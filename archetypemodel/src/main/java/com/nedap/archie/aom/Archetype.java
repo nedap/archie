@@ -1,5 +1,8 @@
 package com.nedap.archie.aom;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Note: this Archetype is not 100% correct, as it should not be an AuthoredResource, but this makes things SO much easier
  * than implementing lots of interfaces
@@ -13,10 +16,7 @@ public class Archetype extends AuthoredResource {
 
     private CComplexObject definition;
     private ArchetypeTerminology terminology;
-    private RuleStatement rules;
-
-
-
+    private List<RuleStatement> rules = new ArrayList<>;
 
     public String getParentArchetypeId() {
         return parentArchetypeId;
@@ -50,11 +50,11 @@ public class Archetype extends AuthoredResource {
         this.definition = definition;
     }
 
-    public RuleStatement getRules() {
+    public List<RuleStatement> getRules() {
         return rules;
     }
 
-    public void setRules(RuleStatement rules) {
+    public void setRules(List<RuleStatement> rules) {
         this.rules = rules;
     }
 
