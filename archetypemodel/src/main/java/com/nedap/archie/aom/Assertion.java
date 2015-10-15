@@ -7,6 +7,14 @@ package com.nedap.archie.aom;
 public class Assertion extends ArchetypeModelObject {
     private String text;
 
+    public Assertion() {
+
+    }
+
+    public Assertion(String text) {
+        this.text = text;
+    }
+
     public String getText() {
         return text;
     }

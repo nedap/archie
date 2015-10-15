@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Created by pieter.bos on 15/10/15.
  */
-public class ArchetypeSlot extends ArchetypeModelObject {
+public class ArchetypeSlot extends CObject {
 
     private List<Assertion> includes = new ArrayList<>();
     private List<Assertion> excludes = new ArrayList<>();

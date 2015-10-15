@@ -59,6 +59,8 @@ adl_path_segment  : '/' adl_path_element ;
 adl_path_element  : attribute_id ( '[' ID_CODE ']' )? ;
 
 
+
+
 //
 //  ======================= Lexical rules ========================
 //

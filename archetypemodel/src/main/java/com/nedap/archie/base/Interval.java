@@ -7,10 +7,10 @@ public class Interval<T> {
 
     T lower;
     T upper;
-    boolean lowerUnbounded;
-    boolean upperUnbounded;
-    boolean lowerIncluded;
-    boolean upperIncluded;
+    boolean lowerUnbounded = false;
+    boolean upperUnbounded = false;
+    boolean lowerIncluded = true;
+    boolean upperIncluded = true;
 
     public T getLower() {
         return lower;
