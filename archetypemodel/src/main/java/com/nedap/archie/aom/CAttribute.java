@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Created by pieter.bos on 15/10/15.
  */
-public class CAttribute {
+public class CAttribute extends ArchetypeConstraint {
 
     private String rmAttributeName;
     private MultiplicityInterval existence; //TODO: this is just a regular Interval<Integer>. Change it?

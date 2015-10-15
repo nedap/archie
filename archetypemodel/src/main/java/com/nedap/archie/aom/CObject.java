@@ -5,7 +5,7 @@ import com.nedap.archie.base.MultiplicityInterval;
 /**
  * Created by pieter.bos on 15/10/15.
  */
-public class CObject {
+public class CObject extends ArchetypeConstraint {
 
     private String rmTypeName;
     private MultiplicityInterval occurences;

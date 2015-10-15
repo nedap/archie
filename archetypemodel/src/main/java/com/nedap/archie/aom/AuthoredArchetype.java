@@ -5,7 +5,7 @@ import java.util.HashMap;
 /**
  * Created by pieter.bos on 15/10/15.
  */
-public class AuthoredArchetype {
+public class AuthoredArchetype extends ArchetypeModelObject{
 
     private String adlVersion;
     private String buildUid;

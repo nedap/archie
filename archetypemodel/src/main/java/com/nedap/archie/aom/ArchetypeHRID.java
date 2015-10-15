@@ -3,7 +3,7 @@ package com.nedap.archie.aom;
 /**
  * Created by pieter.bos on 15/10/15.
  */
-public class ArchetypeHRID {
+public class ArchetypeHRID extends ArchetypeModelObject {
     private String namespace;
     private String rmPublisher;
     private String rmPackage;
