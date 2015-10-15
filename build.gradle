@@ -1,0 +1,30 @@
+apply plugin: 'java'
+apply plugin: 'antlr'
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+ext.antlrVersion = '4.5.1-1'
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.7'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+	antlr "org.antlr:antlr4:${antlrVersion}"
+    testCompile 'junit:junit:4.12'
+}
+
+generateGrammarSource { //antlr4
+	outputDirectory = new File("${project.buildDir}/generated-src/antlr/main/com/nedap/archie/adlparser/antlr".toString())
+    arguments = ['-package', 'com.nedap.archie.adlparser.antlr'] + arguments
+}
+
+classes {
+	dependsOn generateGrammarSource
+}
+
