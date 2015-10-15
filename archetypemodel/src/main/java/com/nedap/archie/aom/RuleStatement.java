@@ -1,6 +1,7 @@
 package com.nedap.archie.aom;
 
 /**
+ * Temporary placeholder for rules.
  * Created by pieter.bos on 15/10/15.
  */
 public class RuleStatement {

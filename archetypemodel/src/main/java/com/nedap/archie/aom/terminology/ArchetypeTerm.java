@@ -17,6 +17,10 @@ public class ArchetypeTerm implements Map<String, String> {
         return code;
     }
 
+    public void setCode(String code) {
+        this.code = code;
+    }
+
     /** convenience methode if you already know you want the text*/
     public String getText() {
         return items.get("text");
@@ -95,4 +99,5 @@ public class ArchetypeTerm implements Map<String, String> {
     public Set<Entry<String, String>> entrySet() {
         return items.entrySet();
     }
+
 }

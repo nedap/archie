@@ -1,5 +1,7 @@
 package com.nedap.archie.aom;
 
+import com.nedap.archie.aom.terminology.ArchetypeTerminology;
+
 import java.util.ArrayList;
 import java.util.List;
 

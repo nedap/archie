@@ -13,6 +13,7 @@ public class ADLParserTest {
         Archetype archetype = ADLParser.parse(getClass().getResourceAsStream("/basic.adl"));
         System.out.println(archetype);
 
+
     }
 
 }

@@ -4,6 +4,8 @@ import com.nedap.archie.adlparser.antlr.adlParser.*;
 import com.nedap.archie.adlparser.antlr.*;
 import com.nedap.archie.aom.*;
 import com.nedap.archie.aom.primitives.*;
+import com.nedap.archie.aom.terminology.ArchetypeTerm;
+import com.nedap.archie.aom.terminology.ArchetypeTerminology;
 import com.nedap.archie.base.MultiplicityInterval;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
@@ -11,6 +13,8 @@ import static com.nedap.archie.adlparser.PrimitivesConstraintParser.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by pieter.bos on 15/10/15.
@@ -24,6 +28,15 @@ public class ADLTreeWalker {
         if (tree.archetype() != null) {
             archetype = parseArchetype(tree.archetype());
         }
+        if(tree.template() != null) {
+
+        }
+        if(tree.template_overlay() != null) {
+
+        }
+        if(tree.operational_template() != null) {
+
+        }
         return archetype;
     }
 
@@ -33,7 +46,98 @@ public class ADLTreeWalker {
         if (archetypeContext.definition_section() != null) {
             archetype.setDefinition(parseComplexObject(archetypeContext.definition_section().c_complex_object()));
         }
+
+        if(archetypeContext.rules_section() != null) {
+            addRules(archetypeContext);
+
+        }
+        if(archetypeContext.terminology_section() != null) {
+            addTerminology(archetype, archetypeContext.terminology_section());
+        }
         return archetype;
+    }
+
+    private void addRules(ArchetypeContext archetypeContext) {
+        //TODO: proper solution for this. Works for now.
+        RuleStatement statement =new RuleStatement();
+        statement.setRuleContent(archetypeContext.rules_section().getText());
+    }
+
+    private void addTerminology(Archetype archetype, Terminology_sectionContext terminologySectionContext) {
+        Odin_textContext odinText = terminologySectionContext.odin_text();
+        ArchetypeTerminology terminology = new ArchetypeTerminology();
+        archetype.setTerminology(terminology);
+        Attr_valsContext values = odinText.attr_vals();
+        if(values != null) {
+            for(Attr_valContext value:values.attr_val()) {
+                switch(value.attribute_id().getText()) {
+                    case "term_definitions":
+                    case "term_definition":
+                        terminology.setTermDefinitions(this.parseArchetypeTermMap(value.object_block()));
+                        break;
+                    case "term_bindings":
+                    case "term_binding":
+                        parseTermBindings(archetype, value.object_block());
+                        break;
+                    case "terminology_extracts":
+                    case "terminology_extract":
+                        terminology.setTerminologyExtracts(this.parseArchetypeTermMap(value.object_block()));
+                        break;
+                    case "value_sets":
+                    case "value_set":
+                        parseValueSets(archetype, value.object_block());
+                        break;
+                    default:
+                        //TODO: log some exception
+
+                }
+            }
+        }
+        if(odinText.object_value_block() != null) {
+            //i don't think this is allowed here?
+        }
+
+    }
+
+    private void parseValueSets(Archetype archetype, Object_blockContext context) {
+
+
+    }
+
+    private void parseTermBindings(Archetype archetype, Object_blockContext object_blockContext) {
+
+    }
+
+    private Map<String, Map<String, ArchetypeTerm>> parseArchetypeTermMap( Object_blockContext context) {
+        //TODO: a proper odin parser would be nice. Why all these custom tools, JSON would be amazing for this!
+        Map<String, Map<String, ArchetypeTerm>> terminology = new ConcurrentHashMap<>();
+        Object_value_blockContext test = context.object_value_block();
+        List<Keyed_objectContext> keyedContext = test.keyed_object();
+        if(keyedContext == null) {
+            //TODO: log some exception
+        }
+        for(Keyed_objectContext languageContext:keyedContext) {
+            String language = OdinValueParser.parseOdinStringValue(languageContext.primitive_value().string_value());
+            Map<String, ArchetypeTerm> translations = new ConcurrentHashMap<>();
+            terminology.put(language, translations);
+
+            Object_blockContext blockContext = languageContext.object_block();
+
+            Object_value_blockContext termsContext = blockContext.object_value_block();
+            for(Keyed_objectContext termCodeContext:termsContext.keyed_object()) {
+                String termCode = OdinValueParser.parseOdinStringValue(termCodeContext.primitive_value().string_value());
+                List<Attr_valContext> attr_valContexts = termCodeContext.object_block().object_value_block().attr_vals().attr_val();
+                ArchetypeTerm archetypeTerm = new ArchetypeTerm();
+                archetypeTerm.setCode(termCode);
+                translations.put(termCode, archetypeTerm);
+                for(Attr_valContext value:attr_valContexts) {
+                    String attribute = value.attribute_id().getText();
+                    String stringValue = OdinValueParser.parseOdinStringValue(value.object_block().object_value_block().primitive_object().primitive_value().string_value());
+                    archetypeTerm.put(attribute, stringValue);
+                }
+            }
+        }
+        return terminology;
     }
 
     private CComplexObject parseComplexObject(C_complex_objectContext context) {
