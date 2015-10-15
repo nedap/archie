@@ -16,7 +16,7 @@ public class Archetype extends AuthoredResource {
 
     private CComplexObject definition;
     private ArchetypeTerminology terminology;
-    private List<RuleStatement> rules = new ArrayList<>;
+    private List<RuleStatement> rules = new ArrayList<>();
 
     public String getParentArchetypeId() {
         return parentArchetypeId;
