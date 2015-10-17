@@ -75,6 +75,9 @@ SYM_EXISTS   : [Ee][Xx][Ii][Ss][Tt][Ss] ;
 
 SYM_MATCHES : ([Mm][Aa][Tt][Cc][Hh][Ee][Ss] | [Ii][Ss]'_'[Ii][Nn] | '\u2208');
 
+SYM_TRUE : [Tt][Rr][Uu][Ee] ;
+SYM_FALSE : [Ff][Aa][Ll][Ss][Ee] ;
+
 // ---------- whitespace & comments ----------
 
 WS :        [ \t\r]+      -> skip ;
@@ -107,7 +110,7 @@ ARCHETYPE_HRID      : ARCHETYPE_HRID_ROOT '.v' VERSION_ID ;
 ARCHETYPE_REF       : ARCHETYPE_HRID_ROOT '.v' INTEGER ( '.' DIGIT+ )* ;
 ARCHETYPE_HRID_ROOT : (NAMESPACE '::')? IDENTIFIER '-' IDENTIFIER '-' IDENTIFIER '.' IDENTIFIER ;
 
-NAMESPACE           : LABEL ('.' LABEL)+ ;
+fragment NAMESPACE  : LABEL ('.' LABEL)+ ;
 fragment LABEL      : ALPHA_CHAR ( NAME_CHAR* ALPHANUM_CHAR )? ;
 fragment IDENTIFIER : ALPHA_CHAR WORD_CHAR* ;
 VERSION_ID : DIGIT+ DOT_SEGMENT DOT_SEGMENT (('-rc' | '-alpha') DOT_SEGMENT? )? ;
@@ -121,23 +124,20 @@ ALPHA_LC_ID : ALPHA_LCHAR WORD_CHAR* ;                      // used for attribut
 // --------------------- primitive types -------------------
 
 TERM_CODE_REF : '[' NAME_CHAR+ ( '(' NAME_CHAR+ ')' )? '::' NAME_CHAR+ ']' ;  // e.g. [ICD10AM(1998)::F23]; [ISO_639-1::en]
-URI : [a-z]+ ':' ( '//' | '/' )? ~[ \t\n]+? ; // just a simple recogniser, the full thing isn't required
+URI : [a-z]+ ':' ( '//' | '/' )? (~[ \t\n>]+)? ; // just a simple recogniser, the full thing isn't required
 
 INTEGER : DIGIT+ E_SUFFIX? ;
 REAL :    DIGIT+ '.' DIGIT+ E_SUFFIX? ;
 fragment E_SUFFIX : [eE][+-]? DIGIT+ ;
 
 STRING : '"' STRING_CHAR*? '"' ;
-fragment STRING_CHAR : ~('\\'|["\r\n]) | ESCAPE_SEQ | UTF8CHAR ;
+fragment STRING_CHAR : ~[\\"] | ESCAPE_SEQ | UTF8CHAR ;
 
 
 CHARACTER : '\'' CHAR '\'' ;
-fragment CHAR : ~('\\'|['\r\n]) | ESCAPE_SEQ | UTF8CHAR  ;
+fragment CHAR : ~[\\'\r\n] | ESCAPE_SEQ | UTF8CHAR  ;
 
 fragment ESCAPE_SEQ: '\\' ['"?abfnrtv\\] ;
-
-SYM_TRUE : [Tt][Rr][Uu][Ee] ;
-SYM_FALSE : [Ff][Aa][Ll][Ss][Ee] ;
 
 // ------------------- character fragments ------------------
 
@@ -153,24 +153,26 @@ fragment UTF8CHAR    : '\\u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT ;
 fragment DIGIT     : [0-9] ;
 fragment HEX_DIGIT : [0-9a-fA-F] ;
 
-BRACKETS : [()<>=;\[\]{}];
-ARITHMETIC_OPERATORS : [-+*/%^];
-
-
+BRACKETS : [()<>\[\]{}];
+ARITHMETIC_OPERATORS : [-+*/%^=];
+MISC : [;];
 
 SYM_LIST_CONTINUE: '...' ;
 SYM_INTERVAL_SEP: '..' ;
 
 
-/*mode MATCHES;
-SYM_LPAREN: '{';
-SYM_START: '*' -> mode(DEFAULT_MODE);
-SYM_OTHER: . -> mode(DEFAULT_MODE);
-REGEXP : ('/' SLASH_REGEXP_CHAR* '/' | '^' REGEXP_CHAR* '^') -> mode(DEFAULT_MODE);
-fragment REGEXP_CHAR : ~["\\^\n\r] | REGEXP_ESCAPE_SEQ | UTF8CHAR ;
-fragment REGEXP_ESCAPE_SEQ : '\\' ['"?abfnrtv\\^] ;
+DATE_CONSTRAINT_PATTERN :       YEAR_PATTERN '-' MONTH_PATTERN '-' DAY_PATTERN ;
+TIME_CONSTRAINT_PATTERN :       HOUR_PATTERN ':' MINUTE_PATTERN ':' SECOND_PATTERN ;
+DATE_TIME_CONSTRAINT_PATTERN :  DATE_CONSTRAINT_PATTERN 'T' TIME_CONSTRAINT_PATTERN ;
+DURATION_CONSTRAINT_PATTERN :   'P' [yY]?[mM]?[Ww]?[dD]? ('T' [hH]?[mM]?[sS]?)? ;
 
+// date time pattern
+fragment YEAR_PATTERN:	 		('yyy' 'y'?) | ('YYY' 'Y'?);
+fragment MONTH_PATTERN:	        'mm' | 'MM' | '??' | 'XX';
+fragment DAY_PATTERN:			'dd' | 'DD' | '??' | 'XX';
+fragment HOUR_PATTERN:			'hh' | 'HH' | '??' | 'XX';
+fragment MINUTE_PATTERN:	    'mm' | 'MM' | '??' | 'XX';
+fragment SECOND_PATTERN:		'ss' | 'SS' | '??' | 'XX';
 
-*/
 
 
