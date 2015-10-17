@@ -10,7 +10,7 @@ public class ADLParserTest {
 
     @Test
     public void basic() throws Exception {
-        Archetype archetype = ADLParser.parse(getClass().getResourceAsStream("/basic.adl"));
+        Archetype archetype = new ADLParser().parse(getClass().getResourceAsStream("/basic.adl"));
         System.out.println(archetype);
 
 

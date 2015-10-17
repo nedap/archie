@@ -13,20 +13,24 @@ import java.io.StringReader;
 
 public class ADLParser {
 
+    public Lexer lexer;
+    public AdlParser parser;
+    public ADLTreeWalker walker;
+    public AdlParser.AdlContext tree;
 
-    public static Archetype parse(String adl) throws IOException {
+    public Archetype parse(String adl) throws IOException {
         return parse(new ANTLRInputStream(adl));
     }
 
-    public static Archetype parse(InputStream stream) throws IOException {
+    public Archetype parse(InputStream stream) throws IOException {
         return parse(new ANTLRInputStream(stream));
     }
 
-    public static Archetype parse(CharStream stream) {
-        Lexer lexer = new adlLexer(stream);
-        adlParser parser = new adlParser(new CommonTokenStream(lexer));
-        adlParser.AdlContext tree = parser.adl(); // parse
-        ADLTreeWalker walker = new ADLTreeWalker();
+    public Archetype parse(CharStream stream) {
+        lexer = new AdlLexer(stream);
+        parser = new AdlParser(new CommonTokenStream(lexer));
+        tree = parser.adl(); // parse
+        walker = new ADLTreeWalker();
         return walker.parse(tree);
     }
 

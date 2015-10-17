@@ -1,6 +1,6 @@
 package com.nedap.archie.adlparser;
 
-import com.nedap.archie.adlparser.antlr.adlParser.*;
+import com.nedap.archie.adlparser.antlr.AdlParser.*;
 import com.nedap.archie.adlparser.antlr.*;
 import com.nedap.archie.aom.*;
 import com.nedap.archie.aom.primitives.*;
@@ -42,7 +42,9 @@ public class ADLTreeWalker {
 
     private Archetype parseArchetype(ArchetypeContext archetypeContext) {
         Archetype archetype = new Archetype();
-        archetype.setArchetypeId(new ArchetypeHRID(archetypeContext.ARCHETYPE_HRID().getText()));
+        if(archetypeContext.ARCHETYPE_HRID() != null) {
+            archetype.setArchetypeId(new ArchetypeHRID(archetypeContext.ARCHETYPE_HRID().getText()));
+        }
         if (archetypeContext.definition_section() != null) {
             archetype.setDefinition(parseComplexObject(archetypeContext.definition_section().c_complex_object()));
         }
@@ -65,36 +67,38 @@ public class ADLTreeWalker {
 
     private void addTerminology(Archetype archetype, Terminology_sectionContext terminologySectionContext) {
         Odin_textContext odinText = terminologySectionContext.odin_text();
-        ArchetypeTerminology terminology = new ArchetypeTerminology();
-        archetype.setTerminology(terminology);
-        Attr_valsContext values = odinText.attr_vals();
-        if(values != null) {
-            for(Attr_valContext value:values.attr_val()) {
-                switch(value.attribute_id().getText()) {
-                    case "term_definitions":
-                    case "term_definition":
-                        terminology.setTermDefinitions(this.parseArchetypeTermMap(value.object_block()));
-                        break;
-                    case "term_bindings":
-                    case "term_binding":
-                        parseTermBindings(archetype, value.object_block());
-                        break;
-                    case "terminology_extracts":
-                    case "terminology_extract":
-                        terminology.setTerminologyExtracts(this.parseArchetypeTermMap(value.object_block()));
-                        break;
-                    case "value_sets":
-                    case "value_set":
-                        parseValueSets(archetype, value.object_block());
-                        break;
-                    default:
-                        //TODO: log some exception
+        if(odinText != null) {
+            ArchetypeTerminology terminology = new ArchetypeTerminology();
+            archetype.setTerminology(terminology);
+            Attr_valsContext values = odinText.attr_vals();
+            if (values != null) {
+                for (Attr_valContext value : values.attr_val()) {
+                    switch (value.attribute_id().getText()) {
+                        case "term_definitions":
+                        case "term_definition":
+                            terminology.setTermDefinitions(this.parseArchetypeTermMap(value.object_block()));
+                            break;
+                        case "term_bindings":
+                        case "term_binding":
+                            parseTermBindings(archetype, value.object_block());
+                            break;
+                        case "terminology_extracts":
+                        case "terminology_extract":
+                            terminology.setTerminologyExtracts(this.parseArchetypeTermMap(value.object_block()));
+                            break;
+                        case "value_sets":
+                        case "value_set":
+                            parseValueSets(archetype, value.object_block());
+                            break;
+                        default:
+                            //TODO: log some exception
 
+                    }
                 }
             }
-        }
-        if(odinText.object_value_block() != null) {
-            //i don't think this is allowed here?
+            if (odinText.object_value_block() != null) {
+                //i don't think this is allowed here?
+            }
         }
 
     }

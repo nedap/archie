@@ -1,0 +1,64 @@
+archetype (adl_version=1.5)
+	openEHR-TEST_PKG-DADL.type_identifiers.v1
+
+concept
+	[at0000]
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	original_author = <
+		["name"] = <"Thomas Beale">
+		["email"] = <"thomas.beale@openEHR.org">
+		["organisation"] = <"openEHR Foundation <http://www.openEHR.org>">
+		["date"] = <"2008-11-12">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"Test ODIN (dADL) type identifiers.">
+			keywords = <"ADL", "dADL", "test">
+			copyright = <"copyright (c) 2008 The openEHR Foundation">
+		>
+	>
+
+	lifecycle_state = <"published">
+	other_details = <
+		["regression"] = <"PASS">
+	>
+	copyright = <"Copyright © 2004 openEHR Foundation <http://www.openEHR.org>">
+
+definition
+	DADL[at0000] matches {
+		value matches {
+			C_QUANTITY <
+				destinations = <
+					["seville"] = (TOURIST_DESTINATION) <
+						profile = (DESTINATION_PROFILE) <>
+						hotels = <
+							["gran sevilla"] = (HISTORIC_HOTEL) <>
+							["sofitel"] = (LUXURY_HOTEL) <>
+							["hotel real"] = (PENSION) <>
+						>
+						attractions = <
+							["la corrida"] = (ATTRACTION) <>
+							["Alcázar"] = (HISTORIC_SITE) <>
+						>
+					>
+				>
+			>
+		}
+	}
+
+ontology
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"">
+					description = <"">
+				>
+			>
+		>
+	>

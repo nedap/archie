@@ -7,7 +7,7 @@
 //
 
 grammar cadl;
-import adl_rules;
+import adl_rules, AdlVocabulary;
 
 //
 //  ======================= Top-level Objects ========================

@@ -3,7 +3,8 @@
 //
 
 grammar odin_values;
-import base_patterns;
+
+import base_patterns, AdlVocabulary;
 
 string_value : STRING ;
 string_list_value : string_value ( ( ',' string_value )+ | ',' SYM_LIST_CONTINUE ) ;
@@ -73,5 +74,4 @@ relop : '>' | '<' | '<=' | '>=' ;
 //  ======================= Lexical rules ========================
 //
 
-SYM_LIST_CONTINUE: '...' ;
-SYM_INTERVAL_SEP: '..' ;
+

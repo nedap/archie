@@ -7,7 +7,8 @@
 //
 
 grammar odin;
-import odin_values;
+
+import odin_values, AdlVocabulary;
 
 //
 // -------------------------- Parse Rules --------------------------
