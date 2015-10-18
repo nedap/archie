@@ -202,17 +202,17 @@ public class ADLTreeWalker {
         } else if (context.ROOT_ID_CODE() != null) {
             object.setNodeId(context.ROOT_ID_CODE().getText());
         }
-        //TODO: object.setDeprecated(context.);
+        //TODO: object.setDeprecated(context.) ?;
         if (context.c_occurrences() != null) {
             object.setOccurences(parseMultiplicityInterval(context.c_occurrences()));
         }
         for (C_attribute_defContext attribute : context.c_attribute_def()) {
-            object.addAttribute(parseAttribute(attribute));
+            object.addAttribute(parseAttribute(object, attribute));
         }
         return object;
     }
 
-    private CAttribute parseAttribute(C_attribute_defContext attributeDefContext) {
+    private CAttribute parseAttribute(CComplexObject parent, C_attribute_defContext attributeDefContext) {
         CAttribute attribute = null;
         if (attributeDefContext.c_attribute() != null) {
             attribute = new CAttribute();
@@ -230,15 +230,39 @@ public class ADLTreeWalker {
                 attribute.setChildren(parseCObjects(attributeContext.c_objects()));
             }
         } else if (attributeDefContext.c_attribute_tuple() != null) {
-            parseAttributeTuple(attributeDefContext.c_attribute_tuple());
+            parseAttributeTuple(parent, attributeDefContext.c_attribute_tuple());
         }
         return attribute;
 
     }
 
-    private CAttributeTuple parseAttributeTuple(C_attribute_tupleContext c_attribute_tupleContext) {
-        //TODO
-        return null;
+    private CAttributeTuple parseAttributeTuple(CComplexObject parent, C_attribute_tupleContext attributeTupleContext) {
+        List<Attribute_idContext> attributeIdList = attributeTupleContext.attribute_id();
+        CAttributeTuple tuple = new CAttributeTuple();
+
+        for(Attribute_idContext idContext:attributeIdList) {
+            CAttribute attribute = new CAttribute();
+            String id = idContext.getText();//TODO? parse odin string value?
+            attribute.setRmAttributeName(id);
+            tuple.addMember(attribute);
+            parent.addAttribute(attribute);
+        }
+        List<C_object_tupleContext> tupleContexts = attributeTupleContext.c_object_tuple();
+        for(C_object_tupleContext tupleContext:tupleContexts) {
+            CPrimitiveTuple primitiveTuple = new CPrimitiveTuple();
+
+            List<C_primitive_objectContext> primitiveObjectContexts = tupleContext.c_object_tuple_items().c_primitive_object();
+            int i = 0;
+            for(C_primitive_objectContext primitiveObjectContext:primitiveObjectContexts) {
+                CPrimitiveObject primitiveObject = parsePrimitiveObject(primitiveObjectContext);
+                tuple.getMembers().get(i).addChild(primitiveObject);
+                primitiveTuple.addMember(primitiveObject);
+                i++;
+            }
+            tuple.addTuple(primitiveTuple);
+        }
+
+        return tuple;
     }
 
     private List<CObject> parseCObjects(C_objectsContext objectsContext) {

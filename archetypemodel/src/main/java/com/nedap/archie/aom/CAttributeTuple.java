@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Created by pieter.bos on 15/10/15.
  */
-public class CAttributeTuple extends CSecondOrder {
+public class CAttributeTuple extends CSecondOrder<CAttribute> {
 
     private List<CPrimitiveTuple> tuples = new ArrayList<>();
 
