@@ -3,16 +3,16 @@ package com.nedap.archie.aom;
 /**
  * Created by pieter.bos on 15/10/15.
  */
-public class CPrimitiveObject<T> extends CDefinedObject<T> {
-    private T assumedValue;
+public class CPrimitiveObject<Constraint, AssumedAndDefaultValue> extends CDefinedObject<AssumedAndDefaultValue> {
+    private AssumedAndDefaultValue assumedValue;
     private Boolean enumeratedTypeConstraint;
-    private T constraint;
+    private Constraint constraint;
 
-    public T getAssumedValue() {
+    public AssumedAndDefaultValue getAssumedValue() {
         return assumedValue;
     }
 
-    public void setAssumedValue(T assumedValue) {
+    public void setAssumedValue(AssumedAndDefaultValue assumedValue) {
         this.assumedValue = assumedValue;
     }
 
@@ -24,11 +24,11 @@ public class CPrimitiveObject<T> extends CDefinedObject<T> {
         this.enumeratedTypeConstraint = enumeratedTypeConstraint;
     }
 
-    public T getConstraint() {
+    public Constraint getConstraint() {
         return constraint;
     }
 
-    public void setConstraint(T constraint) {
+    public void setConstraint(Constraint constraint) {
         this.constraint = constraint;
     }
 }

@@ -56,4 +56,9 @@ public class CAttribute extends ArchetypeConstraint {
     public void setChildren(List<CObject> children) {
         this.children = children;
     }
+
+    public void addChild(CObject child) {
+        children.add(child);
+    }
+
 }

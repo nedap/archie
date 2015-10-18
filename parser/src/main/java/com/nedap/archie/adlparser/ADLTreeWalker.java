@@ -11,10 +11,13 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 
 import static com.nedap.archie.adlparser.PrimitivesConstraintParser.*;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.BiFunction;
 
 /**
  * Created by pieter.bos on 15/10/15.
@@ -76,15 +79,17 @@ public class ADLTreeWalker {
                     switch (value.attribute_id().getText()) {
                         case "term_definitions":
                         case "term_definition":
-                            terminology.setTermDefinitions(this.parseArchetypeTermMap(value.object_block()));
+
+                            terminology.setTermDefinitions(parseOdinMap(value.object_block(), ADLTreeWalker::parseOdinArchetypeTerm));
                             break;
                         case "term_bindings":
                         case "term_binding":
-                            parseTermBindings(archetype, value.object_block());
+                            parseOdinMap(value.object_block(), ADLTreeWalker::parseOdinUri);
+
                             break;
                         case "terminology_extracts":
                         case "terminology_extract":
-                            terminology.setTerminologyExtracts(this.parseArchetypeTermMap(value.object_block()));
+                            terminology.setTerminologyExtracts(parseOdinMap(value.object_block(), ADLTreeWalker::parseOdinArchetypeTerm));
                             break;
                         case "value_sets":
                         case "value_set":
@@ -103,6 +108,8 @@ public class ADLTreeWalker {
 
     }
 
+
+
     private void parseValueSets(Archetype archetype, Object_blockContext context) {
 
 
@@ -112,7 +119,7 @@ public class ADLTreeWalker {
 
     }
 
-    private Map<String, Map<String, ArchetypeTerm>> parseArchetypeTermMap( Object_blockContext context) {
+    private <T> Map<String, Map<String, T>> parseOdinMap( Object_blockContext context, BiFunction<Map<String, T>, Keyed_objectContext, Void> parseInner) {
         //TODO: a proper odin parser would be nice. Why all these custom tools, JSON would be amazing for this!
         Map<String, Map<String, ArchetypeTerm>> terminology = new ConcurrentHashMap<>();
         Object_value_blockContext test = context.object_value_block();
@@ -129,19 +136,37 @@ public class ADLTreeWalker {
 
             Object_value_blockContext termsContext = blockContext.object_value_block();
             for(Keyed_objectContext termCodeContext:termsContext.keyed_object()) {
-                String termCode = OdinValueParser.parseOdinStringValue(termCodeContext.primitive_value().string_value());
-                List<Attr_valContext> attr_valContexts = termCodeContext.object_block().object_value_block().attr_vals().attr_val();
-                ArchetypeTerm archetypeTerm = new ArchetypeTerm();
-                archetypeTerm.setCode(termCode);
-                translations.put(termCode, archetypeTerm);
-                for(Attr_valContext value:attr_valContexts) {
-                    String attribute = value.attribute_id().getText();
-                    String stringValue = OdinValueParser.parseOdinStringValue(value.object_block().object_value_block().primitive_object().primitive_value().string_value());
-                    archetypeTerm.put(attribute, stringValue);
-                }
+                parseInner.apply(translations, termCodeContext);
+
             }
         }
         return terminology;
+    }
+
+    private static Void parseOdinArchetypeTerm(Map<String, ArchetypeTerm> map, Keyed_objectContext context) {
+        String termCode = OdinValueParser.parseOdinStringValue(context.primitive_value().string_value());
+        List<Attr_valContext> attr_valContexts = context.object_block().object_value_block().attr_vals().attr_val();
+        ArchetypeTerm archetypeTerm = new ArchetypeTerm();
+        archetypeTerm.setCode(termCode);
+        map.put(termCode, archetypeTerm);
+        for(Attr_valContext value:attr_valContexts) {
+            String attribute = value.attribute_id().getText();
+            String stringValue = OdinValueParser.parseOdinStringValue(value.object_block().object_value_block().primitive_object().primitive_value().string_value());
+            archetypeTerm.put(attribute, stringValue);
+        }
+        return null;
+    }
+
+    private static Void parseOdinUri(Map<String, Object> map, Keyed_objectContext context) {
+        String termCode = OdinValueParser.parseOdinStringValue(context.primitive_value().string_value());
+        try {
+            URI uri = OdinValueParser.parseOdinUri(context.primitive_value().uri_value());
+            map.put(termCode, uri);
+        } catch (URISyntaxException e) {
+            //todo: log exception
+        }
+
+        return null;
     }
 
     private CComplexObject parseComplexObject(C_complex_objectContext context) {

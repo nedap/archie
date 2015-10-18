@@ -6,7 +6,6 @@ import java.util.List;
 /**
  * Created by pieter.bos on 15/10/15.
  */
-//TODO: can this really have any archetypemodelobject as a default value?
 public class CComplexObject extends CDefinedObject<ArchetypeModelObject> {
 
     private List<CAttribute> attributes = new ArrayList();
