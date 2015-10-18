@@ -15,6 +15,8 @@ public class CAttribute extends ArchetypeConstraint {
     private String differentialPath;
     private boolean multiple;
 
+    private Cardinality cardinality;
+
     private List<CObject> children = new ArrayList<>();
 
     public String getRmAttributeName() {
@@ -61,4 +63,11 @@ public class CAttribute extends ArchetypeConstraint {
         children.add(child);
     }
 
+    public Cardinality getCardinality() {
+        return cardinality;
+    }
+
+    public void setCardinality(Cardinality cardinality) {
+        this.cardinality = cardinality;
+    }
 }

@@ -1,5 +1,6 @@
 package com.nedap.archie.adlparser;
 
+import com.nedap.archie.adlparser.antlr.AdlParser;
 import com.nedap.archie.adlparser.antlr.AdlParser.*;
 import com.nedap.archie.aom.*;
 import com.nedap.archie.aom.terminology.ArchetypeTerm;
@@ -223,18 +224,21 @@ public class ADLTreeWalker {
 
             //TODO: attributeContext.adl_dir()
             if (attributeContext.c_cardinality() != null) {
-                attributeContext.c_cardinality();//TODO!
+                this.parseCardinalityInterval(attributeContext.c_cardinality());//TODO!
             }
             if (attributeContext.c_objects() != null) {
                 attribute.setChildren(parseCObjects(attributeContext.c_objects()));
             }
         } else if (attributeDefContext.c_attribute_tuple() != null) {
-            C_attribute_tupleContext tupleContext = attributeDefContext.c_attribute_tuple();
-            //TODO: i have no clue
-
+            parseAttributeTuple(attributeDefContext.c_attribute_tuple());
         }
         return attribute;
 
+    }
+
+    private CAttributeTuple parseAttributeTuple(C_attribute_tupleContext c_attribute_tupleContext) {
+        //TODO
+        return null;
     }
 
     private List<CObject> parseCObjects(C_objectsContext objectsContext) {
@@ -323,6 +327,23 @@ public class ADLTreeWalker {
             return parseCBoolean(objectContext.c_boolean());
         }
         return null;
+    }
+
+    private Cardinality parseCardinalityInterval(C_cardinalityContext cardinalityContext) {
+        Cardinality cardinality = new Cardinality();
+        MultiplicityInterval interval = new MultiplicityInterval();
+        cardinality.setInterval(interval);
+
+        //TODO: cardinality().cardinatelyMod();
+        List<TerminalNode> integers = cardinalityContext.cardinality().multiplicity().INTEGER();
+        if(integers.size() == 1) {
+            interval.setLower(Integer.parseInt(integers.get(0).getText()));
+            interval.setUpper(interval.getLower());
+        } else if (integers.size() == 2) {
+            interval.setLower(Integer.parseInt(integers.get(0).getText()));
+            interval.setUpper(Integer.parseInt(integers.get(1).getText()));
+        }
+        return cardinality;
     }
 
     private MultiplicityInterval parseMultiplicityInterval(C_existenceContext existenceContext) {
