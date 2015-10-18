@@ -9,4 +9,19 @@ public class CDefinedObject<T> extends CObject {
     Boolean frozen;
     T defaultValue;
 
+    public Boolean getFrozen() {
+        return frozen;
+    }
+
+    public void setFrozen(Boolean frozen) {
+        this.frozen = frozen;
+    }
+
+    public T getDefaultValue() {
+        return defaultValue;
+    }
+
+    public void setDefaultValue(T defaultValue) {
+        this.defaultValue = defaultValue;
+    }
 }

@@ -1,15 +1,15 @@
 package com.nedap.archie.adlparser;
 
 import com.nedap.archie.adlparser.antlr.AdlParser.*;
-import com.nedap.archie.adlparser.antlr.*;
 import com.nedap.archie.aom.*;
-import com.nedap.archie.aom.primitives.*;
 import com.nedap.archie.aom.terminology.ArchetypeTerm;
 import com.nedap.archie.aom.terminology.ArchetypeTerminology;
+import com.nedap.archie.aom.terminology.ValueSet;
 import com.nedap.archie.base.MultiplicityInterval;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import static com.nedap.archie.adlparser.PrimitivesConstraintParser.*;
+import static com.nedap.archie.adlparser.NumberConstraintParser.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -93,7 +93,7 @@ public class ADLTreeWalker {
                             break;
                         case "value_sets":
                         case "value_set":
-                            parseValueSets(archetype, value.object_block());
+                            terminology.setValueSets(parseOdinValueSets(value.object_block()));
                             break;
                         default:
                             //TODO: log some exception
@@ -108,20 +108,39 @@ public class ADLTreeWalker {
 
     }
 
+    private  Map<String, ValueSet> parseOdinValueSets(Object_blockContext context) {
+        //TODO: a proper odin parser would be nice. Why all these custom tools, JSON would be amazing for this!
+        Map<String, ValueSet> valueSets = new ConcurrentHashMap<>();
+        Object_value_blockContext test = context.object_value_block();
+        List<Keyed_objectContext> keyedContext = test.keyed_object();
+        if(keyedContext == null) {
+            //TODO: log some exception
+        }
+        for(Keyed_objectContext innerContext:keyedContext) {
+            String valueSetId = OdinValueParser.parseOdinStringValue(innerContext.primitive_value().string_value());
+            Object_value_blockContext valueSetContext = innerContext.object_block().object_value_block();
+            List<Keyed_objectContext> valueSetProperties = valueSetContext.keyed_object();
+            ValueSet valueSet = new ValueSet();
+            for(Keyed_objectContext property:valueSetProperties) {
+                switch(property.primitive_value().string_value().getText()) {
+                    case "id":
+                        valueSet.setId(property.object_block().object_value_block().primitive_object().primitive_value().string_value().getText());
+                        break;
+                    case "members":
+                        Primitive_objectContext membersContext = property.object_block().object_value_block().primitive_object();
+                        valueSet.setMembers(OdinValueParser.parseListOfStrings(membersContext));
+                }
 
+            }
+            valueSets.put(valueSetId, valueSet);
 
-    private void parseValueSets(Archetype archetype, Object_blockContext context) {
-
-
-    }
-
-    private void parseTermBindings(Archetype archetype, Object_blockContext object_blockContext) {
-
+        }
+        return valueSets;
     }
 
     private <T> Map<String, Map<String, T>> parseOdinMap( Object_blockContext context, BiFunction<Map<String, T>, Keyed_objectContext, Void> parseInner) {
         //TODO: a proper odin parser would be nice. Why all these custom tools, JSON would be amazing for this!
-        Map<String, Map<String, ArchetypeTerm>> terminology = new ConcurrentHashMap<>();
+        Map<String, Map<String, T>> terminology = new ConcurrentHashMap<>();
         Object_value_blockContext test = context.object_value_block();
         List<Keyed_objectContext> keyedContext = test.keyed_object();
         if(keyedContext == null) {
@@ -129,7 +148,7 @@ public class ADLTreeWalker {
         }
         for(Keyed_objectContext languageContext:keyedContext) {
             String language = OdinValueParser.parseOdinStringValue(languageContext.primitive_value().string_value());
-            Map<String, ArchetypeTerm> translations = new ConcurrentHashMap<>();
+            Map<String, T> translations = new ConcurrentHashMap<>();
             terminology.put(language, translations);
 
             Object_blockContext blockContext = languageContext.object_block();
@@ -160,10 +179,13 @@ public class ADLTreeWalker {
     private static Void parseOdinUri(Map<String, Object> map, Keyed_objectContext context) {
         String termCode = OdinValueParser.parseOdinStringValue(context.primitive_value().string_value());
         try {
-            URI uri = OdinValueParser.parseOdinUri(context.primitive_value().uri_value());
-            map.put(termCode, uri);
+            URI uri = OdinValueParser.parseOdinUri(context.object_block().object_value_block().primitive_object().primitive_value().uri_value());
+            if(uri != null) {
+                map.put(termCode, uri);
+            }
         } catch (URISyntaxException e) {
             //todo: log exception
+            e.printStackTrace();
         }
 
         return null;
@@ -271,7 +293,7 @@ public class ADLTreeWalker {
         return slot;
     }
 
-    private CObject parsePrimitiveObject(C_primitive_objectContext objectContext) {
+    private CPrimitiveObject parsePrimitiveObject(C_primitive_objectContext objectContext) {
         /*c_integer
                 | c_real
                 | c_date
@@ -321,19 +343,18 @@ public class ADLTreeWalker {
         List<TerminalNode> integers = occurrencesContext.multiplicity().INTEGER();
 
         if(occurrencesContext.multiplicity().SYM_INTERVAL_SEP() != null) {
-            //two bounds. Only the last one can be *, according to the grammar. Doesn't seem right, does it?
-            //one integer or *
             if(occurrencesContext.multiplicity().getText().contains("*")) {
                 interval.setLower(Integer.parseInt(integers.get(0).getText()));
                 interval.setUpperUnbounded(true);
             } else {
                 interval.setLower(Integer.parseInt(integers.get(0).getText()));
-                interval.setLower(Integer.parseInt(integers.get(1).getText()));
+                interval.setUpper(Integer.parseInt(integers.get(1).getText()));
             }
         } else {
             //one integer or *
             if(occurrencesContext.multiplicity().getText().contains("*")) {
-                interval.setLowerUnbounded(true);
+                interval.setLowerUnbounded(false);
+                interval.setLower(0);
                 interval.setUpperUnbounded(true);
             } else {
                 interval.setLower(Integer.parseInt(integers.get(0).getText()));

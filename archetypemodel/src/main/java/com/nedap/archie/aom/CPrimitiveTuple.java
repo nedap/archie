@@ -1,7 +1,5 @@
 package com.nedap.archie.aom;
 
-import org.openehr.am.archetype.constraintmodel.primitive.CPrimitive;
-
 import java.util.List;
 
 /**

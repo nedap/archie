@@ -18,6 +18,7 @@ public class ArchetypeTerminology {
     private Map<String, Map<String, ArchetypeTerm>> termDefinitions = new ConcurrentHashMap<>();
     private Map<String, Map<String, URI>> termBindings = new ConcurrentHashMap<>();
     private Map<String, Map<String, ArchetypeTerm>> terminologyExtracts = new ConcurrentHashMap<>();
+    private Map<String, ValueSet> valueSets = new ConcurrentHashMap<>();
 
     private Archetype parent;
 
@@ -76,5 +77,13 @@ public class ArchetypeTerminology {
 
     public void setParent(Archetype parent) {
         this.parent = parent;
+    }
+
+    public Map<String, ValueSet> getValueSets() {
+        return valueSets;
+    }
+
+    public void setValueSets(Map<String, ValueSet> valueSets) {
+        this.valueSets = valueSets;
     }
 }

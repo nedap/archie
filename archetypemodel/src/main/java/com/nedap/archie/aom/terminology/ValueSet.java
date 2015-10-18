@@ -26,4 +26,8 @@ public class ValueSet {
     public void setMembers(List<String> members) {
         this.members = members;
     }
+
+    public void addMember(String member) {
+        this.members.add(member);
+    }
 }

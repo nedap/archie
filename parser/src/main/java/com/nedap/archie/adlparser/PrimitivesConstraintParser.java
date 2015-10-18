@@ -1,6 +1,7 @@
 package com.nedap.archie.adlparser;
 
 import com.nedap.archie.adlparser.antlr.AdlParser;
+import com.nedap.archie.adlparser.antlr.AdlParser.*;
 import com.nedap.archie.aom.CObject;
 import com.nedap.archie.aom.primitives.CBoolean;
 import com.nedap.archie.aom.primitives.CDate;
@@ -12,33 +13,34 @@ import com.nedap.archie.aom.primitives.CString;
 import com.nedap.archie.aom.primitives.CTerminologyCode;
 import com.nedap.archie.aom.primitives.CTime;
 
+import java.util.List;
+
 /**
  * Created by pieter.bos on 15/10/15.
  */
 public class PrimitivesConstraintParser {
 
-    public static CObject parseCInteger(AdlParser.C_integerContext integerContext) {
-        // ( integer_value | integer_list_value | integer_interval_value | integer_interval_list_value ) ( ';' integer_value )? ;
-        CInteger result = new CInteger();
-
-        if(integerContext.integer_value() != null) {
-            //TODO
+    public static CBoolean parseCBoolean(AdlParser.C_booleanContext booleanContext) {
+        CBoolean result = new CBoolean();
+        List<Boolean_valueContext> booleanValues = booleanContext.boolean_value();
+        Boolean_list_valueContext booleanListValue = booleanContext.boolean_list_value();
+        if(booleanValues != null) {
+            parseBooleanValues(result, booleanValues);
         }
-        if(integerContext.integer_list_value() != null) {
-
+        if(booleanListValue != null) {
+            parseBooleanValues(result, booleanListValue.boolean_value());
         }
-        if(integerContext.integer_interval_value() != null) {
-
-        }
-        if(integerContext.integer_interval_list_value() != null) {
-
-        }
-
         return result;
     }
 
-    public static CBoolean parseCBoolean(AdlParser.C_booleanContext c_booleanContext) {
-        return new CBoolean();
+    private static void parseBooleanValues(CBoolean result, List<Boolean_valueContext> booleanValues) {
+        for(Boolean_valueContext booleanValue:booleanValues) {
+            if(booleanValue.SYM_FALSE() != null) {
+                result.addConstraint(false);
+            } else if(booleanValue.SYM_TRUE() != null) {
+                result.addConstraint(true);
+            }
+        }
     }
 
     public static CTerminologyCode parseCTerminologyCode(AdlParser.C_terminology_codeContext c_terminology_codeContext) {
@@ -65,7 +67,4 @@ public class PrimitivesConstraintParser {
         return new CDate();
     }
 
-    public static CReal parseCReal(AdlParser.C_realContext c_realContext) {
-        return new CReal();
-    }
 }
