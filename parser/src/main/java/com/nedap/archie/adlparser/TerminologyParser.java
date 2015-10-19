@@ -17,6 +17,12 @@ import java.util.function.BiFunction;
  */
 public class TerminologyParser {
 
+    private final ADLParserErrors errors;
+
+    public TerminologyParser(ADLParserErrors errors) {
+        this.errors = errors;
+    }
+
     public ArchetypeTerminology parseTerminology(AdlParser.Terminology_sectionContext terminologySectionContext) {
         AdlParser.Odin_textContext odinText = terminologySectionContext.odin_text();
         ArchetypeTerminology terminology = new ArchetypeTerminology();

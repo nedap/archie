@@ -23,8 +23,14 @@ import java.util.function.BiFunction;
 /**
  * Created by pieter.bos on 15/10/15.
  */
-public class ADLTreeWalker {
+public class CComplexObjectParser {
 
+    private final ADLParserErrors errors;
+
+    public CComplexObjectParser(ADLParserErrors errors) {
+        this.errors = errors;
+
+    }
 
     public RuleStatement parseRules(Rules_sectionContext rulesSectionContext) {
         //TODO: proper solution for this. Works for now.
@@ -32,8 +38,6 @@ public class ADLTreeWalker {
         statement.setRuleContent(rulesSectionContext.getText());
         return statement;
     }
-
-
 
     public CComplexObject parseComplexObject(C_complex_objectContext context) {
         CComplexObject object = new CComplexObject();

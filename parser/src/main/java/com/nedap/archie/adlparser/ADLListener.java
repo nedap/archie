@@ -8,20 +8,20 @@ import com.nedap.archie.aom.ArchetypeHRID;
 import com.nedap.archie.aom.AuthoredArchetype;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import java.util.List;
-
 /**
  * Created by pieter.bos on 19/10/15.
  */
 public class ADLListener extends AdlBaseListener {
 
+    private ADLParserErrors errors = new ADLParserErrors();
+
     private Archetype archetype;
-    private ADLTreeWalker subTreeWalker;
+    private CComplexObjectParser subTreeWalker;
     private TerminologyParser terminologyParser;
 
     public ADLListener() {
-        subTreeWalker = new ADLTreeWalker();//TODO: rename to ComplexObjectParser?
-        terminologyParser = new TerminologyParser();
+        subTreeWalker = new CComplexObjectParser(errors);//TODO: rename to ComplexObjectParser?
+        terminologyParser = new TerminologyParser(errors);
     }
 
     /** top-level constructs */
