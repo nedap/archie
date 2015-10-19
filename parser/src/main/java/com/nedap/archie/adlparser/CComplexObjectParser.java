@@ -114,7 +114,7 @@ public class CComplexObjectParser {
 
     private List<CObject> parseCObjects(C_objectsContext objectsContext) {
         ArrayList<CObject> result = new ArrayList<>();
-
+        objectsContext.sibling_order();//TODO!
         if (objectsContext.c_primitive_object() != null) {
             result.add(parsePrimitiveObject(objectsContext.c_primitive_object()));
         } else if (objectsContext.c_non_primitive_object() != null) {
@@ -148,8 +148,14 @@ public class CComplexObjectParser {
         return null;
     }
 
-    private CObject parseCComplexObjectProxy(C_complex_object_proxyContext c_complex_object_proxyContext) {
-        return null;
+    private CComplexObjectProxy parseCComplexObjectProxy(C_complex_object_proxyContext proxyContext) {
+
+        CComplexObjectProxy proxy = new CComplexObjectProxy();
+        proxy.setOccurences(this.parseMultiplicityInterval(proxyContext.c_occurrences()));
+        proxy.setTargetPath(proxyContext.adl_path().getText());
+        proxy.setRmTypeName(proxyContext.type_id().getText());
+        proxy.setNodeId(proxyContext.ID_CODE().getText());
+        return proxy;
     }
 
     private CArchetypeRoot parseArchetypeRoot(C_archetype_rootContext archetypeRootContext) {
@@ -158,9 +164,9 @@ public class CComplexObjectParser {
         root.setRmTypeName(archetypeRootContext.type_id().getText());
         root.setNodeId(archetypeRootContext.ID_CODE().getText());
         root.setArchetypeRef(archetypeRootContext.ARCHETYPE_REF().getText());
-        if(archetypeRootContext.c_occurrences() != null) {
-            root.setOccurences(this.parseMultiplicityInterval(archetypeRootContext.c_occurrences()));
-        }
+
+        root.setOccurences(this.parseMultiplicityInterval(archetypeRootContext.c_occurrences()));
+
         return root;
     }
 
@@ -248,6 +254,9 @@ public class CComplexObjectParser {
     }
 
     private MultiplicityInterval parseMultiplicityInterval(C_occurrencesContext occurrencesContext) {
+        if(occurrencesContext == null) {
+            return null;
+        }
         MultiplicityInterval interval = new MultiplicityInterval();
         List<TerminalNode> integers = occurrencesContext.multiplicity().INTEGER();
 
