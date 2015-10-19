@@ -63,7 +63,7 @@ public class TerminologyParser {
     }
 
     private Map<String, ValueSet> parseOdinValueSets(AdlParser.Object_blockContext context) {
-        //TODO: a proper odin parser would be nice. Why all these custom tools, JSON would be amazing for this!
+        //TODO: a proper odin parser would be nice. Jackson offers the possibility of relatively easily implementing JAXB-style data binding, See for example the CSV plugin
         Map<String, ValueSet> valueSets = new ConcurrentHashMap<>();
         AdlParser.Object_value_blockContext test = context.object_value_block();
         List<AdlParser.Keyed_objectContext> keyedContext = test.keyed_object();
@@ -93,7 +93,7 @@ public class TerminologyParser {
     }
 
     private <T> Map<String, Map<String, T>> parseOdinMap(String attributeName, AdlParser.Object_blockContext context, BiFunction<Map<String, T>, AdlParser.Keyed_objectContext, Void> parseInner) {
-        //TODO: a proper odin parser would be nice. Why all these custom tools, JSON would be amazing for this!
+        //TODO: a proper odin parser would be nice. Jackson offers the possibility of relatively easily implementing JAXB-style data binding, See for example the CSV plugin
         Map<String, Map<String, T>> terminology = new ConcurrentHashMap<>();
         AdlParser.Object_value_blockContext test = context.object_value_block();
         List<AdlParser.Keyed_objectContext> keyedContext = test.keyed_object();
