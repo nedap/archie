@@ -17,7 +17,6 @@ import java.util.List;
 public class NumberConstraintParser {
 
     public static CInteger parseCInteger(AdlParser.C_integerContext integerContext) {
-        // ( integer_value | integer_list_value | integer_interval_value | integer_interval_list_value ) ( ';' integer_value )? ;
         CInteger result = new CInteger();
 
         if(integerContext.assumed_integer_value() != null) {

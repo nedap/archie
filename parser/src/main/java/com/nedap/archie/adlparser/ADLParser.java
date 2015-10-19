@@ -5,6 +5,7 @@ import com.nedap.archie.aom.Archetype;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 
 import java.io.IOException;
@@ -15,7 +16,8 @@ public class ADLParser {
 
     public Lexer lexer;
     public AdlParser parser;
-    public ADLTreeWalker walker;
+    public ADLListener listener;
+    public ParseTreeWalker walker;
     public AdlParser.AdlContext tree;
     public ADLErrorListener errorListener;
 
@@ -35,8 +37,12 @@ public class ADLParser {
         parser = new AdlParser(new CommonTokenStream(lexer));
         parser.addErrorListener(errorListener);
         tree = parser.adl(); // parse
-        walker = new ADLTreeWalker();
-        return walker.parse(tree);
+
+        ADLListener listener = new ADLListener();
+        walker= new ParseTreeWalker();
+        walker.walk(listener, tree);
+        return listener.getArchetype();
+
     }
 
 }

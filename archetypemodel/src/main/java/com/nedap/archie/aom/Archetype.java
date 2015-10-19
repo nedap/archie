@@ -18,7 +18,7 @@ public class Archetype extends AuthoredResource {
 
     private CComplexObject definition;
     private ArchetypeTerminology terminology;
-    private List<RuleStatement> rules = new ArrayList<>();
+    private RuleStatement rules = null;//TODO: this should be a list when we correctly parse the rules. However, getting this as a string is very nice alternative for many use cases
 
     public String getParentArchetypeId() {
         return parentArchetypeId;
@@ -52,11 +52,11 @@ public class Archetype extends AuthoredResource {
         this.definition = definition;
     }
 
-    public List<RuleStatement> getRules() {
+    public RuleStatement getRules() {
         return rules;
     }
 
-    public void setRules(List<RuleStatement> rules) {
+    public void setRules(RuleStatement rules) {
         this.rules = rules;
     }
 

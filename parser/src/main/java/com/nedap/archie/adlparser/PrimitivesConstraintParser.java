@@ -2,21 +2,19 @@ package com.nedap.archie.adlparser;
 
 import com.nedap.archie.adlparser.antlr.AdlLexer;
 import com.nedap.archie.adlparser.antlr.AdlParser;
-import com.nedap.archie.adlparser.antlr.AdlParser.*;
-import com.nedap.archie.aom.CObject;
+import com.nedap.archie.adlparser.antlr.AdlParser.Boolean_list_valueContext;
+import com.nedap.archie.adlparser.antlr.AdlParser.Boolean_valueContext;
+import com.nedap.archie.adlparser.antlr.AdlParser.String_list_valueContext;
+import com.nedap.archie.adlparser.antlr.AdlParser.String_valueContext;
 import com.nedap.archie.aom.primitives.CBoolean;
 import com.nedap.archie.aom.primitives.CDate;
 import com.nedap.archie.aom.primitives.CDateTime;
 import com.nedap.archie.aom.primitives.CDuration;
-import com.nedap.archie.aom.primitives.CInteger;
-import com.nedap.archie.aom.primitives.CReal;
 import com.nedap.archie.aom.primitives.CString;
 import com.nedap.archie.aom.primitives.CTerminologyCode;
 import com.nedap.archie.aom.primitives.CTime;
 import com.nedap.archie.base.terminology.TerminologyCode;
-import org.antlr.v4.runtime.tree.TerminalNode;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
