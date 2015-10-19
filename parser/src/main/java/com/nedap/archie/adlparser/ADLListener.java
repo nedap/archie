@@ -113,10 +113,19 @@ public class ADLListener extends AdlBaseListener {
         archetype.setTerminology(terminologyParser.parseTerminology(ctx));
     }
 
+    @Override
+    public void enterSpecialization_section(Specialization_sectionContext ctx) {
+        if(ctx != null && ctx.ARCHETYPE_REF() != null) {
+            archetype.setParentArchetypeId(ctx.ARCHETYPE_REF().getText());
+        }
+    }
+
     public void enterRules_section(Rules_sectionContext ctx) {
         archetype.setRules(subTreeWalker.parseRules(ctx));
     }
 
+
+    /* getters for result */
     public Archetype getArchetype() {
         return archetype;
     }
