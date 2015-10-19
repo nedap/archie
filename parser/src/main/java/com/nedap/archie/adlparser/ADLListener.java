@@ -6,6 +6,9 @@ import com.nedap.archie.adlparser.antlr.AdlParser.*;
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.ArchetypeHRID;
 import com.nedap.archie.aom.AuthoredArchetype;
+import com.nedap.archie.aom.OperationalTemplate;
+import com.nedap.archie.aom.Template;
+import com.nedap.archie.aom.TemplateOverlay;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 /**
@@ -27,14 +30,14 @@ public class ADLListener extends AdlBaseListener {
     /** top-level constructs */
     @Override
     public void enterArchetype(ArchetypeContext ctx) {
-        archetype = new Archetype();
+        archetype = new AuthoredArchetype();
         archetype.setDifferential(true);
         parseArchetypeHRID(ctx.ARCHETYPE_HRID());
     }
 
     @Override
     public void enterTemplate(TemplateContext ctx) {
-        archetype = new Archetype();
+        archetype = new Template();
         archetype.setDifferential(false);
         parseArchetypeHRID(ctx.ARCHETYPE_HRID());
 
@@ -42,21 +45,22 @@ public class ADLListener extends AdlBaseListener {
 
     @Override
     public void enterTemplate_overlay(Template_overlayContext ctx) {
-        archetype = new Archetype();
+        archetype = new TemplateOverlay();
         archetype.setDifferential(false);
         parseArchetypeHRID(ctx.ARCHETYPE_HRID());
     }
 
     @Override
     public void enterOperational_template(Operational_templateContext ctx) {
-        archetype = new Archetype();
+        archetype = new OperationalTemplate();
         archetype.setDifferential(false);
         parseArchetypeHRID(ctx.ARCHETYPE_HRID());
     }
 
     private void parseArchetypeHRID(TerminalNode hrId) {
         if(hrId != null) {
-            archetype.setArchetypeId(new ArchetypeHRID(hrId.getText()));
+            ArchetypeHRID archetypeHRID = new ArchetypeHRID(hrId.getText());
+            archetype.setArchetypeId(archetypeHRID);
         }
     }
 

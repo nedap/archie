@@ -10,6 +10,22 @@ public class CComplexObject extends CDefinedObject<ArchetypeModelObject> {
 
     private List<CAttribute> attributes = new ArrayList();
 
+    /**
+     * get attribute by name.
+     * TODO: although this really belongs in complexobject, add convenience method in CObject, always returning null
+     *       saves lots of code in treewalking/path finding
+     * @param name
+     * @return
+     */
+    public CAttribute getAttribute(String name) {
+        for(CAttribute attribute:attributes) {
+            if(attribute.getRmAttributeName().equals(name)) {
+                return attribute;
+            }
+        }
+        return null;
+    }
+
     public List<CAttribute> getAttributes() {
         return attributes;
     }

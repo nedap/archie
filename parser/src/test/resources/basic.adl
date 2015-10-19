@@ -105,6 +105,7 @@ terminology
 			["id7"] = <
 				text = <"Comment">
 				description = <"Comment on any qualification.">
+				extra = <"Extra value">
 			>
 			["id8"] = <
 				text = <"Medication instruction">

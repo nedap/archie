@@ -86,4 +86,20 @@ public class ArchetypeTerminology {
     public void setValueSets(Map<String, ValueSet> valueSets) {
         this.valueSets = valueSets;
     }
+
+    public ArchetypeTerm getTermDefinition(String language, String code) {
+        Map<String, ArchetypeTerm> translated = termDefinitions.get(language);
+        if(translated == null) {
+            return null;
+        }
+        return translated.get(code);
+    }
+
+    public URI getTermBinding(String terminologyId, String code) {
+        Map<String, URI> translated = termBindings.get(terminologyId);
+        if(translated == null) {
+            return null;
+        }
+        return translated.get(code);
+    }
 }

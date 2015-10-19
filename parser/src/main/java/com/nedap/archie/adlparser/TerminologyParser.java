@@ -37,7 +37,7 @@ public class TerminologyParser {
                             break;
                         case "term_bindings":
                         case "term_binding":
-                            parseOdinMap(value.attribute_id().getText(), value.object_block(), TerminologyParser::parseOdinUri);
+                            terminology.setTermBindings(parseOdinMap(value.attribute_id().getText(), value.object_block(), TerminologyParser::parseOdinUri));
 
                             break;
                         case "terminology_extracts":
@@ -130,7 +130,7 @@ public class TerminologyParser {
         return null;
     }
 
-    private static Void parseOdinUri(Map<String, Object> map, AdlParser.Keyed_objectContext context) {
+    private static Void parseOdinUri(Map<String, URI> map, AdlParser.Keyed_objectContext context) {
         String termCode = OdinValueParser.parseOdinStringValue(context.primitive_value().string_value());
         try {
             URI uri = OdinValueParser.parseOdinUri(context.object_block().object_value_block().primitive_object().primitive_value().uri_value());

@@ -1,9 +1,15 @@
 package com.nedap.archie.aom;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * Created by pieter.bos on 15/10/15.
  */
 public class ArchetypeHRID extends ArchetypeModelObject {
+
+    private String idValue;
+
     private String namespace;
     private String rmPublisher;
     private String rmPackage;
@@ -19,7 +25,27 @@ public class ArchetypeHRID extends ArchetypeModelObject {
     }
 
     public ArchetypeHRID(String value) {
+        this.idValue = value;
 
+        Pattern p = Pattern.compile("((?<namespace>.*)::)?(?<publisher>.*)-(?<package>.*)-(?<class>.*)\\.(?<concept>.*)\\.v(?<version>.*)");
+        Matcher m = p.matcher(value);
+
+        if(!m.matches()) {
+            throw new IllegalArgumentException(value + " is not a valid archetype human readable id");
+        }
+        namespace = m.group("namespace");
+        rmPublisher = m.group("publisher");
+        rmPackage = m.group("package");
+        rmClass = m.group("class");
+
+
+        conceptId = m.group("concept");
+        releaseVersion = m.group("version");
+        //TODO: versionStatus and build count
+    }
+
+    public String getFullId() {
+        return idValue;
     }
 
     public String getNamespace() {
