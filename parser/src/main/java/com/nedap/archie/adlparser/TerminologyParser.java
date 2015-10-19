@@ -33,24 +33,23 @@ public class TerminologyParser {
                     switch (value.attribute_id().getText()) {
                         case "term_definitions":
                         case "term_definition":
-
-                            terminology.setTermDefinitions(parseOdinMap(value.object_block(), TerminologyParser::parseOdinArchetypeTerm));
+                            terminology.setTermDefinitions(parseOdinMap(value.attribute_id().getText(), value.object_block(), TerminologyParser::parseOdinArchetypeTerm));
                             break;
                         case "term_bindings":
                         case "term_binding":
-                            parseOdinMap(value.object_block(), TerminologyParser::parseOdinUri);
+                            parseOdinMap(value.attribute_id().getText(), value.object_block(), TerminologyParser::parseOdinUri);
 
                             break;
                         case "terminology_extracts":
                         case "terminology_extract":
-                            terminology.setTerminologyExtracts(parseOdinMap(value.object_block(), TerminologyParser::parseOdinArchetypeTerm));
+                            terminology.setTerminologyExtracts(parseOdinMap(value.attribute_id().getText(), value.object_block(), TerminologyParser::parseOdinArchetypeTerm));
                             break;
                         case "value_sets":
                         case "value_set":
                             terminology.setValueSets(parseOdinValueSets(value.object_block()));
                             break;
                         default:
-                            //TODO: log some exception
+                            errors.addWarning(String.format("Unknown section found in archetype terminology: %s", value.attribute_id().getText()));
 
                     }
                 }
@@ -69,7 +68,7 @@ public class TerminologyParser {
         AdlParser.Object_value_blockContext test = context.object_value_block();
         List<AdlParser.Keyed_objectContext> keyedContext = test.keyed_object();
         if(keyedContext == null) {
-            //TODO: log some exception
+            errors.addWarning("in ArchetypeTerminology, Value set found, but no definition");
         }
         for(AdlParser.Keyed_objectContext innerContext:keyedContext) {
             String valueSetId = OdinValueParser.parseOdinStringValue(innerContext.primitive_value().string_value());
@@ -93,13 +92,13 @@ public class TerminologyParser {
         return valueSets;
     }
 
-    private <T> Map<String, Map<String, T>> parseOdinMap( AdlParser.Object_blockContext context, BiFunction<Map<String, T>, AdlParser.Keyed_objectContext, Void> parseInner) {
+    private <T> Map<String, Map<String, T>> parseOdinMap(String attributeName, AdlParser.Object_blockContext context, BiFunction<Map<String, T>, AdlParser.Keyed_objectContext, Void> parseInner) {
         //TODO: a proper odin parser would be nice. Why all these custom tools, JSON would be amazing for this!
         Map<String, Map<String, T>> terminology = new ConcurrentHashMap<>();
         AdlParser.Object_value_blockContext test = context.object_value_block();
         List<AdlParser.Keyed_objectContext> keyedContext = test.keyed_object();
         if(keyedContext == null) {
-            //TODO: log some exception
+            errors.addWarning("In ArchetypeTerminology, empty " + attributeName + " found");
         }
         for(AdlParser.Keyed_objectContext languageContext:keyedContext) {
             String language = OdinValueParser.parseOdinStringValue(languageContext.primitive_value().string_value());
