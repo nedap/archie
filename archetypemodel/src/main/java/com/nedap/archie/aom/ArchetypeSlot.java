@@ -10,7 +10,7 @@ public class ArchetypeSlot extends CObject {
 
     private List<Assertion> includes = new ArrayList<>();
     private List<Assertion> excludes = new ArrayList<>();
-    private Boolean closed;
+    private boolean closed = false;
 
     public List<Assertion> getIncludes() {
         return includes;
@@ -28,11 +28,11 @@ public class ArchetypeSlot extends CObject {
         this.excludes = excludes;
     }
 
-    public Boolean getClosed() {
+    public boolean getClosed() {
         return closed;
     }
 
-    public void setClosed(Boolean closed) {
+    public void setClosed(boolean closed) {
         this.closed = closed;
     }
 }

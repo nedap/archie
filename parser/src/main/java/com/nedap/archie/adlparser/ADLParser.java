@@ -17,6 +17,7 @@ public class ADLParser {
     public AdlParser parser;
     public ADLTreeWalker walker;
     public AdlParser.AdlContext tree;
+    public ADLErrorListener errorListener;
 
     public Archetype parse(String adl) throws IOException {
         return parse(new ANTLRInputStream(adl));
@@ -27,8 +28,12 @@ public class ADLParser {
     }
 
     public Archetype parse(CharStream stream) {
+        errorListener = new ADLErrorListener();
+
         lexer = new AdlLexer(stream);
+        lexer.addErrorListener(errorListener);
         parser = new AdlParser(new CommonTokenStream(lexer));
+        parser.addErrorListener(errorListener);
         tree = parser.adl(); // parse
         walker = new ADLTreeWalker();
         return walker.parse(tree);

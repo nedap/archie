@@ -17,10 +17,18 @@ public class OdinValueParser {
             return null;
         }
         String text = context.getText();
-        //strip the quotes
-        if(!text.startsWith("\"")) {
+        //regexps
+        if(text.startsWith("/")) {
             return text;
         }
+        if(text.startsWith("^")) {
+            return text;
+        }
+
+        if(!text.startsWith("\"")) {
+            throw new IllegalArgumentException("text should start with '/', '^' or '\"'");
+        }
+        //strip the quotes
         if(text.length() == 2) { // empty string, ""
             return "";
         }

@@ -290,13 +290,22 @@ public class ADLTreeWalker {
         if (objectContext.c_complex_object() != null) {
             return parseComplexObject(objectContext.c_complex_object());
         } else if (objectContext.c_archetype_root() != null) {
-            return null;//TODO
+            return parseArchetypeRoot(objectContext.c_archetype_root());
+
         } else if (objectContext.c_complex_object_proxy() != null) {
-            return null;//TODO
+            return parseCComplexObjectProxy(objectContext.c_complex_object_proxy());
         } else if (objectContext.archetype_slot() != null) {
             return parseArchetypeSlot(objectContext.archetype_slot());
 
         }
+        return null;
+    }
+
+    private CObject parseCComplexObjectProxy(C_complex_object_proxyContext c_complex_object_proxyContext) {
+        return null;
+    }
+
+    private CObject parseArchetypeRoot(C_archetype_rootContext c_archetype_rootContext) {
         return null;
     }
 

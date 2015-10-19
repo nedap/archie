@@ -1,5 +1,6 @@
 package com.nedap.archie.aom;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -7,7 +8,7 @@ import java.util.List;
  */
 public class CPrimitiveTuple {
     private ArchetypeModelObject assumedValue;
-    private List<CPrimitiveObject> members;
+    private List<CPrimitiveObject> members = new ArrayList<>();
 
     public ArchetypeModelObject getAssumedValue() {
         return assumedValue;

@@ -10,7 +10,7 @@ lexer grammar AdlVocabulary;
 
 MATCHES_REGEXP : SYM_MATCHES WS? '{' WS? REGEXP WS? '}' ;
 fragment REGEXP : '/' SLASH_REGEXP_CHAR* '/' | '^' REGEXP_CHAR* '^';
-fragment REGEXP_CHAR : ~('\\'|[^\n\r]) | REGEXP_ESCAPE_SEQ | UTF8CHAR ;
+fragment REGEXP_CHAR : ~[\\^\n\r] | REGEXP_ESCAPE_SEQ | UTF8CHAR ;
 fragment REGEXP_ESCAPE_SEQ : '\\' [?abfnrtv\\^] ;
 
 
@@ -155,7 +155,7 @@ fragment HEX_DIGIT : [0-9a-fA-F] ;
 
 BRACKETS : [()<>\[\]{}];
 ARITHMETIC_OPERATORS : [-+*/%^=];
-MISC : [;];
+SYM_SEMICOLON: ';';
 
 SYM_LIST_CONTINUE: '...' ;
 SYM_INTERVAL_SEP: '..' ;

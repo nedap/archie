@@ -11,7 +11,7 @@ public class AuthoredArchetype extends ArchetypeModelObject{
     private String buildUid;
     private String rmRelease;
     private Boolean generated;
-    private HashMap<String, String> otherMetaData = new HashMap<String, String>();
+    private HashMap<String, String> otherMetaData = new HashMap<>();
 
     public String getAdlVersion() {
         return adlVersion;
