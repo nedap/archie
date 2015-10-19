@@ -152,8 +152,16 @@ public class CComplexObjectParser {
         return null;
     }
 
-    private CObject parseArchetypeRoot(C_archetype_rootContext c_archetype_rootContext) {
-        return null;
+    private CArchetypeRoot parseArchetypeRoot(C_archetype_rootContext archetypeRootContext) {
+        CArchetypeRoot root = new CArchetypeRoot();
+
+        root.setRmTypeName(archetypeRootContext.type_id().getText());
+        root.setNodeId(archetypeRootContext.ID_CODE().getText());
+        root.setArchetypeRef(archetypeRootContext.ARCHETYPE_REF().getText());
+        if(archetypeRootContext.c_occurrences() != null) {
+            root.setOccurences(this.parseMultiplicityInterval(archetypeRootContext.c_occurrences()));
+        }
+        return root;
     }
 
     private ArchetypeSlot parseArchetypeSlot(Archetype_slotContext slotContext) {
