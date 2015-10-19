@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import static org.junit.Assert.assertTrue;
+
 /**
  * Created by pieter.bos on 16/10/15.
  */
@@ -62,7 +64,13 @@ public class LargeSetOfADLsTest {
         System.out.println("parsed adls: " + adlFiles.size());
         System.out.println("parsed adls with ANTLR parse errors: " + parseErrors.size());
         System.out.println("parsed adls with Exceptions: " + exceptions.size());
+        //TODO: this is rather ugly, but I just want not more failing tests, that's all :)
+        //this now contains regexp matching errors, version 1.5 (arguably, should not fail on that at all!)
+        //and some other problems
+        assertTrue(exceptions.size() <= 13);
 
 
     }
+
+
 }
