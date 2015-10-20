@@ -10,6 +10,8 @@ public class CComplexObject extends CDefinedObject<ArchetypeModelObject> {
 
     private List<CAttribute> attributes = new ArrayList();
 
+    private List<CAttributeTuple> attributeTuples = new ArrayList();
+
     /**
      * get attribute by name.
      * TODO: although this really belongs in complexobject, add convenience method in CObject, always returning null
@@ -36,5 +38,17 @@ public class CComplexObject extends CDefinedObject<ArchetypeModelObject> {
 
     public void addAttribute(CAttribute attribute) {
         attributes.add(attribute);
+    }
+
+    public List<CAttributeTuple> getAttributeTuples() {
+        return attributeTuples;
+    }
+
+    public void setAttributeTuples(List<CAttributeTuple> attributeTuples) {
+        this.attributeTuples = attributeTuples;
+    }
+
+    public void addAttributeTuple(CAttributeTuple tuple) {
+        this.attributeTuples.add(tuple);
     }
 }

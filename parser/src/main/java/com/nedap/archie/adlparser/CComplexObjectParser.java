@@ -54,15 +54,15 @@ public class CComplexObjectParser {
             object.setOccurences(parseMultiplicityInterval(context.c_occurrences()));
         }
         for (C_attribute_defContext attribute : context.c_attribute_def()) {
-            object.addAttribute(parseAttribute(object, attribute));
+            parseAttribute(object, attribute);
         }
         return object;
     }
 
-    private CAttribute parseAttribute(CComplexObject parent, C_attribute_defContext attributeDefContext) {
-        CAttribute attribute = null;
+    private void parseAttribute(CComplexObject parent, C_attribute_defContext attributeDefContext) {
+
         if (attributeDefContext.c_attribute() != null) {
-            attribute = new CAttribute();
+            CAttribute attribute = new CAttribute();
             C_attributeContext attributeContext = attributeDefContext.c_attribute();
             attribute.setRmAttributeName(attributeContext.attribute_id().getText());
             if (attributeContext.c_existence() != null) {
@@ -76,10 +76,10 @@ public class CComplexObjectParser {
             if (attributeContext.c_objects() != null) {
                 attribute.setChildren(parseCObjects(attributeContext.c_objects()));
             }
+            parent.addAttribute(attribute);
         } else if (attributeDefContext.c_attribute_tuple() != null) {
-            parseAttributeTuple(parent, attributeDefContext.c_attribute_tuple());
+            parent.addAttributeTuple(parseAttributeTuple(parent, attributeDefContext.c_attribute_tuple()));
         }
-        return attribute;
 
     }
 

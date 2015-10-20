@@ -70,4 +70,10 @@ public class CAttribute extends ArchetypeConstraint {
     public void setCardinality(Cardinality cardinality) {
         this.cardinality = cardinality;
     }
+
+    @Override
+    public String toString() {
+        return "Cattribute: " + rmAttributeName + ", " + children.size() + " children";
+    }
+
 }

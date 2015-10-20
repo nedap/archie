@@ -47,7 +47,9 @@ definition
 									}
 									ELEMENT[id5] occurrences matches {0..*} matches {	-- Endorsement
 										value matches {
-											DV_TEXT[id14] 
+											DV_TEXT[id14] matches {
+												value matches {"Robert", "Rick", "Clara"}
+											}
 										}
 									}
 									ELEMENT[id6] occurrences matches {0..*} matches {	-- AuthorisationID
@@ -57,7 +59,12 @@ definition
 									}
 									ELEMENT[id7] occurrences matches {0..*} matches {	-- Comment
 										value matches {
-											DV_TEXT[id16] 
+											DV_QUANTITY[id16] matches {
+													[unit, value] matches {
+															[{"kg"}, {|5..300|}],
+															[{"lb"}, {|10..600|}]
+															}
+											}
 										}
 									}
 								}

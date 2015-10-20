@@ -3,12 +3,15 @@ package com.nedap.archie.adlparser;
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.ArchetypeModelObject;
 import com.nedap.archie.aom.CAttribute;
+import com.nedap.archie.aom.CAttributeTuple;
 import com.nedap.archie.aom.CComplexObject;
 import com.nedap.archie.aom.CObject;
+import com.nedap.archie.aom.primitives.CString;
 import com.nedap.archie.aom.primitives.CTerminologyCode;
 import com.nedap.archie.query.APathQuery;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -79,9 +82,52 @@ public class DefinitionTest {
         CObject child1 = attribute.getChildren().get(1);
         assertEquals("DV_IDENTIFIER", child1.getRmTypeName());
         assertEquals("id13", child1.getNodeId());
+    }
+
+    @Test
+    public void stringConstraint() throws Exception {
+        Archetype archetype = new ADLParser().parse(getClass().getResourceAsStream("/basic.adl"));
+
+        APathQuery query =
+                new APathQuery("/context[id11]/other_context[id2]/items[id3]/items[id5]/value[id14]/value");
+
+        ArchetypeModelObject archetypeModelObject = query.find(archetype.getDefinition());
+
+        assertEquals(CAttribute.class, archetypeModelObject.getClass());
+        CAttribute stringAttribute = (CAttribute) archetypeModelObject;
+        assertEquals(1, stringAttribute.getChildren().size());
+        CString stringConstraint = (CString) stringAttribute.getChildren().get(0);
+        List<String> namesList = new ArrayList<>();
+        namesList.add("Robert");
+        namesList.add("Rick");
+        namesList.add("Clara");
+        assertEquals(namesList, stringConstraint.getConstraint());
 
     }
 
+    @Test
+    public void tupleConstraint() throws Exception {
+        Archetype archetype = new ADLParser().parse(getClass().getResourceAsStream("/basic.adl"));
 
+        APathQuery query =
+                new APathQuery("/context[id11]/other_context[id2]/items[id3]/items[id7]/value[id16]");
 
+        ArchetypeModelObject archetypeModelObject = query.find(archetype.getDefinition());
+
+        assertEquals(CComplexObject.class, archetypeModelObject.getClass());
+        CComplexObject rootObject = (CComplexObject) archetypeModelObject;
+        assertEquals("DV_QUANTITY", rootObject.getRmTypeName());
+        assertEquals(1, rootObject.getAttributeTuples().size());
+
+        List<CAttribute> attributes = rootObject.getAttributes();
+        assertEquals(2, attributes.size());
+        assertEquals("unit", attributes.get(0).getRmAttributeName());
+        assertEquals("value", attributes.get(1).getRmAttributeName());
+
+        CAttributeTuple attributeTuple = rootObject.getAttributeTuples().get(0);
+        assertEquals(2, attributeTuple.getTuples().size());
+        CString kilograms = (CString) attributeTuple.getTuples().get(0).getMembers().get(0);
+        assertEquals("kg", kilograms.getConstraint().get(0));
+
+    }
 }

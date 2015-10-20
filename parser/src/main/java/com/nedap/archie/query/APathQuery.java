@@ -46,18 +46,19 @@ public class APathQuery {
             List<PredicateContext> predicateContexts = stepContext.predicate();
             String nodeId = null;
             for(PredicateContext predicateContext:predicateContexts) {
-                //TODO: this is NOT a full parser. Find one because writing an XPath parser seems like a thing that's been done before!
-                nodeId = predicateContext.expr().orExpr().andExpr(0).getText();
+                //TODO: this is not a full parser. Find one because writing an XPath parser seems like a thing that's been done before.
+                //this is a bit of a hack, but it makes sure that /items[id2 and name="ignored"] works. Only in that order
+                nodeId = predicateContext.expr().orExpr().andExpr(0).equalityExpr().get(0).getText();
             }
             pathSegments.add(new PathSegment(nodeName, nodeId));
         }
     }
 
     public ArchetypeModelObject find(CComplexObject root) {
-        CObject currentObject = root;
+        ArchetypeModelObject currentObject = root;
         int i =0;
         for(PathSegment segment:pathSegments) {
-            if(i == pathSegments.size()) {
+            if(i >= pathSegments.size()) {
                 return currentObject;
             }
             CAttribute attribute = null;
@@ -70,6 +71,7 @@ public class APathQuery {
             if(attribute == null) {
                 return null;
             }
+            currentObject = attribute;
             if(segment.getNodeId() == null) {
                 if(i == pathSegments.size()-1) {
                     return attribute;
@@ -85,6 +87,6 @@ public class APathQuery {
             }
             i++;
         }
-        return null;
+        return currentObject;
     }
 }

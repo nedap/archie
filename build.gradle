@@ -1,5 +1,9 @@
+allprojects {
+	apply plugin: 'maven' //so we can install to local repository
+}
 subprojects {
 	apply plugin: 'java'
+
 	repositories {
 	    mavenCentral()
 		mavenLocal()
