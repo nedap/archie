@@ -1,5 +1,9 @@
+
+
 allprojects {
 	apply plugin: 'maven' //so we can install to local repository
+	version = '0.1.0-SNAPSHOT'
+	group = 'com.nedap.healthcare.archie'
 }
 subprojects {
 	apply plugin: 'java'
