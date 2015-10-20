@@ -1,16 +1,16 @@
 # Archie: ADL 2.0 parser
 
-An ADL 2.0 parser for use in openEHR-implementations, written in Java. Based on the ANTLR-grammar by Thomas Beale at https://github.com/openehr/adl-antlr . See also www.openehr.org
+A work-in-progress ADL 2.0 parser for use in openEHR-implementations, written in Java. Based on the ANTLR-grammar by Thomas Beale at https://github.com/openehr/adl-antlr . See also www.openehr.org.
 
 ## Build
 
-You need Java 8 and Gradle to build:
+You need Java 8 and Gradle to build. Then just type:
 
 ```sh
 ./gradlew build
 ```
 
-To install to your local maven repository:
+To install to your local maven repository for use in other gradle or maven projects:
 
 ```sh
 ./gradlew install
@@ -22,6 +22,8 @@ To install to your local maven repository:
 Archetype archetype = new ADLParser().parse(adlFile);
 APathQuery query = new APathQuery("/context[id1]/items[id2]/value");
 ArchetypeModelObject object = query.find(archetype.getDefinition());
+CAttribute attribute = archetype.getDefinition()
+    .getAttribute("context").getChild("id1").getAttribute("items");
 String text = archetype.getTerminology().getTermDefinition("en", "id2").getText();
 ```
 
@@ -39,12 +41,14 @@ What it features:
 What we want this to do in the future:
 - Sibling order parsing
 - Rules parsing
+- Archetype metadata parsing
+- Annotations parsing
 - A template flattener
 - Many more convenience methods in the archetype object model
 - More extended APath-queries
 - A reference model implementation?
 - Probably rule evaluation
-- ADL serialization
+- ADL serialization (to ADL and perhaps JSON and XML)
 - Many more tests
 
 Known issues:
