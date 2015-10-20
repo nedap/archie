@@ -11,6 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
+ * NOTE: THIS CLASS IS EXPERIMENTAL AND THEREFORE SUBJECT TO CHANGE
  * Tree walker for archetypes describing reference model objects.
  *
  * TODO: at least activity objects. Perhaps a separate listener for demographic objects?

@@ -73,4 +73,23 @@ public class CObject extends ArchetypeConstraint {
         }
         return path;
     }
+
+    public boolean isAllowed() {
+        if(occurences == null) {
+            return true;
+        }
+        return occurences.isUpperUnbounded() || occurences.getUpper() > 0;
+    }
+
+    @Override
+    public CAttribute getParent() {
+        return (CAttribute) super.getParent();
+    }
+
+    public boolean isRequired() {
+        if(occurences == null) {
+            return false;
+        }
+        return occurences.getLower() > 0;
+    }
 }
