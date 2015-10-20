@@ -4,7 +4,7 @@ A work-in-progress ADL 2.0 parser for use in openEHR-implementations, written in
 
 ## Build
 
-You need Java 8 and Gradle to build. Then just type:
+You need Java 8 and Gradle to build. Then type:
 
 ```sh
 ./gradlew build
