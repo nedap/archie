@@ -1,6 +1,7 @@
 //
 //  General purpose patterns used in all openEHR parser and lexer tools
 //
+// Modified by Pieter Bos
 
 grammar base_patterns;
 import AdlVocabulary;

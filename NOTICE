@@ -1,2 +1,5 @@
 Archie ADL-parser
 Copyright 2015 Nedap Healthcare
+
+This project contains an adl-antlr grammar developed by Thomas Beale
+licensed under the Apache License 2.0
