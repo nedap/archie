@@ -51,4 +51,8 @@ public class CComplexObject extends CDefinedObject<ArchetypeModelObject> {
     public void addAttributeTuple(CAttributeTuple tuple) {
         this.attributeTuples.add(tuple);
     }
+
+    public boolean isAnyAllowed() {
+        return attributes.isEmpty();
+    }
 }
