@@ -37,6 +37,7 @@ public class CComplexObject extends CDefinedObject<ArchetypeModelObject> {
     }
 
     public void addAttribute(CAttribute attribute) {
+        attribute.setParent(this);
         attributes.add(attribute);
     }
 

@@ -1,0 +1,39 @@
+package com.nedap.archie.adlparser;
+
+import com.nedap.archie.aom.Archetype;
+import com.nedap.archie.aom.CAttribute;
+import com.nedap.archie.aom.CObject;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+
+/**
+ * Created by pieter.bos on 20/10/15.
+ */
+public class PathTest {
+
+    Archetype archetype;
+
+    @Before
+    public void setup() throws Exception {
+        archetype = new ADLParser().parse(getClass().getResourceAsStream("/basic.adl"));
+    }
+
+    @Test
+    public void rootNode() {
+        assertEquals("/", archetype.getDefinition().getPath());
+    }
+
+    @Test
+    public void complexObject() {
+        CObject object = archetype.getDefinition().getAttribute("context").getChild("id11").getAttribute("other_context").getChild("id2").getAttribute("items").getChild("id3");
+        assertEquals("/context[id11]/other_context[id2]/items[id3]", object.getPath());
+    }
+
+    @Test
+    public void attribute() {
+        CAttribute attribute = archetype.getDefinition().getAttribute("context").getChild("id11").getAttribute("other_context").getChild("id2").getAttribute("items");
+        assertEquals("/context[id11]/other_context[id2]/items", attribute.getPath());
+    }
+}

@@ -3,6 +3,7 @@ package com.nedap.archie.treewalker;
 import com.nedap.archie.adlparser.ADLParser;
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.CComplexObject;
+import com.nedap.archie.aom.CObject;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -46,6 +47,7 @@ public class RMArchetypeTreeListenerTest {
                 if(elementConstraint.getNodeId().equals("id16")) {
                     quantityFound = true;
                     assertEquals(1, elementConstraint.getAttributeTuples().size());
+                    assertEquals("id7", ((CObject) elementConstraint.getParent().getParent()).getNodeId());
                 } else {
                     fail("unknown quantity id: " + elementConstraint.getNodeId());
                 }

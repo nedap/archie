@@ -78,13 +78,11 @@ public class APathQuery {
                 }
                 continue;//??
             }
-            List<CObject> objects = attribute.getChildren();
-            for(CObject object:objects) {
-                if(segment.getNodeId().equals(object.getNodeId())) {
-                    currentObject = object;
-                    break;
-                }
+            currentObject = attribute.getChild(segment.getNodeId());
+            if(currentObject == null) {
+                return null;
             }
+
             i++;
         }
         return currentObject;

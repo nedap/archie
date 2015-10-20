@@ -51,16 +51,29 @@ public class CAttribute extends ArchetypeConstraint {
         this.multiple = multiple;
     }
 
+    public CObject getChild(String nodeId) {
+        for(CObject child:children) {
+            if(nodeId.equals(child.getNodeId())) {
+                return child;
+            }
+        }
+        return null;
+    }
+
     public List<CObject> getChildren() {
         return children;
     }
 
     public void setChildren(List<CObject> children) {
         this.children = children;
+        for(CObject child:children) {
+            child.setParent(this);
+        }
     }
 
     public void addChild(CObject child) {
         children.add(child);
+        child.setParent(this);
     }
 
     public Cardinality getCardinality() {
@@ -74,6 +87,18 @@ public class CAttribute extends ArchetypeConstraint {
     @Override
     public String toString() {
         return "Cattribute: " + rmAttributeName + ", " + children.size() + " children";
+    }
+
+    @Override
+    public String getPath() {
+        String path = "/" + rmAttributeName;
+        if(getParent() != null) {
+            path = getParent().getPath() + path;
+        }
+        if(path.startsWith("//")) {
+            return path.substring(1);
+        }
+        return path;
     }
 
 }
