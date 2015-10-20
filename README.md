@@ -1,8 +1,10 @@
-# Archie: ADL 2.0 parser
+# Archie: ADL 2.0 parser    
 
 A work-in-progress ADL 2.0 parser for use in openEHR-implementations, written in Java. Based on the ANTLR-grammar by Thomas Beale at https://github.com/openehr/adl-antlr . See also www.openehr.org.
 
 ## Build
+
+[![Build Status](https://travis-ci.org/nedap/archie.svg?branch=master)](https://travis-ci.org/nedap/archie)
 
 You need Java 8 and Gradle to build. Then type:
 
