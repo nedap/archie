@@ -33,15 +33,15 @@ What it features:
 - ADL 2.0 parsing, including tuples
 - basic Archetype Object Model implementation
 - very basic apath-queries - absolute paths with nodeid only so far, you can add a 'and name=""' clause if you want to, but it will be ignored
+- A listener to more easily walk the tree of archetypes describing an openEHR reference model
 - rather basic test coverage
 
 What we want this to do in the future:
 - Sibling order parsing
 - Rules parsing
 - A template flattener
-- Many convenience methods in the archetype object model
+- Many more convenience methods in the archetype object model
 - More extended APath-queries
-- A listener to easily walk the tree of archetypes describing an openEHR reference model
 - A reference model implementation?
 - Probably rule evaluation
 - ADL serialization
@@ -56,4 +56,4 @@ Feel free to create a pull request or use the github issue tracker to report iss
 
 ## License
 
-This software is licensed under the Apache license. See LICENSE.TXT.
+This software is licensed under the Apache license. See the LICENSE and NOTICE files.

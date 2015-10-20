@@ -9,8 +9,10 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Note: this Archetype is not 100% correct, as it should not be an AuthoredResource, but this makes things SO much easier
- * than implementing lots of interfaces
+ * Note: this Archetype does not conform to the UML model completely:
+ * - it extends AuthoredResource - needed because otherwise we would have multiple inheritance
+ * - it contains fields from AuthoredArchetype - needed because it saves complicated casting in java to call these methods otherwise
+ *
  * Created by pieter.bos on 15/10/15.
  */
 public class Archetype extends AuthoredResource {

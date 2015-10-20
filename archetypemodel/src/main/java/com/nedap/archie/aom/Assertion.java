@@ -1,7 +1,7 @@
 package com.nedap.archie.aom;
 
 /**
- * This should be an assertion, but for now it will contain its text-content
+ * Assertion object. For now contains all the text of the assertions, and not the parsed form
  * Created by pieter.bos on 15/10/15.
  */
 public class Assertion extends ArchetypeModelObject {

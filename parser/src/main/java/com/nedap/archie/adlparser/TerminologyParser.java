@@ -13,6 +13,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
 
 /**
+ * Parser for the terminology section of an archetype
+ *
  * Created by pieter.bos on 19/10/15.
  */
 public class TerminologyParser {

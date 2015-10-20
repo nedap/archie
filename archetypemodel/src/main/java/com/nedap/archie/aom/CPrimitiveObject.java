@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Primitive object. Parameterized with a Constraint type and AssumedAndDefault value type, to be able to override
+ * the methods in subclasses easily
+ *
  * Created by pieter.bos on 15/10/15.
  */
 public class CPrimitiveObject<Constraint, AssumedAndDefaultValue> extends CDefinedObject<AssumedAndDefaultValue> {

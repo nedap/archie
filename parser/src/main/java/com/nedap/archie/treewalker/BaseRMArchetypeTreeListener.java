@@ -6,7 +6,8 @@ import com.nedap.archie.aom.CComplexObject;
 import com.nedap.archie.aom.CObject;
 
 /**
- * Default implementation, all listeners have a no-op implementation. You can override what you want yourself.
+ * Default implementation, of the RMArchetypeTreeListener if you are only interested in a part of an Archetype
+ * All listeners are implemented as no-op methods
  *
  *
  * Created by pieter.bos on 20/10/15.

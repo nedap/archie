@@ -18,6 +18,11 @@ import java.util.List;
 /**
  * For now only accepts rather simple xpath-like expressions. TODO: get a proper parser library, there should be one out there, like jaxen (seems old?)
  *
+ * The only queries fully supported at the moment are absolute queries with node ids, such as '/items[id1]/content[id2]/value'.
+ *
+ * Any expression after the ID-code, such as in '[id1 and name="ignored"] are currently ignored, but they parse and function
+ * as long as you add the id-code as first part of the expression.
+ *
  * Created by pieter.bos on 19/10/15.
  */
 public class APathQuery {

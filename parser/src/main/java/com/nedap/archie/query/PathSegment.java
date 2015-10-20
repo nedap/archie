@@ -1,6 +1,7 @@
 package com.nedap.archie.query;
 
 /**
+ * Segment of an apath-query
  * Created by pieter.bos on 19/10/15.
  */
 public class PathSegment {

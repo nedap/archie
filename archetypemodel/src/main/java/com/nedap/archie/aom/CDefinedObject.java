@@ -1,7 +1,7 @@
 package com.nedap.archie.aom;
 
 /**
- * Defined Object. Parameterized so we don't have to do instanceof as much
+ * Defined Object. Parameterized so the default value methods can be overridden with a different type
  * Created by pieter.bos on 15/10/15.
  */
 public class CDefinedObject<T> extends CObject {

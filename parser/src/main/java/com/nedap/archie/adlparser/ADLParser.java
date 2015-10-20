@@ -7,11 +7,14 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
-
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringReader;
 
+
+/**
+ * Parses ADL files to Archetype objects.
+ *
+ */
 public class ADLParser {
 
     public Lexer lexer;

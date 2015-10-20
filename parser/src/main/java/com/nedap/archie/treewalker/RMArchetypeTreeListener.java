@@ -11,11 +11,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * NOTE: THIS CLASS IS EXPERIMENTAL AND THEREFORE SUBJECT TO CHANGE
- * Tree walker for archetypes describing reference model objects.
+ * Experimental tree walker for archetypes describing reference model objects.
  *
- * TODO: at least activity objects. Perhaps a separate listener for demographic objects?
- * TODO: split the item tree and item structures in separate calls?
+ * This API will probably be changed to something better in the future.
+ *
+ * TODO: at least Activity objects. Perhaps a separate listener for demographic objects?
+ * TODO: split the item tree and item structures into separate calls?
+ *
  * Created by pieter.bos on 20/10/15.
  */
 public interface RMArchetypeTreeListener {

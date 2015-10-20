@@ -12,6 +12,9 @@ import com.nedap.archie.aom.TemplateOverlay;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 /**
+ * ANTLR listener for an ADLS file. Uses the listener construction for the topmost elements, switches to custom treewalker
+ * for elements lower in the tree. This approach saves some code and complexity.
+ *
  * Created by pieter.bos on 19/10/15.
  */
 public class ADLListener extends AdlBaseListener {

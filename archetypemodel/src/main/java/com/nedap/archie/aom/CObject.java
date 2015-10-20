@@ -6,6 +6,12 @@ import java.util.Collections;
 import java.util.List;
 
 /**
+ * Constraint on an object.
+ *
+ * Slightly deviates from the openEHR Archetype Model by including the getAttributes() and getAttribute() methods here
+ * This enables one to type: archetype.getDefinition().getAttribute("context").getChild("id13").getAttribute("value")
+ * without casting.
+ *
  * Created by pieter.bos on 15/10/15.
  */
 public class CObject extends ArchetypeConstraint {
@@ -57,6 +63,11 @@ public class CObject extends ArchetypeConstraint {
         return null;
     }
 
+    /**
+     * Get the underlying attributes of this CObject. From this class always returns an empty list. Overriden with
+     * different implementations in subclasses.
+     * @return
+     */
     public List<CAttribute> getAttributes() {
         return Collections.EMPTY_LIST;
     }

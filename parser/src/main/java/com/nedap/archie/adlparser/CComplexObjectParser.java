@@ -21,6 +21,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
 
 /**
+ * Parser for the definition part of an archetype
+ *
  * Created by pieter.bos on 15/10/15.
  */
 public class CComplexObjectParser {
