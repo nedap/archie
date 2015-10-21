@@ -44,6 +44,7 @@ What we want this to do in the future:
 - Sibling order parsing
 - Rules parsing
 - Archetype metadata parsing
+- proper archetype slot assertions parsing (and tools to evaluate?)
 - Annotations parsing
 - A template flattener
 - Many more convenience methods in the archetype object model
