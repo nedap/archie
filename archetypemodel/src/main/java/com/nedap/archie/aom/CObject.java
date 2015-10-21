@@ -1,5 +1,7 @@
 package com.nedap.archie.aom;
 
+import com.nedap.archie.Configuration;
+import com.nedap.archie.aom.terminology.ArchetypeTerm;
 import com.nedap.archie.base.MultiplicityInterval;
 
 import java.util.Collections;
@@ -20,6 +22,7 @@ public class CObject extends ArchetypeConstraint {
     private MultiplicityInterval occurences;
     private String nodeId;
     private Boolean deprecated;
+
 
     public String getRmTypeName() {
         return rmTypeName;
@@ -79,6 +82,29 @@ public class CObject extends ArchetypeConstraint {
             return "/";
         }
         String path = getParent().getPath() + "[" + nodeId + "]";
+        if(path.startsWith("//")) {
+            return path.substring(1);
+        }
+        return path;
+    }
+
+
+
+    public String getLogicalPath() {
+        //TODO: this can cause name clashes. Solve them!
+        //TODO: the text can contain []-characters. Replace them?
+        //TODO: lowercase and replace spaces with underscores?
+        if(getParent() == null) {
+            return "/";
+        }
+
+        String nodeName = nodeId;
+        //TODO: this is a bit slow because we have to walk the tree to the archetype every single time
+        ArchetypeTerm termDefinition = getArchetype().getTerminology().getTermDefinition(Configuration.getLogicalPathLanguage(), nodeId);
+        if(termDefinition != null && termDefinition.getText() != null) {
+            nodeName = termDefinition.getText();
+        }
+        String path = getParent().getLogicalPath() + "[" + nodeName + "]";
         if(path.startsWith("//")) {
             return path.substring(1);
         }

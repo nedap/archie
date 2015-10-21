@@ -19,7 +19,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Archetype extends AuthoredResource implements Cloneable {
 
     private String parentArchetypeId;
-    private Boolean differential;
+    private boolean differential = false;
     private ArchetypeHRID archetypeId;
 
     private CComplexObject definition;
@@ -39,11 +39,11 @@ public class Archetype extends AuthoredResource implements Cloneable {
         this.parentArchetypeId = parentArchetypeId;
     }
 
-    public Boolean getDifferential() {
+    public boolean isDifferential() {
         return differential;
     }
 
-    public void setDifferential(Boolean differential) {
+    public void setDifferential(boolean differential) {
         this.differential = differential;
     }
 
@@ -60,6 +60,7 @@ public class Archetype extends AuthoredResource implements Cloneable {
     }
 
     public void setDefinition(CComplexObject definition) {
+        definition.setArchetype(this);
         this.definition = definition;
     }
 

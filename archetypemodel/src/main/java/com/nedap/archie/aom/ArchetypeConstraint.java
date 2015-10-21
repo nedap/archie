@@ -7,14 +7,14 @@ import javax.xml.bind.annotation.XmlTransient;
 /**
  * Created by pieter.bos on 15/10/15.
  */
-public class ArchetypeConstraint extends ArchetypeModelObject {
+public abstract class ArchetypeConstraint extends ArchetypeModelObject {
 
     @JsonIgnore //ignore these field in popular object mappers
     @XmlTransient
-    private transient ArchetypeConstraint parent;
+    private ArchetypeConstraint parent;
     @JsonIgnore //ignore these field in popular object mappers, otherwise we get infinite loops
     @XmlTransient
-    private transient CSecondOrder socParent;
+    private CSecondOrder socParent;
 
     @JsonIgnore
     @XmlTransient
@@ -36,11 +36,18 @@ public class ArchetypeConstraint extends ArchetypeModelObject {
         this.socParent = socParent;
     }
 
-    public String getPath() {
-        String path = "";
-        if(parent != null) {
-            path += parent.getPath();
-        }
-        return path;
+    public abstract String getPath();
+
+    public abstract String getLogicalPath();
+
+    public String path() {
+        return getPath();
     }
+
+
+    public Archetype getArchetype() {
+            return getParent().getArchetype();
+    }
+
+
 }

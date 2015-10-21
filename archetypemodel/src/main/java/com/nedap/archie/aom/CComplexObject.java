@@ -11,6 +11,7 @@ public class CComplexObject extends CDefinedObject<ArchetypeModelObject> {
     private List<CAttribute> attributes = new ArrayList();
 
     private List<CAttributeTuple> attributeTuples = new ArrayList();
+    private Archetype archetype;
 
     /**
      * get attribute by name.
@@ -55,5 +56,17 @@ public class CComplexObject extends CDefinedObject<ArchetypeModelObject> {
 
     public boolean isAnyAllowed() {
         return attributes.isEmpty();
+    }
+
+    public Archetype getArchetype() {
+        if(archetype == null) {
+            return getParent().getArchetype();
+        }
+        return archetype;
+    }
+
+    /* set the archetype this is used in. Only set for root nodes! */
+    public void setArchetype(Archetype archetype) {
+        this.archetype = archetype;
     }
 }

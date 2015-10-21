@@ -6,6 +6,7 @@ import com.nedap.archie.adlparser.antlr.AdlParser.*;
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.ArchetypeHRID;
 import com.nedap.archie.aom.AuthoredArchetype;
+import com.nedap.archie.aom.CComplexObject;
 import com.nedap.archie.aom.OperationalTemplate;
 import com.nedap.archie.aom.Template;
 import com.nedap.archie.aom.TemplateOverlay;
@@ -107,7 +108,8 @@ public class ADLListener extends AdlBaseListener {
      */
     @Override
     public void enterDefinition_section(Definition_sectionContext ctx) {
-        archetype.setDefinition(subTreeWalker.parseComplexObject(ctx.c_complex_object()));
+        CComplexObject definition = subTreeWalker.parseComplexObject(ctx.c_complex_object());
+        archetype.setDefinition(definition);
     }
 
     @Override

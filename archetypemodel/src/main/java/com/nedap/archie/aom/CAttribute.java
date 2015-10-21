@@ -101,4 +101,15 @@ public class CAttribute extends ArchetypeConstraint {
         return path;
     }
 
+    public String getLogicalPath() {
+        String path = "/" + rmAttributeName;
+        if(getParent() != null) {
+            path = getParent().getLogicalPath() + path;
+        }
+        if(path.startsWith("//")) {
+            return path.substring(1);
+        }
+        return path;
+    }
+
 }

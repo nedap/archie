@@ -36,4 +36,16 @@ public class PathTest {
         CAttribute attribute = archetype.getDefinition().getAttribute("context").getChild("id11").getAttribute("other_context").getChild("id2").getAttribute("items");
         assertEquals("/context[id11]/other_context[id2]/items", attribute.getPath());
     }
+
+
+    @Test
+    public void logicalPath() {
+        CObject object = archetype.getDefinition()
+                .getAttribute("context").getChild("id11")
+                .getAttribute("other_context").getChild("id2")
+                .getAttribute("items").getChild("id3")
+                .getAttribute("items").getChild("id4");
+        //id11 and id2 are not translated
+        assertEquals("/context[id11]/other_context[id2]/items[Qualification]/items[OrderID]", object.getLogicalPath());
+    }
 }
