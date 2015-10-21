@@ -19,5 +19,6 @@ public class CSecondOrder<T extends ArchetypeConstraint> {
 
     public void addMember(T member) {
         members.add(member);
+        member.setSocParent(this);
     }
 }

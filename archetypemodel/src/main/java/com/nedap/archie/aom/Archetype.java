@@ -1,5 +1,6 @@
 package com.nedap.archie.aom;
 
+import com.esotericsoftware.kryo.Kryo;
 import com.nedap.archie.aom.terminology.ArchetypeTerminology;
 
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * Created by pieter.bos on 15/10/15.
  */
-public class Archetype extends AuthoredResource {
+public class Archetype extends AuthoredResource implements Cloneable {
 
     private String parentArchetypeId;
     private Boolean differential;
@@ -124,6 +125,10 @@ public class Archetype extends AuthoredResource {
         if(value != null) {
             otherMetaData.put(text, value);
         }//TODO: just a value is possible according to grammar. But no in a ConcurrentHashMap. Change to different map implementation?
+    }
 
+    public Archetype clone() {
+        Kryo kryo = new Kryo();
+        return kryo.copy(this);
     }
 }

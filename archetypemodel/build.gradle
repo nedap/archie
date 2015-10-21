@@ -1,0 +1,3 @@
+dependencies {
+    compile 'com.esotericsoftware:kryo:3.0.3' //for easy and relatively fast object cloning
+}

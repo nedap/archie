@@ -11,10 +11,10 @@ public class ArchetypeConstraint extends ArchetypeModelObject {
 
     @JsonIgnore //ignore these field in popular object mappers
     @XmlTransient
-    private ArchetypeConstraint parent;
+    private transient ArchetypeConstraint parent;
     @JsonIgnore //ignore these field in popular object mappers, otherwise we get infinite loops
     @XmlTransient
-    private CSecondOrder socParent;
+    private transient CSecondOrder socParent;
 
     @JsonIgnore
     @XmlTransient
