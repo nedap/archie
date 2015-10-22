@@ -38,15 +38,22 @@ What it features:
 - basic Archetype Object Model implementation
 - very basic apath-queries - absolute paths with nodeid only so far, you can add a 'and name=""' clause if you want to, but it will be ignored
 - A listener to more easily walk the tree of archetypes describing an openEHR reference model
+- A far from complete Flattener implementation
+	- with id overriding if specified in template
+	- with RMTypeName setting
+	- with some basic attribute overriding/adding
+	- with archetype root expansion
+	- without terminology merging
+	- without name overriding
 - rather basic test coverage
 
 What we want this to do in the future:
-- Sibling order parsing
+- Temporal constraint parsing
 - Rules parsing
 - Archetype metadata parsing
-- proper archetype slot assertions parsing (and tools to evaluate?)
+- Proper archetype slot assertions parsing (and tools to evaluate?)
 - Annotations parsing
-- A template flattener
+- A fully featured flattener
 - Many more convenience methods in the archetype object model
 - More extended APath-queries
 - A reference model implementation?
@@ -55,7 +62,7 @@ What we want this to do in the future:
 - Many more tests
 
 Known issues:
-- The ADL ANTLR grammar still has some issues - at least with regular expression parsing and sibling order. Until this is fixed, not all ADL-files will parse.
+- The ADL ANTLR grammar still has some issues, mainly with regular expression parsing, but also some more issues. You might not even notice this in basic use cases
 
 ## Contributions
 
