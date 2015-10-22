@@ -117,10 +117,21 @@ public class CComplexObjectParser {
             if (nonPrimitiveObjectOrderedContext != null) {
 
                 for (C_non_primitive_object_orderedContext object : nonPrimitiveObjectOrderedContext) {
-                    if(object.sibling_order() != null) {
-                        //TODO: sibling order
+
+                    CObject cobject = parseNonPrimitiveObject(object.c_non_primitive_object());
+                    Sibling_orderContext siblingOrderContext = object.sibling_order();
+                    if(siblingOrderContext != null) {
+                        SiblingOrder siblingOrder = new SiblingOrder();
+                        if(siblingOrderContext.SYM_AFTER() != null) {
+                            siblingOrder.setBefore(false);
+                        } else if (siblingOrderContext.SYM_BEFORE() != null) {
+                            siblingOrder.setBefore(true);
+                        }
+                        siblingOrder.setSiblingNodeId(siblingOrderContext.ID_CODE().getText());
+                        cobject.setSiblingOrder(siblingOrder);
                     }
-                    result.add(parseNonPrimitiveObject(object.c_non_primitive_object()));
+
+                    result.add(cobject);
                 }
             }
         }

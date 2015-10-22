@@ -23,6 +23,8 @@ public class CObject extends ArchetypeConstraint {
     private String nodeId;
     private Boolean deprecated;
 
+    private SiblingOrder siblingOrder;
+
 
     public String getRmTypeName() {
         return rmTypeName;
@@ -50,6 +52,14 @@ public class CObject extends ArchetypeConstraint {
 
     public Boolean getDeprecated() {
         return deprecated;
+    }
+
+    public SiblingOrder getSiblingOrder() {
+        return siblingOrder;
+    }
+
+    public void setSiblingOrder(SiblingOrder siblingOrder) {
+        this.siblingOrder = siblingOrder;
     }
 
     public void setDeprecated(Boolean deprecated) {
