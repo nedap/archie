@@ -7,7 +7,7 @@
 //
 
 grammar Adl;
-import cadl, odin, AdlVocabulary;
+import cadl, odin;
 
 //
 //  ============== Parser rules ==============
@@ -37,7 +37,7 @@ template:
     rules_section?
     terminology_section
     annotations_section?
-    (HLINE? template_overlay)*
+    (H_CMT_LINE template_overlay)*
     ;
 
 template_overlay: 
@@ -60,7 +60,7 @@ operational_template:
     component_terminologies_section?
     ;
 
-specialization_section : SYM_SPECIALIZE ARCHETYPE_HRID ;
+specialization_section : SYM_SPECIALIZE archetype_ref ;
 language_section       : SYM_LANGUAGE odin_text ;
 description_section    : SYM_DESCRIPTION odin_text ;
 definition_section     : SYM_DEFINITION c_complex_object ;
@@ -72,12 +72,12 @@ component_terminologies_section: SYM_COMPONENT_TERMINOLOGIES odin_text ;
 meta_data: '(' meta_data_item  (';' meta_data_item )* ')' ;
 
 meta_data_item:
-      SYM_ADL_VERSION '=' VERSION_ID
-    | SYM_UID '=' GUID
-    | SYM_BUILD_UID '=' GUID
-    | SYM_RM_RELEASE '=' VERSION_ID
-    | SYM_IS_CONTROLLED
-    | SYM_IS_GENERATED
+      'adl_version' '=' VERSION_ID
+    | 'uid' '=' GUID
+    | 'build_uid' '=' GUID
+    | 'rm_release' '=' VERSION_ID
+    | 'is_controlled'
+    | 'is_generated'
     | identifier ( '=' meta_data_value )?
     ;
 

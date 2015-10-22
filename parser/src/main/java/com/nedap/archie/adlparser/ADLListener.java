@@ -96,6 +96,7 @@ public class ADLListener extends AdlBaseListener {
          */
         if(archetype instanceof AuthoredArchetype) {
             AuthoredArchetype authoredArchetype = (AuthoredArchetype) archetype;
+
             if(ctx.SYM_ADL_VERSION() != null) {
                 authoredArchetype.setAdlVersion(ctx.VERSION_ID().getText());
             }

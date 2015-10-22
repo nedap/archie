@@ -7,9 +7,7 @@
 //
 
 grammar adl_rules;
-
-
-import cadl_primitives, AdlVocabulary;
+import cadl_primitives;
 
 //
 //  ============== Parser rules ==============
@@ -35,15 +33,12 @@ boolean_leaf:
     | SYM_NOT boolean_leaf
     ;
 
-boolean_constraint: ( adl_path | adl_relative_path ) (matches_regexp_constraint | matches_primitive_constraint ) ;
-
-matches_regexp_constraint: MATCHES_REGEXP;
-matches_primitive_constraint: SYM_MATCHES '{' c_primitive_object '}';
+boolean_constraint: ( adl_path | adl_relative_path ) SYM_MATCHES '{' c_primitive_object '}' ;
 
 boolean_binop:
-      SYM_OR
     | SYM_AND
     | SYM_XOR
+    | SYM_OR
     | SYM_IMPLIES
     ;
 
@@ -67,6 +62,7 @@ arithmetic_leaf:
     ;
 
 arithmetic_arith_expr: arithmetic_arith_expr arithmetic_binop arithmetic_leaf
+    | arithmetic_arith_expr '^'<assoc=right> arithmetic_leaf
     | arithmetic_leaf
     ;
 
@@ -84,5 +80,4 @@ arithmetic_binop:
     | '*'
     | '+'
     | '-'
-    | '^'
     ;

@@ -5,11 +5,9 @@
 //	copyright:   Copyright (c) 2015 openEHR Foundation
 //	license:     Apache 2.0 License <http://www.apache.org/licenses/LICENSE-2.0.html>
 //
-// Modified by Pieter Bos
 
 grammar odin;
-
-import odin_values, AdlVocabulary;
+import odin_values;
 
 //
 // -------------------------- Parse Rules --------------------------

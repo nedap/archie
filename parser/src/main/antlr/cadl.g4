@@ -5,10 +5,9 @@
 // copyright:   Copyright (c) 2015 openEHR Foundation
 // license:     Apache 2.0 License <http://www.apache.org/licenses/LICENSE-2.0.html>
 //
-// Modified by Pieter Bos
 
 grammar cadl;
-import adl_rules, AdlVocabulary;
+import adl_rules;
 
 //
 //  ======================= Top-level Objects ========================
@@ -18,9 +17,11 @@ c_complex_object: type_id '[' ( ROOT_ID_CODE | ID_CODE ) ']' c_occurrences? ( SY
 
 // ======================== Components =======================
 
-c_objects: ( sibling_order? c_non_primitive_object+ ) | c_primitive_object ;
+c_objects: c_non_primitive_object_ordered+ | c_primitive_object ;
 
 sibling_order: ( SYM_AFTER | SYM_BEFORE ) '[' ID_CODE ']' ;
+
+c_non_primitive_object_ordered: sibling_order? c_non_primitive_object ;
 
 c_non_primitive_object:
       c_complex_object
@@ -29,7 +30,7 @@ c_non_primitive_object:
     | archetype_slot
     ;
 
-c_archetype_root: SYM_USE_ARCHETYPE type_id '[' ID_CODE ',' ARCHETYPE_HRID ']' c_occurrences? ;
+c_archetype_root: SYM_USE_ARCHETYPE type_id '[' ID_CODE ',' archetype_ref ']' c_occurrences? ;
 
 c_complex_object_proxy: SYM_USE_NODE type_id '[' ID_CODE ']' c_occurrences? adl_path ;
 
