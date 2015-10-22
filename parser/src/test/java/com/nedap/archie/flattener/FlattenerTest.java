@@ -1,5 +1,8 @@
 package com.nedap.archie.flattener;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.nedap.archie.adlparser.ADLParser;
 import com.nedap.archie.aom.Archetype;
 import org.junit.Before;
@@ -41,8 +44,12 @@ public class FlattenerTest {
 
 
     @Test
-    public void test() {
+    public void test() throws JsonProcessingException {
         Archetype flattened = flattener.flatten(bloodPressureComposition);
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
+
+        System.out.println(objectMapper.writeValueAsString(flattened));
 
     }
 }

@@ -45,9 +45,10 @@ public abstract class ArchetypeConstraint extends ArchetypeModelObject {
     }
 
 
+    @JsonIgnore
+    @XmlTransient
     public Archetype getArchetype() {
             return getParent().getArchetype();
     }
-
 
 }

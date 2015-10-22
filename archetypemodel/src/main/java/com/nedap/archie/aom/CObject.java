@@ -112,12 +112,15 @@ public class CObject extends ArchetypeConstraint {
         }
 
         String nodeName = nodeId;
+        String path = getParent().getLogicalPath();
         //TODO: this is a bit slow because we have to walk the tree to the archetype every single time
-        ArchetypeTerm termDefinition = getArchetype().getTerminology().getTermDefinition(Configuration.getLogicalPathLanguage(), nodeId);
-        if(termDefinition != null && termDefinition.getText() != null) {
-            nodeName = termDefinition.getText();
+        if(nodeId != null) {
+            ArchetypeTerm termDefinition = getArchetype().getTerminology().getTermDefinition(Configuration.getLogicalPathLanguage(), nodeId);
+            if (termDefinition != null && termDefinition.getText() != null) {
+                nodeName = termDefinition.getText();
+            }
+            path += "[" + nodeName + "]";
         }
-        String path = getParent().getLogicalPath() + "[" + nodeName + "]";
         if(path.startsWith("//")) {
             return path.substring(1);
         }

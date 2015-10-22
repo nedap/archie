@@ -16,7 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * Created by pieter.bos on 15/10/15.
  */
-public class Archetype extends AuthoredResource implements Cloneable {
+public class Archetype extends AuthoredResource {
 
     private String parentArchetypeId;
     private boolean differential = false;
@@ -129,6 +129,7 @@ public class Archetype extends AuthoredResource implements Cloneable {
     }
 
     public Archetype clone() {
-        return new Kryo().copy(this);
+        return (Archetype) super.clone();
     }
+
 }

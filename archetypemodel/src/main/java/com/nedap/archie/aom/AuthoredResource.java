@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Created by pieter.bos on 15/10/15.
  */
-public class AuthoredResource {
+public class AuthoredResource extends ArchetypeModelObject{
     private String originalLanguage;
     private Boolean controlled;
     private String uid;

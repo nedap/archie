@@ -6,8 +6,12 @@ ext.reflectionsVersion = '0.9.10'
 
 dependencies {
 	antlr "org.antlr:antlr4:${antlrVersion}"
-	testCompile "org.reflections:reflections:${reflectionsVersion}"
 	compile project(':archetypemodel')
+
+	compile 'com.fasterxml.jackson.core:jackson-databind:2.6.3'
+	testCompile "org.reflections:reflections:${reflectionsVersion}"
+
+	
 }
 
 generateGrammarSource { //antlr4

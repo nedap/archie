@@ -3,6 +3,7 @@ package com.nedap.archie.aom;
 import com.nedap.archie.base.MultiplicityInterval;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -76,6 +77,19 @@ public class CAttribute extends ArchetypeConstraint {
         child.setParent(this);
     }
 
+
+    public void replaceChild(String nodeId, CComplexObject definition) {
+        Iterator<CObject> iter = children.iterator();
+        while(iter.hasNext()) {
+            CObject child = iter.next();
+            if(nodeId.equals(child.getNodeId())) {
+                iter.remove();
+            }
+        }
+        //TODO: definition.setNodeId(nodeId);
+        children.add(definition);
+    }
+
     public Cardinality getCardinality() {
         return cardinality;
     }
@@ -110,6 +124,10 @@ public class CAttribute extends ArchetypeConstraint {
             return path.substring(1);
         }
         return path;
+    }
+
+    public CAttribute clone() {
+        return (CAttribute) super.clone();
     }
 
 }
