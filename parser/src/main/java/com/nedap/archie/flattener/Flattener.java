@@ -100,6 +100,8 @@ public class Flattener {
             for (CObject childObject : child.getChildren()) {
                 boolean overrideFound = false;
                 for (CObject possibleMatch : parent.getChildren()) {
+                    //TODO: this is wrong when matching CPrimitiveObjects, since they don't have a unique node id.
+                    //if these are primitive objects, replace ALL primitive objects with the new set?
                     if (isOverridenCObject(childObject, possibleMatch)) {
                         //TODO: this works with complexObjects. but not with CObjects because we do not set extra constraints
                         flattenCObject(possibleMatch, childObject);
@@ -113,7 +115,10 @@ public class Flattener {
     }
 
     private boolean isOverridenCObject(CObject childObject, CObject possibleMatch) {
-        String childNode = childObject.getNodeId().substring(0, childObject.getNodeId().lastIndexOf('.'));//-1?
+        String childNode = childObject.getNodeId();
+        if(childObject.getNodeId().lastIndexOf('.') > 0) {
+            childNode = childObject.getNodeId().substring(0, childObject.getNodeId().lastIndexOf('.'));//-1?
+        }
         return childNode.startsWith(possibleMatch.getNodeId());
     }
 

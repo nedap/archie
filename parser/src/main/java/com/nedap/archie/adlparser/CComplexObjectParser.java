@@ -62,7 +62,7 @@ public class CComplexObjectParser {
                 attribute.setExistence(parseMultiplicityInterval(attributeContext.c_existence()));
             }
             if(attributeContext.adl_dir() != null) {
-                attribute.setDifferentialPath(attributeContext.adl_dir().getText());
+                attribute.setDifferentialPath(attributeContext.adl_dir().getText() + attributeContext.attribute_id().getText());
             }
 
             if (attributeContext.c_cardinality() != null) {

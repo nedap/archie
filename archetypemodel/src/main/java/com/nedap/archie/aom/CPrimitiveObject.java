@@ -10,6 +10,9 @@ import java.util.List;
  * Created by pieter.bos on 15/10/15.
  */
 public class CPrimitiveObject<Constraint, AssumedAndDefaultValue> extends CDefinedObject<AssumedAndDefaultValue> {
+
+    public static final String PRIMITIVE_NODE_ID_VALUE = "Primitive_node_id";
+
     private AssumedAndDefaultValue assumedValue;
     private Boolean enumeratedTypeConstraint;
     private List<Constraint> constraints = new ArrayList<>();
@@ -40,6 +43,16 @@ public class CPrimitiveObject<Constraint, AssumedAndDefaultValue> extends CDefin
 
     public void addConstraint(Constraint constraint) {
         this.constraints.add(constraint);
+    }
+
+    public String getNodeId() {
+        return PRIMITIVE_NODE_ID_VALUE;
+    }
+
+    public void setNodeId(String nodeId) {
+        if(!nodeId.equals(PRIMITIVE_NODE_ID_VALUE)) {
+            throw new UnsupportedOperationException("Cannot set node id on a CPrimitiveObject");
+        }
     }
 }
 
