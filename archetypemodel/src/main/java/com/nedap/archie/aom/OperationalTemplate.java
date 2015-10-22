@@ -10,7 +10,6 @@ public class OperationalTemplate extends AuthoredArchetype {
 
     private Map<String, String> terminologyExtracts = new ConcurrentHashMap<>();//TODO: is this correct?
 
-
     public Map<String, String> getTerminologyExtracts() {
         return terminologyExtracts;
     }

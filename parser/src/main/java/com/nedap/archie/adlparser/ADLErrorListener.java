@@ -30,7 +30,8 @@ public class ADLErrorListener implements ANTLRErrorListener {
 
     @Override
     public void reportAmbiguity(Parser recognizer, DFA dfa, int startIndex, int stopIndex, boolean exact, BitSet ambigAlts, ATNConfigSet configs) {
-        warnings.add(String.format("FULL AMBIGUITY: %n-%n, exact: %b", startIndex, stopIndex, exact));
+        logger.warn(String.format("FULL AMBIGUITY: %d-%d, exact: %b", startIndex, stopIndex, exact));
+        warnings.add(String.format("FULL AMBIGUITY: %d-%d, exact: %b", startIndex, stopIndex, exact));
     }
 
     @Override

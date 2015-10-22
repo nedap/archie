@@ -29,7 +29,7 @@ c_non_primitive_object:
     | archetype_slot
     ;
 
-c_archetype_root: SYM_USE_ARCHETYPE type_id '[' ID_CODE ',' ARCHETYPE_REF ']' c_occurrences? ;
+c_archetype_root: SYM_USE_ARCHETYPE type_id '[' ID_CODE ',' ARCHETYPE_HRID ']' c_occurrences? ;
 
 c_complex_object_proxy: SYM_USE_NODE type_id '[' ID_CODE ']' c_occurrences? adl_path ;
 

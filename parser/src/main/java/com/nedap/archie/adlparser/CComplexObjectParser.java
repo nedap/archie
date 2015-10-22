@@ -1,24 +1,15 @@
 package com.nedap.archie.adlparser;
 
-import com.nedap.archie.adlparser.antlr.AdlParser;
 import com.nedap.archie.adlparser.antlr.AdlParser.*;
 import com.nedap.archie.aom.*;
-import com.nedap.archie.aom.terminology.ArchetypeTerm;
-import com.nedap.archie.aom.terminology.ArchetypeTerminology;
-import com.nedap.archie.aom.terminology.ValueSet;
 import com.nedap.archie.base.MultiplicityInterval;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import static com.nedap.archie.adlparser.PrimitivesConstraintParser.*;
 import static com.nedap.archie.adlparser.NumberConstraintParser.*;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.BiFunction;
 
 /**
  * Parser for the definition part of an archetype
@@ -56,12 +47,12 @@ public class CComplexObjectParser {
             object.setOccurences(parseMultiplicityInterval(context.c_occurrences()));
         }
         for (C_attribute_defContext attribute : context.c_attribute_def()) {
-            parseAttribute(object, attribute);
+            parseCAttribute(object, attribute);
         }
         return object;
     }
 
-    private void parseAttribute(CComplexObject parent, C_attribute_defContext attributeDefContext) {
+    private void parseCAttribute(CComplexObject parent, C_attribute_defContext attributeDefContext) {
 
         if (attributeDefContext.c_attribute() != null) {
             CAttribute attribute = new CAttribute();
@@ -70,8 +61,10 @@ public class CComplexObjectParser {
             if (attributeContext.c_existence() != null) {
                 attribute.setExistence(parseMultiplicityInterval(attributeContext.c_existence()));
             }
+            if(attributeContext.adl_dir() != null) {
+                attribute.setDifferentialPath(attributeContext.adl_dir().getText());
+            }
 
-            //TODO: attributeContext.adl_dir()
             if (attributeContext.c_cardinality() != null) {
                 this.parseCardinalityInterval(attributeContext.c_cardinality());//TODO!
             }
@@ -165,7 +158,7 @@ public class CComplexObjectParser {
 
         root.setRmTypeName(archetypeRootContext.type_id().getText());
         root.setNodeId(archetypeRootContext.ID_CODE().getText());
-        root.setArchetypeRef(archetypeRootContext.ARCHETYPE_REF().getText());
+        root.setArchetypeRef(archetypeRootContext.ARCHETYPE_HRID().getText());
 
         root.setOccurences(this.parseMultiplicityInterval(archetypeRootContext.c_occurrences()));
 

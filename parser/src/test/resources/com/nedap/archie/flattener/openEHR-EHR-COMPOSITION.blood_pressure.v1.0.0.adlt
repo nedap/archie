@@ -1,0 +1,551 @@
+template (adl_version=2.0.5; rm_release=1.0.2; generated)
+    openEHR-EHR-COMPOSITION.blood_pressure.v1.0.0
+
+specialize
+    openEHR-EHR-COMPOSITION.report_result.v1.0.0
+
+language
+    original_language = <[ISO_639-1::en]>
+    translations = <
+        ["ar-sy"] = <
+            author = <
+                ["name"] = <"Mona Saleh">
+            >
+            language = <[ISO_639-1::ar-sy]>
+        >
+    >
+    
+description
+    copyright = <"© openEHR Foundation">
+    details = <
+        ["ar-sy"] = <
+            keywords = <"تقرير">
+            language = <[ISO_639-1::ar-sy]>
+            misuse = <"">
+            purpose = <"نموذج جنيس (غير محدود الملكية) يحتوي على معلومات من أجل مشاركتها مع الجميع.">
+            use = <"يستخدم كنموذج جنيس (غير محدود الملكية) ليحتوي على المعلومات التي ينبغي مشاركتها مع الآخرين. و من الأمثلة المشهورة, توثيق الاستجابة لطلب معلومات, ناتج اختبار, الأنشطة التي تم إجراؤها أو الوقائع التي حدثت بالفعل.
+و هو يمثل إحدى المكونات التي تتناسب مع السياق و يمكن استخدامه كشرفة في:
+- إضافة محتوى اختياري أثناء إعداد القالب لدعم متطلبات محددة متعلقة بحالة الاستخدام.
+- إضافة نماذج ديموغرافية على نمط السجل الطبي الإلكتروني, يمثل الأطراف المساهِمة. و في حين أن ذلك قد لا يكون مرغوبا فيه عند التشغيل, فإنه قد يكون من المفيد عرض كيف يمكن تمثيل المعلومات الديموغرافية في وقت التشغيل, بمعنى استخدامها كدعم لتجميع متطلبات المحتوى السريري أو مراجعة القالب.
+و قد تم تعمد جعل مُكَوِّن المقاطع غير مقيد للوصول إلى الحد الأقصى لإعادة استخدام هذا النموذج.">
+        >
+        ["en"] = <
+            keywords = <"report", "test", "result", "diagnostic", "audiogram", "tympanogram", "audiometry", "tympanography">
+            language = <[ISO_639-1::en]>
+            misuse = <"">
+            purpose = <"Generic container archetype to carry information about the result of a test or assessment.">
+            use = <"Use as a generic archetype to carry information about the result of a test or assessment.  Common result examples are: a pathology/laboratory test; an imaging examination test; or an audiogram hearing assessement.
+The Context component contains an optional unnamed slot that can be used to:
+- add optional content during templating to support a use-case specific requirements;
+- add EHR model demographic archetypes representing participating parties. While this may not be desired at implementation, this can be useful to demonstrate how demographics may be represented in an implementation ie as a support to clinical content requirements gathering or template review.
+The Sections component has been deliberately left unconstrained to maximise re-use of this archetype.">
+        >
+    >
+    lifecycle_state = <"unmanaged">
+    original_author = <
+        ["name"] = <"Heather Leslie">
+        ["organisation"] = <"Ocean Informatics">
+        ["email"] = <"heather.leslie@oceaninformatics.com">
+        ["date"] = <"2012-12-11">
+    >
+    other_contributors = <"Heath Frankel, Ocean Informatics, Australia", "Sam Heard, Ocean Informatics, Australia", "Sistine Barretto-Daniels, Ocean Informatics, Australia", "Hugh Leslie, Ocean Informatics, Australia", "Ian McNicoll, Ocean Informatics, Australia">
+
+definition
+    COMPOSITION[id1.1.1] matches {    -- Blood pressure result
+        content matches {
+            use_archetype OBSERVATION[id5, openEHR-EHR-OBSERVATION.ovl-blood_pressure-blood_pressure-001.v1.0.0]
+        }
+    }
+
+terminology
+    term_definitions = <
+        ["ar-sy"] = <
+            ["id1.1.1"] = <
+                text = <"*Result Report(en)">
+                description = <"*Document to communicate information to others about the result of a test  or assessment.(en)">
+            >
+        >
+        ["en"] = <
+            ["id1.1.1"] = <
+                text = <"Blood pressure result">
+                description = <"Document for blood pressure result">
+                comment = <"And this is a comment about this blood pressure report">
+            >
+        >
+        ["sl"] = <
+            
+        >
+        ["es-ar"] = <
+            
+        >
+    >
+
+
+---------------------------------------------------------------------------------
+template_overlay
+    openEHR-EHR-OBSERVATION.ovl-blood_pressure-blood_pressure-001.v1.0.0
+
+specialize
+    openEHR-EHR-OBSERVATION.blood_pressure.v1.0.0
+
+definition
+    OBSERVATION[id1.1] matches {    -- Blood Pressure
+        /data[id2]/events[id7]/data[id4]/items matches {
+            ELEMENT[id5.1] occurrences matches {1} matches {    -- Systolic
+                value matches {
+                    DV_QUANTITY[id1054.1] matches {
+                        property matches {[at1055]}
+                        magnitude matches {|0.0..<1000.0|}
+                        precision matches {|0|}
+                        units matches {"mm[Hg]"}
+                        [units, magnitude, precision] matches {
+                            [{"mm[Hg]"}, {|0.0..<1000.0|}, {|>=0|}]
+                        }
+                    }
+                }
+            }
+            ELEMENT[id34.1] occurrences matches {0} matches {    -- Comment
+                value matches {
+                    DV_TEXT[id1058.1] 
+                }
+            }
+        }
+        /protocol[id12]/items matches {
+            CLUSTER[id1034.1] occurrences matches {0..1}     -- Measurement location
+            use_archetype CLUSTER[id1026, openEHR-EHR-CLUSTER.ovl-blood_pressure-device-001.v1.0.0]
+        }
+    }
+
+terminology
+    term_definitions = <
+        ["en"] = <
+            ["id1.1"] = <
+                text = <"Blood Pressure">
+                description = <"The local measurement of arterial blood pressure which is a surrogate for arterial. pressure in the systemic circulation.  Most commonly, use of the term 'blood pressure' refers to measurement of brachial artery pressure in the upper arm.">
+            >
+            ["id1034.1"] = <
+                text = <"Measurement location">
+                description = <"Body location where blood pressure is measured.  Use 'Location of measurement' to select from common sites.  Use 'Specific location' to record more specific details or a site that is not in the common set or to refer to an external terminology.">
+            >
+            ["id5.1"] = <
+                text = <"Systolic">
+                description = <"Peak systemic arterial blood pressure  - measured in systolic or contraction phase of the heart cycle.">
+            >
+            ["id34.1"] = <
+                text = <"Comment">
+                description = <"Comment on blood pressure measurement.">
+            >
+        >
+        ["ja"] = <
+            ["id1.1"] = <
+                text = <"血圧">
+                description = <"全身に循環する動脈圧を示すものとして，局所で測定される血圧。一般的には「血圧」とは上腕で上腕動脈を測定したものをさすことが多い。">
+            >
+            ["id1034.1"] = <
+                text = <"部位">
+                description = <"血圧測定を行った体の部位。「測定部位」を一般的な場所では利用する。「特定部位」はより詳細に部位を特定したり、外部のターミノロジーや一般的な用語にはない部位を指すために用いる。">
+            >
+            ["id5.1"] = <
+                text = <"収縮期">
+                description = <"1つ以上の脈の間で最高値を示す全身の動脈圧 - 心機図の収縮期で測定される">
+            >
+            ["id34.1"] = <
+                text = <"コメント">
+                description = <"血圧測定のコメント">
+            >
+        >
+        ["de"] = <
+            ["id1.1"] = <
+                text = <"Blutdruck">
+                description = <"Die lokale Messung des arteriellen Blutdrucks als Surrogat für den arteriellen Druck in der systemischen Zirkulation. Häufig wird der Ausdruck 'Blutdruck' zur Bezeichung der Messung des brachialen Ateriendrucks im Oberarm verwendet.">
+            >
+            ["id1034.1"] = <
+                text = <"Körperstelle">
+                description = <"Körperstelle der Blutdruckmessung. 'Körperstelle der Messung' kann für die gewöhnlichen Stellen verwendet werden. 'Spezifische Stelle' wird für die Aufzeichnung spezifischer Details einer Körperstelle, die nicht in den gewöhnlichen Stellen enthalten ist, verwendet, Sie kann auch verwendet werden, um auf eine externe Teminologie zu verweisen.">
+            >
+            ["id5.1"] = <
+                text = <"Systolisch">
+                description = <"Der höchste arterielle Blutdruck eines Zyklus - gemessen in der systolischen oder Kontraktionsphase des Herzens.">
+            >
+            ["id34.1"] = <
+                text = <"Kommentar">
+                description = <"Kommentar zur Blutdruckmessung.">
+            >
+        >
+        ["zh-cn"] = <
+            ["id1.1"] = <
+                text = <"血压">
+                description = <"代表体循环动脉压的动脉血压的局部测量。最为常见的情况就是，采用“血压”一词来表示上臂肱动脉血压的测量。">
+            >
+            ["id1034.1"] = <
+                text = <"位置">
+                description = <"血压测量的身体位置。采用“测量位置”（Location of measurement）从常见部位之中进行选择。采用“特殊位置”（Specific location）来记录更为具体的细节信息或者常用集合之中所没有的部位，或者用于引用外部术语集。">
+            >
+            ["id5.1"] = <
+                text = <"收缩压">
+                description = <"在心动周期的收缩期所测量到的体循环动脉血压峰值。">
+            >
+            ["id34.1"] = <
+                text = <"注释">
+                description = <"有关血压值的注释、评论或意见。">
+            >
+        >
+        ["nl"] = <
+            ["id1.1"] = <
+                text = <"Bloeddruk">
+                description = <"De lokale meting van de arteriële bloeddruk, welke surrogaat is voor de arteriële druk in de systemische circulatie. Meest gebruikelijk is dat de term 'bloeddruk'  refereert aan de meting van de bloeddruk van de arterie brachialis in de bovenarm.">
+            >
+            ["id1034.1"] = <
+                text = <"Locatie">
+                description = <"Lichaamslocatie waar de bloeddrukmeting is gemeten. Gebruik 'locatie van meting' om gebruikelijke plaatsen te selecteren. Gebruik 'specifieke locatie' om meer specifieke details of locatie te registreren, die niet in de gebruikelijke set staan of om aan een externe terminologie te refereren.">
+            >
+            ["id5.1"] = <
+                text = <"Systole">
+                description = <"De maximale (piek) systemische arteriele bloeddruk - gemeten in de systolische of samentrekkingsfase van de hartslag">
+            >
+            ["id34.1"] = <
+                text = <"Opmerking">
+                description = <"Opmerking over de gemeten bloeddruk">
+            >
+        >
+        ["ru"] = <
+            ["id1.1"] = <
+                text = <"АД">
+                description = <"Локальное измерение артериального давления, которое является суррогатом артериального давления в системном кровотоке. Как правило, термин относится к давления плечевой артерии на предплечье.
+">
+            >
+            ["id1034.1"] = <
+                text = <"*Location(en)">
+                description = <"Место тела, где измеряется АД. Используйте \"Место измерения\", чтобы выбрать из обобщённых мест. Используйте \"Точное местограсположение\", чтобы записать более конкретную информацию или место, которое не входит в обобщённый список или обратиться к внешней терминологии.">
+            >
+            ["id5.1"] = <
+                text = <"Систолическое">
+                description = <"Пик системного артериального давления - измеряется в систолиу или в фазу сокращения сердца">
+            >
+            ["id34.1"] = <
+                text = <"Комментарии">
+                description = <"Комментарии к измерению кровяного давления.">
+            >
+        >
+        ["fa"] = <
+            ["id1.1"] = <
+                text = <"فشار خون">
+                description = <"اندازه گیری موضعی فشار خون وریدی، که جایگزینی برای فشار وریدی در گردش خون کلی است.
+معمولا واژه \"فشار خون\" به اندازه گیری فشار ورید بازویی در روی بازو گفته می شود">
+            >
+            ["id1034.1"] = <
+                text = <"*Location(en)">
+                description = <"*Body location where blood pressure is measured.  Use 'Location of measurement' to select from common sites.  Use 'Specific location' to record more specific details or a site that is not in the common set or to refer to an external terminology.(en)">
+            >
+            ["id5.1"] = <
+                text = <"سیستولیک">
+                description = <"اوج فشار خون وریدی کلی که در سیستولیک یا فاز انقباضی چرخه گردش خون اندازه گیری می شود ">
+            >
+            ["id34.1"] = <
+                text = <"نظر">
+                description = <"نظر در مورد اندازه گیری فشار خون">
+            >
+        >
+        ["ar-sy"] = <
+            ["id1.1"] = <
+                text = <"ضغط الدم">
+                description = <"قياس موضعي لضغط الدم الشرياني و الذي يحل محل الضغط الشرياني في الدورة الدموية الجهازية. 
+و عادة ما يستخدم مصطلح \"ضغط الدم\" لللإشارة إلى قياس ضغط دم الشريان العضُدي في أعلى الذراع.">
+            >
+            ["id1034.1"] = <
+                text = <"الموضع">
+                description = <"الموضع من الجسم الذي يتم قياس ضغط الدم عنده. 
+استخدم (موضع القياس) للاختيار من الأماكن المعتادة. 
+استخدم (موضع معيَّن) لتسجيل تفاصيل أكثر تحديدا أو موضعا ليس في مجموعة الخيارات المعتادة أو للإشارة إلى مجموعة مصطلحات خارجية.">
+            >
+            ["id5.1"] = <
+                text = <"الانقباضي">
+                description = <"ذروة ضغط الدم الشرياني الجهازي - يتم قياسه في طور الانقباض من دورة القلب">
+            >
+            ["id34.1"] = <
+                text = <"تعليق">
+                description = <"تعليق حول قياس ضغط الدم">
+            >
+        >
+        ["es-ar"] = <
+            ["id1.1"] = <
+                text = <"Presión Arterial">
+                description = <"La medición local de la tensión arterial que deriva de la medida de la presión arterial en la circulación sistémica. Comúnmente el uso de 'presión arterial' se refiere a la medida de la presión de la arteria braquial por encima del pliegue del codo.">
+            >
+            ["id1034.1"] = <
+                text = <"Localización">
+                description = <"Localización del cuerpo donde se mide la presión arterial. Use 'Localización de la medida' para seleccionar los sitios más comunes. Use 'Localización específica' para registrar detalles mas específicos o un sitio que no pertenece al conjunto mas común o para referirse a una terminología externa.">
+            >
+            ["id5.1"] = <
+                text = <"Sistólica">
+                description = <"Presión arterial sistólica pico - medido en sístole o la fase de contracción del ciclo cardíaco">
+            >
+            ["id34.1"] = <
+                text = <"Comentario">
+                description = <"Comentario sobre la medición de la presión sanguínea">
+            >
+        >
+        ["pt-br"] = <
+            ["id1.1"] = <
+                text = <"Pressão Arterial">
+                description = <"A medida local da pressão sanguínea arterial, a qual é uma substituta da pressão arterial na circulação arterial sistêmica. Mais comumente o uso do termo pressão arterial se refere à medida da pressão da artéria braquial no antebraço.">
+            >
+            ["id1034.1"] = <
+                text = <"Local">
+                description = <"Local do corpo onde  foi medida a pressão arterial.  Use  'Local da Medida' para selecionar entre os locais mais comuns.  Use 'Local Específico' para registrar detalhes mais específicos ou um local que não está representado no conjunto comum ou para se referenciar a uma terminologia externa.">
+            >
+            ["id5.1"] = <
+                text = <"Sistólica">
+                description = <"Pressão arterial sistêmica máxima - medida na fase sistólica ou de contração do ciclo cardíaco.">
+            >
+            ["id34.1"] = <
+                text = <"Comentários">
+                description = <"Comentários sobre a medida da pressão arterial.">
+            >
+        >
+        ["ko"] = <
+            ["id1.1"] = <
+                text = <"혈압">
+                description = <"체순환에서 동맥압을 대신하는 동맥혈압의 국소 측정. 보통은 '혈압'이라는 용어의 사용은 상완에서 상완동맥의 측정을 의미함.">
+            >
+            ["id1034.1"] = <
+                text = <"*위치(ko)">
+                description = <"*혈압이 측정되는 신체 위치. Common site에서 선택된 'Location of measurement'를 사용. 특정한 상세내용 또는 common set에 없는 위치를 기록 혹은 외부 용어체계를 참조하기 위해서는 'Specific location'를 사용.(ko)
+
+
+
+">
+            >
+            ["id5.1"] = <
+                text = <"수축기">
+                description = <"최대 체동맥 혈압 - 심장 싸이클의 수축기에서 측정.">
+            >
+            ["id34.1"] = <
+                text = <"*코멘트(ko)">
+                description = <"*혈압 측정에 관한 코멘트.(ko)">
+            >
+        >
+        ["es"] = <
+            ["id1.1"] = <
+                text = <"Presión arterial">
+                description = <"Medida de la presión arterial">
+            >
+            ["id1034.1"] = <
+                text = <"Ubicación">
+                description = <"Ubicación del cuerpo donde se realiza la medida.">
+            >
+            ["id5.1"] = <
+                text = <"Sistólica">
+                description = <"Presión arterial sistólica">
+            >
+            ["id34.1"] = <
+                text = <"Comentario">
+                description = <"Comentario sobre la medida de la presión arterial">
+            >
+        >
+    >
+
+
+---------------------------------------------------------------------------------
+template_overlay
+    openEHR-EHR-CLUSTER.ovl-blood_pressure-device-001.v1.0.0
+
+specialize
+    openEHR-EHR-CLUSTER.device.v1.0.0
+
+definition
+    CLUSTER[id1.1] matches {    -- Medical Device
+        items matches {
+            ELEMENT[id2.1] matches {    -- Scale name
+                value matches {
+                    DV_TEXT[id29.1] 
+                }
+            }
+            ELEMENT[id4.1] occurrences matches {0..1} matches {    -- Type
+                value matches {
+                    DV_CODED_TEXT[id30.1] matches {
+                        defining_code matches {[ac0.1; at0.6]}
+                    }
+                }
+            }
+        }
+    }
+
+terminology
+    term_definitions = <
+        ["ar-sy"] = <
+            ["id1.1"] = <
+                text = <"*Medical Device(en)">
+                description = <"*An instrument, apparatus, implant, material or similar, used in the provision of healthcare. In this context, a medical device includes a broad range of devices which act through a variety of physical, mechanical, thermal or similar means but specifically excludes devices which act through medicinal means such as pharmacological, metabolic or immunological methods.  The scope is inclusive of disposable devices as well as durable or persisting devices that require tracking, maintenance activities or regular calibration, recognising that each type of device has specific data recording requirements.(en)">
+            >
+            ["id2.1"] = <
+                text = <"*Device name(en)">
+                description = <"*Identification of the medical device, preferably by a common name, a formal fully descriptive name or, if required, by class or category of device.(en)">
+            >
+            ["id4.1"] = <
+                text = <"*Type(en)">
+                description = <"*Type of medical device.(en)">
+            >
+            ["at0.1"] = <
+                text = <"Balance (en)">
+                description = <"Probably not the best choice (en)">
+            >
+            ["at0.2"] = <
+                text = <"Kitchen scale (en)">
+                description = <"For very small people (en)">
+            >
+            ["at0.3"] = <
+                text = <"Household scale (en)">
+                description = <"Hmm right (en)">
+            >
+            ["at0.4"] = <
+                text = <"Optimistic scale (en)">
+                description = <"Always shows optimal weight for your length (en)">
+            >
+            ["at0.5"] = <
+                text = <"Pessimistic scale (en)">
+                description = <"Garfield's scale (en)">
+            >
+            ["ac0.1"] = <
+                text = <"Scale types (en)">
+                description = <"Scale types description (en)">
+            >
+            ["at0.6"] = <
+                text = <"Postal scale (en)">
+                description = <"in case you want to mail the patient (en)">
+            >
+        >
+        ["en"] = <
+            ["id1.1"] = <
+                text = <"Medical Device">
+                description = <"An instrument, apparatus, implant, material or similar, used in the provision of healthcare. In this context, a medical device includes a broad range of devices which act through a variety of physical, mechanical, thermal or similar means but specifically excludes devices which act through medicinal means such as pharmacological, metabolic or immunological methods.  The scope is inclusive of disposable devices as well as durable or persisting devices that require tracking, maintenance activities or regular calibration, recognising that each type of device has specific data recording requirements.">
+            >
+            ["id2.1"] = <
+                text = <"Scale name">
+                description = <"Identification of the medical device, preferably by a common name, a formal fully descriptive name or, if required, by class or category of device.">
+            >
+            ["id4.1"] = <
+                text = <"Type">
+                description = <"The category or kind of device.">
+            >
+            ["at0.1"] = <
+                text = <"Balance">
+                description = <"Probably not the best choice">
+            >
+            ["at0.2"] = <
+                text = <"Kitchen scale">
+                description = <"For very small people">
+            >
+            ["at0.3"] = <
+                text = <"Household scale">
+                description = <"Hmm right">
+            >
+            ["at0.4"] = <
+                text = <"Optimistic scale">
+                description = <"Always shows optimal weight for your length">
+            >
+            ["at0.5"] = <
+                text = <"Pessimistic scale">
+                description = <"Garfield's scale">
+            >
+            ["ac0.1"] = <
+                text = <"Scale types">
+                description = <"Scale types description">
+            >
+            ["at0.6"] = <
+                text = <"Postal scale">
+                description = <"in case you want to mail the patient">
+            >
+        >
+        ["nb"] = <
+            ["id1.1"] = <
+                text = <"*Medical Device(en)">
+                description = <"*An instrument, apparatus, implant, material or similar, used in the provision of healthcare. In this context, a medical device includes a broad range of devices which act through a variety of physical, mechanical, thermal or similar means but specifically excludes devices which act through medicinal means such as pharmacological, metabolic or immunological methods.  The scope is inclusive of disposable devices as well as durable or persisting devices that require tracking, maintenance activities or regular calibration, recognising that each type of device has specific data recording requirements.(en)">
+            >
+            ["id2.1"] = <
+                text = <"Enhets navn">
+                description = <"*Identification of the medical device, preferably by a common name, a formal fully descriptive name or, if required, by class or category of device.(en)">
+            >
+            ["id4.1"] = <
+                text = <"Type">
+                description = <"*The category or kind of device.(en)">
+            >
+            ["at0.1"] = <
+                text = <"Balance (en)">
+                description = <"Probably not the best choice (en)">
+            >
+            ["at0.2"] = <
+                text = <"Kitchen scale (en)">
+                description = <"For very small people (en)">
+            >
+            ["at0.3"] = <
+                text = <"Household scale (en)">
+                description = <"Hmm right (en)">
+            >
+            ["at0.4"] = <
+                text = <"Optimistic scale (en)">
+                description = <"Always shows optimal weight for your length (en)">
+            >
+            ["at0.5"] = <
+                text = <"Pessimistic scale (en)">
+                description = <"Garfield's scale (en)">
+            >
+            ["ac0.1"] = <
+                text = <"Scale types (en)">
+                description = <"Scale types description (en)">
+            >
+            ["at0.6"] = <
+                text = <"Postal scale (en)">
+                description = <"in case you want to mail the patient (en)">
+            >
+        >
+        ["es-ar"] = <
+            ["id1.1"] = <
+                text = <"*Medical Device(en)">
+                description = <"*An instrument, apparatus, implant, material or similar, used in the provision of healthcare. In this context, a medical device includes a broad range of devices which act through a variety of physical, mechanical, thermal or similar means but specifically excludes devices which act through medicinal means such as pharmacological, metabolic or immunological methods.  The scope is inclusive of disposable devices as well as durable or persisting devices that require tracking, maintenance activities or regular calibration, recognising that each type of device has specific data recording requirements.(en)">
+            >
+            ["id2.1"] = <
+                text = <"*Device name(en)">
+                description = <"*Identification of the medical device, preferably by a common name, a formal fully descriptive name or, if required, by class or category of device.(en)">
+            >
+            ["id4.1"] = <
+                text = <"*Type(en)">
+                description = <"*Type of medical device.(en)">
+            >
+            ["at0.1"] = <
+                text = <"Balance (en)">
+                description = <"Probably not the best choice (en)">
+            >
+            ["at0.2"] = <
+                text = <"Kitchen scale (en)">
+                description = <"For very small people (en)">
+            >
+            ["at0.3"] = <
+                text = <"Household scale (en)">
+                description = <"Hmm right (en)">
+            >
+            ["at0.4"] = <
+                text = <"Optimistic scale (en)">
+                description = <"Always shows optimal weight for your length (en)">
+            >
+            ["at0.5"] = <
+                text = <"Pessimistic scale (en)">
+                description = <"Garfield's scale (en)">
+            >
+            ["ac0.1"] = <
+                text = <"Scale types (en)">
+                description = <"Scale types description (en)">
+            >
+            ["at0.6"] = <
+                text = <"Postal scale (en)">
+                description = <"in case you want to mail the patient (en)">
+            >
+        >
+    >
+    value_sets = <
+        ["ac0.1"] = <
+            id = <"ac0.1">
+            members = <"at0.1", "at0.2", "at0.3", "at0.4", "at0.5", "at0.6">
+        >
+    >
+

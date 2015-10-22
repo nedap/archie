@@ -37,7 +37,7 @@ template:
     rules_section?
     terminology_section
     annotations_section?
-    (HLINE template_overlay)*
+    (HLINE? template_overlay)*
     ;
 
 template_overlay: 
@@ -60,7 +60,7 @@ operational_template:
     component_terminologies_section?
     ;
 
-specialization_section : SYM_SPECIALIZE ARCHETYPE_REF ;
+specialization_section : SYM_SPECIALIZE ARCHETYPE_HRID ;
 language_section       : SYM_LANGUAGE odin_text ;
 description_section    : SYM_DESCRIPTION odin_text ;
 definition_section     : SYM_DEFINITION c_complex_object ;

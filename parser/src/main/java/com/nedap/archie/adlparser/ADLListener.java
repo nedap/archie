@@ -22,6 +22,8 @@ public class ADLListener extends AdlBaseListener {
 
     private ADLParserErrors errors = new ADLParserErrors();
 
+    private Archetype rootArchetype;
+
     private Archetype archetype;
     private CComplexObjectParser subTreeWalker;
     private TerminologyParser terminologyParser;
@@ -34,30 +36,43 @@ public class ADLListener extends AdlBaseListener {
     /** top-level constructs */
     @Override
     public void enterArchetype(ArchetypeContext ctx) {
-        archetype = new AuthoredArchetype();
-        archetype.setDifferential(true);
+        rootArchetype = new AuthoredArchetype();
+        rootArchetype.setDifferential(true);
+        archetype = rootArchetype;
         parseArchetypeHRID(ctx.ARCHETYPE_HRID());
     }
 
     @Override
     public void enterTemplate(TemplateContext ctx) {
-        archetype = new Template();
-        archetype.setDifferential(false);
+        rootArchetype = new Template();
+        rootArchetype.setDifferential(false);
+        archetype = rootArchetype;
         parseArchetypeHRID(ctx.ARCHETYPE_HRID());
 
     }
 
     @Override
     public void enterTemplate_overlay(Template_overlayContext ctx) {
-        archetype = new TemplateOverlay();
-        archetype.setDifferential(false);
+        TemplateOverlay overlay =  new TemplateOverlay();
+        overlay.setDifferential(true);
+        if(rootArchetype != null) {
+            if(rootArchetype instanceof Template) {
+                ((Template) rootArchetype).addTemplateOverlay(overlay);
+            } else {
+                throw new IllegalArgumentException("Template overlay in a non-template archetype is not allowed. This sounds like a grammar problem.");
+            }
+        } else {
+            rootArchetype = overlay;
+        }
+        archetype = overlay;
         parseArchetypeHRID(ctx.ARCHETYPE_HRID());
     }
 
     @Override
     public void enterOperational_template(Operational_templateContext ctx) {
-        archetype = new OperationalTemplate();
-        archetype.setDifferential(false);
+        rootArchetype = new OperationalTemplate();
+        rootArchetype.setDifferential(false);
+        archetype = rootArchetype;
         parseArchetypeHRID(ctx.ARCHETYPE_HRID());
     }
 
@@ -91,7 +106,7 @@ public class ADLListener extends AdlBaseListener {
                 authoredArchetype.setRmRelease(ctx.VERSION_ID().getText());
             }
             if(ctx.SYM_IS_CONTROLLED() != null) {
-                //TODO: not in the archetype modeL?
+                authoredArchetype.setControlled(true);
             }
             if(ctx.SYM_IS_GENERATED() != null) {
                 authoredArchetype.setGenerated(true);
@@ -124,8 +139,8 @@ public class ADLListener extends AdlBaseListener {
 
     @Override
     public void enterSpecialization_section(Specialization_sectionContext ctx) {
-        if(ctx != null && ctx.ARCHETYPE_REF() != null) {
-            archetype.setParentArchetypeId(ctx.ARCHETYPE_REF().getText());
+        if(ctx != null && ctx.ARCHETYPE_HRID() != null) {
+            archetype.setParentArchetypeId(ctx.ARCHETYPE_HRID().getText());
         }
     }
 
@@ -136,6 +151,6 @@ public class ADLListener extends AdlBaseListener {
 
     /* getters for result */
     public Archetype getArchetype() {
-        return archetype;
+        return rootArchetype;
     }
 }

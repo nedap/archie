@@ -129,7 +129,6 @@ public class Archetype extends AuthoredResource implements Cloneable {
     }
 
     public Archetype clone() {
-        Kryo kryo = new Kryo();
-        return kryo.copy(this);
+        return new Kryo().copy(this);
     }
 }
