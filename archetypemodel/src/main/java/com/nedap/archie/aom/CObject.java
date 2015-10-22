@@ -81,7 +81,10 @@ public class CObject extends ArchetypeConstraint {
         if(getParent() == null) {
             return "/";
         }
-        String path = getParent().getPath() + "[" + nodeId + "]";
+        String path = getParent().getPath();
+        if(nodeId != null) {
+             path += "[" + nodeId + "]";
+        }
         if(path.startsWith("//")) {
             return path.substring(1);
         }

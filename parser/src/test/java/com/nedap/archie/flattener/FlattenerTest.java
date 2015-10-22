@@ -42,7 +42,7 @@ public class FlattenerTest {
 
     @Test
     public void test() {
-        Archetype flattened = flattener.flatten(bloodPressureObservation);
+        Archetype flattened = flattener.flatten(bloodPressureComposition);
 
     }
 }

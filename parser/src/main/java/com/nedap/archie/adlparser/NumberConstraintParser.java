@@ -20,15 +20,18 @@ public class NumberConstraintParser {
         CInteger result = new CInteger();
 
         if(integerContext.assumed_integer_value() != null) {
-            result.setAssumedValue(Long.parseLong(integerContext.assumed_integer_value().getText()));
+            result.setAssumedValue(Long.parseLong(integerContext.assumed_integer_value().integer_value().getText()));
         }
 
         Integer_valueContext integerValueContext = integerContext.integer_value();
+        if(integerValueContext != null) {
+            parseIntegerConstraint(result, integerValueContext);
+        }
 
         AdlParser.Integer_list_valueContext integerListValueContext = integerContext.integer_list_value();
         if(integerListValueContext != null) {
             for(Integer_valueContext integerValueContext1:integerListValueContext.integer_value()) {
-                parseIntegerConstraint(result, integerValueContext);
+                parseIntegerConstraint(result, integerValueContext1);
             }
         }
         Integer_interval_valueContext intervalContext = integerContext.integer_interval_value();
@@ -73,8 +76,13 @@ public class NumberConstraintParser {
             interval = parseRelOpIntegerInterval(intervalContext);
         } else {
             interval = new Interval<>();
-            interval.setLower(Long.parseLong(intervalContext.integer_value(0).getText()));
-            interval.setUpper(Long.parseLong(intervalContext.integer_value(1).getText()));
+            if(intervalContext.integer_value().size() == 1) {
+                interval.setLower(Long.parseLong(intervalContext.integer_value(0).getText()));
+                interval.setUpper(interval.getLower());
+            } else {
+                interval.setLower(Long.parseLong(intervalContext.integer_value(0).getText()));
+                interval.setUpper(Long.parseLong(intervalContext.integer_value(1).getText()));
+            }
             //TODO: lower and upper included. Generic interval parsing?
         }
         return interval;
@@ -105,15 +113,18 @@ public class NumberConstraintParser {
         CReal result = new CReal();
 
         if(realContext.assumed_real_value() != null) {
-            result.setAssumedValue(Double.parseDouble(realContext.assumed_real_value().getText()));
+            result.setAssumedValue(Double.parseDouble(realContext.assumed_real_value().real_value().getText()));
         }
 
         Real_valueContext realValueContext = realContext.real_value();
+        if(realValueContext != null) {
+            parseRealConstraint(result, realValueContext);
+        }
 
         AdlParser.Real_list_valueContext realListValueContext = realContext.real_list_value();
         if(realListValueContext != null) {
             for(Real_valueContext realValueContext1:realListValueContext.real_value()) {
-                parseRealConstraint(result, realValueContext);
+                parseRealConstraint(result, realValueContext1);
             }
         }
         Real_interval_valueContext intervalContext = realContext.real_interval_value();

@@ -32,6 +32,18 @@ public class PathTest {
     }
 
     @Test
+    public void primitiveObject() {
+        CObject object = archetype.getDefinition()
+                .getAttribute("context").getChild("id11")
+                .getAttribute("other_context").getChild("id2")
+                .getAttribute("items").getChild("id3")
+                .getAttribute("items").getChild("id5")
+                .getAttribute("value").getChild("id14")
+                .getAttribute("value").getChildren().get(0);//TODO: no node id's here i think?
+        assertEquals("/context[id11]/other_context[id2]/items[id3]/items[id5]/value[id14]/value", object.getPath());
+    }
+
+    @Test
     public void attribute() {
         CAttribute attribute = archetype.getDefinition().getAttribute("context").getChild("id11").getAttribute("other_context").getChild("id2").getAttribute("items");
         assertEquals("/context[id11]/other_context[id2]/items", attribute.getPath());

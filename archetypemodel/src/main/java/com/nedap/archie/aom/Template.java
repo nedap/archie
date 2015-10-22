@@ -1,5 +1,6 @@
 package com.nedap.archie.aom;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -7,7 +8,7 @@ import java.util.List;
  */
 public class Template extends AuthoredArchetype {
 
-    private List<TemplateOverlay> templateOverlays;
+    private List<TemplateOverlay> templateOverlays = new ArrayList<>();
 
     public List<TemplateOverlay> getTemplateOverlays() {
         return templateOverlays;
