@@ -6,6 +6,7 @@ import com.nedap.archie.aom.CArchetypeRoot;
 import com.nedap.archie.aom.CAttribute;
 import com.nedap.archie.aom.CComplexObject;
 import com.nedap.archie.aom.CObject;
+import com.nedap.archie.aom.CPrimitiveObject;
 import com.nedap.archie.aom.Template;
 import com.nedap.archie.aom.TemplateOverlay;
 import com.nedap.archie.query.APathQuery;
@@ -78,6 +79,9 @@ public class Flattener {
 
 
         this.result = parent.clone();
+        //TODO: multiple steps?:on
+        //1. redefine structure
+        //2. fill archetype slots?
         flatten(result, child);//TODO: this way around, or the other one? :)
         return result;
     }
@@ -143,18 +147,23 @@ public class Flattener {
             //the parent to be the new child.
             parent = childCloned;
         }
-        for (CObject childObject : child.getChildren()) {
-            boolean overrideFound = false;
-            for (CObject possibleMatch : parent.getChildren()) {
-                //TODO: this is wrong when matching CPrimitiveObjects, since they don't have a unique node id.
-                //if these are primitive objects, replace ALL primitive objects with the new set?
-                if (isOverridenCObject(childObject, possibleMatch)) {
-                    //TODO: this works with complexObjects. but not with CObjects because we do not set extra constraints
-                    flattenCObject(possibleMatch, childObject);
-                    overrideFound = true;
+        if(child.getChildren().size() > 0 && child.getChildren().get(0) instanceof CPrimitiveObject) {
+            //TODO: is this correct? replace all child nodes
+            parent.setChildren(child.getChildren());
+        } else {
+            for (CObject childObject : child.getChildren()) {
+                boolean overrideFound = false;
+
+                for (CObject possibleMatch : parent.getChildren()) {
+                    //TODO: this is wrong when matching CPrimitiveObjects, since they don't have a unique node id.
+                    //if these are primitive objects, replace ALL primitive objects with the new set?
+                    if (isOverridenCObject(childObject, possibleMatch)) {
+                        //TODO: this works with complexObjects. but not with CObjects because we do not set extra constraints
+                        flattenCObject(possibleMatch, childObject);
+                        overrideFound = true;
+                    }
                 }
             }
-
         }
 
     }
