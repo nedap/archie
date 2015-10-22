@@ -97,3 +97,5 @@ fragment UTF8CHAR    : '\\u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT ;
 
 fragment DIGIT     : [0-9] ;
 fragment HEX_DIGIT : [0-9a-fA-F] ;
+
+SYM_SEMICOLON: ';';

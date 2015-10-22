@@ -97,19 +97,19 @@ public class ADLListener extends AdlBaseListener {
         if(archetype instanceof AuthoredArchetype) {
             AuthoredArchetype authoredArchetype = (AuthoredArchetype) archetype;
 
-            if(ctx.SYM_ADL_VERSION() != null) {
+            if(ctx.adl_version_keyword() != null) {
                 authoredArchetype.setAdlVersion(ctx.VERSION_ID().getText());
             }
-            if(ctx.SYM_UID() != null) {
+            if(ctx.uid_keyword() != null) {
                 authoredArchetype.setBuildUid(ctx.GUID().getText());
             }
-            if(ctx.SYM_RM_RELEASE() != null) {
+            if(ctx.rm_release_keyword() != null) {
                 authoredArchetype.setRmRelease(ctx.VERSION_ID().getText());
             }
-            if(ctx.SYM_IS_CONTROLLED() != null) {
+            if(ctx.is_controlled_keyword() != null) {
                 authoredArchetype.setControlled(true);
             }
-            if(ctx.SYM_IS_GENERATED() != null) {
+            if(ctx.is_generated_keyword() != null) {
                 authoredArchetype.setGenerated(true);
             }
             else if(ctx.identifier() != null) {
@@ -140,8 +140,8 @@ public class ADLListener extends AdlBaseListener {
 
     @Override
     public void enterSpecialization_section(Specialization_sectionContext ctx) {
-        if(ctx != null && ctx.ARCHETYPE_HRID() != null) {
-            archetype.setParentArchetypeId(ctx.ARCHETYPE_HRID().getText());
+        if(ctx != null && ctx.archetype_ref() != null) {
+            archetype.setParentArchetypeId(ctx.archetype_ref().getText());
         }
     }
 

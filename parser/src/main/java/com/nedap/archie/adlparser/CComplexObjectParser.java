@@ -109,14 +109,19 @@ public class CComplexObjectParser {
 
     private List<CObject> parseCObjects(C_objectsContext objectsContext) {
         ArrayList<CObject> result = new ArrayList<>();
-        objectsContext.sibling_order();//TODO!
+
         if (objectsContext.c_primitive_object() != null) {
             result.add(parsePrimitiveObject(objectsContext.c_primitive_object()));
-        } else if (objectsContext.c_non_primitive_object() != null) {
-            //TODO: sibling order!
-            List<C_non_primitive_objectContext> objects = objectsContext.c_non_primitive_object();
-            for (C_non_primitive_objectContext object : objects) {
-                result.add(parseNonPrimitiveObject(object));
+        } else {
+            List<C_non_primitive_object_orderedContext> nonPrimitiveObjectOrderedContext = objectsContext.c_non_primitive_object_ordered();
+            if (nonPrimitiveObjectOrderedContext != null) {
+
+                for (C_non_primitive_object_orderedContext object : nonPrimitiveObjectOrderedContext) {
+                    if(object.sibling_order() != null) {
+                        //TODO: sibling order
+                    }
+                    result.add(parseNonPrimitiveObject(object.c_non_primitive_object()));
+                }
             }
         }
         return result;
@@ -158,7 +163,7 @@ public class CComplexObjectParser {
 
         root.setRmTypeName(archetypeRootContext.type_id().getText());
         root.setNodeId(archetypeRootContext.ID_CODE().getText());
-        root.setArchetypeRef(archetypeRootContext.ARCHETYPE_HRID().getText());
+        root.setArchetypeRef(archetypeRootContext.archetype_ref().getText());
 
         root.setOccurences(this.parseMultiplicityInterval(archetypeRootContext.c_occurrences()));
 
