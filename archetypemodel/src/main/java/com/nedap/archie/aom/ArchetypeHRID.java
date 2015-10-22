@@ -48,6 +48,25 @@ public class ArchetypeHRID extends ArchetypeModelObject {
         return idValue;
     }
 
+    public String getSemanticId() {
+        StringBuilder result = new StringBuilder();
+        if(namespace != null) {
+            result.append(namespace);
+            result.append("::");
+        }
+        result.append(rmPublisher);
+        result.append("-");
+        result.append(rmPackage);
+        result.append("-");
+        result.append(rmClass);
+        result.append(".");
+        result.append(conceptId);
+        result.append(".v");
+        result.append(releaseVersion.split("\\.")[0]);
+        return result.toString();
+
+    }
+
     public String getNamespace() {
         return namespace;
     }

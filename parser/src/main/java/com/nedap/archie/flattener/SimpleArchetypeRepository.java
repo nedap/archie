@@ -1,6 +1,7 @@
 package com.nedap.archie.flattener;
 
 import com.nedap.archie.aom.Archetype;
+import com.nedap.archie.aom.ArchetypeHRID;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -18,10 +19,10 @@ public class SimpleArchetypeRepository implements ArchetypeRepository {
 
     @Override
     public Archetype getArchetype(String archetypeId) {
-        return archetypes.get(archetypeId);
+        return archetypes.get(new ArchetypeHRID(archetypeId).getSemanticId());
     }
 
     public void addArchetype(Archetype archetype) {
-        archetypes.put(archetype.getArchetypeId().getFullId(), archetype);
+        archetypes.put(archetype.getArchetypeId().getSemanticId(), archetype);
     }
 }

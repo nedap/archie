@@ -38,21 +38,19 @@ public class Flattener {
     }
 
     public Archetype flatten(Archetype toFlatten) {
+        if(parent != null) {
+            throw new IllegalStateException("You've used this flattener before - single use instance, please create a new one!");
+        }
         //validate that we can legally flatten first
         String parentId = toFlatten.getParentArchetypeId();
         if(parentId == null) {
             throw new IllegalArgumentException("Cannot flatten archetype without a parent");
         }
 
-        Archetype parent = repository.getArchetype(toFlatten.getParentArchetypeId());
+        this.parent = repository.getArchetype(toFlatten.getParentArchetypeId());
         if(parent == null) {
-            throw new IllegalArgumentException("parent archetype not found in repository");
+            throw new IllegalArgumentException("parent archetype not found in repository: " + toFlatten.getParentArchetypeId());
         }
-//        while(parent.getParentArchetypeId() != null && parent.isDifferential()) {
-//            //parent needs flattening first
-//            parent = flatten(parent);//TODO: this might end up in an infinite loop
-//        }
-        this.parent = parent;
         this.child = toFlatten.clone();//just to be sure, so we don't have to copy more things deeper down
 
         if(child instanceof Template) {
@@ -73,13 +71,19 @@ public class Flattener {
             }
         }
 
+        while(parent.getParentArchetypeId() != null && parent.isDifferential()) {
+            //parent needs flattening first
+            parent = new Flattener(repository).flatten(parent);//TODO: this might end up in an infinite loop. Detect depth?
+        }
+
 
         this.result = parent.clone();
-        flatten(result, child);
+        flatten(result, child);//TODO: this way around, or the other one? :)
         return result;
     }
 
     private void flatten(Archetype parent, Archetype child) {
+        parent.setArchetypeId(child.getArchetypeId()); //TODO: override all metadata?
         flattenCObject(parent.getDefinition(), child.getDefinition());
 
     }
@@ -124,7 +128,6 @@ public class Flattener {
             throw new IllegalArgumentException("Archetype with reference :" + archetypeRef + " not found.");
         }
         if(archetype.getParentArchetypeId() != null) {
-            //TODO: flatten here!
             archetype = new Flattener(repository).flatten(archetype);
         }
         archetype = archetype.clone();//make sure we don't change this archetype :)
