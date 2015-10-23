@@ -1,19 +1,13 @@
 package com.nedap.archie.flattener;
 
-import com.nedap.archie.aom.Archetype;
-import com.nedap.archie.aom.ArchetypeModelObject;
-import com.nedap.archie.aom.CArchetypeRoot;
-import com.nedap.archie.aom.CAttribute;
-import com.nedap.archie.aom.CComplexObject;
-import com.nedap.archie.aom.CObject;
-import com.nedap.archie.aom.CPrimitiveObject;
-import com.nedap.archie.aom.Template;
-import com.nedap.archie.aom.TemplateOverlay;
+import com.nedap.archie.aom.*;
 import com.nedap.archie.query.APathQuery;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+
+import java.util.ArrayList;
 
 /**
  * Flattener. For single use only, create a new flattener for every flatten-action you want to do!
@@ -33,9 +27,15 @@ public class Flattener {
     private Archetype child;
 
     private Archetype result;
+    private boolean makeOperationalTemplate;
 
     public Flattener(ArchetypeRepository repository) {
         this.repository = new OverridingArchetypeRepository(repository);
+    }
+
+    public Flattener makeOperationalTemplate(boolean makeTemplate) {
+        this.makeOperationalTemplate = makeTemplate;
+        return this;
     }
 
     public Archetype flatten(Archetype toFlatten) {
@@ -74,15 +74,41 @@ public class Flattener {
 
         while(parent.getParentArchetypeId() != null && parent.isDifferential()) {
             //parent needs flattening first
-            parent = new Flattener(repository).flatten(parent);//TODO: this might end up in an infinite loop. Detect depth?
+            parent = getNewFlattener().flatten(parent);//TODO: this might end up in an infinite loop. Detect depth?
         }
 
 
-        this.result = parent.clone();
+        this.result = null;
+        if(makeOperationalTemplate) {
+            result = createOperationalTemplate(parent, child);
+        } else {
+            result = parent.clone();
+        }
+
         //TODO: multiple steps?:on
         //1. redefine structure
         //2. fill archetype slots?
         flatten(result, child);//TODO: this way around, or the other one? :)
+        return result;
+    }
+
+    private static Archetype createOperationalTemplate(Archetype parent, Archetype child) {
+        Archetype toClone = parent.clone(); //clone so we do not overwrite the parent archetype. never
+        OperationalTemplate result = new OperationalTemplate();
+        result.setArchetypeId(child.getArchetypeId());
+        result.setDefinition(toClone.getDefinition());
+        result.setDifferential(false);
+        result.setParentArchetypeId(null);
+        result.setRmRelease(toClone.getRmRelease());
+        result.setAdlVersion(toClone.getAdlVersion());
+        result.setTerminology(toClone.getTerminology());
+        result.setGenerated(true);
+        result.setOtherMetaData(toClone.getOtherMetaData());
+        result.setRules(toClone.getRules());
+        result.setBuildUid(toClone.getBuildUid());
+        result.setDescription(toClone.getDescription());
+        result.setOriginalLanguage(toClone.getOriginalLanguage());
+        result.setTranslations(toClone.getTranslations());
         return result;
     }
 
@@ -93,6 +119,9 @@ public class Flattener {
     }
 
     private void flattenCObject(CObject parent, CObject child) {
+        parent.setOccurences(getPossiblyOverridenValue(parent.getOccurences(), child.getOccurences()));
+        parent.setSiblingOrder(getPossiblyOverridenValue(parent.getSiblingOrder(), child.getSiblingOrder()));
+
         parent.setNodeId(getPossiblyOverridenValue(parent.getNodeId(), child.getNodeId()));
         parent.setRmTypeName(getPossiblyOverridenValue(parent.getRmTypeName(), child.getRmTypeName()));
         if(child != null && child instanceof CArchetypeRoot) {
@@ -125,18 +154,35 @@ public class Flattener {
         }
     }
 
+    private Flattener getNewFlattener() {
+        return new Flattener(repository).makeOperationalTemplate(makeOperationalTemplate);
+    }
+
     private void fillArchetypeRoot(CObject parent, CArchetypeRoot child) {
-        String archetypeRef = child.getArchetypeRef(); //TODO: is a ref always an id, or can it be a bit different?
-        Archetype archetype = this.repository.getArchetype(archetypeRef);
-        if(archetype == null) {
-            throw new IllegalArgumentException("Archetype with reference :" + archetypeRef + " not found.");
+        if(makeOperationalTemplate) {
+            String archetypeRef = child.getArchetypeRef(); //TODO: is a ref always an id, or can it be a bit different?
+            Archetype archetype = this.repository.getArchetype(archetypeRef);
+            if (archetype == null) {
+                throw new IllegalArgumentException("Archetype with reference :" + archetypeRef + " not found.");
+            }
+            if (archetype.getParentArchetypeId() != null) {
+                archetype = getNewFlattener().flatten(archetype);
+            } else {
+                archetype = archetype.clone();//make sure we don't change this archetype :)
+            }
+            //TODO: we have to replace the nodeid to the archetypeid here!
+
+            parent.getParent().replaceChild(child.getNodeId(), archetype.getDefinition());//TODO: check this!
+            archetype.getDefinition().setNodeId(archetype.getArchetypeId().getFullId());
+
+            OperationalTemplate templateResult = (OperationalTemplate) result;
+
+            //todo: should we filter this?
+            templateResult.addComponentTerminology(child.getNodeId(), archetype.getTerminology());
+            //todo: do we have to put something in the terminology extracts?
+            //templateResult.addTerminologyExtract(child.getNodeId(), archetype.getTerminology().);
         }
-        if(archetype.getParentArchetypeId() != null) {
-            archetype = new Flattener(repository).flatten(archetype);
-        }
-        archetype = archetype.clone();//make sure we don't change this archetype :)
-        parent.getParent().replaceChild(child.getNodeId(), archetype.getDefinition());//TODO: check this!
-        //TODO: set id?
+
     }
 
     private void flattenAttribute(CComplexObject root, CAttribute parent, CAttribute child) {
@@ -147,6 +193,9 @@ public class Flattener {
             //the parent to be the new child.
             parent = childCloned;
         }
+        parent.setMultiple(getPossiblyOverridenValue(parent.isMultiple(), child.isMultiple()));
+        parent.setExistence(getPossiblyOverridenValue(parent.getExistence(), child.getExistence()));
+        parent.setCardinality(getPossiblyOverridenValue(parent.getCardinality(), child.getCardinality()));
         if(child.getChildren().size() > 0 && child.getChildren().get(0) instanceof CPrimitiveObject) {
             //TODO: is this correct? replace all child nodes
             parent.setChildren(child.getChildren());
@@ -155,10 +204,7 @@ public class Flattener {
                 boolean overrideFound = false;
 
                 for (CObject possibleMatch : parent.getChildren()) {
-                    //TODO: this is wrong when matching CPrimitiveObjects, since they don't have a unique node id.
-                    //if these are primitive objects, replace ALL primitive objects with the new set?
                     if (isOverridenCObject(childObject, possibleMatch)) {
-                        //TODO: this works with complexObjects. but not with CObjects because we do not set extra constraints
                         flattenCObject(possibleMatch, childObject);
                         overrideFound = true;
                     }

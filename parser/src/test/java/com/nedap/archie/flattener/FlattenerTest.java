@@ -53,7 +53,7 @@ public class FlattenerTest {
         repository.addArchetype(bloodPressureObservation);
         repository.addArchetype(reportResult);
 
-        flattener = new Flattener(repository);
+        flattener = new Flattener(repository).makeOperationalTemplate(true);
     }
 
     @Test

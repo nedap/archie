@@ -8,6 +8,7 @@ import com.nedap.archie.query.APathQuery;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Created by pieter.bos on 20/10/15.
@@ -37,6 +38,15 @@ public class APathQueryTest {
         APathQuery query = new APathQuery("/context[id11 and name=\"ignored\"]");
         ArchetypeModelObject archetypeModelObject = query.find(archetype.getDefinition());
         assertEquals("EVENT_CONTEXT", ((CComplexObject) archetypeModelObject).getRmTypeName());
+
+    }
+
+    @Test
+    public void logicalPaths() throws Exception {
+        Archetype archetype = new ADLParser().parse(getClass().getResourceAsStream("/basic.adl"));
+        APathQuery query = new APathQuery("/context[id11]/other_context[id2]/items[qualification]/items[orderid]");
+        ArchetypeModelObject archetypeModelObject = query.find(archetype.getDefinition());
+        assertNotNull(archetypeModelObject);
 
     }
 }

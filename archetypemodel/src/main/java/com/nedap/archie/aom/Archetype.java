@@ -118,7 +118,7 @@ public class Archetype extends AuthoredResource {
         return otherMetaData;
     }
 
-    public void setOtherMetaData(HashMap<String, String> otherMetaData) {
+    public void setOtherMetaData(Map<String, String> otherMetaData) {
         this.otherMetaData = otherMetaData;
     }
 

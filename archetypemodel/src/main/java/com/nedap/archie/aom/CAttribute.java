@@ -61,6 +61,21 @@ public class CAttribute extends ArchetypeConstraint {
         return null;
     }
 
+    public CObject getChildByMeaning(String meaning) {
+        meaning = meaning.toLowerCase();
+        for(CObject child:children) {
+            String childMeaning = child.getMeaning();
+            if(childMeaning != null) {
+                childMeaning = childMeaning.toLowerCase();
+                if(meaning.equals(childMeaning)){
+                    return child;
+                }
+            }
+
+        }
+        return null;
+    }
+
     public List<CObject> getChildren() {
         return children;
     }

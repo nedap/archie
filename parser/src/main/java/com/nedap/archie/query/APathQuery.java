@@ -81,9 +81,14 @@ public class APathQuery {
                 if(i == pathSegments.size()-1) {
                     return attribute;
                 }
-                continue;//??
+                continue;
             }
-            currentObject = attribute.getChild(segment.getNodeId());
+            String nodeId = segment.getNodeId();
+            if(nodeId.matches("id((\\.)?\\d)+")) {
+                currentObject = attribute.getChild(segment.getNodeId());
+            } else {
+                currentObject = attribute.getChildByMeaning(nodeId);
+            }
             if(currentObject == null) {
                 return null;
             }

@@ -69,6 +69,7 @@ public class CObject extends ArchetypeConstraint {
     /**
      * Return the named attribute if this is a constrained complex object. Return null if there is no such named attribute,
      * or this is not a CComplexObject
+     *
      * @param name
      * @return
      */
@@ -79,6 +80,7 @@ public class CObject extends ArchetypeConstraint {
     /**
      * Get the underlying attributes of this CObject. From this class always returns an empty list. Overriden with
      * different implementations in subclasses.
+     *
      * @return
      */
     public List<CAttribute> getAttributes() {
@@ -88,19 +90,31 @@ public class CObject extends ArchetypeConstraint {
 
     @Override
     public String getPath() {
-        if(getParent() == null) {
+        if (getParent() == null) {
             return "/";
         }
         String path = getParent().getPath();
-        if(nodeId != null) {
-             path += "[" + nodeId + "]";
+        if (nodeId != null) {
+            path += "[" + nodeId + "]";
         }
-        if(path.startsWith("//")) {
+        if (path.startsWith("//")) {
             return path.substring(1);
         }
         return path;
     }
 
+
+    public String getMeaning() {
+        if(nodeId == null) {
+            return null;
+        }
+        String meaning = null;
+        ArchetypeTerm termDefinition = getArchetype().getTerminology().getTermDefinition(Configuration.getLogicalPathLanguage(), nodeId);
+        if(termDefinition!=null&&termDefinition.getText()!=null) {
+            meaning = termDefinition.getText();
+        }
+        return meaning;
+    }
 
 
     public String getLogicalPath() {
@@ -111,14 +125,13 @@ public class CObject extends ArchetypeConstraint {
             return "/";
         }
 
-        String nodeName = nodeId;
+        String nodeName = getMeaning();
+        if(nodeName == null) {
+            nodeName = nodeId;
+        }
         String path = getParent().getLogicalPath();
         //TODO: this is a bit slow because we have to walk the tree to the archetype every single time
-        if(nodeId != null) {
-            ArchetypeTerm termDefinition = getArchetype().getTerminology().getTermDefinition(Configuration.getLogicalPathLanguage(), nodeId);
-            if (termDefinition != null && termDefinition.getText() != null) {
-                nodeName = termDefinition.getText();
-            }
+        if(nodeName != null) {
             path += "[" + nodeName + "]";
         }
         if(path.startsWith("//")) {
