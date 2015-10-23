@@ -29,6 +29,14 @@ CAttribute attribute = archetype.getDefinition()
 String text = archetype.getTerminology().getTermDefinition("en", "id2").getText();
 ```
 
+Or, if you prefer your paths to be human readable, you could do:
+```java
+APathQuery query = new APathQuery("/context[systolic]/items");
+CAttribute attribute = archetype.getDefinition()
+    .getAttribute("context").getChildByMeaning("systolic").getAttribute("items");
+    attribute.getLogicalPath(); // is 'context[systolic]/items'
+```
+
 ## Features
 This is work in progress, but already usable for some situations. 
 
@@ -36,7 +44,7 @@ What it features:
 
 - ADL 2.0 parsing, including tuples
 - basic Archetype Object Model implementation
-- very basic apath-queries - absolute paths with nodeid only so far, you can add a 'and name=""' clause if you want to, but it will be ignored
+- very basic apath-queries - paths with nodeIds and paths with meanings.
 - A listener to more easily walk the tree of archetypes describing an openEHR reference model
 - A far from complete Flattener implementation
 	- with id overriding if specified in template
