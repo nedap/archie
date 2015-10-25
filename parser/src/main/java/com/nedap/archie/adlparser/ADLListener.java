@@ -97,20 +97,23 @@ public class ADLListener extends AdlBaseListener {
         if(archetype instanceof AuthoredArchetype) {
             AuthoredArchetype authoredArchetype = (AuthoredArchetype) archetype;
 
-            if(ctx.adl_version_keyword() != null) {
+            if(ctx.meta_data_tag_adl_version() != null) {
                 authoredArchetype.setAdlVersion(ctx.VERSION_ID().getText());
             }
-            if(ctx.uid_keyword() != null) {
+            if(ctx.meta_data_tag_build_uid() != null) {
                 authoredArchetype.setBuildUid(ctx.GUID().getText());
             }
-            if(ctx.rm_release_keyword() != null) {
+            if(ctx.meta_data_tag_rm_release() != null) {
                 authoredArchetype.setRmRelease(ctx.VERSION_ID().getText());
             }
-            if(ctx.is_controlled_keyword() != null) {
+            if(ctx.meta_data_tag_is_controlled() != null) {
                 authoredArchetype.setControlled(true);
             }
-            if(ctx.is_generated_keyword() != null) {
+            if(ctx.meta_data_tag_is_generated() != null) {
                 authoredArchetype.setGenerated(true);
+            }
+            if(ctx.meta_data_tag_uid() != null) {
+                authoredArchetype.setUid(ctx.GUID().getText());
             }
             else if(ctx.identifier() != null) {
                 authoredArchetype.addOtherMetadata(ctx.identifier().getText(), ctx.meta_data_value() == null ? null : ctx.meta_data_value().getText());

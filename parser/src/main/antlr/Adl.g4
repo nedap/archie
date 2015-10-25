@@ -72,24 +72,24 @@ component_terminologies_section: SYM_COMPONENT_TERMINOLOGIES odin_text ;
 meta_data: '(' meta_data_item  (';' meta_data_item )* ')' ;
 
 meta_data_item:
-      adl_version_keyword '=' VERSION_ID
-    | uid_keyword '=' GUID
-    | build_uid_keyword '=' GUID
-    | rm_release_keyword '=' VERSION_ID
-    | is_controlled_keyword
-    | is_generated_keyword
+      meta_data_tag_adl_version '=' VERSION_ID
+    | meta_data_tag_uid '=' GUID
+    | meta_data_tag_build_uid '=' GUID
+    | meta_data_tag_rm_release '=' VERSION_ID
+    | meta_data_tag_is_controlled
+    | meta_data_tag_is_generated
     | identifier ( '=' meta_data_value )?
     ;
-
-adl_version_keyword: 'adl_version';
-uid_keyword: 'uid';
-build_uid_keyword: 'build_uid';
-rm_release_keyword: 'rm_release';
-is_controlled_keyword: 'is_controlled';
-is_generated_keyword: 'is_generated';
 
 meta_data_value:
       primitive_value
     | GUID
     | VERSION_ID
     ;
+
+meta_data_tag_adl_version   : 'adl_version' ;
+meta_data_tag_uid           : 'uid' ;
+meta_data_tag_build_uid     : 'build_uid' ;
+meta_data_tag_rm_release    : 'rm_release' ;
+meta_data_tag_is_controlled : 'is_controlled' ;
+meta_data_tag_is_generated  : 'is_generated' ;

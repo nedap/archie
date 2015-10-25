@@ -20,10 +20,10 @@ archetype_ref : ARCHETYPE_HRID | ARCHETYPE_REF ;
 
 // ---------- whitespace & comments ----------
 
-WS :         [ \t\r]+    -> skip ;
-LINE :       '\n'        -> skip ;     // increment line count
+WS         : [ \t\r]+    -> skip ;
+LINE       : '\n'        -> skip ;     // increment line count
 H_CMT_LINE : '--------' '-'*? '\n'  ;  // special type of comment for splitting template overlays
-CMT_LINE :   '--' .*? '\n'  -> skip ;  // (increment line count)
+CMT_LINE   : '--' .*? '\n'  -> skip ;  // (increment line count)
 
 // ---------- ISO8601 Date/Time values ----------
 
@@ -43,10 +43,10 @@ fragment SECOND   : [0-5][0-9] ;                 // seconds
 // ISO8601 DURATION PnYnMnWnDTnnHnnMnn.nnnS 
 // here we allow a deviation from the standard to allow weeks to be // mixed in with the rest since this commonly occurs in medicine
 // TODO: the following will incorrectly match just 'P'
-ISO8601_DURATION : 'P'(DIGIT+[yY])?(DIGIT+[mM])?(DIGIT+[wW])?(DIGIT+[dD])?('T'(DIGIT+[hH])?(DIGIT+[mM])?(DIGIT+('.'DIGIT+)?[sS])?)? ;
+ISO8601_DURATION : 'P' (DIGIT+ [yY])? (DIGIT+ [mM])? (DIGIT+ [wW])? (DIGIT+[dD])? ('T' (DIGIT+[hH])? (DIGIT+[mM])? (DIGIT+ ('.'DIGIT+)?[sS])?)? ;
 
 // ------------------- special word symbols --------------
-SYM_TRUE : [Tt][Rr][Uu][Ee] ;
+SYM_TRUE  : [Tt][Rr][Uu][Ee] ;
 SYM_FALSE : [Ff][Aa][Ll][Ss][Ee] ;
 
 // ---------------------- Identifiers ---------------------
@@ -54,23 +54,49 @@ SYM_FALSE : [Ff][Aa][Ll][Ss][Ee] ;
 ARCHETYPE_HRID      : ARCHETYPE_HRID_ROOT '.v' VERSION_ID ;
 ARCHETYPE_REF       : ARCHETYPE_HRID_ROOT '.v' INTEGER ( '.' DIGIT+ )* ;
 fragment ARCHETYPE_HRID_ROOT : (NAMESPACE '::')? IDENTIFIER '-' IDENTIFIER '-' IDENTIFIER '.' LABEL ;
-VERSION_ID : DIGIT+ '.' DIGIT+ '.' DIGIT+ ( ( '-rc' | '-alpha' ) ( '.' DIGIT+ )? )? ;
+VERSION_ID          : DIGIT+ '.' DIGIT+ '.' DIGIT+ ( ( '-rc' | '-alpha' ) ( '.' DIGIT+ )? )? ;
 fragment IDENTIFIER : ALPHA_CHAR WORD_CHAR* ;
+
+// --------------------- composed primitive types -------------------
+
+TERM_CODE_REF : '[' NAME_CHAR+ ( '(' NAME_CHAR+ ')' )? '::' NAME_CHAR+ ']' ;  // e.g. [ICD10AM(1998)::F23]; [ISO_639-1::en]
+
+// URIs - simple recogniser based on https://tools.ietf.org/html/rfc3986 and
+// http://www.w3.org/Addressing/URL/5_URI_BNF.html
+URI : URI_SCHEME ':' URI_HIER_PART ( '?' URI_QUERY )? ;
+fragment URI_HIER_PART : ( '//' URI_AUTHORITY )? URI_PATH ;
+fragment URI_AUTHORITY : ( URI_USER '@' )? URI_HOST ( ':' NATURAL )? ;
+fragment URI_HOST : IP_LITERAL | NAMESPACE ;
+fragment URI_USER : URI_RESERVED+ ;
+fragment URI_SCHEME : ALPHANUM_CHAR URI_XALPHA* ;
+fragment URI_PATH   : ( '/' URI_XPALPHA+ )+ ;
+fragment URI_QUERY  : URI_XALPHA+ ( '+' URI_XALPHA+ )* ;
+
+fragment IP_LITERAL   : IPV4_LITERAL | IPV6_LITERAL ;
+fragment IPV4_LITERAL : NATURAL '.' NATURAL '.' NATURAL '.' NATURAL ;
+fragment IPV6_LITERAL : HEX_QUAD (':' HEX_QUAD )* '::' HEX_QUAD (':' HEX_QUAD )* ;
+
+fragment URI_XPALPHA : URI_XALPHA | '+' ;
+fragment URI_XALPHA : ALPHANUM_CHAR | URI_SAFE | URI_EXTRA | URI_ESCAPE ;
+fragment URI_SAFE   : [$@.&_-] ;
+fragment URI_EXTRA  : [!*"'()] ;
+fragment URI_ESCAPE : '%' HEX_DIGIT HEX_DIGIT ;
+fragment URI_RESERVED : [=;/#?: ] ;
+
+fragment NATURAL  : [1-9][0-9]* ;
+fragment HEX_QUAD : HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT ;
 
 // According to IETF http://tools.ietf.org/html/rfc1034[RFC 1034] and http://tools.ietf.org/html/rfc1035[RFC 1035],
 // as clarified by http://tools.ietf.org/html/rfc2181[RFC 2181] (section 11)
-fragment NAMESPACE      : LABEL ('.' LABEL)+ ;
+fragment NAMESPACE : LABEL ('.' LABEL)+ ;
 fragment LABEL : ALPHA_CHAR ( NAME_CHAR* ALPHANUM_CHAR )? ;
 
 GUID : HEX_DIGIT+ '-' HEX_DIGIT+ '-' HEX_DIGIT+ '-' HEX_DIGIT+ '-' HEX_DIGIT+ ;
 
-ALPHA_UC_ID : ALPHA_UCHAR WORD_CHAR* ;                      // used for type ids
-ALPHA_LC_ID : ALPHA_LCHAR WORD_CHAR* ;                      // used for attribute / method ids
+ALPHA_UC_ID : ALPHA_UCHAR WORD_CHAR* ;           // used for type ids
+ALPHA_LC_ID : ALPHA_LCHAR WORD_CHAR* ;           // used for attribute / method ids
 
-// --------------------- primitive types -------------------
-
-TERM_CODE_REF : '[' NAME_CHAR+ ( '(' NAME_CHAR+ ')' )? '::' NAME_CHAR+ ']' ;  // e.g. [ICD10AM(1998)::F23]; [ISO_639-1::en]
-URI : [a-z]+ ':' ( '//' | '/' )? ~[ \t\n<>]+ ; // just a simple recogniser, the full thing isn't required
+// --------------------- atomic primitive types -------------------
 
 INTEGER : DIGIT+ E_SUFFIX? ;
 REAL :    DIGIT+ '.' DIGIT+ E_SUFFIX? ;
