@@ -3,7 +3,9 @@ package com.nedap.archie.aom;
 import com.nedap.archie.Configuration;
 import com.nedap.archie.aom.terminology.ArchetypeTerm;
 import com.nedap.archie.base.MultiplicityInterval;
+import com.nedap.archie.paths.PathSegment;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -89,18 +91,16 @@ public class CObject extends ArchetypeConstraint {
 
 
     @Override
-    public String getPath() {
-        if (getParent() == null) {
-            return "/";
+    public List<PathSegment> getPathSegments() {
+        CAttribute parent = getParent();
+        if(parent == null) {
+            return new ArrayList<>();
         }
-        String path = getParent().getPath();
-        if (nodeId != null) {
-            path += "[" + nodeId + "]";
+        List<PathSegment> segments = parent.getPathSegments();
+        if(!segments.isEmpty()) {
+            segments.get(segments.size()-1).setNodeId(getNodeId());
         }
-        if (path.startsWith("//")) {
-            return path.substring(1);
-        }
-        return path;
+        return segments;
     }
 
 
@@ -109,7 +109,7 @@ public class CObject extends ArchetypeConstraint {
             return null;
         }
         String meaning = null;
-        ArchetypeTerm termDefinition = getArchetype().getTerminology().getTermDefinition(Configuration.getLogicalPathLanguage(), nodeId);
+        ArchetypeTerm termDefinition = getArchetype().getTerm(this, Configuration.getLogicalPathLanguage());
         if(termDefinition!=null&&termDefinition.getText()!=null) {
             meaning = termDefinition.getText();
         }

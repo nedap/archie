@@ -1,6 +1,7 @@
 package com.nedap.archie.aom;
 
 import com.nedap.archie.base.MultiplicityInterval;
+import com.nedap.archie.paths.PathSegment;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -101,8 +102,7 @@ public class CAttribute extends ArchetypeConstraint {
                 iter.remove();
             }
         }
-        //TODO: definition.setNodeId(nodeId);
-        children.add(definition);
+        addChild(definition);
     }
 
     public Cardinality getCardinality() {
@@ -118,16 +118,19 @@ public class CAttribute extends ArchetypeConstraint {
         return "Cattribute: " + rmAttributeName + ", " + children.size() + " children";
     }
 
+    public List<PathSegment> getPathSegments() {
+        CObject parent = getParent();
+        if(parent == null) {
+            return new ArrayList<>();
+        }
+        List<PathSegment> segments = parent.getPathSegments();
+        segments.add(new PathSegment(getRmAttributeName(), null));
+        return segments;
+    }
+
     @Override
-    public String getPath() {
-        String path = "/" + rmAttributeName;
-        if(getParent() != null) {
-            path = getParent().getPath() + path;
-        }
-        if(path.startsWith("//")) {
-            return path.substring(1);
-        }
-        return path;
+    public CObject getParent() {
+        return (CObject) super.getParent();
     }
 
     public String getLogicalPath() {

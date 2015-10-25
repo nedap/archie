@@ -1,4 +1,4 @@
-package com.nedap.archie.query;
+package com.nedap.archie.paths;
 
 /**
  * Segment of an apath-query
@@ -30,8 +30,17 @@ public class PathSegment {
         this.nodeId = nodeId;
     }
 
+    public boolean hasIdCode() {
+        return nodeId != null && nodeId.matches("id(\\.?\\d)+");
+    }
+
+    public boolean hasArchetypeRef() {
+        return nodeId != null && nodeId.matches("(.*::)?.*-.*-.*\\..*\\.v.*");
+    }
+
     @Override
     public String toString() {
         return "/" + nodeName + "[" + nodeId + "]";
     }
+
 }

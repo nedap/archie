@@ -170,15 +170,21 @@ public class Flattener {
             } else {
                 archetype = archetype.clone();//make sure we don't change this archetype :)
             }
-            //TODO: we have to replace the nodeid to the archetypeid here!
 
-            parent.getParent().replaceChild(child.getNodeId(), archetype.getDefinition());//TODO: check this!
+            parent.getParent().replaceChild(child.getNodeId(), archetype.getDefinition());
             archetype.getDefinition().setNodeId(archetype.getArchetypeId().getFullId());
-
+            archetype.getDefinition().setArchetype(parent.getArchetype());//update the pointer to the archetype parent.
             OperationalTemplate templateResult = (OperationalTemplate) result;
 
             //todo: should we filter this?
-            templateResult.addComponentTerminology(child.getNodeId(), archetype.getTerminology());
+            if(archetype instanceof OperationalTemplate) {
+                OperationalTemplate template = (OperationalTemplate) archetype;
+                //add all the component terminologies, otherwise we lose translation
+                for(String subarchetypeId:template.getComponentTerminologies().keySet()) {
+                    templateResult.addComponentTerminology(subarchetypeId, template.getComponentTerminologies().get(subarchetypeId));
+                }
+            }
+            templateResult.addComponentTerminology(archetype.getDefinition().getNodeId(), archetype.getTerminology());
             //todo: do we have to put something in the terminology extracts?
             //templateResult.addTerminologyExtract(child.getNodeId(), archetype.getTerminology().);
         }

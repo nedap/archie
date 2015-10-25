@@ -1,6 +1,7 @@
 package com.nedap.archie.aom;
 
 import com.esotericsoftware.kryo.Kryo;
+import com.nedap.archie.aom.terminology.ArchetypeTerm;
 import com.nedap.archie.aom.terminology.ArchetypeTerminology;
 
 import java.util.ArrayList;
@@ -126,6 +127,16 @@ public class Archetype extends AuthoredResource {
         if(value != null) {
             otherMetaData.put(text, value);
         }//TODO: just a value is possible according to grammar. But no in a ConcurrentHashMap. Change to different map implementation?
+    }
+
+    /**
+     * Translation helper function. To be overriden by Operational Templates
+     * @param object the object to get the term definition for
+     * @param language the language to get the term definition for
+     * @return the ArchetypeTerm corresponding to the given CObject in the given language
+     */
+    public ArchetypeTerm getTerm(CObject object, String language) {
+        return getTerminology().getTermDefinition(language, object.getNodeId());
     }
 
     public Archetype clone() {

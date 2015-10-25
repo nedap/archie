@@ -5,12 +5,23 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.nedap.archie.adlparser.ADLParser;
 import com.nedap.archie.aom.Archetype;
+import com.nedap.archie.aom.ArchetypeModelObject;
+import com.nedap.archie.aom.CAttribute;
+import com.nedap.archie.aom.CComplexObject;
+import com.nedap.archie.aom.CObject;
+import com.nedap.archie.query.APathQuery;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 
 /**
  * TODO: all this tests is that the flattener runs, with some diagnostic JSON-output. Implement way more tests.
@@ -67,12 +78,41 @@ public class FlattenerTest {
 
 
     @Test
-    public void test() throws Exception {
+    public void checkParentReplacement() throws Exception {
         Archetype flattened = flattener.flatten(bloodPressureComposition);
+
+        Stack<CObject> worklist = new Stack();
+        worklist.add(flattened.getDefinition());
+
+        while(!worklist.isEmpty()) {
+            CObject object = worklist.pop();
+            if(object.getArchetype() != flattened) {
+                fail("wrong parent found!");
+            }
+            for(CAttribute attr:object.getAttributes()) {
+                if(attr.getParent() != object) {
+                    fail("wrong parent found!");
+                }
+                worklist.addAll(attr.getChildren());
+            }
+        }
+
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
 
         System.out.println(objectMapper.writeValueAsString(flattened));
 
+    }
+
+    @Test
+    public void testComponentTerminologies() throws Exception {
+        Archetype flattened = flattener.flatten(bloodPressureComposition);
+        CComplexObject definition = flattened.getDefinition();
+        //you definately need component terminologies to translate this :)
+        CObject object = (CObject)
+                new APathQuery("/content[openEHR-EHR-OBSERVATION.ovl-blood_pressure-blood_pressure-001.v1.0.0]/protocol[id12]/items[id1011]")
+                .find(definition);
+        assertNull(flattened.getTerminology().getTermDefinition("en", "id1011"));
+        assertEquals("Diastolic endpoint", flattened.getTerm(object, "en").getText());
     }
 }

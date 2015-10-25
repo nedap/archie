@@ -10,6 +10,7 @@ import com.nedap.archie.aom.CComplexObject;
 import com.nedap.archie.aom.CObject;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
+import com.nedap.archie.paths.PathSegment;
 
 
 import java.util.ArrayList;
@@ -83,11 +84,10 @@ public class APathQuery {
                 }
                 continue;
             }
-            String nodeId = segment.getNodeId();
-            if(nodeId.matches("id((\\.)?\\d)+")) {
+            if(segment.hasIdCode() || segment.hasArchetypeRef()) {
                 currentObject = attribute.getChild(segment.getNodeId());
             } else {
-                currentObject = attribute.getChildByMeaning(nodeId);
+                currentObject = attribute.getChildByMeaning(segment.getNodeId());
             }
             if(currentObject == null) {
                 return null;

@@ -1,8 +1,10 @@
 package com.nedap.archie.aom;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.nedap.archie.paths.PathSegment;
 
 import javax.xml.bind.annotation.XmlTransient;
+import java.util.List;
 
 /**
  * Created by pieter.bos on 15/10/15.
@@ -36,7 +38,26 @@ public abstract class ArchetypeConstraint extends ArchetypeModelObject {
         this.socParent = socParent;
     }
 
-    public abstract String getPath();
+    public abstract List<PathSegment> getPathSegments();
+
+    public final String getPath() {
+        StringBuilder result = new StringBuilder();
+
+        List<PathSegment> pathSegments = getPathSegments();
+        if(pathSegments.isEmpty()) {
+            return "/";
+        }
+        for(PathSegment segment: pathSegments) {
+            result.append("/");
+            result.append(segment.getNodeName());
+            if(segment.getNodeId() != null && !segment.getNodeId().equals(CPrimitiveObject.PRIMITIVE_NODE_ID_VALUE)) {
+                result.append("[");
+                result.append(segment.getNodeId());
+                result.append("]");
+            }
+        }
+        return result.toString();
+    }
 
     public abstract String getLogicalPath();
 
