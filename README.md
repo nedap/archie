@@ -43,15 +43,15 @@ This is work in progress, but already usable for some situations.
 What it features:
 
 - ADL 2.0 parsing, including tuples
-- basic Archetype Object Model implementation
-- very basic apath-queries - paths with nodeIds and paths with meanings.
+- Basic Archetype Object Model implementation
+- Very basic apath-queries - paths with nodeIds, archetype references and logical paths with meanings
+- Both logical path and physical path support, for queries and from archetype model
 - A listener to more easily walk the tree of archetypes describing an openEHR reference model
-- A far from complete Flattener implementation
-	- with id overriding if specified in template
-	- with RMTypeName setting
-	- with some basic attribute overriding/adding
-	- with archetype root expansion
-	- without terminology merging
+- A far from complete Flattener implementation, that can make Operational Templates
+	- node ids, rm names, occurrences/cardinality/existence overriding
+	- with archetype root expansion if required
+	- with terminology definition merging
+	- adds component terminologies
 	- without name overriding
 - rather basic test coverage
 
@@ -68,9 +68,7 @@ What we want this to do in the future:
 - Probably rule evaluation
 - ADL serialization (to ADL and perhaps JSON and XML)
 - Many more tests
-
-Known issues:
-- The ADL ANTLR grammar still has some issues, mainly with regular expression parsing, but also some more issues. You might not even notice this in basic use cases
+- ...
 
 ## Contributions
 
