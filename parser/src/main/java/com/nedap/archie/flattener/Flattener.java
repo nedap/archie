@@ -1,6 +1,7 @@
 package com.nedap.archie.flattener;
 
 import com.nedap.archie.aom.*;
+import com.nedap.archie.aom.terminology.ArchetypeTerm;
 import com.nedap.archie.query.APathQuery;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -8,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Flattener. For single use only, create a new flattener for every flatten-action you want to do!
@@ -89,6 +91,19 @@ public class Flattener {
         //1. redefine structure
         //2. fill archetype slots?
         flatten(result, child);//TODO: this way around, or the other one? :)
+        Map<String, Map<String, ArchetypeTerm>> resultTermDefinitions = result.getTerminology().getTermDefinitions();
+        Map<String, Map<String, ArchetypeTerm>> childTermDefinitions = child.getTerminology().getTermDefinitions();
+        for(String language:childTermDefinitions.keySet()) {
+            if(!resultTermDefinitions.containsKey(language)) {
+                resultTermDefinitions.put(language, childTermDefinitions.get(language));
+            } else {
+                for(String nodeId:childTermDefinitions.get(language).keySet()) {
+                    resultTermDefinitions.get(language)
+                            .put(nodeId, childTermDefinitions.get(language).get(nodeId));
+                }
+            }
+
+        }
         return result;
     }
 
