@@ -104,6 +104,7 @@ public class Flattener {
             }
 
         }
+        //TODO: all other methods in terminology
         return result;
     }
 
