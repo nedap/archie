@@ -1,16 +1,10 @@
 package com.nedap.archie.flattener;
 
 import com.nedap.archie.aom.*;
-import com.nedap.archie.aom.terminology.ArchetypeTerm;
 import com.nedap.archie.aom.terminology.ArchetypeTerminology;
 import com.nedap.archie.aom.terminology.ValueSet;
 import com.nedap.archie.query.APathQuery;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-
-import java.util.ArrayList;
 import java.util.Map;
 
 /**
@@ -37,7 +31,7 @@ public class Flattener {
         this.repository = new OverridingArchetypeRepository(repository);
     }
 
-    public Flattener makeOperationalTemplate(boolean makeTemplate) {
+    public Flattener createOperationalTemplate(boolean makeTemplate) {
         this.makeOperationalTemplate = makeTemplate;
         return this;
     }
@@ -205,7 +199,7 @@ public class Flattener {
     }
 
     private Flattener getNewFlattener() {
-        return new Flattener(repository).makeOperationalTemplate(makeOperationalTemplate);
+        return new Flattener(repository).createOperationalTemplate(makeOperationalTemplate);
     }
 
     private void fillArchetypeRoot(CObject parent, CArchetypeRoot child) {

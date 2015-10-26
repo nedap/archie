@@ -20,6 +20,8 @@ To install to your local maven repository for use in other gradle or maven proje
 
 ## Usage
 
+### Parsing and Queries
+
 ```java
 Archetype archetype = new ADLParser().parse(adlFile);
 APathQuery query = new APathQuery("/context[id1]/items[id2]/value");
@@ -37,23 +39,37 @@ CAttribute attribute = archetype.getDefinition()
     attribute.getLogicalPath(); // is 'context[systolic]/items'
 ```
 
-## Features
+### Flattener
+
+First, create an ArchetypeRepository - create your own or use the supplied in memory SimpleArchetypeRespository. You need it to contain all Archetypes that are to be used, in parsed form. Then do:
+
+```java
+SimpleArchetypeRepository repository = new SimpleArchetypeRepository();
+repository.addArchetype(archetype1); //repeat for all your archetypes
+Archetype flattened = new Flattener(repository).createOperationalTemplate(true).flatten(archetype);
+```
+
+### Terminology
+
+You can of course directly use archetype.terminology() to get the meaning in any desired language. But that doesn't work with OperationalTemplates because you need to handle component terminologies. So instead, do:
+
+```java
+CObject cobject = archetype.getDefinition().getAttribute("context").getChild("id1");
+ArchetypeTerm term = archetype.getTerm(cobject, "en");
+logger.info("and the archetype term text is: " + term.getText());
+```
+
+And it handles it for you.
+
+A helper function for locally defined ac/at-codes that works in operational templates will be implemented soon - or do it yourself and create a pull request :)
+
+### Archetype tree walking for openEHR reference models
+
+You can implement the RMArchetypeTreeListener or the BaseRMArchetypeTreeListener and you'll get a specific callback for every reference model object. Very little instanceof calls needed there.
+
+## Status
+
 This is work in progress, but already usable for some situations. 
-
-What it features:
-
-- ADL 2.0 parsing, including tuples
-- Basic Archetype Object Model implementation
-- Very basic apath-queries - paths with nodeIds, archetype references and logical paths with meanings
-- Both logical path and physical path support, for queries and from archetype model
-- A listener to more easily walk the tree of archetypes describing an openEHR reference model
-- A far from complete Flattener implementation, that can make Operational Templates
-	- node ids, rm names, occurrences/cardinality/existence overriding
-	- with archetype root expansion if required
-	- with terminology definition merging
-	- adds component terminologies
-	- without name overriding
-- rather basic test coverage
 
 What we want this to do in the future:
 - Temporal constraint parsing

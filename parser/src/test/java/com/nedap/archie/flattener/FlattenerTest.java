@@ -1,11 +1,9 @@
 package com.nedap.archie.flattener;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.nedap.archie.adlparser.ADLParser;
 import com.nedap.archie.aom.Archetype;
-import com.nedap.archie.aom.ArchetypeModelObject;
 import com.nedap.archie.aom.CAttribute;
 import com.nedap.archie.aom.CComplexObject;
 import com.nedap.archie.aom.CObject;
@@ -13,11 +11,7 @@ import com.nedap.archie.query.APathQuery;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Stack;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -64,7 +58,7 @@ public class FlattenerTest {
         repository.addArchetype(bloodPressureObservation);
         repository.addArchetype(reportResult);
 
-        flattener = new Flattener(repository).makeOperationalTemplate(true);
+        flattener = new Flattener(repository).createOperationalTemplate(true);
     }
 
     @Test
