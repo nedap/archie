@@ -11,6 +11,10 @@ public class CComplexObject extends CDefinedObject<ArchetypeModelObject> {
     private List<CAttribute> attributes = new ArrayList();
 
     private List<CAttributeTuple> attributeTuples = new ArrayList();
+
+    /**
+     * If the parent of this is an archetype, this will contain a pointer to it.
+     */
     private Archetype archetype;
 
     /**
@@ -56,6 +60,12 @@ public class CComplexObject extends CDefinedObject<ArchetypeModelObject> {
 
     public boolean isAnyAllowed() {
         return attributes.isEmpty();
+    }
+
+    @Override
+    public void setParent(ArchetypeConstraint parent) {
+        archetype = null;
+        super.setParent(parent);
     }
 
     public Archetype getArchetype() {

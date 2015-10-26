@@ -2,6 +2,8 @@ package com.nedap.archie.flattener;
 
 import com.nedap.archie.aom.*;
 import com.nedap.archie.aom.terminology.ArchetypeTerm;
+import com.nedap.archie.aom.terminology.ArchetypeTerminology;
+import com.nedap.archie.aom.terminology.ValueSet;
 import com.nedap.archie.query.APathQuery;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -91,8 +93,43 @@ public class Flattener {
         //1. redefine structure
         //2. fill archetype slots?
         flatten(result, child);//TODO: this way around, or the other one? :)
-        Map<String, Map<String, ArchetypeTerm>> resultTermDefinitions = result.getTerminology().getTermDefinitions();
-        Map<String, Map<String, ArchetypeTerm>> childTermDefinitions = child.getTerminology().getTermDefinitions();
+        flattenTerminology();
+
+        result.getDefinition().setArchetype(result);
+        return result;
+    }
+
+    private void flattenTerminology() {
+
+        ArchetypeTerminology resultTerminology = result.getTerminology();
+        ArchetypeTerminology childTerminology = child.getTerminology();
+
+        flattenTerminologyDefinitions(resultTerminology.getTermDefinitions(), childTerminology.getTermDefinitions());
+        flattenTerminologyDefinitions(resultTerminology.getTerminologyExtracts(), childTerminology.getTerminologyExtracts());
+        flattenTerminologyDefinitions(resultTerminology.getTermBindings(), childTerminology.getTermBindings());
+        resultTerminology.setDifferential(false);//TODO: correct?
+
+        Map<String, ValueSet> childValueSets = childTerminology.getValueSets();
+        Map<String, ValueSet> resultValueSets = resultTerminology.getValueSets();
+
+        flattenValueSets(childValueSets, resultValueSets);
+    }
+
+    private void flattenValueSets(Map<String, ValueSet> childValueSets, Map<String, ValueSet> resultValueSets) {
+        for(String key:childValueSets.keySet()) {
+            ValueSet childValueSet = childValueSets.get(key);
+            if(!resultValueSets.containsKey(key)) {
+                resultValueSets.put(key, childValueSet);
+            } else {
+                ValueSet resultValueSet = resultValueSets.get(key);
+                for(String member:childValueSet.getMembers()) {
+                    resultValueSet.addMember(member);
+                }
+            }
+        }
+    }
+
+    private <T> void flattenTerminologyDefinitions(Map<String, Map<String, T>> resultTermDefinitions, Map<String, Map<String, T>> childTermDefinitions) {
         for(String language:childTermDefinitions.keySet()) {
             if(!resultTermDefinitions.containsKey(language)) {
                 resultTermDefinitions.put(language, childTermDefinitions.get(language));
@@ -102,10 +139,7 @@ public class Flattener {
                             .put(nodeId, childTermDefinitions.get(language).get(nodeId));
                 }
             }
-
         }
-        //TODO: all other methods in terminology
-        return result;
     }
 
     private static Archetype createOperationalTemplate(Archetype parent, Archetype child) {
@@ -189,7 +223,7 @@ public class Flattener {
 
             parent.getParent().replaceChild(child.getNodeId(), archetype.getDefinition());
             archetype.getDefinition().setNodeId(archetype.getArchetypeId().getFullId());
-            archetype.getDefinition().setArchetype(parent.getArchetype());//update the pointer to the archetype parent.
+
             OperationalTemplate templateResult = (OperationalTemplate) result;
 
             //todo: should we filter this?

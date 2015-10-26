@@ -1,7 +1,10 @@
 package com.nedap.archie.aom.terminology;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 /**
@@ -9,7 +12,7 @@ import java.util.concurrent.ConcurrentLinkedDeque;
  */
 public class ValueSet {
     private String id;
-    private List<String> members = new ArrayList<>();//TODO: use something concurrent instead
+    private Set<String> members = new LinkedHashSet<>();
 
     public String getId() {
         return id;
@@ -19,12 +22,12 @@ public class ValueSet {
         this.id = id;
     }
 
-    public List<String> getMembers() {
+    public Set<String> getMembers() {
         return members;
     }
 
-    public void setMembers(List<String> members) {
-        this.members = members;
+    public void setMembers(Collection<String> members) {
+        this.members = new LinkedHashSet<>(members);
     }
 
     public void addMember(String member) {
