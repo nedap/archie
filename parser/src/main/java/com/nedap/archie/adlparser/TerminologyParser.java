@@ -1,6 +1,7 @@
 package com.nedap.archie.adlparser;
 
 import com.nedap.archie.adlparser.antlr.AdlParser;
+import com.nedap.archie.adlparser.antlr.AdlParser.*;
 import com.nedap.archie.aom.terminology.ArchetypeTerm;
 import com.nedap.archie.aom.terminology.ArchetypeTerminology;
 import com.nedap.archie.aom.terminology.ValueSet;
@@ -25,13 +26,13 @@ public class TerminologyParser {
         this.errors = errors;
     }
 
-    public ArchetypeTerminology parseTerminology(AdlParser.Terminology_sectionContext terminologySectionContext) {
-        AdlParser.Odin_textContext odinText = terminologySectionContext.odin_text();
+    public ArchetypeTerminology parseTerminology(Terminology_sectionContext terminologySectionContext) {
+        Odin_textContext odinText = terminologySectionContext.odin_text();
         ArchetypeTerminology terminology = new ArchetypeTerminology();
         if(odinText != null) {
-            AdlParser.Attr_valsContext values = odinText.attr_vals();
+            Attr_valsContext values = odinText.attr_vals();
             if (values != null) {
-                for (AdlParser.Attr_valContext value : values.attr_val()) {
+                for (Attr_valContext value : values.attr_val()) {
                     switch (value.attribute_id().getText()) {
                         case "term_definitions":
                         case "term_definition":
@@ -64,26 +65,32 @@ public class TerminologyParser {
 
     }
 
-    private Map<String, ValueSet> parseOdinValueSets(AdlParser.Object_blockContext context) {
+    private Map<String, ValueSet> parseOdinValueSets(Object_blockContext context) {
         //TODO: a proper odin parser would be nice. Jackson offers the possibility of relatively easily implementing JAXB-style data binding, See for example the CSV plugin
         Map<String, ValueSet> valueSets = new ConcurrentHashMap<>();
-        AdlParser.Object_value_blockContext test = context.object_value_block();
-        List<AdlParser.Keyed_objectContext> keyedContext = test.keyed_object();
+        Object_value_blockContext test = context.object_value_block();
+        List<Keyed_objectContext> keyedContext = test.keyed_object();
         if(keyedContext == null) {
             errors.addWarning("in ArchetypeTerminology, Value set found, but no definition");
         }
-        for(AdlParser.Keyed_objectContext innerContext:keyedContext) {
+        for(Keyed_objectContext innerContext:keyedContext) {
             String valueSetId = OdinValueParser.parseOdinStringValue(innerContext.primitive_value().string_value());
-            AdlParser.Object_value_blockContext valueSetContext = innerContext.object_block().object_value_block();
-            List<AdlParser.Keyed_objectContext> valueSetProperties = valueSetContext.keyed_object();
+            Object_value_blockContext valueSetContext = innerContext.object_block().object_value_block();
+
+
+            List<Attr_valContext> attrValContexts =  valueSetContext.attr_vals().attr_val();
             ValueSet valueSet = new ValueSet();
-            for(AdlParser.Keyed_objectContext property:valueSetProperties) {
-                switch(property.primitive_value().string_value().getText()) {
+            valueSet.setId(valueSetId);
+
+
+            //TODO: add a test for this behaviour.
+            for(Attr_valContext property:attrValContexts) {
+                switch(property.attribute_id().getText()) {
                     case "id":
                         valueSet.setId(property.object_block().object_value_block().primitive_object().primitive_value().string_value().getText());
                         break;
                     case "members":
-                        AdlParser.Primitive_objectContext membersContext = property.object_block().object_value_block().primitive_object();
+                        Primitive_objectContext membersContext = property.object_block().object_value_block().primitive_object();
                         valueSet.setMembers(OdinValueParser.parseListOfStrings(membersContext));
                 }
 
@@ -94,23 +101,23 @@ public class TerminologyParser {
         return valueSets;
     }
 
-    private <T> Map<String, Map<String, T>> parseOdinMap(String attributeName, AdlParser.Object_blockContext context, BiFunction<Map<String, T>, AdlParser.Keyed_objectContext, Void> parseInner) {
+    private <T> Map<String, Map<String, T>> parseOdinMap(String attributeName, Object_blockContext context, BiFunction<Map<String, T>, Keyed_objectContext, Void> parseInner) {
         //TODO: a proper odin parser would be nice. Jackson offers the possibility of relatively easily implementing JAXB-style data binding, See for example the CSV plugin
         Map<String, Map<String, T>> terminology = new ConcurrentHashMap<>();
-        AdlParser.Object_value_blockContext test = context.object_value_block();
-        List<AdlParser.Keyed_objectContext> keyedContext = test.keyed_object();
+        Object_value_blockContext test = context.object_value_block();
+        List<Keyed_objectContext> keyedContext = test.keyed_object();
         if(keyedContext == null) {
             errors.addWarning("In ArchetypeTerminology, empty " + attributeName + " found");
         }
-        for(AdlParser.Keyed_objectContext languageContext:keyedContext) {
+        for(Keyed_objectContext languageContext:keyedContext) {
             String language = OdinValueParser.parseOdinStringValue(languageContext.primitive_value().string_value());
             Map<String, T> translations = new ConcurrentHashMap<>();
             terminology.put(language, translations);
 
-            AdlParser.Object_blockContext blockContext = languageContext.object_block();
+            Object_blockContext blockContext = languageContext.object_block();
 
-            AdlParser.Object_value_blockContext termsContext = blockContext.object_value_block();
-            for(AdlParser.Keyed_objectContext termCodeContext:termsContext.keyed_object()) {
+            Object_value_blockContext termsContext = blockContext.object_value_block();
+            for(Keyed_objectContext termCodeContext:termsContext.keyed_object()) {
                 parseInner.apply(translations, termCodeContext);
 
             }
@@ -118,13 +125,13 @@ public class TerminologyParser {
         return terminology;
     }
 
-    private static Void parseOdinArchetypeTerm(Map<String, ArchetypeTerm> map, AdlParser.Keyed_objectContext context) {
+    private static Void parseOdinArchetypeTerm(Map<String, ArchetypeTerm> map, Keyed_objectContext context) {
         String termCode = OdinValueParser.parseOdinStringValue(context.primitive_value().string_value());
-        List<AdlParser.Attr_valContext> attr_valContexts = context.object_block().object_value_block().attr_vals().attr_val();
+        List<Attr_valContext> attr_valContexts = context.object_block().object_value_block().attr_vals().attr_val();
         ArchetypeTerm archetypeTerm = new ArchetypeTerm();
         archetypeTerm.setCode(termCode);
         map.put(termCode, archetypeTerm);
-        for(AdlParser.Attr_valContext value:attr_valContexts) {
+        for(Attr_valContext value:attr_valContexts) {
             String attribute = value.attribute_id().getText();
             String stringValue = OdinValueParser.parseOdinStringValue(value.object_block().object_value_block().primitive_object().primitive_value().string_value());
             archetypeTerm.put(attribute, stringValue);
@@ -132,7 +139,7 @@ public class TerminologyParser {
         return null;
     }
 
-    private static Void parseOdinUri(Map<String, URI> map, AdlParser.Keyed_objectContext context) {
+    private static Void parseOdinUri(Map<String, URI> map, Keyed_objectContext context) {
         String termCode = OdinValueParser.parseOdinStringValue(context.primitive_value().string_value());
         try {
             URI uri = OdinValueParser.parseOdinUri(context.object_block().object_value_block().primitive_object().primitive_value().uri_value());
