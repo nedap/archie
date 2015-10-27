@@ -73,7 +73,7 @@ This is work in progress, but already usable for some situations.
 
 What we want this to do in the future:
 - Temporal constraint parsing
-- Rules parsing
+- Full rules parsing, once the adl-antlr grammar supports this fully
 - Archetype metadata parsing
 - Proper archetype slot assertions parsing (and tools to evaluate?)
 - Annotations parsing
