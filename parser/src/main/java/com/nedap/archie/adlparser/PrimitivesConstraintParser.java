@@ -92,6 +92,9 @@ public class PrimitivesConstraintParser {
         if(stringValueContext != null) {
             result.addConstraint(OdinValueParser.parseOdinStringValue(stringValueContext));
         }
+        if(stringContext.regex_constraint() != null) {
+            result.addConstraint(stringContext.regex_constraint().getText());
+        }
         return result;
     }
 
