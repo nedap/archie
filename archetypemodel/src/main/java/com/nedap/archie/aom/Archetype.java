@@ -1,12 +1,9 @@
 package com.nedap.archie.aom;
 
-import com.esotericsoftware.kryo.Kryo;
 import com.nedap.archie.aom.terminology.ArchetypeTerm;
 import com.nedap.archie.aom.terminology.ArchetypeTerminology;
+import com.nedap.archie.rules.RuleStatement;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -25,7 +22,7 @@ public class Archetype extends AuthoredResource {
 
     private CComplexObject definition;
     private ArchetypeTerminology terminology;
-    private RuleStatement rules = null;//TODO: this should be a list when we correctly parse the rules. However, getting this as a string is very nice alternative for many use cases
+    private RulesSection rules = null;
 
     private String adlVersion;
     private String buildUid;
@@ -65,11 +62,11 @@ public class Archetype extends AuthoredResource {
         this.definition = definition;
     }
 
-    public RuleStatement getRules() {
+    public RulesSection getRules() {
         return rules;
     }
 
-    public void setRules(RuleStatement rules) {
+    public void setRules(RulesSection rules) {
         this.rules = rules;
     }
 

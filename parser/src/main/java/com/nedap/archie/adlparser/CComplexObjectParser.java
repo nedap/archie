@@ -3,6 +3,8 @@ package com.nedap.archie.adlparser;
 import com.nedap.archie.adlparser.antlr.AdlParser.*;
 import com.nedap.archie.aom.*;
 import com.nedap.archie.base.MultiplicityInterval;
+import com.nedap.archie.rules.Assertion;
+import com.nedap.archie.rules.RuleStatement;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import static com.nedap.archie.adlparser.PrimitivesConstraintParser.*;
@@ -25,11 +27,16 @@ public class CComplexObjectParser {
 
     }
 
-    public RuleStatement parseRules(Rules_sectionContext rulesSectionContext) {
-        //TODO: proper solution for this. Works for now.
-        RuleStatement statement =new RuleStatement();
-        statement.setRuleContent(rulesSectionContext.getText());
-        return statement;
+    public RulesSection parseRules(Rules_sectionContext context) {
+        RulesSection result = new RulesSection();
+
+        result.setContent(context.getText());
+
+        for(AssertionContext assertion:context.assertion()) {
+            result.addRule(AssertionsParser.parse(assertion));
+        }
+
+        return result;
     }
 
     public CComplexObject parseComplexObject(C_complex_objectContext context) {
@@ -177,7 +184,7 @@ public class CComplexObjectParser {
         root.setArchetypeRef(archetypeRootContext.archetype_ref().getText());
 
         root.setOccurences(this.parseMultiplicityInterval(archetypeRootContext.c_occurrences()));
-
+//((Archetype_slotContext) slotContext).start.getInputStream().getText(slotContext.getSourceInterval())
         return root;
     }
 
@@ -189,20 +196,21 @@ public class CComplexObjectParser {
         if(headContext.c_occurrences() != null) {
             slot.setOccurences(parseMultiplicityInterval(headContext.c_occurrences()));
         }
+        AssertionsParser assertionParser = new AssertionsParser();
         if(slotContext.c_excludes() != null) {
             for(AssertionContext assertionContext:slotContext.c_excludes().assertion()) {
-                slot.getExcludes().add(new Assertion(assertionContext.getText()));
+                slot.getExcludes().add(assertionParser.parse(assertionContext));
             }
         }
         if(slotContext.c_includes() != null) {
             for(AssertionContext assertionContext:slotContext.c_includes().assertion()) {
-                slot.getIncludes().add(new Assertion(assertionContext.getText()));
+                slot.getIncludes().add(assertionParser.parse(assertionContext));
             }
         }
         return slot;
     }
 
-    private CPrimitiveObject parsePrimitiveObject(C_primitive_objectContext objectContext) {
+    public static CPrimitiveObject parsePrimitiveObject(C_primitive_objectContext objectContext) {
         /*c_integer
                 | c_real
                 | c_date

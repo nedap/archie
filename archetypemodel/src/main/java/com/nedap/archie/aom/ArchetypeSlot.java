@@ -1,5 +1,7 @@
 package com.nedap.archie.aom;
 
+import com.nedap.archie.rules.Assertion;
+
 import java.util.ArrayList;
 import java.util.List;
 

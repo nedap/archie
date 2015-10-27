@@ -149,6 +149,7 @@ public class ADLListener extends AdlBaseListener {
     }
 
     public void enterRules_section(Rules_sectionContext ctx) {
+
         archetype.setRules(subTreeWalker.parseRules(ctx));
     }
 
