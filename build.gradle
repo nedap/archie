@@ -1,4 +1,11 @@
-
+buildscript {
+  repositories {
+    jcenter()
+  }
+  dependencies {
+    classpath "org.jfrog.buildinfo:build-info-extractor-gradle:3.1.0"
+  }
+}
 
 allprojects {
 	apply plugin: 'maven' //so we can install to local repository
@@ -6,7 +13,12 @@ allprojects {
 	group = 'com.nedap.healthcare.archie'
 }
 subprojects {
+
+
+
 	apply plugin: 'java'
+	apply plugin: 'maven-publish'
+	apply plugin: "com.jfrog.artifactory"	
 
 	repositories {
 	    mavenCentral()
@@ -29,4 +41,30 @@ subprojects {
 
 	sourceCompatibility = '1.8'
 	targetCompatibility = '1.8'
+
+	publishing {
+	    publications {
+	        mavenJava(MavenPublication) {
+	            from components.java
+	        }
+	    }
+	}
+
+	artifactory {
+		//sorry about the private repository. Once we release a version, this will change to something public
+	    contextUrl = 'https://nedap.artifactoryonline.com/nedap/'
+	    publish {
+	        repository {
+	            repoKey = 'libs-snapshots-local'
+	            username = "${artifactoryUser}"
+	            password = "${artifactoryPassword}"
+	            maven = true
+
+	        }       
+	        defaults {
+	            publications ('mavenJava')
+	        }
+	    }
+	}
+	artifactoryPublish.dependsOn 'generatePomFileForMavenJavaPublication', 'build'
 }
