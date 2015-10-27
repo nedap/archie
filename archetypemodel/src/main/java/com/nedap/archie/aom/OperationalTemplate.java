@@ -46,6 +46,19 @@ public class OperationalTemplate extends AuthoredArchetype {
         componentTerminologies.put(nodeId, terminology);
     }
 
+    private String getChildArchetypeId(CObject object) {
+        //optimization possible: walk back the tree until you find a node used in an archetype, instead of
+        //getting the entire path
+        List<PathSegment> pathSegments = object.getPathSegments();
+        Collections.reverse(pathSegments);
+        for(PathSegment segment:pathSegments) {
+            if(!segment.hasIdCode()) {
+                //this is [archetypeId] instead of [idcode]
+                return segment.getNodeId();
+            }
+        }
+        return null;
+    }
 
     /**
      * Get the ArchetypeTerm for the given CObject. This gets the term from the ComponentTerminologies if required.
@@ -55,29 +68,32 @@ public class OperationalTemplate extends AuthoredArchetype {
      */
     @Override
     public ArchetypeTerm getTerm(CObject object, String language) {
-        //optimization possible: walk back the tree until you find a node used in an archetype, instead of
-        //getting the entire path
-        List<PathSegment> pathSegments = object.getPathSegments();
-        Collections.reverse(pathSegments);
-        String archetypeId = null;
-        for(PathSegment segment:pathSegments) {
-            if(!segment.hasIdCode()) {
-                //this is [archetypeId] instead of [idcode]
-                archetypeId = segment.getNodeId();
-                break;
-            }
-        }
+        return getTerm(object, object.getNodeId(), language);
+    }
+
+    @Override
+    public ArchetypeTerm getTerm(CObject object, String code, String language) {
+        String archetypeId = getChildArchetypeId(object);
         if(archetypeId == null) {
-            return super.getTerm(object, language);
+            return super.getTerm(object, code, language);
         } else {
             ArchetypeTerminology terminology = getComponentTerminologies().get(archetypeId);
             if(terminology != null) {
-                return terminology.getTermDefinition(language, object.getNodeId());
+                return terminology.getTermDefinition(language, code);
             } else {
                 //TODO: check if we should do this or just return null
                 throw new IllegalStateException("Expected an archetype terminology for archetype id " + archetypeId);
             }
+        }
+    }
 
+
+    public ArchetypeTerminology getTerminology(CObject object) {
+        String archetypeId = getChildArchetypeId(object);
+        if(archetypeId == null) {
+            return getTerminology();
+        } else {
+            return getComponentTerminologies().get(archetypeId);
         }
     }
 }

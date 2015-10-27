@@ -139,8 +139,27 @@ public class Archetype extends AuthoredResource {
         return getTerminology().getTermDefinition(language, object.getNodeId());
     }
 
+    /**
+     * Get the terminology definition for a certain code used in a certain path in a terminology. Use this instead of
+     * the ArchetypeTerminology and things work in Operation Templates out of the box. Overridden in OperationalTemplate
+     *
+     * @param object the object to get the term definition for
+     * @param code the object to get the term definition for. Usually an ac- or at-code
+     * @param language the language to get the term definition for
+     * @return the ArchetypeTerm corresponding to the given CObject in the given language
+     */
+    public ArchetypeTerm getTerm(CObject object, String code, String language) {
+        return getTerminology().getTermDefinition(language, code);
+    }
+
+
+    public ArchetypeTerminology getTerminology(CObject object) {
+        return getTerminology();
+    }
+
     public Archetype clone() {
         return (Archetype) super.clone();
     }
+
 
 }
