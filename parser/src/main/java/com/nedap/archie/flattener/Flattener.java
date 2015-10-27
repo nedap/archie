@@ -11,8 +11,7 @@ import java.util.Map;
  * Flattener. For single use only, create a new flattener for every flatten-action you want to do!
  *
  * TODO: the parent/child naming is very confusing. Make a new name. Original/specialized? Root/specialized? something else? Check the specs!
- * TODO: new Node IDs should be assigned, i think. With a idDIGIT+(\.DIGIT+)+ syntax?
- * TODO: Archetype terminologies should be merged
+
  *
  * Created by pieter.bos on 21/10/15.
  */
