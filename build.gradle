@@ -14,7 +14,8 @@ allprojects {
 }
 subprojects {
 
-
+def artifactoryUserMethod = hasProperty('artifactoryUser') ? artifactoryUser : ""
+def artifactoryPasswordMethod = hasProperty('artifactoryPassword') ? artifactoryPassword : ""
 
 	apply plugin: 'java'
 	apply plugin: 'maven-publish'
@@ -56,8 +57,8 @@ subprojects {
 	    publish {
 	        repository {
 	            repoKey = 'libs-snapshots-local'
-	            username = "${artifactoryUser}"
-	            password = "${artifactoryPassword}"
+	            username = "${artifactoryUserMethod}"
+	            password = "${artifactoryPasswordMethod}"
 	            maven = true
 
 	        }       
