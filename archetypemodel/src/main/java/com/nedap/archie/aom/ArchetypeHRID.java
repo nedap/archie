@@ -130,4 +130,9 @@ public class ArchetypeHRID extends ArchetypeModelObject {
     public void setBuildCount(String buildCount) {
         this.buildCount = buildCount;
     }
+
+    @Override
+    public String toString() {
+        return getFullId();
+    }
 }

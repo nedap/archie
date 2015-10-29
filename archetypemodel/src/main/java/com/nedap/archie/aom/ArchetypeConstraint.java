@@ -38,6 +38,8 @@ public abstract class ArchetypeConstraint extends ArchetypeModelObject {
         this.socParent = socParent;
     }
 
+    @JsonIgnore
+    @XmlTransient
     public abstract List<PathSegment> getPathSegments();
 
     public final String getPath() {

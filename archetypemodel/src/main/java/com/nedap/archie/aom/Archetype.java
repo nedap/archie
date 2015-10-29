@@ -121,14 +121,15 @@ public class Archetype extends AuthoredResource {
     }
 
     public void addOtherMetadata(String text, String value) {
-        if(value != null) {
+        if (value != null) {
             otherMetaData.put(text, value);
         }//TODO: just a value is possible according to grammar. But no in a ConcurrentHashMap. Change to different map implementation?
     }
 
     /**
      * Translation helper function. To be overriden by Operational Templates
-     * @param object the object to get the term definition for
+     *
+     * @param object   the object to get the term definition for
      * @param language the language to get the term definition for
      * @return the ArchetypeTerm corresponding to the given CObject in the given language
      */
@@ -140,8 +141,8 @@ public class Archetype extends AuthoredResource {
      * Get the terminology definition for a certain code used in a certain path in a terminology. Use this instead of
      * the ArchetypeTerminology and things work in Operation Templates out of the box. Overridden in OperationalTemplate
      *
-     * @param object the object to get the term definition for
-     * @param code the object to get the term definition for. Usually an ac- or at-code
+     * @param object   the object to get the term definition for
+     * @param code     the object to get the term definition for. Usually an ac- or at-code
      * @param language the language to get the term definition for
      * @return the ArchetypeTerm corresponding to the given CObject in the given language
      */
@@ -158,5 +159,10 @@ public class Archetype extends AuthoredResource {
         return (Archetype) super.clone();
     }
 
+
+    @Override
+    public String toString() {
+        return"archetype: " + getArchetypeId();
+    }
 
 }

@@ -13,9 +13,7 @@ import org.junit.Test;
 
 import java.util.Stack;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 /**
  * TODO: all this tests is that the flattener runs, with some diagnostic JSON-output. Implement way more tests.
@@ -30,6 +28,8 @@ public class FlattenerTest {
     Archetype bloodPressureObservation;
     Archetype reportResult;
     Archetype bloodPressureComposition;
+    Archetype height;
+    Archetype heightTemplate;
     SimpleArchetypeRepository repository;
 
     Flattener flattener;
@@ -51,12 +51,17 @@ public class FlattenerTest {
         bloodPressureComposition = new ADLParser().parse(FlattenerTest.class.getResourceAsStream("openEHR-EHR-COMPOSITION.blood_pressure.v1.0.0.adlt"));
 
 
+        height = new ADLParser().parse(FlattenerTest.class.getResourceAsStream("openEHR-EHR-OBSERVATION.height.v1.adls"));
+        heightTemplate = new ADLParser().parse(FlattenerTest.class.getResourceAsStream("openEHR-EHR-COMPOSITION.length.v1.0.0.adlt"));
+
         repository = new SimpleArchetypeRepository();
         repository.addArchetype(report);
         repository.addArchetype(device);
         repository.addArchetype(bloodPressureComposition);
         repository.addArchetype(bloodPressureObservation);
         repository.addArchetype(reportResult);
+        repository.addArchetype(height);
+        repository.addArchetype(heightTemplate);
 
         flattener = new Flattener(repository).createOperationalTemplate(true);
     }
@@ -64,10 +69,7 @@ public class FlattenerTest {
     @Test
     public void reportResult() throws Exception {
         Archetype flattened = flattener.flatten(reportResult);
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
-
-        System.out.println(objectMapper.writeValueAsString(flattened));
+        //TODO: nice to know there are no exceptions. Now add assertions
     }
 
 
@@ -108,5 +110,31 @@ public class FlattenerTest {
                 .find(definition);
         assertNull(flattened.getTerminology().getTermDefinition("en", "id1011"));
         assertEquals("Diastolic endpoint", flattened.getTerm(object, "en").getText());
+    }
+
+    @Test
+    public void height() throws Exception {
+        Archetype flattened = flattener.flatten(heightTemplate);
+
+        CObject object = (CObject) new APathQuery("/content[openEHR-EHR-OBSERVATION.ovl-length-height-001.v1.0.0]").find(flattened.getDefinition());
+        assertNotNull(object);
+        assertNotNull(flattened.getTerm(object, "nl"));
+        assertEquals("Lengte", flattened.getTerm(object, "nl").getText());
+/*
+data matches {
+			HISTORY[id2] matches {
+				events cardinality matches {1..*; unordered} matches {
+					EVENT[id3] occurrences matches {1..*} matches {	-- Any event
+						data matches {
+							ITEM_TREE[id4] matches {
+								items cardinality matches {1..*; unordered} matches {
+									ELEMENT[id5] matches {	-- Height/Length
+										value matches {
+											DV_QUANTITY[id21] matches {
+ */
+        CObject quantity = (CObject) new APathQuery("/content[openEHR-EHR-OBSERVATION.ovl-length-height-001.v1.0.0]/data[id2]/events[id3]/data[id4]/items[id5]/value[id21]").find(flattened.getDefinition());
+        assertEquals("DV_QUANTITY", quantity.getRmTypeName());
+
+
     }
 }

@@ -158,4 +158,9 @@ public class CObject extends ArchetypeConstraint {
         }
         return occurences.getLower() > 0;
     }
+
+    @Override
+    public String toString() {
+        return "CObject: " + getRmTypeName() + "[" + getNodeId() + "]";
+    }
 }

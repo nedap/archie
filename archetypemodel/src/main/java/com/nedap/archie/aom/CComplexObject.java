@@ -79,4 +79,9 @@ public class CComplexObject extends CDefinedObject<ArchetypeModelObject> {
     public void setArchetype(Archetype archetype) {
         this.archetype = archetype;
     }
+
+    @Override
+    public String toString() {
+        return "CComplexObject: " + getRmTypeName() + "[" + getNodeId() + "]";
+    }
 }

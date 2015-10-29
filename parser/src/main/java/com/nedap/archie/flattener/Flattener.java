@@ -1,11 +1,13 @@
 package com.nedap.archie.flattener;
 
 import com.nedap.archie.aom.*;
+import com.nedap.archie.aom.terminology.ArchetypeTerm;
 import com.nedap.archie.aom.terminology.ArchetypeTerminology;
 import com.nedap.archie.aom.terminology.ValueSet;
 import com.nedap.archie.query.APathQuery;
 
 import java.util.Map;
+import java.util.Stack;
 
 /**
  * Flattener. For single use only, create a new flattener for every flatten-action you want to do!
@@ -86,10 +88,82 @@ public class Flattener {
         //1. redefine structure
         //2. fill archetype slots?
         flatten(result, child);//TODO: this way around, or the other one? :)
+        if(makeOperationalTemplate) {
+            fillSlots(result);
+        }
         flattenTerminology();
 
         result.getDefinition().setArchetype(result);
         return result;
+    }
+
+    private void fillSlots(Archetype result) {
+
+        Stack<CObject> workList = new Stack<>();
+        workList.push(result.getDefinition());
+        while(!workList.isEmpty()) {
+            CObject object = workList.pop();
+            for(CAttribute attribute:object.getAttributes()) {
+                for(CObject child:attribute.getChildren()) {
+                    if(child instanceof CArchetypeRoot) { //use_archetype
+                        this.fillArchetypeRoot((CArchetypeRoot) child);
+                    }
+                    if(object instanceof CComplexObjectProxy) { //use_node
+                        //TODO
+                    }
+                    workList.push(child);
+                }
+            }
+        }
+    }
+
+    private void fillArchetypeRoot(CArchetypeRoot root) {
+        if(makeOperationalTemplate) {
+            String archetypeRef = root.getArchetypeRef(); //TODO: is a ref always an id, or can it be a bit different?
+            Archetype archetype = this.repository.getArchetype(archetypeRef);
+            if (archetype == null) {
+                throw new IllegalArgumentException("Archetype with reference :" + archetypeRef + " not found.");
+            }
+            if (archetype.getParentArchetypeId() != null) {
+                archetype = getNewFlattener().flatten(archetype);
+            } else {
+                archetype = archetype.clone();//make sure we don't change this archetype :)
+            }
+
+            root.getParent().replaceChild(root.getNodeId(), archetype.getDefinition());
+            String newNodeId = archetype.getArchetypeId().getFullId();
+
+            ArchetypeTerminology terminology = archetype.getTerminology();
+
+            //The node id will be replaced from "id1" to something like "openEHR-EHR-COMPOSITION.template_overlay.v1.0.0
+            //so store it in the terminology as well
+            //TODO: value sets, term bindings, etc.
+            Map<String, Map<String, ArchetypeTerm>> termDefinitions = terminology.getTermDefinitions();
+            for(String language: termDefinitions.keySet()) {
+                Map<String, ArchetypeTerm> translations = termDefinitions.get(language);
+                ArchetypeTerm term = translations.get(archetype.getDefinition().getNodeId());
+                translations.put(newNodeId, term);
+            }
+
+
+            archetype.getDefinition().setNodeId(newNodeId);
+
+            OperationalTemplate templateResult = (OperationalTemplate) result;
+
+            //todo: should we filter this?
+            if(archetype instanceof OperationalTemplate) {
+                OperationalTemplate template = (OperationalTemplate) archetype;
+                //add all the component terminologies, otherwise we lose translation
+                for(String subarchetypeId:template.getComponentTerminologies().keySet()) {
+                    templateResult.addComponentTerminology(subarchetypeId, template.getComponentTerminologies().get(subarchetypeId));
+                }
+            }
+
+            templateResult.addComponentTerminology(archetype.getDefinition().getNodeId(), terminology);
+            //todo: do we have to put something in the terminology extracts?
+            //templateResult.addTerminologyExtract(child.getNodeId(), archetype.getTerminology().);
+        }
+
     }
 
     private void flattenTerminology() {
@@ -167,10 +241,10 @@ public class Flattener {
 
         parent.setNodeId(getPossiblyOverridenValue(parent.getNodeId(), child.getNodeId()));
         parent.setRmTypeName(getPossiblyOverridenValue(parent.getRmTypeName(), child.getRmTypeName()));
-        if(child != null && child instanceof CArchetypeRoot) {
-            fillArchetypeRoot(parent, (CArchetypeRoot) child);
-        }
-        else if(parent instanceof CComplexObject) {
+//        if(child != null && child instanceof CArchetypeRoot) {
+//            fillArchetypeRoot(parent, (CArchetypeRoot) child);
+//        }
+        if(parent instanceof CComplexObject) {
             flattenCComplexObject((CComplexObject) parent, (CComplexObject) child);
         }
 
@@ -201,38 +275,7 @@ public class Flattener {
         return new Flattener(repository).createOperationalTemplate(makeOperationalTemplate);
     }
 
-    private void fillArchetypeRoot(CObject parent, CArchetypeRoot child) {
-        if(makeOperationalTemplate) {
-            String archetypeRef = child.getArchetypeRef(); //TODO: is a ref always an id, or can it be a bit different?
-            Archetype archetype = this.repository.getArchetype(archetypeRef);
-            if (archetype == null) {
-                throw new IllegalArgumentException("Archetype with reference :" + archetypeRef + " not found.");
-            }
-            if (archetype.getParentArchetypeId() != null) {
-                archetype = getNewFlattener().flatten(archetype);
-            } else {
-                archetype = archetype.clone();//make sure we don't change this archetype :)
-            }
 
-            parent.getParent().replaceChild(child.getNodeId(), archetype.getDefinition());
-            archetype.getDefinition().setNodeId(archetype.getArchetypeId().getFullId());
-
-            OperationalTemplate templateResult = (OperationalTemplate) result;
-
-            //todo: should we filter this?
-            if(archetype instanceof OperationalTemplate) {
-                OperationalTemplate template = (OperationalTemplate) archetype;
-                //add all the component terminologies, otherwise we lose translation
-                for(String subarchetypeId:template.getComponentTerminologies().keySet()) {
-                    templateResult.addComponentTerminology(subarchetypeId, template.getComponentTerminologies().get(subarchetypeId));
-                }
-            }
-            templateResult.addComponentTerminology(archetype.getDefinition().getNodeId(), archetype.getTerminology());
-            //todo: do we have to put something in the terminology extracts?
-            //templateResult.addTerminologyExtract(child.getNodeId(), archetype.getTerminology().);
-        }
-
-    }
 
     private void flattenAttribute(CComplexObject root, CAttribute parent, CAttribute child) {
         if(parent == null) {
@@ -249,14 +292,19 @@ public class Flattener {
             //TODO: is this correct? replace all child nodes
             parent.setChildren(child.getChildren());
         } else {
+
             for (CObject childObject : child.getChildren()) {
                 boolean overrideFound = false;
 
                 for (CObject possibleMatch : parent.getChildren()) {
-                    if (isOverridenCObject(childObject, possibleMatch)) {
+                    if (isOverridenCObject(childObject, possibleMatch)) { //TODO: we now replace the node. but it's possible to replace one node by multiple ones in the archetype
                         flattenCObject(possibleMatch, childObject);
                         overrideFound = true;
                     }
+                }
+                if(!overrideFound) {
+                    parent.addChild(childObject);
+                    //flattenCObject(childObject, null);
                 }
             }
         }
