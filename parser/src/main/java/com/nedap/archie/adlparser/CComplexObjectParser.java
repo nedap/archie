@@ -18,22 +18,22 @@ import java.util.List;
  *
  * Created by pieter.bos on 15/10/15.
  */
-public class CComplexObjectParser {
+public class CComplexObjectParser extends BaseTreeWalker {
 
-    private final ADLParserErrors errors;
+    private final PrimitivesConstraintParser primitivesConstraintParser;
 
     public CComplexObjectParser(ADLParserErrors errors) {
-        this.errors = errors;
-
+        super(errors);
+        primitivesConstraintParser = new PrimitivesConstraintParser(errors);
     }
 
     public RulesSection parseRules(Rules_sectionContext context) {
         RulesSection result = new RulesSection();
 
         result.setContent(context.getText());
-
+        AssertionsParser assertionsParser = new AssertionsParser(getErrors());
         for(AssertionContext assertion:context.assertion()) {
-            result.addRule(AssertionsParser.parse(assertion));
+            result.addRule(assertionsParser.parse(assertion));
         }
 
         return result;
@@ -103,7 +103,7 @@ public class CComplexObjectParser {
             List<C_primitive_objectContext> primitiveObjectContexts = tupleContext.c_object_tuple_items().c_primitive_object();
             int i = 0;
             for(C_primitive_objectContext primitiveObjectContext:primitiveObjectContexts) {
-                CPrimitiveObject primitiveObject = parsePrimitiveObject(primitiveObjectContext);
+                CPrimitiveObject primitiveObject = primitivesConstraintParser.parsePrimitiveObject(primitiveObjectContext);
                 tuple.getMembers().get(i).addChild(primitiveObject);
                 primitiveTuple.addMember(primitiveObject);
                 i++;
@@ -118,7 +118,7 @@ public class CComplexObjectParser {
         ArrayList<CObject> result = new ArrayList<>();
 
         if (objectsContext.c_primitive_object() != null) {
-            result.add(parsePrimitiveObject(objectsContext.c_primitive_object()));
+            result.add(primitivesConstraintParser.parsePrimitiveObject(objectsContext.c_primitive_object()));
         } else {
             List<C_non_primitive_object_orderedContext> nonPrimitiveObjectOrderedContext = objectsContext.c_non_primitive_object_ordered();
             if (nonPrimitiveObjectOrderedContext != null) {
@@ -193,54 +193,23 @@ public class CComplexObjectParser {
         C_archetype_slot_headContext headContext = slotContext.c_archetype_slot_head();
         slot.setNodeId(headContext.c_archetype_slot_id().ID_CODE().getText());
         slot.setRmTypeName(headContext.c_archetype_slot_id().type_id().getText());
-        if(headContext.c_occurrences() != null) {
+        if (headContext.c_occurrences() != null) {
             slot.setOccurences(parseMultiplicityInterval(headContext.c_occurrences()));
         }
-        AssertionsParser assertionParser = new AssertionsParser();
-        if(slotContext.c_excludes() != null) {
-            for(AssertionContext assertionContext:slotContext.c_excludes().assertion()) {
+        AssertionsParser assertionParser = new AssertionsParser(getErrors());
+        if (slotContext.c_excludes() != null) {
+            for (AssertionContext assertionContext : slotContext.c_excludes().assertion()) {
                 slot.getExcludes().add(assertionParser.parse(assertionContext));
             }
         }
-        if(slotContext.c_includes() != null) {
-            for(AssertionContext assertionContext:slotContext.c_includes().assertion()) {
+        if (slotContext.c_includes() != null) {
+            for (AssertionContext assertionContext : slotContext.c_includes().assertion()) {
                 slot.getIncludes().add(assertionParser.parse(assertionContext));
             }
         }
         return slot;
     }
 
-    public static CPrimitiveObject parsePrimitiveObject(C_primitive_objectContext objectContext) {
-        /*c_integer
-                | c_real
-                | c_date
-                | c_time
-                | c_date_time
-                | c_duration
-                | c_string
-                | c_terminology_code
-                | c_boolean*/
-        if(objectContext.c_integer() != null) {
-            return parseCInteger(objectContext.c_integer());
-        } else if (objectContext.c_real() != null) {
-            return parseCReal(objectContext.c_real());
-        } else if (objectContext.c_date() != null) {
-            return parseCDate(objectContext.c_date());
-        } else if (objectContext.c_time() != null) {
-            return parseCTime(objectContext.c_time());
-        } else if (objectContext.c_date_time() != null) {
-            return parseCDateTime(objectContext.c_date_time());
-        } else if (objectContext.c_duration() != null) {
-            return parseCDuration(objectContext.c_duration());
-        } else if (objectContext.c_string() != null) {
-            return parseCString(objectContext.c_string());
-        } else if (objectContext.c_terminology_code() != null) {
-            return parseCTerminologyCode(objectContext.c_terminology_code());
-        } else if (objectContext.c_boolean() != null) {
-            return parseCBoolean(objectContext.c_boolean());
-        }
-        return null;
-    }
 
     private Cardinality parseCardinalityInterval(C_cardinalityContext cardinalityContext) {
         Cardinality cardinality = new Cardinality();
@@ -300,4 +269,5 @@ public class CComplexObjectParser {
         }
         return interval;
     }
+
 }

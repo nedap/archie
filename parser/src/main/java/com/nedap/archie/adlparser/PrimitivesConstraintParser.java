@@ -6,6 +6,7 @@ import com.nedap.archie.adlparser.antlr.AdlParser.Boolean_list_valueContext;
 import com.nedap.archie.adlparser.antlr.AdlParser.Boolean_valueContext;
 import com.nedap.archie.adlparser.antlr.AdlParser.String_list_valueContext;
 import com.nedap.archie.adlparser.antlr.AdlParser.String_valueContext;
+import com.nedap.archie.aom.CPrimitiveObject;
 import com.nedap.archie.aom.primitives.CBoolean;
 import com.nedap.archie.aom.primitives.CDate;
 import com.nedap.archie.aom.primitives.CDateTime;
@@ -20,9 +21,50 @@ import java.util.List;
 /**
  * Created by pieter.bos on 15/10/15.
  */
-public class PrimitivesConstraintParser {
+public class PrimitivesConstraintParser extends BaseTreeWalker {
 
-    public static CBoolean parseCBoolean(AdlParser.C_booleanContext booleanContext) {
+    private final NumberConstraintParser numberConstraintParser;
+    private final TemporalConstraintParser temporalConstraintParser;
+
+    public PrimitivesConstraintParser(ADLParserErrors errors) {
+        super(errors);
+        numberConstraintParser = new NumberConstraintParser(errors);
+        temporalConstraintParser = new TemporalConstraintParser(errors);
+    }
+
+    public CPrimitiveObject parsePrimitiveObject(AdlParser.C_primitive_objectContext objectContext) {
+        /*c_integer
+                | c_real
+                | c_date
+                | c_time
+                | c_date_time
+                | c_duration
+                | c_string
+                | c_terminology_code
+                | c_boolean*/
+        if(objectContext.c_integer() != null) {
+            return numberConstraintParser.parseCInteger(objectContext.c_integer());
+        } else if (objectContext.c_real() != null) {
+            return numberConstraintParser.parseCReal(objectContext.c_real());
+        } else if (objectContext.c_date() != null) {
+            return parseCDate(objectContext.c_date());
+        } else if (objectContext.c_time() != null) {
+            return parseCTime(objectContext.c_time());
+        } else if (objectContext.c_date_time() != null) {
+            return parseCDateTime(objectContext.c_date_time());
+        } else if (objectContext.c_duration() != null) {
+            return parseCDuration(objectContext.c_duration());
+        } else if (objectContext.c_string() != null) {
+            return parseCString(objectContext.c_string());
+        } else if (objectContext.c_terminology_code() != null) {
+            return parseCTerminologyCode(objectContext.c_terminology_code());
+        } else if (objectContext.c_boolean() != null) {
+            return parseCBoolean(objectContext.c_boolean());
+        }
+        return null;
+    }
+
+    public CBoolean parseCBoolean(AdlParser.C_booleanContext booleanContext) {
         CBoolean result = new CBoolean();
         if(booleanContext.assumed_boolean_value() != null) {
             result.setAssumedValue(parseBoolean(booleanContext.assumed_boolean_value().boolean_value()));
@@ -38,7 +80,7 @@ public class PrimitivesConstraintParser {
         return result;
     }
 
-    private static boolean parseBoolean(Boolean_valueContext context) {
+    private boolean parseBoolean(Boolean_valueContext context) {
         if(context.SYM_FALSE() != null) {
             return false;
         } else {
@@ -46,13 +88,13 @@ public class PrimitivesConstraintParser {
         }
     }
 
-    private static void parseBooleanValues(CBoolean result, List<Boolean_valueContext> booleanValues) {
+    private void parseBooleanValues(CBoolean result, List<Boolean_valueContext> booleanValues) {
         for(Boolean_valueContext booleanValue:booleanValues) {
             result.addConstraint(parseBoolean(booleanValue));
         }
     }
 
-    public static CTerminologyCode parseCTerminologyCode(AdlParser.C_terminology_codeContext terminologyCodeContext) {
+    public CTerminologyCode parseCTerminologyCode(AdlParser.C_terminology_codeContext terminologyCodeContext) {
         CTerminologyCode result = new CTerminologyCode();
         boolean containsAssumedValue = !terminologyCodeContext.getTokens(AdlLexer.SYM_SEMICOLON).isEmpty();
 
@@ -74,7 +116,7 @@ public class PrimitivesConstraintParser {
         return result;
     }
 
-    public static CString parseCString(AdlParser.C_stringContext stringContext) {
+    public CString parseCString(AdlParser.C_stringContext stringContext) {
 
         CString result = new CString();
         if(stringContext.assumed_string_value() != null) {

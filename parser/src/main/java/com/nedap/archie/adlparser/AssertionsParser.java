@@ -9,9 +9,16 @@ import com.nedap.archie.rules.*;
 /**
  * Created by pieter.bos on 27/10/15.
  */
-public class AssertionsParser {
+public class AssertionsParser extends BaseTreeWalker {
 
-    public static Assertion parse(AssertionContext assertionContext) {
+    private PrimitivesConstraintParser primitivesConstraintParser;
+
+    public AssertionsParser(ADLParserErrors errors) {
+        super(errors);
+        primitivesConstraintParser = new PrimitivesConstraintParser(errors);
+    }
+
+    public Assertion parse(AssertionContext assertionContext) {
         Assertion assertion = new Assertion();
         assertion.setStringExpression(assertionContext.getText());//TODO: this has whitespace stripped. Get the Lexer input instead
         if(assertionContext.identifier() != null) {
@@ -21,7 +28,7 @@ public class AssertionsParser {
         return assertion;
     }
 
-    private static Expression parseExpression(Boolean_exprContext booleanExpr) {
+    private Expression parseExpression(Boolean_exprContext booleanExpr) {
 
         if(booleanExpr.boolean_binop() != null) {
             BinaryOperator expression = new BinaryOperator();
@@ -36,7 +43,7 @@ public class AssertionsParser {
 
     }
 
-    private static Expression parseBooleanLeaf(Boolean_leafContext context) {
+    private Expression parseBooleanLeaf(Boolean_leafContext context) {
         if(context.boolean_literal() != null) {
             Constant result = new Constant<Boolean>(ExpressionType.BOOLEAN, context.boolean_literal().SYM_TRUE() != null ? true : false);
 
@@ -69,7 +76,7 @@ public class AssertionsParser {
         throw new IllegalArgumentException("cannot parse unknown boolean leaf type");
     }
 
-    private static Expression parseBooleanConstraint(Boolean_constraintContext context) {
+    private Expression parseBooleanConstraint(Boolean_constraintContext context) {
         String path = null;
         if(context.adl_path() != null) {
             path = context.adl_path().getText();
@@ -77,10 +84,10 @@ public class AssertionsParser {
         if(context.adl_relative_path() != null) {
             path = context.adl_relative_path().getText();
         }
-        return new BinaryOperator(ExpressionType.BOOLEAN, OperatorKind.matches, new ModelReference(path), new Constraint(CComplexObjectParser.parsePrimitiveObject(context.c_primitive_object())));
+        return new BinaryOperator(ExpressionType.BOOLEAN, OperatorKind.matches, new ModelReference(path), new Constraint(primitivesConstraintParser.parsePrimitiveObject(context.c_primitive_object())));
     }
 
-    private static Expression parseArithmeticRelOpExpression(Arithmetic_relop_exprContext context) {
+    private Expression parseArithmeticRelOpExpression(Arithmetic_relop_exprContext context) {
         Expression left = parseArithmeticExpression(context.arithmetic_arith_expr(0));
         Expression right = parseArithmeticExpression(context.arithmetic_arith_expr(1));
         if(left.getType() != null && right.getType() != null && left.getType() != right.getType()) {
@@ -89,7 +96,7 @@ public class AssertionsParser {
         return new BinaryOperator(left.getType(), OperatorKind.parse(context.relational_binop().getText()), left, right);
     }
 
-    private static Expression parseArithmeticExpression(Arithmetic_arith_exprContext context) {
+    private Expression parseArithmeticExpression(Arithmetic_arith_exprContext context) {
         Expression leaf = parseArithmeticLeaf(context.arithmetic_leaf());
         if(context.arithmetic_binop() != null) {
             Expression left = parseArithmeticExpression(context.arithmetic_arith_expr());
@@ -103,7 +110,7 @@ public class AssertionsParser {
         }
     }
 
-    private static Expression parseArithmeticLeaf(Arithmetic_leafContext context) {
+    private Expression parseArithmeticLeaf(Arithmetic_leafContext context) {
         if(context.integer_value() != null) {
             return new Constant<>(ExpressionType.INTEGER, Integer.parseInt(context.real_value().getText()));
         }

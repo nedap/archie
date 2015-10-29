@@ -7,6 +7,7 @@ import com.nedap.archie.aom.CObject;
 import com.nedap.archie.aom.primitives.CInteger;
 import com.nedap.archie.aom.primitives.CReal;
 import com.nedap.archie.base.Interval;
+import org.antlr.runtime.tree.BaseTree;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,9 +15,13 @@ import java.util.List;
 /**
  * Created by pieter.bos on 18/10/15.
  */
-public class NumberConstraintParser {
+public class NumberConstraintParser extends BaseTreeWalker {
 
-    public static CInteger parseCInteger(AdlParser.C_integerContext integerContext) {
+    public NumberConstraintParser(ADLParserErrors errors) {
+        super(errors);
+    }
+
+    public CInteger parseCInteger(AdlParser.C_integerContext integerContext) {
         CInteger result = new CInteger();
 
         if(integerContext.assumed_integer_value() != null) {
@@ -56,13 +61,13 @@ public class NumberConstraintParser {
         return result;
     }
 
-    private static void parseIntegerValueList(CInteger cInteger, List<AdlParser.Integer_valueContext> integerValueContextList) {
+    private void parseIntegerValueList(CInteger cInteger, List<AdlParser.Integer_valueContext> integerValueContextList) {
         for(AdlParser.Integer_valueContext integerValueContext:integerValueContextList) {
             parseIntegerConstraint(cInteger, integerValueContext);
         }
     }
 
-    private static void parseIntegerConstraint(CInteger cInteger, Integer_valueContext integerValueContext) {
+    private void parseIntegerConstraint(CInteger cInteger, Integer_valueContext integerValueContext) {
         long integer = Long.parseLong(integerValueContext.getText());
         Interval<Long> interval = new Interval<>();
         interval.setLower(integer);
@@ -70,7 +75,7 @@ public class NumberConstraintParser {
         cInteger.addConstraint(interval);
     }
 
-    private static Interval<Long> parseIntegerInterval(AdlParser.Integer_interval_valueContext intervalContext) {
+    private Interval<Long> parseIntegerInterval(AdlParser.Integer_interval_valueContext intervalContext) {
         Interval<Long> interval = null;
         if(intervalContext.relop() != null) {
             interval = parseRelOpIntegerInterval(intervalContext);
@@ -88,7 +93,7 @@ public class NumberConstraintParser {
         return interval;
     }
 
-    private static Interval<Long> parseRelOpIntegerInterval(AdlParser.Integer_interval_valueContext intervalContext) {
+    private Interval<Long> parseRelOpIntegerInterval(AdlParser.Integer_interval_valueContext intervalContext) {
         Interval<Long> interval = new Interval<>();
         long integer = Long.parseLong(intervalContext.integer_value().get(0).getText());
         switch(intervalContext.relop().getText()) {
@@ -108,7 +113,7 @@ public class NumberConstraintParser {
         return interval;
     }
 
-    public static CReal parseCReal(AdlParser.C_realContext realContext) {
+    public CReal parseCReal(AdlParser.C_realContext realContext) {
         // ( real_value | real_list_value | real_interval_value | real_interval_list_value ) ( ';' real_value )? ;
         CReal result = new CReal();
 
@@ -149,13 +154,13 @@ public class NumberConstraintParser {
         return result;
     }
 
-    private static void parseRealValueList(CReal cReal, List<AdlParser.Real_valueContext> realValueContextList) {
+    private void parseRealValueList(CReal cReal, List<AdlParser.Real_valueContext> realValueContextList) {
         for(AdlParser.Real_valueContext realValueContext:realValueContextList) {
             parseRealConstraint(cReal, realValueContext);
         }
     }
 
-    private static void parseRealConstraint(CReal cReal, Real_valueContext realValueContext) {
+    private void parseRealConstraint(CReal cReal, Real_valueContext realValueContext) {
         double real = Double.parseDouble(realValueContext.getText());
         Interval<Double> interval = new Interval<>();
         interval.setLower(real);
@@ -163,7 +168,7 @@ public class NumberConstraintParser {
         cReal.addConstraint(interval);
     }
 
-    private static Interval<Double> parseRealInterval(AdlParser.Real_interval_valueContext intervalContext) {
+    private Interval<Double> parseRealInterval(AdlParser.Real_interval_valueContext intervalContext) {
         Interval<Double> interval = null;
         if(intervalContext.relop() != null) {
             interval = parseRelOpRealInterval(intervalContext);
@@ -176,7 +181,7 @@ public class NumberConstraintParser {
         return interval;
     }
 
-    private static Interval<Double> parseRelOpRealInterval(AdlParser.Real_interval_valueContext intervalContext) {
+    private Interval<Double> parseRelOpRealInterval(AdlParser.Real_interval_valueContext intervalContext) {
         Interval<Double> interval = new Interval<>();
         double real = Double.parseDouble(intervalContext.real_value().get(0).getText());
         switch(intervalContext.relop().getText()) {

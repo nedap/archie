@@ -18,12 +18,10 @@ import java.util.function.BiFunction;
  *
  * Created by pieter.bos on 19/10/15.
  */
-public class TerminologyParser {
-
-    private final ADLParserErrors errors;
+public class TerminologyParser extends BaseTreeWalker {
 
     public TerminologyParser(ADLParserErrors errors) {
-        this.errors = errors;
+        super(errors);
     }
 
     public ArchetypeTerminology parseTerminology(Terminology_sectionContext terminologySectionContext) {
@@ -52,7 +50,7 @@ public class TerminologyParser {
                             terminology.setValueSets(parseOdinValueSets(value.object_block()));
                             break;
                         default:
-                            errors.addWarning(String.format("Unknown section found in archetype terminology: %s", value.attribute_id().getText()));
+                            addWarning(String.format("Unknown section found in archetype terminology: %s", value.attribute_id().getText()));
 
                     }
                 }
@@ -71,7 +69,7 @@ public class TerminologyParser {
         Object_value_blockContext test = context.object_value_block();
         List<Keyed_objectContext> keyedContext = test.keyed_object();
         if(keyedContext == null) {
-            errors.addWarning("in ArchetypeTerminology, Value set found, but no definition");
+            addWarning("in ArchetypeTerminology, Value set found, but no definition");
         }
         for(Keyed_objectContext innerContext:keyedContext) {
             String valueSetId = OdinValueParser.parseOdinStringValue(innerContext.primitive_value().string_value());
@@ -107,7 +105,7 @@ public class TerminologyParser {
         Object_value_blockContext test = context.object_value_block();
         List<Keyed_objectContext> keyedContext = test.keyed_object();
         if(keyedContext == null) {
-            errors.addWarning("In ArchetypeTerminology, empty " + attributeName + " found");
+            addWarning("In ArchetypeTerminology, empty " + attributeName + " found");
         }
         for(Keyed_objectContext languageContext:keyedContext) {
             String language = OdinValueParser.parseOdinStringValue(languageContext.primitive_value().string_value());
