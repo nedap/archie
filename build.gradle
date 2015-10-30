@@ -24,11 +24,14 @@ def artifactoryPasswordMethod = hasProperty('artifactoryPassword') ? artifactory
 	repositories {
 	    mavenCentral()
 		mavenLocal()
+		maven {
+			url "http://dl.bintray.com/guestful/maven"
+		}
 	}
 	dependencies {
 		compile 'org.slf4j:slf4j-api:1.7.12'
         compile 'com.fasterxml.jackson.core:jackson-annotations:2.6.3'
-
+		compile 'com.guestful.module:guestful.module.jsr310-extensions:1.4' //kryo java.time serializers
 
 		testCompile 'junit:junit:4.12'
         testCompile 'org.slf4j:slf4j-simple:1.7.12'

@@ -2,6 +2,7 @@ package com.nedap.archie.aom;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.guestful.jsr310.kryo.KryoJsr310;
 
 import java.io.Serializable;
 
@@ -14,6 +15,8 @@ public abstract class ArchetypeModelObject implements Serializable, Cloneable {
 
 
     public ArchetypeModelObject clone() {
-        return new Kryo().copy(this);
+        Kryo kryo = new Kryo();
+        KryoJsr310.addJsr310Serializers(kryo); //needed for all java.time types
+        return kryo.copy(this);
     }
 }
