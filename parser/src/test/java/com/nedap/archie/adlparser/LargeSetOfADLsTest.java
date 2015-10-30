@@ -28,18 +28,18 @@ public class LargeSetOfADLsTest {
         List<String> adlFiles = new ArrayList(reflections.getResources(Pattern.compile(".*\\.adls")));
 
         Map<String, Exception> exceptions = new LinkedHashMap<>();
-        Map<String, List<String>> parseErrors = new LinkedHashMap<>();
+        Map<String, ADLParserErrors> parseErrors = new LinkedHashMap<>();
 
         for(String file:adlFiles) {
             try (InputStream stream = getClass().getResourceAsStream("/" + file)) {
                 logger.info("trying to parse " + file);
                 ADLParser parser = new ADLParser();
                 parser.parse(stream);
-                if(parser.errorListener.getErrors().size() > 0) {
+                if(parser.errorListener.getErrors().getErrors().size() > 0) {
                     parseErrors.put(file, parser.errorListener.getErrors());
                 }
-                if(parser.tree.exception != null) {
-                    exceptions.put(file, parser.tree.exception);
+                if(parser.getTree().exception != null) {
+                    exceptions.put(file, parser.getTree().exception);
                 }
             } catch (Exception e) {
                 exceptions.put(file, e);
@@ -49,15 +49,11 @@ public class LargeSetOfADLsTest {
         for(String file:adlFiles) {
             if(parseErrors.containsKey(file)) {
                 logger.error("parse error found in " + file);
-                for(String error:parseErrors.get(file)) {
-                    logger.error(error);
-                }
+                logger.error(parseErrors.get(file).toString());
             }
             if(exceptions.containsKey(file)) {
                 logger.error("exception found in " + file, exceptions.get(file));
             }
-
-
 
         }
 

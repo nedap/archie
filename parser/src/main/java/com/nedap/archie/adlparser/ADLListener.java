@@ -20,7 +20,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
  */
 public class ADLListener extends AdlBaseListener {
 
-    private ADLParserErrors errors = new ADLParserErrors();
+    private ADLParserErrors errors;
 
     private Archetype rootArchetype;
 
@@ -28,8 +28,9 @@ public class ADLListener extends AdlBaseListener {
     private CComplexObjectParser subTreeWalker;
     private TerminologyParser terminologyParser;
 
-    public ADLListener() {
-        subTreeWalker = new CComplexObjectParser(errors);//TODO: rename to ComplexObjectParser?
+    public ADLListener(ADLParserErrors errors) {
+        this.errors = errors;
+        subTreeWalker = new CComplexObjectParser(errors);
         terminologyParser = new TerminologyParser(errors);
     }
 
@@ -157,5 +158,9 @@ public class ADLListener extends AdlBaseListener {
     /* getters for result */
     public Archetype getArchetype() {
         return rootArchetype;
+    }
+
+    public ADLParserErrors getErrors() {
+        return errors;
     }
 }

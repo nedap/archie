@@ -17,12 +17,15 @@ import java.io.InputStream;
  */
 public class ADLParser {
 
-    public Lexer lexer;
-    public AdlParser parser;
-    public ADLListener listener;
-    public ParseTreeWalker walker;
-    public AdlParser.AdlContext tree;
+    private ADLParserErrors errors;
+
+    private Lexer lexer;
+    private AdlParser parser;
+    private ADLListener listener;
+    private ParseTreeWalker walker;
+    private AdlParser.AdlContext tree;
     public ADLErrorListener errorListener;
+
 
     public Archetype parse(String adl) throws IOException {
         return parse(new ANTLRInputStream(adl));
@@ -33,7 +36,8 @@ public class ADLParser {
     }
 
     public Archetype parse(CharStream stream) {
-        errorListener = new ADLErrorListener();
+        errors = new ADLParserErrors();
+        errorListener = new ADLErrorListener(errors);
 
         lexer = new AdlLexer(stream);
         lexer.addErrorListener(errorListener);
@@ -41,11 +45,54 @@ public class ADLParser {
         parser.addErrorListener(errorListener);
         tree = parser.adl(); // parse
 
-        ADLListener listener = new ADLListener();
+        ADLListener listener = new ADLListener(errors);
         walker= new ParseTreeWalker();
         walker.walk(listener, tree);
         return listener.getArchetype();
 
     }
 
+    public ADLParserErrors getErrors() {
+        return errors;
+    }
+
+    public Lexer getLexer() {
+        return lexer;
+    }
+
+    public void setLexer(Lexer lexer) {
+        this.lexer = lexer;
+    }
+
+    public AdlParser getParser() {
+        return parser;
+    }
+
+    public void setParser(AdlParser parser) {
+        this.parser = parser;
+    }
+
+    public ADLListener getListener() {
+        return listener;
+    }
+
+    public void setListener(ADLListener listener) {
+        this.listener = listener;
+    }
+
+    public ParseTreeWalker getWalker() {
+        return walker;
+    }
+
+    public void setWalker(ParseTreeWalker walker) {
+        this.walker = walker;
+    }
+
+    public AdlParser.AdlContext getTree() {
+        return tree;
+    }
+
+    public void setTree(AdlParser.AdlContext tree) {
+        this.tree = tree;
+    }
 }

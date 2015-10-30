@@ -140,8 +140,8 @@ public class PrimitivesConstraintParser extends BaseTreeWalker {
         return result;
     }
 
-    public static CDuration parseCDuration(AdlParser.C_durationContext c_durationContext) {
-        return new CDuration();
+    public CDuration parseCDuration(AdlParser.C_durationContext context) {
+        return temporalConstraintParser.parseCDuration(context);
     }
 
     public static CDateTime parseCDateTime(AdlParser.C_date_timeContext c_date_timeContext) {

@@ -125,3 +125,7 @@ fragment DIGIT     : [0-9] ;
 fragment HEX_DIGIT : [0-9a-fA-F] ;
 
 SYM_SEMICOLON: ';';
+SYM_LT: '<';
+SYM_GT: '>';
+SYM_LE: '<=';
+SYM_GE: '>=';

@@ -1,5 +1,7 @@
 package com.nedap.archie.base;
 
+import java.util.Objects;
+
 /**
  * Created by pieter.bos on 15/10/15.
  */
@@ -11,6 +13,34 @@ public class Interval<T> {
     boolean upperUnbounded = false;
     boolean lowerIncluded = true;
     boolean upperIncluded = true;
+
+    public Interval() {
+
+    }
+
+    public Interval(T lower, T upper) {
+        this.lower = lower;
+        this.upper = upper;
+    }
+
+    public Interval(T lower, T upper, boolean lowerIncluded, boolean upperIncluded) {
+        this.lower = lower;
+        this.upper = upper;
+        this.lowerIncluded = lowerIncluded;
+        this.upperIncluded = upperIncluded;
+    }
+
+    public static <T>  Interval lowerUnbounded(T upper, boolean upperIncluded) {
+        Interval<T> result = new Interval<>(null, upper, true, upperIncluded);
+        result.setLowerUnbounded(true);
+        return result;
+    }
+
+    public static <T>  Interval upperUnbounded(T lower, boolean lowerIncluded) {
+        Interval<T> result = new Interval<>(lower, null, lowerIncluded, true);
+        result.setUpperUnbounded(true);
+        return result;
+    }
 
     public T getLower() {
         return lower;
@@ -58,5 +88,30 @@ public class Interval<T> {
 
     public void setUpperIncluded(boolean upperIncluded) {
         this.upperIncluded = upperIncluded;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Interval<?> interval = (Interval<?>) o;
+
+        return (lowerUnbounded == interval.lowerUnbounded) &&
+            (upperUnbounded == interval.upperUnbounded) &&
+            (lowerIncluded == interval.lowerIncluded) &&
+            (upperIncluded == interval.upperIncluded) &&
+            Objects.equals(lower, interval.lower) &&
+            Objects.equals(upper, interval.upper);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(lower,
+                upper,
+                lowerUnbounded,
+                upperUnbounded,
+                lowerIncluded,
+                upperIncluded);
     }
 }
