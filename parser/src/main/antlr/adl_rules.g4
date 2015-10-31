@@ -33,7 +33,7 @@ boolean_leaf:
     | SYM_NOT boolean_leaf
     ;
 
-boolean_constraint: ( adl_path | adl_relative_path ) SYM_MATCHES '{' c_primitive_object '}' ;
+boolean_constraint: ( adl_path | adl_relative_path ) SYM_MATCHES ('{' c_primitive_object '}' | CONTAINED_REGEXP );
 
 boolean_binop:
     | SYM_AND

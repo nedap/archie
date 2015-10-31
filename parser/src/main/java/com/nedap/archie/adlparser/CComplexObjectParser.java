@@ -77,6 +77,8 @@ public class CComplexObjectParser extends BaseTreeWalker {
             }
             if (attributeContext.c_objects() != null) {
                 attribute.setChildren(parseCObjects(attributeContext.c_objects()));
+            } else if (attributeContext.CONTAINED_REGEXP() != null) {
+                attribute.addChild(primitivesConstraintParser.parseRegex(attributeContext.CONTAINED_REGEXP()));
             }
             parent.addAttribute(attribute);
         } else if (attributeDefContext.c_attribute_tuple() != null) {
@@ -100,10 +102,15 @@ public class CComplexObjectParser extends BaseTreeWalker {
         for(C_object_tupleContext tupleContext:tupleContexts) {
             CPrimitiveTuple primitiveTuple = new CPrimitiveTuple();
 
-            List<C_primitive_objectContext> primitiveObjectContexts = tupleContext.c_object_tuple_items().c_primitive_object();
+            List<C_object_tuple_itemContext> primitiveObjectContexts = tupleContext.c_object_tuple_items().c_object_tuple_item();
             int i = 0;
-            for(C_primitive_objectContext primitiveObjectContext:primitiveObjectContexts) {
-                CPrimitiveObject primitiveObject = primitivesConstraintParser.parsePrimitiveObject(primitiveObjectContext);
+            for(C_object_tuple_itemContext tupleObjectContext:primitiveObjectContexts) {
+                CPrimitiveObject primitiveObject = null;
+                if(tupleObjectContext.c_primitive_object() != null) {
+                     primitiveObject = primitivesConstraintParser.parsePrimitiveObject(tupleObjectContext.c_primitive_object());
+                } else if (tupleObjectContext.CONTAINED_REGEXP() != null) {
+                    primitiveObject = primitivesConstraintParser.parseRegex(tupleObjectContext.CONTAINED_REGEXP());
+                }
                 tuple.getMembers().get(i).addChild(primitiveObject);
                 primitiveTuple.addMember(primitiveObject);
                 i++;

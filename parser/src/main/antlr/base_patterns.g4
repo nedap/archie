@@ -14,6 +14,14 @@ identifier   : ALPHA_UC_ID | ALPHA_LC_ID ;
 
 archetype_ref : ARCHETYPE_HRID | ARCHETYPE_REF ;
 
+//a regexp can only exist between {}. It can optionally have an assumed value, by adding ;"value"
+CONTAINED_REGEXP: '{'WS* (SLASH_REGEXP | CARET_REGEXP) WS* (';' WS* STRING)? WS* '}';
+fragment SLASH_REGEXP: '/' SLASH_REGEXP_CHAR+ '/';
+fragment SLASH_REGEXP_CHAR: ~[/\n\r] | ESCAPE_SEQ | '\\/';
+
+fragment CARET_REGEXP: '^' CARET_REGEXP_CHAR+ '^';
+fragment CARET_REGEXP_CHAR: ~[^\n\r] | ESCAPE_SEQ | '\\^';
+
 //
 // -------------------------- Lexer patterns --------------------------
 //

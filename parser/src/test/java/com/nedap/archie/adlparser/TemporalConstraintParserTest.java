@@ -1,16 +1,12 @@
 package com.nedap.archie.adlparser;
 
-import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.primitives.CDuration;
 import com.nedap.archie.base.Interval;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.time.Duration;
 import java.time.Period;
 import java.time.temporal.TemporalAmount;
-import java.time.temporal.TemporalUnit;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -19,16 +15,8 @@ import static org.junit.Assert.assertTrue;
 /**
  * Created by pieter.bos on 30/10/15.
  */
-public class TemporalConstraintParserTest {
+public class TemporalConstraintParserTest extends PrimitivesConstraintParserTest {
 
-    private static Archetype archetype;
-    private static ADLParser parser;
-
-    @BeforeClass
-    public static void setup() throws Exception {
-        parser = new ADLParser();
-        archetype = parser.parse(TemporalConstraintParserTest.class.getResourceAsStream("/adl2-tests/features/aom_structures/basic/openEHR-TEST_PKG-WHOLE.primitive_types.v1.adls"));
-    }
 
     @Test
     public void noParseErrors() {
@@ -39,10 +27,10 @@ public class TemporalConstraintParserTest {
 
     @Test
     public void durationPattern() {
-        assertEquals("Pw", getDuration("duration_attr1").getPatternedConstraint());
+        assertEquals("Pw", this.<CDuration>getAttribute("duration_attr1").getPatternedConstraint());
         //		duration_attr33 matches {PdThms/|P38W..P39W4D|}
         assertDurationInterval(new Interval(Period.ofWeeks(38), Period.ofWeeks(39).plus(Period.ofDays(4))), "duration_attr33");
-        assertEquals("PdThms", getDuration("duration_attr33").getPatternedConstraint());
+        assertEquals("PdThms", this.<CDuration>getAttribute("duration_attr33").getPatternedConstraint());
     }
 
     @Test
@@ -85,14 +73,14 @@ public class TemporalConstraintParserTest {
     }
 
     private void assertDurationInterval(Interval<TemporalAmount> expected, String attribute) {
-        CDuration duration = getDuration(attribute);
+        CDuration duration = getAttribute(attribute);
         assertEquals(1, duration.getConstraint().size());
         Interval<TemporalAmount> interval = duration.getConstraint().get(0);
         assertEquals(expected, interval);
     }
 
     private void assertSingleDuration(TemporalAmount amount, String attribute) {
-        CDuration duration = getDuration(attribute);
+        CDuration duration = getAttribute(attribute);
         assertEquals(1, duration.getConstraint().size());
         Interval<TemporalAmount> interval = duration.getConstraint().get(0);
         assertEquals(amount, interval.getLower());
@@ -103,8 +91,5 @@ public class TemporalConstraintParserTest {
         assertTrue(interval.isUpperIncluded());
     }
 
-    private CDuration getDuration(String attributeName) {
-        return (CDuration) archetype.getDefinition().getAttribute(attributeName).getChildren().get(0);
-    }
 
 }

@@ -3,6 +3,7 @@ package com.nedap.archie.adlparser;
 import com.nedap.archie.adlparser.antlr.AdlParser;
 import com.nedap.archie.adlparser.antlr.AdlParser.*;
 
+import com.nedap.archie.aom.CPrimitiveObject;
 import com.nedap.archie.rules.*;
 
 
@@ -84,7 +85,13 @@ public class AssertionsParser extends BaseTreeWalker {
         if(context.adl_relative_path() != null) {
             path = context.adl_relative_path().getText();
         }
-        return new BinaryOperator(ExpressionType.BOOLEAN, OperatorKind.matches, new ModelReference(path), new Constraint(primitivesConstraintParser.parsePrimitiveObject(context.c_primitive_object())));
+        CPrimitiveObject cPrimitiveObject = null;
+        if(context.c_primitive_object() != null) {
+            cPrimitiveObject = primitivesConstraintParser.parsePrimitiveObject(context.c_primitive_object());
+        } else {
+            cPrimitiveObject = primitivesConstraintParser.parseRegex(context.CONTAINED_REGEXP());
+        }
+        return new BinaryOperator(ExpressionType.BOOLEAN, OperatorKind.matches, new ModelReference(path), new Constraint(cPrimitiveObject));
     }
 
     private Expression parseArithmeticRelOpExpression(Arithmetic_relop_exprContext context) {

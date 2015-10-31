@@ -1,5 +1,7 @@
 package com.nedap.archie.adlparser;
 
+import com.nedap.archie.adlparser.antlr.ContainedRegexLexer;
+import com.nedap.archie.adlparser.antlr.ContainedRegexParser;
 import com.nedap.archie.adlparser.antlr.AdlLexer;
 import com.nedap.archie.adlparser.antlr.AdlParser;
 import com.nedap.archie.adlparser.antlr.AdlParser.Boolean_list_valueContext;
@@ -15,8 +17,13 @@ import com.nedap.archie.aom.primitives.CString;
 import com.nedap.archie.aom.primitives.CTerminologyCode;
 import com.nedap.archie.aom.primitives.CTime;
 import com.nedap.archie.base.terminology.TerminologyCode;
+import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by pieter.bos on 15/10/15.
@@ -134,9 +141,9 @@ public class PrimitivesConstraintParser extends BaseTreeWalker {
         if(stringValueContext != null) {
             result.addConstraint(OdinValueParser.parseOdinStringValue(stringValueContext));
         }
-        if(stringContext.regex_constraint() != null) {
-            result.addConstraint(stringContext.regex_constraint().getText());
-        }
+//        if(stringContext.regex_constraint() != null) {
+//            result.addConstraint(stringContext.regex_constraint().getText());
+//        }
         return result;
     }
 
@@ -156,4 +163,16 @@ public class PrimitivesConstraintParser extends BaseTreeWalker {
         return temporalConstraintParser.parseCDate(context);
     }
 
+    public CPrimitiveObject parseRegex(TerminalNode terminalNode) {
+        ContainedRegexLexer lexer = new ContainedRegexLexer(new ANTLRInputStream(terminalNode.getText()));
+        ContainedRegexParser parser = new ContainedRegexParser(new CommonTokenStream(lexer));
+        ContainedRegexParser.RegexContext regex = parser.regex();
+        CString result = new CString();
+        result.addConstraint(regex.REGEX().getText());
+        if(regex.STRING() != null) {
+            String assumedValue = regex.STRING().getText();
+            result.setAssumedValue(assumedValue.substring(1, assumedValue.length()-1));
+        }
+        return result;
+    }
 }

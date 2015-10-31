@@ -39,11 +39,11 @@ public class Operator  extends Expression {
     }
 
     public Expression getLeftOperand() {
-        return operands.size() > 0 ? operands.get(1) : null;
+        return operands.size() > 0 ? operands.get(0) : null;
     }
 
     public Expression getRightOperand() {
-        return operands.size() > 0 ? operands.get(1) : null;
+        return operands.size() > 1 ? operands.get(1) : null;
     }
 
     public boolean isUnary() {
