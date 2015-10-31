@@ -11,6 +11,7 @@ import com.nedap.archie.base.Interval;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.Period;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.TemporalAmount;
@@ -230,6 +231,7 @@ public class TemporalConstraintParser extends BaseTreeWalker {
     private LocalDateTime parseDateTimeValue(AdlParser.Date_time_valueContext context) {
         try {
             String text = context.getText();
+            text = text.replace(',', '.');//iso 8601 says ss.sss. openehr for some reason does ss,sss
             return LocalDateTime.parse(text);
         } catch (DateTimeParseException e) {
             throw new IllegalArgumentException(e.getMessage() + ":" + context.getText());
@@ -237,8 +239,109 @@ public class TemporalConstraintParser extends BaseTreeWalker {
     }
 
 
-    public CTime parseCTime(C_timeContext c_timeContext) {
-        return new CTime();
+    public CTime parseCTime(C_timeContext context) {
+        //TODO: surround with try catch, do a nice error reporting with line numbers and other nice messages here :)
+        CTime result = new CTime();
+        if(context.TIME_CONSTRAINT_PATTERN() != null) {
+            result.setPatternedConstraint(context.TIME_CONSTRAINT_PATTERN().getText());
+        }
+        if(context.assumed_time_value() != null) {
+            result.setAssumedValue(parseTimeValue(context.assumed_time_value().time_value()));
+        }
+
+        Time_valueContext timeValueContext = context.time_value();
+        if(timeValueContext != null) {
+            parseTime(result, timeValueContext);
+        }
+
+        Time_list_valueContext timeListValueContext = context.time_list_value();
+        if(timeListValueContext != null) {
+            for(Time_valueContext timeValueContext1:timeListValueContext.time_value()) {
+                parseTime(result, timeValueContext1);
+            }
+        }
+        Time_interval_valueContext intervalContext = context.time_interval_value();
+
+        if(intervalContext != null) {
+            result.addConstraint(parseTimeInterval(intervalContext));
+        }
+        if(context.time_interval_list_value() != null) {
+            for(Time_interval_valueContext intervalListContext:context.time_interval_list_value().time_interval_value()) {
+                result.addConstraint(parseTimeInterval(intervalListContext));
+            }
+        }
+
+        if(result.getConstraint().size() == 1) {
+            Interval<LocalTime> interval = result.getConstraint().get(0);
+            if(interval.getLower() != null && interval.getUpper() != null && interval.getLower().equals(interval.getUpper())) {
+                result.setAssumedValue(interval.getLower());
+                result.setDefaultValue(interval.getLower());
+            }
+        }
+
+        return result;
+    }
+
+    private Interval<LocalTime> parseTimeInterval(Time_interval_valueContext context) {
+        Interval<LocalTime> interval = null;
+        if(context.relop() != null) {
+            interval = parseRelOpTimeInterval(context);
+        } else {
+            interval = new Interval<>();
+            if(context.time_value().size() == 1) {
+                interval.setLower(parseTimeValue(context.time_value(0)));
+                interval.setUpper(interval.getLower());
+            } else {
+                interval.setLower(parseTimeValue(context.time_value(0)));
+                interval.setUpper(parseTimeValue(context.time_value(1)));
+            }
+            if(context.SYM_GT() != null) {//'|>a..b|'
+                interval.setLowerIncluded(false);
+            }
+            if(context.SYM_LT() != null) {//'|a..<b|
+                interval.setUpperIncluded(false);
+            }
+            //TODO: lower and upper included. Generic interval parsing?
+        }
+        return interval;
+    }
+
+    private Interval<LocalTime> parseRelOpTimeInterval(Time_interval_valueContext context) {
+        Interval<LocalTime> interval = new Interval<>();
+        LocalTime datetime = parseTimeValue(context.time_value(0));
+        switch(context.relop().getText()) {
+            case "<":
+                interval.setUpperIncluded(false);
+            case "<=":
+                interval.setLowerUnbounded(true);
+                interval.setUpper(datetime);
+                break;
+            case ">":
+                interval.setLowerIncluded(false);
+            case ">=":
+                interval.setUpperUnbounded(true);
+                interval.setLower(datetime);
+                break;
+        }
+        return interval;
+    }
+
+    private void parseTime(CTime result, Time_valueContext context) {
+        LocalTime datetime = parseTimeValue(context);
+        Interval<LocalTime> constraint = new Interval<>();
+        constraint.setLower(datetime);
+        constraint.setUpper(datetime);
+        result.addConstraint(constraint);
+    }
+
+    private LocalTime parseTimeValue(Time_valueContext context) {
+        try {
+            String text = context.getText();
+            text = text.replace(',', '.');//convert to java iso 8601 format
+            return LocalTime.parse(text);
+        } catch (DateTimeParseException e) {
+            throw new IllegalArgumentException(e.getMessage() + ":" + context.getText());
+        }
     }
 
     public CDate parseCDate(C_dateContext context) {
