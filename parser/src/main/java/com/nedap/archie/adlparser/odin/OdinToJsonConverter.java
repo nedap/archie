@@ -33,7 +33,6 @@ public class OdinToJsonConverter {
     }
 
 
-
     public static ObjectMapper getObjectMapper() {
         return objectMapper;
     }
@@ -105,17 +104,7 @@ public class OdinToJsonConverter {
             } else if (primitiveObjectContext.primitive_list_value() != null) {
                 //json array
                 Primitive_list_valueContext listContext = primitiveObjectContext.primitive_list_value();
-                List<Primitive_valueContext> primitiveValueContexts = listContext.primitive_value();
-                output.append("[");
-                boolean first = true;
-                for(Primitive_valueContext valueContext:primitiveValueContexts) {
-                    if (!first) {
-                        output.append(',');
-                    }
-                    first = false;
-                    output(valueContext);
-                }
-                output.append("]");
+                output(listContext);
 
             } else {
                 //interval. TODO: implement interval-object notation in json :)
@@ -123,6 +112,20 @@ public class OdinToJsonConverter {
         } else {
             output.append("{}");
         }
+    }
+
+    private void output(Primitive_list_valueContext listContext) {
+        List<Primitive_valueContext> primitiveValueContexts = listContext.primitive_value();
+        output.append("[");
+        boolean first = true;
+        for(Primitive_valueContext valueContext:primitiveValueContexts) {
+            if (!first) {
+                output.append(',');
+            }
+            first = false;
+            output(valueContext);
+        }
+        output.append("]");
     }
 
     private void output(Primitive_valueContext context) {
@@ -137,7 +140,7 @@ public class OdinToJsonConverter {
         } else if (context.time_value() != null) {
             outputString(context.getText());
         } else if (context.term_code_value() != null) {
-            outputString(context.getText());//TODO: slightly complex value. Or just jackson-mapper that converts this?
+            outputString(context.getText());
         } else {
             //json-compatible anyway
             outputEscaped(context.getText());
@@ -158,12 +161,13 @@ public class OdinToJsonConverter {
             //strip "" if present, all the other "-characters will have to be escaped
             if(text.startsWith("\"") && text.endsWith("\"")) {
                 text = text.substring(1, text.length()-1);
+                output.append(objectMapper.writeValueAsString(text));
+            } else {
+                output.append(text);
             }
-            output.append(objectMapper.writeValueAsString(text));
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     public String getOutput() {

@@ -168,7 +168,7 @@ public class ADLListener extends AdlBaseListener {
     public void enterComponent_terminologies_section(AdlParser.Component_terminologies_sectionContext ctx) {
         if(archetype instanceof OperationalTemplate) {
             OperationalTemplate template = (OperationalTemplate) archetype;
-            
+
             TypeFactory typeFactory = OdinToJsonConverter.getObjectMapper().getTypeFactory();
             MapType mapType = typeFactory.constructMapType(ConcurrentHashMap.class, String.class, ArchetypeTerminology.class);
 

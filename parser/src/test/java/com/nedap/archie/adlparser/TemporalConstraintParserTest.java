@@ -1,11 +1,13 @@
 package com.nedap.archie.adlparser;
 
+import com.nedap.archie.aom.primitives.CDate;
 import com.nedap.archie.aom.primitives.CDuration;
 import com.nedap.archie.base.Interval;
 import org.junit.Test;
 
 import java.time.Duration;
 import java.time.Period;
+import java.time.YearMonth;
 import java.time.temporal.TemporalAmount;
 
 import static org.junit.Assert.assertEquals;
@@ -69,6 +71,16 @@ public class TemporalConstraintParserTest extends PrimitivesConstraintParserTest
         //TODO: add more to test file!
         assertDurationInterval(Interval.lowerUnbounded(Duration.ofHours(1), true),
                 "duration_attr18");
+
+    }
+
+    @Test
+    public void assumedValues() throws Exception {
+        archetype = parser.parse(TemporalConstraintParserTest.class.getResourceAsStream("/adl2-tests/features/aom_structures/basic/openEHR-TEST_PKG-WHOLE.assumed_values.v1.adls"));
+        CDate dateAttr4 = getAttribute("date_attr4");
+        assertEquals("yyyy-??-XX", dateAttr4.getPatternedConstraint());
+        assertEquals(YearMonth.of(1995, 3), dateAttr4.getAssumedValue());
+
 
     }
 

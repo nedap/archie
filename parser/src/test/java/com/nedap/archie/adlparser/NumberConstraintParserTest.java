@@ -25,19 +25,6 @@ public class NumberConstraintParserTest extends PrimitivesConstraintParserTest {
 		integer_attr11 matches {|-10..-5|}
 		integer_attr12 matches {10}
 		integer_attr13
-		real_attr1 matches {100.0}
-		real_attr2 matches {10.0, 20.0, 30.0}
-		real_attr3 matches {|0.0..100.0|}
-		real_attr4 matches {|>0.0..100.0|}
-		real_attr5 matches {|0.0..<100.0|}
-		real_attr6 matches {|>0.0..<100.0|}
-		real_attr7 matches {|>=10.0|}
-		real_attr8 matches {|<=10.0|}
-		real_attr9 matches {|>=10.0|}
-		real_attr10 matches {|<=10.0|}
-		real_attr11 matches {|-10.0..-5.0|}
-		real_attr12 matches {10.0}
-		real_attr13
      */
 
     @Test
@@ -72,6 +59,22 @@ public class NumberConstraintParserTest extends PrimitivesConstraintParserTest {
 		assertEquals(new Interval<>(10l), integerAttr12.getConstraint().get(0));
     }
 
+
+	/*
+	real_attr1 matches {100.0}
+		real_attr2 matches {10.0, 20.0, 30.0}
+		real_attr3 matches {|0.0..100.0|}
+		real_attr4 matches {|>0.0..100.0|}
+		real_attr5 matches {|0.0..<100.0|}
+		real_attr6 matches {|>0.0..<100.0|}
+		real_attr7 matches {|>=10.0|}
+		real_attr8 matches {|<=10.0|}
+		real_attr9 matches {|>=10.0|}
+		real_attr10 matches {|<=10.0|}
+		real_attr11 matches {|-10.0..-5.0|}
+		real_attr12 matches {10.0}
+		real_attr13
+	 */
     @Test
     public void reals() {
 

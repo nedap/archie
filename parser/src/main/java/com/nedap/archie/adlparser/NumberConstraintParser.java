@@ -61,12 +61,6 @@ public class NumberConstraintParser extends BaseTreeWalker {
         return result;
     }
 
-    private void parseIntegerValueList(CInteger cInteger, List<AdlParser.Integer_valueContext> integerValueContextList) {
-        for(AdlParser.Integer_valueContext integerValueContext:integerValueContextList) {
-            parseIntegerConstraint(cInteger, integerValueContext);
-        }
-    }
-
     private void parseIntegerConstraint(CInteger cInteger, Integer_valueContext integerValueContext) {
         long integer = Long.parseLong(integerValueContext.getText());
         Interval<Long> interval = new Interval<>();
@@ -157,12 +151,6 @@ public class NumberConstraintParser extends BaseTreeWalker {
             }
         }
         return result;
-    }
-
-    private void parseRealValueList(CReal cReal, List<AdlParser.Real_valueContext> realValueContextList) {
-        for(AdlParser.Real_valueContext realValueContext:realValueContextList) {
-            parseRealConstraint(cReal, realValueContext);
-        }
     }
 
     private void parseRealConstraint(CReal cReal, Real_valueContext realValueContext) {

@@ -13,7 +13,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Period;
+import java.time.YearMonth;
 import java.time.format.DateTimeParseException;
+import java.time.temporal.Temporal;
 import java.time.temporal.TemporalAmount;
 
 /**
@@ -374,7 +376,7 @@ public class TemporalConstraintParser extends BaseTreeWalker {
         }
 
         if(result.getConstraint().size() == 1) {
-            Interval<LocalDate> interval = result.getConstraint().get(0);
+            Interval<Temporal> interval = result.getConstraint().get(0);
             if(interval.getLower() != null && interval.getUpper() != null && interval.getLower().equals(interval.getUpper())) {
                 result.setAssumedValue(interval.getLower());
                 result.setDefaultValue(interval.getLower());
@@ -384,8 +386,8 @@ public class TemporalConstraintParser extends BaseTreeWalker {
         return result;
     }
 
-    private Interval<LocalDate> parseDateInterval(Date_interval_valueContext context) {
-        Interval<LocalDate> interval = null;
+    private Interval<Temporal> parseDateInterval(Date_interval_valueContext context) {
+        Interval<Temporal> interval = null;
         if(context.relop() != null) {
             interval = parseRelOpDateInterval(context);
         } else {
@@ -407,9 +409,9 @@ public class TemporalConstraintParser extends BaseTreeWalker {
         return interval;
     }
 
-    private Interval<LocalDate> parseRelOpDateInterval(Date_interval_valueContext context) {
-        Interval<LocalDate> interval = new Interval<>();
-        LocalDate duration = parseDateValue(context.date_value().get(0));
+    private Interval<Temporal> parseRelOpDateInterval(Date_interval_valueContext context) {
+        Interval<Temporal> interval = new Interval<>();
+        Temporal duration = parseDateValue(context.date_value().get(0));
         switch(context.relop().getText()) {
             case "<":
                 interval.setUpperIncluded(false);
@@ -428,16 +430,24 @@ public class TemporalConstraintParser extends BaseTreeWalker {
     }
 
     private void parseDate(CDate result, Date_valueContext durationValueContext) {
-        LocalDate duration = parseDateValue(durationValueContext);
-        Interval<LocalDate> constraint = new Interval<>();
+        Temporal duration = parseDateValue(durationValueContext);
+        Interval<Temporal> constraint = new Interval<>();
         constraint.setLower(duration);
         constraint.setUpper(duration);
         result.addConstraint(constraint);
     }
 
-    private LocalDate parseDateValue(AdlParser.Date_valueContext context) {
+    private Temporal parseDateValue(AdlParser.Date_valueContext context) {
         try {
-            return LocalDate.parse(context.getText());
+            String text = context.getText();
+            if(text.matches(".+-.+-.+")) {
+                return LocalDate.parse(context.getText());
+            } else if (text.matches(".+-.+")) {
+                return YearMonth.parse(context.getText());
+            } else {
+                throw new IllegalArgumentException("unexpected date format: " + context.getText());
+            }
+
         } catch (DateTimeParseException e) {
             throw new IllegalArgumentException(e.getMessage() + ":" + context.getText());
         }

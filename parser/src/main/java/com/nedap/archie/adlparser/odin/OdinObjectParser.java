@@ -15,7 +15,6 @@ public class OdinObjectParser {
 
     public static <T> T convert(AdlParser.Odin_textContext odin, Class<T> clazz) {
         try {
-
             return OdinToJsonConverter.getObjectMapper().readValue(new OdinToJsonConverter().convert(odin), clazz);
         } catch (IOException e) {
             throw new RuntimeException(e);
