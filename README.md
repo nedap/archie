@@ -67,16 +67,31 @@ A helper function for locally defined ac/at-codes that works in operational temp
 
 You can implement the RMArchetypeTreeListener or the BaseRMArchetypeTreeListener and you'll get a specific callback for every reference model object. Very little instanceof calls needed there.
 
+### ODIN
+
+ODIN is a JSON/YAML like notation used as part of ADL, for meta-data, terminologies and annotations. See https://github.com/openehr/odin for what more it can do. To our knowledge it's not used widely outside of ADL/openEHR. Archie can map ODIN data directly to Java-objects using Jackson. 
+
+```
+	YourType type = OdinObjectParser.convert(odinText, YourType.class);
+```
+
+It works by first converting to JSON, then binding that to objects with Jackson.
+This means you can also convert ODIN to JSON. 
+
+```
+	String json = new OdinToJsonConverter().convert(odinText);
+```
+
+Converting to JSON is a great way to get ODIN object mapping with very little code and it parses enough to parse the ODIN used in ADL 2. However, ODIN has a few features that are not supported natively in JSON, specifically object references and intervals. It's very possible to add interval support, object references are tricky.
+
+If someone wants to do a full Jackson extension for odin, plus perhaps ODIN-serialization support, it is welcome. It is not currently a priority for us.
+
 ## Status
 
 This is work in progress, but already usable for some situations. 
 
 What we want this to do in the future:
-- Temporal constraint parsing
 - Full rules parsing, once the adl-antlr grammar supports this fully
-- Archetype metadata parsing
-- Proper archetype slot assertions parsing (and tools to evaluate?)
-- Annotations parsing
 - A fully featured flattener
 - Many more convenience methods in the archetype object model
 - More extended APath-queries
