@@ -23,7 +23,6 @@ public class OdinObjectParser {
 
     public static <T> T convert(AdlParser.Odin_textContext odin, JavaType clazz) {
         try {
-
             return OdinToJsonConverter.getObjectMapper().readValue(new OdinToJsonConverter().convert(odin), clazz);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -31,6 +30,12 @@ public class OdinObjectParser {
     }
 
     public static <T> T convert(String odin, Class<T> clazz) {
+        AdlLexer adlLexer = new AdlLexer(new ANTLRInputStream(odin));
+        AdlParser parser = new AdlParser(new CommonTokenStream(adlLexer));
+        return convert(parser.odin_text(), clazz);
+    }
+
+    public static <T> T convert(String odin, JavaType clazz) {
         AdlLexer adlLexer = new AdlLexer(new ANTLRInputStream(odin));
         AdlParser parser = new AdlParser(new CommonTokenStream(adlLexer));
         return convert(parser.odin_text(), clazz);
