@@ -42,8 +42,11 @@ public class OdinToJsonConverter {
     public String convert(Odin_textContext context) {
         if (context.attr_vals() != null) {
             output(context.attr_vals().attr_val());
-        } else {
+        } else if(context.object_value_block() != null){
             output(context.object_value_block());
+        } else {
+            //empty
+            return "{}";
         }
         return output.toString();
 
