@@ -19,14 +19,14 @@ public class ResourceDescription {
     private String custodianNamespace;
     private String custodianOrganisation;
     private String copyright;
-    private String license;
+    private String licence;
     private Map<String, String> ipAcknowledgements = new ConcurrentHashMap<>();
     private Map<String, String> references = new ConcurrentHashMap<>();
     private String resourcePackageUri;
     private Map<String, String> conversionDetails = new ConcurrentHashMap<>();
     private Map<String, String> otherDetails = new ConcurrentHashMap<>();
 
-    //TODO: private List<ResourceDescriptionItem>    details;
+    private Map<String, ResourceDescriptionItem>  details;
 
     public Map<String, String> getOriginalAuthor() {
         return originalAuthor;
@@ -92,12 +92,12 @@ public class ResourceDescription {
         this.copyright = copyright;
     }
 
-    public String getLicense() {
-        return license;
+    public String getLicence() {
+        return licence;
     }
 
-    public void setLicense(String license) {
-        this.license = license;
+    public void setLicence(String license) {
+        this.licence = license;
     }
 
     public Map<String, String> getIpAcknowledgements() {
@@ -138,5 +138,13 @@ public class ResourceDescription {
 
     public void setOtherDetails(Map<String, String> otherDetails) {
         this.otherDetails = otherDetails;
+    }
+
+    public Map<String, ResourceDescriptionItem> getDetails() {
+        return details;
+    }
+
+    public void setDetails(Map<String, ResourceDescriptionItem> details) {
+        this.details = details;
     }
 }

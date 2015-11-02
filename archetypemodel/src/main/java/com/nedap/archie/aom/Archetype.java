@@ -123,7 +123,7 @@ public class Archetype extends AuthoredResource {
     public void addOtherMetadata(String text, String value) {
         if (value != null) {
             otherMetaData.put(text, value);
-        }//TODO: just a value is possible according to grammar. But no in a ConcurrentHashMap. Change to different map implementation?
+        }//TODO: just a value is possible according to grammar (null values). But no in a ConcurrentHashMap. Change to different map implementation?
     }
 
     /**

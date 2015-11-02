@@ -53,18 +53,8 @@ primitive_value :
     | uri_value 
     ;
 
-primitive_list_value : 
-      string_list_value 
-    | integer_list_value 
-    | real_list_value 
-    | boolean_list_value 
-    | character_list_value 
-    | term_code_list_value
-    | date_list_value
-    | time_list_value 
-    | date_time_list_value 
-    | duration_list_value 
-    ;
+primitive_list_value :  primitive_value ( ( ',' primitive_value )+ | ',' SYM_LIST_CONTINUE ) ;
+
 
 primitive_interval_value :
       integer_interval_value

@@ -1,16 +1,18 @@
 package com.nedap.archie.adlparser;
 
+import com.fasterxml.jackson.databind.type.MapType;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.nedap.archie.adlparser.antlr.AdlBaseListener;
 import com.nedap.archie.adlparser.antlr.AdlParser;
 import com.nedap.archie.adlparser.antlr.AdlParser.*;
-import com.nedap.archie.aom.Archetype;
-import com.nedap.archie.aom.ArchetypeHRID;
-import com.nedap.archie.aom.AuthoredArchetype;
-import com.nedap.archie.aom.CComplexObject;
-import com.nedap.archie.aom.OperationalTemplate;
-import com.nedap.archie.aom.Template;
-import com.nedap.archie.aom.TemplateOverlay;
+import com.nedap.archie.adlparser.odin.OdinObjectParser;
+import com.nedap.archie.adlparser.odin.OdinToJsonConverter;
+import com.nedap.archie.aom.*;
+import com.nedap.archie.aom.terminology.ArchetypeTerminology;
 import org.antlr.v4.runtime.tree.TerminalNode;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * ANTLR listener for an ADLS file. Uses the listener construction for the topmost elements, switches to custom treewalker
@@ -134,12 +136,17 @@ public class ADLListener extends AdlBaseListener {
 
     @Override
     public void enterLanguage_section(Language_sectionContext ctx) {
-
+        archetype.setAuthoredResourceContent(OdinObjectParser.convert(ctx.odin_text(), LanguageSection.class));
     }
 
     @Override
     public void enterTerminology_section(Terminology_sectionContext ctx) {
         archetype.setTerminology(terminologyParser.parseTerminology(ctx));
+    }
+
+    @Override
+    public void enterDescription_section(AdlParser.Description_sectionContext ctx) {
+        archetype.setDescription(OdinObjectParser.convert(ctx.odin_text(), ResourceDescription.class));
     }
 
     @Override
@@ -150,8 +157,25 @@ public class ADLListener extends AdlBaseListener {
     }
 
     public void enterRules_section(Rules_sectionContext ctx) {
-
         archetype.setRules(subTreeWalker.parseRules(ctx));
+    }
+
+
+    public void enterAnnotations_section(AdlParser.Annotations_sectionContext ctx) {
+        archetype.setAnnotations(OdinObjectParser.convert(ctx.odin_text(), ResourceAnnotations.class));
+    }
+
+    public void enterComponent_terminologies_section(AdlParser.Component_terminologies_sectionContext ctx) {
+        if(archetype instanceof OperationalTemplate) {
+            OperationalTemplate template = (OperationalTemplate) archetype;
+            
+            TypeFactory typeFactory = OdinToJsonConverter.getObjectMapper().getTypeFactory();
+            MapType mapType = typeFactory.constructMapType(ConcurrentHashMap.class, String.class, ArchetypeTerminology.class);
+
+            template.setComponentTerminologies(OdinObjectParser.convert(ctx.odin_text(), mapType));
+        } else {
+            throw new IllegalArgumentException("cannot add component terminologies to anything but an operational template");
+        }
     }
 
 
@@ -163,4 +187,6 @@ public class ADLListener extends AdlBaseListener {
     public ADLParserErrors getErrors() {
         return errors;
     }
+
+
 }

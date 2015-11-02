@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class TranslationDetails {
     private TerminologyCode language;
-    private String author;
+    private Map<String, String> author = new ConcurrentHashMap<>();
     private String accreditation;
     private Map<String, String> otherDetails = new ConcurrentHashMap<>();
     private String versionLastTranslated;
@@ -25,11 +25,11 @@ public class TranslationDetails {
         this.language = language;
     }
 
-    public String getAuthor() {
+    public Map<String, String> getAuthor() {
         return author;
     }
 
-    public void setAuthor(String author) {
+    public void setAuthor(Map<String, String> author) {
         this.author = author;
     }
 

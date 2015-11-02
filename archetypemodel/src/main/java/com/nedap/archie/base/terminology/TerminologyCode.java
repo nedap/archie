@@ -8,6 +8,14 @@ public class TerminologyCode {
     private String terminologyVersion;
     private String codeString;
 
+    public TerminologyCode() {
+    }
+
+    //for json-mapping
+    public TerminologyCode(String terminologyId) {//todo
+        this.terminologyId = terminologyId;
+    }
+
     public String getTerminologyId() {
         return terminologyId;
     }

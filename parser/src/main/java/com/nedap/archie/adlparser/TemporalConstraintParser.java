@@ -87,7 +87,6 @@ public class TemporalConstraintParser extends BaseTreeWalker {
             if(context.SYM_LT() != null) {//'|a..<b|
                 interval.setUpperIncluded(false);
             }
-            //TODO: lower and upper included. Generic interval parsing?
         }
         return interval;
     }
@@ -195,7 +194,6 @@ public class TemporalConstraintParser extends BaseTreeWalker {
             if(context.SYM_LT() != null) {//'|a..<b|
                 interval.setUpperIncluded(false);
             }
-            //TODO: lower and upper included. Generic interval parsing?
         }
         return interval;
     }
@@ -301,7 +299,6 @@ public class TemporalConstraintParser extends BaseTreeWalker {
             if(context.SYM_LT() != null) {//'|a..<b|
                 interval.setUpperIncluded(false);
             }
-            //TODO: lower and upper included. Generic interval parsing?
         }
         return interval;
     }
@@ -406,7 +403,6 @@ public class TemporalConstraintParser extends BaseTreeWalker {
             if(context.SYM_LT() != null) {//'|a..<b|
                 interval.setUpperIncluded(false);
             }
-            //TODO: lower and upper included. Generic interval parsing?
         }
         return interval;
     }

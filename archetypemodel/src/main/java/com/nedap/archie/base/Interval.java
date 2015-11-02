@@ -18,6 +18,11 @@ public class Interval<T> {
 
     }
 
+    public Interval(T value) {
+        this.lower = value;
+        this.upper = value;
+    }
+
     public Interval(T lower, T upper) {
         this.lower = lower;
         this.upper = upper;
@@ -113,5 +118,33 @@ public class Interval<T> {
                 upperUnbounded,
                 lowerIncluded,
                 upperIncluded);
+    }
+
+    @Override
+    public String toString() {
+
+        if(lowerUnbounded) {
+            return "|" + (upperIncluded ? "<=" : "<") + upper + "|";
+        }
+        if(upperUnbounded) {
+            return "|" + (lowerIncluded ? ">=" : ">") + lower + "|";
+        }
+
+        if(lower != null && upper != null && lower == upper) {
+            return lower.toString();
+        }
+        StringBuilder result = new StringBuilder();
+        result.append("|");
+        if(!lowerIncluded) {
+            result.append(">");
+        }
+        result.append(lower);
+        result.append("...");
+        if(!upperIncluded) {
+            result.append("<");
+        }
+        result.append(upper);
+        result.append("|");
+        return result.toString();
     }
 }

@@ -1,4 +1,4 @@
-package com.nedap.archie.adlparser;
+package com.nedap.archie.adlparser.odin;
 
 import com.nedap.archie.adlparser.antlr.AdlParser;
 
@@ -33,24 +33,5 @@ public class OdinValueParser {
             return "";
         }
         return text.substring(1, text.length() - 1);
-    }
-
-    public static URI parseOdinUri(AdlParser.Uri_valueContext context) throws URISyntaxException {
-        if(context == null) {
-            return null;
-        }
-        return new URI(context.getText());
-    }
-
-    public static List<String> parseListOfStrings(AdlParser.Primitive_objectContext listContext) {
-        List<String> result = new ArrayList<>();
-        if(listContext.primitive_value() != null) {
-            result.add(parseOdinStringValue(listContext.primitive_value().string_value()));
-        } else if (listContext.primitive_list_value() != null) {
-            for(AdlParser.String_valueContext stringContext: listContext.primitive_list_value().string_list_value().string_value()) {
-                result.add(parseOdinStringValue(stringContext));
-            }
-        }
-        return result;
     }
 }

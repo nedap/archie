@@ -73,7 +73,7 @@ public class CComplexObjectParser extends BaseTreeWalker {
             }
 
             if (attributeContext.c_cardinality() != null) {
-                this.parseCardinalityInterval(attributeContext.c_cardinality());//TODO!
+                attribute.setCardinality(this.parseCardinalityInterval(attributeContext.c_cardinality()));
             }
             if (attributeContext.c_objects() != null) {
                 attribute.setChildren(parseCObjects(attributeContext.c_objects()));
@@ -218,19 +218,29 @@ public class CComplexObjectParser extends BaseTreeWalker {
     }
 
 
-    private Cardinality parseCardinalityInterval(C_cardinalityContext cardinalityContext) {
+    private Cardinality parseCardinalityInterval(C_cardinalityContext context) {
         Cardinality cardinality = new Cardinality();
         MultiplicityInterval interval = new MultiplicityInterval();
         cardinality.setInterval(interval);
 
-        //TODO: cardinality().cardinatelyMod();
-        List<TerminalNode> integers = cardinalityContext.cardinality().multiplicity().INTEGER();
+        List<TerminalNode> integers = context.cardinality().multiplicity().INTEGER();
         if(integers.size() == 1) {
             interval.setLower(Integer.parseInt(integers.get(0).getText()));
             interval.setUpper(interval.getLower());
         } else if (integers.size() == 2) {
             interval.setLower(Integer.parseInt(integers.get(0).getText()));
             interval.setUpper(Integer.parseInt(integers.get(1).getText()));
+        }
+
+        List<Multiplicity_modContext> modContexts = context.cardinality().multiplicity_mod();
+        for(Multiplicity_modContext modContext:modContexts) {
+            if(modContext.ordering_mod() != null) {
+                cardinality.setOrdered(modContext.ordering_mod().SYM_ORDERED() != null);
+            }
+            if(modContext.unique_mod() != null) {
+                cardinality.setUnique(true);
+            }
+
         }
         return cardinality;
     }

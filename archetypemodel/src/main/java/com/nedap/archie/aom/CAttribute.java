@@ -13,7 +13,7 @@ import java.util.List;
 public class CAttribute extends ArchetypeConstraint {
 
     private String rmAttributeName;
-    private MultiplicityInterval existence; //TODO: this is just a regular Interval<Integer>. Change it?
+    private MultiplicityInterval existence;
     private String differentialPath;
     private boolean multiple;
 

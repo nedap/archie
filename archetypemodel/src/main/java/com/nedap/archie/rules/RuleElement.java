@@ -5,7 +5,7 @@ package com.nedap.archie.rules;
  */
 public class RuleElement {
 
-    private ExpressionType type;//TODO: enum?
+    private ExpressionType type;
 
     public ExpressionType getType() {
         return type;

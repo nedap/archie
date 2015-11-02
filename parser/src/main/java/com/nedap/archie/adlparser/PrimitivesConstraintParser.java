@@ -8,6 +8,7 @@ import com.nedap.archie.adlparser.antlr.AdlParser.Boolean_list_valueContext;
 import com.nedap.archie.adlparser.antlr.AdlParser.Boolean_valueContext;
 import com.nedap.archie.adlparser.antlr.AdlParser.String_list_valueContext;
 import com.nedap.archie.adlparser.antlr.AdlParser.String_valueContext;
+import com.nedap.archie.adlparser.odin.OdinValueParser;
 import com.nedap.archie.aom.CPrimitiveObject;
 import com.nedap.archie.aom.primitives.CBoolean;
 import com.nedap.archie.aom.primitives.CDate;
@@ -22,10 +23,16 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
+ * TODO: Due to how the grammar is built, it's a lot of work to create a treewalker. Much copy/paste code.
+ * Instead, we could adapt the grammar to work with:
+ *
+ * c_primitive_object: (value | list_value | interval_value | interval_list_value) assumed_value?
+ *
+ * This has the drawback that we need to check for type correctness in the treewalker. But that is quite simple, mostly
+ * that all objects have the same type and for a few that you cannot use an interval.
+ *
  * Created by pieter.bos on 15/10/15.
  */
 public class PrimitivesConstraintParser extends BaseTreeWalker {
@@ -155,8 +162,8 @@ public class PrimitivesConstraintParser extends BaseTreeWalker {
         return temporalConstraintParser.parseCDateTime(context);
     }
 
-    public static CTime parseCTime(AdlParser.C_timeContext c_timeContext) {
-        return new CTime();
+    public CTime parseCTime(AdlParser.C_timeContext context) {
+        return temporalConstraintParser.parseCTime(context);
     }
 
     public CDate parseCDate(AdlParser.C_dateContext context) {

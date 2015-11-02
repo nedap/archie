@@ -1,27 +1,21 @@
 package com.nedap.archie.aom;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.nedap.archie.base.terminology.TerminologyCode;
+
+import java.util.Map;
 
 /**
  * Created by pieter.bos on 15/10/15.
  */
 public class AuthoredResource extends ArchetypeModelObject{
-    private String originalLanguage;
+
     private Boolean controlled;
     private String uid;
-
-    private List<TranslationDetails> translations = new ArrayList<>();
     private ResourceDescription description;
 
+    private LanguageSection content = new LanguageSection();
 
-    public String getOriginalLanguage() {
-        return originalLanguage;
-    }
-
-    public void setOriginalLanguage(String originalLanguage) {
-        this.originalLanguage = originalLanguage;
-    }
+    private ResourceAnnotations annotations;
 
     public Boolean getControlled() {
         return controlled;
@@ -39,24 +33,55 @@ public class AuthoredResource extends ArchetypeModelObject{
         this.uid = uid;
     }
 
-    public List<TranslationDetails> getTranslations() {
-        return translations;
-    }
-
-    public void setTranslations(List<TranslationDetails> translations) {
-        this.translations = translations;
-    }
-
-    public void addTranslation(TranslationDetails translation) {
-        this.translations.add(translation);
-    }
-
-
     public ResourceDescription getDescription() {
         return description;
     }
 
     public void setDescription(ResourceDescription description) {
         this.description = description;
+    }
+
+    public LanguageSection getContent() {
+        return content;
+    }
+
+    public void setContent(LanguageSection content) {
+        this.content = content;
+    }
+
+    public TerminologyCode getOriginalLanguage() {
+        return content.getOriginalLanguage();
+    }
+
+    public void setOriginalLanguage(TerminologyCode originalLanguage) {
+        content.setOriginalLanguage(originalLanguage);
+    }
+
+    public Map<String, TranslationDetails> getTranslations() {
+        return content.getTranslations();
+    }
+
+    public void setTranslations(Map<String, TranslationDetails> translations) {
+        content.setTranslations(translations);
+    }
+
+    public ResourceAnnotations getAnnotations() {
+        return annotations;
+    }
+
+    public void setAnnotations(ResourceAnnotations annotations) {
+        this.annotations = annotations;
+    }
+
+    /** Not in archetype object model specs, but this is the full content of the language section.
+     *   All methods of this languageSection class are directly exposed by methods of AuthoredResource
+     */
+    public LanguageSection getAuthoredResourceContent() {
+        return content;
+    }
+
+
+    public void setAuthoredResourceContent(LanguageSection content) {
+        this.content = content;
     }
 }

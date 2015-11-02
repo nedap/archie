@@ -26,14 +26,14 @@ public class Flattener {
     private Archetype child;
 
     private Archetype result;
-    private boolean makeOperationalTemplate;
+    private boolean createOperationalTemplate;
 
     public Flattener(ArchetypeRepository repository) {
         this.repository = new OverridingArchetypeRepository(repository);
     }
 
     public Flattener createOperationalTemplate(boolean makeTemplate) {
-        this.makeOperationalTemplate = makeTemplate;
+        this.createOperationalTemplate = makeTemplate;
         return this;
     }
 
@@ -78,17 +78,16 @@ public class Flattener {
 
 
         this.result = null;
-        if(makeOperationalTemplate) {
+        if(createOperationalTemplate) {
             result = createOperationalTemplate(parent, child);
         } else {
             result = parent.clone();
         }
 
-        //TODO: multiple steps?:on
         //1. redefine structure
-        //2. fill archetype slots?
+        //2. fill archetype slots if we are creating an operational template
         flatten(result, child);//TODO: this way around, or the other one? :)
-        if(makeOperationalTemplate) {
+        if(createOperationalTemplate) {
             fillSlots(result);
         }
         flattenTerminology();
@@ -118,7 +117,7 @@ public class Flattener {
     }
 
     private void fillArchetypeRoot(CArchetypeRoot root) {
-        if(makeOperationalTemplate) {
+        if(createOperationalTemplate) {
             String archetypeRef = root.getArchetypeRef(); //TODO: is a ref always an id, or can it be a bit different?
             Archetype archetype = this.repository.getArchetype(archetypeRef);
             if (archetype == null) {
@@ -272,7 +271,7 @@ public class Flattener {
     }
 
     private Flattener getNewFlattener() {
-        return new Flattener(repository).createOperationalTemplate(makeOperationalTemplate);
+        return new Flattener(repository).createOperationalTemplate(createOperationalTemplate);
     }
 
 

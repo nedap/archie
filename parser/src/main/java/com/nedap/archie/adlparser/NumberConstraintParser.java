@@ -75,20 +75,25 @@ public class NumberConstraintParser extends BaseTreeWalker {
         cInteger.addConstraint(interval);
     }
 
-    private Interval<Long> parseIntegerInterval(AdlParser.Integer_interval_valueContext intervalContext) {
+    private Interval<Long> parseIntegerInterval(AdlParser.Integer_interval_valueContext context) {
         Interval<Long> interval = null;
-        if(intervalContext.relop() != null) {
-            interval = parseRelOpIntegerInterval(intervalContext);
+        if(context.relop() != null) {
+            interval = parseRelOpIntegerInterval(context);
         } else {
             interval = new Interval<>();
-            if(intervalContext.integer_value().size() == 1) {
-                interval.setLower(Long.parseLong(intervalContext.integer_value(0).getText()));
+            if(context.integer_value().size() == 1) {
+                interval.setLower(Long.parseLong(context.integer_value(0).getText()));
                 interval.setUpper(interval.getLower());
             } else {
-                interval.setLower(Long.parseLong(intervalContext.integer_value(0).getText()));
-                interval.setUpper(Long.parseLong(intervalContext.integer_value(1).getText()));
+                interval.setLower(Long.parseLong(context.integer_value(0).getText()));
+                interval.setUpper(Long.parseLong(context.integer_value(1).getText()));
             }
-            //TODO: lower and upper included. Generic interval parsing?
+            if(context.SYM_GT() != null) {//'|>a..b|'
+                interval.setLowerIncluded(false);
+            }
+            if(context.SYM_LT() != null) {//'|a..<b|
+                interval.setUpperIncluded(false);
+            }
         }
         return interval;
     }
@@ -168,15 +173,20 @@ public class NumberConstraintParser extends BaseTreeWalker {
         cReal.addConstraint(interval);
     }
 
-    private Interval<Double> parseRealInterval(AdlParser.Real_interval_valueContext intervalContext) {
+    private Interval<Double> parseRealInterval(AdlParser.Real_interval_valueContext context) {
         Interval<Double> interval = null;
-        if(intervalContext.relop() != null) {
-            interval = parseRelOpRealInterval(intervalContext);
+        if(context.relop() != null) {
+            interval = parseRelOpRealInterval(context);
         } else {
             interval = new Interval<>();
-            interval.setLower(Double.parseDouble(intervalContext.real_value(0).getText()));
-            interval.setUpper(Double.parseDouble(intervalContext.real_value(1).getText()));
-            //TODO: lower and upper included. Generic interval parsing?
+            interval.setLower(Double.parseDouble(context.real_value(0).getText()));
+            interval.setUpper(Double.parseDouble(context.real_value(1).getText()));
+        }
+        if(context.SYM_GT() != null) {//'|>a..b|'
+            interval.setLowerIncluded(false);
+        }
+        if(context.SYM_LT() != null) {//'|a..<b|
+            interval.setUpperIncluded(false);
         }
         return interval;
     }
