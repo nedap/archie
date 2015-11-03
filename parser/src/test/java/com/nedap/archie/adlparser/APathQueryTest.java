@@ -5,6 +5,7 @@ import com.nedap.archie.aom.ArchetypeModelObject;
 import com.nedap.archie.aom.CAttribute;
 import com.nedap.archie.aom.CComplexObject;
 import com.nedap.archie.query.APathQuery;
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -15,9 +16,17 @@ import static org.junit.Assert.assertNotNull;
  */
 public class APathQueryTest {
 
+    Archetype archetype;
+
+    @Before
+    public void setup() throws Exception {
+        archetype = new ADLParser().parse(getClass().getResourceAsStream("/basic.adl"));
+    }
+
+
     @Test
     public void basicPaths() throws Exception {
-        Archetype archetype = new ADLParser().parse(getClass().getResourceAsStream("/basic.adl"));
+
         APathQuery query = new APathQuery("/context[id11]");
         ArchetypeModelObject archetypeModelObject = query.find(archetype.getDefinition());
         assertEquals("EVENT_CONTEXT", ((CComplexObject) archetypeModelObject).getRmTypeName());
@@ -34,7 +43,6 @@ public class APathQueryTest {
 
     @Test
     public void nameAttributeIgnoredForNow() throws Exception {
-        Archetype archetype = new ADLParser().parse(getClass().getResourceAsStream("/basic.adl"));
         APathQuery query = new APathQuery("/context[id11 and name=\"ignored\"]");
         ArchetypeModelObject archetypeModelObject = query.find(archetype.getDefinition());
         assertEquals("EVENT_CONTEXT", ((CComplexObject) archetypeModelObject).getRmTypeName());
@@ -43,7 +51,6 @@ public class APathQueryTest {
 
     @Test
     public void logicalPaths() throws Exception {
-        Archetype archetype = new ADLParser().parse(getClass().getResourceAsStream("/basic.adl"));
         APathQuery query = new APathQuery("/context[id11]/other_context[id2]/items[qualification]/items[orderid]");
         ArchetypeModelObject archetypeModelObject = query.find(archetype.getDefinition());
         assertNotNull(archetypeModelObject);

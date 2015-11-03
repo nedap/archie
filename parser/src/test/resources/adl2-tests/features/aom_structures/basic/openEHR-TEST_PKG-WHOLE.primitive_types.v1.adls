@@ -59,8 +59,8 @@ definition
 		real_attr4 matches {|>0.0..100.0|}
 		real_attr5 matches {|0.0..<100.0|}
 		real_attr6 matches {|>0.0..<100.0|}
-		real_attr7 matches {|>=10.0|}
-		real_attr8 matches {|<=10.0|}
+		real_attr7 matches {|>10.0|}
+		real_attr8 matches {|<10.0|}
 		real_attr9 matches {|>=10.0|}
 		real_attr10 matches {|<=10.0|}
 		real_attr11 matches {|-10.0..-5.0|}

@@ -103,6 +103,5 @@ public class TemporalConstraintParserTest extends PrimitivesConstraintParserTest
         assertTrue(interval.isUpperIncluded());
     }
 
-    //TODO: i see date patterns like: date_attr4 matches {yyyy-??-XX; 1995-03}. That does not fit in java LocalDate-objects, I would think
 
 }
