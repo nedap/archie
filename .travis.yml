@@ -2,3 +2,9 @@ language: java
 sudo: false
 jdk:
   - oraclejdk8
+cache:
+  directories:
+    - $HOME/.gradle/wrapper
+    - $HOME/.gradle/native
+    - $HOME/.gradle/daemon
+    - $HOME/.gradle/caches
