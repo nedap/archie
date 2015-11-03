@@ -52,7 +52,7 @@ public class OperationalTemplate extends AuthoredArchetype {
         List<PathSegment> pathSegments = object.getPathSegments();
         Collections.reverse(pathSegments);
         for(PathSegment segment:pathSegments) {
-            if(!segment.hasIdCode()) {
+            if(segment.hasArchetypeRef()) {
                 //this is [archetypeId] instead of [idcode]
                 return segment.getNodeId();
             }
