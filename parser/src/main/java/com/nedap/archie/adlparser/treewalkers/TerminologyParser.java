@@ -1,18 +1,12 @@
-package com.nedap.archie.adlparser;
+package com.nedap.archie.adlparser.treewalkers;
 
+import com.nedap.archie.adlparser.ADLParserErrors;
 import com.nedap.archie.adlparser.antlr.AdlParser.*;
 import com.nedap.archie.adlparser.odin.OdinObjectParser;
-import com.nedap.archie.adlparser.odin.OdinValueParser;
 import com.nedap.archie.aom.terminology.ArchetypeTerm;
 import com.nedap.archie.aom.terminology.ArchetypeTerminology;
-import com.nedap.archie.aom.terminology.ValueSet;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.BiFunction;
 
 /**
  * Parser for the terminology section of an archetype

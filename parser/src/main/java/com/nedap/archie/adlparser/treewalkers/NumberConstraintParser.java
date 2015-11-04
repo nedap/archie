@@ -1,16 +1,12 @@
-package com.nedap.archie.adlparser;
+package com.nedap.archie.adlparser.treewalkers;
 
+import com.nedap.archie.adlparser.ADLParserErrors;
 import com.nedap.archie.adlparser.antlr.AdlLexer;
 import com.nedap.archie.adlparser.antlr.AdlParser;
 import com.nedap.archie.adlparser.antlr.AdlParser.*;
-import com.nedap.archie.aom.CObject;
 import com.nedap.archie.aom.primitives.CInteger;
 import com.nedap.archie.aom.primitives.CReal;
 import com.nedap.archie.base.Interval;
-import org.antlr.runtime.tree.BaseTree;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by pieter.bos on 18/10/15.

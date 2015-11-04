@@ -1,14 +1,10 @@
-package com.nedap.archie.adlparser;
+package com.nedap.archie.adlparser.treewalkers;
 
+import com.nedap.archie.adlparser.ADLParserErrors;
 import com.nedap.archie.adlparser.antlr.AdlParser.*;
 import com.nedap.archie.aom.*;
 import com.nedap.archie.base.MultiplicityInterval;
-import com.nedap.archie.rules.Assertion;
-import com.nedap.archie.rules.RuleStatement;
 import org.antlr.v4.runtime.tree.TerminalNode;
-
-import static com.nedap.archie.adlparser.PrimitivesConstraintParser.*;
-import static com.nedap.archie.adlparser.NumberConstraintParser.*;
 
 import java.util.ArrayList;
 import java.util.List;

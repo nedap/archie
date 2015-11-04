@@ -1,6 +1,7 @@
 package com.nedap.archie.adlparser;
 
 import com.nedap.archie.adlparser.antlr.*;
+import com.nedap.archie.adlparser.treewalkers.ADLListener;
 import com.nedap.archie.aom.Archetype;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
