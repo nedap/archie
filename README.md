@@ -45,12 +45,15 @@ The openEHR specification mentions that cardinality is not a required field, bec
 
 That means you need knowledge about the reference model to correctly fill an archetype object model.
 
-If you're implementing the reference model and you want the default constraints to apply to every attribute in the Archetype, you're in luck, just do:
+That's what the RMConstraintImposer does. The ADLParser can be configured to directly use it:
 
 ```
 Archetype archetype = new ADLParser(new RMConstraintImposer()).parse(adlFile);
 ```
-It only overrides the attributes you specify, not every attribute. If you want this otherwise, you can create a subclass of the RMConstraintImposer to act differently. If you do, we would be happy with a pull request.
+
+If you do this and no cardinality is specified: ELEMENT.value will have a multiplicity interval of 0..1, isMultiple false. ITEM_TREE.items will have a multiplicity interval of 0..*, isMultiple true. ADMIN_ENTRY.data will have a multiplicity interval of 1..1, isMultiple false. If a cardinality is specified in the ADL, it will override the default constraint.
+
+It only sets default values for the attributes that are specified in the ADL, not every possible attribute in the reference model. If you want this otherwise, you can create a subclass of the RMConstraintImposer to act differently. If you do, we would be happy with a pull request.
 
 To do this for other models than the reference model, have a look at the superclasses of RMConstraintImposer - you can easily write your own.
 
@@ -102,6 +105,10 @@ Converting to JSON is a great way to get ODIN object mapping with very little co
 
 If someone wants to do a full Jackson extension for odin, plus perhaps ODIN-serialization support, it is welcome. It is not currently a priority for us.
 
+### Reference model
+
+A basic reference model implementation is available. It has not yet been tested, except for use as a source for the RMConstraintImposer.
+
 ## Status
 
 This is work in progress, but already usable for some situations. 
@@ -110,8 +117,8 @@ What we want this to do in the future:
 - Full rules parsing, once the adl-antlr grammar supports this fully
 - A fully featured flattener
 - Many more convenience methods in the archetype object model
-- More extended APath-queries
-- A reference model implementation?
+- More complete APath-queries
+- A more complete reference model implementation
 - Probably rule evaluation
 - ADL serialization (to ADL and perhaps JSON and XML)
 - Many more tests
