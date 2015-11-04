@@ -159,6 +159,14 @@ public class CObject extends ArchetypeConstraint {
         return occurences.getLower() > 0;
     }
 
+    /**
+     * Return true if and only if this is a root node.
+     * @return
+     */
+    public boolean isRootNode() {
+        return false;
+    }
+
     @Override
     public String toString() {
         return "CObject: " + getRmTypeName() + "[" + getNodeId() + "]";

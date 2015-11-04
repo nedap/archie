@@ -74,6 +74,11 @@ public class CComplexObject extends CDefinedObject<ArchetypeModelObject> {
         return archetype;
     }
 
+    @Override
+    public boolean isRootNode() {
+        return this.getParent() == null && this.archetype != null;
+    }
+
     /* set the archetype this is used in. Only set for root nodes! */
     public void setArchetype(Archetype archetype) {
         this.archetype = archetype;
