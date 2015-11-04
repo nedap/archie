@@ -1,4 +1,6 @@
-package com.nedap.archie.adlparser;
+package com.nedap.archie.adlparser.treewalkers;
+
+import com.nedap.archie.adlparser.ADLParserErrors;
 
 /**
  * Created by pieter.bos on 29/10/15.

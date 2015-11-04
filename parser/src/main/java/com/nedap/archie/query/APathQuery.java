@@ -4,6 +4,7 @@ package com.nedap.archie.query;
 import com.nedap.archie.adlparser.antlr.XPathParser;
 import com.nedap.archie.adlparser.antlr.XPathParser.*;
 import com.nedap.archie.adlparser.antlr.XPathLexer;
+import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.ArchetypeModelObject;
 import com.nedap.archie.aom.CAttribute;
 import com.nedap.archie.aom.CComplexObject;
@@ -60,12 +61,12 @@ public class APathQuery {
         }
     }
 
-    public ArchetypeModelObject find(CComplexObject root) {
+    public <T extends ArchetypeModelObject> T find(CComplexObject root) {
         ArchetypeModelObject currentObject = root;
         int i =0;
         for(PathSegment segment:pathSegments) {
             if(i >= pathSegments.size()) {
-                return currentObject;
+                return (T) currentObject;
             }
             CAttribute attribute = null;
             if(currentObject instanceof CComplexObject) {
@@ -80,7 +81,7 @@ public class APathQuery {
             currentObject = attribute;
             if(segment.getNodeId() == null) {
                 if(i == pathSegments.size()-1) {
-                    return attribute;
+                    return (T) attribute;
                 }
                 continue;
             }
@@ -95,6 +96,6 @@ public class APathQuery {
 
             i++;
         }
-        return currentObject;
+        return (T) currentObject;
     }
 }
