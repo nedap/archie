@@ -2,7 +2,7 @@ package com.nedap.archie.rm.composition;
 
 import com.nedap.archie.rm.IsmTransition;
 import com.nedap.archie.rm.datastructures.ItemStructure;
-import com.nedap.archie.rm.datavalues.DvDateTime;
+import com.nedap.archie.rm.datavalues.quantity.datetime.DvDateTime;
 
 /**
  * Created by pieter.bos on 04/11/15.

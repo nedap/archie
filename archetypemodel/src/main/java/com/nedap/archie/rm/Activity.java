@@ -1,7 +1,7 @@
 package com.nedap.archie.rm;
 
 import com.nedap.archie.rm.archetypes.Locatable;
-import com.nedap.archie.rm.datavalues.DvParsable;
+import com.nedap.archie.rm.datavalues.encapsulated.DvParsable;
 
 import javax.annotation.Nullable;
 

@@ -3,23 +3,15 @@ package com.nedap.archie.rm.datavalues;
 /**
  * Created by pieter.bos on 04/11/15.
  */
-public class DvBoolean extends DataValue {
+public class DvBoolean extends DataValue implements SingleValuedDataValue<Boolean>{
 
-    private boolean value;
+    private Boolean value;
 
-    public DvBoolean() {
-
-    }
-
-    public DvBoolean(boolean value) {
-        this.value = value;
-    }
-
-    public boolean isValue() {
+    public Boolean getValue() {
         return value;
     }
 
-    public void setValue(boolean value) {
+    public void setValue(Boolean value) {
         this.value = value;
     }
 }
