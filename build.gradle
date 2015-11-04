@@ -7,15 +7,20 @@ buildscript {
   }
 }
 
+def artifactoryUserMethod = hasProperty('artifactoryUser') ? artifactoryUser : ""
+def artifactoryPasswordMethod = hasProperty('artifactoryPassword') ? artifactoryPassword : ""
+
 allprojects {
 	apply plugin: 'maven' //so we can install to local repository
 	version = '0.1.0-SNAPSHOT'
 	group = 'com.nedap.healthcare.archie'
+
+	
+
 }
 subprojects {
 
-def artifactoryUserMethod = hasProperty('artifactoryUser') ? artifactoryUser : ""
-def artifactoryPasswordMethod = hasProperty('artifactoryPassword') ? artifactoryPassword : ""
+
 
 	apply plugin: 'java'
 	apply plugin: 'maven-publish'
@@ -42,6 +47,8 @@ def artifactoryPasswordMethod = hasProperty('artifactoryPassword') ? artifactory
 //		testCompile 'org.apache.logging.log4j:log4j-core:2.4.1'
 //        testCompile 'org.apache.logging.log4j:log4j-to-slf4j:2.4.1'
 	}
+
+
 
 	sourceCompatibility = '1.8'
 	targetCompatibility = '1.8'
