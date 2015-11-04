@@ -1,6 +1,7 @@
 package com.nedap.archie.adlparser;
 
 import com.nedap.archie.adlparser.antlr.*;
+import com.nedap.archie.adlparser.modelconstraints.ModelConstraintImposer;
 import com.nedap.archie.adlparser.treewalkers.ADLListener;
 import com.nedap.archie.aom.Archetype;
 import org.antlr.v4.runtime.ANTLRInputStream;
@@ -18,6 +19,7 @@ import java.io.InputStream;
  */
 public class ADLParser {
 
+    private ModelConstraintImposer modelConstraintImposer;
     private ADLParserErrors errors;
 
     private Lexer lexer;
@@ -26,6 +28,14 @@ public class ADLParser {
     private ParseTreeWalker walker;
     private AdlParser.AdlContext tree;
     public ADLErrorListener errorListener;
+
+    public ADLParser() {
+
+    }
+
+    public ADLParser(ModelConstraintImposer modelConstraintImposer) {
+        this.modelConstraintImposer = modelConstraintImposer;
+    }
 
 
     public Archetype parse(String adl) throws IOException {
@@ -49,7 +59,11 @@ public class ADLParser {
         ADLListener listener = new ADLListener(errors);
         walker= new ParseTreeWalker();
         walker.walk(listener, tree);
-        return listener.getArchetype();
+        Archetype result = listener.getArchetype();
+        if(modelConstraintImposer != null) {
+            modelConstraintImposer.imposeConstraints(result.getDefinition());
+        }
+        return result;
 
     }
 
