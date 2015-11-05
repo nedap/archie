@@ -214,7 +214,7 @@ public class Flattener {
         result.setArchetypeId(child.getArchetypeId());
         result.setDefinition(toClone.getDefinition());
         result.setDifferential(false);
-        result.setParentArchetypeId(null);
+        result.setParentArchetypeId(child.getParentArchetypeId());
         result.setRmRelease(toClone.getRmRelease());
         result.setAdlVersion(toClone.getAdlVersion());
         result.setTerminology(toClone.getTerminology());
