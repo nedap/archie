@@ -6,11 +6,13 @@ package com.nedap.archie.rm.datastructures;
  */
 public class ItemSingle extends ItemStructure<Item> {
 
+    private Item item;
+
     public Item getItem() {
         return getItems().isEmpty() ? null : getItems().get(0);
     }
 
     public void setITem(Item item) {
-        getItems().set(0, item);
+        getItems().set(0, item); this.item = item;
     }
 }
