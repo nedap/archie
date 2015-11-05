@@ -19,12 +19,15 @@ definition
 		utf8_assumed_value matches {/(☃|☄)/ ; "☄"}
 
 		/start matches {/this should work/}
+		/start[id2]/end matches {/this should work/}
+		/broken/path matches {/this should work/}
+
 
 
 	}
 
 rules
-	relative/path matches {/regexp/}
+	relative[id3]/path matches {/regexp/}
 
 
 terminology

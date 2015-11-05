@@ -54,13 +54,13 @@ public class RegexTest extends PrimitivesConstraintParserTest {
         }
 
         //the following still fails due to https://github.com/openEHR/adl-antlr/issues/20
- /*       {
+        {
             //path and regexpes can clash if the parser is wrong
             CAttribute pathAttribute = archetype.getDefinition().getAttribute("end");
-            assertEquals("/path2/end", pathAttribute.getDifferentialPath());
+            assertEquals("/start[id2]/end", pathAttribute.getDifferentialPath());
             CString regex = (CString) pathAttribute.getChildren().get(0);
             assertEquals("/this should work/", regex.getConstraint().get(0));
-        }*/
+        }
         {
             //rules section contains some
             List<RuleStatement> rules = archetype.getRules().getRules();
@@ -68,7 +68,7 @@ public class RegexTest extends PrimitivesConstraintParserTest {
             Assertion rule = (Assertion) rules.get(0);
             BinaryOperator binaryExpression = (BinaryOperator) rule.getExpression();
             ModelReference ref = (ModelReference) binaryExpression.getLeftOperand();
-            assertEquals("relative/path", ref.getPath());
+            assertEquals("relative[id3]/path", ref.getPath());
             Constraint regexConstraint = (Constraint) binaryExpression.getRightOperand();
             CString regex = (CString) regexConstraint.getItem();
             assertEquals("/regexp/", regex.getConstraint().get(0));
