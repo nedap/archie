@@ -3,6 +3,8 @@ package com.nedap.archie.adlparser.modelconstraints;
 import com.nedap.archie.aom.CAttribute;
 import com.nedap.archie.aom.CComplexObject;
 import com.nedap.archie.aom.CObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Stack;
 
@@ -18,6 +20,8 @@ import java.util.Stack;
  * Created by pieter.bos on 04/11/15.
  */
 public interface ModelConstraintImposer {
+
+    Logger logger = LoggerFactory.getLogger(ModelConstraintImposer.class);
 
     /**
      * Get the default attribute specs for a specific model, with a given typeId and attribute
@@ -37,15 +41,21 @@ public interface ModelConstraintImposer {
         while(!workList.isEmpty()) {
             CObject object = workList.pop();
             for(CAttribute attribute:object.getAttributes()) {
-                CAttribute defaultAttribute = getDefaultAttribute(object.getRmTypeName(), attribute.getRmAttributeName());
-                if(defaultAttribute == null) {
-                    //TODO: log
-                    System.out.println("could not find attribute for " + object.getRmTypeName() + "." + attribute.getRmAttributeName());
-                } else {
-                    attribute.setMultiple(defaultAttribute.isMultiple());
-                    if (attribute.getCardinality() == null) {
-                        attribute.setCardinality(defaultAttribute.getCardinality());
+                //if a differential path is present, we cannot set any default values because we do not know what kind of
+                // object this is. This is only known after flattening, and it will be handled correclty by the Flattener
+                if(attribute.getDifferentialPath() == null) {
+
+                    CAttribute defaultAttribute = getDefaultAttribute(object.getRmTypeName(), attribute.getRmAttributeName());
+                    if(defaultAttribute == null) {
+                        //TODO: log
+                        logger.info("could not find attribute for " + object.getRmTypeName() + "." + attribute.getRmAttributeName());
+                    } else {
+                        attribute.setMultiple(defaultAttribute.isMultiple());
+                        if (attribute.getCardinality() == null) {
+                            attribute.setCardinality(defaultAttribute.getCardinality());
                     }
+                }
+
                 }
                 for (CObject child : attribute.getChildren()) {
                     workList.push(child);
