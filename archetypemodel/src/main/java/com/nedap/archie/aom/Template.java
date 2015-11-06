@@ -21,4 +21,13 @@ public class Template extends AuthoredArchetype {
     public void addTemplateOverlay(TemplateOverlay overlay) {
         templateOverlays.add(overlay);
     }
+
+    public TemplateOverlay getTemplateOverlay(String id) {
+        for(TemplateOverlay overlay:templateOverlays) {
+            if(overlay.getArchetypeId().getFullId().equals(id)) {
+                return overlay;
+            }
+        }
+        return null;
+    }
 }
