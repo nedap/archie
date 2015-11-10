@@ -30,7 +30,7 @@ public class Element extends Item implements SingleValuedDataValue<DataValue> {
     }
 
     @Override
-    public void setValue(DataValue dataValue) {
+    public void setValue(DataValue value) {
         this.value = value;
     }
 }

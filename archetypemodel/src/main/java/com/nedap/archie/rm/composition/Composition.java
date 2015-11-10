@@ -1,5 +1,6 @@
 package com.nedap.archie.rm.composition;
 
+import com.nedap.archie.rm.archetypes.Locatable;
 import com.nedap.archie.rm.datatypes.CodePhrase;
 import com.nedap.archie.rm.datatypes.PartyProxy;
 
@@ -11,7 +12,7 @@ import java.util.List;
 /**
  * Created by pieter.bos on 03/11/15.
  */
-public class Composition {
+public class Composition extends Locatable {
 
     private CodePhrase language;
     private CodePhrase territory;
@@ -88,4 +89,6 @@ public class Composition {
     public void addContent(ContentItem item) {
         this.content.add(item);
     }
+
+
 }

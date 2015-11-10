@@ -66,5 +66,6 @@ public class Locatable extends Pathable {
     public void addLink(Link link) {
         this.links.add(link);
     }
+
 }
 

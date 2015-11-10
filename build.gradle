@@ -16,12 +16,10 @@ allprojects {
 	version = '0.1.0-SNAPSHOT'
 	group = 'com.nedap.healthcare.archie'
 
-	
+	ext.antlrVersion = '4.5.1-1'
 
 }
 subprojects {
-
-
 
 	apply plugin: 'java'
 	apply plugin: 'maven-publish'
@@ -38,6 +36,8 @@ subprojects {
 		compile 'org.slf4j:slf4j-api:1.7.12'
         compile 'com.fasterxml.jackson.core:jackson-annotations:2.6.3'
 		compile 'com.guestful.module:guestful.module.jsr310-extensions:1.4' //kryo java.time serializers
+
+		compile 'com.google.guava:guava:19.0-rc2'
 
 		compile 'org.checkerframework:checker:1.9.7'
 		testCompile 'junit:junit:4.12'

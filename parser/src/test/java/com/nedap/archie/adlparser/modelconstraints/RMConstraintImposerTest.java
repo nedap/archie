@@ -2,7 +2,6 @@ package com.nedap.archie.adlparser.modelconstraints;
 
 import com.nedap.archie.adlparser.ADLParser;
 import com.nedap.archie.aom.Archetype;
-import com.nedap.archie.aom.ArchetypeModelObject;
 import com.nedap.archie.aom.CAttribute;
 import com.nedap.archie.aom.Cardinality;
 import com.nedap.archie.query.APathQuery;

@@ -1,7 +1,6 @@
 
 apply plugin: 'antlr'
 
-ext.antlrVersion = '4.5.1-1'
 ext.reflectionsVersion = '0.9.10'
 
 dependencies {

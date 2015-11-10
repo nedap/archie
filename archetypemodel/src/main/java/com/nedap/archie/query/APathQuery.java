@@ -1,20 +1,25 @@
 package com.nedap.archie.query;
 
 
-import com.nedap.archie.adlparser.antlr.XPathParser;
-import com.nedap.archie.adlparser.antlr.XPathParser.*;
-import com.nedap.archie.adlparser.antlr.XPathLexer;
-import com.nedap.archie.aom.Archetype;
+import com.nedap.archie.rm.archetypes.Locatable;
+import com.nedap.archie.rm.archetypes.Pathable;
+import com.nedap.archie.util.NamingUtil;
+import com.nedap.archie.xpath.antlr.XPathParser;
+import com.nedap.archie.xpath.antlr.XPathParser.*;
+import com.nedap.archie.xpath.antlr.XPathLexer;
 import com.nedap.archie.aom.ArchetypeModelObject;
 import com.nedap.archie.aom.CAttribute;
 import com.nedap.archie.aom.CComplexObject;
-import com.nedap.archie.aom.CObject;
+
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import com.nedap.archie.paths.PathSegment;
 
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -97,5 +102,70 @@ public class APathQuery {
             i++;
         }
         return (T) currentObject;
+    }
+
+    //TODO: get diagnostic information about where the finder stopped in the path - could be very useful!
+    public <T> T find(Pathable root) {
+        Object currentObject = root;
+        try {
+            for(PathSegment segment:pathSegments) {
+                if(currentObject == null) {
+                    return null;
+                }
+                Method method = currentObject.getClass().getMethod(NamingUtil.attributeNameToGetMethod(segment.getNodeName()));
+                currentObject = method.invoke(currentObject);
+                if(currentObject == null) {
+                    return null;
+                }
+                if(currentObject instanceof Collection) {
+                    Collection collection = (Collection) currentObject;
+                    if(segment.getNodeId() == null) {
+                        //TODO: check if this is correct
+                        currentObject = collection;
+                    } else {
+                        currentObject = findRMObject(segment, collection);
+                    }
+                } else if(currentObject instanceof Locatable) {
+
+                    if(segment.getNodeId() != null) {
+                        Locatable locatable = (Locatable) currentObject;
+                        if(segment.hasIdCode()) {
+                            if (!locatable.getArchetypeNodeId().equals(segment.getNodeId())) {
+                                return null;
+                            }
+                        } else {
+                            throw new IllegalArgumentException("cannot handle RM-queries with node names or archetype references yet");
+                        }
+                    }
+                } else {
+                    if(segment.getNodeId() != null) {
+                        throw new IllegalArgumentException("node id specified in path, but object is not a Locatable: " + currentObject);
+                    }
+                }
+            }
+            return (T) currentObject;
+        } catch (NoSuchMethodException e) {
+            return null;
+        } catch (InvocationTargetException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    private Object findRMObject(PathSegment segment, Collection collection) {
+
+        for(Object o:collection) {
+            Locatable locatable = (Locatable) o;
+            if(segment.hasIdCode()) {
+                if (locatable.getArchetypeNodeId().equals(segment.getNodeId())) {
+                    return o;
+                }
+            } else {
+                throw new IllegalArgumentException("cannot handle RM-queries with node names or archetype references yet");
+            }
+        }
+        return null;
     }
 }
