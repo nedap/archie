@@ -1,5 +1,7 @@
 package com.nedap.archie.aom;
 
+import com.nedap.archie.query.APathQuery;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,5 +89,10 @@ public class CComplexObject extends CDefinedObject<ArchetypeModelObject> {
     @Override
     public String toString() {
         return "CComplexObject: " + getRmTypeName() + "[" + getNodeId() + "]";
+    }
+
+    /** TODO: should this only be on complex objects? */
+    public <T extends ArchetypeModelObject> T itemAtPath(String path) {
+        return new APathQuery(path).find(this);
     }
 }

@@ -2,6 +2,7 @@ package com.nedap.archie.aom;
 
 import com.nedap.archie.aom.terminology.ArchetypeTerm;
 import com.nedap.archie.aom.terminology.ArchetypeTerminology;
+import com.nedap.archie.query.APathQuery;
 import com.nedap.archie.rules.RuleStatement;
 
 import java.util.Map;
@@ -157,6 +158,11 @@ public class Archetype extends AuthoredResource {
 
     public Archetype clone() {
         return (Archetype) super.clone();
+    }
+
+    /** TODO: should this only be on complex objects? */
+    public <T extends ArchetypeModelObject> T itemAtPath(String path) {
+        return new APathQuery(path).find(getDefinition());
     }
 
 
