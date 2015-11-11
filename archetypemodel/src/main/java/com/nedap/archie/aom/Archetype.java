@@ -3,10 +3,10 @@ package com.nedap.archie.aom;
 import com.nedap.archie.aom.terminology.ArchetypeTerm;
 import com.nedap.archie.aom.terminology.ArchetypeTerminology;
 import com.nedap.archie.query.APathQuery;
-import com.nedap.archie.rules.RuleStatement;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Note: this Archetype does not conform to the UML model completely:
@@ -29,6 +29,8 @@ public class Archetype extends AuthoredResource {
     private String buildUid;
     private String rmRelease;
     private Boolean generated;
+
+    private Map<String, String> otherMetaData = new HashMap<>();
 
     public String getParentArchetypeId() {
         return parentArchetypeId;
@@ -79,8 +81,6 @@ public class Archetype extends AuthoredResource {
         this.terminology = terminology;
     }
 
-    private Map<String, String> otherMetaData = new ConcurrentHashMap<>();
-
     public String getAdlVersion() {
         return adlVersion;
     }
@@ -124,7 +124,7 @@ public class Archetype extends AuthoredResource {
     public void addOtherMetadata(String text, String value) {
         if (value != null) {
             otherMetaData.put(text, value);
-        }//TODO: just a value is possible according to grammar (null values). But no in a ConcurrentHashMap. Change to different map implementation?
+        }
     }
 
     /**
