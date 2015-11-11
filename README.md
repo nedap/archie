@@ -39,25 +39,6 @@ CAttribute attribute = archetype.getDefinition()
     attribute.getLogicalPath(); // is 'context[systolic]/items'
 ```
 
-### Constraints imposed by default by the reference model
-
-The openEHR specification mentions that cardinality is not a required field, because there already is a cardinality constraint in the model being described by the Archetype. is_multiple has a similar source.
-
-That means you need knowledge about the reference model to correctly fill an archetype object model.
-
-That's what the RMConstraintImposer does. The ADLParser can be configured to directly use it:
-
-```
-Archetype archetype = new ADLParser(new RMConstraintImposer()).parse(adlFile);
-```
-
-If you do this and no cardinality is specified: ELEMENT.value will have a multiplicity interval of 0..1, isMultiple false. ITEM_TREE.items will have a multiplicity interval of 0..*, isMultiple true. ADMIN_ENTRY.data will have a multiplicity interval of 1..1, isMultiple false. If a cardinality is specified in the ADL, it will override the default constraint.
-
-It only sets default values for the attributes that are specified in the ADL, not every possible attribute in the reference model. If you want this otherwise, you can create a subclass of the RMConstraintImposer to act differently. If you do, we would be happy with a pull request.
-
-To do this for other models than the reference model, have a look at the superclasses of RMConstraintImposer - you can easily write your own.
-
-
 ### Flattener
 
 First, create an ArchetypeRepository - create your own or use the supplied in memory SimpleArchetypeRespository. You need it to contain all Archetypes that are to be used, in parsed form. Then do:
@@ -81,6 +62,19 @@ logger.info("and the archetype term text is: " + term.getText());
 And it handles it for you.
 
 A helper function for locally defined ac/at-codes that works in operational templates will be implemented soon - or do it yourself and create a pull request :)
+
+### Constraints imposed by default by the reference model
+
+The openEHR specification mentions that cardinality is not a required field, because the reference model has some default constraints. The value of is_multiple is determined in the same way,
+
+That means you need knowledge about the reference model to correctly fill an archetype object model.That's what the RMConstraintImposer does. For many use cases, you'll want to use it:
+
+```
+Archetype archetype = new ADLParser(new RMConstraintImposer()).parse(adlFile);
+```
+
+Archetypes can be used to further constrain any model. To use this for a different model than the reference model, see the superclasses of RMConstraintImposer - you can easily write your own.
+
 
 ### Archetype tree walking for openEHR reference models
 
