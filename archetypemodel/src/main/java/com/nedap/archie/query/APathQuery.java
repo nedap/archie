@@ -20,6 +20,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -92,8 +93,10 @@ public class APathQuery {
             }
             if(segment.hasIdCode() || segment.hasArchetypeRef()) {
                 currentObject = attribute.getChild(segment.getNodeId());
+            } else if(segment.hasNumberIndex()) {
+                currentObject = attribute.getChildren().get(Integer.parseInt(segment.getNodeId())-1);//APath path numbers start at 1 instead of 0
             } else {
-                currentObject = attribute.getChildByMeaning(segment.getNodeId());
+                currentObject = attribute.getChildByMeaning(segment.getNodeId());//TODO: the ANTLR grammar removes all whitespace. what to do here?
             }
             if(currentObject == null) {
                 return null;
@@ -136,6 +139,11 @@ public class APathQuery {
                             if (!locatable.getArchetypeNodeId().equals(segment.getNodeId())) {
                                 return null;
                             }
+                        } else if (segment.hasNumberIndex()) {
+                            int number = Integer.parseInt(segment.getNodeId());
+                            if(number != 1) {
+                                return null;
+                            }
                         } else {
                             throw new IllegalArgumentException("cannot handle RM-queries with node names or archetype references yet");
                         }
@@ -159,16 +167,41 @@ public class APathQuery {
 
     private Object findRMObject(PathSegment segment, Collection collection) {
 
+        if(segment.hasNumberIndex()) {
+            int number = Integer.parseInt(segment.getNodeId());
+            for(Object object:collection) {
+                if(number == 1) {
+                    return object;
+                }
+                number--;
+            }
+        }
         for(Object o:collection) {
             Locatable locatable = (Locatable) o;
-            if(segment.hasIdCode()) {
+
+            if (segment.hasIdCode()) {
                 if (locatable.getArchetypeNodeId().equals(segment.getNodeId())) {
                     return o;
                 }
+            } else if (segment.hasArchetypeRef()) {
+                throw new IllegalArgumentException("cannot handle RM-queries with archetype references yet");
             } else {
-                throw new IllegalArgumentException("cannot handle RM-queries with node names or archetype references yet");
+                if(equalsName(locatable.getName(), segment.getNodeId())) {
+                    return o;
+                }
             }
         }
         return null;
+    }
+
+    private boolean equalsName(String name, String nameFromQuery) {
+        //the grammar throws away whitespace. And it should, because it's kind of tricky otherwise. So match names without whitespace
+        //TODO: should this be case sensitive?
+        if(name == null) {
+            return false;
+        }
+        name = name.replaceAll("( |\\t|\\n|\\r)+", "");
+        return name.equalsIgnoreCase(nameFromQuery);
+
     }
 }

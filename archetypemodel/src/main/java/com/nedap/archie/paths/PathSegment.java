@@ -34,6 +34,8 @@ public class PathSegment {
         return nodeId != null && nodeId.matches("id(\\.?\\d)+");
     }
 
+    public boolean hasNumberIndex() { return nodeId != null && nodeId.matches("\\d+");}
+
     public boolean hasArchetypeRef() {
         return nodeId != null && nodeId.matches("(.*::)?.*-.*-.*\\..*\\.v.*");
     }

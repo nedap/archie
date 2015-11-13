@@ -54,6 +54,17 @@ public class APathQueryTest {
         APathQuery query = new APathQuery("/context[id11]/other_context[id2]/items[qualification]/items[orderid]");
         ArchetypeModelObject archetypeModelObject = query.find(archetype.getDefinition());
         assertNotNull(archetypeModelObject);
+        assertEquals("id4", ((CComplexObject) archetypeModelObject).getNodeId());
+
+    }
+
+
+    @Test
+    public void indexedPath() throws Exception {
+        APathQuery query = new APathQuery("/context[id11]/other_context[id2]/items[qualification]/items[2]");
+        ArchetypeModelObject archetypeModelObject = query.find(archetype.getDefinition());
+        assertNotNull(archetypeModelObject);
+        assertEquals("id5", ((CComplexObject) archetypeModelObject).getNodeId());
 
     }
 }

@@ -33,6 +33,7 @@ public class LocatableTest {
         PointEvent event = new PointEvent<>();
         data.addEvent(event);
         event.setArchetypeNodeId("id3");
+        event.setName("custom event");
         ItemTree itemTree = new ItemTree();
         event.setData(itemTree);
         itemTree.setArchetypeNodeId("id4");
@@ -51,6 +52,8 @@ public class LocatableTest {
         assertEquals(data, composition.itemAtPath("/content[id1]/data[id2]"));
         assertEquals(event, composition.itemAtPath("/content[id1]/data[id2]/events[id3]"));
         assertEquals(itemTree, composition.itemAtPath("/content[id1]/data[id2]/events[id3]/data[id4]"));
+        assertEquals(itemTree, composition.itemAtPath("/content[id1]/data[id2]/events[1]/data[id4]"));
+        assertEquals(itemTree, composition.itemAtPath("/content[id1]/data[id2]/events[custom event]/data[id4]"));
         assertEquals(element, composition.itemAtPath("/content[id1]/data[id2]/events[id3]/data[id4]/items[id5]"));
         assertEquals(text, composition.itemAtPath("/content[id1]/data[id2]/events[id3]/data[id4]/items[id5]/value"));
 

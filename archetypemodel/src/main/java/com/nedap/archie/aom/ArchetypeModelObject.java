@@ -5,6 +5,7 @@ import com.esotericsoftware.kryo.pool.KryoFactory;
 import com.esotericsoftware.kryo.pool.KryoPool;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.guestful.jsr310.kryo.KryoJsr310;
+import com.nedap.archie.query.APathQuery;
 import com.nedap.archie.util.KryoUtil;
 
 import java.io.Serializable;
@@ -25,4 +26,5 @@ public abstract class ArchetypeModelObject implements Serializable, Cloneable {
             KryoUtil.getPool().release(kryo);
         }
     }
+
 }
