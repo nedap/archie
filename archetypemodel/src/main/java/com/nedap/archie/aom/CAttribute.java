@@ -148,4 +148,26 @@ public class CAttribute extends ArchetypeConstraint {
         return (CAttribute) super.clone();
     }
 
+
+    /* Operations defined by UML */
+
+    public boolean isSingle() {
+        return !multiple;
+    }
+
+    public boolean isMandatory() {
+        if(existence != null) {
+            if(existence.getLower() == 1 && existence.getUpper() == 1 && existence.isUpperIncluded()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean anyAllowed() {
+        return children.isEmpty();
+    }
+
+    //TODO: congruent and conforms to?
+
 }
