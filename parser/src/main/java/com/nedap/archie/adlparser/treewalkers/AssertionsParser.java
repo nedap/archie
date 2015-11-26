@@ -120,7 +120,7 @@ public class AssertionsParser extends BaseTreeWalker {
 
     private Expression parseArithmeticLeaf(Arithmetic_leafContext context) {
         if(context.integer_value() != null) {
-            return new Constant<>(ExpressionType.INTEGER, Integer.parseInt(context.real_value().getText()));
+            return new Constant<>(ExpressionType.INTEGER, Integer.parseInt(context.integer_value().getText()));
         }
         if(context.real_value() != null) {
             return new Constant<>(ExpressionType.REAL, Double.parseDouble(context.real_value().getText()));
