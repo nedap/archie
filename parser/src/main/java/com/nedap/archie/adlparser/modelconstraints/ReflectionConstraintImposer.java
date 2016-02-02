@@ -28,8 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class ReflectionConstraintImposer implements ModelConstraintImposer {
 
-    private ClassLoader classLoader;
-    private String packageName;
+
 
     /** Contains complex object structure of the specified model. Attributes NEVER will have children. Sorry bout that :)*/
     private Map<String, CComplexObject> objects = new ConcurrentHashMap<>();
@@ -42,60 +41,36 @@ public class ReflectionConstraintImposer implements ModelConstraintImposer {
     }
 
     public ReflectionConstraintImposer(String packageName, ClassLoader classLoader) {
+        this(new ConstraintToClassLookup(packageName, classLoader));
+    }
 
-        this.classLoader = classLoader;
-        this.packageName = packageName;
-        Reflections reflections = new Reflections(packageName, classLoader, new SubTypesScanner(false));
+    public ReflectionConstraintImposer(ConstraintToClassLookup classLookup) {
+        Map<String, Class> rmTypeNameToClassMap = classLookup.getRmTypeNameToClassMap();
+        for(String rmTypeName:rmTypeNameToClassMap.keySet()) {
+            Class clazz = rmTypeNameToClassMap.get(rmTypeName);
 
-        Set<String> types = reflections.getAllTypes();
-        for(String type:types) {
-            try {
-                Class clazz = classLoader.loadClass(type);
+            CComplexObject object = new CComplexObject();
+            object.setRmTypeName(rmTypeName);
 
-                CComplexObject object = new CComplexObject();
-                object.setRmTypeName(getRmTypeName(clazz));
-
-                Set<Field> allFields = getAllFields(clazz);
-                for(Field field:allFields) {
-                    CAttribute attribute = new CAttribute();
-                    attribute.setCardinality(new Cardinality(1,1));
-                    attribute.setMultiple(false);
-                    attribute.setRmAttributeName(getRmAttributeName(field));
-                    Nullable annotation = field.getAnnotation(Nullable.class);
-                    if(annotation != null) {
-                        attribute.setCardinality(new Cardinality(0,1));
-                    }
-                    if(Collection.class.isAssignableFrom(field.getType())) {
-                        attribute.setCardinality(Cardinality.unbounded());
-                        attribute.setMultiple(true);
-                    }
-                    object.addAttribute(attribute);
+            Set<Field> allFields = getAllFields(clazz);
+            for(Field field:allFields) {
+                CAttribute attribute = new CAttribute();
+                attribute.setCardinality(new Cardinality(1,1));
+                attribute.setMultiple(false);
+                attribute.setRmAttributeName(classLookup.getRmAttributeName(field));
+                Nullable annotation = field.getAnnotation(Nullable.class);
+                if(annotation != null) {
+                    attribute.setCardinality(new Cardinality(0,1));
                 }
-                objects.put(object.getRmTypeName(), object);
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
+                if(Collection.class.isAssignableFrom(field.getType())) {
+                    attribute.setCardinality(Cardinality.unbounded());
+                    attribute.setMultiple(true);
+                }
+                object.addAttribute(attribute);
             }
+            objects.put(object.getRmTypeName(), object);
 
         }
-    }
-
-    /**
-     * Naming from fields. Override to get custom behaviour
-     * @param field
-     * @return
-     */
-    protected String getRmAttributeName(Field field) {
-        return lowerCaseWithUnderscoresStrategy.translate(field.getName());
-    }
-
-
-    /**
-     * Naming from classes. Override to get custom behaviour
-     * @param clazz
-     * @return
-     */
-    protected String getRmTypeName(Class clazz) {
-        return lowerCaseWithUnderscoresStrategy.translate(clazz.getSimpleName()).toUpperCase();
     }
 
     @Override
