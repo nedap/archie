@@ -2,6 +2,7 @@ package com.nedap.archie.adlparser.modelconstraints;
 
 import com.nedap.archie.aom.CObject;
 import com.nedap.archie.rm.archetypes.Locatable;
+import com.nedap.archie.util.NamingUtil;
 import org.apache.commons.beanutils.BeanUtils;
 
 import java.lang.reflect.Field;
@@ -40,6 +41,9 @@ public class RMObjectCreator {
     public void set(Object object, String rmAttributeName, List<Object> values) {
         try {
             Field field = classLookup.getField(object.getClass(), rmAttributeName);
+            if(field == null) {
+                throw new IllegalArgumentException(String.format("Attribute %s not known for object %s", rmAttributeName, object.getClass().getSimpleName()));
+            }
             if(Collection.class.isAssignableFrom(field.getType())) {
                 Collection collection = (Collection) newInstance(field);
                 setField(object, field, collection);

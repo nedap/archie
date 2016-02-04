@@ -148,10 +148,15 @@ public class APathQuery {
                             throw new IllegalArgumentException("cannot handle RM-queries with node names or archetype references yet");
                         }
                     }
-                } else {
-                    if(segment.getNodeId() != null) {
-                        throw new IllegalArgumentException("node id specified in path, but object is not a Locatable: " + currentObject);
+                } else if (segment.hasNumberIndex()) {
+                    int number = Integer.parseInt(segment.getNodeId());
+                    if(number != 1) {
+                        return null;
                     }
+                } else {
+                    //not a locatable, but that's fine
+                    //in openehr, in archetypes everythign has node ids. Datavalues do not in the rm. a bit ugly if you ask
+                    //me, but that's why there's no 'if there's a nodeId set, this won't match!' code here.
                 }
             }
             return (T) currentObject;
