@@ -35,13 +35,13 @@ public class Interval<T> {
         this.upperIncluded = upperIncluded;
     }
 
-    public static <T>  Interval lowerUnbounded(T upper, boolean upperIncluded) {
+    public static <T extends Comparable>  Interval lowerUnbounded(T upper, boolean upperIncluded) {
         Interval<T> result = new Interval<>(null, upper, true, upperIncluded);
         result.setLowerUnbounded(true);
         return result;
     }
 
-    public static <T>  Interval upperUnbounded(T lower, boolean lowerIncluded) {
+    public static <T extends Comparable>  Interval upperUnbounded(T lower, boolean lowerIncluded) {
         Interval<T> result = new Interval<>(lower, null, lowerIncluded, true);
         result.setUpperUnbounded(true);
         return result;
@@ -93,6 +93,40 @@ public class Interval<T> {
 
     public void setUpperIncluded(boolean upperIncluded) {
         this.upperIncluded = upperIncluded;
+    }
+
+    public boolean has(T value) {
+        //since TemporalAmount does not implement Comparable we have to do some magic here
+        if(!(isComparable(lower) && isComparable(upper) && isComparable(value))) {
+            throw new UnsupportedOperationException("subclasses of interval not implementing comparable should implement their own has method");
+        }
+        Comparable comparableValue = (Comparable) value;
+        Comparable comparableLower = (Comparable) lower;
+        Comparable comparableUpper = (Comparable) upper;
+
+        if(value == null) {
+            //interval values are not concerned with cardinality, so return true if not set
+            return true;
+        }
+
+        if(!lowerUnbounded) {
+            int comparedWithLower = comparableValue.compareTo(comparableLower);
+            if (comparedWithLower < 0 || (!lowerIncluded && comparedWithLower == 0)) {
+                return false;
+            }
+        }
+
+        if(!upperUnbounded) {
+            int comparedWithUpper = comparableValue.compareTo(comparableUpper);
+            if (comparedWithUpper > 0 || (!upperIncluded && comparedWithUpper == 0)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean isComparable(T upper) {
+        return upper == null || upper instanceof Comparable;
     }
 
     @Override

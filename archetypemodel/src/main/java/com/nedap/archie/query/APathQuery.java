@@ -1,6 +1,7 @@
 package com.nedap.archie.query;
 
 
+import com.nedap.archie.aom.CObject;
 import com.nedap.archie.rm.archetypes.Locatable;
 import com.nedap.archie.rm.archetypes.Pathable;
 import com.nedap.archie.util.NamingUtil;
@@ -108,7 +109,7 @@ public class APathQuery {
     }
 
     //TODO: get diagnostic information about where the finder stopped in the path - could be very useful!
-    public <T> T find(Pathable root) {
+    public <T> T find(Object root) {
         //TODO: you can access undesired methods like the getClass().getClassLoader() methods with these queries
         //find a way to whitelist the resulting classes? Or switch to field-based queries?
 
