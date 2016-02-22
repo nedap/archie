@@ -120,7 +120,7 @@ public class PrimitivesConstraintParser extends BaseTreeWalker {
             String assumedValueString = terminologyCodeContext.AT_CODE().getText();
             assumedValue.setCodeString(assumedValueString);
             result.setAssumedValue(assumedValue);
-            result.addConstraint(assumedValue.getTerminologyId());
+            result.addConstraint(assumedValue.getTerminologyIdString());
         } else {
             if(terminologyCodeContext.AC_CODE() != null) {
                 result.addConstraint(terminologyCodeContext.AC_CODE().getText());
