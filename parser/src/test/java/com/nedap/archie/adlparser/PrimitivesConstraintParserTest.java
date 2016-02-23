@@ -10,8 +10,8 @@ import org.junit.BeforeClass;
  */
 public abstract class PrimitivesConstraintParserTest {
 
-    ADLParser parser;
-    Archetype archetype;
+    protected ADLParser parser;
+    protected Archetype archetype;
 
     @Before
     public void setup() throws Exception {

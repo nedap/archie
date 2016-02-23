@@ -24,12 +24,12 @@ public class CTerminologyCode extends CPrimitiveObject<String, TerminologyCode> 
             return true;
         }
         for(String constraint:getConstraint()) {
-            if(constraint.startsWith("ac")) {
+            if(constraint.startsWith("at")) {
                 if(value.getCodeString() != null && value.getCodeString().equals(constraint)) {
                     return true;
                 }
-            } else if (constraint.startsWith("at")) {
-                if(value.getTerminologyId() != null && value.getTerminologyId().equals(constraint)) {
+            } else if (constraint.startsWith("ac")) {
+                if(value.getTerminologyId() != null && value.getTerminologyId().getValue().equals(constraint)) {
                     return true;
                 }
             }

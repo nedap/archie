@@ -28,7 +28,9 @@ public class CString extends CPrimitiveObject<String, String> {
                 }
             } else {
                 //TODO: does case matter here?
-                return Objects.equals(value, constraint);
+                if(Objects.equals(value, constraint)) {
+                    return true;
+                }
             }
         }
         return false;

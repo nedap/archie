@@ -55,4 +55,10 @@ public class TerminologyCode extends CodePhrase {
         TerminologyId terminologyId = getTerminologyId();
         return terminologyId == null ? null : terminologyId.getValue();
     }
+
+    public String toString() {
+        return terminologyVersion == null ?
+                "[" + getTerminologyId() + "::" + getCodeString() + "]" :
+                "[" + getTerminologyId() + "(" + terminologyVersion + ")::" + getCodeString() + "]";
+    }
 }
