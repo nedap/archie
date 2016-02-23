@@ -13,4 +13,29 @@ public class Archetyped {
     @Nullable
     private ArchetypeHRID templateId; //not sure if this is still required in AOM/ADL 2
     private String rmVersion;
+
+    public ArchetypeHRID getArchetypeId() {
+        return archetypeId;
+    }
+
+    public void setArchetypeId(ArchetypeHRID archetypeId) {
+        this.archetypeId = archetypeId;
+    }
+
+    @Nullable
+    public ArchetypeHRID getTemplateId() {
+        return templateId;
+    }
+
+    public void setTemplateId(@Nullable ArchetypeHRID templateId) {
+        this.templateId = templateId;
+    }
+
+    public String getRmVersion() {
+        return rmVersion;
+    }
+
+    public void setRmVersion(String rmVersion) {
+        this.rmVersion = rmVersion;
+    }
 }
