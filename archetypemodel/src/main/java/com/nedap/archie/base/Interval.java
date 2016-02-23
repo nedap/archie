@@ -1,5 +1,8 @@
 package com.nedap.archie.base;
 
+import java.time.Duration;
+import java.time.chrono.ChronoPeriod;
+import java.time.temporal.TemporalAmount;
 import java.util.Objects;
 
 /**
@@ -96,13 +99,26 @@ public class Interval<T> {
     }
 
     public boolean has(T value) {
-        //since TemporalAmount does not implement Comparable we have to do some magic here
-        if(!(isComparable(lower) && isComparable(upper) && isComparable(value))) {
-            throw new UnsupportedOperationException("subclasses of interval not implementing comparable should implement their own has method");
+        if(lowerUnbounded && upperUnbounded) {
+            return true;
         }
-        Comparable comparableValue = (Comparable) value;
-        Comparable comparableLower = (Comparable) lower;
-        Comparable comparableUpper = (Comparable) upper;
+        //since TemporalAmount does not implement Comparable we have to do some magic here
+        Comparable comparableValue;
+        Comparable comparableLower;
+        Comparable comparableUpper;
+        if(value instanceof TemporalAmount && !(value instanceof Comparable) && isNonComparableTemporalAmount(lower) && isNonComparableTemporalAmount(upper)) {
+            //TemporalAmount is not comparable, but can always be converted to a duration that is comparable.
+            comparableValue = value == null ? null : Duration.from((TemporalAmount) value);
+            comparableLower = lower == null ? null : Duration.from((TemporalAmount) lower);
+            comparableUpper = upper == null ? null : Duration.from((TemporalAmount) upper);
+        }
+        else if(!(isComparable(lower) && isComparable(upper) && isComparable(value))) {
+            throw new UnsupportedOperationException("subclasses of interval not implementing comparable should implement their own has method");
+        } else {
+            comparableValue = (Comparable) value;
+            comparableLower = (Comparable) lower;
+            comparableUpper = (Comparable) upper;
+        }
 
         if(value == null) {
             //interval values are not concerned with cardinality, so return true if not set
@@ -123,6 +139,10 @@ public class Interval<T> {
             }
         }
         return true;
+    }
+
+    private boolean isNonComparableTemporalAmount(T value) {
+        return value == null || (!(value instanceof Comparable) && value instanceof TemporalAmount);
     }
 
     private boolean isComparable(T upper) {
