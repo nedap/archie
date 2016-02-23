@@ -1,6 +1,6 @@
 # Archie: ADL 2.0 parser    
 
-A work-in-progress ADL 2.0 parser for use in openEHR-implementations, written in Java. Based on the ANTLR-grammar by Thomas Beale at https://github.com/openehr/adl-antlr . See also www.openehr.org.
+ADL 2.0 parser, Archetype Object Model and Reference Model implementation for use in openEHR-implementations, written in Java. Based on the ANTLR-grammar by Thomas Beale at https://github.com/openehr/adl-antlr . See also www.openehr.org.
 
 ## Build
 
@@ -59,9 +59,29 @@ ArchetypeTerm term = archetype.getTerm(cobject, "en");
 logger.info("and the archetype term text is: " + term.getText());
 ```
 
-And it handles it for you.
+This takes component terminologies into account as well. Alternatively, use ```archetype.getTerminology(cobject)``` to get the full terminology object for that path.
 
-A helper function for locally defined ac/at-codes that works in operational templates will be implemented soon - or do it yourself and create a pull request :)
+### Intervals and primitive objects
+
+The Interval has its ```has(value)``` method implemented. So you can do:
+
+```java
+new Interval<>(2,4).has(3); //returns true
+Interval.upperUnbounded(2).has(1); //returns false
+```
+
+CPrimitiveObject has a isValidValue(value) method, so you can do:
+
+```java
+CString cString = new CString();
+cString.addConstraint("test");
+cString.addConstraint("/more te+st");
+cString.isValidValue("test"); //returns true
+cString.isValidValue("more teeeeest"); //returns true - regexp matching
+cString.isValidValue("mooooore test"); //returns false
+```
+
+ISO-8601 date constraint patterns are not yet implemented
 
 ### Constraints imposed by default by the reference model
 
@@ -78,7 +98,19 @@ Archetypes can be used to further constrain any model. To use this for a differe
 
 ### Archetype tree walking for openEHR reference models
 
-You can implement the RMArchetypeTreeListener or the BaseRMArchetypeTreeListener and you'll get a specific callback for every reference model object. Very little instanceof calls needed there.
+Because the getAttributes() has been implemented on the CObject-class instead of CComplexObject, creating a tree walker is just a few lines of code:
+
+```java
+public void walk(CObject cobject) {
+	for(CAttribute attribute:cobject.getAttributes()) {
+		for(CObject child:attributes.getChildren()) {
+			walk(child);
+		}
+	}
+}
+```
+
+There's also a specific implementation available with named predefined callbacks for every RM object constraint. See RMArchetypeTreeListener and BaseRMArchetypeTreeListener.
 
 ### ODIN
 
@@ -97,22 +129,22 @@ This means you can also convert ODIN to JSON.
 
 Converting to JSON is a great way to get ODIN object mapping with very little code and it parses enough to parse the ODIN used in ADL 2. However, ODIN has a few features that are not supported natively in JSON, specifically object references and intervals. It's very possible to add interval support, object references are tricky.
 
-If someone wants to do a full Jackson extension for odin, plus perhaps ODIN-serialization support, it is welcome. It is not currently a priority for us.
+If someone wants to do a full Jackson extension for ODIN, plus perhaps ODIN-serialization support, it is welcome. It is not currently a priority for us.
 
 ### Reference model
 
-A basic reference model implementation is available. It has not yet been tested, except for use as a source for the RMConstraintImposer.
+A reference model implementation is available. It deserializes with Jackson into json, but probably not yet in a standard way.
 
 ## Status
 
-This is work in progress, but already usable for some situations. 
+The project is quite usable for when you want to create an EHR implementation. It is not yet usable for when you want to create an ADL-editor, mainly because there is no serialization to ADL-files.
 
 What we want this to do in the future:
-- Full rules parsing, once the adl-antlr grammar supports this fully
-- A fully featured flattener
+- Date Constraint parsing with patterns, not just intervals
+- Tests for the reference model
 - Many more convenience methods in the archetype object model
 - More complete APath-queries
-- A more complete reference model implementation
+- Full rules parsing, once the adl-antlr grammar supports this fully
 - Probably rule evaluation
 - ADL serialization (to ADL and perhaps JSON and XML)
 - Many more tests
