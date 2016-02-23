@@ -27,4 +27,5 @@ public class DvQuantity extends DvAmount<Double> {
     public void setUnits(String units) {
         this.units = units;
     }
+
 }

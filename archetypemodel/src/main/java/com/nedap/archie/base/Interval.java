@@ -1,5 +1,8 @@
 package com.nedap.archie.base;
 
+import java.time.Duration;
+import java.time.chrono.ChronoPeriod;
+import java.time.temporal.TemporalAmount;
 import java.util.Objects;
 
 /**
@@ -35,13 +38,13 @@ public class Interval<T> {
         this.upperIncluded = upperIncluded;
     }
 
-    public static <T>  Interval lowerUnbounded(T upper, boolean upperIncluded) {
+    public static <T extends Comparable>  Interval lowerUnbounded(T upper, boolean upperIncluded) {
         Interval<T> result = new Interval<>(null, upper, true, upperIncluded);
         result.setLowerUnbounded(true);
         return result;
     }
 
-    public static <T>  Interval upperUnbounded(T lower, boolean lowerIncluded) {
+    public static <T extends Comparable>  Interval upperUnbounded(T lower, boolean lowerIncluded) {
         Interval<T> result = new Interval<>(lower, null, lowerIncluded, true);
         result.setUpperUnbounded(true);
         return result;
@@ -93,6 +96,57 @@ public class Interval<T> {
 
     public void setUpperIncluded(boolean upperIncluded) {
         this.upperIncluded = upperIncluded;
+    }
+
+    public boolean has(T value) {
+        if(lowerUnbounded && upperUnbounded) {
+            return true;
+        }
+        //since TemporalAmount does not implement Comparable we have to do some magic here
+        Comparable comparableValue;
+        Comparable comparableLower;
+        Comparable comparableUpper;
+        if(value instanceof TemporalAmount && !(value instanceof Comparable) && isNonComparableTemporalAmount(lower) && isNonComparableTemporalAmount(upper)) {
+            //TemporalAmount is not comparable, but can always be converted to a duration that is comparable.
+            comparableValue = value == null ? null : Duration.from((TemporalAmount) value);
+            comparableLower = lower == null ? null : Duration.from((TemporalAmount) lower);
+            comparableUpper = upper == null ? null : Duration.from((TemporalAmount) upper);
+        }
+        else if(!(isComparable(lower) && isComparable(upper) && isComparable(value))) {
+            throw new UnsupportedOperationException("subclasses of interval not implementing comparable should implement their own has method");
+        } else {
+            comparableValue = (Comparable) value;
+            comparableLower = (Comparable) lower;
+            comparableUpper = (Comparable) upper;
+        }
+
+        if(value == null) {
+            //interval values are not concerned with cardinality, so return true if not set
+            return true;
+        }
+
+        if(!lowerUnbounded) {
+            int comparedWithLower = comparableValue.compareTo(comparableLower);
+            if (comparedWithLower < 0 || (!lowerIncluded && comparedWithLower == 0)) {
+                return false;
+            }
+        }
+
+        if(!upperUnbounded) {
+            int comparedWithUpper = comparableValue.compareTo(comparableUpper);
+            if (comparedWithUpper > 0 || (!upperIncluded && comparedWithUpper == 0)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean isNonComparableTemporalAmount(T value) {
+        return value == null || (!(value instanceof Comparable) && value instanceof TemporalAmount);
+    }
+
+    private boolean isComparable(T upper) {
+        return upper == null || upper instanceof Comparable;
     }
 
     @Override

@@ -14,7 +14,7 @@ public class TermMapping {
      * < = narrower term
      * = = equals term
      * > = broader term
-     * ? = no clue
+     * ? = the kind of mapping is unknown
      */
     private char match = '?';
     @Nullable

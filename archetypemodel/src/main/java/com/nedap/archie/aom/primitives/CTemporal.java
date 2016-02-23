@@ -16,4 +16,16 @@ public  class CTemporal<T> extends COrdered<T>{
     public void setPatternedConstraint(String patternedConstraint) {
         this.patternedConstraint = patternedConstraint;
     }
+
+    public boolean isValidValue(T value) {
+        if(getConstraint().isEmpty() && patternedConstraint == null) {
+            return true;
+        }
+        if(patternedConstraint == null) {
+            return super.isValidValue(value);
+        } else {
+            //TODO: find a library that validates ISO 8601 patterns
+            return true;
+        }
+    }
 }

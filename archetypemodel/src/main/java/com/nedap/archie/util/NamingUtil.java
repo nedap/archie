@@ -32,4 +32,8 @@ public class NamingUtil {
     public static String attributeNameToGetMethod(String snakeCased) {
         return "get" + CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, snakeCased);
     }
+
+    public static String attributeNameToSetMethod(String snakeCased) {
+        return "set" + CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, snakeCased);
+    }
 }

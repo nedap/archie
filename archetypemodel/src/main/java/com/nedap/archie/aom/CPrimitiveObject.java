@@ -2,6 +2,7 @@ package com.nedap.archie.aom;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Primitive object. Parameterized with a Constraint type and AssumedAndDefault value type, to be able to override
@@ -54,5 +55,26 @@ public class CPrimitiveObject<Constraint, AssumedAndDefaultValue> extends CDefin
             throw new UnsupportedOperationException("Cannot set node id on a CPrimitiveObject");
         }
     }
+
+    /**
+     * True if the given value is a valid value for this constraint
+     * Must be overridden in classes where the AssumedAndDefaultValue is not the actual value.
+     * For example when it is an interval or pattern
+     *
+     * @param value
+     * @return
+     */
+    public boolean isValidValue(AssumedAndDefaultValue value) {
+        if(getConstraint().isEmpty()) {
+            return true;
+        }
+        for(Constraint constraint:getConstraint()) {
+            if(Objects.equals(constraint, value)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
 
