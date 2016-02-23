@@ -23,7 +23,7 @@ public class CString extends CPrimitiveObject<String, String> {
                 //regexp. Strip first and last character and match. If you want to input
                 //data starting and ending with '/', you cannot in the AOM, although ADL lets you express if just fine.
                 //perhaps we should make the constraint object something more expressive than a String?
-                if(value.matches(constraint.substring(1).substring(0, constraint.length()-1))) {
+                if(value.matches(constraint.substring(1).substring(0, constraint.length()-2))) {
                     return true;
                 }
             } else {
