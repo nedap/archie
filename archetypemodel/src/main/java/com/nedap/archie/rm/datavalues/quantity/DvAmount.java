@@ -9,5 +9,12 @@ public abstract class DvAmount<MagnitudeType extends Comparable> extends DvQuant
     @Nullable
     private Boolean accuracyIsPercent;
 
+    @Nullable
+    public Boolean getAccuracyIsPercent() {
+        return accuracyIsPercent;
+    }
 
+    public void setAccuracyIsPercent(@Nullable Boolean accuracyIsPercent) {
+        this.accuracyIsPercent = accuracyIsPercent;
+    }
 }

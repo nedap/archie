@@ -16,7 +16,8 @@ public class CodePhrase {
 
     }
 
-    /** Construct a code phrase in the form:
+    /**
+     * Construct a code phrase in the form:
      * <br/>
      * [terminologyId::codeString]
      * <br/>

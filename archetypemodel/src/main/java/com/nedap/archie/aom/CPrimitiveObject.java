@@ -10,19 +10,19 @@ import java.util.Objects;
  *
  * Created by pieter.bos on 15/10/15.
  */
-public class CPrimitiveObject<Constraint, AssumedAndDefaultValue> extends CDefinedObject<AssumedAndDefaultValue> {
+public class CPrimitiveObject<Constraint, ValueType> extends CDefinedObject<ValueType> {
 
     public static final String PRIMITIVE_NODE_ID_VALUE = "Primitive_node_id";
 
-    private AssumedAndDefaultValue assumedValue;
+    private ValueType assumedValue;
     private Boolean enumeratedTypeConstraint;
     private List<Constraint> constraints = new ArrayList<>();
 
-    public AssumedAndDefaultValue getAssumedValue() {
+    public ValueType getAssumedValue() {
         return assumedValue;
     }
 
-    public void setAssumedValue(AssumedAndDefaultValue assumedValue) {
+    public void setAssumedValue(ValueType assumedValue) {
         this.assumedValue = assumedValue;
     }
 
@@ -64,7 +64,7 @@ public class CPrimitiveObject<Constraint, AssumedAndDefaultValue> extends CDefin
      * @param value
      * @return
      */
-    public boolean isValidValue(AssumedAndDefaultValue value) {
+    public boolean isValidValue(ValueType value) {
         if(getConstraint().isEmpty()) {
             return true;
         }
