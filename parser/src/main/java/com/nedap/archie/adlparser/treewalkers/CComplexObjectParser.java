@@ -216,17 +216,8 @@ public class CComplexObjectParser extends BaseTreeWalker {
 
     private Cardinality parseCardinalityInterval(C_cardinalityContext context) {
         Cardinality cardinality = new Cardinality();
-        MultiplicityInterval interval = new MultiplicityInterval();
+        MultiplicityInterval interval = parseMultiplicity(context.cardinality().multiplicity());
         cardinality.setInterval(interval);
-
-        List<TerminalNode> integers = context.cardinality().multiplicity().INTEGER();
-        if(integers.size() == 1) {
-            interval.setLower(Integer.parseInt(integers.get(0).getText()));
-            interval.setUpper(interval.getLower());
-        } else if (integers.size() == 2) {
-            interval.setLower(Integer.parseInt(integers.get(0).getText()));
-            interval.setUpper(Integer.parseInt(integers.get(1).getText()));
-        }
 
         List<Multiplicity_modContext> modContexts = context.cardinality().multiplicity_mod();
         for(Multiplicity_modContext modContext:modContexts) {
@@ -258,11 +249,18 @@ public class CComplexObjectParser extends BaseTreeWalker {
         if(occurrencesContext == null) {
             return null;
         }
-        MultiplicityInterval interval = new MultiplicityInterval();
-        List<TerminalNode> integers = occurrencesContext.multiplicity().INTEGER();
 
-        if(occurrencesContext.multiplicity().SYM_INTERVAL_SEP() != null) {
-            if(occurrencesContext.multiplicity().getText().contains("*")) {
+        return parseMultiplicity(occurrencesContext.multiplicity());
+    }
+
+    private MultiplicityInterval parseMultiplicity(MultiplicityContext multiplicity) {
+        if(multiplicity == null) {
+            return null;
+        }
+        MultiplicityInterval interval = new MultiplicityInterval();
+        List<TerminalNode> integers = multiplicity.INTEGER();
+        if(multiplicity.SYM_INTERVAL_SEP() != null) {
+            if(multiplicity.getText().contains("*")) {
                 interval.setLower(Integer.parseInt(integers.get(0).getText()));
                 interval.setUpperUnbounded(true);
             } else {
@@ -271,7 +269,7 @@ public class CComplexObjectParser extends BaseTreeWalker {
             }
         } else {
             //one integer or *
-            if(occurrencesContext.multiplicity().getText().contains("*")) {
+            if(multiplicity.getText().contains("*")) {
                 interval.setLowerUnbounded(false);
                 interval.setLower(0);
                 interval.setUpperUnbounded(true);
@@ -282,5 +280,6 @@ public class CComplexObjectParser extends BaseTreeWalker {
         }
         return interval;
     }
+
 
 }
