@@ -3,7 +3,6 @@ package com.nedap.archie.rm.datavalues.quantity.datetime;
 import com.nedap.archie.rm.datavalues.SingleValuedDataValue;
 import com.nedap.archie.rm.datavalues.quantity.DvAmount;
 
-import java.time.LocalTime;
 import java.time.temporal.TemporalAmount;
 
 /**

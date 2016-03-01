@@ -1,7 +1,6 @@
 package com.nedap.archie.rm.datavalues.quantity.datetime;
 
 import com.nedap.archie.rm.datavalues.SingleValuedDataValue;
-import com.nedap.archie.rm.datavalues.quantity.DvAbsoluteQuantity;
 
 import java.time.LocalTime;
 import java.time.temporal.Temporal;

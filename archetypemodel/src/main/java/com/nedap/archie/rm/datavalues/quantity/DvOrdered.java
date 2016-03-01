@@ -3,7 +3,6 @@ package com.nedap.archie.rm.datavalues.quantity;
 import com.nedap.archie.rm.datatypes.CodePhrase;
 import com.nedap.archie.rm.datavalues.DataValue;
 
-
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;

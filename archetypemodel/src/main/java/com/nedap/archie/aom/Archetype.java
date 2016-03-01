@@ -4,7 +4,6 @@ import com.nedap.archie.aom.terminology.ArchetypeTerm;
 import com.nedap.archie.aom.terminology.ArchetypeTerminology;
 import com.nedap.archie.query.APathQuery;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 

@@ -1,6 +1,5 @@
 package com.nedap.archie.rm.datavalues.encapsulated;
 
-import com.nedap.archie.rm.datavalues.DataValue;
 import com.nedap.archie.rm.datavalues.SingleValuedDataValue;
 
 /**

@@ -2,8 +2,6 @@ package com.nedap.archie.aom;
 
 import com.nedap.archie.base.terminology.TerminologyCode;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 

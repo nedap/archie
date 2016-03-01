@@ -1,6 +1,5 @@
 package com.nedap.archie.aom.primitives;
 
-import com.nedap.archie.aom.CDefinedObject;
 import com.nedap.archie.aom.CPrimitiveObject;
 
 /**

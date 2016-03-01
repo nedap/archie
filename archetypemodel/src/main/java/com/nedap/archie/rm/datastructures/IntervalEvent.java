@@ -3,7 +3,6 @@ package com.nedap.archie.rm.datastructures;
 import com.nedap.archie.rm.datavalues.DvCodedText;
 import com.nedap.archie.rm.datavalues.quantity.datetime.DvDuration;
 
-
 import javax.annotation.Nullable;
 
 /**

@@ -1,7 +1,5 @@
 package com.nedap.archie.aom.primitives;
 
-import java.time.LocalDateTime;
-import java.time.temporal.Temporal;
 import java.time.temporal.TemporalAccessor;
 
 /**

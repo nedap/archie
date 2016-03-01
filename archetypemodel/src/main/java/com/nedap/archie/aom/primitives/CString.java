@@ -1,11 +1,8 @@
 package com.nedap.archie.aom.primitives;
 
-import com.nedap.archie.aom.CDefinedObject;
 import com.nedap.archie.aom.CPrimitiveObject;
 
-import java.util.List;
 import java.util.Objects;
-import java.util.regex.Pattern;
 
 /**
  * Created by pieter.bos on 15/10/15.

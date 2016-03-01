@@ -1,11 +1,8 @@
 package com.nedap.archie.aom.terminology;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.concurrent.ConcurrentLinkedDeque;
 
 /**
  * Created by pieter.bos on 15/10/15.

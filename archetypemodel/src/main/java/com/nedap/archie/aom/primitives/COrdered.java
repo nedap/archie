@@ -1,10 +1,7 @@
 package com.nedap.archie.aom.primitives;
 
-import com.nedap.archie.aom.CDefinedObject;
 import com.nedap.archie.aom.CPrimitiveObject;
 import com.nedap.archie.base.Interval;
-
-import java.util.Objects;
 
 /**
  * Created by pieter.bos on 15/10/15.

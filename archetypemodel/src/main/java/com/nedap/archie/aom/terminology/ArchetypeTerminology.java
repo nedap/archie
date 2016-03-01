@@ -3,7 +3,6 @@ package com.nedap.archie.aom.terminology;
 import com.nedap.archie.aom.Archetype;
 
 import java.net.URI;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 

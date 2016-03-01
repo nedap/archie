@@ -1,9 +1,9 @@
 package com.nedap.archie.rm.composition;
 
 import com.nedap.archie.rm.Activity;
-import com.nedap.archie.rm.datavalues.quantity.datetime.DvDateTime;
-import com.nedap.archie.rm.datavalues.encapsulated.DvParsable;
 import com.nedap.archie.rm.datavalues.DvText;
+import com.nedap.archie.rm.datavalues.encapsulated.DvParsable;
+import com.nedap.archie.rm.datavalues.quantity.datetime.DvDateTime;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;

@@ -1,6 +1,5 @@
 package com.nedap.archie.aom.primitives;
 
-import java.time.Duration;
 import java.time.temporal.TemporalAmount;
 
 /**

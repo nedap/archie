@@ -1,8 +1,8 @@
 package com.nedap.archie.rm.composition;
 
 import com.nedap.archie.rm.datastructures.ItemStructure;
-import com.nedap.archie.rm.datavalues.quantity.datetime.DvDateTime;
 import com.nedap.archie.rm.datavalues.DvCodedText;
+import com.nedap.archie.rm.datavalues.quantity.datetime.DvDateTime;
 
 import javax.annotation.Nullable;
 
