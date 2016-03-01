@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 /**
  * TODO: both used in AOM and RM, but both are different - ArchetypeId and ArchetypeHRID. Problem: they are both the same
  * but slightly different
- * 
+ *
  * Created by pieter.bos on 15/10/15.
  */
 public class ArchetypeID extends ArchetypeModelObject {
