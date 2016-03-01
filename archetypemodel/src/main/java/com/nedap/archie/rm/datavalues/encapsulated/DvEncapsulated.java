@@ -6,7 +6,7 @@ import com.nedap.archie.rm.datavalues.DataValue;
 /**
  * Created by pieter.bos on 04/11/15.
  */
-public class DvEncapsulated extends DataValue {
+public abstract class DvEncapsulated extends DataValue {
     private CodePhrase charset;
     private CodePhrase language;
 

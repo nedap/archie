@@ -8,8 +8,6 @@ import com.nedap.archie.adlparser.antlr.AdlParser;
 import com.nedap.archie.adlparser.antlr.AdlParser.*;
 import com.nedap.archie.adlparser.odin.OdinObjectParser;
 import com.nedap.archie.adlparser.odin.OdinToJsonConverter;
-import com.nedap.archie.adlparser.treewalkers.CComplexObjectParser;
-import com.nedap.archie.adlparser.treewalkers.TerminologyParser;
 import com.nedap.archie.aom.*;
 import com.nedap.archie.aom.terminology.ArchetypeTerminology;
 import org.antlr.v4.runtime.tree.TerminalNode;
@@ -83,8 +81,8 @@ public class ADLListener extends AdlBaseListener {
 
     private void parseArchetypeHRID(TerminalNode hrId) {
         if(hrId != null) {
-            ArchetypeHRID archetypeHRID = new ArchetypeHRID(hrId.getText());
-            archetype.setArchetypeId(archetypeHRID);
+            ArchetypeID archetypeID = new ArchetypeID(hrId.getText());
+            archetype.setArchetypeId(archetypeID);
         }
     }
 

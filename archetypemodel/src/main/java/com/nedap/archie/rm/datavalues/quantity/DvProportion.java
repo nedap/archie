@@ -3,10 +3,11 @@ package com.nedap.archie.rm.datavalues.quantity;
 import javax.annotation.Nullable;
 
 /**
- * TODO: this should extend PROPORTION_KIND - find out why and find a way to implement wihtout m,ultiple inheritance.
+ * TODO: This does not implement PROPORTION KIND, because multiple inheritance - won't work.
+ * It does have a type=proportion kind enum
  * Created by pieter.bos on 04/11/15.
  */
-public class DvProportion extends DvAmount {
+public class DvProportion extends DvAmount<Double> {
 
     private double numerator;
     private double denominator;

@@ -1,5 +1,6 @@
 package com.nedap.archie.rm.composition;
 
+import com.nedap.archie.rm.archetypes.Pathable;
 import com.nedap.archie.rm.datastructures.ItemStructure;
 import com.nedap.archie.rm.datavalues.DvCodedText;
 import com.nedap.archie.rm.datavalues.quantity.datetime.DvDateTime;
@@ -9,7 +10,7 @@ import javax.annotation.Nullable;
 /**
  * Created by pieter.bos on 04/11/15.
  */
-public class EventContext {
+public class EventContext extends Pathable {
 
     private DvDateTime startTime;
     @Nullable

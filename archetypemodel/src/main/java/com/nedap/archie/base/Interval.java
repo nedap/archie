@@ -1,7 +1,7 @@
 package com.nedap.archie.base;
 
+import javax.annotation.Nullable;
 import java.time.Duration;
-import java.time.chrono.ChronoPeriod;
 import java.time.temporal.TemporalAmount;
 import java.util.Objects;
 
@@ -10,7 +10,9 @@ import java.util.Objects;
  */
 public class Interval<T> {
 
+    @Nullable
     T lower;
+    @Nullable
     T upper;
     boolean lowerUnbounded = false;
     boolean upperUnbounded = false;

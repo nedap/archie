@@ -1,5 +1,7 @@
 package com.nedap.archie.rm.datatypes;
 
+import com.nedap.archie.rm.RMObject;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -7,7 +9,7 @@ import java.util.regex.Pattern;
  * TODO: reuse archetype model TerminologyCode? Thing is, that doesn't constrain as nicely with the archetype model...
  * Created by pieter.bos on 04/11/15.
  */
-public class CodePhrase {
+public class CodePhrase extends RMObject {
 
     private TerminologyId terminologyId;
     private String codeString;

@@ -1,5 +1,6 @@
 package com.nedap.archie.rm.datavalues;
 
+import com.nedap.archie.rm.RMObject;
 import com.nedap.archie.rm.datatypes.CodePhrase;
 
 import javax.annotation.Nullable;
@@ -7,7 +8,7 @@ import javax.annotation.Nullable;
 /**
  * Created by pieter.bos on 04/11/15.
  */
-public class TermMapping {
+public class TermMapping extends RMObject {
     /**
      * This is an interesting one, that could be implemented with an enum
      * //TODO: look at it

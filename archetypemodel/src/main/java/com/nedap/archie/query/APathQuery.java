@@ -1,27 +1,22 @@
 package com.nedap.archie.query;
 
 
-import com.nedap.archie.aom.CObject;
-import com.nedap.archie.rm.archetypes.Locatable;
-import com.nedap.archie.rm.archetypes.Pathable;
-import com.nedap.archie.util.NamingUtil;
-import com.nedap.archie.xpath.antlr.XPathParser;
-import com.nedap.archie.xpath.antlr.XPathParser.*;
-import com.nedap.archie.xpath.antlr.XPathLexer;
 import com.nedap.archie.aom.ArchetypeModelObject;
 import com.nedap.archie.aom.CAttribute;
 import com.nedap.archie.aom.CComplexObject;
-
+import com.nedap.archie.paths.PathSegment;
+import com.nedap.archie.rm.archetypes.Locatable;
+import com.nedap.archie.util.NamingUtil;
+import com.nedap.archie.xpath.antlr.XPathLexer;
+import com.nedap.archie.xpath.antlr.XPathParser;
+import com.nedap.archie.xpath.antlr.XPathParser.*;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
-import com.nedap.archie.paths.PathSegment;
-
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 /**

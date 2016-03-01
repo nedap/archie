@@ -1,7 +1,5 @@
 package com.nedap.archie.rules;
 
-import com.nedap.archie.aom.ArchetypeModelObject;
-
 /**
  * Assertion object. For now contains all the text of the assertions, and not the parsed form
  * Created by pieter.bos on 15/10/15.

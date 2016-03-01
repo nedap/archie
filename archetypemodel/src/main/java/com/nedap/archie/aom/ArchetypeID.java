@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 /**
  * Created by pieter.bos on 15/10/15.
  */
-public class ArchetypeHRID extends ArchetypeModelObject {
+public class ArchetypeID extends ArchetypeModelObject {
 
     private String idValue;
 
@@ -20,11 +20,11 @@ public class ArchetypeHRID extends ArchetypeModelObject {
     private String buildCount;
 
 
-    public ArchetypeHRID() {
+    public ArchetypeID() {
 
     }
 
-    public ArchetypeHRID(String value) {
+    public ArchetypeID(String value) {
         this.idValue = value;
 
         Pattern p = Pattern.compile("((?<namespace>.*)::)?(?<publisher>.*)-(?<package>.*)-(?<class>.*)\\.(?<concept>.*)\\.v(?<version>.*)");

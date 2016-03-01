@@ -8,7 +8,7 @@ import javax.annotation.Nullable;
 /**
  * Created by pieter.bos on 04/11/15.
  */
-public class DvMultimedia {
+public class DvMultimedia extends DvEncapsulated {
     @Nullable
     private String alternateText;
     @Nullable
