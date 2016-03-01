@@ -8,6 +8,7 @@ import org.junit.Test;
 import java.time.Duration;
 import java.time.Period;
 import java.time.YearMonth;
+import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAmount;
 
 import static org.junit.Assert.assertEquals;
@@ -79,7 +80,8 @@ public class TemporalConstraintParserTest extends PrimitivesConstraintParserTest
         archetype = parser.parse(TemporalConstraintParserTest.class.getResourceAsStream("/adl2-tests/features/aom_structures/basic/openEHR-TEST_PKG-WHOLE.assumed_values.v1.adls"));
         CDate dateAttr4 = getAttribute("date_attr4");
         assertEquals("yyyy-??-XX", dateAttr4.getPatternedConstraint());
-        assertEquals(YearMonth.of(1995, 3), dateAttr4.getAssumedValue());
+        assertEquals(1995, dateAttr4.getAssumedValue().get(ChronoField.YEAR));
+        assertEquals(3, dateAttr4.getAssumedValue().get(ChronoField.MONTH_OF_YEAR));
 
 
     }

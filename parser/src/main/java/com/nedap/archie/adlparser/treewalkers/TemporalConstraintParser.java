@@ -15,8 +15,14 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Period;
 import java.time.YearMonth;
+import java.time.chrono.IsoChronology;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
+import java.time.temporal.ChronoField;
 import java.time.temporal.Temporal;
+import java.time.temporal.TemporalAccessor;
 import java.time.temporal.TemporalAmount;
 
 /**
@@ -26,6 +32,69 @@ public class TemporalConstraintParser extends BaseTreeWalker {
 
     public TemporalConstraintParser(ADLParserErrors errors) {
         super(errors);
+    }
+
+    public static final DateTimeFormatter ISO_8601_DATE;
+    static {
+        ISO_8601_DATE = new DateTimeFormatterBuilder()
+                .parseCaseInsensitive()
+                .appendValue(ChronoField.YEAR)
+                .optionalStart()
+                .appendLiteral('-')
+                .appendValue(ChronoField.MONTH_OF_YEAR)
+                .optionalStart()
+                .appendLiteral('-')
+                .appendValue(ChronoField.DAY_OF_MONTH)
+                .optionalEnd()
+                .optionalEnd()
+                .toFormatter();
+    }
+
+    public static final DateTimeFormatter ISO_8601_DATE_TIME;
+    static {
+        ISO_8601_DATE_TIME = new DateTimeFormatterBuilder()
+                .parseCaseInsensitive()
+                .append(DateTimeFormatter.ISO_LOCAL_DATE)
+                .appendLiteral('T')
+                .appendValue(ChronoField.HOUR_OF_DAY)
+                .optionalStart()
+                .appendLiteral(':')
+                .appendValue(ChronoField.MINUTE_OF_HOUR)
+                .optionalStart()
+                .appendLiteral(':')
+                .appendValue(ChronoField.SECOND_OF_MINUTE)
+                .optionalStart()
+                .appendLiteral(',')
+                .appendFraction(ChronoField.MICRO_OF_SECOND, 0, 6, false)
+                .optionalStart()
+                .appendOffset("+HHmm", "Z")
+                .optionalEnd()
+                .optionalEnd()
+                .optionalEnd()
+                .toFormatter();
+    }
+
+    public static final DateTimeFormatter ISO_8601_TIME;
+    static {
+        ISO_8601_TIME = new DateTimeFormatterBuilder()
+                .parseCaseInsensitive()
+                .appendValue(ChronoField.HOUR_OF_DAY)
+                .optionalStart()
+                .appendLiteral(':')
+                .appendValue(ChronoField.MINUTE_OF_HOUR)
+                .optionalStart()
+                .appendLiteral(':')
+                .appendValue(ChronoField.SECOND_OF_MINUTE)
+                .optionalStart()
+                .appendLiteral(',')
+                .appendFraction(ChronoField.MICRO_OF_SECOND, 0, 6, false)
+                .optionalStart()
+                .appendOffset("+HHmm", "Z")
+                .optionalEnd()
+                .optionalEnd()
+                .optionalEnd()
+                .optionalEnd()
+                .toFormatter();
     }
 
     public CDuration parseCDuration(C_durationContext context) {
@@ -168,7 +237,7 @@ public class TemporalConstraintParser extends BaseTreeWalker {
         }
 
         if(result.getConstraint().size() == 1) {
-            Interval<LocalDateTime> interval = result.getConstraint().get(0);
+            Interval<TemporalAccessor> interval = result.getConstraint().get(0);
             if(interval.getLower() != null && interval.getUpper() != null && interval.getLower().equals(interval.getUpper())) {
                 result.setAssumedValue(interval.getLower());
                 result.setDefaultValue(interval.getLower());
@@ -178,8 +247,8 @@ public class TemporalConstraintParser extends BaseTreeWalker {
         return result;
     }
 
-    private Interval<LocalDateTime> parseDateTimeInterval(Date_time_interval_valueContext context) {
-        Interval<LocalDateTime> interval = null;
+    private Interval<TemporalAccessor> parseDateTimeInterval(Date_time_interval_valueContext context) {
+        Interval<TemporalAccessor> interval = null;
         if(context.relop() != null) {
             interval = parseRelOpDateTimeInterval(context);
         } else {
@@ -201,9 +270,9 @@ public class TemporalConstraintParser extends BaseTreeWalker {
         return interval;
     }
 
-    private Interval<LocalDateTime> parseRelOpDateTimeInterval(Date_time_interval_valueContext context) {
-        Interval<LocalDateTime> interval = new Interval<>();
-        LocalDateTime datetime = parseDateTimeValue(context.date_time_value(0));
+    private Interval<TemporalAccessor> parseRelOpDateTimeInterval(Date_time_interval_valueContext context) {
+        Interval<TemporalAccessor> interval = new Interval<>();
+        TemporalAccessor datetime = parseDateTimeValue(context.date_time_value(0));
         switch(context.relop().getText()) {
             case "<":
                 interval.setUpperIncluded(false);
@@ -222,18 +291,16 @@ public class TemporalConstraintParser extends BaseTreeWalker {
     }
 
     private void parseDateTime(CDateTime result, Date_time_valueContext datetimeValueContext) {
-        LocalDateTime datetime = parseDateTimeValue(datetimeValueContext);
-        Interval<LocalDateTime> constraint = new Interval<>();
+        TemporalAccessor datetime = parseDateTimeValue(datetimeValueContext);
+        Interval<TemporalAccessor> constraint = new Interval<>();
         constraint.setLower(datetime);
         constraint.setUpper(datetime);
         result.addConstraint(constraint);
     }
 
-    private LocalDateTime parseDateTimeValue(AdlParser.Date_time_valueContext context) {
+    private TemporalAccessor parseDateTimeValue(AdlParser.Date_time_valueContext context) {
         try {
-            String text = context.getText();
-            text = text.replace(',', '.');//iso 8601 says ss.sss. openehr for some reason does ss,sss
-            return LocalDateTime.parse(text);
+            return (TemporalAccessor) ISO_8601_DATE_TIME.parse(context.getText());
         } catch (DateTimeParseException e) {
             throw new IllegalArgumentException(e.getMessage() + ":" + context.getText());
         }
@@ -273,7 +340,7 @@ public class TemporalConstraintParser extends BaseTreeWalker {
         }
 
         if(result.getConstraint().size() == 1) {
-            Interval<LocalTime> interval = result.getConstraint().get(0);
+            Interval<TemporalAccessor> interval = result.getConstraint().get(0);
             if(interval.getLower() != null && interval.getUpper() != null && interval.getLower().equals(interval.getUpper())) {
                 result.setAssumedValue(interval.getLower());
                 result.setDefaultValue(interval.getLower());
@@ -283,8 +350,8 @@ public class TemporalConstraintParser extends BaseTreeWalker {
         return result;
     }
 
-    private Interval<LocalTime> parseTimeInterval(Time_interval_valueContext context) {
-        Interval<LocalTime> interval = null;
+    private Interval<TemporalAccessor> parseTimeInterval(Time_interval_valueContext context) {
+        Interval<TemporalAccessor> interval = null;
         if(context.relop() != null) {
             interval = parseRelOpTimeInterval(context);
         } else {
@@ -306,9 +373,9 @@ public class TemporalConstraintParser extends BaseTreeWalker {
         return interval;
     }
 
-    private Interval<LocalTime> parseRelOpTimeInterval(Time_interval_valueContext context) {
-        Interval<LocalTime> interval = new Interval<>();
-        LocalTime datetime = parseTimeValue(context.time_value(0));
+    private Interval<TemporalAccessor> parseRelOpTimeInterval(Time_interval_valueContext context) {
+        Interval<TemporalAccessor> interval = new Interval<>();
+        TemporalAccessor datetime = parseTimeValue(context.time_value(0));
         switch(context.relop().getText()) {
             case "<":
                 interval.setUpperIncluded(false);
@@ -327,18 +394,16 @@ public class TemporalConstraintParser extends BaseTreeWalker {
     }
 
     private void parseTime(CTime result, Time_valueContext context) {
-        LocalTime datetime = parseTimeValue(context);
-        Interval<LocalTime> constraint = new Interval<>();
+        TemporalAccessor datetime = parseTimeValue(context);
+        Interval<TemporalAccessor> constraint = new Interval<>();
         constraint.setLower(datetime);
         constraint.setUpper(datetime);
         result.addConstraint(constraint);
     }
 
-    private LocalTime parseTimeValue(Time_valueContext context) {
+    private TemporalAccessor parseTimeValue(Time_valueContext context) {
         try {
-            String text = context.getText();
-            text = text.replace(',', '.');//convert to java iso 8601 format
-            return LocalTime.parse(text);
+            return (TemporalAccessor) ISO_8601_TIME.parse(context.getText());
         } catch (DateTimeParseException e) {
             throw new IllegalArgumentException(e.getMessage() + ":" + context.getText());
         }
@@ -377,7 +442,7 @@ public class TemporalConstraintParser extends BaseTreeWalker {
         }
 
         if(result.getConstraint().size() == 1) {
-            Interval<Temporal> interval = result.getConstraint().get(0);
+            Interval<TemporalAccessor> interval = result.getConstraint().get(0);
             if(interval.getLower() != null && interval.getUpper() != null && interval.getLower().equals(interval.getUpper())) {
                 result.setAssumedValue(interval.getLower());
                 result.setDefaultValue(interval.getLower());
@@ -387,8 +452,8 @@ public class TemporalConstraintParser extends BaseTreeWalker {
         return result;
     }
 
-    private Interval<Temporal> parseDateInterval(Date_interval_valueContext context) {
-        Interval<Temporal> interval = null;
+    private Interval<TemporalAccessor> parseDateInterval(Date_interval_valueContext context) {
+        Interval<TemporalAccessor> interval = null;
         if(context.relop() != null) {
             interval = parseRelOpDateInterval(context);
         } else {
@@ -410,9 +475,9 @@ public class TemporalConstraintParser extends BaseTreeWalker {
         return interval;
     }
 
-    private Interval<Temporal> parseRelOpDateInterval(Date_interval_valueContext context) {
-        Interval<Temporal> interval = new Interval<>();
-        Temporal duration = parseDateValue(context.date_value().get(0));
+    private Interval<TemporalAccessor> parseRelOpDateInterval(Date_interval_valueContext context) {
+        Interval<TemporalAccessor> interval = new Interval<>();
+        TemporalAccessor duration = parseDateValue(context.date_value().get(0));
         switch(context.relop().getText()) {
             case "<":
                 interval.setUpperIncluded(false);
@@ -431,24 +496,16 @@ public class TemporalConstraintParser extends BaseTreeWalker {
     }
 
     private void parseDate(CDate result, Date_valueContext durationValueContext) {
-        Temporal duration = parseDateValue(durationValueContext);
-        Interval<Temporal> constraint = new Interval<>();
+        TemporalAccessor duration = parseDateValue(durationValueContext);
+        Interval<TemporalAccessor> constraint = new Interval<>();
         constraint.setLower(duration);
         constraint.setUpper(duration);
         result.addConstraint(constraint);
     }
 
-    private Temporal parseDateValue(AdlParser.Date_valueContext context) {
+    private TemporalAccessor parseDateValue(AdlParser.Date_valueContext context) {
         try {
-            String text = context.getText();
-            if(text.matches(".+-.+-.+")) {
-                return LocalDate.parse(context.getText());
-            } else if (text.matches(".+-.+")) {
-                return YearMonth.parse(context.getText());
-            } else {
-                throw new IllegalArgumentException("unexpected date format: " + context.getText());
-            }
-
+            return (TemporalAccessor) ISO_8601_DATE.parse(context.getText());
         } catch (DateTimeParseException e) {
             throw new IllegalArgumentException(e.getMessage() + ":" + context.getText());
         }

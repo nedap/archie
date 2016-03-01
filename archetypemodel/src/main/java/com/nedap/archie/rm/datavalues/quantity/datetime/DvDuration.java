@@ -3,21 +3,25 @@ package com.nedap.archie.rm.datavalues.quantity.datetime;
 import com.nedap.archie.rm.datavalues.SingleValuedDataValue;
 import com.nedap.archie.rm.datavalues.quantity.DvAmount;
 
+import java.time.LocalTime;
+import java.time.temporal.TemporalAmount;
+
 /**
  * TODO: magnitude of duration is not defined properly
  * Created by pieter.bos on 04/11/15.
  */
-public class DvDuration extends DvAmount<Long> implements SingleValuedDataValue<String> {
+public class DvDuration extends DvAmount<Long> implements SingleValuedDataValue<TemporalAmount> {
 
-    private String value;
+    private TemporalAmount value;
 
     @Override
-    public String getValue() {
+    public TemporalAmount getValue() {
         return value;
     }
 
     @Override
-    public void setValue(String value) {
+    public void setValue(TemporalAmount value) {
         this.value = value;
     }
+
 }

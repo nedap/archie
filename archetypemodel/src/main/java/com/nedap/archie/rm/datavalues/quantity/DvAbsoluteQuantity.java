@@ -3,5 +3,5 @@ package com.nedap.archie.rm.datavalues.quantity;
 /**
  * Created by pieter.bos on 04/11/15.
  */
-public class DvAbsoluteQuantity<MagnitudeType  extends Comparable> extends  DvQuantified<DvAmount,MagnitudeType> {
+public abstract class DvAbsoluteQuantity<AccuracyType extends DvAmount, MagnitudeType  extends Comparable> extends  DvQuantified<AccuracyType,MagnitudeType> {
 }
