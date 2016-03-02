@@ -6,22 +6,23 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.temporal.Temporal;
+import java.time.temporal.TemporalAccessor;
 
 /**
- * TODO: implement java.time.Temporal for this
+ * TODO: implement java.time.Temporal for this object?
  * Created by pieter.bos on 04/11/15.
  */
-public class DvDateTime extends DvTemporal<Long> implements SingleValuedDataValue<Temporal> {
+public class DvDateTime extends DvTemporal<Long> implements SingleValuedDataValue<TemporalAccessor> {
 
-    private Temporal value;
+    private TemporalAccessor value;
 
     @Override
-    public Temporal getValue() {
+    public TemporalAccessor getValue() {
         return value;
     }
 
     @Override
-    public void setValue(Temporal value) {
+    public void setValue(TemporalAccessor value) {
         this.value = value;
     }
 

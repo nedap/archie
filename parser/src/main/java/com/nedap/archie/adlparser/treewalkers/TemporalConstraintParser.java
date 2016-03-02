@@ -13,8 +13,11 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.OffsetTime;
 import java.time.Period;
+import java.time.Year;
 import java.time.YearMonth;
+import java.time.ZonedDateTime;
 import java.time.chrono.IsoChronology;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
@@ -298,14 +301,6 @@ public class TemporalConstraintParser extends BaseTreeWalker {
         result.addConstraint(constraint);
     }
 
-    private TemporalAccessor parseDateTimeValue(AdlParser.Date_time_valueContext context) {
-        try {
-            return (TemporalAccessor) ISO_8601_DATE_TIME.parse(context.getText());
-        } catch (DateTimeParseException e) {
-            throw new IllegalArgumentException(e.getMessage() + ":" + context.getText());
-        }
-    }
-
 
     public CTime parseCTime(C_timeContext context) {
         //TODO: surround with try catch, do a nice error reporting with line numbers and other nice messages here :)
@@ -401,13 +396,7 @@ public class TemporalConstraintParser extends BaseTreeWalker {
         result.addConstraint(constraint);
     }
 
-    private TemporalAccessor parseTimeValue(Time_valueContext context) {
-        try {
-            return (TemporalAccessor) ISO_8601_TIME.parse(context.getText());
-        } catch (DateTimeParseException e) {
-            throw new IllegalArgumentException(e.getMessage() + ":" + context.getText());
-        }
-    }
+
 
     public CDate parseCDate(C_dateContext context) {
         //TODO: surround with try catch, do a nice error reporting with line numbers and other nice messages here :)
@@ -442,7 +431,7 @@ public class TemporalConstraintParser extends BaseTreeWalker {
         }
 
         if(result.getConstraint().size() == 1) {
-            Interval<TemporalAccessor> interval = result.getConstraint().get(0);
+            Interval<Temporal> interval = result.getConstraint().get(0);
             if(interval.getLower() != null && interval.getUpper() != null && interval.getLower().equals(interval.getUpper())) {
                 result.setAssumedValue(interval.getLower());
                 result.setDefaultValue(interval.getLower());
@@ -452,8 +441,8 @@ public class TemporalConstraintParser extends BaseTreeWalker {
         return result;
     }
 
-    private Interval<TemporalAccessor> parseDateInterval(Date_interval_valueContext context) {
-        Interval<TemporalAccessor> interval = null;
+    private Interval<Temporal> parseDateInterval(Date_interval_valueContext context) {
+        Interval<Temporal> interval = null;
         if(context.relop() != null) {
             interval = parseRelOpDateInterval(context);
         } else {
@@ -475,9 +464,9 @@ public class TemporalConstraintParser extends BaseTreeWalker {
         return interval;
     }
 
-    private Interval<TemporalAccessor> parseRelOpDateInterval(Date_interval_valueContext context) {
-        Interval<TemporalAccessor> interval = new Interval<>();
-        TemporalAccessor duration = parseDateValue(context.date_value().get(0));
+    private Interval<Temporal> parseRelOpDateInterval(Date_interval_valueContext context) {
+        Interval<Temporal> interval = new Interval<>();
+        Temporal duration = parseDateValue(context.date_value().get(0));
         switch(context.relop().getText()) {
             case "<":
                 interval.setUpperIncluded(false);
@@ -496,16 +485,46 @@ public class TemporalConstraintParser extends BaseTreeWalker {
     }
 
     private void parseDate(CDate result, Date_valueContext durationValueContext) {
-        TemporalAccessor duration = parseDateValue(durationValueContext);
-        Interval<TemporalAccessor> constraint = new Interval<>();
+        Temporal duration = parseDateValue(durationValueContext);
+        Interval<Temporal> constraint = new Interval<>();
         constraint.setLower(duration);
         constraint.setUpper(duration);
         result.addConstraint(constraint);
     }
 
-    private TemporalAccessor parseDateValue(AdlParser.Date_valueContext context) {
+    private TemporalAccessor parseDateTimeValue(AdlParser.Date_time_valueContext context) {
         try {
-            return (TemporalAccessor) ISO_8601_DATE.parse(context.getText());
+            return ISO_8601_DATE_TIME.parseBest(context.getText(), ZonedDateTime::from, LocalDateTime::from);
+        } catch (DateTimeParseException e) {
+            try {
+                //Not parseable as a standard public object from datetime. We do not implement our own yet (we could!)
+                //so fallback to the Parsed object. The Parsed object is package-private, so cannot be added as a reference
+                //to the parseBest query, unfortunately.
+                return ISO_8601_DATE_TIME.parse(context.getText());
+            } catch (DateTimeParseException e1) {
+                throw new IllegalArgumentException(e1.getMessage() + ":" + context.getText());
+            }
+        }
+    }
+
+    private TemporalAccessor parseTimeValue(Time_valueContext context) {
+        try {
+            return ISO_8601_TIME.parseBest(context.getText(), OffsetTime::from, LocalTime::from);
+        } catch (DateTimeParseException e) {
+            try {
+                //Not parseable as a standard public object from datetime. We do not implement our own yet (we could!)
+                //so fallback to the Parsed object. The Parsed object is package-private, so cannot be added as a reference
+                //to the parseBest query, unfortunately.
+                return ISO_8601_TIME.parse(context.getText());
+            } catch (DateTimeParseException e1) {
+                throw new IllegalArgumentException(e1.getMessage() + ":" + context.getText());
+            }
+        }
+    }
+
+    private Temporal parseDateValue(AdlParser.Date_valueContext context) {
+        try {
+            return (Temporal) ISO_8601_DATE.parseBest(context.getText(), LocalDate::from, YearMonth::from, Year::from);
         } catch (DateTimeParseException e) {
             throw new IllegalArgumentException(e.getMessage() + ":" + context.getText());
         }

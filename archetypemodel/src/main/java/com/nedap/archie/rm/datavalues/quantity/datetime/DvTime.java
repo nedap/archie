@@ -4,26 +4,28 @@ import com.nedap.archie.rm.datavalues.SingleValuedDataValue;
 
 import java.time.LocalTime;
 import java.time.temporal.Temporal;
+import java.time.temporal.TemporalAccessor;
 
 /**
- * * TODO: implement java.time.Temporal for this
+ * TODO: implement java.time.Temporal for this object?
  *
  * Deviation from the standard: the standard uses a String to represent a value here.
  * We do not, we use the java time types. Perhaps we will add a parser later.
+ * possible issue: people constraining the String field of DvTime directly instead of using a Ctime. Ask people if this is an issue.
  *
  * Created by pieter.bos on 04/11/15.
  */
-public class DvTime extends DvTemporal<Double> implements SingleValuedDataValue<Temporal> {
+public class DvTime extends DvTemporal<Double> implements SingleValuedDataValue<TemporalAccessor> {
 
-    private Temporal value;
+    private TemporalAccessor value;
 
     @Override
-    public void setValue(Temporal value) {
+    public void setValue(TemporalAccessor value) {
         this.value = value;
     }
 
     @Override
-    public Temporal getValue() {
+    public TemporalAccessor getValue() {
         return value;
     }
 
