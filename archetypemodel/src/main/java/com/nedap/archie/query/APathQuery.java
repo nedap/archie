@@ -140,8 +140,13 @@ public class APathQuery {
                             if(number != 1) {
                                 return null;
                             }
-                        } else {
-                            throw new IllegalArgumentException("cannot handle RM-queries with node names or archetype references yet");
+                        } else if (segment.hasArchetypeRef()) {
+                            //operational templates in RM Objects have their archetype node ID set to an archetype ref. That
+                            //we support. Other things not so much
+                            if (!locatable.getArchetypeNodeId().equals(segment.getNodeId())) {
+                                throw new IllegalArgumentException("cannot handle RM-queries with node names or archetype references yet");
+                            }
+
                         }
                     }
                 } else if (segment.hasNumberIndex()) {
@@ -185,6 +190,11 @@ public class APathQuery {
                     return o;
                 }
             } else if (segment.hasArchetypeRef()) {
+                //operational templates in RM Objects have their archetype node ID set to an archetype ref. That
+                //we support. Other things not so much
+                if (locatable.getArchetypeNodeId().equals(segment.getNodeId())) {
+                    return o;
+                }
                 throw new IllegalArgumentException("cannot handle RM-queries with archetype references yet");
             } else {
                 if(equalsName(locatable.getName(), segment.getNodeId())) {
