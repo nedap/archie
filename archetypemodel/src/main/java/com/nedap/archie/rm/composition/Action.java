@@ -29,6 +29,7 @@ public class Action extends CareEntry {
 
     public void setDescription(ItemStructure description) {
         this.description = description;
+        description.setParent(this);
     }
 
     public IsmTransition getIsmTransition() {
@@ -37,5 +38,6 @@ public class Action extends CareEntry {
 
     public void setIsmTransition(IsmTransition ismTransition) {
         this.ismTransition = ismTransition;
+        ismTransition.setParent(this);
     }
 }

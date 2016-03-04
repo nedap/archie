@@ -16,9 +16,13 @@ public class Section extends ContentItem {
 
     public void setItems(List<ContentItem> items) {
         this.items = items;
+        for(ContentItem item:items) {
+            item.setParent(this);
+        }
     }
 
     public void addItem(ContentItem item) {
         this.items.add(item);
+        item.setParent(this);
     }
 }

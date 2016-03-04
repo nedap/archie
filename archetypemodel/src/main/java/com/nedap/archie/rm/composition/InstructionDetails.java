@@ -38,5 +38,6 @@ public class InstructionDetails extends Pathable {
 
     public void setWfDetails(ItemStructure wfDetails) {
         this.wfDetails = wfDetails;
+        wfDetails.setParent(this);
     }
 }

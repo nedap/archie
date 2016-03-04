@@ -52,5 +52,13 @@ public class Instruction extends CareEntry {
 
     public void setActivities(List<Activity> activities) {
         this.activities = activities;
+        for(Activity activity:activities) {
+            activity.setParent(this);
+        }
+    }
+
+    public void addActivity(Activity activity) {
+        activities.add(activity);
+        activity.setParent(this);
     }
 }

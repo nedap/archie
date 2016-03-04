@@ -13,6 +13,8 @@ public class ItemSingle extends ItemStructure<Item> {
     }
 
     public void setITem(Item item) {
-        getItems().set(0, item); this.item = item;
+        getItems().set(0, item);
+        this.item = item;
+        item.setParent(this);
     }
 }

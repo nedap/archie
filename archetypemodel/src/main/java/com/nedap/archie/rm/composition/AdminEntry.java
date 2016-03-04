@@ -14,5 +14,6 @@ public class AdminEntry extends Entry {
 
     public void setData(ItemStructure data) {
         this.data = data;
+        data.setParent(this);
     }
 }

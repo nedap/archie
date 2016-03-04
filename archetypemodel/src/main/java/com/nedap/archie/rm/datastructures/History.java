@@ -11,6 +11,7 @@ import java.util.List;
  * Created by pieter.bos on 04/11/15.
  */
 public class History<Type extends ItemStructure> extends DataStructure {
+
     private DvDateTime origin;
     @Nullable
     private DvDuration period;
@@ -54,10 +55,14 @@ public class History<Type extends ItemStructure> extends DataStructure {
 
     public void setEvents(List<Event<Type>> events) {
         this.events = events;
+        for(Event event:events) {
+            event.setParent(this);
+        }
     }
 
     public void addEvent(Event<Type> event) {
         events.add(event);
+        event.setParent(this);
     }
 
     @Nullable
@@ -67,5 +72,6 @@ public class History<Type extends ItemStructure> extends DataStructure {
 
     public void setSummary(@Nullable Type summary) {
         this.summary = summary;
+        summary.setParent(this);
     }
 }
