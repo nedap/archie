@@ -59,15 +59,6 @@ public class Flattener {
                 //we'll flatten them later when we need them, otherwise, you run into problems with archetypes
                 //not yet added to repository while we already need them
                 repository.addArchetype(overlay);
-
-               /* try {
-                    ObjectMapper objectMapper = new ObjectMapper();
-                    objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
-
-                    System.out.println(objectMapper.writeValueAsString(flattened));
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }*/
             }
         }
 
@@ -88,7 +79,8 @@ public class Flattener {
         //2. fill archetype slots if we are creating an operational template
         flatten(result, child);//TODO: this way around, or the other one? :)
         if(createOperationalTemplate) {
-            fillSlots(result);
+            fillComplexObjectProxies(result);
+            fillArchetypeSlots(result);
         }
         flattenTerminology();
 
@@ -96,7 +88,7 @@ public class Flattener {
         return result;
     }
 
-    private void fillSlots(Archetype result) {
+    private void fillArchetypeSlots(Archetype result) {
 
         Stack<CObject> workList = new Stack<>();
         workList.push(result.getDefinition());
@@ -105,13 +97,40 @@ public class Flattener {
             for(CAttribute attribute:object.getAttributes()) {
                 for(CObject child:attribute.getChildren()) {
                     if(child instanceof CArchetypeRoot) { //use_archetype
-                        this.fillArchetypeRoot((CArchetypeRoot) child);
-                    }
-                    if(object instanceof CComplexObjectProxy) { //use_node
-                        //TODO
+                        fillArchetypeRoot((CArchetypeRoot) child);
                     }
                     workList.push(child);
                 }
+            }
+        }
+    }
+
+    private void fillComplexObjectProxies(Archetype result) {
+
+        Stack<CObject> workList = new Stack<>();
+        workList.push(result.getDefinition());
+        while(!workList.isEmpty()) {
+            CObject object = workList.pop();
+            for(CAttribute attribute:object.getAttributes()) {
+                for(CObject child:attribute.getChildren()) {
+                    if(child instanceof CComplexObjectProxy) { //use_node
+                        fillComplexObjectProxy((CComplexObjectProxy) child);
+                    }
+                    workList.push(child);
+                }
+            }
+        }
+    }
+
+    private void fillComplexObjectProxy(CComplexObjectProxy proxy) {
+        if(createOperationalTemplate) {
+            CObject newObject = new APathQuery(proxy.getTargetPath()).find(proxy.getArchetype().getDefinition());
+            if(newObject == null) {
+                throw new RuntimeException("cannot find target in CComplexObjectProxy");
+            } else {
+                CComplexObject clone = (CComplexObject) newObject.clone();
+                clone.setNodeId(proxy.getNodeId());
+                proxy.getParent().replaceChild(proxy.getNodeId(), clone);
             }
         }
     }

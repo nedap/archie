@@ -6,6 +6,7 @@ import com.nedap.archie.adlparser.ADLParser;
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.CAttribute;
 import com.nedap.archie.aom.CComplexObject;
+import com.nedap.archie.aom.CComplexObjectProxy;
 import com.nedap.archie.aom.CObject;
 import com.nedap.archie.query.APathQuery;
 import org.junit.Before;
@@ -98,6 +99,31 @@ public class FlattenerTest {
 
         System.out.println(objectMapper.writeValueAsString(flattened));
 
+    }
+
+
+    @Test
+    public void useNodeReplacement() throws Exception {
+        Archetype flattened = flattener.flatten(bloodPressureComposition);
+
+        Stack<CObject> worklist = new Stack();
+        worklist.add(flattened.getDefinition());
+        boolean proxyFound = false;
+        while(!worklist.isEmpty()) {
+            CObject object = worklist.pop();
+            if(object.getNodeId().equals("id1065")) {
+                assertFalse(object instanceof CComplexObjectProxy);
+                proxyFound = true;
+                assertNotNull(object.getAttribute("items").getChild("id5"));
+            }
+            for(CAttribute attr:object.getAttributes()) {
+                if(attr.getParent() != object) {
+                    fail("wrong parent found!");
+                }
+                worklist.addAll(attr.getChildren());
+            }
+        }
+        assertTrue("a prox object should have been found", proxyFound);
     }
 
     @Test
