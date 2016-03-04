@@ -47,8 +47,10 @@ public interface ModelConstraintImposer {
 
                     CAttribute defaultAttribute = getDefaultAttribute(object.getRmTypeName(), attribute.getRmAttributeName());
                     if(defaultAttribute == null) {
-                        //TODO: log
-                        logger.info("could not find attribute for " + object.getRmTypeName() + "." + attribute.getRmAttributeName());
+                        if(!(object.getRmTypeName().equals("DV_QUANTITY") && attribute.getRmAttributeName().equals("property"))) {
+                            //the one thing that is defined everywhere, but does not exist in the reference model
+                            logger.info("could not find attribute for " + object.getRmTypeName() + "." + attribute.getRmAttributeName());
+                        }
                     } else {
                         attribute.setMultiple(defaultAttribute.isMultiple());
                         if (attribute.getCardinality() == null) {
