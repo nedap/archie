@@ -17,12 +17,12 @@ public class Cluster extends Item {
     public void setItems(List<Item> items) {
         this.items = items;
         for(Item item:items) {
-            item.setParent(this);
+            setThisAsParent(item);
         }
     }
 
     public void addItem(Item item) {
         items.add(item);
-        item.setParent(this);
+        setThisAsParent(item);
     }
 }

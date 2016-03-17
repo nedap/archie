@@ -14,6 +14,6 @@ public class Evaluation extends CareEntry {
 
     public void setData(ItemStructure data) {
         this.data = data;
-        data.setParent(this);
+        setThisAsParent(data);
     }
 }

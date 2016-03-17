@@ -30,4 +30,14 @@ public class Pathable extends RMObject {
         this.parent = parent;
     }
 
+    /**
+    * Utility method to set this object as the parent of the given child,
+    * if the child is not null
+    */
+    protected void setThisAsParent(Pathable child) {
+        if(child != null) {
+            child.setParent(this);
+        }
+    }
+
 }
