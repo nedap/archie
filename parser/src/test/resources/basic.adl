@@ -60,7 +60,7 @@ definition
 									ELEMENT[id7] occurrences matches {0..*} matches {	-- Comment
 										value matches {
 											DV_QUANTITY[id16] matches {
-													[unit, value] matches {
+													[units, magnitude] matches {
 															[{"kg"}, {|5..300|}],
 															[{"lb"}, {|10..600|}]
 															}

@@ -6,27 +6,21 @@ import java.util.List;
 /**
  * Created by pieter.bos on 15/10/15.
  */
-public class CPrimitiveTuple {
-    private ArchetypeModelObject assumedValue;
-    private List<CPrimitiveObject> members = new ArrayList<>();
+public class CPrimitiveTuple extends CSecondOrder<CPrimitiveObject> {
 
-    public ArchetypeModelObject getAssumedValue() {
-        return assumedValue;
-    }
-
-    public void setAssumedValue(ArchetypeModelObject assumedValue) {
-        this.assumedValue = assumedValue;
-    }
-
-    public List<CPrimitiveObject> getMembers() {
-        return members;
-    }
-
-    public void setMembers(List<CPrimitiveObject> members) {
-        this.members = members;
-    }
-
-    public void addMember(CPrimitiveObject member) {
-        members.add(member);
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        result.append("[");
+        boolean first = true;
+        for(CPrimitiveObject object:getMembers()) {
+            if(!first) {
+                result.append(", ");
+            }
+            first = false;
+            result.append(object.toString());
+        }
+        result.append("]");
+        return result.toString();
     }
 }

@@ -76,5 +76,27 @@ public class CPrimitiveObject<Constraint, ValueType> extends CDefinedObject<Valu
         return false;
     }
 
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        result.append("{");
+        boolean first = true;
+        for(Constraint constraint:constraints) {
+            if(!first) {
+                result.append(", ");
+            }
+            first = false;
+            if(constraint instanceof String) {
+                result.append('"');
+                result.append(((String) constraint).replace("\"", "\\\""));
+                result.append('"');
+            } else {
+                result.append(constraint.toString());
+            }
+        }
+        result.append("}");
+        return result.toString();
+    }
+
 }
 

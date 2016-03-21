@@ -121,8 +121,8 @@ public class DefinitionTest {
 
         List<CAttribute> attributes = rootObject.getAttributes();
         assertEquals(2, attributes.size());
-        assertEquals("unit", attributes.get(0).getRmAttributeName());
-        assertEquals("value", attributes.get(1).getRmAttributeName());
+        assertEquals("units", attributes.get(0).getRmAttributeName());
+        assertEquals("magnitude", attributes.get(1).getRmAttributeName());
 
         CAttributeTuple attributeTuple = rootObject.getAttributeTuples().get(0);
         assertEquals(2, attributeTuple.getTuples().size());
