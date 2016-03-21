@@ -99,8 +99,8 @@ public class CAttributeTuple extends CSecondOrder<CAttribute> {
             if(!first) {
                 result.append(", ");
             }
-            result.append(member.getRmAttributeName());
             first = false;
+            result.append(member.getRmAttributeName());
         }
         result.append("] ∈ {\n");
         first = true;
@@ -108,9 +108,11 @@ public class CAttributeTuple extends CSecondOrder<CAttribute> {
             if(!first) {
                 result.append(",\n");
             }
+            first = false;
+            result.append("\t");
             result.append(tuple.toString());
         }
-        result.append("}");
+        result.append("\n}");
 
         return result.toString();
 

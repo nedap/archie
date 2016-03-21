@@ -76,8 +76,15 @@ public class AttributeTupleConstraintsTest {
         HashMap<String, Object> missingAttribute = new HashMap<>();
         missingAttribute.put("units", "lb");
 
-        //missing attributes are not valid
         assertFalse(attributeTuple.isValid(missingAttribute));
 
+    }
+
+    @Test
+    public void toStringTest() {
+        String toString = attributeTuple.toString();
+        assertTrue(toString.contains("[{\"kg\"}, {|5...300|}],"));
+        assertTrue(toString.contains("[{\"lb\"}, {|10...600|}]"));
+        assertTrue(toString.startsWith("[units, magnitude] ∈ {"));
     }
 }
