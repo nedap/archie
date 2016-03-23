@@ -1,5 +1,9 @@
 package com.nedap.archie.aom;
 
+import com.nedap.archie.util.NamingUtil;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -49,19 +53,39 @@ public class CAttributeTuple extends CSecondOrder<CAttribute> {
         return false;
     }
 
+
     private boolean isValid(CPrimitiveTuple tuple, HashMap<String, Object> values) {
 
-        for(String attributeName:values.keySet()) {
-            int index = getMemberIndex(attributeName);
-            if(index >= 0) { //if not found, that is an extra attribute and that's fine
-                Object value = values.get(attributeName);
-                if(!tuple.getMembers().get(index).isValidValue(value)) {
-                    return false;
-                }
+        int index = 0;
+        for(CAttribute attribute:getMembers()) {
+            String attributeName = attribute.getRmAttributeName();
+            if(!tuple.getMembers().get(index).isValidValue(values.get(attributeName))) {
+                return false;
             }
+            index++;
         }
         return true;
+    }
 
+    /**
+     * Given a reference model object, check if it is valid
+     * return true if and only if the given values are valid.
+     */
+    public boolean isValid(Object value) {
+
+        HashMap<String, Object> members = new HashMap();
+        for(CAttribute attribute:getMembers()) {
+            String getMethodName = NamingUtil.attributeNameToGetMethod(attribute.getRmAttributeName());
+            try {
+                Method method = value.getClass().getMethod(getMethodName);
+                members.put(attribute.getRmAttributeName(), method.invoke(value));
+            } catch (NoSuchMethodException e) {
+                //will be caught later on and return false. throw some exception?
+            } catch (InvocationTargetException | IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return isValid(members);
     }
 
     public CAttribute getMember(String attributeName) {

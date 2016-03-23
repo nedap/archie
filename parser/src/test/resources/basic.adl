@@ -61,8 +61,8 @@ definition
 										value matches {
 											DV_QUANTITY[id16] matches {
 													[units, magnitude] matches {
-															[{"kg"}, {|5..300|}],
-															[{"lb"}, {|10..600|}]
+															[{"kg"}, {|5.0..300.0|}],
+															[{"lb"}, {|10.0..600.0|}]
 															}
 											}
 										}

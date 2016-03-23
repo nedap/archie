@@ -2,11 +2,13 @@ package com.nedap.archie.aom;
 
 import com.nedap.archie.adlparser.ADLParser;
 import com.nedap.archie.query.APathQuery;
+import com.nedap.archie.rm.datavalues.quantity.DvQuantity;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -29,10 +31,10 @@ public class AttributeTupleConstraintsTest {
 
         HashMap<String, Object> kgValid = new HashMap<>();
         kgValid.put("units", "kg");
-        kgValid.put("magnitude", 5l);
+        kgValid.put("magnitude", 5d);
         HashMap<String, Object> lbValid = new HashMap<>();
         lbValid.put("units", "lb");
-        lbValid.put("magnitude", 10l);
+        lbValid.put("magnitude", 10d);
 
         assertTrue(attributeTuple.isValid(kgValid));
         assertTrue(attributeTuple.isValid(lbValid));
@@ -44,14 +46,14 @@ public class AttributeTupleConstraintsTest {
 
         HashMap<String, Object> lbInvalid = new HashMap<>();
         lbInvalid.put("units", "lb");
-        lbInvalid.put("magnitude", 9l);
+        lbInvalid.put("magnitude", 9d);
         HashMap<String, Object> kgInvalid = new HashMap<>();
         kgInvalid.put("units", "kg");
-        kgInvalid.put("magnitude", 301l);
+        kgInvalid.put("magnitude", 301d);
 
         HashMap<String, Object> invalidUnit = new HashMap<>();
         invalidUnit.put("units", "stone");
-        invalidUnit.put("magnitude", 5l);
+        invalidUnit.put("magnitude", 5d);
 
         assertFalse(attributeTuple.isValid(lbInvalid));
         assertFalse(attributeTuple.isValid(kgInvalid));
@@ -63,7 +65,7 @@ public class AttributeTupleConstraintsTest {
     public void tupleConstraintExtraAttribute() throws Exception {
         HashMap<String, Object> extraAttribute = new HashMap<>();
         extraAttribute.put("units", "lb");
-        extraAttribute.put("magnitude", 150l);
+        extraAttribute.put("magnitude", 150d);
         extraAttribute.put("precison", 0.1d);
 
         //any extra attributes can be valid, because they are not constrained by this tuple
@@ -81,10 +83,25 @@ public class AttributeTupleConstraintsTest {
     }
 
     @Test
+    public void withRmObjectValid() throws Exception {
+        DvQuantity valid = new DvQuantity();
+        valid.setUnits("lb");
+        valid.setMagnitude(150d);
+        assertTrue(attributeTuple.isValid(valid));
+    }
+
+    @Test
+    public void withRmObjectInvalid() throws Exception {
+        DvQuantity valid = new DvQuantity();
+        valid.setUnits("kg");
+        valid.setMagnitude(600d);
+        assertFalse(attributeTuple.isValid(valid));
+    }
+
+    @Test
     public void toStringTest() {
-        String toString = attributeTuple.toString();
-        assertTrue(toString.contains("[{\"kg\"}, {|5...300|}],"));
-        assertTrue(toString.contains("[{\"lb\"}, {|10...600|}]"));
-        assertTrue(toString.startsWith("[units, magnitude] ∈ {"));
+        String toString = attributeTuple.toString().replace("\t", "").replace("\n", "");
+        assertEquals("[units, magnitude] ∈ {[{\"kg\"}, {|5.0...300.0|}],[{\"lb\"}, {|10.0...600.0|}]}", toString);
+
     }
 }
