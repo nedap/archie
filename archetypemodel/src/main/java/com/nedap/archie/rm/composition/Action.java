@@ -40,4 +40,12 @@ public class Action extends CareEntry {
         this.ismTransition = ismTransition;
         setThisAsParent(ismTransition);
     }
+
+    public InstructionDetails getInstructionDetails() {
+        return instructionDetails;
+    }
+
+    public void setInstructionDetails(InstructionDetails instructionDetails) {
+        this.instructionDetails = instructionDetails;
+    }
 }

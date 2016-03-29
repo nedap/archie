@@ -4,18 +4,10 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.nedap.archie.aom.CAttribute;
 import com.nedap.archie.aom.CComplexObject;
 import com.nedap.archie.aom.Cardinality;
-import org.reflections.Reflections;
-import org.reflections.scanners.SubTypesScanner;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import static org.reflections.ReflectionUtils.*;
-
-import java.lang.reflect.Field;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -28,8 +20,6 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class ReflectionConstraintImposer implements ModelConstraintImposer {
 
-
-
     /** Contains complex object structure of the specified model. Attributes NEVER will have children. Sorry bout that :)*/
     private Map<String, CComplexObject> objects = new ConcurrentHashMap<>();
 
@@ -41,28 +31,32 @@ public class ReflectionConstraintImposer implements ModelConstraintImposer {
     }
 
     public ReflectionConstraintImposer(String packageName, ClassLoader classLoader) {
-        this(new ConstraintToClassLookup(packageName, classLoader));
+        this(new ArchieRMNamingStrategy(), packageName, classLoader);
     }
 
-    public ReflectionConstraintImposer(ConstraintToClassLookup classLookup) {
-        Map<String, Class> rmTypeNameToClassMap = classLookup.getRmTypeNameToClassMap();
-        for(String rmTypeName:rmTypeNameToClassMap.keySet()) {
-            Class clazz = rmTypeNameToClassMap.get(rmTypeName);
+    public ReflectionConstraintImposer(ModelNamingStrategy strategy, String packageName, ClassLoader classLoader) {
+        this(new ModelInfoLookup(strategy, packageName, classLoader));
+    }
 
+    public ReflectionConstraintImposer(ModelInfoLookup classLookup) {
+        List<RMTypeInfo> rmTypes = classLookup.getAllTypes();
+
+        for(RMTypeInfo typeInfo:rmTypes) {
             CComplexObject object = new CComplexObject();
-            object.setRmTypeName(rmTypeName);
+            object.setRmTypeName(typeInfo.getRmName());
 
-            Set<Field> allFields = getAllFields(clazz);
-            for(Field field:allFields) {
+            for(RMAttributeInfo attributeInfo:typeInfo.getAttributes().values()) {
                 CAttribute attribute = new CAttribute();
                 attribute.setCardinality(new Cardinality(1,1));
                 attribute.setMultiple(false);
-                attribute.setRmAttributeName(classLookup.getRmAttributeName(field));
-                Nullable annotation = field.getAnnotation(Nullable.class);
-                if(annotation != null) {
+                attribute.setRmAttributeName(attributeInfo.getRmName());
+
+                if(attributeInfo.isNullable()) {
+                    //TODO: not correct. Should be existence?
                     attribute.setCardinality(new Cardinality(0,1));
                 }
-                if(Collection.class.isAssignableFrom(field.getType())) {
+
+                if(attributeInfo.getType() instanceof Class && Collection.class.isAssignableFrom((Class) attributeInfo.getType())) {
                     attribute.setCardinality(Cardinality.unbounded());
                     attribute.setMultiple(true);
                 }

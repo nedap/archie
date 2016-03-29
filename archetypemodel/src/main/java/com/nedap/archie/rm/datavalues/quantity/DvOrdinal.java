@@ -25,4 +25,12 @@ public class DvOrdinal extends DvOrdered<DvOrdinal> implements SingleValuedDataV
     public int compareTo(DvOrdinal o) {
         return value.compareTo(o.value);
     }
+
+    public DvCodedText getSymbol() {
+        return symbol;
+    }
+
+    public void setSymbol(DvCodedText symbol) {
+        this.symbol = symbol;
+    }
 }

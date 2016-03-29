@@ -2,11 +2,10 @@ package com.nedap.archie.adlparser.modelconstraints;
 
 import com.nedap.archie.aom.CObject;
 import com.nedap.archie.rm.archetypes.Locatable;
-import com.nedap.archie.util.NamingUtil;
-import org.apache.commons.beanutils.BeanUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashSet;
@@ -18,9 +17,9 @@ import java.util.Set;
  */
 public class RMObjectCreator {
 
-    private final ConstraintToClassLookup classLookup;
+    private final ModelInfoLookup classLookup;
 
-    public RMObjectCreator(ConstraintToClassLookup lookup) {
+    public RMObjectCreator(ModelInfoLookup lookup) {
         this.classLookup = lookup;
     }
 
@@ -40,63 +39,85 @@ public class RMObjectCreator {
 
     public void set(Object object, String rmAttributeName, List<Object> values) {
         try {
-            Field field = classLookup.getField(object.getClass(), rmAttributeName);
-            if(field == null) {
+            RMAttributeInfo attributeInfo = classLookup.getAttributeInfo(object.getClass(), rmAttributeName);
+            if(attributeInfo == null) {
                 throw new IllegalArgumentException(String.format("Attribute %s not known for object %s", rmAttributeName, object.getClass().getSimpleName()));
             }
-            if(Collection.class.isAssignableFrom(field.getType())) {
-                Collection collection = (Collection) newInstance(field);
-                setField(object, field, collection);
-                if(values != null) {
-                    collection.addAll(values);
+
+            Field field = attributeInfo.getField();
+            Type type = attributeInfo.getType();
+            if(type instanceof Class) {
+                Class clazz = (Class) type;
+                if(Collection.class.isAssignableFrom(clazz)) {
+                    Collection collection = (Collection) newInstance(attributeInfo);
+                    setField(object, attributeInfo, collection);
+                    if(values != null) {
+                        collection.addAll(values);
+                    }
+                } else {
+                    setSingleValuedAttribute(object, rmAttributeName, values, attributeInfo);
                 }
             } else {
-                if(values == null || values.isEmpty()) {
-                    setField(object, field, null);
-                } else if(values.size() > 1) {
-                    throw new IllegalArgumentException(String.format("trying to set multiple values for a single valued field, %s %s",
-                                    object.getClass().getSimpleName(), rmAttributeName)
-                    );
-                } else {
-                    setField(object, field, values.get(0));
-                }
+                //primitive value.
+                setSingleValuedAttribute(object, rmAttributeName, values, attributeInfo);
             }
+
         } catch (IllegalAccessException | InstantiationException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
 
     }
 
-    private Object newInstance(Field field) throws InstantiationException, IllegalAccessException {
-        if(field.getType().equals(List.class)) {
-            return new ArrayList<>();
-        } else if (field.getType().equals(Set.class)) {
-            return new LinkedHashSet<>();
+    private void setSingleValuedAttribute(Object object, String rmAttributeName, List<Object> values, RMAttributeInfo attributeInfo) throws InvocationTargetException, IllegalAccessException {
+        if(values == null || values.isEmpty()) {
+            setField(object, attributeInfo, null);
+        } else if(values.size() > 1) {
+            throw new IllegalArgumentException(String.format("trying to set multiple values for a single valued field, %s %s",
+                    object.getClass().getSimpleName(), rmAttributeName)
+            );
         } else {
-            return field.getType().newInstance();
+            setField(object, attributeInfo, values.get(0));
         }
     }
 
-    private void setField(Object object, Field field, Object value) throws InvocationTargetException, IllegalAccessException {
-        BeanUtils.setProperty(object, field.getName(), value);
+    private Object newInstance(RMAttributeInfo attributeInfo) throws InstantiationException, IllegalAccessException {
+        if(attributeInfo.getType().equals(List.class)) {
+            return new ArrayList<>();
+        } else if (attributeInfo.getType().equals(Set.class)) {
+            return new LinkedHashSet<>();
+        } else if(attributeInfo.getType() instanceof Class){
+            return ((Class)attributeInfo.getType()).newInstance();
+        } else {
+            throw new IllegalArgumentException("cannot create collection instanceof " + attributeInfo.toString());
+        }
+    }
+
+    private void setField(Object object, RMAttributeInfo field, Object value) throws InvocationTargetException, IllegalAccessException {
+        field.getSetMethod().invoke(object, value);
 
     }
 
-    public void addElementToList(Object object, String rmAttributeName, Object element) {
+    public void addElementToList(Object object, RMAttributeInfo attributeInfo, Object element) {
         try {
-            Field field = classLookup.getField(object.getClass(), rmAttributeName);
-            Object collectionValue = field.get(object);
-
-            if(Collection.class.isAssignableFrom(field.getType())) {
-                if(collectionValue == null) {
-                    collectionValue = newInstance(field);
-                    setField(object, field, collectionValue);
-                }
-                Collection collection = (Collection) collectionValue;
-                collection.add(element);//TODO: use add method in object instead!
+            if(attributeInfo.getAddMethod() != null) {
+                attributeInfo.getAddMethod().invoke(object, element);
             } else {
-                throw new IllegalArgumentException("trying to add an element to an object with type " + field.getType());
+                Object collectionValue = attributeInfo.getGetMethod().invoke(object);
+                if(!(attributeInfo.getType() instanceof Class)) {
+                    throw new IllegalArgumentException("trying to add an element to an object with type " + attributeInfo.getType());
+                }
+                if(Collection.class.isAssignableFrom((Class) attributeInfo.getType())) {
+                    if(collectionValue == null) {
+                        collectionValue = newInstance(attributeInfo);
+                        setField(object, attributeInfo, collectionValue);
+                    }
+                    Collection collection = (Collection) collectionValue;
+                    collection.add(element);
+                } else {
+                    throw new IllegalArgumentException("trying to add an element to an object with type " + attributeInfo.getType());
+                }
             }
+
         } catch (IllegalAccessException | InstantiationException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }

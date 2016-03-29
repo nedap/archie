@@ -37,4 +37,13 @@ public abstract class DvOrdered<ComparableType> extends DataValue implements Com
     public void addOtherReferenceRange(ReferenceRange range) {
         otherReferenceRanges.add(range);
     }
+
+    @Nullable
+    public CodePhrase getNormalStatus() {
+        return normalStatus;
+    }
+
+    public void setNormalStatus(@Nullable CodePhrase normalStatus) {
+        this.normalStatus = normalStatus;
+    }
 }

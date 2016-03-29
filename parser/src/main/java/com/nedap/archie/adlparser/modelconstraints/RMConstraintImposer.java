@@ -8,7 +8,7 @@ package com.nedap.archie.adlparser.modelconstraints;
 public class RMConstraintImposer extends ReflectionConstraintImposer {
 
     public RMConstraintImposer() {
-        super(new RMConstraintToClassLookup());
+        super(new ArchieRMInfoLookup());
     }
 
 }
