@@ -6,6 +6,8 @@ import com.nedap.archie.aom.CAttribute;
 import com.nedap.archie.aom.CComplexObject;
 import com.nedap.archie.paths.PathSegment;
 import com.nedap.archie.rm.archetypes.Locatable;
+import com.nedap.archie.rminfo.ModelInfoLookup;
+import com.nedap.archie.rminfo.RMAttributeInfo;
 import com.nedap.archie.util.NamingUtil;
 import com.nedap.archie.xpath.antlr.XPathLexer;
 import com.nedap.archie.xpath.antlr.XPathParser;
@@ -104,6 +106,14 @@ public class APathQuery {
     }
 
     //TODO: get diagnostic information about where the finder stopped in the path - could be very useful!
+
+    /**
+     * Deprecated. Use find(ModelInfoLookup, object) instead. It has a fix for both performance and security problems
+     * @param root
+     * @param <T>
+     * @return
+     */
+    @Deprecated
     public <T> T find(Object root) {
         //TODO: you can access undesired methods like the getClass().getClassLoader() methods with these queries
         //find a way to whitelist the resulting classes? Or switch to field-based queries?
@@ -163,6 +173,73 @@ public class APathQuery {
             return (T) currentObject;
         } catch (NoSuchMethodException e) {
             return null;
+        } catch (InvocationTargetException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    //TODO: get diagnostic information about where the finder stopped in the path - could be very useful!
+    public <T> T find(ModelInfoLookup lookup, Object root) {
+        Object currentObject = root;
+        try {
+            for (PathSegment segment : pathSegments) {
+                if (currentObject == null) {
+                    return null;
+                }
+                RMAttributeInfo attributeInfo = lookup.getAttributeInfo(currentObject.getClass(), segment.getNodeName());
+                if (attributeInfo == null) {
+                    return null;
+                }
+                Method method = attributeInfo.getGetMethod();
+                currentObject = method.invoke(currentObject);
+                if (currentObject == null) {
+                    return null;
+                }
+                if (currentObject instanceof Collection) {
+                    Collection collection = (Collection) currentObject;
+                    if (segment.getNodeId() == null) {
+                        //TODO: check if this is correct
+                        currentObject = collection;
+                    } else {
+                        currentObject = findRMObject(segment, collection);
+                    }
+                } else if (currentObject instanceof Locatable) {
+
+                    if (segment.getNodeId() != null) {
+                        Locatable locatable = (Locatable) currentObject;
+                        if (segment.hasIdCode()) {
+                            if (!locatable.getArchetypeNodeId().equals(segment.getNodeId())) {
+                                return null;
+                            }
+                        } else if (segment.hasNumberIndex()) {
+                            int number = Integer.parseInt(segment.getNodeId());
+                            if (number != 1) {
+                                return null;
+                            }
+                        } else if (segment.hasArchetypeRef()) {
+                            //operational templates in RM Objects have their archetype node ID set to an archetype ref. That
+                            //we support. Other things not so much
+                            if (!locatable.getArchetypeNodeId().equals(segment.getNodeId())) {
+                                throw new IllegalArgumentException("cannot handle RM-queries with node names or archetype references yet");
+                            }
+
+                        }
+                    }
+                } else if (segment.hasNumberIndex()) {
+                    int number = Integer.parseInt(segment.getNodeId());
+                    if (number != 1) {
+                        return null;
+                    }
+                } else {
+                    //not a locatable, but that's fine
+                    //in openehr, in archetypes everythign has node ids. Datavalues do not in the rm. a bit ugly if you ask
+                    //me, but that's why there's no 'if there's a nodeId set, this won't match!' code here.
+                }
+            }
+            return (T) currentObject;
         } catch (InvocationTargetException e) {
             throw new RuntimeException(e);
         } catch (IllegalAccessException e) {

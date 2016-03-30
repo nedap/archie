@@ -1,4 +1,4 @@
-package com.nedap.archie.adlparser.modelconstraints;
+package com.nedap.archie.rminfo;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;

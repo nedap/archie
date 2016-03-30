@@ -1,4 +1,4 @@
-package com.nedap.archie.adlparser.modelconstraints;
+package com.nedap.archie.rminfo;
 
 import com.google.common.reflect.TypeToken;
 import org.reflections.ReflectionUtils;
@@ -56,7 +56,7 @@ public class ModelInfoLookup {
     //constructed as  a field to save some object creation
 
     public ModelInfoLookup(ModelNamingStrategy namingStrategy, String packageName) {
-        this(namingStrategy, packageName, ReflectionConstraintImposer.class.getClassLoader());
+        this(namingStrategy, packageName, ModelInfoLookup.class.getClassLoader());
     }
 
     public ModelInfoLookup(ModelNamingStrategy namingStrategy, String packageName, ClassLoader classLoader) {

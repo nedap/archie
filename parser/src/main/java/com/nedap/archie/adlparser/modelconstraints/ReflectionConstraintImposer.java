@@ -4,6 +4,11 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.nedap.archie.aom.CAttribute;
 import com.nedap.archie.aom.CComplexObject;
 import com.nedap.archie.aom.Cardinality;
+import com.nedap.archie.rminfo.ArchieRMNamingStrategy;
+import com.nedap.archie.rminfo.ModelInfoLookup;
+import com.nedap.archie.rminfo.ModelNamingStrategy;
+import com.nedap.archie.rminfo.RMAttributeInfo;
+import com.nedap.archie.rminfo.RMTypeInfo;
 
 import java.util.Collection;
 import java.util.List;

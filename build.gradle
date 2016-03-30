@@ -32,12 +32,16 @@ subprojects {
 			url "http://dl.bintray.com/guestful/maven"
 		}
 	}
+	ext.reflectionsVersion = '0.9.10'
 	dependencies {
 		compile 'org.slf4j:slf4j-api:1.7.12'
         compile 'com.fasterxml.jackson.core:jackson-annotations:2.6.3'
 		compile 'com.guestful.module:guestful.module.jsr310-extensions:1.4' //kryo java.time serializers
-		compile 'commons-beanutils:commons-beanutils:1.9.2'
 		compile 'com.google.guava:guava:19.0'
+
+		compile "org.reflections:reflections:${reflectionsVersion}"
+
+		compile 'com.fasterxml.jackson.core:jackson-databind:2.6.3'
 
 		compile 'org.checkerframework:checker:1.9.7'
 		testCompile 'junit:junit:4.12'

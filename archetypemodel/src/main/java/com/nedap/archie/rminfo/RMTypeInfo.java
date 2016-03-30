@@ -1,4 +1,4 @@
-package com.nedap.archie.adlparser.modelconstraints;
+package com.nedap.archie.rminfo;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,8 +1,10 @@
 package com.nedap.archie.adlparser.modelconstraints;
 
-import com.nedap.archie.rm.datastructures.ItemList;
 import com.nedap.archie.rm.datavalues.DvURI;
 import com.nedap.archie.rm.datavalues.quantity.DvQuantity;
+import com.nedap.archie.rminfo.ArchieRMInfoLookup;
+import com.nedap.archie.rminfo.RMAttributeInfo;
+import com.nedap.archie.rminfo.RMTypeInfo;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -19,7 +21,7 @@ public class ArchieRMInfoLookupTest {
 
     @BeforeClass
     public static void setup() {
-        rmInfoLookup = new ArchieRMInfoLookup();
+        rmInfoLookup = ArchieRMInfoLookup.getInstance();
     }
 
     @Test

@@ -3,6 +3,7 @@ package com.nedap.archie.rm.archetypes;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nedap.archie.query.APathQuery;
 import com.nedap.archie.rm.RMObject;
+import com.nedap.archie.rminfo.ArchieRMInfoLookup;
 
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -17,7 +18,7 @@ public class Pathable extends RMObject {
     private Pathable parent;
 
     public Object itemAtPath(String s) {
-        return new APathQuery(s).find(this);
+        return new APathQuery(s).find(ArchieRMInfoLookup.getInstance(), this);
     }
 
     @JsonIgnore

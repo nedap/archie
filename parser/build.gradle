@@ -1,17 +1,11 @@
 
 apply plugin: 'antlr'
 
-ext.reflectionsVersion = '0.9.10'
+
 
 dependencies {
 	antlr "org.antlr:antlr4:${antlrVersion}"
 	compile project(':archetypemodel')
-
-	compile "org.reflections:reflections:${reflectionsVersion}"
-
-	compile 'com.fasterxml.jackson.core:jackson-databind:2.6.3'
-
-	
 }
 
 generateGrammarSource { //antlr4
