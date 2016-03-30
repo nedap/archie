@@ -170,13 +170,13 @@ public class ModelInfoLookup {
     public Class getClass(String rmTypename) {
 
         RMTypeInfo rmTypeInfo = rmTypeNamesToRmTypeInfo.get(rmTypename);
-        return rmTypeInfo == null ? null : rmTypeInfo.getClass();
+        return rmTypeInfo == null ? null : rmTypeInfo.getJavaClass();
     }
 
     public  Map<String, Class> getRmTypeNameToClassMap() {
         HashMap<String, Class> result = new HashMap<>();
         for(String rmTypeName: rmTypeNamesToRmTypeInfo.keySet()) {
-            result.put(rmTypeName, rmTypeNamesToRmTypeInfo.get(rmTypeName).getClass());
+            result.put(rmTypeName, rmTypeNamesToRmTypeInfo.get(rmTypeName).getJavaClass());
         }
         return result;
     }
@@ -205,5 +205,9 @@ public class ModelInfoLookup {
 
     public List<RMTypeInfo> getAllTypes() {
         return new ArrayList<>(classesToRmTypeInfo.values());
+    }
+
+    public ModelNamingStrategy getNamingStrategy() {
+        return namingStrategy;
     }
 }

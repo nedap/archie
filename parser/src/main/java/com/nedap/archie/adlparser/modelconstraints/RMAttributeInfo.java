@@ -10,13 +10,13 @@ import java.lang.reflect.Type;
 public class RMAttributeInfo {
     private final String name;
     private final Field field;
-    private final Type type;
+    private final Class type;
     private final Method getMethod;
     private final Method setMethod;
     private final Method addMethod;
     private final boolean nullable;
 
-    public RMAttributeInfo(String name, Field field, Type type, boolean nullable, Method getMethod, Method setMethod, Method addMethod) {
+    public RMAttributeInfo(String name, Field field, Class type, boolean nullable, Method getMethod, Method setMethod, Method addMethod) {
         this.name = name;
         this.field = field;
         this.type = type;
@@ -46,7 +46,7 @@ public class RMAttributeInfo {
         return field;
     }
 
-    public Type getType() {
+    public Class getType() {
         return type;
     }
 
