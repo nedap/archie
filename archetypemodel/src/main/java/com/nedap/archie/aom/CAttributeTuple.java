@@ -1,5 +1,7 @@
 package com.nedap.archie.aom;
 
+import com.nedap.archie.rminfo.ArchieRMInfoLookup;
+import com.nedap.archie.rminfo.RMAttributeInfo;
 import com.nedap.archie.util.NamingUtil;
 
 import java.lang.reflect.InvocationTargetException;
@@ -75,12 +77,13 @@ public class CAttributeTuple extends CSecondOrder<CAttribute> {
 
         HashMap<String, Object> members = new HashMap();
         for(CAttribute attribute:getMembers()) {
-            String getMethodName = NamingUtil.attributeNameToGetMethod(attribute.getRmAttributeName());
+            RMAttributeInfo attributeInfo = ArchieRMInfoLookup.getInstance().getAttributeInfo(value.getClass(), attribute.getRmAttributeName());
             try {
-                Method method = value.getClass().getMethod(getMethodName);
-                members.put(attribute.getRmAttributeName(), method.invoke(value));
-            } catch (NoSuchMethodException e) {
-                //will be caught later on and return false. throw some exception?
+                if (attributeInfo != null && attributeInfo.getGetMethod() != null) {
+                    members.put(attribute.getRmAttributeName(), attributeInfo.getGetMethod().invoke(value));
+                } else {
+                    //warn? throw exception?
+                }
             } catch (InvocationTargetException | IllegalAccessException e) {
                 throw new RuntimeException(e);
             }
