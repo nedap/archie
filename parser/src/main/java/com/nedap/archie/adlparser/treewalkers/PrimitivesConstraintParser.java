@@ -152,6 +152,9 @@ public class PrimitivesConstraintParser extends BaseTreeWalker {
 //        if(stringContext.regex_constraint() != null) {
 //            result.addConstraint(stringContext.regex_constraint().getText());
 //        }
+//        if(stringContext.regex_constraint() != null) {
+//            result.addConstraint(stringContext.regex_constraint().getText());
+//        }
         return result;
     }
 

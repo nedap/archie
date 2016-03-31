@@ -47,12 +47,13 @@ c_duration: (
 assumed_duration_value: ';' duration_value ;
 
 // for REGEX: strip first and last char, and then process with PCRE grammar
-c_string: ( string_value | string_list_value  ) assumed_string_value? ;
+//c_string: ( string_value | string_list_value | regex_constraint ) assumed_string_value? ;
+c_string: ( string_value | string_list_value ) assumed_string_value? ;
 assumed_string_value: ';' string_value ;
-
-
+//regex_constraint: REGEX;
 
 // ADL2 term types: [ac3], [ac3; at5], [at5]
+// NOTE: an assumed at-code (the ';' AT_CODE pattern) can only occur after an ac-code not after the single at-code
 c_terminology_code: '[' ( ( AC_CODE ( ';' AT_CODE )? ) | AT_CODE ) ']' ;
 
 c_boolean: ( boolean_value | boolean_list_value ) assumed_boolean_value? ;
@@ -61,7 +62,7 @@ assumed_boolean_value: ';' boolean_value ;
 adl_path          : adl_path_segment+ ;
 adl_relative_path : adl_path_element adl_path ;  // TODO: remove when current slots no longer needed
 adl_path_segment  : '/' adl_path_element ;
-adl_path_element  : attribute_id ( '[' ID_CODE ']' )? ;
+adl_path_element  : rm_attribute_id ( '[' ID_CODE ']' )? ;
 
 
 //

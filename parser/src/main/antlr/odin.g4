@@ -20,14 +20,14 @@ odin_text :
 
 attr_vals : ( attr_val ';'? )+ ;
 
-attr_val : attribute_id '=' object_block ;
+attr_val : rm_attribute_id '=' object_block ;
 
 object_block :
       object_value_block
     | object_reference_block
     ;
 
-object_value_block : ( '(' type_id ')' )? '<' ( primitive_object | attr_vals? | keyed_object* ) '>' ;
+object_value_block : ( '(' rm_type_id ')' )? '<' ( primitive_object | attr_vals? | keyed_object* ) '>' ;
 
 keyed_object : '[' primitive_value ']' '=' object_block ; // TODO: probably should limit to String and Integer?
 
@@ -55,7 +55,6 @@ primitive_value :
 
 primitive_list_value :  primitive_value ( ( ',' primitive_value )+ | ',' SYM_LIST_CONTINUE ) ;
 
-
 primitive_interval_value :
       integer_interval_value
     | real_interval_value
@@ -70,4 +69,4 @@ object_reference_block : '<' odin_path_list '>' ;
 odin_path_list     : odin_path ( ( ',' odin_path )+ | SYM_LIST_CONTINUE )? ;
 odin_path          : '/' | odin_path_segment+ ;
 odin_path_segment  : '/' odin_path_element ;
-odin_path_element  : attribute_id ( '[' ( STRING | INTEGER ) ']' )? ;
+odin_path_element  : rm_attribute_id ( '[' ( STRING | INTEGER ) ']' )? ;

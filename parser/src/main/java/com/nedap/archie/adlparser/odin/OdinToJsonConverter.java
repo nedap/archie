@@ -61,7 +61,7 @@ public class OdinToJsonConverter {
             }
             first = false;
             output.append('"');
-            output.append(attrValContext.attribute_id().getText());
+            output.append(attrValContext.rm_attribute_id().getText());
             output.append('"');
             output.append(':');
             output(attrValContext.object_block());

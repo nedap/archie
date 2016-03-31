@@ -33,7 +33,7 @@ boolean_leaf:
     | SYM_NOT boolean_leaf
     ;
 
-boolean_constraint: ( adl_path | adl_relative_path ) SYM_MATCHES ('{' c_primitive_object '}' | CONTAINED_REGEXP );
+boolean_constraint: ( adl_path | adl_relative_path ) SYM_MATCHES ( '{' c_primitive_object '}' | CONTAINED_REGEXP );
 
 boolean_binop:
     | SYM_AND
@@ -67,12 +67,12 @@ arithmetic_arith_expr: arithmetic_arith_expr arithmetic_binop arithmetic_leaf
     ;
 
 relational_binop:
-      '='
-    | '!='
-    | '<='
-    | '<'
-    | '>='
-    | '>'
+      SYM_EQ
+    | SYM_NE
+    | SYM_GT
+    | SYM_LT
+    | SYM_LE
+    | SYM_GE
     ;
 
 arithmetic_binop:

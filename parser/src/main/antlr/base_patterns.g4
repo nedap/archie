@@ -8,11 +8,40 @@ grammar base_patterns;
 // -------------------------- Parse Rules --------------------------
 //
 
-type_id      : ALPHA_UC_ID ( '<' type_id ( ',' type_id )* '>' )? ;
-attribute_id : ALPHA_LC_ID ;
+rm_type_id      : ALPHA_UC_ID ( '<' rm_type_id ( ',' rm_type_id )* '>' )? ;
+rm_attribute_id : ALPHA_LC_ID ;
 identifier   : ALPHA_UC_ID | ALPHA_LC_ID ;
 
 archetype_ref : ARCHETYPE_HRID | ARCHETYPE_REF ;
+
+//
+// -------------------------- Lexer patterns --------------------------
+//
+
+// ---------- symbols ----------
+
+SYM_GT : '>' ;
+SYM_LT : '<' ;
+SYM_LE : '<=' ;
+SYM_GE : '>=' ;
+SYM_NE : '/=' | '!=' ;
+SYM_EQ : '=' ;
+
+SYM_LIST_CONTINUE: '...' ;
+SYM_INTERVAL_SEP: '..' ;
+
+SYM_SEMICOLON: ';';
+
+// ---------- whitespace & comments ----------
+
+WS         : [ \t\r]+    -> skip ;
+LINE       : '\n'        -> skip ;     // increment line count
+H_CMT_LINE : '--------' '-'*? '\n'  ;  // special type of comment for splitting template overlays
+CMT_LINE   : '--' .*? '\n'  -> skip ;  // (increment line count)
+
+// ---------- Delimited Regex matcher ------------
+// allows for '/' or '^' delimiters
+//REGEX: '/' ( '\\/' | ~'/' )+ '/' | '^' ( '\\^' | ~'^' )+ '^';
 
 //a regexp can only exist between {}. It can optionally have an assumed value, by adding ;"value"
 CONTAINED_REGEXP: '{'WS* (SLASH_REGEXP | CARET_REGEXP) WS* (';' WS* STRING)? WS* '}';
@@ -21,17 +50,6 @@ fragment SLASH_REGEXP_CHAR: ~[/\n\r] | ESCAPE_SEQ | '\\/';
 
 fragment CARET_REGEXP: '^' CARET_REGEXP_CHAR+ '^';
 fragment CARET_REGEXP_CHAR: ~[^\n\r] | ESCAPE_SEQ | '\\^';
-
-//
-// -------------------------- Lexer patterns --------------------------
-//
-
-// ---------- whitespace & comments ----------
-
-WS         : [ \t\r]+    -> skip ;
-LINE       : '\n'        -> skip ;     // increment line count
-H_CMT_LINE : '--------' '-'*? '\n'  ;  // special type of comment for splitting template overlays
-CMT_LINE   : '--' .*? '\n'  -> skip ;  // (increment line count)
 
 // ---------- ISO8601 Date/Time values ----------
 
@@ -132,8 +150,3 @@ fragment UTF8CHAR    : '\\u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT ;
 fragment DIGIT     : [0-9] ;
 fragment HEX_DIGIT : [0-9a-fA-F] ;
 
-SYM_SEMICOLON: ';';
-SYM_LT: '<';
-SYM_GT: '>';
-SYM_LE: '<=';
-SYM_GE: '>=';

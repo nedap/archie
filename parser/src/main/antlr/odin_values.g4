@@ -69,9 +69,4 @@ uri_value : URI ;
 
 relop : SYM_GT | SYM_LT | SYM_LE | SYM_GE ;
 
-//
-//  ======================= Lexical rules ========================
-//
 
-SYM_LIST_CONTINUE: '...' ;
-SYM_INTERVAL_SEP: '..' ;

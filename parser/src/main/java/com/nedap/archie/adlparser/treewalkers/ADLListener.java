@@ -150,7 +150,7 @@ public class ADLListener extends AdlBaseListener {
     }
 
     @Override
-    public void enterSpecialization_section(Specialization_sectionContext ctx) {
+    public void enterSpecialize_section(Specialize_sectionContext ctx) {
         if(ctx != null && ctx.archetype_ref() != null) {
             archetype.setParentArchetypeId(ctx.archetype_ref().getText());
         }

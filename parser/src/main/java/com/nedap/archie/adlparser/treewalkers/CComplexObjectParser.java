@@ -37,8 +37,8 @@ public class CComplexObjectParser extends BaseTreeWalker {
 
     public CComplexObject parseComplexObject(C_complex_objectContext context) {
         CComplexObject object = new CComplexObject();
-        if(context.type_id() != null) {
-            object.setRmTypeName(context.type_id().getText());
+        if(context.rm_type_id() != null) {
+            object.setRmTypeName(context.rm_type_id().getText());
         }
         if(context.ID_CODE() != null) {
             object.setNodeId(context.ID_CODE().getText());
@@ -60,12 +60,12 @@ public class CComplexObjectParser extends BaseTreeWalker {
         if (attributeDefContext.c_attribute() != null) {
             CAttribute attribute = new CAttribute();
             C_attributeContext attributeContext = attributeDefContext.c_attribute();
-            attribute.setRmAttributeName(attributeContext.attribute_id().getText());
+            attribute.setRmAttributeName(attributeContext.rm_attribute_id().getText());
             if (attributeContext.c_existence() != null) {
                 attribute.setExistence(parseMultiplicityInterval(attributeContext.c_existence()));
             }
             if(attributeContext.adl_dir() != null) {
-                attribute.setDifferentialPath(attributeContext.adl_dir().getText() + attributeContext.attribute_id().getText());
+                attribute.setDifferentialPath(attributeContext.adl_dir().getText() + attributeContext.rm_attribute_id().getText());
             }
 
             if (attributeContext.c_cardinality() != null) {
@@ -84,23 +84,23 @@ public class CComplexObjectParser extends BaseTreeWalker {
     }
 
     private CAttributeTuple parseAttributeTuple(CComplexObject parent, C_attribute_tupleContext attributeTupleContext) {
-        List<Attribute_idContext> attributeIdList = attributeTupleContext.attribute_id();
+        List<Rm_attribute_idContext> attributeIdList = attributeTupleContext.rm_attribute_id();
         CAttributeTuple tuple = new CAttributeTuple();
 
-        for(Attribute_idContext idContext:attributeIdList) {
+        for(Rm_attribute_idContext idContext:attributeIdList) {
             CAttribute attribute = new CAttribute();
             String id = idContext.getText();//TODO? parse odin string value?
             attribute.setRmAttributeName(id);
             tuple.addMember(attribute);
             parent.addAttribute(attribute);
         }
-        List<C_object_tupleContext> tupleContexts = attributeTupleContext.c_object_tuple();
-        for(C_object_tupleContext tupleContext:tupleContexts) {
+        List<C_primitive_tupleContext> tupleContexts = attributeTupleContext.c_primitive_tuple();
+        for(C_primitive_tupleContext tupleContext:tupleContexts) {
             CPrimitiveTuple primitiveTuple = new CPrimitiveTuple();
 
-            List<C_object_tuple_itemContext> primitiveObjectContexts = tupleContext.c_object_tuple_items().c_object_tuple_item();
+            List<C_primitive_tuple_contentContext> primitiveTupleContentContexts = tupleContext.c_primitive_tuple_content();
             int i = 0;
-            for(C_object_tuple_itemContext tupleObjectContext:primitiveObjectContexts) {
+            for(C_primitive_tuple_contentContext tupleObjectContext:primitiveTupleContentContexts) {
                 CPrimitiveObject primitiveObject = null;
                 if(tupleObjectContext.c_primitive_object() != null) {
                      primitiveObject = primitivesConstraintParser.parsePrimitiveObject(tupleObjectContext.c_primitive_object());
@@ -174,7 +174,7 @@ public class CComplexObjectParser extends BaseTreeWalker {
         CComplexObjectProxy proxy = new CComplexObjectProxy();
         proxy.setOccurences(this.parseMultiplicityInterval(proxyContext.c_occurrences()));
         proxy.setTargetPath(proxyContext.adl_path().getText());
-        proxy.setRmTypeName(proxyContext.type_id().getText());
+        proxy.setRmTypeName(proxyContext.rm_type_id().getText());
         proxy.setNodeId(proxyContext.ID_CODE().getText());
         return proxy;
     }
@@ -182,7 +182,7 @@ public class CComplexObjectParser extends BaseTreeWalker {
     private CArchetypeRoot parseArchetypeRoot(C_archetype_rootContext archetypeRootContext) {
         CArchetypeRoot root = new CArchetypeRoot();
 
-        root.setRmTypeName(archetypeRootContext.type_id().getText());
+        root.setRmTypeName(archetypeRootContext.rm_type_id().getText());
         root.setNodeId(archetypeRootContext.ID_CODE().getText());
         root.setArchetypeRef(archetypeRootContext.archetype_ref().getText());
 
@@ -193,11 +193,13 @@ public class CComplexObjectParser extends BaseTreeWalker {
 
     private ArchetypeSlot parseArchetypeSlot(Archetype_slotContext slotContext) {
         ArchetypeSlot slot = new ArchetypeSlot();
-        C_archetype_slot_headContext headContext = slotContext.c_archetype_slot_head();
-        slot.setNodeId(headContext.c_archetype_slot_id().ID_CODE().getText());
-        slot.setRmTypeName(headContext.c_archetype_slot_id().type_id().getText());
-        if (headContext.c_occurrences() != null) {
-            slot.setOccurences(parseMultiplicityInterval(headContext.c_occurrences()));
+        slot.setNodeId(slotContext.ID_CODE().getText());
+        slot.setRmTypeName(slotContext.rm_type_id().getText());
+        if (slotContext.c_occurrences() != null) {
+            slot.setOccurences(parseMultiplicityInterval(slotContext.c_occurrences()));
+        }
+        if(slotContext.SYM_CLOSED() != null) {
+            slot.setClosed(true);
         }
         AssertionsParser assertionParser = new AssertionsParser(getErrors());
         if (slotContext.c_excludes() != null) {
