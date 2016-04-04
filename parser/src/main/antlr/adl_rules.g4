@@ -6,7 +6,6 @@
 //  license:     Apache 2.0 License <http://www.apache.org/licenses/LICENSE-2.0.html>
 //
 
-//TODO: the UTF-8 form of the operators!
 grammar adl_rules;
 import cadl_primitives;
 
