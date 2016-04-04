@@ -29,7 +29,9 @@ public class ADLErrorListener implements ANTLRErrorListener {
 
     @Override
     public void syntaxError(Recognizer<?,?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) {
-        errors.addError(String.format("syntax error at %d:%d: %s. msg: %s", line, charPositionInLine, offendingSymbol, msg));
+        String error = String.format("syntax error at %d:%d: %s. msg: %s", line, charPositionInLine, offendingSymbol, msg);
+        logger.warn(error);
+        errors.addError(error);
     }
 
     @Override

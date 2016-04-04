@@ -22,6 +22,9 @@ public class ParsedRulesEvaluationTest {
         System.out.println(archetype);
         RuleEvaluation ruleEvaluation = new RuleEvaluation();
         ruleEvaluation.evaluation(archetype.getRules().getRules());
-        assertEquals(19l, ruleEvaluation.getSymbolMap().get("test").getValue());
+        assertEquals(19l, ruleEvaluation.getSymbolMap().get("arithmetic_test").getValue());
+        assertEquals(false, ruleEvaluation.getSymbolMap().get("boolean_false_test").getValue());
+        assertEquals(true, ruleEvaluation.getSymbolMap().get("boolean_true_test").getValue());
+        assertEquals(true, ruleEvaluation.getSymbolMap().get("boolean_extended_test").getValue());
     }
 }

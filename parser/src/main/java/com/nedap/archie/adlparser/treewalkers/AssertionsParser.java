@@ -242,6 +242,6 @@ public class AssertionsParser extends BaseTreeWalker {
             Expression expression = parseArithmeticLeaf(context.arithmetic_leaf());
             return new UnaryOperator(expression.getType(), OperatorKind.minus, expression);
         }
-        throw new IllegalArgumentException("cannot parse unknown arithmetic leaf type");
+        throw new IllegalArgumentException("cannot parse unknown arithmetic leaf type: " + context.getText());
     }
 }

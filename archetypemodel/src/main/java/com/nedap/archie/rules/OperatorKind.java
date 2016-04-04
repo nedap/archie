@@ -21,6 +21,7 @@ public enum OperatorKind {
     }
 
     public static OperatorKind parse(String operatorString) {
+        operatorString = operatorString.toLowerCase();
         for(OperatorKind operator:values()) { //TODO: a hash implementation is faster
             if(operator.codes.contains(operatorString)) {
                 return operator;

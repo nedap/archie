@@ -3,16 +3,32 @@ archetype (adl_version=2.0.5; rm_release=1.0.2; generated)
 
 language
 	original_language = <[ISO_639-1::en]>
-	translations = < >
 
 description
+	original_author = <
+		["name"] = <"Pieter Bos">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"Test for rules, simple constant arithmetics">
+			keywords = <"ADL", "test">
+		>
+	>
+	lifecycle_state = <"published">
+	other_details = <
+		["regression"] = <"PASS">
+	>
+	copyright = <"copyright © 2004 openEHR Foundation <http://www.openEHR.org>">
 
 definition
 	OBSERVATION[id1]
 
 rules
-	$test:Integer ::= 3 * 5 + 2 * 2 -- 15 + 4 = 19
-    3 > 5 + 6 * 7 + 3 * 23 + 8 / (1 + 2)
+	$arithmetic_test:Integer ::= 3 * 5 + 2 * 2 -- 15 + 4 = 19
+    $boolean_false_test:Boolean ::= 3 > 5 + 6 * 7 + 3 * 23 + 8 / (1 + 2)
+    $boolean_true_test:Boolean ::= 3 < 5 + 6 * 7 + 3 * 23 + 8 / (1 + 2)
+    $boolean_extended_test:Boolean ::= (3 < 5 OR 2 > 1) AND 1 = 1
 
 terminology
 	term_definitions = <

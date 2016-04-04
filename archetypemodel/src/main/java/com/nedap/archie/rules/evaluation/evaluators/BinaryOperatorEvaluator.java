@@ -7,6 +7,7 @@ import com.nedap.archie.rules.PrimitiveType;
 import com.nedap.archie.rules.evaluation.Evaluator;
 import com.nedap.archie.rules.evaluation.RuleEvaluation;
 import com.nedap.archie.rules.evaluation.Value;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.EnumSet;
 import java.util.List;
@@ -31,176 +32,162 @@ public class BinaryOperatorEvaluator implements Evaluator<BinaryOperator> {
     private Value evaluate(OperatorKind operator, Value leftValue, Value rightValue) {
         switch(operator) {
             case plus:
-                checkIsNumber(leftValue, rightValue);
-                if(leftValue.getType() == PrimitiveType.Integer && rightValue.getType() == PrimitiveType.Integer) {
-                    Long leftNumber = (Long) leftValue.getValue();
-                    Long rightNumber = (Long) rightValue.getValue();
-                    return new Value(leftNumber + rightNumber);
-                } else if (leftValue.getType() == PrimitiveType.Real && rightValue.getType() == PrimitiveType.Real) {
-                    Double leftNumber = (Double) leftValue.getValue();
-                    Double rightNumber = (Double) rightValue.getValue();
-                    return new Value(leftNumber + rightNumber);
-                } else {
-                    throw new RuntimeException("not yet supported");
-                }
             case minus:
-                checkIsNumber(leftValue, rightValue);
-                if(leftValue.getType() == PrimitiveType.Integer && rightValue.getType() == PrimitiveType.Integer) {
-                    Long leftNumber = (Long) leftValue.getValue();
-                    Long rightNumber = (Long) rightValue.getValue();
-                    return new Value(leftNumber - rightNumber);
-                } else if (leftValue.getType() == PrimitiveType.Real && rightValue.getType() == PrimitiveType.Real) {
-                    Double leftNumber = (Double) leftValue.getValue();
-                    Double rightNumber = (Double) rightValue.getValue();
-                    return new Value(leftNumber - rightNumber);
-                } else {
-                    throw new RuntimeException("not yet supported");
-                }
             case multiply:
-                checkIsNumber(leftValue, rightValue);
-                if(leftValue.getType() == PrimitiveType.Integer && rightValue.getType() == PrimitiveType.Integer) {
-                    Long leftNumber = (Long) leftValue.getValue();
-                    Long rightNumber = (Long) rightValue.getValue();
-                    return new Value(leftNumber * rightNumber);
-                } else if (leftValue.getType() == PrimitiveType.Real && rightValue.getType() == PrimitiveType.Real) {
-                    Double leftNumber = (Double) leftValue.getValue();
-                    Double rightNumber = (Double) rightValue.getValue();
-                    return new Value(leftNumber * rightNumber);
-                } else {
-                    throw new RuntimeException("not yet supported");
-                }
             case divide:
-                checkIsNumber(leftValue, rightValue);
-                if(leftValue.getType() == PrimitiveType.Integer && rightValue.getType() == PrimitiveType.Integer) {
-                    Long leftNumber = (Long) leftValue.getValue();
-                    Long rightNumber = (Long) rightValue.getValue();
-                    return new Value(leftNumber / rightNumber);
-                } else if (leftValue.getType() == PrimitiveType.Real && rightValue.getType() == PrimitiveType.Real) {
-                    Double leftNumber = (Double) leftValue.getValue();
-                    Double rightNumber = (Double) rightValue.getValue();
-                    return new Value(leftNumber / rightNumber);
-                } else {
-                    throw new RuntimeException("not yet supported");
-                }
             case modulo:
-                checkIsNumber(leftValue, rightValue);
-                if(leftValue.getType() == PrimitiveType.Integer && rightValue.getType() == PrimitiveType.Integer) {
-                    Long leftNumber = (Long) leftValue.getValue();
-                    Long rightNumber = (Long) rightValue.getValue();
-                    return new Value(leftNumber % rightNumber);
-                } else if (leftValue.getType() == PrimitiveType.Real && rightValue.getType() == PrimitiveType.Real) {
-                    Double leftNumber = (Double) leftValue.getValue();
-                    Double rightNumber = (Double) rightValue.getValue();
-                    return new Value(leftNumber % rightNumber);
-                } else {
-                    throw new RuntimeException("not yet supported");
-                }
             case exponent:
-                checkIsNumber(leftValue, rightValue);
-                checkIsNumber(leftValue, rightValue);
-                if(leftValue.getType() == PrimitiveType.Integer && rightValue.getType() == PrimitiveType.Integer) {
-                    Long leftNumber = (Long) leftValue.getValue();
-                    Long rightNumber = (Long) rightValue.getValue();
-                    return new Value((long) Math.pow(leftNumber, rightNumber));
-                } else if (leftValue.getType() == PrimitiveType.Real && rightValue.getType() == PrimitiveType.Real) {
-                    Double leftNumber = (Double) leftValue.getValue();
-                    Double rightNumber = (Double) rightValue.getValue();
-                    return new Value(Math.pow(leftNumber, rightNumber));
-                } else {
-                    throw new RuntimeException("not yet supported");
-                }
+                return evaluateArithmeticOperator(operator, leftValue, rightValue);
             case gt:
-                checkIsNumber(leftValue, rightValue);
-                checkIsNumber(leftValue, rightValue);
-                if(leftValue.getType() == PrimitiveType.Integer && rightValue.getType() == PrimitiveType.Integer) {
-                    Long leftNumber = (Long) leftValue.getValue();
-                    Long rightNumber = (Long) rightValue.getValue();
-                    return new Value(leftNumber > rightNumber);
-                } else if (leftValue.getType() == PrimitiveType.Real && rightValue.getType() == PrimitiveType.Real) {
-                    Double leftNumber = (Double) leftValue.getValue();
-                    Double rightNumber = (Double) rightValue.getValue();
-                    return new Value(leftNumber > rightNumber);
-                } else {
-                    throw new RuntimeException("not yet supported");
-                }
             case ge:
-                checkIsNumber(leftValue, rightValue);
-                checkIsNumber(leftValue, rightValue);
-                if(leftValue.getType() == PrimitiveType.Integer && rightValue.getType() == PrimitiveType.Integer) {
-                    Long leftNumber = (Long) leftValue.getValue();
-                    Long rightNumber = (Long) rightValue.getValue();
-                    return new Value(leftNumber >= rightNumber);
-                } else if (leftValue.getType() == PrimitiveType.Real && rightValue.getType() == PrimitiveType.Real) {
-                    Double leftNumber = (Double) leftValue.getValue();
-                    Double rightNumber = (Double) rightValue.getValue();
-                    return new Value(leftNumber >= rightNumber);
-                } else {
-                    throw new RuntimeException("not yet supported");
-                }
             case lt:
-                checkIsNumber(leftValue, rightValue);
-                checkIsNumber(leftValue, rightValue);
-                if(leftValue.getType() == PrimitiveType.Integer && rightValue.getType() == PrimitiveType.Integer) {
-                    Long leftNumber = (Long) leftValue.getValue();
-                    Long rightNumber = (Long) rightValue.getValue();
-                    return new Value(leftNumber < rightNumber);
-                } else if (leftValue.getType() == PrimitiveType.Real && rightValue.getType() == PrimitiveType.Real) {
-                    Double leftNumber = (Double) leftValue.getValue();
-                    Double rightNumber = (Double) rightValue.getValue();
-                    return new Value(leftNumber < rightNumber);
-                } else {
-                    throw new RuntimeException("not yet supported");
-                }
             case le:
-                checkIsNumber(leftValue, rightValue);
-                checkIsNumber(leftValue, rightValue);
-                if(leftValue.getType() == PrimitiveType.Integer && rightValue.getType() == PrimitiveType.Integer) {
-                    Long leftNumber = (Long) leftValue.getValue();
-                    Long rightNumber = (Long) rightValue.getValue();
-                    return new Value(leftNumber <= rightNumber);
-                } else if (leftValue.getType() == PrimitiveType.Real && rightValue.getType() == PrimitiveType.Real) {
-                    Double leftNumber = (Double) leftValue.getValue();
-                    Double rightNumber = (Double) rightValue.getValue();
-                    return new Value(leftNumber <= rightNumber);
-                } else {
-                    throw new RuntimeException("not yet supported");
-                }
             case eq:
-                checkIsNumber(leftValue, rightValue);
-                checkIsNumber(leftValue, rightValue);
-                if(leftValue.getType() == PrimitiveType.Integer && rightValue.getType() == PrimitiveType.Integer) {
-                    Long leftNumber = (Long) leftValue.getValue();
-                    Long rightNumber = (Long) rightValue.getValue();
-
-                    return new Value(leftNumber == rightNumber);
-                } else if (leftValue.getType() == PrimitiveType.Real && rightValue.getType() == PrimitiveType.Real) {
-                    Double leftNumber = (Double) leftValue.getValue();
-                    Double rightNumber = (Double) rightValue.getValue();
-                    return new Value(Math.abs(leftNumber - rightNumber) < EPSILON);
-                } else {
-                    throw new RuntimeException("not yet supported");
-                }
             case ne:
-                checkIsNumber(leftValue, rightValue);
-                checkIsNumber(leftValue, rightValue);
-                if(leftValue.getType() == PrimitiveType.Integer && rightValue.getType() == PrimitiveType.Integer) {
-                    Long leftNumber = (Long) leftValue.getValue();
-                    Long rightNumber = (Long) rightValue.getValue();
-
-                    return new Value(leftNumber != rightNumber);
-                } else if (leftValue.getType() == PrimitiveType.Real && rightValue.getType() == PrimitiveType.Real) {
-                    Double leftNumber = (Double) leftValue.getValue();
-                    Double rightNumber = (Double) rightValue.getValue();
-                    return new Value(Math.abs(leftNumber - rightNumber) > EPSILON);
-                } else {
-                    throw new RuntimeException("not yet supported");
-                }
-
-//                    matches("matches", "∈", "is_in"), , and("and", "∧"), or("or", "∨"), xor("xor"),
+                return evaluateRelOpOperator(operator, leftValue, rightValue);
+            case and:
+            case or:
+            case xor:
+                return evaluateBooleanOperator(operator, leftValue, rightValue);
+//                    matches("matches", "∈", "is_in"),
 //                    implies("implies", "®"), for_all("for_all", "∀"), exists("exists" ,"∃"),;
 
         }
         throw new RuntimeException("operation " + operator + " not yet supported");
+    }
+
+    private Value evaluateBooleanOperator(OperatorKind operator, Value leftValue, Value rightValue) {
+        checkisBoolean(leftValue, rightValue);
+        Boolean leftBoolean = (Boolean) leftValue.getValue();
+        Boolean rightBoolean = (Boolean) leftValue.getValue();
+        switch(operator) {
+            case and:
+                return new Value(leftBoolean & rightBoolean);
+            case or:
+                return new Value(leftBoolean | rightBoolean);
+            case xor:
+                return new Value(leftBoolean ^ rightBoolean);
+            default:
+                throw new IllegalArgumentException("Not a boolean operator: " + operator);
+        }
+    }
+
+    private Value evaluateArithmeticOperator(OperatorKind operator, Value leftValue, Value rightValue) {
+        checkIsNumber(leftValue, rightValue);
+        if(leftValue.getValue() instanceof Long && rightValue.getValue() instanceof Long) {
+            return evaluateIntegerArithmetic(operator, leftValue, rightValue);
+        } else {
+            return evaluateRealArithmetic(operator, leftValue, rightValue);
+        }
+    }
+
+    private Value evaluateRealArithmetic(OperatorKind operator, Value left, Value right) {
+        Double leftNumber = convertToDouble(left);
+        Double rightNumber = convertToDouble(right);
+        switch(operator) {
+            case plus:
+                return new Value(leftNumber + rightNumber);
+            case minus:
+                return new Value(leftNumber - rightNumber);
+            case multiply:
+                return new Value(leftNumber * rightNumber);
+            case divide:
+                return new Value(leftNumber / rightNumber);
+            case modulo:
+                return new Value(leftNumber % rightNumber);
+            case exponent:
+                return new Value(Math.pow(leftNumber, rightNumber));
+            default:
+                throw new IllegalArgumentException("Not an arithmetic operator: " + operator);
+        }
+    }
+
+
+
+    private Value evaluateIntegerArithmetic(OperatorKind operator, Value left, Value right) {
+        Long leftNumber = (Long) left.getValue();
+        Long rightNumber = (Long) right.getValue();
+        switch(operator) {
+            case plus:
+                return new Value(leftNumber + rightNumber);
+            case minus:
+                return new Value(leftNumber - rightNumber);
+            case multiply:
+                return new Value(leftNumber * rightNumber);
+            case divide:
+                return new Value(leftNumber / rightNumber);
+            case modulo:
+                return new Value(leftNumber % rightNumber);
+            case exponent:
+                return new Value((long) Math.pow(leftNumber, rightNumber));
+            default:
+                throw new IllegalArgumentException("Not an arithmetic operator: " + operator);
+        }
+    }
+
+    @NotNull
+    private Value evaluateRelOpOperator(OperatorKind operator, Value leftValue, Value rightValue) {
+        checkIsNumber(leftValue, rightValue);
+        if(leftValue.getValue() instanceof Long && rightValue.getValue() instanceof Long) {
+            return evaluateIntegerRelOp(operator, leftValue, rightValue);
+        } else {
+            return evaluateRealRelOp(operator, leftValue, rightValue);
+        }
+    }
+
+    private Value evaluateIntegerRelOp(OperatorKind operator, Value left, Value right) {
+
+        Long leftNumber = (Long) left.getValue();
+        Long rightNumber = (Long) right.getValue();
+        switch(operator) {
+            case eq:
+                return new Value(leftNumber == rightNumber);
+            case ne:
+                return new Value(leftNumber != rightNumber);
+            case gt:
+                return new Value(leftNumber > rightNumber);
+            case lt:
+                return new Value(leftNumber < rightNumber);
+            case ge:
+                return new Value(leftNumber >= rightNumber);
+            case le:
+                return new Value(leftNumber <= rightNumber);
+
+            default:
+                throw new IllegalArgumentException("Not a boolean operator: " + operator);
+        }
+    }
+
+    private Value evaluateRealRelOp(OperatorKind operator, Value left, Value right) {
+
+        Double leftNumber = convertToDouble(left);
+        Double rightNumber = convertToDouble(right);
+        switch(operator) {
+            case eq:
+                return new Value(Math.abs(leftNumber - rightNumber) < EPSILON);
+            case ne:
+                return new Value(Math.abs(leftNumber - rightNumber) >= EPSILON);
+            case gt:
+                return new Value(leftNumber > rightNumber);
+            case lt:
+                return new Value(leftNumber < rightNumber);
+            case ge:
+                return new Value(leftNumber >= rightNumber);
+            case le:
+                return new Value(leftNumber <= rightNumber);
+            default:
+                throw new IllegalArgumentException("Not a boolean operator: " + operator);
+        }
+    }
+
+    private void checkisBoolean(Value leftValue, Value rightValue) {
+        EnumSet booleanTypes = EnumSet.of(PrimitiveType.Boolean);
+        if(!booleanTypes.contains(leftValue.getType())) {
+            throw new RuntimeException("not a boolean with boolean operator: " + leftValue.getType());//TODO: proper errors
+        }
+        if(!booleanTypes.contains(rightValue.getType())) {
+            throw new RuntimeException("not a boolean with boolean operator: " + rightValue.getType());//TODO: proper errors
+        }
     }
 
     private void checkIsNumber(Value leftValue, Value rightValue) {
@@ -211,6 +198,10 @@ public class BinaryOperatorEvaluator implements Evaluator<BinaryOperator> {
         if(!numberTypes.contains(rightValue.getType())) {
             throw new RuntimeException("not a number with number operator: " + rightValue.getType());//TODO: proper errors
         }
+    }
+
+    private double convertToDouble(Value value) {
+        return value.getValue() instanceof  Double ? (Double) value.getValue() : ((Long) value.getValue()).doubleValue();
     }
 
     @Override
