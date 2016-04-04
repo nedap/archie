@@ -9,7 +9,7 @@ import java.util.Set;
  */
 public enum OperatorKind {
     eq("="), ne("!="), le("<"), lt("<="), ge(">="), gt(">"),
-    matches("matches", "∈", "is_in"), not("!", "∼", "¬"), and("and", "∧"), or("or", "∨"), xor("xor"),
+    matches("matches", "∈", "is_in"), not("not", "!", "∼", "¬"), and("and", "∧"), or("or", "∨"), xor("xor"),
     implies("implies", "®"), for_all("for_all", "∀"), exists("exists" ,"∃"),
     plus("+"), minus("-"), multiply("*"), divide("/"), modulo("%"), exponent("^");
 

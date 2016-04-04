@@ -5,6 +5,7 @@ import com.nedap.archie.rules.*;
 import com.nedap.archie.rules.evaluation.evaluators.AssertionEvaluator;
 import com.nedap.archie.rules.evaluation.evaluators.BinaryOperatorEvaluator;
 import com.nedap.archie.rules.evaluation.evaluators.ConstantEvaluator;
+import com.nedap.archie.rules.evaluation.evaluators.UnaryOperatorEvaluator;
 import com.nedap.archie.rules.evaluation.evaluators.VariableDeclarationEvaluator;
 
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ public class RuleEvaluation {
         add(new ConstantEvaluator());
         add(new AssertionEvaluator());
         add(new BinaryOperatorEvaluator());
+        add(new UnaryOperatorEvaluator());
     }
 
     private void add(Evaluator evaluator) {
