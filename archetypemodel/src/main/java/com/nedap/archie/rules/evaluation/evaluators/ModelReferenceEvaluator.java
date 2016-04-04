@@ -14,7 +14,8 @@ import java.util.List;
 public class ModelReferenceEvaluator implements Evaluator<ModelReference> {
     @Override
     public Value evaluate(RuleEvaluation evaluation, ModelReference statement) {
-        return null;//implement me!
+        //TODO: check this is a primitive type or a list of types.
+        return new Value(evaluation.getRMRoot().itemAtPath(statement.getPath()));
     }
 
     @Override

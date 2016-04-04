@@ -25,15 +25,18 @@ public class RMObjectCreator {
         this.classLookup = lookup;
     }
 
-    public Object create(CObject constraint) {
+    public <T> T create(CObject constraint) {
         Class clazz = classLookup.getClass(constraint.getRmTypeName());
+        if(clazz == null) {
+            throw new IllegalArgumentException("cannot construct RMObject because of unknown constraint name " + constraint.getRmTypeName() + " full constraint " + constraint);
+        }
         try {
             Object result = clazz.newInstance();
             if(result instanceof Locatable) { //and most often, it will be
                 Locatable locatable = (Locatable) result;
                 locatable.setArchetypeNodeId(constraint.getNodeId());
             }
-            return result;
+            return (T) result;
         } catch (InstantiationException | IllegalAccessException e) {
             throw new RuntimeException(e);
         }

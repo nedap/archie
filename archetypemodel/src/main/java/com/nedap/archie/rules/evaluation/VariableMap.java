@@ -6,7 +6,7 @@ import java.util.Map;
 /**
  * Created by pieter.bos on 31/03/16.
  */
-public class SymbolMap {
+public class VariableMap {
 
     private Map<String, Value> variables = new HashMap<>();
 
