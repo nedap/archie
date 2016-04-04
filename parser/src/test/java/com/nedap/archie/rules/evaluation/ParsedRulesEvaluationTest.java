@@ -70,7 +70,13 @@ public class ParsedRulesEvaluationTest {
     }
 
     /**
-     * Creates an empty RM Object. For those familiar to the old java libs: this is a simple skeleton generator
+     * Creates an empty RM Object, fully nested, one object per CObject found.
+     * For those familiar to the old java libs: this is a simple skeleton generator.
+     *
+     * Perhaps this should be moved to a utility class. However, it is more of an example:
+     * in a real system you would want user input/a parameter map. Plus just creating every CObject will
+     * introduce cardinality/multiplicity problems in many case.
+     * 
      * @param object
      * @return
      */
@@ -89,6 +95,5 @@ public class ParsedRulesEvaluationTest {
             }
         }
         return result;
-
     }
 }
