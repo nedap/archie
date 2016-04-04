@@ -19,6 +19,7 @@ public class AssertionEvaluator implements Evaluator<Assertion> {
         if(statement.getExpression() != null) {
             Value value = evaluation.evaluate(statement.getExpression());
             if (value.getType() == PrimitiveType.Boolean) {
+                evaluation.assertionEvaluated(statement.getTag(), statement.getExpression(), value);
                 return value;
             } else {
                 //variable declaration?

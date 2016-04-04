@@ -68,4 +68,17 @@ public class RuleEvaluation {
         return variables;
     }
 
+    /**
+     * Callback: an assertion has been evaluated with the given result
+     * @param rightOperand
+     * @param rightValue
+     */
+    public void assertionEvaluated(String tag, Expression rightOperand, Value value) {
+        //TODO: If expression matches:
+        //1. path = expression: set path value to value
+        //2. exists path: mark existence in form (Only for usage in implies ...)
+        //3. not exists path: mark existence in form (Only for usage in implies ...)
+
+        //before re-evaluation, reset any overridden existence from evaluation?
+    }
 }

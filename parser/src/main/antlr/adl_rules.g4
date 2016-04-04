@@ -24,10 +24,14 @@ boolean_assertion: ( identifier ':' )? boolean_expression ;
 //
 
 boolean_expression
-    : boolean_and_expression
-    | boolean_expression SYM_OR boolean_and_expression
+    : boolean_or_expression
+    | boolean_expression SYM_IMPLIES boolean_or_expression
     ;
 
+boolean_or_expression
+    : boolean_and_expression
+    | boolean_or_expression SYM_OR boolean_and_expression
+    ;
 
 boolean_and_expression
 	:	boolean_xor_expression
@@ -35,14 +39,10 @@ boolean_and_expression
 	;
 
 boolean_xor_expression
-	:	boolean_implies_expression
-	|	boolean_xor_expression SYM_XOR boolean_implies_expression
+	:	boolean_leaf
+	|	boolean_xor_expression SYM_XOR boolean_leaf
 	;
 
-boolean_implies_expression
-    : boolean_leaf
-    | boolean_implies_expression SYM_IMPLIES boolean_leaf
-    ;
 
 boolean_leaf:
       boolean_literal
@@ -55,13 +55,6 @@ boolean_leaf:
     ;
 
 boolean_constraint: ( adl_path | adl_relative_path ) SYM_MATCHES ('{' c_primitive_object '}' | CONTAINED_REGEXP );
-
-boolean_binop:
-    | SYM_AND
-    | SYM_XOR
-    | SYM_OR
-    | SYM_IMPLIES
-    ;
 
 boolean_literal:
       SYM_TRUE

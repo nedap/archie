@@ -26,10 +26,19 @@ public class BinaryOperatorEvaluator implements Evaluator<BinaryOperator> {
         }
         Value leftValue = evaluation.evaluate(statement.getLeftOperand());
         Value rightValue = evaluation.evaluate(statement.getRightOperand());
-        return evaluate(statement.getOperator(), leftValue, rightValue);
+        if(statement.getOperator() == OperatorKind.implies) {
+            if(leftValue.getType() != PrimitiveType.Boolean) {
+                throw new IllegalArgumentException("left operand type should be boolean, but was " + leftValue.getType());
+            }
+            if((Boolean) leftValue.getValue()) {
+                //we could use the tag from the overall statement, but not sure if we should
+                evaluation.assertionEvaluated(null /* no tag present here*/, statement.getRightOperand(), rightValue);
+            }
+        }
+        return evaluate(evaluation, statement.getOperator(), leftValue, rightValue);
     }
 
-    private Value evaluate(OperatorKind operator, Value leftValue, Value rightValue) {
+    private Value evaluate(RuleEvaluation evaluation, OperatorKind operator, Value leftValue, Value rightValue) {
         switch(operator) {
             case plus:
             case minus:
@@ -48,7 +57,7 @@ public class BinaryOperatorEvaluator implements Evaluator<BinaryOperator> {
             case and:
             case or:
             case xor:
-                return evaluateBooleanOperator(operator, leftValue, rightValue);
+                return evaluateBooleanOperator(evaluation, operator, leftValue, rightValue);
 //                    matches("matches", "∈", "is_in"),
 //                    implies("implies", "®"), for_all("for_all", "∀"), exists("exists" ,"∃"),;
 
@@ -56,7 +65,7 @@ public class BinaryOperatorEvaluator implements Evaluator<BinaryOperator> {
         throw new RuntimeException("operation " + operator + " not yet supported");
     }
 
-    private Value evaluateBooleanOperator(OperatorKind operator, Value leftValue, Value rightValue) {
+    private Value evaluateBooleanOperator(RuleEvaluation evaluation, OperatorKind operator, Value leftValue, Value rightValue) {
         checkisBoolean(leftValue, rightValue);
         Boolean leftBoolean = (Boolean) leftValue.getValue();
         Boolean rightBoolean = (Boolean) leftValue.getValue();

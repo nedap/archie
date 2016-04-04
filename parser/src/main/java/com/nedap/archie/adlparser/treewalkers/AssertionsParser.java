@@ -73,17 +73,30 @@ public class AssertionsParser extends BaseTreeWalker {
 
     private Expression parseExpression(Boolean_expressionContext context) {
 
+        if(context.SYM_IMPLIES() != null) {
+            BinaryOperator expression = new BinaryOperator();
+            expression.setType(ExpressionType.BOOLEAN);
+            expression.setOperator(OperatorKind.parse(context.SYM_IMPLIES().getText()));
+            expression.addOperand(parseExpression(context.boolean_expression()));
+            expression.addOperand(parseOrExpression(context.boolean_or_expression()));
+            return expression;
+        } else {
+            return parseOrExpression(context.boolean_or_expression());
+        }
+
+    }
+
+    private Expression parseOrExpression(Boolean_or_expressionContext context) {
         if(context.SYM_OR() != null) {
             BinaryOperator expression = new BinaryOperator();
             expression.setType(ExpressionType.BOOLEAN);
             expression.setOperator(OperatorKind.parse(context.SYM_OR().getText()));
-            expression.addOperand(parseExpression(context.boolean_expression()));
+            expression.addOperand(parseOrExpression(context.boolean_or_expression()));
             expression.addOperand(parseAndExpression(context.boolean_and_expression()));
             return expression;
         } else {
             return parseAndExpression(context.boolean_and_expression());
         }
-
     }
 
     private Expression parseAndExpression(Boolean_and_expressionContext context) {
@@ -104,27 +117,12 @@ public class AssertionsParser extends BaseTreeWalker {
             BinaryOperator expression = new BinaryOperator();
             expression.setType(ExpressionType.BOOLEAN);
             expression.setOperator(OperatorKind.parse(context.SYM_XOR().getText()));
-            expression.addOperand(parseImpliesExpression(context.boolean_implies_expression()));
-            expression.addOperand(parseXorExpression(context.boolean_xor_expression()));
-            return expression;
-        } else {
-            return parseImpliesExpression(context.boolean_implies_expression());
-        }
-
-    }
-
-    private Expression parseImpliesExpression(Boolean_implies_expressionContext context) {
-        if(context.SYM_IMPLIES() != null) {
-            BinaryOperator expression = new BinaryOperator();
-            expression.setType(ExpressionType.BOOLEAN);
-            expression.setOperator(OperatorKind.parse(context.SYM_IMPLIES().getText()));
             expression.addOperand(parseBooleanLeaf(context.boolean_leaf()));
-            expression.addOperand(parseImpliesExpression(context.boolean_implies_expression()));
+            expression.addOperand(parseXorExpression(context.boolean_xor_expression()));
             return expression;
         } else {
             return parseBooleanLeaf(context.boolean_leaf());
         }
-
     }
 
     private Expression parseBooleanLeaf(Boolean_leafContext context) {
