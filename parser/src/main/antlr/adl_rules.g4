@@ -6,6 +6,7 @@
 //  license:     Apache 2.0 License <http://www.apache.org/licenses/LICENSE-2.0.html>
 //
 
+//TODO: the UTF-8 form of the operators!
 grammar adl_rules;
 import cadl_primitives;
 
@@ -13,14 +14,35 @@ import cadl_primitives;
 //  ============== Parser rules ==============
 //
 
-assertion: ( identifier ':' )? boolean_expr ;
+assertion: variable_declaration | boolean_assertion;
+
+variable_declaration: '$' identifier ':' identifier '::=' (boolean_expression | arithmetic_expression | adl_path | adl_relative_path);
+
+boolean_assertion: ( identifier ':' )? boolean_expression ;
 
 //
 // Expressions evaluating to boolean values
 //
 
-boolean_expr: boolean_expr boolean_binop boolean_leaf
-    | boolean_leaf
+boolean_expression
+    : boolean_and_expression
+    | boolean_expression SYM_OR boolean_and_expression
+    ;
+
+
+boolean_and_expression
+	:	boolean_xor_expression
+	|	boolean_and_expression SYM_AND boolean_xor_expression
+	;
+
+boolean_xor_expression
+	:	boolean_implies_expression
+	|	boolean_xor_expression SYM_XOR boolean_implies_expression
+	;
+
+boolean_implies_expression
+    : boolean_leaf
+    | boolean_implies_expression SYM_IMPLIES boolean_leaf
     ;
 
 boolean_leaf:
@@ -28,7 +50,7 @@ boolean_leaf:
     | adl_path
     | SYM_EXISTS adl_path
     | boolean_constraint
-    | '(' boolean_expr ')'
+    | '(' boolean_expression ')'
     | arithmetic_relop_expr
     | SYM_NOT boolean_leaf
     ;
@@ -51,20 +73,38 @@ boolean_literal:
 // Expressions evaluating to arithmetic values
 //
 
-arithmetic_relop_expr: arithmetic_arith_expr relational_binop arithmetic_arith_expr ;
+arithmetic_relop_expr: arithmetic_expression relational_binop arithmetic_expression ;
+
+
+arithmetic_expression
+   : multiplying_expression
+   | arithmetic_expression plus_minus_binop multiplying_expression
+   ;
+
+multiplying_expression
+   : pow_expression
+   | multiplying_expression mult_binop pow_expression
+   ;
+
+pow_expression
+   : arithmetic_leaf
+   | pow_expression pow_binop arithmetic_leaf
+   ;
 
 arithmetic_leaf:
       integer_value
     | real_value
     | adl_path
-    | '(' arithmetic_arith_expr ')'
+    | variable_reference
+    | '(' arithmetic_expression ')'
     | '-' arithmetic_leaf
     ;
 
-arithmetic_arith_expr: arithmetic_arith_expr arithmetic_binop arithmetic_leaf
-    | arithmetic_arith_expr '^'<assoc=right> arithmetic_leaf
-    | arithmetic_leaf
-    ;
+variable_reference: '$' identifier;
+
+plus_minus_binop: '+' | '-';
+mult_binop: '*' | '/' | '%';
+pow_binop: '^';
 
 relational_binop:
       '='
@@ -75,9 +115,3 @@ relational_binop:
     | '>'
     ;
 
-arithmetic_binop:
-      '/'
-    | '*'
-    | '+'
-    | '-'
-    ;

@@ -11,17 +11,13 @@ public enum OperatorKind {
     eq("="), ne("!="), le("<"), lt("<="), ge(">="), gt(">"),
     matches("matches", "∈", "is_in"), not("!", "∼", "¬"), and("and", "∧"), or("or", "∨"), xor("xor"),
     implies("implies", "®"), for_all("for_all", "∀"), exists("exists" ,"∃"),
-    plus("+"), minus("-"), multiply("*"), divide("/"), exponent("^");
+    plus("+"), minus("-"), multiply("*"), divide("/"), modulo("%"), exponent("^");
 
     private Set<String> codes;
 
     OperatorKind(String... items) {
         codes = new HashSet<>();
         Collections.addAll(codes, items);
-    }
-
-    OperatorKind(String text) {
-        this.codes = Collections.singleton(text);
     }
 
     public static OperatorKind parse(String operatorString) {

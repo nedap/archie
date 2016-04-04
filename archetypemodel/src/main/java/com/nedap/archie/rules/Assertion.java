@@ -1,5 +1,10 @@
 package com.nedap.archie.rules;
 
+import javassist.compiler.ast.Variable;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Assertion object. For now contains all the text of the assertions, and not the parsed form
  * Created by pieter.bos on 15/10/15.
@@ -10,6 +15,8 @@ public class Assertion extends RuleStatement {
 
     private Expression expression;
     private String tag;
+
+    private List<VariableDeclaration> variables = new ArrayList<>();
 
     public Assertion() {
 
@@ -49,5 +56,17 @@ public class Assertion extends RuleStatement {
 
     public String getTag() {
         return tag;
+    }
+
+    public List<VariableDeclaration> getVariables() {
+        return variables;
+    }
+
+    public void setVariables(List<VariableDeclaration> variables) {
+        this.variables = variables;
+    }
+
+    public void addVariable(VariableDeclaration variable) {
+        variables.add(variable);
     }
 }
