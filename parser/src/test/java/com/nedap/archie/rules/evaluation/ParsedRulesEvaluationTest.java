@@ -27,6 +27,6 @@ public class ParsedRulesEvaluationTest {
         assertEquals(true, ruleEvaluation.getSymbolMap().get("boolean_true_test").getValue());
         assertEquals(true, ruleEvaluation.getSymbolMap().get("boolean_extended_test").getValue());
         assertEquals(true, ruleEvaluation.getSymbolMap().get("not_false").getValue());
-        assertEquals(false, ruleEvaluation.getSymbolMap().get("not_true").getValue());
+        assertEquals(false, ruleEvaluation.getSymbolMap().get("not_not_not_true").getValue());
     }
 }

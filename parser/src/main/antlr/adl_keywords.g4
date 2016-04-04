@@ -45,7 +45,7 @@ SYM_OR       : [Oo][Rr] | '∨' ;
 SYM_XOR      : [Xx][Oo][Rr] ;
 SYM_NOT      : [Nn][Oo][Tt] | '!' | '∼' | '~' | '¬';
 SYM_IMPLIES  : [Ii][Mm][Pp][Ll][Ii][Ee][Ss] | '®';
-SYM_FOR_ALL  : [Ff][Oo][Rr][_][Aa][Ll][Ll] | '∀' ;
+SYM_FOR_ALL  : [Ff][Oo][Rr][_][Aa][Ll][Ll] | '∀';
 SYM_EXISTS   : [Ee][Xx][Ii][Ss][Tt][Ss] | '∃';
 
 SYM_MATCHES : [Mm][Aa][Tt][Cc][Hh][Ee][Ss] | [Ii][Ss]'_'[Ii][Nn] | '∈';
