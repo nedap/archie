@@ -31,6 +31,8 @@ rules
     $boolean_extended_test:Boolean ::= (3 < 5 OR 2 > 1) AND 1 = 1
     $not_false:Boolean ::= not false
     $not_not_not_true:Boolean ::= ¬~! true
+    $variable_reference:Integer ::= $arithmetic_test % 5
+
 
 terminology
 	term_definitions = <

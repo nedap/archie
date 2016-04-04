@@ -20,7 +20,7 @@ public class VariableDeclarationEvaluator implements Evaluator<VariableDeclarati
     public Value evaluate(RuleEvaluation evaluation, VariableDeclaration declaration) {
         String variableName = declaration.getName();
         Value value = calculateValue(evaluation, declaration);
-        evaluation.getSymbolMap().put(variableName, value);
+        evaluation.getVariableMap().put(variableName, value);
         return value;
 
     }

@@ -5,8 +5,10 @@ import com.nedap.archie.rules.*;
 import com.nedap.archie.rules.evaluation.evaluators.AssertionEvaluator;
 import com.nedap.archie.rules.evaluation.evaluators.BinaryOperatorEvaluator;
 import com.nedap.archie.rules.evaluation.evaluators.ConstantEvaluator;
+import com.nedap.archie.rules.evaluation.evaluators.ModelReferenceEvaluator;
 import com.nedap.archie.rules.evaluation.evaluators.UnaryOperatorEvaluator;
 import com.nedap.archie.rules.evaluation.evaluators.VariableDeclarationEvaluator;
+import com.nedap.archie.rules.evaluation.evaluators.VariableReferenceEvaluator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,6 +31,8 @@ public class RuleEvaluation {
         add(new AssertionEvaluator());
         add(new BinaryOperatorEvaluator());
         add(new UnaryOperatorEvaluator());
+        add(new VariableReferenceEvaluator());
+        add(new ModelReferenceEvaluator());
     }
 
     private void add(Evaluator evaluator) {
@@ -60,7 +64,7 @@ public class RuleEvaluation {
 //        }
     }
 
-    public SymbolMap getSymbolMap() {
+    public SymbolMap getVariableMap() {
         return variables;
     }
 
