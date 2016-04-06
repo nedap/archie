@@ -15,7 +15,7 @@ public class ModelReferenceEvaluator implements Evaluator<ModelReference> {
     @Override
     public Value evaluate(RuleEvaluation evaluation, ModelReference statement) {
         //TODO: check this is a primitive type or a list of types.
-        return new Value(evaluation.getRMRoot().itemAtPath(statement.getPath()));
+        return new Value(evaluation.getRMRoot().itemsAtPath(statement.getPath()));
     }
 
     @Override

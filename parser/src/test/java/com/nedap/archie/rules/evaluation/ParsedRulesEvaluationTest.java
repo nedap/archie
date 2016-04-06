@@ -42,13 +42,13 @@ public class ParsedRulesEvaluationTest {
         RuleEvaluation ruleEvaluation = new RuleEvaluation(archetype);
         Observation root = new Observation();
         ruleEvaluation.evaluate(root, archetype.getRules().getRules());
-        assertEquals(19l, ruleEvaluation.getVariableMap().get("arithmetic_test").getValue());
-        assertEquals(false, ruleEvaluation.getVariableMap().get("boolean_false_test").getValue());
-        assertEquals(true, ruleEvaluation.getVariableMap().get("boolean_true_test").getValue());
-        assertEquals(true, ruleEvaluation.getVariableMap().get("boolean_extended_test").getValue());
-        assertEquals(true, ruleEvaluation.getVariableMap().get("not_false").getValue());
-        assertEquals(false, ruleEvaluation.getVariableMap().get("not_not_not_true").getValue());
-        assertEquals(4l, ruleEvaluation.getVariableMap().get("variable_reference").getValue());
+        assertEquals(19l, ruleEvaluation.getVariableMap().get("arithmetic_test").get(0));
+        assertEquals(false, ruleEvaluation.getVariableMap().get("boolean_false_test").get(0));
+        assertEquals(true, ruleEvaluation.getVariableMap().get("boolean_true_test").get(0));
+        assertEquals(true, ruleEvaluation.getVariableMap().get("boolean_extended_test").get(0));
+        assertEquals(true, ruleEvaluation.getVariableMap().get("not_false").get(0));
+        assertEquals(false, ruleEvaluation.getVariableMap().get("not_not_not_true").get(0));
+        assertEquals(4l, ruleEvaluation.getVariableMap().get("variable_reference").get(0));
     }
 
 
@@ -64,7 +64,7 @@ public class ParsedRulesEvaluationTest {
 
         ruleEvaluation.evaluate(root, archetype.getRules().getRules());
 
-        assertEquals(65d, (Double) ruleEvaluation.getVariableMap().get("arithmetic_test").getValue(), 0.001d);
+        assertEquals(65d, (Double) ruleEvaluation.getVariableMap().get("arithmetic_test").get(0), 0.001d);
 
         List<AssertionResult> assertionResults = ruleEvaluation.getAssertionResults();
         assertEquals("one assertion should have been checked", 1, assertionResults.size());
@@ -86,12 +86,12 @@ public class ParsedRulesEvaluationTest {
         quantity.setMagnitude(40d);
 
         ruleEvaluation.evaluate(root, archetype.getRules().getRules());
-        assertEquals(false, ruleEvaluation.getVariableMap().get("extended_validity").getValue());
+        assertEquals(false, ruleEvaluation.getVariableMap().get("extended_validity").get(0));
 
         quantity.setMagnitude(20d);
 
         ruleEvaluation.evaluate(root, archetype.getRules().getRules());
-        assertEquals(true, ruleEvaluation.getVariableMap().get("extended_validity").getValue());
+        assertEquals(true, ruleEvaluation.getVariableMap().get("extended_validity").get(0));
 
 
     }

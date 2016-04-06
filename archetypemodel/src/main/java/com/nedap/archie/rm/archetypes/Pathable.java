@@ -21,7 +21,7 @@ public class Pathable extends RMObject {
     public Object itemAtPath(String s) {
         return new APathQuery(s).find(ArchieRMInfoLookup.getInstance(), this);
     }
-    
+
     public List<Object> itemsAtPath(String s) {
         return new APathQuery(s).findList(ArchieRMInfoLookup.getInstance(), this);
     }

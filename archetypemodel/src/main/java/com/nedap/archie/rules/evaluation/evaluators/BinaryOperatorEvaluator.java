@@ -51,75 +51,140 @@ public class BinaryOperatorEvaluator implements Evaluator<BinaryOperator> {
     }
 
     private Value evaluateImplies(RuleEvaluation evaluation, BinaryOperator statement) {
-        Value leftValue = evaluation.evaluate(statement.getLeftOperand());
-        if(leftValue.getType() != PrimitiveType.Boolean) {
-            throw new IllegalArgumentException("left operand type should be boolean, but was " + leftValue.getType());
-        }
-        if((Boolean) leftValue.getValue()) {
-            //we could use the tag from the overall statement, but not sure if we should
-            Value rightValue = evaluation.evaluate(statement.getRightOperand());
-            evaluation.assertionEvaluated(null /* no tag present here*/, statement.getRightOperand(), rightValue);
-        }
-        return leftValue;//i think?
+        return null;//TODO
+//        Value leftValue = evaluation.evaluate(statement.getLeftOperand());
+//        if(leftValue.getType() != PrimitiveType.Boolean) {
+//            throw new IllegalArgumentException("left operand type should be boolean, but was " + leftValue.getType());
+//        }
+//        if((Boolean) leftValue.getValue()) {
+//            //we could use the tag from the overall statement, but not sure if we should
+//            Value rightValue = evaluation.evaluate(statement.getRightOperand());
+//            evaluation.assertionEvaluated(null /* no tag present here*/, statement.getRightOperand(), rightValue);
+//        }
+//        return leftValue;//i think?
     }
 
     private Value evaluateBooleanConstraint(RuleEvaluation evaluation, BinaryOperator statement) {
-        Value leftValue = evaluation.evaluate(statement.getLeftOperand());
+        Value leftValues = evaluation.evaluate(statement.getLeftOperand());
         if(!(statement.getRightOperand() instanceof Constraint)){
             throw new IllegalArgumentException("cannot evaluate matches statement, right operand not a constraint");
 
         }
         Constraint constraint = (Constraint) statement.getRightOperand();
-        return new Value(constraint.getItem().isValidValue(leftValue.getValue()));
+        Value result = new Value();
+        result.setType(PrimitiveType.Boolean);
+        for(Object value:leftValues.getValues()) {
+            result.addValue(constraint.getItem().isValidValue(value));
+        }
+        return result;
 
     }
 
     private Value evaluateBooleanOperator(RuleEvaluation evaluation, BinaryOperator statement) {
-        Value leftValue = evaluation.evaluate(statement.getLeftOperand());
-        Value rightValue = evaluation.evaluate(statement.getRightOperand());
-        checkisBoolean(leftValue, rightValue);
-        Boolean leftBoolean = (Boolean) leftValue.getValue();
-        Boolean rightBoolean = (Boolean) leftValue.getValue();
+        Value leftValues = evaluation.evaluate(statement.getLeftOperand());
+        Value rightValues = evaluation.evaluate(statement.getRightOperand());
+        checkisBoolean(leftValues, rightValues);
+
+        Value result = new Value();
+        result.setType(PrimitiveType.Boolean);
+        if(leftValues.size() == rightValues.size()) {
+            for(int i = 0; i < leftValues.size();i++) {
+                Boolean leftValue = (Boolean) leftValues.get(i);
+                Boolean rightValue = (Boolean) rightValues.get(i);
+                result.addValue(evaluateBoolean(statement, result, leftValue, rightValue));
+            }
+        } else if (leftValues.size() == 1) {
+            Boolean leftValue = (Boolean) leftValues.get(0);
+            for(Object right:rightValues.getValues()) {
+                Boolean rightValue = (Boolean) right;
+                result.addValue(evaluateBoolean(statement, result, leftValue, rightValue));
+            }
+        } else if (rightValues.size() == 1) {
+            Boolean rightValue = (Boolean) rightValues.get(0);
+            for(Object left:leftValues.getValues()) {
+                Boolean leftValue = (Boolean) left;
+                result.addValue(evaluateBoolean(statement, result, leftValue, rightValue));
+            }
+        } else {
+            throw new IllegalArgumentException("sizes of operator arguments not compatible");
+        }
+
+        return result;
+    }
+
+    private Boolean evaluateBoolean(BinaryOperator statement, Value result, Boolean leftBoolean, Boolean rightBoolean) {
         switch(statement.getOperator()) {
             case and:
-                return new Value(leftBoolean & rightBoolean);
+                return leftBoolean & rightBoolean;
             case or:
-                return new Value(leftBoolean | rightBoolean);
+                return leftBoolean | rightBoolean;
             case xor:
-                return new Value(leftBoolean ^ rightBoolean);
+                return leftBoolean ^ rightBoolean;
             default:
                 throw new IllegalArgumentException("Not a boolean operator: " + statement.getOperator());
         }
     }
 
     private Value evaluateArithmeticOperator(RuleEvaluation evaluation, BinaryOperator statement) {
-        Value leftValue = evaluation.evaluate(statement.getLeftOperand());
-        Value rightValue = evaluation.evaluate(statement.getRightOperand());
+        Value leftValues = evaluation.evaluate(statement.getLeftOperand());
+        Value rightValues = evaluation.evaluate(statement.getRightOperand());
 
-        checkIsNumber(leftValue, rightValue);
-        if(leftValue.getValue() instanceof Long && rightValue.getValue() instanceof Long) {
-            return evaluateIntegerArithmetic(statement.getOperator(), leftValue, rightValue);
+        Value result = new Value();
+        result.setType(PrimitiveType.Real);
+
+        checkIsNumber(leftValues, rightValues);
+        if(leftValues.size() == rightValues.size()) {
+            for(int i = 0; i < leftValues.size();i++) {
+                Object leftValue = leftValues.get(i);
+                Object rightValue = rightValues.get(i);
+                evaluateArithmetic(statement, result, rightValue, leftValue);
+            }
+        } else if (leftValues.size() == 1) {
+            Object leftValue = leftValues.get(0);
+            for(Object rightValue:rightValues.getValues()) {
+                evaluateArithmetic(statement, result, rightValue, leftValue);
+            }
+        } else if (rightValues.size() == 1) {
+            Object rightValue = rightValues.get(0);
+            for(Object leftValue:leftValues.getValues()) {
+                evaluateArithmetic(statement, result, rightValue, leftValue);
+            }
         } else {
-            return evaluateRealArithmetic(statement.getOperator(), leftValue, rightValue);
+            throw new IllegalArgumentException("sizes of operator arguments not compatible");
+        }
+
+        return result;
+    }
+
+    private void evaluateArithmetic(BinaryOperator statement, Value result, Object rightValue, Object leftValue) {
+        if(leftValue instanceof Long && rightValue instanceof Long) {
+            result.addValue(evaluateIntegerArithmetic(statement.getOperator()
+                    , (Long) leftValue
+                    , (Long) rightValue));
+            result.setType(PrimitiveType.Integer);
+        } else {
+            result.addValue(evaluateRealArithmetic(statement.getOperator()
+                            , convertToDouble(leftValue)
+                            , convertToDouble(rightValue))
+            );
+            result.setType(PrimitiveType.Real);
         }
     }
 
-    private Value evaluateRealArithmetic(OperatorKind operator, Value left, Value right) {
-        Double leftNumber = convertToDouble(left);
-        Double rightNumber = convertToDouble(right);
+    private Double evaluateRealArithmetic(OperatorKind operator, Double leftNumber, Double rightNumber) {
         switch(operator) {
             case plus:
-                return new Value(leftNumber + rightNumber);
+                return leftNumber + rightNumber;
             case minus:
-                return new Value(leftNumber - rightNumber);
+                return leftNumber - rightNumber;
             case multiply:
-                return new Value(leftNumber * rightNumber);
+                return leftNumber * rightNumber;
             case divide:
-                return new Value(leftNumber / rightNumber);
+                return leftNumber / rightNumber;
             case modulo:
-                return new Value(leftNumber % rightNumber);
+                return leftNumber % rightNumber;
             case exponent:
-                return new Value(Math.pow(leftNumber, rightNumber));
+                return Math.pow(leftNumber, rightNumber);
             default:
                 throw new IllegalArgumentException("Not an arithmetic operator: " + operator);
         }
@@ -127,22 +192,20 @@ public class BinaryOperatorEvaluator implements Evaluator<BinaryOperator> {
 
 
 
-    private Value evaluateIntegerArithmetic(OperatorKind operator, Value left, Value right) {
-        Long leftNumber = (Long) left.getValue();
-        Long rightNumber = (Long) right.getValue();
+    private Long evaluateIntegerArithmetic(OperatorKind operator, Long leftNumber, Long rightNumber) {
         switch(operator) {
             case plus:
-                return new Value(leftNumber + rightNumber);
+                return leftNumber + rightNumber;
             case minus:
-                return new Value(leftNumber - rightNumber);
+                return leftNumber - rightNumber;
             case multiply:
-                return new Value(leftNumber * rightNumber);
+                return leftNumber * rightNumber;
             case divide:
-                return new Value(leftNumber / rightNumber);
+                return leftNumber / rightNumber;
             case modulo:
-                return new Value(leftNumber % rightNumber);
+                return leftNumber % rightNumber;
             case exponent:
-                return new Value((long) Math.pow(leftNumber, rightNumber));
+                return (long) Math.pow(leftNumber, rightNumber);
             default:
                 throw new IllegalArgumentException("Not an arithmetic operator: " + operator);
         }
@@ -150,56 +213,87 @@ public class BinaryOperatorEvaluator implements Evaluator<BinaryOperator> {
 
     @NotNull
     private Value evaluateRelOpOperator(RuleEvaluation evaluation, BinaryOperator statement) {
-        Value leftValue = evaluation.evaluate(statement.getLeftOperand());
-        Value rightValue = evaluation.evaluate(statement.getRightOperand());
-        checkIsNumber(leftValue, rightValue);
-        if(leftValue.getValue() instanceof Long && rightValue.getValue() instanceof Long) {
-            return evaluateIntegerRelOp(statement.getOperator(), leftValue, rightValue);
+        Value leftValues = evaluation.evaluate(statement.getLeftOperand());
+        Value rightValues = evaluation.evaluate(statement.getRightOperand());
+        checkIsNumber(leftValues, rightValues);
+
+        Value result = new Value();
+        result.setType(PrimitiveType.Boolean);
+
+        if(leftValues.size() == rightValues.size()) {
+            for(int i = 0; i < leftValues.size();i++) {
+                Object leftValue = leftValues.get(i);
+                Object rightValue = rightValues.get(i);
+                evaluateRelOp(statement, result, leftValue, rightValue);
+
+            }
+        } else if (leftValues.size() == 1) {
+            Object leftValue = leftValues.get(0);
+            for(Object rightValue:rightValues.getValues()) {
+                evaluateRelOp(statement, result, rightValue, leftValue);
+            }
+        } else if (rightValues.size() == 1) {
+            Object rightValue = rightValues.get(0);
+            for(Object leftValue:leftValues.getValues()) {
+                evaluateRelOp(statement, result, rightValue, leftValue);
+            }
         } else {
-            return evaluateRealRelOp(statement.getOperator(), leftValue, rightValue);
+            throw new IllegalArgumentException("sizes of operator arguments not compatible");
+        }
+
+        return result;
+    }
+
+    private void evaluateRelOp(BinaryOperator statement, Value result, Object leftValue, Object rightValue) {
+        if(leftValue instanceof Long && rightValue instanceof Long) {
+            result.addValue(evaluateIntegerRelOp(statement.getOperator(),
+                    (Long) leftValue,
+                    (Long) rightValue
+            ));
+        } else {
+            result.addValue(evaluateRealRelOp(statement.getOperator(),
+                    convertToDouble(leftValue),
+                    convertToDouble(rightValue)
+            ));
         }
     }
 
-    private Value evaluateIntegerRelOp(OperatorKind operator, Value left, Value right) {
+    private Boolean evaluateIntegerRelOp(OperatorKind operator, Long leftNumber, Long rightNumber) {
 
-        Long leftNumber = (Long) left.getValue();
-        Long rightNumber = (Long) right.getValue();
         switch(operator) {
             case eq:
-                return new Value(leftNumber == rightNumber);
+                return leftNumber == rightNumber;
             case ne:
-                return new Value(leftNumber != rightNumber);
+                return leftNumber != rightNumber;
             case gt:
-                return new Value(leftNumber > rightNumber);
+                return leftNumber > rightNumber;
             case lt:
-                return new Value(leftNumber < rightNumber);
+                return leftNumber < rightNumber;
             case ge:
-                return new Value(leftNumber >= rightNumber);
+                return leftNumber >= rightNumber;
             case le:
-                return new Value(leftNumber <= rightNumber);
+                return leftNumber <= rightNumber;
 
             default:
                 throw new IllegalArgumentException("Not a boolean operator: " + operator);
         }
     }
 
-    private Value evaluateRealRelOp(OperatorKind operator, Value left, Value right) {
+    private Boolean evaluateRealRelOp(OperatorKind operator, Double leftNumber, Double rightNumber) {
 
-        Double leftNumber = convertToDouble(left);
-        Double rightNumber = convertToDouble(right);
         switch(operator) {
             case eq:
-                return new Value(Math.abs(leftNumber - rightNumber) < EPSILON);
+                return Math.abs(leftNumber - rightNumber) < EPSILON;
             case ne:
-                return new Value(Math.abs(leftNumber - rightNumber) >= EPSILON);
+                return Math.abs(leftNumber - rightNumber) >= EPSILON;
             case gt:
-                return new Value(leftNumber > rightNumber);
+                return leftNumber > rightNumber;
             case lt:
-                return new Value(leftNumber < rightNumber);
+                return leftNumber < rightNumber;
             case ge:
-                return new Value(leftNumber >= rightNumber);
+                return leftNumber >= rightNumber;
             case le:
-                return new Value(leftNumber <= rightNumber);
+                return leftNumber <= rightNumber;
             default:
                 throw new IllegalArgumentException("Not a boolean operator: " + operator);
         }
@@ -225,8 +319,8 @@ public class BinaryOperatorEvaluator implements Evaluator<BinaryOperator> {
         }
     }
 
-    private double convertToDouble(Value value) {
-        return value.getValue() instanceof  Double ? (Double) value.getValue() : ((Long) value.getValue()).doubleValue();
+    private double convertToDouble(Object value) {
+        return value instanceof  Double ? (Double) value : ((Long) value).doubleValue();
     }
 
     @Override

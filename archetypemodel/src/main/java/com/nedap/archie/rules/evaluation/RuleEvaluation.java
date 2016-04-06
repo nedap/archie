@@ -21,20 +21,18 @@ import java.util.List;
 public class RuleEvaluation {
 
     private Archetype archetype;
-    private Pathable root;
+    private List<Evaluator> evaluators = new ArrayList<>();
+    private HashMap<Class, Evaluator> classToEvaluator = new HashMap<>();
 
+    //evaluation state
+    private Pathable root;
     private VariableMap variables;
     private List<AssertionResult> assertionResults;
-
-    private List<Evaluator> evaluators = new ArrayList<>();
-
-    private HashMap<Class, Evaluator> classToEvaluator = new HashMap<>();
 
 
 
     public RuleEvaluation(Archetype archetype) {
         this.archetype = archetype;
-
         add(new VariableDeclarationEvaluator());
         add(new ConstantEvaluator());
         add(new AssertionEvaluator());
@@ -86,14 +84,20 @@ public class RuleEvaluation {
 
     /**
      * Callback: an assertion has been evaluated with the given result
-     * @param rightOperand
-     * @param rightValue
      */
     public void assertionEvaluated(String tag, Expression expression, Value value) {
         AssertionResult assertionResult = new AssertionResult();
         assertionResult.setTag(tag);
         assertionResult.setAssertion(expression);
-        assertionResult.setResult((Boolean) value.getValue());
+
+        boolean result = true;
+        for(Object singleResult:value.getValues()) {
+            Boolean singleBoolean = (Boolean) singleResult;
+            if(!singleBoolean) {
+                result = false;
+            }
+        }
+        assertionResult.setResult(result);
         assertionResults.add(assertionResult);
         //TODO: If expression matches:
         //1. path = expression: set path value to value
