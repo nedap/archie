@@ -9,25 +9,15 @@ import java.util.List;
 public class Operator  extends Expression {
 
     private OperatorKind operator;
-    private boolean precedenceOverridden = false;
 
     private List<Expression> operands = new ArrayList<>();
-
-
+    
     public OperatorKind getOperator() {
         return operator;
     }
 
     public void setOperator(OperatorKind operator) {
         this.operator = operator;
-    }
-
-    public boolean isPrecedenceOverridden() {
-        return precedenceOverridden;
-    }
-
-    public void setPrecedenceOverridden(boolean precedenceOverridden) {
-        this.precedenceOverridden = precedenceOverridden;
     }
 
     public List<Expression> getOperands() {

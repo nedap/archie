@@ -46,16 +46,16 @@ public class AssertionsParser extends BaseTreeWalker {
             setVariableNameAndType(context, result);
             result.setExpression(parseExpression(context.boolean_expression()));
             return result;
-        } else if (context.adl_path() != null) {
-            ExpressionVariable result = new ExpressionVariable();
-            setVariableNameAndType(context, result);
-            assertion.setExpression(parseModelReference(context.adl_path()));
-            return result;
-        } else if (context.adl_relative_path() != null) {
-            ExpressionVariable result = new ExpressionVariable();
-            setVariableNameAndType(context, result);
-            assertion.setExpression(parseModelReference(context.adl_relative_path()));
-            return result;
+//        } else if (context.adl_path() != null) {
+//            ExpressionVariable result = new ExpressionVariable();
+//            setVariableNameAndType(context, result);
+//            assertion.setExpression(parseModelReference(context.adl_path()));
+//            return result;
+//        } else if (context.adl_relative_path() != null) {
+//            ExpressionVariable result = new ExpressionVariable();
+//            setVariableNameAndType(context, result);
+//            assertion.setExpression(parseModelReference(context.adl_relative_path()));
+//            return result;
 
         } else if (context.arithmetic_expression() != null) {
             ExpressionVariable result = new ExpressionVariable();
@@ -117,9 +117,17 @@ public class AssertionsParser extends BaseTreeWalker {
             BinaryOperator expression = new BinaryOperator();
             expression.setType(ExpressionType.BOOLEAN);
             expression.setOperator(OperatorKind.parse(context.SYM_XOR().getText()));
-            expression.addOperand(parseBooleanLeaf(context.boolean_leaf()));
+            expression.addOperand(parseBooleanConstraintExpression(context.boolean_constraint_expression()));
             expression.addOperand(parseXorExpression(context.boolean_xor_expression()));
             return expression;
+        } else {
+            return parseBooleanConstraintExpression(context.boolean_constraint_expression());
+        }
+    }
+
+    private Expression parseBooleanConstraintExpression(Boolean_constraint_expressionContext context) {
+        if(context.boolean_constraint() != null) {
+            return parseBooleanConstraint(context.boolean_constraint());
         } else {
             return parseBooleanLeaf(context.boolean_leaf());
         }
@@ -138,9 +146,6 @@ public class AssertionsParser extends BaseTreeWalker {
             } else {
                 return reference;
             }
-        }
-        if(context.boolean_constraint() != null) {
-            return parseBooleanConstraint(context.boolean_constraint());
         }
         if(context.boolean_expression() != null) {
             Expression expression = parseExpression(context.boolean_expression());

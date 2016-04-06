@@ -2,6 +2,7 @@ package com.nedap.archie.rules.evaluation.evaluators;
 
 import com.google.common.collect.Lists;
 import com.nedap.archie.rules.BinaryOperator;
+import com.nedap.archie.rules.Constraint;
 import com.nedap.archie.rules.OperatorKind;
 import com.nedap.archie.rules.PrimitiveType;
 import com.nedap.archie.rules.evaluation.Evaluator;
@@ -21,55 +22,65 @@ public class BinaryOperatorEvaluator implements Evaluator<BinaryOperator> {
 
     @Override
     public Value evaluate(RuleEvaluation evaluation, BinaryOperator statement) {
-        if(statement.isPrecedenceOverridden()) {
-            //TODO!
-        }
-        Value leftValue = evaluation.evaluate(statement.getLeftOperand());
-        Value rightValue = evaluation.evaluate(statement.getRightOperand());
-        if(statement.getOperator() == OperatorKind.implies) {
-            if(leftValue.getType() != PrimitiveType.Boolean) {
-                throw new IllegalArgumentException("left operand type should be boolean, but was " + leftValue.getType());
-            }
-            if((Boolean) leftValue.getValue()) {
-                //we could use the tag from the overall statement, but not sure if we should
-                evaluation.assertionEvaluated(null /* no tag present here*/, statement.getRightOperand(), rightValue);
-            }
-        }
-        return evaluate(evaluation, statement.getOperator(), leftValue, rightValue);
-    }
-
-    private Value evaluate(RuleEvaluation evaluation, OperatorKind operator, Value leftValue, Value rightValue) {
-        switch(operator) {
+        switch(statement.getOperator()) {
             case plus:
             case minus:
             case multiply:
             case divide:
             case modulo:
             case exponent:
-                return evaluateArithmeticOperator(operator, leftValue, rightValue);
+                return evaluateArithmeticOperator(evaluation, statement);
             case gt:
             case ge:
             case lt:
             case le:
             case eq:
             case ne:
-                return evaluateRelOpOperator(operator, leftValue, rightValue);
+                return evaluateRelOpOperator(evaluation, statement);
             case and:
             case or:
             case xor:
-                return evaluateBooleanOperator(evaluation, operator, leftValue, rightValue);
-//                    matches("matches", "∈", "is_in"),
-//                    implies("implies", "®"), for_all("for_all", "∀"), exists("exists" ,"∃"),;
-
+                return evaluateBooleanOperator(evaluation, statement);
+            case matches:
+                return evaluateBooleanConstraint(evaluation, statement);
+            case implies:
+                return evaluateImplies(evaluation, statement);
+                //for_all("for_all", "∀"), exists("exists" ,"∃"),;
         }
-        throw new RuntimeException("operation " + operator + " not yet supported");
+        throw new RuntimeException("operation " + statement.getOperator() + " not yet supported");
     }
 
-    private Value evaluateBooleanOperator(RuleEvaluation evaluation, OperatorKind operator, Value leftValue, Value rightValue) {
+    private Value evaluateImplies(RuleEvaluation evaluation, BinaryOperator statement) {
+        Value leftValue = evaluation.evaluate(statement.getLeftOperand());
+        if(leftValue.getType() != PrimitiveType.Boolean) {
+            throw new IllegalArgumentException("left operand type should be boolean, but was " + leftValue.getType());
+        }
+        if((Boolean) leftValue.getValue()) {
+            //we could use the tag from the overall statement, but not sure if we should
+            Value rightValue = evaluation.evaluate(statement.getRightOperand());
+            evaluation.assertionEvaluated(null /* no tag present here*/, statement.getRightOperand(), rightValue);
+        }
+        return leftValue;//i think?
+    }
+
+    private Value evaluateBooleanConstraint(RuleEvaluation evaluation, BinaryOperator statement) {
+        Value leftValue = evaluation.evaluate(statement.getLeftOperand());
+        if(!(statement.getRightOperand() instanceof Constraint)){
+            throw new IllegalArgumentException("cannot evaluate matches statement, right operand not a constraint");
+
+        }
+        Constraint constraint = (Constraint) statement.getRightOperand();
+        return new Value(constraint.getItem().isValidValue(leftValue.getValue()));
+
+    }
+
+    private Value evaluateBooleanOperator(RuleEvaluation evaluation, BinaryOperator statement) {
+        Value leftValue = evaluation.evaluate(statement.getLeftOperand());
+        Value rightValue = evaluation.evaluate(statement.getRightOperand());
         checkisBoolean(leftValue, rightValue);
         Boolean leftBoolean = (Boolean) leftValue.getValue();
         Boolean rightBoolean = (Boolean) leftValue.getValue();
-        switch(operator) {
+        switch(statement.getOperator()) {
             case and:
                 return new Value(leftBoolean & rightBoolean);
             case or:
@@ -77,16 +88,19 @@ public class BinaryOperatorEvaluator implements Evaluator<BinaryOperator> {
             case xor:
                 return new Value(leftBoolean ^ rightBoolean);
             default:
-                throw new IllegalArgumentException("Not a boolean operator: " + operator);
+                throw new IllegalArgumentException("Not a boolean operator: " + statement.getOperator());
         }
     }
 
-    private Value evaluateArithmeticOperator(OperatorKind operator, Value leftValue, Value rightValue) {
+    private Value evaluateArithmeticOperator(RuleEvaluation evaluation, BinaryOperator statement) {
+        Value leftValue = evaluation.evaluate(statement.getLeftOperand());
+        Value rightValue = evaluation.evaluate(statement.getRightOperand());
+
         checkIsNumber(leftValue, rightValue);
         if(leftValue.getValue() instanceof Long && rightValue.getValue() instanceof Long) {
-            return evaluateIntegerArithmetic(operator, leftValue, rightValue);
+            return evaluateIntegerArithmetic(statement.getOperator(), leftValue, rightValue);
         } else {
-            return evaluateRealArithmetic(operator, leftValue, rightValue);
+            return evaluateRealArithmetic(statement.getOperator(), leftValue, rightValue);
         }
     }
 
@@ -135,12 +149,14 @@ public class BinaryOperatorEvaluator implements Evaluator<BinaryOperator> {
     }
 
     @NotNull
-    private Value evaluateRelOpOperator(OperatorKind operator, Value leftValue, Value rightValue) {
+    private Value evaluateRelOpOperator(RuleEvaluation evaluation, BinaryOperator statement) {
+        Value leftValue = evaluation.evaluate(statement.getLeftOperand());
+        Value rightValue = evaluation.evaluate(statement.getRightOperand());
         checkIsNumber(leftValue, rightValue);
         if(leftValue.getValue() instanceof Long && rightValue.getValue() instanceof Long) {
-            return evaluateIntegerRelOp(operator, leftValue, rightValue);
+            return evaluateIntegerRelOp(statement.getOperator(), leftValue, rightValue);
         } else {
-            return evaluateRealRelOp(operator, leftValue, rightValue);
+            return evaluateRealRelOp(statement.getOperator(), leftValue, rightValue);
         }
     }
 

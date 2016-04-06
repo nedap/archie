@@ -51,11 +51,7 @@ definition
 	}
 
 rules
-	$arithmetic_test:Real ::= /data[id2]/events[id3]/data[id4]/items[id5]/value[id13]/magnitude
-
-	blood_pressure_valid: $arithmetic_test > 50
-
-
+	$extended_validity:Boolean ::= /data[id2]/events[id3]/data[id4]/items[id5]/value[id13]/magnitude matches {|0.0..30.0|}
 
 terminology
 	term_definitions = <

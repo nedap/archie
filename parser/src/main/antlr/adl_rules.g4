@@ -15,7 +15,7 @@ import cadl_primitives;
 
 assertion: variable_declaration | boolean_assertion;
 
-variable_declaration: '$' identifier ':' identifier '::=' (boolean_expression | arithmetic_expression | adl_path | adl_relative_path);
+variable_declaration: '$' identifier ':' identifier '::=' (boolean_expression | arithmetic_expression);
 
 boolean_assertion: ( identifier ':' )? boolean_expression ;
 
@@ -39,22 +39,26 @@ boolean_and_expression
 	;
 
 boolean_xor_expression
-	:	boolean_leaf
-	|	boolean_xor_expression SYM_XOR boolean_leaf
+	:	boolean_constraint_expression
+	|	boolean_xor_expression SYM_XOR boolean_constraint_expression
 	;
 
+boolean_constraint_expression
+    : boolean_constraint
+    | boolean_leaf;
+
+
+boolean_constraint: ( adl_path | adl_relative_path ) SYM_MATCHES ('{' c_primitive_object '}' | CONTAINED_REGEXP );
 
 boolean_leaf:
       boolean_literal
     | adl_path
+    | variable_reference
     | SYM_EXISTS adl_path
-    | boolean_constraint
     | '(' boolean_expression ')'
     | arithmetic_relop_expr
     | SYM_NOT boolean_leaf
     ;
-
-boolean_constraint: ( adl_path | adl_relative_path ) SYM_MATCHES ('{' c_primitive_object '}' | CONTAINED_REGEXP );
 
 boolean_literal:
       SYM_TRUE
@@ -80,7 +84,7 @@ multiplying_expression
 
 pow_expression
    : arithmetic_leaf
-   | pow_expression pow_binop arithmetic_leaf
+   | <assoc=right> pow_expression '^' arithmetic_leaf
    ;
 
 arithmetic_leaf:
@@ -96,7 +100,6 @@ variable_reference: '$' identifier;
 
 plus_minus_binop: '+' | '-';
 mult_binop: '*' | '/' | '%';
-pow_binop: '^';
 
 relational_binop:
       '='

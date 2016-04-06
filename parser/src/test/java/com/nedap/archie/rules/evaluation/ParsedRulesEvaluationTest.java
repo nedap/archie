@@ -69,6 +69,29 @@ public class ParsedRulesEvaluationTest {
         assertEquals("the assertion tag should be correct", "blood_pressure_valid", result.getTag());
     }
 
+    @Test
+    public void booleanConstraint() throws Exception {
+        parser = new ADLParser();
+        archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("matches.adls"));
+        creator = new RMObjectCreator(ArchieRMInfoLookup.getInstance());
+        RuleEvaluation ruleEvaluation = new RuleEvaluation(archetype);
+
+        Pathable root = (Pathable) constructEmptyRMObject(archetype.getDefinition());
+
+        DvQuantity quantity = (DvQuantity) root.itemAtPath("/data[id2]/events[id3]/data[id4]/items[id5]/value[id13]");
+        quantity.setMagnitude(40d);
+
+        ruleEvaluation.evaluate(root, archetype.getRules().getRules());
+        assertEquals(false, ruleEvaluation.getVariableMap().get("extended_validity").getValue());
+
+        quantity.setMagnitude(20d);
+
+        ruleEvaluation.evaluate(root, archetype.getRules().getRules());
+        assertEquals(true, ruleEvaluation.getVariableMap().get("extended_validity").getValue());
+
+
+    }
+
     /**
      * Creates an empty RM Object, fully nested, one object per CObject found.
      * For those familiar to the old java libs: this is a simple skeleton generator.
@@ -76,7 +99,7 @@ public class ParsedRulesEvaluationTest {
      * Perhaps this should be moved to a utility class. However, it is more of an example:
      * in a real system you would want user input/a parameter map. Plus just creating every CObject will
      * introduce cardinality/multiplicity problems in many case.
-     * 
+     *
      * @param object
      * @return
      */
@@ -88,6 +111,10 @@ public class ParsedRulesEvaluationTest {
                 if(childConstraint instanceof CComplexObject) {
                     RMObject childObject = constructEmptyRMObject(childConstraint);
                     children.add(childObject);
+//                    if(childConstraint.getRmTypeName().equals("EVENT")) {
+//                        childObject = constructEmptyRMObject(childConstraint);
+//                        children.add(childObject);
+//                    }
                 }
             }
             if(!children.isEmpty()) {
