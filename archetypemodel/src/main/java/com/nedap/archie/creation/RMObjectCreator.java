@@ -2,6 +2,7 @@ package com.nedap.archie.creation;
 
 import com.nedap.archie.aom.CObject;
 import com.nedap.archie.rm.archetypes.Locatable;
+import com.nedap.archie.rminfo.ArchieRMInfoLookup;
 import com.nedap.archie.rminfo.ModelInfoLookup;
 import com.nedap.archie.rminfo.RMAttributeInfo;
 
@@ -15,11 +16,18 @@ import java.util.List;
 import java.util.Set;
 
 /**
+ * Utility to create Reference model objects based on their RM name. Also can set attribute values on RM Objects based
+ * on their RM Attribute name.
+ *
  * Created by pieter.bos on 03/02/16.
  */
 public class RMObjectCreator {
 
     private final ModelInfoLookup classLookup;
+
+    public RMObjectCreator(){
+        this(ArchieRMInfoLookup.getInstance());
+    }
 
     public RMObjectCreator(ModelInfoLookup lookup) {
         this.classLookup = lookup;
@@ -77,7 +85,7 @@ public class RMObjectCreator {
         if(values == null || values.isEmpty()) {
             setField(object, attributeInfo, null);
         } else if(values.size() > 1) {
-            throw new IllegalArgumentException(String.format("trying to set multiple values for a single valued field, %s %s",
+            throw new IllegalArgumentException(String.format("trying to set multiple values for a single valued field, class %s field %s",
                     object.getClass().getSimpleName(), rmAttributeName)
             );
         } else {

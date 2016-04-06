@@ -2,6 +2,7 @@ package com.nedap.archie.adlparser;
 
 import com.nedap.archie.adlparser.antlr.*;
 import com.nedap.archie.adlparser.modelconstraints.ModelConstraintImposer;
+import com.nedap.archie.adlparser.modelconstraints.RMConstraintImposer;
 import com.nedap.archie.adlparser.treewalkers.ADLListener;
 import com.nedap.archie.aom.Archetype;
 import org.antlr.v4.runtime.ANTLRInputStream;
@@ -31,6 +32,10 @@ public class ADLParser {
 
     public ADLParser() {
 
+    }
+
+    public static ADLParser withRMConstraintsImposer() {
+        return new ADLParser(new RMConstraintImposer());
     }
 
     public ADLParser(ModelConstraintImposer modelConstraintImposer) {

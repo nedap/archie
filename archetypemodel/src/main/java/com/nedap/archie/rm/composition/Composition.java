@@ -4,6 +4,7 @@ import com.nedap.archie.rm.archetypes.Locatable;
 import com.nedap.archie.rm.archetypes.Pathable;
 import com.nedap.archie.rm.datatypes.CodePhrase;
 import com.nedap.archie.rm.datatypes.PartyProxy;
+import com.nedap.archie.rm.datavalues.DvCodedText;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ public class Composition extends Locatable {
 
     private CodePhrase language;
     private CodePhrase territory;
-    private CodePhrase category;
+    private DvCodedText category;
 
     private PartyProxy composer;
 
@@ -50,16 +51,17 @@ public class Composition extends Locatable {
         this.territory = new CodePhrase(codePhrase);
     }
 
-    public CodePhrase getCategory() {
+    public DvCodedText getCategory() {
         return category;
     }
 
-    public void setCategory(CodePhrase category) {
+    public void setCategory(DvCodedText category) {
         this.category = category;
     }
 
     public void setCategory(String codePhrase) {
-        this.category = new CodePhrase(codePhrase);
+        this.category = new DvCodedText();
+        category.setDefiningCode(new CodePhrase(codePhrase));
     }
 
     public PartyProxy getComposer() {

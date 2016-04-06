@@ -6,12 +6,12 @@ import java.util.List;
 /**
  * Created by pieter.bos on 27/10/15.
  */
-public class Operator  extends Expression {
+public class Operator extends Expression {
 
     private OperatorKind operator;
 
     private List<Expression> operands = new ArrayList<>();
-    
+
     public OperatorKind getOperator() {
         return operator;
     }

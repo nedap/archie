@@ -219,10 +219,10 @@ public class AssertionsParser extends BaseTreeWalker {
     }
 
     private Expression parsePowExpression(Pow_expressionContext context) {
-        if(context.pow_binop() != null) {
+        if(context.pow_expression() != null) {
             Expression left = parsePowExpression(context.pow_expression());
             Expression right = parseArithmeticLeaf(context.arithmetic_leaf());
-            return new BinaryOperator(right.getType(), OperatorKind.parse(context.pow_binop().getText()), left, right);
+            return new BinaryOperator(right.getType(), OperatorKind.parse("^"), left, right);
         } else {
             return parseArithmeticLeaf(context.arithmetic_leaf());
         }

@@ -19,7 +19,7 @@ public class RMConstraintImposerTest {
 
     @Before
     public void setup() throws Exception {
-        archetype = new ADLParser(new RMConstraintImposer()).parse(getClass().getResourceAsStream("/adl2-tests/features/alternatives/openEHR-EHR-ADMIN_ENTRY.dependency_choice.v1.adls"));
+        archetype = ADLParser.withRMConstraintsImposer().parse(getClass().getResourceAsStream("/adl2-tests/features/alternatives/openEHR-EHR-ADMIN_ENTRY.dependency_choice.v1.adls"));
     }
 
     @Test

@@ -11,6 +11,8 @@ import com.nedap.archie.rm.archetypes.Pathable;
 import com.nedap.archie.rm.composition.Observation;
 import com.nedap.archie.rm.datavalues.quantity.DvQuantity;
 import com.nedap.archie.rminfo.ArchieRMInfoLookup;
+import com.nedap.archie.testutil.TestUtil;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -26,11 +28,16 @@ public class ParsedRulesEvaluationTest {
     ADLParser parser;
     Archetype archetype;
 
-    RMObjectCreator creator;
+    TestUtil testUtil;
+
+    @Before
+    public void setup() {
+        testUtil = new TestUtil();
+        parser = new ADLParser();
+    }
 
     @Test
     public void simpleArithmetic() throws Exception {
-        parser = new ADLParser();
         archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("simplearithmetic.adls"));
         RuleEvaluation ruleEvaluation = new RuleEvaluation(archetype);
         Observation root = new Observation();
@@ -47,12 +54,10 @@ public class ParsedRulesEvaluationTest {
 
     @Test
     public void modelReferences() throws Exception {
-        parser = new ADLParser();
         archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("modelreferences.adls"));
-        creator = new RMObjectCreator(ArchieRMInfoLookup.getInstance());
         RuleEvaluation ruleEvaluation = new RuleEvaluation(archetype);
 
-        Pathable root = (Pathable) constructEmptyRMObject(archetype.getDefinition());
+        Pathable root = (Pathable) testUtil.constructEmptyRMObject(archetype.getDefinition());
 
         DvQuantity quantity = (DvQuantity) root.itemAtPath("/data[id2]/events[id3]/data[id4]/items[id5]/value[id13]");
         quantity.setMagnitude(65d);
@@ -71,12 +76,11 @@ public class ParsedRulesEvaluationTest {
 
     @Test
     public void booleanConstraint() throws Exception {
-        parser = new ADLParser();
         archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("matches.adls"));
-        creator = new RMObjectCreator(ArchieRMInfoLookup.getInstance());
+
         RuleEvaluation ruleEvaluation = new RuleEvaluation(archetype);
 
-        Pathable root = (Pathable) constructEmptyRMObject(archetype.getDefinition());
+        Pathable root = (Pathable) testUtil.constructEmptyRMObject(archetype.getDefinition());
 
         DvQuantity quantity = (DvQuantity) root.itemAtPath("/data[id2]/events[id3]/data[id4]/items[id5]/value[id13]");
         quantity.setMagnitude(40d);
@@ -92,35 +96,5 @@ public class ParsedRulesEvaluationTest {
 
     }
 
-    /**
-     * Creates an empty RM Object, fully nested, one object per CObject found.
-     * For those familiar to the old java libs: this is a simple skeleton generator.
-     *
-     * Perhaps this should be moved to a utility class. However, it is more of an example:
-     * in a real system you would want user input/a parameter map. Plus just creating every CObject will
-     * introduce cardinality/multiplicity problems in many case.
-     *
-     * @param object
-     * @return
-     */
-    private RMObject constructEmptyRMObject(CObject object) {
-        RMObject result = creator.create(object);
-        for(CAttribute attribute: object.getAttributes()) {
-            List<Object> children = new ArrayList<>();
-            for(CObject childConstraint:attribute.getChildren()) {
-                if(childConstraint instanceof CComplexObject) {
-                    RMObject childObject = constructEmptyRMObject(childConstraint);
-                    children.add(childObject);
-//                    if(childConstraint.getRmTypeName().equals("EVENT")) {
-//                        childObject = constructEmptyRMObject(childConstraint);
-//                        children.add(childObject);
-//                    }
-                }
-            }
-            if(!children.isEmpty()) {
-                creator.set(result, attribute.getRmAttributeName(), children);
-            }
-        }
-        return result;
-    }
+
 }
