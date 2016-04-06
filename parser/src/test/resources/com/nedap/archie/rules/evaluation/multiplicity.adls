@@ -1,5 +1,5 @@
 archetype (adl_version=2.0.5; rm_release=1.0.2; generated)
-	openEHR-EHR-OBSERVATION.modelreferences.v1.0.0
+	openEHR-EHR-OBSERVATION.multiplicity.v1.0.0
 
 language
 	original_language = <[ISO_639-1::en]>
@@ -29,18 +29,25 @@ definition
 					EVENT[id3] occurrences matches {1..*} matches {	-- Any event
 						data matches {
 							ITEM_TREE[id4] matches {
-								items cardinality matches {1..*; unordered} matches {
-									ELEMENT[id5] matches {	-- Body Mass Index
+								items cardinality matches {2; unordered} matches {
+									ELEMENT[id5] matches {	-- systolic pressure
 										value matches {
 											DV_QUANTITY[id13] matches {
-												property matches {[at10]}
 												[magnitude, units, precision] matches {
-													[{|0.0..<1000.0|}, {"kg/m2"}, {1}],
-													[{|0.0..<1000.0|}, {"lb/in2"}, {1}]
+													[{|0.0..<1000.0|}, {"mmHg"}, {1}]
 												}
 											}
 										}
 									}
+									ELEMENT[id6] matches {	-- diastolic pressure
+                                        value matches {
+                                            DV_QUANTITY[id14] matches {
+                                                [magnitude, units, precision] matches {
+                                                    [{|0.0..<1000.0|}, {"mmHg"}, {1}]]
+                                                }
+                                            }
+                                        }
+                                    }
 								}
 							}
 						}
@@ -51,9 +58,11 @@ definition
 	}
 
 rules
-	$arithmetic_test:Real ::= /data[id2]/events[id3]/data[id4]/items[id5]/value[id13]/magnitude
+	$systolic:Real ::= /data[id2]/events[id3]/data[id4]/items[id5]/value[id13]/magnitude
 
-	blood_pressure_valid: $arithmetic_test > 50
+	$diastolic:Real ::= /data[id2]/events[id3]/data[id4]/items[id6]/value[id14]/magnitude
+
+	blood_pressure_valid: $systolic > $diastolic
 
 
 

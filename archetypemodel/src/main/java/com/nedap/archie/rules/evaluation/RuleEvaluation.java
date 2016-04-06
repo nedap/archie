@@ -98,6 +98,7 @@ public class RuleEvaluation {
             }
         }
         assertionResult.setResult(result);
+        assertionResult.setRawResult(value);
         assertionResults.add(assertionResult);
         //TODO: If expression matches:
         //1. path = expression: set path value to value

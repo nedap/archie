@@ -9,6 +9,13 @@ public class AssertionResult {
 
     private String tag;
     private Expression assertion;
+    /**
+     * The raw result: Did all the separate checks for this assertion pass?
+     */
+    private Value rawResult;
+    /**
+     * The result: did this assertion pass?
+     */
     private boolean result;
 
     public String getTag() {
@@ -25,6 +32,14 @@ public class AssertionResult {
 
     public void setAssertion(Expression assertion) {
         this.assertion = assertion;
+    }
+
+    public Value getRawResult() {
+        return rawResult;
+    }
+
+    public void setRawResult(Value rawResult) {
+        this.rawResult = rawResult;
     }
 
     public boolean getResult() {
