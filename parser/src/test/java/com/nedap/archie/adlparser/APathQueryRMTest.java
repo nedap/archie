@@ -1,6 +1,5 @@
 package com.nedap.archie.adlparser;
 
-import com.nedap.archie.adlparser.modelconstraints.RMConstraintImposer;
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.query.APathQuery;
 import com.nedap.archie.rm.archetypes.Pathable;
@@ -10,8 +9,6 @@ import com.nedap.archie.rminfo.ArchieRMInfoLookup;
 import com.nedap.archie.testutil.TestUtil;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.Collection;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -68,18 +65,22 @@ public class APathQueryRMTest {
             composition.getContext().getOtherContext().getItems().addAll(composition2.getContext().getOtherContext().getItems());
         }
 
+        assertEquals(1,
+                new APathQuery("/context")
+                        .findList(ArchieRMInfoLookup.getInstance(), composition).size());
+
         //now check that retrieving this retrieves more than one, even with the same ID. Should we always return a list of objects?
         assertEquals(2,
-                ((Collection) new APathQuery("/context[id11]/other_context[id2]/items")
-                        .find(ArchieRMInfoLookup.getInstance(), composition)).size());
+                new APathQuery("/context[id11]/other_context[id2]/items")
+                        .findList(ArchieRMInfoLookup.getInstance(), composition).size());
         assertEquals(2,
-                ((Collection) new APathQuery("/context[id11]/other_context[id2]/items[id3]")
-                        .find(ArchieRMInfoLookup.getInstance(), composition)).size());
+                new APathQuery("/context[id11]/other_context[id2]/items[id3]")
+                        .findList(ArchieRMInfoLookup.getInstance(), composition).size());
 
         //and check that retrieving a sub-element also retrieves more than one element
         assertEquals(2,
-                ((Collection) new APathQuery("/context[id11]/other_context[id2]/items[id3]/items[id5]/value")
-                        .find(ArchieRMInfoLookup.getInstance(), composition)).size());
+                new APathQuery("/context[id11]/other_context[id2]/items[id3]/items[id5]/value")
+                        .findList(ArchieRMInfoLookup.getInstance(), composition).size());
     }
 
 

@@ -1,6 +1,7 @@
 package com.nedap.archie.query;
 
 
+import com.google.common.collect.Lists;
 import com.nedap.archie.aom.ArchetypeModelObject;
 import com.nedap.archie.aom.CAttribute;
 import com.nedap.archie.aom.CComplexObject;
@@ -181,7 +182,7 @@ public class APathQuery {
 
     }
 
-    //TODO: get diagnostic information about where the finder stopped in the path - could be very useful!
+
     public <T> T find(ModelInfoLookup lookup, Object root) {
         Object currentObject = root;
         try {
@@ -246,6 +247,113 @@ public class APathQuery {
             throw new RuntimeException(e);
         }
 
+    }
+
+    public <T> List<T> findList(ModelInfoLookup lookup, Object root) {
+        List currentObjects = Lists.newArrayList(root);
+        try {
+            for (PathSegment segment : pathSegments) {
+                if(currentObjects.isEmpty()){
+                    return null;
+                }
+                List newCurrentObjects = new ArrayList();
+                for(Object currentObject:currentObjects) {
+                    RMAttributeInfo attributeInfo = lookup.getAttributeInfo(currentObject.getClass(), segment.getNodeName());
+                    if (attributeInfo == null) {
+                        continue;
+                    }
+                    Method method = attributeInfo.getGetMethod();
+                    currentObject = method.invoke(currentObject);
+                    if (currentObject == null) {
+                        continue;
+                    }
+                    if (currentObject instanceof Collection) {
+                        Collection collection = (Collection) currentObject;
+                        if (segment.getNodeId() == null) {
+                            //TODO: check if this is correct
+                            newCurrentObjects.addAll(collection);
+                        } else {
+                            newCurrentObjects.addAll(findRMObjectCollection(segment, collection));
+                        }
+                    } else if (currentObject instanceof Locatable) {
+
+                        if (segment.getNodeId() != null) {
+                            Locatable locatable = (Locatable) currentObject;
+                            if (segment.hasIdCode()) {
+                                if (!locatable.getArchetypeNodeId().equals(segment.getNodeId())) {
+                                    continue;
+                                }
+                            } else if (segment.hasNumberIndex()) {
+                                int number = Integer.parseInt(segment.getNodeId());
+                                if (number != 1) {
+                                    continue;
+                                }
+                            } else if (segment.hasArchetypeRef()) {
+                                //operational templates in RM Objects have their archetype node ID set to an archetype ref. That
+                                //we support. Other things not so much
+                                if (!locatable.getArchetypeNodeId().equals(segment.getNodeId())) {
+                                    throw new IllegalArgumentException("cannot handle RM-queries with node names or archetype references yet");
+                                }
+
+                            }
+                            newCurrentObjects.add(currentObject);
+                        }
+                    } else if (segment.hasNumberIndex()) {
+                        int number = Integer.parseInt(segment.getNodeId());
+                        if (number != 1) {
+                            continue;
+                        }
+                    } else {
+                        //not a locatable, but that's fine
+                        //in openehr, in archetypes everythign has node ids. Datavalues do not in the rm. a bit ugly if you ask
+                        //me, but that's why there's no 'if there's a nodeId set, this won't match!' code here.
+                        newCurrentObjects.add(currentObject);
+                    }
+                }
+                currentObjects = newCurrentObjects;
+            }
+            return currentObjects;
+        } catch (InvocationTargetException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    private Collection findRMObjectCollection(PathSegment segment, Collection collection) {
+
+        if(segment.hasNumberIndex()) {
+            int number = Integer.parseInt(segment.getNodeId());
+            for(Object object:collection) {
+                if(number == 1) {
+                    return Lists.newArrayList(object);
+                }
+                number--;
+            }
+        }
+        List<Object> result = new ArrayList<>();
+        for(Object o:collection) {
+            Locatable locatable = (Locatable) o;
+
+            if (segment.hasIdCode()) {
+                if (locatable.getArchetypeNodeId().equals(segment.getNodeId())) {
+                    result.add(o);
+                }
+            } else if (segment.hasArchetypeRef()) {
+                //operational templates in RM Objects have their archetype node ID set to an archetype ref. That
+                //we support. Other things not so much
+                if (locatable.getArchetypeNodeId().equals(segment.getNodeId())) {
+                    result.add(o);
+                }
+                throw new IllegalArgumentException("cannot handle RM-queries with archetype references yet");
+            } else {
+                if(equalsName(locatable.getName(), segment.getNodeId())) {
+                    result.add(o);
+                }
+            }
+        }
+        return result;
     }
 
     private Object findRMObject(PathSegment segment, Collection collection) {
