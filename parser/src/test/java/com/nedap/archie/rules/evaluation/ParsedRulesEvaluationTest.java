@@ -107,10 +107,10 @@ public class ParsedRulesEvaluationTest {
 
         {
             DvQuantity systolic = (DvQuantity) root.itemAtPath("/data[id2]/events[id3]/data[id4]/items[id5]/value[id13]");
-            systolic.setMagnitude(120d);
+            systolic.setMagnitude(76d);
             DvQuantity diastolic = (DvQuantity) root.itemAtPath("/data[id2]/events[id3]/data[id4]/items[id6]/value[id14]");
             diastolic.setMagnitude(80d);
-            //this is fine
+            //this is fine, because "blood_pressure_valid: $systolic > $diastolic - 5"
         }
 
 

@@ -62,7 +62,7 @@ rules
 
 	$diastolic:Real ::= /data[id2]/events[id3]/data[id4]/items[id6]/value[id14]/magnitude
 
-	blood_pressure_valid: $systolic > $diastolic
+	blood_pressure_valid: $systolic > $diastolic - 5
 
 
 
