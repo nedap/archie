@@ -158,6 +158,9 @@ public class AssertionsParser extends BaseTreeWalker {
         if(context.SYM_NOT() != null) {
             return new UnaryOperator(ExpressionType.BOOLEAN, OperatorKind.not, parseBooleanLeaf(context.boolean_leaf()));
         }
+        if(context.variable_reference() != null) {
+            return parseVariableReference(context.variable_reference());
+        }
 
         throw new IllegalArgumentException("cannot parse unknown boolean leaf type");
     }
@@ -246,13 +249,18 @@ public class AssertionsParser extends BaseTreeWalker {
             return new UnaryOperator(expression.getType(), OperatorKind.minus, expression);
         }
         if(context.variable_reference() != null) {
-            VariableReference reference = new VariableReference();
-            //TODO: retrieve declaration from actual declaration, instead of just setting the name
-            VariableDeclaration declaration = new VariableDeclaration();
-            declaration.setName(context.variable_reference().identifier().  getText());
-            reference.setDeclaration(declaration);
-            return reference;
+            return parseVariableReference(context.variable_reference());
         }
         throw new IllegalArgumentException("cannot parse unknown arithmetic leaf type: " + context.getText());
+    }
+
+    @NotNull
+    private Expression parseVariableReference(Variable_referenceContext context) {
+        VariableReference reference = new VariableReference();
+        //TODO: retrieve declaration from actual declaration, instead of just setting the name
+        VariableDeclaration declaration = new VariableDeclaration();
+        declaration.setName(context.identifier().  getText());
+        reference.setDeclaration(declaration);
+        return reference;
     }
 }
