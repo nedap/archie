@@ -6,6 +6,7 @@ import com.nedap.archie.rm.RMObject;
 import com.nedap.archie.rminfo.ArchieRMInfoLookup;
 
 import javax.xml.bind.annotation.XmlTransient;
+import java.util.List;
 
 /**
  * Created by pieter.bos on 04/11/15.
@@ -19,6 +20,10 @@ public class Pathable extends RMObject {
 
     public Object itemAtPath(String s) {
         return new APathQuery(s).find(ArchieRMInfoLookup.getInstance(), this);
+    }
+    
+    public List<Object> itemsAtPath(String s) {
+        return new APathQuery(s).findList(ArchieRMInfoLookup.getInstance(), this);
     }
 
     @JsonIgnore
