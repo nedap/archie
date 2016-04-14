@@ -1,5 +1,6 @@
 package com.nedap.archie.adlparser;
 
+import com.nedap.archie.adlparser.modelconstraints.RMConstraintImposer;
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.ArchetypeModelObject;
 import com.nedap.archie.aom.CAttribute;
@@ -12,15 +13,17 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 /**
+ * Test APath queries with archetype model objects
+ *
  * Created by pieter.bos on 20/10/15.
  */
-public class APathQueryTest {
+public class APathQueryArchetypeTest {
 
     Archetype archetype;
 
     @Before
     public void setup() throws Exception {
-        archetype = new ADLParser().parse(getClass().getResourceAsStream("/basic.adl"));
+        archetype = ADLParser.withRMConstraintsImposer().parse(getClass().getResourceAsStream("/basic.adl"));
     }
 
 

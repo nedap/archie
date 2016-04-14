@@ -2,6 +2,7 @@ package com.nedap.archie.creation;
 
 import com.nedap.archie.aom.CObject;
 import com.nedap.archie.rm.archetypes.Locatable;
+import com.nedap.archie.rminfo.ArchieRMInfoLookup;
 import com.nedap.archie.rminfo.ModelInfoLookup;
 import com.nedap.archie.rminfo.RMAttributeInfo;
 
@@ -15,25 +16,35 @@ import java.util.List;
 import java.util.Set;
 
 /**
+ * Utility to create Reference model objects based on their RM name. Also can set attribute values on RM Objects based
+ * on their RM Attribute name.
+ *
  * Created by pieter.bos on 03/02/16.
  */
 public class RMObjectCreator {
 
     private final ModelInfoLookup classLookup;
 
+    public RMObjectCreator(){
+        this(ArchieRMInfoLookup.getInstance());
+    }
+
     public RMObjectCreator(ModelInfoLookup lookup) {
         this.classLookup = lookup;
     }
 
-    public Object create(CObject constraint) {
+    public <T> T create(CObject constraint) {
         Class clazz = classLookup.getClass(constraint.getRmTypeName());
+        if(clazz == null) {
+            throw new IllegalArgumentException("cannot construct RMObject because of unknown constraint name " + constraint.getRmTypeName() + " full constraint " + constraint);
+        }
         try {
             Object result = clazz.newInstance();
             if(result instanceof Locatable) { //and most often, it will be
                 Locatable locatable = (Locatable) result;
                 locatable.setArchetypeNodeId(constraint.getNodeId());
             }
-            return result;
+            return (T) result;
         } catch (InstantiationException | IllegalAccessException e) {
             throw new RuntimeException(e);
         }
@@ -74,7 +85,7 @@ public class RMObjectCreator {
         if(values == null || values.isEmpty()) {
             setField(object, attributeInfo, null);
         } else if(values.size() > 1) {
-            throw new IllegalArgumentException(String.format("trying to set multiple values for a single valued field, %s %s",
+            throw new IllegalArgumentException(String.format("trying to set multiple values for a single valued field, class %s field %s",
                     object.getClass().getSimpleName(), rmAttributeName)
             );
         } else {

@@ -21,7 +21,7 @@ public class Observation extends CareEntry {
 
     public void setState(@Nullable History<ItemStructure> state) {
         this.state = state;
-        setThisAsParent(state);
+        setThisAsParent(state, "state");
     }
 
     public History<ItemStructure> getData() {
@@ -30,6 +30,6 @@ public class Observation extends CareEntry {
 
     public void setData(History<ItemStructure> data) {
         this.data = data;
-        setThisAsParent(data);
+        setThisAsParent(data, "data");
     }
 }

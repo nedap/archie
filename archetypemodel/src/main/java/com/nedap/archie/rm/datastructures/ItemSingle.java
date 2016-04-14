@@ -15,6 +15,6 @@ public class ItemSingle extends ItemStructure<Item> {
     public void setITem(Item item) {
         getItems().set(0, item);
         this.item = item;
-        setThisAsParent(item);
+        setThisAsParent(item, "item");
     }
 }

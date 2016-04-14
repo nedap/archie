@@ -92,7 +92,7 @@ filterExpr
 orExpr  :  andExpr ('or' andExpr)*
   ;
 
-andExpr  :  equalityExpr ('and' equalityExpr)*
+andExpr  :  equalityExpr (('and'|',') equalityExpr)*
   ;
 
 equalityExpr

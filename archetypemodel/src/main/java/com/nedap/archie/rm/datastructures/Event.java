@@ -37,7 +37,7 @@ public class Event<Type extends ItemStructure> extends Locatable {
 
     public void setState(@Nullable Type state) {
         this.state = state;
-        setThisAsParent(state);
+        setThisAsParent(state, "state");
     }
 
     public Type getData() {
@@ -46,7 +46,7 @@ public class Event<Type extends ItemStructure> extends Locatable {
 
     public void setData(Type data) {
         this.data = data;
-        setThisAsParent(data);
+        setThisAsParent(data, "data");
     }
 
     public DvDuration offset() {

@@ -1,6 +1,8 @@
 package com.nedap.archie.rm.archetypes;
 
+import com.nedap.archie.paths.PathSegment;
 import com.nedap.archie.rm.datatypes.UIDBasedId;
+import com.nedap.archie.rm.datavalues.DvText;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -20,8 +22,6 @@ public class Locatable extends Pathable {
     private Archetyped archetypeDetails;
 
     private List<Link> links = new ArrayList<>();
-
-
 
     public String getName() {
         return name;
@@ -65,6 +65,18 @@ public class Locatable extends Pathable {
 
     public void addLink(Link link) {
         this.links.add(link);
+    }
+
+    @Override
+    public List<PathSegment> getPathSegments() {
+        Pathable parent = getParent();
+        if(parent == null) {
+            return new ArrayList<>();
+        }
+
+        List<PathSegment> segments = parent.getPathSegments();
+        segments.add(new PathSegment(getParentAttributeName(), archetypeNodeId));
+        return segments;
     }
 
 }

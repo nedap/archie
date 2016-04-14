@@ -13,33 +13,51 @@ import cadl_primitives;
 //  ============== Parser rules ==============
 //
 
-assertion: ( identifier ':' )? boolean_expr ;
+assertion: variable_declaration | boolean_assertion;
+
+variable_declaration: '$' identifier ':' identifier '::=' (boolean_expression | arithmetic_expression);
+
+boolean_assertion: ( identifier ':' )? boolean_expression ;
 
 //
 // Expressions evaluating to boolean values
 //
 
-boolean_expr: boolean_expr boolean_binop boolean_leaf
-    | boolean_leaf
+boolean_expression
+    : boolean_or_expression
+    | boolean_expression SYM_IMPLIES boolean_or_expression
     ;
+
+boolean_or_expression
+    : boolean_and_expression
+    | boolean_or_expression SYM_OR boolean_and_expression
+    ;
+
+boolean_and_expression
+	:	boolean_xor_expression
+	|	boolean_and_expression SYM_AND boolean_xor_expression
+	;
+
+boolean_xor_expression
+	:	boolean_constraint_expression
+	|	boolean_xor_expression SYM_XOR boolean_constraint_expression
+	;
+
+boolean_constraint_expression
+    : boolean_constraint
+    | boolean_leaf;
+
+
+boolean_constraint: ( adl_path | adl_relative_path ) SYM_MATCHES ('{' c_primitive_object '}' | CONTAINED_REGEXP );
 
 boolean_leaf:
       boolean_literal
     | adl_path
+    | variable_reference
     | SYM_EXISTS adl_path
-    | boolean_constraint
-    | '(' boolean_expr ')'
+    | '(' boolean_expression ')'
     | arithmetic_relop_expr
     | SYM_NOT boolean_leaf
-    ;
-
-boolean_constraint: ( adl_path | adl_relative_path ) SYM_MATCHES ('{' c_primitive_object '}' | CONTAINED_REGEXP );
-
-boolean_binop:
-    | SYM_AND
-    | SYM_XOR
-    | SYM_OR
-    | SYM_IMPLIES
     ;
 
 boolean_literal:
@@ -51,20 +69,37 @@ boolean_literal:
 // Expressions evaluating to arithmetic values
 //
 
-arithmetic_relop_expr: arithmetic_arith_expr relational_binop arithmetic_arith_expr ;
+arithmetic_relop_expr: arithmetic_expression relational_binop arithmetic_expression ;
+
+
+arithmetic_expression
+   : multiplying_expression
+   | arithmetic_expression plus_minus_binop multiplying_expression
+   ;
+
+multiplying_expression
+   : pow_expression
+   | multiplying_expression mult_binop pow_expression
+   ;
+
+pow_expression
+   : arithmetic_leaf
+   | <assoc=right> pow_expression '^' arithmetic_leaf
+   ;
 
 arithmetic_leaf:
       integer_value
     | real_value
     | adl_path
-    | '(' arithmetic_arith_expr ')'
+    | variable_reference
+    | '(' arithmetic_expression ')'
     | '-' arithmetic_leaf
     ;
 
-arithmetic_arith_expr: arithmetic_arith_expr arithmetic_binop arithmetic_leaf
-    | arithmetic_arith_expr '^'<assoc=right> arithmetic_leaf
-    | arithmetic_leaf
-    ;
+variable_reference: '$' identifier;
+
+plus_minus_binop: '+' | '-';
+mult_binop: '*' | '/' | '%';
 
 relational_binop:
       '='
@@ -75,9 +110,3 @@ relational_binop:
     | '>'
     ;
 
-arithmetic_binop:
-      '/'
-    | '*'
-    | '+'
-    | '-'
-    ;

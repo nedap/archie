@@ -14,4 +14,8 @@ public class UnaryOperator extends Operator {
         setOperator(operator);
         addOperand(operand);
     }
+
+    public Expression getOperand() {
+        return super.getLeftOperand();
+    }
 }

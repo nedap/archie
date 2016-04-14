@@ -59,6 +59,6 @@ public class EventContext extends Pathable {
 
     public void setOtherContext(ItemStructure otherContext) {
         this.otherContext = otherContext;
-        setThisAsParent(otherContext);
+        setThisAsParent(otherContext, "other_context");
     }
 }

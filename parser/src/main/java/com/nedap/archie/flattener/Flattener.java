@@ -148,8 +148,13 @@ public class Flattener {
                 archetype = archetype.clone();//make sure we don't change this archetype :)
             }
 
-            root.getParent().replaceChild(root.getNodeId(), archetype.getDefinition());
+
+
+            //root.getParent().replaceChild(root.getNodeId(), archetype.getDefinition());
             String newNodeId = archetype.getArchetypeId().getFullId();
+            root.setAttributes(archetype.getDefinition().getAttributes());
+            root.setAttributeTuples(archetype.getDefinition().getAttributeTuples());
+            root.setDefaultValue(archetype.getDefinition().getDefaultValue());
 
             ArchetypeTerminology terminology = archetype.getTerminology();
 
@@ -163,9 +168,7 @@ public class Flattener {
                 translations.put(newNodeId, term);
             }
 
-
-            archetype.getDefinition().setNodeId(newNodeId);
-
+            root.setNodeId(newNodeId);
             OperationalTemplate templateResult = (OperationalTemplate) result;
 
             //todo: should we filter this?
@@ -177,7 +180,7 @@ public class Flattener {
                 }
             }
 
-            templateResult.addComponentTerminology(archetype.getDefinition().getNodeId(), terminology);
+            templateResult.addComponentTerminology(newNodeId, terminology);
             //todo: do we have to put something in the terminology extracts?
             //templateResult.addTerminologyExtract(child.getNodeId(), archetype.getTerminology().);
         }

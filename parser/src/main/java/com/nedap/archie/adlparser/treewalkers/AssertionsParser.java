@@ -6,6 +6,8 @@ import com.nedap.archie.adlparser.antlr.AdlParser.*;
 
 import com.nedap.archie.aom.CPrimitiveObject;
 import com.nedap.archie.rules.*;
+import javassist.compiler.ast.Variable;
+import org.jetbrains.annotations.NotNull;
 
 
 /**
@@ -21,28 +23,114 @@ public class AssertionsParser extends BaseTreeWalker {
     }
 
     public Assertion parse(AssertionContext assertionContext) {
+
         Assertion assertion = new Assertion();
-        assertion.setStringExpression(assertionContext.getText());//TODO: this has whitespace stripped. Get the Lexer input instead
-        if(assertionContext.identifier() != null) {
-            assertion.setTag(assertionContext.identifier().getText());
+        if(assertionContext.boolean_assertion() != null) {
+            Boolean_assertionContext context = assertionContext.boolean_assertion();
+            assertion.setStringExpression(context.getText());//TODO: this has whitespace stripped. Get the Lexer input instead
+            if (context.identifier() != null) {
+                assertion.setTag(context.identifier().getText());
+            }
+            assertion.setExpression(parseExpression(context.boolean_expression()));
+        } else if (assertionContext.variable_declaration() != null) {
+            VariableDeclaration declaration = parseVariableDeclaration(assertion, assertionContext.variable_declaration());
+            assertion.addVariable(declaration);
         }
-        assertion.setExpression(parseExpression(assertionContext.boolean_expr()));
         return assertion;
     }
 
-    private Expression parseExpression(Boolean_exprContext booleanExpr) {
+    private VariableDeclaration parseVariableDeclaration(Assertion assertion, Variable_declarationContext context) {
 
-        if(booleanExpr.boolean_binop() != null) {
+        if(context.boolean_expression() != null) {
+            ExpressionVariable result = new ExpressionVariable();
+            setVariableNameAndType(context, result);
+            result.setExpression(parseExpression(context.boolean_expression()));
+            return result;
+//        } else if (context.adl_path() != null) {
+//            ExpressionVariable result = new ExpressionVariable();
+//            setVariableNameAndType(context, result);
+//            assertion.setExpression(parseModelReference(context.adl_path()));
+//            return result;
+//        } else if (context.adl_relative_path() != null) {
+//            ExpressionVariable result = new ExpressionVariable();
+//            setVariableNameAndType(context, result);
+//            assertion.setExpression(parseModelReference(context.adl_relative_path()));
+//            return result;
+
+        } else if (context.arithmetic_expression() != null) {
+            ExpressionVariable result = new ExpressionVariable();
+            setVariableNameAndType(context, result);
+            result.setExpression(parseArithmeticExpression(context.arithmetic_expression()));
+            return result;
+        }
+        return null;
+    }
+
+    private void setVariableNameAndType(AdlParser.Variable_declarationContext context, ExpressionVariable result) {
+        result.setName(context.identifier(0).getText());
+        result.setType(ExpressionType.fromString(context.identifier(1).getText()));
+    }
+
+    private Expression parseExpression(Boolean_expressionContext context) {
+
+        if(context.SYM_IMPLIES() != null) {
             BinaryOperator expression = new BinaryOperator();
             expression.setType(ExpressionType.BOOLEAN);
-            expression.setOperator(OperatorKind.parse(booleanExpr.boolean_binop().getText()));
-            expression.addOperand(parseExpression(booleanExpr.boolean_expr()));
-            expression.addOperand(parseBooleanLeaf(booleanExpr.boolean_leaf()));
+            expression.setOperator(OperatorKind.parse(context.SYM_IMPLIES().getText()));
+            expression.addOperand(parseExpression(context.boolean_expression()));
+            expression.addOperand(parseOrExpression(context.boolean_or_expression()));
             return expression;
         } else {
-            return parseBooleanLeaf(booleanExpr.boolean_leaf());
+            return parseOrExpression(context.boolean_or_expression());
         }
 
+    }
+
+    private Expression parseOrExpression(Boolean_or_expressionContext context) {
+        if(context.SYM_OR() != null) {
+            BinaryOperator expression = new BinaryOperator();
+            expression.setType(ExpressionType.BOOLEAN);
+            expression.setOperator(OperatorKind.parse(context.SYM_OR().getText()));
+            expression.addOperand(parseOrExpression(context.boolean_or_expression()));
+            expression.addOperand(parseAndExpression(context.boolean_and_expression()));
+            return expression;
+        } else {
+            return parseAndExpression(context.boolean_and_expression());
+        }
+    }
+
+    private Expression parseAndExpression(Boolean_and_expressionContext context) {
+        if(context.SYM_AND() != null) {
+            BinaryOperator expression = new BinaryOperator();
+            expression.setType(ExpressionType.BOOLEAN);
+            expression.setOperator(OperatorKind.parse(context.SYM_AND().getText()));
+            expression.addOperand(parseAndExpression(context.boolean_and_expression()));
+            expression.addOperand(parseXorExpression(context.boolean_xor_expression()));
+            return expression;
+        } else {
+            return parseXorExpression(context.boolean_xor_expression());
+        }
+    }
+
+    private Expression parseXorExpression(Boolean_xor_expressionContext context) {
+        if(context.SYM_XOR() != null) {
+            BinaryOperator expression = new BinaryOperator();
+            expression.setType(ExpressionType.BOOLEAN);
+            expression.setOperator(OperatorKind.parse(context.SYM_XOR().getText()));
+            expression.addOperand(parseBooleanConstraintExpression(context.boolean_constraint_expression()));
+            expression.addOperand(parseXorExpression(context.boolean_xor_expression()));
+            return expression;
+        } else {
+            return parseBooleanConstraintExpression(context.boolean_constraint_expression());
+        }
+    }
+
+    private Expression parseBooleanConstraintExpression(Boolean_constraint_expressionContext context) {
+        if(context.boolean_constraint() != null) {
+            return parseBooleanConstraint(context.boolean_constraint());
+        } else {
+            return parseBooleanLeaf(context.boolean_leaf());
+        }
     }
 
     private Expression parseBooleanLeaf(Boolean_leafContext context) {
@@ -52,19 +140,15 @@ public class AssertionsParser extends BaseTreeWalker {
             return result;
         }
         if(context.adl_path() != null) {
-            ModelReference reference = new ModelReference();
-            reference.setPath(context.adl_path().getText());//TODO: set the type. This must be done by looking up the type. Post-processor work?
+            ModelReference reference = parseModelReference(context.adl_path());
             if(context.SYM_EXISTS() != null) {
                 return new UnaryOperator(ExpressionType.BOOLEAN, OperatorKind.exists, reference);
             } else {
                 return reference;
             }
         }
-        if(context.boolean_constraint() != null) {
-            return parseBooleanConstraint(context.boolean_constraint());
-        }
-        if(context.boolean_expr() != null) {
-            Expression expression = parseExpression(context.boolean_expr());
+        if(context.boolean_expression() != null) {
+            Expression expression = parseExpression(context.boolean_expression());
             //expression.setPrecedenceOverridden(true);
             return expression;
         }
@@ -74,8 +158,21 @@ public class AssertionsParser extends BaseTreeWalker {
         if(context.SYM_NOT() != null) {
             return new UnaryOperator(ExpressionType.BOOLEAN, OperatorKind.not, parseBooleanLeaf(context.boolean_leaf()));
         }
+        if(context.variable_reference() != null) {
+            return parseVariableReference(context.variable_reference());
+        }
 
         throw new IllegalArgumentException("cannot parse unknown boolean leaf type");
+    }
+
+    @NotNull
+    private ModelReference parseModelReference(Adl_pathContext context) {
+        return new ModelReference(context.getText());
+    }
+
+    @NotNull
+    private ModelReference parseModelReference(Adl_relative_pathContext context) {
+        return new ModelReference(context.getText());
     }
 
     private Expression parseBooleanConstraint(Boolean_constraintContext context) {
@@ -96,23 +193,39 @@ public class AssertionsParser extends BaseTreeWalker {
     }
 
     private Expression parseArithmeticRelOpExpression(Arithmetic_relop_exprContext context) {
-        Expression left = parseArithmeticExpression(context.arithmetic_arith_expr(0));
-        Expression right = parseArithmeticExpression(context.arithmetic_arith_expr(1));
+        Expression left = parseArithmeticExpression(context.arithmetic_expression(0));
+        Expression right = parseArithmeticExpression(context.arithmetic_expression(1));
         if(left.getType() != null && right.getType() != null && left.getType() != right.getType()) {
             throw new IllegalArgumentException("arithmetic relop expression with different types: " + left.getType() + " + " + right.getType());
         }
         return new BinaryOperator(left.getType(), OperatorKind.parse(context.relational_binop().getText()), left, right);
     }
 
-    private Expression parseArithmeticExpression(Arithmetic_arith_exprContext context) {
-        Expression leaf = parseArithmeticLeaf(context.arithmetic_leaf());
-        if(context.arithmetic_binop() != null) {
-            Expression left = parseArithmeticExpression(context.arithmetic_arith_expr());
-            return new BinaryOperator(leaf.getType(), OperatorKind.parse(context.arithmetic_binop().getText()), left, leaf);
+    private Expression parseArithmeticExpression(Arithmetic_expressionContext context) {
+        if(context.plus_minus_binop() != null) {
+            Expression left = parseArithmeticExpression(context.arithmetic_expression());
+            Expression right = parseMultiplyingExpression(context.multiplying_expression());
+            return new BinaryOperator(right.getType(), OperatorKind.parse(context.plus_minus_binop().getText()), left, right);
+        } else {
+            return parseMultiplyingExpression(context.multiplying_expression());
         }
-        else if(context.arithmetic_arith_expr() != null) {
-            Expression left = parseArithmeticExpression(context.arithmetic_arith_expr());
-            return new BinaryOperator(leaf.getType(), OperatorKind.exponent, left, leaf);
+    }
+
+    private Expression parseMultiplyingExpression(Multiplying_expressionContext context) {
+        if(context.mult_binop() != null) {
+            Expression left = parseMultiplyingExpression(context.multiplying_expression());
+            Expression right = parsePowExpression(context.pow_expression());
+            return new BinaryOperator(right.getType(), OperatorKind.parse(context.mult_binop().getText()), left, right);
+        } else {
+            return parsePowExpression(context.pow_expression());
+        }
+    }
+
+    private Expression parsePowExpression(Pow_expressionContext context) {
+        if(context.pow_expression() != null) {
+            Expression left = parsePowExpression(context.pow_expression());
+            Expression right = parseArithmeticLeaf(context.arithmetic_leaf());
+            return new BinaryOperator(right.getType(), OperatorKind.parse("^"), left, right);
         } else {
             return parseArithmeticLeaf(context.arithmetic_leaf());
         }
@@ -120,7 +233,7 @@ public class AssertionsParser extends BaseTreeWalker {
 
     private Expression parseArithmeticLeaf(Arithmetic_leafContext context) {
         if(context.integer_value() != null) {
-            return new Constant<>(ExpressionType.INTEGER, Integer.parseInt(context.integer_value().getText()));
+            return new Constant<>(ExpressionType.INTEGER, Long.parseLong(context.integer_value().getText()));
         }
         if(context.real_value() != null) {
             return new Constant<>(ExpressionType.REAL, Double.parseDouble(context.real_value().getText()));
@@ -128,13 +241,26 @@ public class AssertionsParser extends BaseTreeWalker {
         if(context.adl_path() != null) {
             return new ModelReference(context.adl_path().getText());//TODO: get type from archetype
         }
-        if(context.arithmetic_arith_expr() != null) {
-            return parseArithmeticExpression(context.arithmetic_arith_expr());//TODO: precedenceOverridden
+        if(context.arithmetic_expression() != null) {
+            return parseArithmeticExpression(context.arithmetic_expression());//TODO: precedenceOverridden
         }
         if(context.arithmetic_leaf() != null) {
             Expression expression = parseArithmeticLeaf(context.arithmetic_leaf());
             return new UnaryOperator(expression.getType(), OperatorKind.minus, expression);
         }
-        throw new IllegalArgumentException("cannot parse unknown arithmetic leaf type");
+        if(context.variable_reference() != null) {
+            return parseVariableReference(context.variable_reference());
+        }
+        throw new IllegalArgumentException("cannot parse unknown arithmetic leaf type: " + context.getText());
+    }
+
+    @NotNull
+    private Expression parseVariableReference(Variable_referenceContext context) {
+        VariableReference reference = new VariableReference();
+        //TODO: retrieve declaration from actual declaration, instead of just setting the name
+        VariableDeclaration declaration = new VariableDeclaration();
+        declaration.setName(context.identifier().  getText());
+        reference.setDeclaration(declaration);
+        return reference;
     }
 }

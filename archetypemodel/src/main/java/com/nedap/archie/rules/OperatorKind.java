@@ -9,9 +9,9 @@ import java.util.Set;
  */
 public enum OperatorKind {
     eq("="), ne("!="), le("<"), lt("<="), ge(">="), gt(">"),
-    matches("matches", "∈", "is_in"), not("!", "∼", "¬"), and("and", "∧"), or("or", "∨"), xor("xor"),
+    matches("matches", "∈", "is_in"), not("not", "!", "∼", "¬"), and("and", "∧"), or("or", "∨"), xor("xor"),
     implies("implies", "®"), for_all("for_all", "∀"), exists("exists" ,"∃"),
-    plus("+"), minus("-"), multiply("*"), divide("/"), exponent("^");
+    plus("+"), minus("-"), multiply("*"), divide("/"), modulo("%"), exponent("^");
 
     private Set<String> codes;
 
@@ -20,11 +20,8 @@ public enum OperatorKind {
         Collections.addAll(codes, items);
     }
 
-    OperatorKind(String text) {
-        this.codes = Collections.singleton(text);
-    }
-
     public static OperatorKind parse(String operatorString) {
+        operatorString = operatorString.toLowerCase();
         for(OperatorKind operator:values()) { //TODO: a hash implementation is faster
             if(operator.codes.contains(operatorString)) {
                 return operator;
