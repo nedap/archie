@@ -16,12 +16,12 @@ public class ItemStructure<Type extends Item> extends DataStructure {
     public void setItems(List<Type> items) {
         this.items = items;
         for(Type item:items) {
-            setThisAsParent(item);
+            setThisAsParent(item, "item");
         }
     }
 
     public void addItem(Type item) {
         this.items.add(item);
-        setThisAsParent(item);
+        setThisAsParent(item, "item");
     }
 }

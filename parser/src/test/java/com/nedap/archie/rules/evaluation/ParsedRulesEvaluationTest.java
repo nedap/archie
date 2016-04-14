@@ -2,22 +2,13 @@ package com.nedap.archie.rules.evaluation;
 
 import com.nedap.archie.adlparser.ADLParser;
 import com.nedap.archie.aom.Archetype;
-import com.nedap.archie.aom.CAttribute;
-import com.nedap.archie.aom.CComplexObject;
-import com.nedap.archie.aom.CObject;
-import com.nedap.archie.creation.RMObjectCreator;
-import com.nedap.archie.rm.RMObject;
 import com.nedap.archie.rm.archetypes.Pathable;
 import com.nedap.archie.rm.composition.Observation;
-import com.nedap.archie.rm.datastructures.Item;
-import com.nedap.archie.rm.datastructures.ItemTree;
 import com.nedap.archie.rm.datavalues.quantity.DvQuantity;
-import com.nedap.archie.rminfo.ArchieRMInfoLookup;
 import com.nedap.archie.testutil.TestUtil;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -136,7 +127,7 @@ public class ParsedRulesEvaluationTest {
 
         assertEquals("the assertion should not have succeeded", false, result.getResult());
         assertEquals("the assertion tag should be correct", "blood_pressure_valid", result.getTag());
-        Value rawResult = result.getRawResult();
+        ValueList rawResult = result.getRawResult();
         assertEquals("two checks have been done", 2, rawResult.size());
         assertTrue(rawResult.getValues().contains(true));
         assertTrue(rawResult.getValues().contains(false));

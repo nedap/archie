@@ -7,9 +7,8 @@ import com.nedap.archie.rules.PrimitiveType;
 import com.nedap.archie.rules.UnaryOperator;
 import com.nedap.archie.rules.evaluation.Evaluator;
 import com.nedap.archie.rules.evaluation.RuleEvaluation;
-import com.nedap.archie.rules.evaluation.Value;
+import com.nedap.archie.rules.evaluation.ValueList;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,14 +16,14 @@ import java.util.List;
  */
 public class UnaryOperatorEvaluator implements Evaluator<UnaryOperator> {
     @Override
-    public Value evaluate(RuleEvaluation evaluation, UnaryOperator statement) {
+    public ValueList evaluate(RuleEvaluation evaluation, UnaryOperator statement) {
         OperatorKind operator = statement.getOperator();
         Expression operand = statement.getOperand();
         switch(operator) {
             case not:
-                Value input = evaluation.evaluate(operand);
+                ValueList input = evaluation.evaluate(operand);
                 List values = input.getValues();
-                Value result = new Value();
+                ValueList result = new ValueList();
                 result.setType(PrimitiveType.Boolean);
                 for(Object value:values){
                     if(value == null) {

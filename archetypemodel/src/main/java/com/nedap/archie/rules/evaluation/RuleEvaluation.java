@@ -59,12 +59,12 @@ public class RuleEvaluation {
         }
     }
 
-    public Value evaluate(RuleElement rule) {
+    public ValueList evaluate(RuleElement rule) {
         Evaluator evaluator = classToEvaluator.get(rule.getClass());
         if(evaluator != null) {
-            Value value = evaluator.evaluate(this, rule);
-            System.out.println(value);
-            return value;
+            ValueList valueList = evaluator.evaluate(this, rule);
+            System.out.println(valueList);
+            return valueList;
         }
         return null;
 //        if(rule instanceof Assertion) {
@@ -85,20 +85,20 @@ public class RuleEvaluation {
     /**
      * Callback: an assertion has been evaluated with the given result
      */
-    public void assertionEvaluated(String tag, Expression expression, Value value) {
+    public void assertionEvaluated(String tag, Expression expression, ValueList valueList) {
         AssertionResult assertionResult = new AssertionResult();
         assertionResult.setTag(tag);
         assertionResult.setAssertion(expression);
 
         boolean result = true;
-        for(Object singleResult:value.getValues()) {
+        for(Object singleResult: valueList.getValues()) {
             Boolean singleBoolean = (Boolean) singleResult;
             if(!singleBoolean) {
                 result = false;
             }
         }
         assertionResult.setResult(result);
-        assertionResult.setRawResult(value);
+        assertionResult.setRawResult(valueList);
         assertionResults.add(assertionResult);
         //TODO: If expression matches:
         //1. path = expression: set path value to value

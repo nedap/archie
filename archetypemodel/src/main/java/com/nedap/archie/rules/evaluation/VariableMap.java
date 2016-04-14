@@ -8,13 +8,13 @@ import java.util.Map;
  */
 public class VariableMap {
 
-    private Map<String, Value> variables = new HashMap<>();
+    private Map<String, ValueList> variables = new HashMap<>();
 
-    public void put(String name, Value value) {
-        variables.put(name, value);
+    public void put(String name, ValueList valueList) {
+        variables.put(name, valueList);
     }
 
-    public Value get(String name) {
+    public ValueList get(String name) {
         return variables.get(name);
     }
 }

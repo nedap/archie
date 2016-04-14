@@ -12,7 +12,7 @@ public class AssertionResult {
     /**
      * The raw result: Did all the separate checks for this assertion pass?
      */
-    private Value rawResult;
+    private ValueList rawResult;
     /**
      * The result: did this assertion pass?
      */
@@ -34,11 +34,11 @@ public class AssertionResult {
         this.assertion = assertion;
     }
 
-    public Value getRawResult() {
+    public ValueList getRawResult() {
         return rawResult;
     }
 
-    public void setRawResult(Value rawResult) {
+    public void setRawResult(ValueList rawResult) {
         this.rawResult = rawResult;
     }
 

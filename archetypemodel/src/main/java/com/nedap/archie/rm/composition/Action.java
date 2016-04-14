@@ -29,7 +29,7 @@ public class Action extends CareEntry {
 
     public void setDescription(ItemStructure description) {
         this.description = description;
-        setThisAsParent(description);
+        setThisAsParent(description, "description");
     }
 
     public IsmTransition getIsmTransition() {
@@ -38,7 +38,7 @@ public class Action extends CareEntry {
 
     public void setIsmTransition(IsmTransition ismTransition) {
         this.ismTransition = ismTransition;
-        setThisAsParent(ismTransition);
+        setThisAsParent(ismTransition, "ism_transition");
     }
 
     public InstructionDetails getInstructionDetails() {

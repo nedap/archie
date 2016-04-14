@@ -7,7 +7,7 @@ import com.nedap.archie.rules.QueryVariable;
 import com.nedap.archie.rules.VariableDeclaration;
 import com.nedap.archie.rules.evaluation.Evaluator;
 import com.nedap.archie.rules.evaluation.RuleEvaluation;
-import com.nedap.archie.rules.evaluation.Value;
+import com.nedap.archie.rules.evaluation.ValueList;
 
 import java.util.List;
 
@@ -17,15 +17,15 @@ import java.util.List;
 public class VariableDeclarationEvaluator implements Evaluator<VariableDeclaration> {
 
     @Override
-    public Value evaluate(RuleEvaluation evaluation, VariableDeclaration declaration) {
+    public ValueList evaluate(RuleEvaluation evaluation, VariableDeclaration declaration) {
         String variableName = declaration.getName();
-        Value value = calculateValue(evaluation, declaration);
-        evaluation.getVariableMap().put(variableName, value);
-        return value;
+        ValueList valueList = calculateValue(evaluation, declaration);
+        evaluation.getVariableMap().put(variableName, valueList);
+        return valueList;
 
     }
 
-    private Value calculateValue(RuleEvaluation evaluation, VariableDeclaration declaration) {
+    private ValueList calculateValue(RuleEvaluation evaluation, VariableDeclaration declaration) {
         if(declaration instanceof ExpressionVariable) {
             return evaluation.evaluate(((ExpressionVariable) declaration).getExpression());
         } else if (declaration instanceof QueryVariable) {

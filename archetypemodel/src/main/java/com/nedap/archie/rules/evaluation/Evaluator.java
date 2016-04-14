@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface Evaluator<T extends RuleElement> {
 
-    Value evaluate(RuleEvaluation evaluation, T statement);
+    ValueList evaluate(RuleEvaluation evaluation, T statement);
 
     List<Class> getSupportedClasses();
 }

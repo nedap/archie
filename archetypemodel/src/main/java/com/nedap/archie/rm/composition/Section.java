@@ -17,12 +17,12 @@ public class Section extends ContentItem {
     public void setItems(List<ContentItem> items) {
         this.items = items;
         for(ContentItem item:items) {
-            setThisAsParent(item);
+            setThisAsParent(item, "item");
         }
     }
 
     public void addItem(ContentItem item) {
         this.items.add(item);
-        setThisAsParent(item);
+        setThisAsParent(item, "item");
     }
 }

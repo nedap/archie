@@ -6,7 +6,7 @@ import com.nedap.archie.rules.PrimitiveType;
 import com.nedap.archie.rules.VariableDeclaration;
 import com.nedap.archie.rules.evaluation.Evaluator;
 import com.nedap.archie.rules.evaluation.RuleEvaluation;
-import com.nedap.archie.rules.evaluation.Value;
+import com.nedap.archie.rules.evaluation.ValueList;
 
 import java.util.List;
 
@@ -15,12 +15,12 @@ import java.util.List;
  */
 public class AssertionEvaluator implements Evaluator<Assertion> {
     @Override
-    public Value evaluate(RuleEvaluation evaluation, Assertion statement) {
+    public ValueList evaluate(RuleEvaluation evaluation, Assertion statement) {
         if(statement.getExpression() != null) {
-            Value value = evaluation.evaluate(statement.getExpression());
-            if (value.getType() == PrimitiveType.Boolean) {
-                evaluation.assertionEvaluated(statement.getTag(), statement.getExpression(), value);
-                return value;
+            ValueList valueList = evaluation.evaluate(statement.getExpression());
+            if (valueList.getType() == PrimitiveType.Boolean) {
+                evaluation.assertionEvaluated(statement.getTag(), statement.getExpression(), valueList);
+                return valueList;
             } else {
                 //variable declaration?
                 //throw new RuntimeException("assertion with type " + value.getType() + " found - should be boolean!");

@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import com.nedap.archie.rules.VariableReference;
 import com.nedap.archie.rules.evaluation.Evaluator;
 import com.nedap.archie.rules.evaluation.RuleEvaluation;
-import com.nedap.archie.rules.evaluation.Value;
+import com.nedap.archie.rules.evaluation.ValueList;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class VariableReferenceEvaluator implements Evaluator<VariableReference> {
     @Override
-    public Value evaluate(RuleEvaluation evaluation, VariableReference statement) {
+    public ValueList evaluate(RuleEvaluation evaluation, VariableReference statement) {
         return evaluation.getVariableMap().get(statement.getDeclaration().getName());
     }
 

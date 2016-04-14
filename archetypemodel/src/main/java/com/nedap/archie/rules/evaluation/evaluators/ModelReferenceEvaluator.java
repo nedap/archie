@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import com.nedap.archie.rules.ModelReference;
 import com.nedap.archie.rules.evaluation.Evaluator;
 import com.nedap.archie.rules.evaluation.RuleEvaluation;
-import com.nedap.archie.rules.evaluation.Value;
+import com.nedap.archie.rules.evaluation.ValueList;
 
 import java.util.List;
 
@@ -13,9 +13,8 @@ import java.util.List;
  */
 public class ModelReferenceEvaluator implements Evaluator<ModelReference> {
     @Override
-    public Value evaluate(RuleEvaluation evaluation, ModelReference statement) {
-        //TODO: check this is a primitive type or a list of types.
-        return new Value(evaluation.getRMRoot().itemsAtPath(statement.getPath()));
+    public ValueList evaluate(RuleEvaluation evaluation, ModelReference statement) {
+        return new ValueList(evaluation.getRMRoot().itemsAtPath(statement.getPath()));
     }
 
     @Override

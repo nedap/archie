@@ -22,7 +22,7 @@ public class CareEntry extends Entry {
 
     public void setProtocol(@Nullable ItemStructure protocol) {
         this.protocol = protocol;
-        setThisAsParent(protocol);
+        setThisAsParent(protocol, "protocol");
     }
 
     @Nullable
