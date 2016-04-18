@@ -1,0 +1,64 @@
+// usage in gradle file
+// apply from:'/path_to/yjp.gradle'
+// when launching use "gradle -Pyjp.enabled=tracing run" or "gradle -Pyjp.enabled=sampling run"
+
+ext {
+   // default settings are for MacOSX and YJP installed with name "yjp" in Applications
+   // you can use YJP_AGENT_PATH environment variable to specify the location of yjp's JVM agent
+   yjpHome = System.getenv('YJP_HOME') ?: '/Applications/yjp.app/Contents/Resources'
+   yjpAgentPath = System.getenv('YJP_AGENT_PATH') ?: "$yjpHome/bin/mac/libyjpagent.jnilib".toString()
+
+   // YJP agent startup options
+   // see http://www.yourkit.com/docs/java/help/startup_options.jsp for docs
+
+   // shared setting for both tracing and samping mode
+   yjpCommonOptions = "delay=0,disablealloc,probe_disable=*,monitors,onexit=snapshot"
+   
+   // sampling mode startup options
+   yjpSamplingOptions = "telemetryperiod=100"
+   // fine tune yjp sampling settings in ~/.yjp/sampling.txt file
+   // see http://www.yourkit.com/docs/java/help/sampling_settings.jsp for docs
+   // can use custom file with sampling_settings_path startup option
+
+   // tracing mode startup options
+   yjpTracingOptions = ""
+   // adjust yjp tracing settings in ~/.yjp/tracing.txt file. if you want to trace all calls, set adaptive=false in that file
+   // see http://www.yourkit.com/docs/java/help/tracing_settings.jsp for docs
+   // can use custom file with tracing_settings_path startup option
+}
+/*run {
+    if(project.hasProperty("yjp.enabled")) {
+      switch(project.getProperty("yjp.enabled")) {
+        case 'none':
+        case '':
+        case 'false':
+        case 'no':
+            break
+        case 'tracing':
+            jvmArgs += ["-agentpath:$yjpAgentPath=tracing,$yjpTracingOptions,$yjpCommonOptions"]
+            break
+        case 'sampling':
+        default:
+            jvmArgs += ["-agentpath:$yjpAgentPath=sampling,$yjpSamplingOptions,$yjpCommonOptions"]
+            break
+      }
+    }
+}*/
+test {
+    if(project.hasProperty("yjp.enabled")) {
+      switch(project.getProperty("yjp.enabled")) {
+        case 'none':
+        case '':
+        case 'false':
+        case 'no':
+            break
+        case 'tracing':
+            jvmArgs += ["-agentpath:$yjpAgentPath=tracing,$yjpTracingOptions,$yjpCommonOptions"]
+            break
+        case 'sampling':
+        default:
+            jvmArgs += ["-agentpath:$yjpAgentPath=sampling,$yjpSamplingOptions,$yjpCommonOptions"]
+            break
+      }
+    }
+}

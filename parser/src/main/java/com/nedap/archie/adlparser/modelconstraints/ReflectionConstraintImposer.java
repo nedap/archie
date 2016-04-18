@@ -61,7 +61,7 @@ public class ReflectionConstraintImposer implements ModelConstraintImposer {
                     attribute.setCardinality(new Cardinality(0,1));
                 }
 
-                if(attributeInfo.getType() instanceof Class && Collection.class.isAssignableFrom((Class) attributeInfo.getType())) {
+                if(attributeInfo.getType() instanceof Class && Collection.class.isAssignableFrom(attributeInfo.getType())) {
                     attribute.setCardinality(Cardinality.unbounded());
                     attribute.setMultiple(true);
                 }

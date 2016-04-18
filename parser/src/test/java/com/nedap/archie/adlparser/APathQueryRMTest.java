@@ -2,13 +2,17 @@ package com.nedap.archie.adlparser;
 
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.query.APathQuery;
+import com.nedap.archie.query.RMObjectWithPath;
 import com.nedap.archie.rm.archetypes.Pathable;
 import com.nedap.archie.rm.composition.Composition;
 import com.nedap.archie.rm.datavalues.DvText;
 import com.nedap.archie.rminfo.ArchieRMInfoLookup;
+import com.nedap.archie.rminfo.ModelInfoLookup;
 import com.nedap.archie.testutil.TestUtil;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -65,22 +69,31 @@ public class APathQueryRMTest {
             composition.getContext().getOtherContext().getItems().addAll(composition2.getContext().getOtherContext().getItems());
         }
 
-        assertEquals(1,
-                new APathQuery("/context")
-                        .findList(ArchieRMInfoLookup.getInstance(), composition).size());
+        ModelInfoLookup modelInfoLookup = ArchieRMInfoLookup.getInstance();
 
-        //now check that retrieving this retrieves more than one, even with the same ID. Should we always return a list of objects?
-        assertEquals(2,
-                new APathQuery("/context[id11]/other_context[id2]/items")
-                        .findList(ArchieRMInfoLookup.getInstance(), composition).size());
-        assertEquals(2,
-                new APathQuery("/context[id11]/other_context[id2]/items[id3]")
-                        .findList(ArchieRMInfoLookup.getInstance(), composition).size());
+        List<RMObjectWithPath> context = new APathQuery("/context")
+                .findList(modelInfoLookup, composition);
+        assertEquals(1, context.size());
+        assertEquals("/context", context.get(0).getPath());
+
+        //now check that retrieving this retrieves more than one, even with the same ID.
+        List<RMObjectWithPath> items = new APathQuery("/context[id11]/other_context[id2]/items").findList(modelInfoLookup, composition);
+        assertEquals(2, items.size());
+        assertEquals("/context/other_context[id2]/items[id3, 1]", items.get(0).getPath());
+        assertEquals("/context/other_context[id2]/items[id3, 2]", items.get(1).getPath());
+        for(RMObjectWithPath value:items) {
+            assertEquals(value.getObject(), new APathQuery(value.getPath()).findList(modelInfoLookup, composition).get(0).getObject());
+        }
+
 
         //and check that retrieving a sub-element also retrieves more than one element
-        assertEquals(2,
-                new APathQuery("/context[id11]/other_context[id2]/items[id3]/items[id5]/value")
-                        .findList(ArchieRMInfoLookup.getInstance(), composition).size());
+        List<RMObjectWithPath> values = new APathQuery("/context[id11]/other_context[id2]/items[id3]/items[id5]/value").findList(modelInfoLookup, composition);
+        assertEquals(2, values.size());
+        assertEquals("/context/other_context[id2]/items[id3, 1]/items[id5, 2]/value", values.get(0).getPath());
+        assertEquals("/context/other_context[id2]/items[id3, 2]/items[id5, 2]/value", values.get(1).getPath());
+        for(RMObjectWithPath value:values) {
+            assertEquals(value.getObject(), new APathQuery(value.getPath()).findList(modelInfoLookup, composition).get(0).getObject());
+        }
     }
 
 

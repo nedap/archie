@@ -55,9 +55,8 @@ public interface ModelConstraintImposer {
                         attribute.setMultiple(defaultAttribute.isMultiple());
                         if (attribute.getCardinality() == null) {
                             attribute.setCardinality(defaultAttribute.getCardinality());
+                        }
                     }
-                }
-
                 }
                 for (CObject child : attribute.getChildren()) {
                     workList.push(child);

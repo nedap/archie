@@ -124,7 +124,7 @@ public class CAttribute extends ArchetypeConstraint {
             return new ArrayList<>();
         }
         List<PathSegment> segments = parent.getPathSegments();
-        segments.add(new PathSegment(getRmAttributeName(), null));
+        segments.add(new PathSegment(getRmAttributeName()));
         return segments;
     }
 
@@ -157,9 +157,7 @@ public class CAttribute extends ArchetypeConstraint {
 
     public boolean isMandatory() {
         if(existence != null) {
-            if(existence.getLower() == 1 && existence.getUpper() == 1 && existence.isUpperIncluded()) {
-                return true;
-            }
+            return existence.getLower() == 1 && existence.getUpper() == 1 && existence.isUpperIncluded();
         }
         return false;
     }
