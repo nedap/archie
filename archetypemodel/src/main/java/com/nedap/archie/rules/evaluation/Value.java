@@ -6,25 +6,25 @@ import java.util.List;
 /**
  * Created by pieter.bos on 07/04/16.
  */
-public class Value {
-    private Object value;
+public class Value<Type> {
+    private Type value;
     private List<String> paths;//instead we could use Locatable, but for some reason datavalues are not locatable and not pathable, so hard to use here.
 
-    public Value(Object value) {
+    public Value(Type value) {
         this.value = value;
         this.paths = new ArrayList();
     }
 
-    public Value(Object value, List<String> paths) {
+    public Value(Type value, List<String> paths) {
         this.value = value;
         this.paths = paths;
     }
 
-    public Object getValue() {
+    public Type getValue() {
         return value;
     }
 
-    public void setValue(Object value) {
+    public void setValue(Type value) {
         this.value = value;
     }
 

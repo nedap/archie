@@ -7,6 +7,7 @@ import com.nedap.archie.rules.PrimitiveType;
 import com.nedap.archie.rules.UnaryOperator;
 import com.nedap.archie.rules.evaluation.Evaluator;
 import com.nedap.archie.rules.evaluation.RuleEvaluation;
+import com.nedap.archie.rules.evaluation.Value;
 import com.nedap.archie.rules.evaluation.ValueList;
 
 import java.util.List;
@@ -22,14 +23,14 @@ public class UnaryOperatorEvaluator implements Evaluator<UnaryOperator> {
         switch(operator) {
             case not:
                 ValueList input = evaluation.evaluate(operand);
-                List values = input.getValues();
+                List<Value> values = input.getValues();
                 ValueList result = new ValueList();
                 result.setType(PrimitiveType.Boolean);
-                for(Object value:values){
+                for(Value value:values){
                     if(value == null) {
                         values.add(null);
-                    } else if(value instanceof Boolean) {
-                        result.addValue(!(Boolean)value);
+                    } else if(value.getValue() instanceof Boolean) {
+                        result.addValue(!(Boolean)value.getValue(), value.getPaths());
                     } else {
                         throw new IllegalStateException("Not operator only works on boolean, but " + value + " was supplied");
                     }

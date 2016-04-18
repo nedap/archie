@@ -21,6 +21,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -271,7 +272,7 @@ public class APathQuery {
         try {
             for (PathSegment segment : pathSegments) {
                 if(currentObjects.isEmpty()){
-                    return null;
+                    return Collections.emptyList();
                 }
                 List<RMObjectWithPath> newCurrentObjects = new ArrayList<>();
 

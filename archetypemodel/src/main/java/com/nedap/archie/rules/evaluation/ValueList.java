@@ -3,9 +3,13 @@ package com.nedap.archie.rules.evaluation;
 import com.nedap.archie.rules.PrimitiveType;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
+ * A list of values, as evaluated by the rule evaluation.
+ *
+ * Every value has both a value and a set of paths, all single-valued paths, used in calculating that value
  * Created by pieter.bos on 31/03/16.
  */
 public class ValueList {
@@ -14,47 +18,29 @@ public class ValueList {
 
     public ValueList() {
 
-        //
-//        [3,5,8] + 1 = [4,6,9]
-//        [3,5,8] > [1,2,3] = [true, true, true]
-//        [3,5,8] > [12,2,3] = [false, true, true]
-//          [3,5,8] > [1,2]= ERROR
-        //sum(/blabla/jfkldsjfds / 3), mean, avg,
-        // /part1/part2 implies exist /part1/part3
-        // /looptest/is_gelopen matches {'ja'} implies exists /looptest/other_questions
-        /**
-            testformulier:
-                looptest:
-                    is er gelopen? nee
-                    other_questions: does not exist/hidden
-                        ...
-                looptest:
-                    is er gelopen? ja
-                    other_questions:
-                        wanneer?
-                        hoever? 23 km
-
-         */
     }
 
-    public ValueList(List<Object> values) {
+    public ValueList(List<Value> values) {
         setValues(values);
         if(!values.isEmpty()) {
-            this.type = PrimitiveType.fromJavaType(values.get(0).getClass());
+            this.type = PrimitiveType.fromJavaType(values.get(0).getValue().getClass());
         } else{
             this.type = PrimitiveType.Unknown;
         }
     }
 
+    /*
+     * Construct a value list of a single value, that does not have a path.
+     */
     public ValueList(Object value) {
-        if(value == null) {
-            this.type = null;
-        } else {
-            addValue(value);
-            this.type = PrimitiveType.fromJavaType(value.getClass());
-        }
+        this(value, Collections.EMPTY_LIST);
     }
 
+    /**
+     * Construct a value list of a single object, with its paths
+     * @param value
+     * @param paths
+     */
     public ValueList(Object value, List<String> paths){
         if(value == null) {
             this.type = null;
@@ -73,7 +59,11 @@ public class ValueList {
         this.type = type;
     }
 
-    public List<Object> getValues() {
+    public List<Value> getValues() {
+        return values;
+    }
+
+    public List<Object> getValueObjects() {
         List<Object> result = new ArrayList();
         for(Value value:values) {
             result.add(value.getValue());
@@ -81,9 +71,9 @@ public class ValueList {
         return result;
     }
 
-    public void setValues(List<Object> values) {
+    public void setValues(List<Value> values) {
         this.values = new ArrayList<>(values.size());
-        for(Object o:values) {
+        for(Value o:values) {
             addValue(o);
         }
     }
@@ -92,8 +82,8 @@ public class ValueList {
         values.add(new Value(value, paths));
     }
 
-    public void addValue(Object value){
-        values.add(new Value(value));
+    public void addValue(Value value){
+        values.add(value);
     }
 
     @Override
@@ -105,7 +95,15 @@ public class ValueList {
         return values.size();
     }
 
-    public Object get(int i) {
+    public Object getObject(int i) {
         return values.get(i).getValue();
+    }
+
+    public List<String> getPaths(int i) {
+        return values.get(i).getPaths();
+    }
+
+    public Value get(int i) {
+        return values.get(i);
     }
 }
