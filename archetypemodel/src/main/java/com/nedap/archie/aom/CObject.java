@@ -110,10 +110,22 @@ public class CObject extends ArchetypeConstraint {
         }
         String meaning = null;
         ArchetypeTerm termDefinition = getArchetype().getTerm(this, Configuration.getLogicalPathLanguage());
-        if(termDefinition!=null&&termDefinition.getText()!=null) {
+        if(termDefinition!=null && termDefinition.getText()!=null) {
             meaning = termDefinition.getText();
         }
         return meaning;
+    }
+
+    public String getDescription() {
+        if(nodeId == null) {
+            return null;
+        }
+        String description = null;
+        ArchetypeTerm termDefinition = getArchetype().getTerm(this, Configuration.getLogicalPathLanguage());
+        if(termDefinition!=null && termDefinition.getText()!=null) {
+            description = termDefinition.getDescription();
+        }
+        return description;
     }
 
 

@@ -1,5 +1,6 @@
 package com.nedap.archie.aom;
 
+import com.nedap.archie.base.OpenEHRBase;
 import com.nedap.archie.base.terminology.TerminologyCode;
 
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Created by pieter.bos on 15/10/15.
  */
-public class ResourceDescription {
+public class ResourceDescription extends ArchetypeModelObject {
     private Map<String, String> originalAuthor = new ConcurrentHashMap<>();
     private String originalNamespace;
     private String originalPublisher;

@@ -13,13 +13,11 @@ import java.util.regex.Pattern;
 /**
  * Experimental tree walker for archetypes describing reference model objects.
  *
- * This API will probably be changed to something better in the future.
- *
- * TODO: at least Activity objects. Perhaps a separate listener for demographic objects?
- * TODO: split the item tree and item structures into separate calls?
+ * Deprecated. This was experimental and a bad idea. and should no longer be used. Please refer to documentation about how to walk over archetypes
  *
  * Created by pieter.bos on 20/10/15.
  */
+@Deprecated
 public interface RMArchetypeTreeListener {
 
     public static final Logger logger = LoggerFactory.getLogger(RMArchetypeTreeListener.class);

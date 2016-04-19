@@ -1,5 +1,6 @@
 package com.nedap.archie.aom;
 
+import com.nedap.archie.base.OpenEHRBase;
 import com.nedap.archie.base.terminology.TerminologyCode;
 
 import java.util.Map;
@@ -8,7 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Created by pieter.bos on 02/11/15.
  */
-public class LanguageSection {
+public class LanguageSection extends ArchetypeModelObject {
 
     private TerminologyCode originalLanguage;
     private Map<String, TranslationDetails> translations = new ConcurrentHashMap<>();

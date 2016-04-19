@@ -5,7 +5,7 @@ import com.nedap.archie.base.MultiplicityInterval;
 /**
  * Created by pieter.bos on 18/10/15.
  */
-public class Cardinality {
+public class Cardinality extends ArchetypeModelObject {
 
     private MultiplicityInterval interval;
 

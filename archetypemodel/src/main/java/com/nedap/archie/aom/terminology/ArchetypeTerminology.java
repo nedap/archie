@@ -1,6 +1,8 @@
 package com.nedap.archie.aom.terminology;
 
 import com.nedap.archie.aom.Archetype;
+import com.nedap.archie.aom.ArchetypeModelObject;
+import com.nedap.archie.base.OpenEHRBase;
 
 import java.net.URI;
 import java.util.Map;
@@ -9,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Created by pieter.bos on 15/10/15.
  */
-public class ArchetypeTerminology {
+public class ArchetypeTerminology extends ArchetypeModelObject {
 
     private Boolean differential;
     private String originalLanguage;

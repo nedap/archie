@@ -1,5 +1,8 @@
 package com.nedap.archie.aom.terminology;
 
+import com.nedap.archie.aom.ArchetypeModelObject;
+import com.nedap.archie.base.OpenEHRBase;
+
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -7,7 +10,7 @@ import java.util.Set;
 /**
  * Created by pieter.bos on 15/10/15.
  */
-public class ValueSet {
+public class ValueSet extends ArchetypeModelObject {
     private String id;
     private Set<String> members = new LinkedHashSet<>();
 

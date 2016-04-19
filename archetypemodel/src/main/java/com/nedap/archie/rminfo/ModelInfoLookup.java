@@ -1,6 +1,7 @@
 package com.nedap.archie.rminfo;
 
 import com.google.common.reflect.TypeToken;
+import com.nedap.archie.rm.RMObject;
 import org.reflections.ReflectionUtils;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
@@ -55,25 +56,20 @@ public class ModelInfoLookup {
 
     //constructed as  a field to save some object creation
 
-    public ModelInfoLookup(ModelNamingStrategy namingStrategy, String packageName) {
-        this(namingStrategy, packageName, ModelInfoLookup.class.getClassLoader());
+    public ModelInfoLookup(ModelNamingStrategy namingStrategy, String packageName, Class baseClass) {
+        this(namingStrategy, packageName, baseClass, ModelInfoLookup.class.getClassLoader());
     }
 
-    public ModelInfoLookup(ModelNamingStrategy namingStrategy, String packageName, ClassLoader classLoader) {
+    public ModelInfoLookup(ModelNamingStrategy namingStrategy, String packageName, Class baseClass, ClassLoader classLoader) {
         this.namingStrategy = namingStrategy;
         this.packageName = packageName;
         this.classLoader = classLoader;
 
-        Reflections reflections = new Reflections(packageName, classLoader, new SubTypesScanner(false));
+        Reflections reflections = new Reflections(packageName, classLoader);
 
-        Set<String> types = reflections.getAllTypes();
-        for(String type:types) {
-            try {
-                Class clazz = classLoader.loadClass(type);
-                addClass(clazz);
-            } catch (ClassNotFoundException e) {
-                throw new IllegalStateException(e);
-            }
+        Set<Class<? extends RMObject>> types = reflections.getSubTypesOf(baseClass);
+        for(Class clazz:types) {
+            addClass(clazz);
         }
     }
 
