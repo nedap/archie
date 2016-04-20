@@ -11,7 +11,7 @@ public class ArchieRMInfoLookup extends ModelInfoLookup {
     private static ArchieRMInfoLookup instance;
 
     public ArchieRMInfoLookup() {
-        super(new ArchieRMNamingStrategy(), "com.nedap.archie.rm", OpenEHRBase.class);
+        super(new ArchieRMNamingStrategy(), "com.nedap.archie.rm");
     }
 
     public static ArchieRMInfoLookup getInstance() {

@@ -56,11 +56,11 @@ public class ModelInfoLookup {
 
     //constructed as  a field to save some object creation
 
-    public ModelInfoLookup(ModelNamingStrategy namingStrategy, String packageName, Class baseClass) {
-        this(namingStrategy, packageName, baseClass, ModelInfoLookup.class.getClassLoader());
+    public ModelInfoLookup(ModelNamingStrategy namingStrategy, String packageName) {
+        this(namingStrategy, packageName, ModelInfoLookup.class.getClassLoader());
     }
 
-    public ModelInfoLookup(ModelNamingStrategy namingStrategy, String packageName, Class baseClass, ClassLoader classLoader) {
+    public ModelInfoLookup(ModelNamingStrategy namingStrategy, String packageName, ClassLoader classLoader) {
         this.namingStrategy = namingStrategy;
         this.packageName = packageName;
         this.classLoader = classLoader;

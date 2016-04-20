@@ -31,16 +31,16 @@ public class ReflectionConstraintImposer implements ModelConstraintImposer {
     //constructed as  a field to save some object creation
     protected PropertyNamingStrategy.LowerCaseWithUnderscoresStrategy lowerCaseWithUnderscoresStrategy = new PropertyNamingStrategy.LowerCaseWithUnderscoresStrategy();
 
-    public ReflectionConstraintImposer(String packageName, Class baseClass) {
-        this(packageName, ReflectionConstraintImposer.class.getClassLoader(), baseClass);
+    public ReflectionConstraintImposer(String packageName) {
+        this(packageName, ReflectionConstraintImposer.class.getClassLoader());
     }
 
-    public ReflectionConstraintImposer(String packageName, ClassLoader classLoader, Class baseClass) {
-        this(new ArchieRMNamingStrategy(), packageName, baseClass, classLoader);
+    public ReflectionConstraintImposer(String packageName, ClassLoader classLoader) {
+        this(new ArchieRMNamingStrategy(), packageName, classLoader);
     }
 
-    public ReflectionConstraintImposer(ModelNamingStrategy strategy, String packageName, Class baseClass, ClassLoader classLoader) {
-        this(new ModelInfoLookup(strategy, packageName, baseClass, classLoader));
+    public ReflectionConstraintImposer(ModelNamingStrategy strategy, String packageName, ClassLoader classLoader) {
+        this(new ModelInfoLookup(strategy, packageName, classLoader));
     }
 
     public ReflectionConstraintImposer(ModelInfoLookup classLookup) {
