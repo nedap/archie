@@ -1,5 +1,7 @@
 package com.nedap.archie.aom;
 
+import com.nedap.archie.base.OpenEHRBase;
+
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
@@ -7,7 +9,7 @@ import java.util.Map;
 /**
  * Created by pieter.bos on 01/11/15.
  */
-public class ResourceDescriptionItem {
+public class ResourceDescriptionItem extends ArchetypeModelObject {
     String language;
     String purpose;
     List<String> keywords;

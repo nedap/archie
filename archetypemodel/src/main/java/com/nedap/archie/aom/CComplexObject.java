@@ -1,5 +1,6 @@
 package com.nedap.archie.aom;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.nedap.archie.query.APathQuery;
 
 import java.util.ArrayList;
@@ -8,6 +9,7 @@ import java.util.List;
 /**
  * Created by pieter.bos on 15/10/15.
  */
+@JsonPropertyOrder({"@type", "rm_type_name", "node_id", "path", "logical_path", "meaning", "description", "required", "allowed", "any_allowed", "root_node", "attributes", "attribute_tuples"})
 public class CComplexObject extends CDefinedObject<ArchetypeModelObject> {
 
     private List<CAttribute> attributes = new ArrayList();
@@ -18,6 +20,45 @@ public class CComplexObject extends CDefinedObject<ArchetypeModelObject> {
      * If the parent of this is an archetype, this will contain a pointer to it.
      */
     private Archetype archetype;
+
+
+
+    public boolean isAnyAllowed() {
+        return attributes.isEmpty();
+    }
+
+    @Override
+    public void setParent(ArchetypeConstraint parent) {
+        archetype = null;
+        super.setParent(parent);
+    }
+
+    public Archetype getArchetype() {
+        if(archetype == null) {
+            return getParent().getArchetype();
+        }
+        return archetype;
+    }
+
+    @Override
+    public boolean isRootNode() {
+        return this.getParent() == null && this.archetype != null;
+    }
+
+    /* set the archetype this is used in. Only set for root nodes! */
+    public void setArchetype(Archetype archetype) {
+        this.archetype = archetype;
+    }
+
+    @Override
+    public String toString() {
+        return "CComplexObject: " + getRmTypeName() + "[" + getNodeId() + "]";
+    }
+
+    /** TODO: should this only be on complex objects? */
+    public <T extends ArchetypeModelObject> T itemAtPath(String path) {
+        return new APathQuery(path).find(this);
+    }
 
     /**
      * get attribute by name.
@@ -60,42 +101,5 @@ public class CComplexObject extends CDefinedObject<ArchetypeModelObject> {
 
     public void addAttributeTuple(CAttributeTuple tuple) {
         this.attributeTuples.add(tuple);
-    }
-
-    public boolean isAnyAllowed() {
-        return attributes.isEmpty();
-    }
-
-    @Override
-    public void setParent(ArchetypeConstraint parent) {
-        archetype = null;
-        super.setParent(parent);
-    }
-
-    public Archetype getArchetype() {
-        if(archetype == null) {
-            return getParent().getArchetype();
-        }
-        return archetype;
-    }
-
-    @Override
-    public boolean isRootNode() {
-        return this.getParent() == null && this.archetype != null;
-    }
-
-    /* set the archetype this is used in. Only set for root nodes! */
-    public void setArchetype(Archetype archetype) {
-        this.archetype = archetype;
-    }
-
-    @Override
-    public String toString() {
-        return "CComplexObject: " + getRmTypeName() + "[" + getNodeId() + "]";
-    }
-
-    /** TODO: should this only be on complex objects? */
-    public <T extends ArchetypeModelObject> T itemAtPath(String path) {
-        return new APathQuery(path).find(this);
     }
 }

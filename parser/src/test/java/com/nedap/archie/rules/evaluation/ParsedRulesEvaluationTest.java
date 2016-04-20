@@ -12,6 +12,7 @@ import org.junit.Test;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -36,13 +37,21 @@ public class ParsedRulesEvaluationTest {
         RuleEvaluation ruleEvaluation = new RuleEvaluation(archetype);
         Observation root = new Observation();
         ruleEvaluation.evaluate(root, archetype.getRules().getRules());
-        assertEquals(19l, ruleEvaluation.getVariableMap().get("arithmetic_test").get(0));
-        assertEquals(false, ruleEvaluation.getVariableMap().get("boolean_false_test").get(0));
-        assertEquals(true, ruleEvaluation.getVariableMap().get("boolean_true_test").get(0));
-        assertEquals(true, ruleEvaluation.getVariableMap().get("boolean_extended_test").get(0));
-        assertEquals(true, ruleEvaluation.getVariableMap().get("not_false").get(0));
-        assertEquals(false, ruleEvaluation.getVariableMap().get("not_not_not_true").get(0));
-        assertEquals(4l, ruleEvaluation.getVariableMap().get("variable_reference").get(0));
+        VariableMap variables = ruleEvaluation.getVariableMap();
+        assertEquals(19l, variables.get("arithmetic_test").getObject(0));
+        assertTrue(variables.get("arithmetic_test").getPaths(0).isEmpty());
+        assertEquals(false, variables.get("boolean_false_test").getObject(0));
+        assertTrue(variables.get("boolean_false_test").getPaths(0).isEmpty());
+        assertEquals(true, variables.get("boolean_true_test").getObject(0));
+        assertTrue(variables.get("boolean_true_test").getPaths(0).isEmpty());
+        assertEquals(true, variables.get("boolean_extended_test").getObject(0));
+        assertTrue(variables.get("boolean_extended_test").getPaths(0).isEmpty());
+        assertEquals(true, variables.get("not_false").getObject(0));
+        assertTrue(variables.get("not_false").getPaths(0).isEmpty());
+        assertEquals(false, variables.get("not_not_not_true").getObject(0));
+        assertTrue(variables.get("not_not_not_true").getPaths(0).isEmpty());
+        assertEquals(4l, variables.get("variable_reference").getObject(0));
+        assertTrue(variables.get("variable_reference").getPaths(0).isEmpty());
     }
 
 
@@ -58,7 +67,7 @@ public class ParsedRulesEvaluationTest {
 
         ruleEvaluation.evaluate(root, archetype.getRules().getRules());
 
-        assertEquals(65d, (Double) ruleEvaluation.getVariableMap().get("arithmetic_test").get(0), 0.001d);
+        assertEquals(65d, (Double) ruleEvaluation.getVariableMap().get("arithmetic_test").getObject(0), 0.001d);
 
         List<AssertionResult> assertionResults = ruleEvaluation.getAssertionResults();
         assertEquals("one assertion should have been checked", 1, assertionResults.size());
@@ -66,6 +75,9 @@ public class ParsedRulesEvaluationTest {
 
         assertEquals("the assertion should have succeeded", true, result.getResult());
         assertEquals("the assertion tag should be correct", "blood_pressure_valid", result.getTag());
+        assertEquals(1, result.getRawResult().getPaths(0).size());
+        assertEquals("/data[id2]/events[id3, 1]/data[id4]/items[id5, 1]/value/magnitude", result.getRawResult().getPaths(0).get(0));
+
     }
 
     @Test
@@ -80,12 +92,15 @@ public class ParsedRulesEvaluationTest {
         quantity.setMagnitude(40d);
 
         ruleEvaluation.evaluate(root, archetype.getRules().getRules());
-        assertEquals(false, ruleEvaluation.getVariableMap().get("extended_validity").get(0));
-
+        assertEquals(false, ruleEvaluation.getVariableMap().get("extended_validity").getObject(0));
+        ValueList extendedValidity = ruleEvaluation.getVariableMap().get("extended_validity");
+        assertEquals("/data[id2]/events[id3, 1]/data[id4]/items[id5, 1]/value/magnitude", extendedValidity.getPaths(0).get(0));
         quantity.setMagnitude(20d);
 
         ruleEvaluation.evaluate(root, archetype.getRules().getRules());
-        assertEquals(true, ruleEvaluation.getVariableMap().get("extended_validity").get(0));
+        extendedValidity = ruleEvaluation.getVariableMap().get("extended_validity");
+        assertEquals(true, extendedValidity.getObject(0));
+        assertEquals("/data[id2]/events[id3, 1]/data[id4]/items[id5, 1]/value/magnitude", extendedValidity.getPaths(0).get(0));
 
     }
 
@@ -129,8 +144,22 @@ public class ParsedRulesEvaluationTest {
         assertEquals("the assertion tag should be correct", "blood_pressure_valid", result.getTag());
         ValueList rawResult = result.getRawResult();
         assertEquals("two checks have been done", 2, rawResult.size());
-        assertTrue(rawResult.getValues().contains(true));
-        assertTrue(rawResult.getValues().contains(false));
+
+        {
+            Value<Boolean> value1 = rawResult.getValues().get(0);
+            assertTrue("assertion 1 should be true", value1.getValue());
+            //systolic and diastolic value 1. The original paths should be present, even if they have been computed through a variable
+            assertTrue(value1.getPaths().contains("/data[id2]/events[id3, 1]/data[id4]/items[id5, 1]/value/magnitude"));
+            assertTrue(value1.getPaths().contains("/data[id2]/events[id3, 1]/data[id4]/items[id6, 2]/value/magnitude"));
+        }
+
+        {
+            Value<Boolean> value2 = rawResult.getValues().get(1);
+            assertFalse("assertion 2 should be false", value2.getValue());
+            //systolic and diastolic value 2. The original paths should be present, even if they have been computed through a variable
+            assertTrue(value2.getPaths().contains("/data[id2]/events[id3, 2]/data[id4]/items[id5, 1]/value/magnitude"));
+            assertTrue(value2.getPaths().contains("/data[id2]/events[id3, 2]/data[id4]/items[id6, 2]/value/magnitude"));
+        }
     }
 
 

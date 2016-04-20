@@ -1,8 +1,11 @@
 package com.nedap.archie.aom;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.nedap.archie.base.MultiplicityInterval;
 import com.nedap.archie.paths.PathSegment;
 
+import javax.xml.bind.annotation.XmlTransient;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -10,6 +13,7 @@ import java.util.List;
 /**
  * Created by pieter.bos on 15/10/15.
  */
+@JsonPropertyOrder({"@type", "rm_attribute_name", "path", "logical_path", "differential_path", "multiple", "mandatory", "existence", "cardinality", "children"})
 public class CAttribute extends ArchetypeConstraint {
 
     private String rmAttributeName;
@@ -124,7 +128,7 @@ public class CAttribute extends ArchetypeConstraint {
             return new ArrayList<>();
         }
         List<PathSegment> segments = parent.getPathSegments();
-        segments.add(new PathSegment(getRmAttributeName(), null));
+        segments.add(new PathSegment(getRmAttributeName()));
         return segments;
     }
 
@@ -151,15 +155,15 @@ public class CAttribute extends ArchetypeConstraint {
 
     /* Operations defined by UML */
 
+    @JsonIgnore
+    @XmlTransient
     public boolean isSingle() {
         return !multiple;
     }
 
     public boolean isMandatory() {
         if(existence != null) {
-            if(existence.getLower() == 1 && existence.getUpper() == 1 && existence.isUpperIncluded()) {
-                return true;
-            }
+            return existence.getLower() == 1 && existence.getUpper() == 1 && existence.isUpperIncluded();
         }
         return false;
     }

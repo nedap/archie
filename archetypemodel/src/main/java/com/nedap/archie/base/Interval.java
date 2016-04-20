@@ -1,5 +1,9 @@
 package com.nedap.archie.base;
 
+import com.nedap.archie.aom.ArchetypeConstraint;
+import com.nedap.archie.aom.ArchetypeModelObject;
+import com.nedap.archie.rm.RMObject;
+
 import javax.annotation.Nullable;
 import java.time.Duration;
 import java.time.temporal.TemporalAmount;
@@ -8,7 +12,7 @@ import java.util.Objects;
 /**
  * Created by pieter.bos on 15/10/15.
  */
-public class Interval<T> {
+public class Interval<T>  extends OpenEHRBase {
 
     @Nullable
     T lower;

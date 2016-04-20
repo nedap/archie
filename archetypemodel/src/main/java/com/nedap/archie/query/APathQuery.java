@@ -15,12 +15,17 @@ import com.nedap.archie.xpath.antlr.XPathParser;
 import com.nedap.archie.xpath.antlr.XPathParser.*;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * For now only accepts rather simple xpath-like expressions. TODO: get a proper parser library, there should be one out there, like jaxen (seems old?)
@@ -52,17 +57,30 @@ public class APathQuery {
         if(!relativeLocationPathContext.getTokens(XPathLexer.ABRPATH).isEmpty()) {
             throw new UnsupportedOperationException("relative path with // between steps not yet supported");
         }
+        Pattern isDigit = Pattern.compile("\\d+");
+
         List<StepContext> stepContexts = relativeLocationPathContext.step();
         for(StepContext stepContext:stepContexts) {
             String nodeName = stepContext.nodeTest().getText();
             List<PredicateContext> predicateContexts = stepContext.predicate();
-            String nodeId = null;
+            PathSegment pathSegment = new PathSegment(nodeName);
             for(PredicateContext predicateContext:predicateContexts) {
-                //TODO: this is not a full parser. Find one because writing an XPath parser seems like a thing that's been done before.
-                //this is a bit of a hack, but it makes sure that /items[id2 and name="ignored"] works. Only in that order
-                nodeId = predicateContext.expr().orExpr().andExpr(0).equalityExpr().get(0).getText();
+                //TODO: this is not a full parser. We really need one. Find one because writing an XPath parser seems like a thing that's been done before.
+
+                AndExprContext andExpressionContext = predicateContext.expr().orExpr().andExpr(0);
+                for(EqualityExprContext equalityExprContext: andExpressionContext.equalityExpr()) {
+                    if(equalityExprContext.relationalExpr().size() == 1) { //do not yet support equals or not equals operator, ignore for now
+                        String expression = equalityExprContext.getText();
+                        if(isDigit.matcher(expression).matches()) {
+                            pathSegment.setIndex(Integer.parseInt(expression));
+                        } else {
+                            pathSegment.setNodeId(expression);
+                        }
+                    }
+
+                }
             }
-            pathSegments.add(new PathSegment(nodeName, nodeId));
+            pathSegments.add(pathSegment);
         }
     }
 
@@ -84,7 +102,7 @@ public class APathQuery {
                 return null;
             }
             currentObject = attribute;
-            if(segment.getNodeId() == null) {
+            if(!segment.hasExpressions()) {
                 if(i == pathSegments.size()-1) {
                     return (T) attribute;
                 }
@@ -93,7 +111,7 @@ public class APathQuery {
             if(segment.hasIdCode() || segment.hasArchetypeRef()) {
                 currentObject = attribute.getChild(segment.getNodeId());
             } else if(segment.hasNumberIndex()) {
-                currentObject = attribute.getChildren().get(Integer.parseInt(segment.getNodeId())-1);//APath path numbers start at 1 instead of 0
+                currentObject = attribute.getChildren().get(segment.getIndex()-1);//APath path numbers start at 1 instead of 0
             } else {
                 currentObject = attribute.getChildByMeaning(segment.getNodeId());//TODO: the ANTLR grammar removes all whitespace. what to do here?
             }
@@ -132,7 +150,7 @@ public class APathQuery {
                 }
                 if(currentObject instanceof Collection) {
                     Collection collection = (Collection) currentObject;
-                    if(segment.getNodeId() == null) {
+                    if(!segment.hasExpressions()) {
                         //TODO: check if this is correct
                         currentObject = collection;
                     } else {
@@ -140,14 +158,14 @@ public class APathQuery {
                     }
                 } else if(currentObject instanceof Locatable) {
 
-                    if(segment.getNodeId() != null) {
+                    if(segment.hasExpressions()) {
                         Locatable locatable = (Locatable) currentObject;
                         if(segment.hasIdCode()) {
                             if (!locatable.getArchetypeNodeId().equals(segment.getNodeId())) {
                                 return null;
                             }
                         } else if (segment.hasNumberIndex()) {
-                            int number = Integer.parseInt(segment.getNodeId());
+                            int number = segment.getIndex();
                             if(number != 1) {
                                 return null;
                             }
@@ -161,7 +179,7 @@ public class APathQuery {
                         }
                     }
                 } else if (segment.hasNumberIndex()) {
-                    int number = Integer.parseInt(segment.getNodeId());
+                    int number = segment.getIndex();
                     if(number != 1) {
                         return null;
                     }
@@ -201,7 +219,7 @@ public class APathQuery {
                 }
                 if (currentObject instanceof Collection) {
                     Collection collection = (Collection) currentObject;
-                    if (segment.getNodeId() == null) {
+                    if (!segment.hasExpressions()) {
                         //TODO: check if this is correct
                         currentObject = collection;
                     } else {
@@ -209,14 +227,14 @@ public class APathQuery {
                     }
                 } else if (currentObject instanceof Locatable) {
 
-                    if (segment.getNodeId() != null) {
+                    if (segment.hasExpressions()) {
                         Locatable locatable = (Locatable) currentObject;
                         if (segment.hasIdCode()) {
                             if (!locatable.getArchetypeNodeId().equals(segment.getNodeId())) {
                                 return null;
                             }
                         } else if (segment.hasNumberIndex()) {
-                            int number = Integer.parseInt(segment.getNodeId());
+                            int number = segment.getIndex();
                             if (number != 1) {
                                 return null;
                             }
@@ -230,7 +248,7 @@ public class APathQuery {
                         }
                     }
                 } else if (segment.hasNumberIndex()) {
-                    int number = Integer.parseInt(segment.getNodeId());
+                    int number = segment.getIndex();
                     if (number != 1) {
                         return null;
                     }
@@ -249,42 +267,51 @@ public class APathQuery {
 
     }
 
-    public <T> List<T> findList(ModelInfoLookup lookup, Object root) {
-        List currentObjects = Lists.newArrayList(root);
+    public <T> List<RMObjectWithPath> findList(ModelInfoLookup lookup, Object root) {
+        List<RMObjectWithPath> currentObjects = Lists.newArrayList(new RMObjectWithPath(root, "/"));
         try {
             for (PathSegment segment : pathSegments) {
                 if(currentObjects.isEmpty()){
-                    return null;
+                    return Collections.emptyList();
                 }
-                List newCurrentObjects = new ArrayList();
-                for(Object currentObject:currentObjects) {
-                    RMAttributeInfo attributeInfo = lookup.getAttributeInfo(currentObject.getClass(), segment.getNodeName());
+                List<RMObjectWithPath> newCurrentObjects = new ArrayList<>();
+
+                for(int i = 0; i < currentObjects.size(); i++) {
+                    RMObjectWithPath currentObject = currentObjects.get(i);
+                    Object currentRMObject = currentObject.getObject();
+                    RMAttributeInfo attributeInfo = lookup.getAttributeInfo(currentRMObject.getClass(), segment.getNodeName());
                     if (attributeInfo == null) {
                         continue;
                     }
                     Method method = attributeInfo.getGetMethod();
-                    currentObject = method.invoke(currentObject);
-                    if (currentObject == null) {
+                    currentRMObject = method.invoke(currentRMObject);
+                    String pathSeparator = "/";
+                    if(currentObject.getPath().endsWith("/")) {
+                        pathSeparator = "";
+                    }
+                    String newPath = currentObject.getPath() + pathSeparator + segment.getNodeName();
+
+                    if (currentRMObject == null) {
                         continue;
                     }
-                    if (currentObject instanceof Collection) {
-                        Collection collection = (Collection) currentObject;
-                        if (segment.getNodeId() == null) {
-                            //TODO: check if this is correct
-                            newCurrentObjects.addAll(collection);
+                    if (currentRMObject instanceof Collection) {
+                        Collection collection = (Collection) currentRMObject;
+                        if (!segment.hasExpressions()) {
+                            addAllFromCollection(newCurrentObjects, collection, newPath);
                         } else {
-                            newCurrentObjects.addAll(findRMObjectCollection(segment, collection));
+                            //TODO
+                            newCurrentObjects.addAll(findRMObjectsWithPathCollection(segment, collection, newPath));
                         }
-                    } else if (currentObject instanceof Locatable) {
+                    } else if (currentRMObject instanceof Locatable) {
 
-                        if (segment.getNodeId() != null) {
-                            Locatable locatable = (Locatable) currentObject;
+                        if (segment.hasExpressions()) {
+                            Locatable locatable = (Locatable) currentRMObject;
                             if (segment.hasIdCode()) {
                                 if (!locatable.getArchetypeNodeId().equals(segment.getNodeId())) {
                                     continue;
                                 }
                             } else if (segment.hasNumberIndex()) {
-                                int number = Integer.parseInt(segment.getNodeId());
+                                int number = segment.getIndex();
                                 if (number != 1) {
                                     continue;
                                 }
@@ -296,10 +323,10 @@ public class APathQuery {
                                 }
 
                             }
-                            newCurrentObjects.add(currentObject);
+                            newCurrentObjects.add(createRMObjectWithPath(currentRMObject, newPath));
                         }
                     } else if (segment.hasNumberIndex()) {
-                        int number = Integer.parseInt(segment.getNodeId());
+                        int number = segment.getIndex();
                         if (number != 1) {
                             continue;
                         }
@@ -307,7 +334,7 @@ public class APathQuery {
                         //not a locatable, but that's fine
                         //in openehr, in archetypes everythign has node ids. Datavalues do not in the rm. a bit ugly if you ask
                         //me, but that's why there's no 'if there's a nodeId set, this won't match!' code here.
-                        newCurrentObjects.add(currentObject);
+                        newCurrentObjects.add(createRMObjectWithPath(currentRMObject, newPath));
                     }
                 }
                 currentObjects = newCurrentObjects;
@@ -321,37 +348,98 @@ public class APathQuery {
 
     }
 
-    private Collection findRMObjectCollection(PathSegment segment, Collection collection) {
+    private RMObjectWithPath createRMObjectWithPath(Object currentObject, String newPath) {
+        String archetypeNodeId = getArchetypeNodeId(currentObject);
+        String pathConstraint = buildPathConstraint(null, archetypeNodeId);
+        return new RMObjectWithPath(currentObject, newPath + pathConstraint);
+    }
+
+    private String getArchetypeNodeId(Object rmObject) {
+        if(rmObject instanceof Locatable) {
+            Locatable o = (Locatable) rmObject;
+            return o.getArchetypeNodeId();
+        }
+        return null;
+
+    }
+
+    /**
+     * Add all the elements from the collection toAdd to the newCurrentObjects Lists.
+     * basePath must be the path under which to add the elements, without the "[]" part
+     * @param newCurrentObjects
+     * @param toAdd
+     * @param basePath
+     */
+    private void addAllFromCollection(List<RMObjectWithPath> newCurrentObjects, Collection toAdd, String basePath) {
+        int index = 1;
+        for(Object object:toAdd) {
+            String constraint = buildPathConstraint(index, getArchetypeNodeId(object));
+            newCurrentObjects.add(new RMObjectWithPath(object, basePath + constraint));
+            index++;
+        }
+    }
+
+    @NotNull
+    private String buildPathConstraint(Integer index, String archetypeNodeId) {
+        if(index == null && archetypeNodeId == null) {
+            return "";//nothing to add
+        }
+        if(archetypeNodeId != null && index == null) {
+            return "[" + archetypeNodeId + "]";
+        }
+        StringBuilder constraint = new StringBuilder("[");
+        boolean first = true;
+        if(archetypeNodeId != null) {
+            constraint.append(archetypeNodeId);
+            first = false;
+        }
+        if(index != null) {
+            if(!first) {
+                constraint.append(", ");
+            }
+            constraint.append(Integer.toString(index));
+        }
+
+        constraint.append("]");
+        return constraint.toString();
+    }
+
+    private Collection<RMObjectWithPath> findRMObjectsWithPathCollection(PathSegment segment, Collection<Object> collection, String path) {
 
         if(segment.hasNumberIndex()) {
-            int number = Integer.parseInt(segment.getNodeId());
+            int number = segment.getIndex();
+            int i = 1;
             for(Object object:collection) {
-                if(number == 1) {
-                    return Lists.newArrayList(object);
+                System.out.println("checking " + i + " with " + number);
+                if(number == i) {
+                    //TODO: check for other constraints as well
+                    return Lists.newArrayList(new RMObjectWithPath(object, path + buildPathConstraint(i-1, getArchetypeNodeId(object))));
                 }
-                number--;
+                i++;
             }
         }
-        List<Object> result = new ArrayList<>();
-        for(Object o:collection) {
-            Locatable locatable = (Locatable) o;
+        List<RMObjectWithPath> result = new ArrayList<>();
+        int i = 1;
+        for(Object object:collection) {
+            Locatable locatable = (Locatable) object;
 
             if (segment.hasIdCode()) {
                 if (locatable.getArchetypeNodeId().equals(segment.getNodeId())) {
-                    result.add(o);
+                    result.add(new RMObjectWithPath(object, path + buildPathConstraint(i, locatable.getArchetypeNodeId())));
                 }
             } else if (segment.hasArchetypeRef()) {
                 //operational templates in RM Objects have their archetype node ID set to an archetype ref. That
                 //we support. Other things not so much
                 if (locatable.getArchetypeNodeId().equals(segment.getNodeId())) {
-                    result.add(o);
+                    result.add(new RMObjectWithPath(object, path + buildPathConstraint(i, locatable.getArchetypeNodeId())));
                 }
                 throw new IllegalArgumentException("cannot handle RM-queries with archetype references yet");
             } else {
                 if(equalsName(locatable.getName(), segment.getNodeId())) {
-                    result.add(o);
+                    result.add(new RMObjectWithPath(object, path + buildPathConstraint(i, locatable.getArchetypeNodeId())));
                 }
             }
+            i++;
         }
         return result;
     }
@@ -359,13 +447,14 @@ public class APathQuery {
     private Object findRMObject(PathSegment segment, Collection collection) {
 
         if(segment.hasNumberIndex()) {
-            int number = Integer.parseInt(segment.getNodeId());
+            int number = segment.getIndex();
             for(Object object:collection) {
                 if(number == 1) {
                     return object;
                 }
                 number--;
             }
+            return null;
         }
         for(Object o:collection) {
             Locatable locatable = (Locatable) o;

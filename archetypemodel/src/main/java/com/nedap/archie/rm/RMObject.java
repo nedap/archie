@@ -1,5 +1,7 @@
 package com.nedap.archie.rm;
 
+import com.nedap.archie.base.OpenEHRBase;
+
 /**
  * Common base class for all RM Objects. Should this be an interface instead?
  *

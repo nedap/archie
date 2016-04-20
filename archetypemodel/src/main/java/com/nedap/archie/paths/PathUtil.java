@@ -21,6 +21,10 @@ public class PathUtil {
             if(segment.getNodeId() != null && !segment.getNodeId().equals(CPrimitiveObject.PRIMITIVE_NODE_ID_VALUE)) {
                 result.append("[");
                 result.append(segment.getNodeId());
+                if(segment.hasNumberIndex()) {
+                    result.append(", ");
+                    result.append(segment.getIndex().toString());
+                }
                 result.append("]");
             }
         }

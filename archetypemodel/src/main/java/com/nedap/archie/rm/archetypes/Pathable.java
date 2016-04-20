@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nedap.archie.paths.PathSegment;
 import com.nedap.archie.paths.PathUtil;
 import com.nedap.archie.query.APathQuery;
+import com.nedap.archie.query.RMObjectWithPath;
 import com.nedap.archie.rm.RMObject;
 import com.nedap.archie.rminfo.ArchieRMInfoLookup;
 
@@ -32,7 +33,12 @@ public class Pathable extends RMObject {
     }
 
     public List<Object> itemsAtPath(String s) {
-        return new APathQuery(s).findList(ArchieRMInfoLookup.getInstance(), this);
+        List<RMObjectWithPath> objects = new APathQuery(s).findList(ArchieRMInfoLookup.getInstance(), this);
+        List<Object> result = new ArrayList<>();
+        for(RMObjectWithPath object:objects) {
+            result.add(object.getObject());
+        }
+        return result;
     }
 
     @JsonIgnore
@@ -84,7 +90,7 @@ public class Pathable extends RMObject {
         }
 
         List<PathSegment> segments = parent.getPathSegments();
-        segments.add(new PathSegment(parentAttributeName, null));
+        segments.add(new PathSegment(parentAttributeName));
         return segments;
     }
 

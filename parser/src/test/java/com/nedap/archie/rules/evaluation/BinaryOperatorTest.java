@@ -84,7 +84,7 @@ public class BinaryOperatorTest {
         operator.addOperand(leftConstant);
         operator.addOperand(rightConstant);
         RuleEvaluation eval = new RuleEvaluation(null);//should be archetype, not very relevant here
-        assertEquals(expected, eval.evaluate(operator).getValues().get(0));
+        assertEquals(expected, eval.evaluate(operator).getValueObjects().get(0));
     }
 
 }

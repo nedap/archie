@@ -91,7 +91,7 @@ public class RuleEvaluation {
         assertionResult.setAssertion(expression);
 
         boolean result = true;
-        for(Object singleResult: valueList.getValues()) {
+        for(Object singleResult: valueList.getValueObjects()) {
             Boolean singleBoolean = (Boolean) singleResult;
             if(!singleBoolean) {
                 result = false;

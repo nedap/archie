@@ -1,10 +1,12 @@
 package com.nedap.archie.aom;
 
-import com.nedap.archie.Configuration;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.nedap.archie.ArchieLanguageConfiguration;
 import com.nedap.archie.aom.terminology.ArchetypeTerm;
 import com.nedap.archie.base.MultiplicityInterval;
 import com.nedap.archie.paths.PathSegment;
 
+import javax.xml.bind.annotation.XmlTransient;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -68,28 +70,6 @@ public class CObject extends ArchetypeConstraint {
         this.deprecated = deprecated;
     }
 
-    /**
-     * Return the named attribute if this is a constrained complex object. Return null if there is no such named attribute,
-     * or this is not a CComplexObject
-     *
-     * @param name
-     * @return
-     */
-    public CAttribute getAttribute(String name) {
-        return null;
-    }
-
-    /**
-     * Get the underlying attributes of this CObject. From this class always returns an empty list. Overriden with
-     * different implementations in subclasses.
-     *
-     * @return
-     */
-    public List<CAttribute> getAttributes() {
-        return Collections.EMPTY_LIST;
-    }
-
-
     @Override
     public List<PathSegment> getPathSegments() {
         CAttribute parent = getParent();
@@ -103,14 +83,42 @@ public class CObject extends ArchetypeConstraint {
         return segments;
     }
 
+    /**
+     * Get the archetype term, in the defined meaning and description language
+     * @return
+     */
+    @JsonIgnore
+    @XmlTransient
+    public ArchetypeTerm getTerm() {
+        if(nodeId == null) {
+            return null;
+        }
+        return getArchetype().getTerm(this, ArchieLanguageConfiguration.getMeaningAndDescriptionLanguage());
+    }
 
     public String getMeaning() {
+        ArchetypeTerm termDefinition = getTerm();
+        if(termDefinition!=null && termDefinition.getText()!=null) {
+            return termDefinition.getText();
+        }
+        return null;
+    }
+
+    public String getDescription() {
+        ArchetypeTerm termDefinition = getTerm();
+        if(termDefinition!=null && termDefinition.getDescription()!=null) {
+            return termDefinition.getDescription();
+        }
+        return null;
+    }
+
+    private String getLogicalPathMeaning() {
         if(nodeId == null) {
             return null;
         }
         String meaning = null;
-        ArchetypeTerm termDefinition = getArchetype().getTerm(this, Configuration.getLogicalPathLanguage());
-        if(termDefinition!=null&&termDefinition.getText()!=null) {
+        ArchetypeTerm termDefinition = getArchetype().getTerm(this, ArchieLanguageConfiguration.getLogicalPathLanguage());
+        if(termDefinition!=null && termDefinition.getText()!=null) {
             meaning = termDefinition.getText();
         }
         return meaning;
@@ -125,7 +133,7 @@ public class CObject extends ArchetypeConstraint {
             return "/";
         }
 
-        String nodeName = getMeaning();
+        String nodeName = getLogicalPathMeaning();
         if(nodeName == null) {
             nodeName = nodeId;
         }
@@ -157,6 +165,27 @@ public class CObject extends ArchetypeConstraint {
             return false;
         }
         return occurences.getLower() > 0;
+    }
+
+    /**
+     * Return the named attribute if this is a constrained complex object. Return null if there is no such named attribute,
+     * or this is not a CComplexObject
+     *
+     * @param name
+     * @return
+     */
+    public CAttribute getAttribute(String name) {
+        return null;
+    }
+
+    /**
+     * Get the underlying attributes of this CObject. From this class always returns an empty list. Overriden with
+     * different implementations in subclasses.
+     *
+     * @return
+     */
+    public List<CAttribute> getAttributes() {
+        return Collections.EMPTY_LIST;
     }
 
     /**

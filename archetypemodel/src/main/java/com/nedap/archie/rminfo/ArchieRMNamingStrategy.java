@@ -26,7 +26,11 @@ public class ArchieRMNamingStrategy implements ModelNamingStrategy {
             default:
 
         }
-        return lowerCaseWithUnderscoresStrategy.translate(clazz.getSimpleName()).toUpperCase();
+        String result = lowerCaseWithUnderscoresStrategy.translate(clazz.getSimpleName()).toUpperCase();
+        if(name.length() > 1 && name.startsWith("C") && Character.isUpperCase(name.charAt(1))) {
+            result = result.replaceFirst("C", "C_");
+        }
+        return result;
     }
 
     @Override
