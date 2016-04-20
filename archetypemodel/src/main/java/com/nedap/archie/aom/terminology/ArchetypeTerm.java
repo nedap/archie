@@ -31,7 +31,7 @@ public class ArchetypeTerm extends ArchetypeModelObject implements Map<String, S
     public String getText() {
         return items.get("text");
     }
-    
+
     public String getDescription() {
         return items.get("description");
     }

@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Created by pieter.bos on 15/10/15.
  */
-@JsonPropertyOrder({"@type", "rm_type_name", "node_id", "path", "logical_path", "meaning", "description", "required", "allowed", "any_allowed", "root_node", "attributes", "attribute_tuples"})
+@JsonPropertyOrder({"@type", "rm_type_name", "node_id", "path", "logical_path", "term", "required", "allowed", "any_allowed", "occurrences", "root_node", "attributes", "attribute_tuples"})
 public class CComplexObject extends CDefinedObject<ArchetypeModelObject> {
 
     private List<CAttribute> attributes = new ArrayList();
