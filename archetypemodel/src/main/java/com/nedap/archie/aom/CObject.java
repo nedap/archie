@@ -70,28 +70,6 @@ public class CObject extends ArchetypeConstraint {
         this.deprecated = deprecated;
     }
 
-    /**
-     * Return the named attribute if this is a constrained complex object. Return null if there is no such named attribute,
-     * or this is not a CComplexObject
-     *
-     * @param name
-     * @return
-     */
-    public CAttribute getAttribute(String name) {
-        return null;
-    }
-
-    /**
-     * Get the underlying attributes of this CObject. From this class always returns an empty list. Overriden with
-     * different implementations in subclasses.
-     *
-     * @return
-     */
-    public List<CAttribute> getAttributes() {
-        return Collections.EMPTY_LIST;
-    }
-
-
     @Override
     public List<PathSegment> getPathSegments() {
         CAttribute parent = getParent();
@@ -187,6 +165,27 @@ public class CObject extends ArchetypeConstraint {
             return false;
         }
         return occurences.getLower() > 0;
+    }
+
+    /**
+     * Return the named attribute if this is a constrained complex object. Return null if there is no such named attribute,
+     * or this is not a CComplexObject
+     *
+     * @param name
+     * @return
+     */
+    public CAttribute getAttribute(String name) {
+        return null;
+    }
+
+    /**
+     * Get the underlying attributes of this CObject. From this class always returns an empty list. Overriden with
+     * different implementations in subclasses.
+     *
+     * @return
+     */
+    public List<CAttribute> getAttributes() {
+        return Collections.EMPTY_LIST;
     }
 
     /**
