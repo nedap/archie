@@ -65,11 +65,14 @@ public class ModelInfoLookup {
         this.packageName = packageName;
         this.classLoader = classLoader;
 
-        Reflections reflections = new Reflections(packageName, classLoader);
-
-        Set<Class<? extends RMObject>> types = reflections.getSubTypesOf(baseClass);
-        for(Class clazz:types) {
-            addClass(clazz);
+        Set<String> typeNames = new Reflections(packageName, new SubTypesScanner(false)).getAllTypes();
+        System.out.println("type names size: " + typeNames.size());
+        for(String typeName:typeNames) {
+            try {
+                addClass(classLoader.loadClass(typeName));
+            } catch (ClassNotFoundException e) {
+                logger.warn("error in ModelInfoLookup", e);
+            }
         }
     }
 

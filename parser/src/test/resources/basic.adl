@@ -127,6 +127,45 @@ terminology
 				description = <"event">
 			>
 		>
+		["nl"] = <
+			["id1"] = <
+				text = <"Recept">
+				description = <"Een document waarmee uitgifte van een of meerdere medicijnen of hulpmiddel wordt geautoriseerd.">
+			>
+			["id3"] = <
+				text = <"Kwalificatie">
+				description = <"Qualifications on any medication order included in the prescription.">
+			>
+			["id4"] = <
+				text = <"OrderID">
+				description = <"The path or ID of the order referenced. If there is no OrderID then the endorsement relates to the entire prescription.">
+			>
+			["id5"] = <
+				text = <"Endorsement">
+				description = <"Asserting that a special condition applies such as approval for  enhanced subsidy or concurrent supply. Australian examples include Regulation 24 (PBS), Hardship Conditions (RPBS) or CTG for 'close the gap'.">
+			>
+			["id6"] = <
+				text = <"AuthorisationID">
+				description = <"An identifier authorising prescription, dispensing or reimbursement for this medication order.">
+			>
+			["id7"] = <
+				text = <"Comment">
+				description = <"Comment on any qualification.">
+				extra = <"Extra value">
+			>
+			["id8"] = <
+				text = <"Medication instruction">
+				description = <"Contains one or more medication instructions to be supplied.">
+			>
+			["id9"] = <
+				text = <"Other data">
+				description = <"Other observational or relevant data.">
+			>
+			["at1"] = <
+				text = <"event">
+				description = <"event">
+			>
+		>
 	>
 	term_bindings = <
 		["openehr"] = <
