@@ -1,9 +1,12 @@
 package com.nedap.archie.aom.terminology;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.nedap.archie.aom.ArchetypeModelObject;
 import com.nedap.archie.base.OpenEHRBase;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -11,6 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Created by pieter.bos on 15/10/15.
  */
+@JsonPropertyOrder({"@type", "text", "description", "other_items"})
 public class ArchetypeTerm extends ArchetypeModelObject implements Map<String, String> {
 
     private String code;
@@ -24,12 +28,10 @@ public class ArchetypeTerm extends ArchetypeModelObject implements Map<String, S
         this.code = code;
     }
 
-    /** convenience methode if you already know you want the text*/
     public String getText() {
         return items.get("text");
     }
-
-    /** convenience methode if you already know you want the text*/
+    
     public String getDescription() {
         return items.get("description");
     }
@@ -42,6 +44,21 @@ public class ArchetypeTerm extends ArchetypeModelObject implements Map<String, S
         items.put("description", description);
     }
 
+    /**
+     * For compatibility with the AOM, the other items is explicitly modelled here. You could just use the map interface
+     * implemented here - it is faster and easier (and required for odin-parsing with jackson).
+     * @return
+     */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    public Map<String, String> getOtherItems() {
+        Map<String, String> otherItems = new HashMap<>();
+        for(Map.Entry<String, String> entry:items.entrySet()) {
+            if(!(entry.getKey().equals("text") || entry.getKey().equals("description"))) {
+                otherItems.put(entry.getKey(), entry.getValue());
+            }
+        }
+        return otherItems;
+    }
 
     @Override
     public int size() {

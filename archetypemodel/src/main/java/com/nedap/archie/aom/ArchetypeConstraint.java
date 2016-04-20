@@ -5,6 +5,7 @@ import com.nedap.archie.paths.PathSegment;
 import com.nedap.archie.paths.PathUtil;
 
 import javax.xml.bind.annotation.XmlTransient;
+
 import java.util.List;
 
 /**
@@ -14,10 +15,10 @@ public abstract class ArchetypeConstraint extends ArchetypeModelObject {
 
     @JsonIgnore //ignore these field in popular object mappers
     @XmlTransient
-    private ArchetypeConstraint parent;
+    private transient ArchetypeConstraint parent;
     @JsonIgnore //ignore these field in popular object mappers, otherwise we get infinite loops
     @XmlTransient
-    private CSecondOrder socParent;
+    private transient CSecondOrder socParent;
 
     @JsonIgnore
     @XmlTransient
@@ -57,7 +58,7 @@ public abstract class ArchetypeConstraint extends ArchetypeModelObject {
     @JsonIgnore
     @XmlTransient
     public Archetype getArchetype() {
-            return getParent().getArchetype();
+        return getParent().getArchetype();
     }
 
 }

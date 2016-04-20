@@ -85,17 +85,25 @@ public class CObject extends ArchetypeConstraint {
 
     /**
      * Get the archetype term, in the defined meaning and description language
-     * @return
      */
-    @JsonIgnore
-    @XmlTransient
     public ArchetypeTerm getTerm() {
         if(nodeId == null) {
             return null;
         }
-        return getArchetype().getTerm(this, ArchieLanguageConfiguration.getMeaningAndDescriptionLanguage());
+        ArchetypeTerm result = getArchetype().getTerm(this, ArchieLanguageConfiguration.getMeaningAndDescriptionLanguage());
+        if(result == null) {
+            //no translation in the given language. Fall back to the default.
+            result = getArchetype().getTerm(this, ArchieLanguageConfiguration.getDefaultMeaningAndDescriptionLanguage());
+        }
+        return result;
     }
 
+    /**
+     * Get the meaning of this CObject in the defined meaning and description language.
+     * See ArchieLanguageConfiguation
+     */
+    @JsonIgnore
+    @XmlTransient
     public String getMeaning() {
         ArchetypeTerm termDefinition = getTerm();
         if(termDefinition!=null && termDefinition.getText()!=null) {
@@ -104,6 +112,12 @@ public class CObject extends ArchetypeConstraint {
         return null;
     }
 
+    /**
+     * Get the meaning of this CObject in the defined meaning and description language.
+     * See ArchieLanguageConfiguation
+     */
+    @JsonIgnore
+    @XmlTransient
     public String getDescription() {
         ArchetypeTerm termDefinition = getTerm();
         if(termDefinition!=null && termDefinition.getDescription()!=null) {

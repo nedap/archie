@@ -21,7 +21,7 @@ public class TerminologyTest {
         ArchetypeTerm term = archetype.getTerminology().getTermDefinition("en", "id7");
         assertEquals("Comment", term.getText());
         assertEquals("Comment on any qualification.", term.getDescription());
-        assertEquals("Extra value", term.get("extra"));
+        assertEquals("Extra value", term.getOtherItems().get("extra"));
         assertNull(archetype.getTerminology().getTermDefinition("en", "doesnotexist"));
         assertNull(archetype.getTerminology().getTermDefinition("es", "d7"));
     }

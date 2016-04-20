@@ -60,4 +60,8 @@ public class ArchieLanguageConfiguration {
     public static void setThreadLocalDescriptiongAndMeaningLanguage(String language) {
         currentMeaningAndDescriptionLanguage.set(language);
     }
+
+    public static String getDefaultMeaningAndDescriptionLanguage() {
+        return DEFAULT_MEANING_DESCRIPTION_LANGUAGE;
+    }
 }

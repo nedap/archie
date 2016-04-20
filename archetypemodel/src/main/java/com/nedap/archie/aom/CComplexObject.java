@@ -1,8 +1,10 @@
 package com.nedap.archie.aom;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.nedap.archie.query.APathQuery;
 
+import javax.xml.bind.annotation.XmlTransient;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,12 +18,9 @@ public class CComplexObject extends CDefinedObject<ArchetypeModelObject> {
 
     private List<CAttributeTuple> attributeTuples = new ArrayList();
 
-    /**
-     * If the parent of this is an archetype, this will contain a pointer to it.
-     */
-    private Archetype archetype;
-
-
+    @JsonIgnore
+    @XmlTransient
+    protected transient Archetype archetype;
 
     public boolean isAnyAllowed() {
         return attributes.isEmpty();
@@ -29,10 +28,17 @@ public class CComplexObject extends CDefinedObject<ArchetypeModelObject> {
 
     @Override
     public void setParent(ArchetypeConstraint parent) {
-        archetype = null;
         super.setParent(parent);
+        archetype = null;
     }
 
+
+    @Override
+    public boolean isRootNode() {
+        return this.getParent() == null && this.archetype != null;
+    }
+
+    @Override
     public Archetype getArchetype() {
         if(archetype == null) {
             return getParent().getArchetype();
@@ -40,12 +46,7 @@ public class CComplexObject extends CDefinedObject<ArchetypeModelObject> {
         return archetype;
     }
 
-    @Override
-    public boolean isRootNode() {
-        return this.getParent() == null && this.archetype != null;
-    }
-
-    /* set the archetype this is used in. Only set for root nodes! */
+    /** set the archetype this is used in. Only set for root nodes! */
     public void setArchetype(Archetype archetype) {
         this.archetype = archetype;
     }
