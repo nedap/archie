@@ -302,30 +302,31 @@ public class Flattener {
         if(parent == null) {
             CAttribute childCloned = child.clone();
             root.addAttribute(childCloned);
-            //this is a new attribute, but we still have to process it, for example to expand archetype roots. So set
-            //the parent to be the new child.
             parent = childCloned;
-        }
-        parent.setMultiple(getPossiblyOverridenValue(parent.isMultiple(), child.isMultiple()));
-        parent.setExistence(getPossiblyOverridenValue(parent.getExistence(), child.getExistence()));
-        parent.setCardinality(getPossiblyOverridenValue(parent.getCardinality(), child.getCardinality()));
-        if(child.getChildren().size() > 0 && child.getChildren().get(0) instanceof CPrimitiveObject) {
-            //TODO: is this correct? replace all child nodes
-            parent.setChildren(child.getChildren());
         } else {
+            parent.setMultiple(getPossiblyOverridenValue(parent.isMultiple(), child.isMultiple()));
+            parent.setExistence(getPossiblyOverridenValue(parent.getExistence(), child.getExistence()));
+            parent.setCardinality(getPossiblyOverridenValue(parent.getCardinality(), child.getCardinality()));
+            if (child.getChildren().size() > 0 && child.getChildren().get(0) instanceof CPrimitiveObject) {
+                //TODO: is this correct? replace all child nodes
+                parent.setChildren(child.getChildren());
+            } else {
 
-            for (CObject childObject : child.getChildren()) {
-                boolean overrideFound = false;
+                for (CObject childObject : child.getChildren()) {
+                    boolean childObjectIsNew = false;
 
-                for (CObject possibleMatch : parent.getChildren()) {
-                    if (isOverridenCObject(childObject, possibleMatch)) { //TODO: we now replace the node. but it's possible to replace one node by multiple ones in the archetype
-                        flattenCObject(possibleMatch, childObject);
-                        overrideFound = true;
+                    for (CObject possibleMatch : parent.getChildren()) {
+                        if (isOverridenCObject(childObject, possibleMatch)) { //TODO: we now replace the node. but it's possible to replace one node by multiple ones in the archetype
+                            flattenCObject(possibleMatch, childObject);
+                            childObjectIsNew = true;
+                        }
                     }
-                }
-                if(!overrideFound) {
-                    parent.addChild(childObject);
-                    //flattenCObject(childObject, null);
+                    if (!childObjectIsNew) {
+                        //if override found, it will have been handled by flattenCObject and we do not have to add
+                        //otherwise it is a new CObject and should be added to the parent node.
+                        parent.addChild(childObject);
+                        //flattenCObject(childObject, null);
+                    }
                 }
             }
         }
