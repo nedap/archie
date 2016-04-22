@@ -66,15 +66,15 @@ public class CTerminologyCode extends CPrimitiveObject<String, TerminologyCode> 
                     result.add(new TerminologyCodeWithArchetypeTerm(constraint, termDefinition));
                 }
             } else if (constraint.startsWith("ac")) {
-                ValueSet ac = terminology.getValueSets().get(constraint);
-                if(ac != null) {
-                    for(String member:ac.getMembers()) {
-                        ArchetypeTerm termDefinition = terminology.getTermDefinition(language, member);
+                ValueSet acValueSet = terminology.getValueSets().get(constraint);
+                if(acValueSet != null) {
+                    for(String atCode:acValueSet.getMembers()) {
+                        ArchetypeTerm termDefinition = terminology.getTermDefinition(language, atCode);
                         if(termDefinition == null) {
-                            termDefinition = terminology.getTermDefinition(defaultLanguage, member);
+                            termDefinition = terminology.getTermDefinition(defaultLanguage, atCode);
                         }
                         if(termDefinition != null) {
-                            result.add(new TerminologyCodeWithArchetypeTerm(constraint, termDefinition));
+                            result.add(new TerminologyCodeWithArchetypeTerm(atCode, termDefinition));
                         }
                     }
                 }
