@@ -5,6 +5,7 @@ import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.CPrimitiveObject;
 import com.nedap.archie.aom.terminology.ArchetypeTerm;
 import com.nedap.archie.aom.terminology.ArchetypeTerminology;
+import com.nedap.archie.aom.terminology.TerminologyCodeWithArchetypeTerm;
 import com.nedap.archie.aom.terminology.ValueSet;
 import com.nedap.archie.base.terminology.TerminologyCode;
 import com.nedap.archie.rm.datatypes.CodePhrase;
@@ -44,6 +45,7 @@ public class CTerminologyCode extends CPrimitiveObject<String, TerminologyCode> 
         return false;
     }
 
+
     /**
      * Get the ArchetypeTerms in the selected meaning and description language for all the possible options if this is a
      * locally defined terminology.
@@ -51,8 +53,8 @@ public class CTerminologyCode extends CPrimitiveObject<String, TerminologyCode> 
      *
      * @return
      */
-    public List<ArchetypeTerm> getTerms() {
-        List<ArchetypeTerm> result = new ArrayList<>();
+    public List<TerminologyCodeWithArchetypeTerm> getTerms() {
+        List<TerminologyCodeWithArchetypeTerm> result = new ArrayList<>();
         Archetype archetype = getArchetype();
         ArchetypeTerminology terminology = archetype.getTerminology(this);
         String language = ArchieLanguageConfiguration.getMeaningAndDescriptionLanguage();
@@ -61,7 +63,7 @@ public class CTerminologyCode extends CPrimitiveObject<String, TerminologyCode> 
             if(constraint.startsWith("at")) {
                 ArchetypeTerm termDefinition = terminology.getTermDefinition(language, constraint);
                 if(termDefinition != null) {
-                    result.add(termDefinition);
+                    result.add(new TerminologyCodeWithArchetypeTerm(constraint, termDefinition));
                 }
             } else if (constraint.startsWith("ac")) {
                 ValueSet ac = terminology.getValueSets().get(constraint);
@@ -72,7 +74,7 @@ public class CTerminologyCode extends CPrimitiveObject<String, TerminologyCode> 
                             termDefinition = terminology.getTermDefinition(defaultLanguage, member);
                         }
                         if(termDefinition != null) {
-                            result.add(termDefinition);
+                            result.add(new TerminologyCodeWithArchetypeTerm(constraint, termDefinition));
                         }
                     }
                 }
