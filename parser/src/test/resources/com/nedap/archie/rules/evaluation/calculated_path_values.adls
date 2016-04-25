@@ -29,7 +29,7 @@ definition
 					EVENT[id3] occurrences matches {1..*} matches {	-- Any event
 						data matches {
 							ITEM_TREE[id4] matches {
-								items cardinality matches {2; unordered} matches {
+								items cardinality matches {3; unordered} matches {
 									ELEMENT[id5] matches {	-- systolic pressure
 										value matches {
 											DV_QUANTITY[id13] matches {
@@ -42,6 +42,15 @@ definition
 									ELEMENT[id6] matches {	-- diastolic pressure
                                         value matches {
                                             DV_QUANTITY[id14] matches {
+                                                [magnitude, units, precision] matches {
+                                                    [{|0.0..<1000.0|}, {"mmHg"}, {1}]
+                                                }
+                                            }
+                                        }
+                                    }
+                                    ELEMENT[id7] matches {	-- difference between systolic and diastolic. For testing purposes :)
+                                        value matches {
+                                            DV_QUANTITY[id15] matches {
                                                 [magnitude, units, precision] matches {
                                                     [{|0.0..<1000.0|}, {"mmHg"}, {1}]
                                                 }
@@ -62,7 +71,7 @@ rules
 
 	$diastolic:Real ::= /data[id2]/events[id3]/data[id4]/items[id6]/value[id14]/magnitude
 
-	blood_pressure_valid: $systolic > $diastolic - 5
+	/data[id2]/events[id3]/data[id4]/items[id7]/value[id15]/magnitude = $systolic - $diastolic
 
 
 
