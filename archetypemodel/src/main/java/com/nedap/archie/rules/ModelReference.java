@@ -22,4 +22,9 @@ public class ModelReference extends Leaf {
     public void setPath(String path) {
         this.path = path;
     }
+
+    public String toString() {
+        return path;
+    }
+
 }

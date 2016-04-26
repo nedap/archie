@@ -28,7 +28,7 @@ public class CComplexObjectParser extends BaseTreeWalker {
 
         result.setContent(context.getText());
         AssertionsParser assertionsParser = new AssertionsParser(getErrors());
-        for(AssertionContext assertion:context.assertion()) {
+        for(AssertionContext assertion:context.assertion_list().assertion()) {
             result.addRule(assertionsParser.parse(assertion));
         }
 

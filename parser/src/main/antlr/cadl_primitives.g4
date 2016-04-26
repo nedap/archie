@@ -58,10 +58,10 @@ c_terminology_code: '[' ( ( AC_CODE ( ';' AT_CODE )? ) | AT_CODE ) ']' ;
 c_boolean: ( boolean_value | boolean_list_value ) assumed_boolean_value? ;
 assumed_boolean_value: ';' boolean_value ;
 
-adl_path          : adl_path_segment+ ;
+adl_path          : adl_path_segment+;//(adl_path_segment ({_input.LA(-1) != WS && _input.LA(-1) != LINE}?))+ adl_path_segment? ;
 adl_relative_path : adl_path_element adl_path ;  // TODO: remove when current slots no longer needed
-adl_path_segment  : '/' adl_path_element ;
-adl_path_element  : attribute_id ( '[' ID_CODE ']' )? ;
+adl_path_segment  : SYM_SLASH adl_path_element ;
+adl_path_element  : attribute_id ( SYM_LEFT_BRACKET ID_CODE SYM_RIGHT_BRACKET )? ;
 
 
 //
@@ -79,7 +79,7 @@ fragment CODE_STR : ('0' | [1-9][0-9]*) ( '.' ('0' | [1-9][0-9]* ))* ;
 // ---------- ISO8601-based date/time/duration constraint patterns
 
 DATE_CONSTRAINT_PATTERN      : YEAR_PATTERN '-' MONTH_PATTERN '-' DAY_PATTERN ;
-TIME_CONSTRAINT_PATTERN      : HOUR_PATTERN ':' MINUTE_PATTERN ':' SECOND_PATTERN ;
+TIME_CONSTRAINT_PATTERN      : HOUR_PATTERN SYM_COLON MINUTE_PATTERN SYM_COLON SECOND_PATTERN ;
 DATE_TIME_CONSTRAINT_PATTERN : DATE_CONSTRAINT_PATTERN 'T' TIME_CONSTRAINT_PATTERN ;
 DURATION_CONSTRAINT_PATTERN  : 'P' [yY]?[mM]?[Ww]?[dD]? ( 'T' [hH]?[mM]?[sS]? )? ;
 
@@ -90,4 +90,8 @@ fragment DAY_PATTERN    : 'dd' | 'DD' | '??' | 'XX' | 'xx'  ;
 fragment HOUR_PATTERN   : 'hh' | 'HH' | '??' | 'XX' | 'xx'  ;
 fragment MINUTE_PATTERN : 'mm' | 'MM' | '??' | 'XX' | 'xx'  ;
 fragment SECOND_PATTERN : 'ss' | 'SS' | '??' | 'XX' | 'xx'  ;
+
+SYM_LEFT_BRACKET: '[';
+SYM_RIGHT_BRACKET: ']';
+SYM_SLASH: '/';
 

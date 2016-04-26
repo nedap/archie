@@ -13,11 +13,13 @@ import cadl_primitives;
 //  ============== Parser rules ==============
 //
 
+assertion_list: (assertion (';')?) +;
+
 assertion: variable_declaration | boolean_assertion;
 
-variable_declaration: '$' identifier ':' identifier '::=' (boolean_expression | arithmetic_expression);
+variable_declaration: SYM_VARIABLE_START identifier SYM_COLON identifier SYM_ASSIGNMENT (boolean_expression | arithmetic_expression);
 
-boolean_assertion: ( identifier ':' )? boolean_expression ;
+boolean_assertion: ( identifier SYM_COLON )? boolean_expression ;
 
 //
 // Expressions evaluating to boolean values
@@ -52,7 +54,7 @@ boolean_constraint: ( adl_path | adl_relative_path ) SYM_MATCHES ('{' c_primitiv
 
 boolean_leaf:
       boolean_literal
-    | adl_path
+    //| adl_path
     | variable_reference
     | SYM_EXISTS adl_path
     | '(' boolean_expression ')'
@@ -109,4 +111,7 @@ relational_binop:
     | '>='
     | '>'
     ;
+
+
+
 

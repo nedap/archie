@@ -177,6 +177,7 @@ public class ParsedRulesEvaluationTest {
         EvaluationResult evaluationResult = ruleEvaluation.evaluate(root, archetype.getRules().getRules());
         assertEquals(1, evaluationResult.getAssertionResults().size());
         assertEquals(1, evaluationResult.getSetPathValues().size());
+        assertEquals(20.0d, (Double) evaluationResult.getSetPathValues().values().iterator().next().getValue(), 0.0001d);
     }
 
 

@@ -110,7 +110,7 @@ public class RuleEvaluation {
         boolean result = true;
         for(Object singleResult: valueList.getValueObjects()) {
             Boolean singleBoolean = (Boolean) singleResult;
-            if(!singleBoolean) {
+            if(singleBoolean != null && !singleBoolean) {
                 result = false;
             }
         }

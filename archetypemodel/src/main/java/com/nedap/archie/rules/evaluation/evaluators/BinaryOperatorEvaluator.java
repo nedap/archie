@@ -144,6 +144,7 @@ public class BinaryOperatorEvaluator implements Evaluator<BinaryOperator> {
 
         ValueList possibleNullResult = checkAndHandleNull(evaluation, statement);
         if(possibleNullResult != null) {
+            possibleNullResult.setType(PrimitiveType.Boolean);
             return possibleNullResult;
         } else {
             ValueList result = new ValueList();
@@ -262,6 +263,7 @@ public class BinaryOperatorEvaluator implements Evaluator<BinaryOperator> {
 
         ValueList possibleNullResult = checkAndHandleNull(evaluation, statement);
         if(possibleNullResult != null) {
+            possibleNullResult.setType(PrimitiveType.Boolean);
             return possibleNullResult;
         } else {
             checkIsNumber(leftValues, rightValues);
