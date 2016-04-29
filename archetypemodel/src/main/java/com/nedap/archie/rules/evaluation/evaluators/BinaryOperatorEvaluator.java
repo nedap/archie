@@ -84,8 +84,14 @@ public class BinaryOperatorEvaluator implements Evaluator<BinaryOperator> {
 
     private ValueList evaluateBooleanOperator(RuleEvaluation evaluation, BinaryOperator statement) {
 
+        ValueList possibleNullResult = checkAndHandleNull(evaluation, statement);
+        if(possibleNullResult != null) {
+            possibleNullResult.setType(PrimitiveType.Boolean);
+            return possibleNullResult;
+        }
         ValueList leftValues = evaluation.evaluate(statement.getLeftOperand());
         ValueList rightValues = evaluation.evaluate(statement.getRightOperand());
+
         checkisBoolean(leftValues, rightValues);
 
         ValueList result = new ValueList();
@@ -141,31 +147,62 @@ public class BinaryOperatorEvaluator implements Evaluator<BinaryOperator> {
         ValueList leftValues = evaluation.evaluate(statement.getLeftOperand());
         ValueList rightValues = evaluation.evaluate(statement.getRightOperand());
 
-        ValueList result = new ValueList();
-        result.setType(PrimitiveType.Real);
 
-        checkIsNumber(leftValues, rightValues);
-        if(leftValues.size() == rightValues.size()) {
-            for(int i = 0; i < leftValues.size();i++) {
-                Value leftValue = leftValues.get(i);
-                Value rightValue = rightValues.get(i);
-                evaluateArithmetic(statement, result, rightValue.getValue(), leftValue.getValue(), getPaths(leftValue, rightValue));
-            }
-        } else if (leftValues.size() == 1) {
-            Value leftValue = leftValues.get(0);
-            for(Value rightValue:rightValues.getValues()) {
-                evaluateArithmetic(statement, result, rightValue.getValue(), leftValue.getValue(), getPaths(leftValue, rightValue));
-            }
-        } else if (rightValues.size() == 1) {
-            Value rightValue = rightValues.get(0);
-            for(Value leftValue:leftValues.getValues()) {
-                evaluateArithmetic(statement, result, rightValue.getValue(), leftValue.getValue(), getPaths(leftValue, rightValue));
-            }
+        ValueList possibleNullResult = checkAndHandleNull(evaluation, statement);
+        if(possibleNullResult != null) {
+            possibleNullResult.setType(PrimitiveType.Boolean);
+            return possibleNullResult;
         } else {
-            throw new IllegalArgumentException("sizes of operator arguments not compatible");
+            ValueList result = new ValueList();
+            result.setType(PrimitiveType.Real);
+
+            checkIsNumber(leftValues, rightValues);
+            if (leftValues.size() == rightValues.size()) {
+                for (int i = 0; i < leftValues.size(); i++) {
+                    Value leftValue = leftValues.get(i);
+                    Value rightValue = rightValues.get(i);
+                    evaluateArithmetic(statement, result, rightValue.getValue(), leftValue.getValue(), getPaths(leftValue, rightValue));
+                }
+            } else if (leftValues.size() == 1) {
+                Value leftValue = leftValues.get(0);
+                for (Value rightValue : rightValues.getValues()) {
+                    evaluateArithmetic(statement, result, rightValue.getValue(), leftValue.getValue(), getPaths(leftValue, rightValue));
+                }
+            } else if (rightValues.size() == 1) {
+                Value rightValue = rightValues.get(0);
+                for (Value leftValue : leftValues.getValues()) {
+                    evaluateArithmetic(statement, result, rightValue.getValue(), leftValue.getValue(), getPaths(leftValue, rightValue));
+                }
+            } else {
+                //TODO: this also happens when one of the modelreferences has a value that does not exist in the model, but others have - while the rules are correct. Those are very valid cases
+                //how to fix?
+                throw new IllegalArgumentException("sizes of operator arguments not compatible");
+            }
+            return result;
         }
 
+    }
+
+    public ValueList checkAndHandleNull(RuleEvaluation evaluation, BinaryOperator statement) {
+        ValueList result = new ValueList();
+        ValueList leftValues = evaluation.evaluate(statement.getLeftOperand());
+        ValueList rightValues = evaluation.evaluate(statement.getRightOperand());
+        if (leftValues.isEmpty() && rightValues.isEmpty()) {
+            //this solves part of the null-valued expression problem. But certainly not all.
+            result.addValue(Value.createNull(Lists.newArrayList()));
+        } else if (leftValues.isEmpty()) {
+            for (Value value : rightValues.getValues()) {
+                result.addValue(Value.createNull(value.getPaths()));
+            }
+        } else if (rightValues.isEmpty()) {
+            for (Value value : leftValues.getValues()) {
+                result.addValue(Value.createNull(value.getPaths()));
+            }
+        } else {
+            return null;
+        }
         return result;
+
     }
 
     private void evaluateArithmetic(BinaryOperator statement, ValueList result, Object rightValue, Object leftValue, List<String> paths) {
@@ -228,33 +265,41 @@ public class BinaryOperatorEvaluator implements Evaluator<BinaryOperator> {
     private ValueList evaluateRelOpOperator(RuleEvaluation evaluation, BinaryOperator statement) {
         ValueList leftValues = evaluation.evaluate(statement.getLeftOperand());
         ValueList rightValues = evaluation.evaluate(statement.getRightOperand());
-        checkIsNumber(leftValues, rightValues);
 
-        ValueList result = new ValueList();
-        result.setType(PrimitiveType.Boolean);
 
-        if(leftValues.size() == rightValues.size()) {
-            for(int i = 0; i < leftValues.size();i++) {
-                Value leftValue = leftValues.get(i);
-                Value rightValue = rightValues.get(i);
-                evaluateRelOp(statement, result, leftValue.getValue(), rightValue.getValue(), getPaths(leftValue, rightValue));
-
-            }
-        } else if (leftValues.size() == 1) {
-            Value leftValue = leftValues.get(0);
-            for(Value rightValue:rightValues.getValues()) {
-                evaluateRelOp(statement, result, leftValue.getValue(), rightValue.getValue(), getPaths(leftValue, rightValue));
-            }
-        } else if (rightValues.size() == 1) {
-            Value rightValue = rightValues.get(0);
-            for(Value leftValue:leftValues.getValues()) {
-                evaluateRelOp(statement, result, leftValue.getValue(), rightValue.getValue(), getPaths(leftValue, rightValue));
-            }
+        ValueList possibleNullResult = checkAndHandleNull(evaluation, statement);
+        if(possibleNullResult != null) {
+            possibleNullResult.setType(PrimitiveType.Boolean);
+            return possibleNullResult;
         } else {
-            throw new IllegalArgumentException("sizes of operator arguments not compatible");
-        }
+            checkIsNumber(leftValues, rightValues);
 
-        return result;
+            ValueList result = new ValueList();
+            result.setType(PrimitiveType.Boolean);
+
+            if (leftValues.size() == rightValues.size()) {
+                for (int i = 0; i < leftValues.size(); i++) {
+                    Value leftValue = leftValues.get(i);
+                    Value rightValue = rightValues.get(i);
+                    evaluateRelOp(statement, result, leftValue.getValue(), rightValue.getValue(), getPaths(leftValue, rightValue));
+
+                }
+            } else if (leftValues.size() == 1) {
+                Value leftValue = leftValues.get(0);
+                for (Value rightValue : rightValues.getValues()) {
+                    evaluateRelOp(statement, result, leftValue.getValue(), rightValue.getValue(), getPaths(leftValue, rightValue));
+                }
+            } else if (rightValues.size() == 1) {
+                Value rightValue = rightValues.get(0);
+                for (Value leftValue : leftValues.getValues()) {
+                    evaluateRelOp(statement, result, leftValue.getValue(), rightValue.getValue(), getPaths(leftValue, rightValue));
+                }
+            } else {
+                throw new IllegalArgumentException("sizes of operator arguments not compatible");
+            }
+
+            return result;
+        }
     }
 
     private void evaluateRelOp(BinaryOperator statement, ValueList result, Object leftValue, Object rightValue, List<String> paths) {

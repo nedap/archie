@@ -64,7 +64,7 @@ specialization_section : SYM_SPECIALIZE archetype_ref ;
 language_section       : SYM_LANGUAGE odin_text ;
 description_section    : SYM_DESCRIPTION odin_text ;
 definition_section     : SYM_DEFINITION c_complex_object ;
-rules_section          : SYM_RULES assertion+ ;
+rules_section          : SYM_RULES assertion_list;
 terminology_section    : SYM_TERMINOLOGY odin_text ;
 annotations_section    : SYM_ANNOTATIONS odin_text ;
 component_terminologies_section: SYM_COMPONENT_TERMINOLOGIES odin_text ;

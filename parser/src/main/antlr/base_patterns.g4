@@ -28,8 +28,8 @@ fragment CARET_REGEXP_CHAR: ~[^\n\r] | ESCAPE_SEQ | '\\^';
 
 // ---------- whitespace & comments ----------
 
-WS         : [ \t\r]+    -> skip ;
-LINE       : '\n'        -> skip ;     // increment line count
+WS         : [ \t\r]+    -> channel(HIDDEN) ;
+LINE       : '\n'        -> channel(HIDDEN) ;     // increment line count
 H_CMT_LINE : '--------' '-'*? '\n'  ;  // special type of comment for splitting template overlays
 CMT_LINE   : '--' .*? '\n'  -> skip ;  // (increment line count)
 
@@ -37,8 +37,8 @@ CMT_LINE   : '--' .*? '\n'  -> skip ;  // (increment line count)
 
 // TODO: consider adding non-standard but unambiguous patterns like YEAR '-' ( MONTH | '??' ) '-' ( DAY | '??' )
 ISO8601_DATE      : YEAR '-' MONTH ( '-' DAY )? ;
-ISO8601_TIME      : HOUR ':' MINUTE ( ':' SECOND ( ',' INTEGER )?)? ( TIMEZONE )? ;
-ISO8601_DATE_TIME : YEAR '-' MONTH '-' DAY 'T' HOUR (':' MINUTE (':' SECOND ( ',' DIGIT+ )?)?)? ( TIMEZONE )? ;
+ISO8601_TIME      : HOUR SYM_COLON MINUTE ( SYM_COLON SECOND ( SYM_COMMA INTEGER )?)? ( TIMEZONE )? ;
+ISO8601_DATE_TIME : YEAR '-' MONTH '-' DAY 'T' HOUR (SYM_COLON MINUTE (SYM_COLON SECOND ( SYM_COMMA DIGIT+ )?)?)? ( TIMEZONE )? ;
 fragment TIMEZONE : 'Z' | ('+'|'-') HOUR_MIN ;   // hour offset, e.g. `+0930`, or else literal `Z` indicating +0000.
 fragment YEAR     : [1-9][0-9]* ;
 fragment MONTH    : ( [0][0-9] | [1][0-2] ) ;    // month in year
@@ -71,9 +71,9 @@ TERM_CODE_REF : '[' NAME_CHAR+ ( '(' NAME_CHAR+ ')' )? '::' NAME_CHAR+ ']' ;  //
 
 // URIs - simple recogniser based on https://tools.ietf.org/html/rfc3986 and
 // http://www.w3.org/Addressing/URL/5_URI_BNF.html
-URI : URI_SCHEME ':' URI_HIER_PART ( '?' URI_QUERY )? ;
+URI : URI_SCHEME SYM_COLON URI_HIER_PART ( '?' URI_QUERY )? ;
 fragment URI_HIER_PART : ( '//' URI_AUTHORITY )? URI_PATH ;
-fragment URI_AUTHORITY : ( URI_USER '@' )? URI_HOST ( ':' NATURAL )? ;
+fragment URI_AUTHORITY : ( URI_USER '@' )? URI_HOST ( SYM_COLON NATURAL )? ;
 fragment URI_HOST : IP_LITERAL | NAMESPACE ;
 fragment URI_USER : URI_RESERVED+ ;
 fragment URI_SCHEME : ALPHANUM_CHAR URI_XALPHA* ;
@@ -82,7 +82,7 @@ fragment URI_QUERY  : URI_XALPHA+ ( '+' URI_XALPHA+ )* ;
 
 fragment IP_LITERAL   : IPV4_LITERAL | IPV6_LITERAL ;
 fragment IPV4_LITERAL : NATURAL '.' NATURAL '.' NATURAL '.' NATURAL ;
-fragment IPV6_LITERAL : HEX_QUAD (':' HEX_QUAD )* '::' HEX_QUAD (':' HEX_QUAD )* ;
+fragment IPV6_LITERAL : HEX_QUAD (SYM_COLON HEX_QUAD )* SYM_COLON SYM_COLON HEX_QUAD (SYM_COLON HEX_QUAD )* ;
 
 fragment URI_XPALPHA : URI_XALPHA | '+' ;
 fragment URI_XALPHA : ALPHANUM_CHAR | URI_SAFE | URI_EXTRA | URI_ESCAPE ;
@@ -132,8 +132,17 @@ fragment UTF8CHAR    : '\\u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT ;
 fragment DIGIT     : [0-9] ;
 fragment HEX_DIGIT : [0-9a-fA-F] ;
 
+
+SYM_VARIABLE_START: '$';
+SYM_ASSIGNMENT: '::=';
+
 SYM_SEMICOLON: ';';
 SYM_LT: '<';
 SYM_GT: '>';
 SYM_LE: '<=';
 SYM_GE: '>=';
+SYM_EQ: '=';
+SYM_LEFT_PAREN: '(';
+SYM_RIGHT_PAREN: ')';
+SYM_COLON: ':';
+SYM_COMMA: ',';

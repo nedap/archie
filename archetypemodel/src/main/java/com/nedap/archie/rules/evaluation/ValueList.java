@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * A list of values, as evaluated by the rule evaluation.
  *
- * Every value has both a value and a set of paths, all single-valued paths, used in calculating that value
+ * Every value has both a value and a set of paths used in calculating that value. See Value
  * Created by pieter.bos on 31/03/16.
  */
 public class ValueList {
@@ -105,5 +105,9 @@ public class ValueList {
 
     public Value get(int i) {
         return values.get(i);
+    }
+
+    public boolean isEmpty() {
+        return values.isEmpty();
     }
 }

@@ -69,7 +69,7 @@ public class ParsedRulesEvaluationTest {
 
         assertEquals(65d, (Double) ruleEvaluation.getVariableMap().get("arithmetic_test").getObject(0), 0.001d);
 
-        List<AssertionResult> assertionResults = ruleEvaluation.getAssertionResults();
+        List<AssertionResult> assertionResults = ruleEvaluation.getEvaluationResult().getAssertionResults();
         assertEquals("one assertion should have been checked", 1, assertionResults.size());
         AssertionResult result = assertionResults.get(0);
 
@@ -136,7 +136,7 @@ public class ParsedRulesEvaluationTest {
 
         ruleEvaluation.evaluate(root, archetype.getRules().getRules());
 
-        List<AssertionResult> assertionResults = ruleEvaluation.getAssertionResults();
+        List<AssertionResult> assertionResults = ruleEvaluation.getEvaluationResult().getAssertionResults();
         assertEquals("one assertion should have been checked", 1, assertionResults.size());
         AssertionResult result = assertionResults.get(0);
 
@@ -160,6 +160,24 @@ public class ParsedRulesEvaluationTest {
             assertTrue(value2.getPaths().contains("/data[id2]/events[id3, 2]/data[id4]/items[id5, 1]/value/magnitude"));
             assertTrue(value2.getPaths().contains("/data[id2]/events[id3, 2]/data[id4]/items[id6, 2]/value/magnitude"));
         }
+    }
+
+
+    @Test
+    public void calculatedPathValues() throws Exception {
+        archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("calculated_path_values.adls"));
+        RuleEvaluation ruleEvaluation = new RuleEvaluation(archetype);
+
+        Pathable root = (Pathable) testUtil.constructEmptyRMObject(archetype.getDefinition());
+        DvQuantity systolic = (DvQuantity) root.itemAtPath("/data[id2]/events[id3]/data[id4]/items[id5]/value[id13]");
+        systolic.setMagnitude(100d);
+        DvQuantity diastolic = (DvQuantity) root.itemAtPath("/data[id2]/events[id3]/data[id4]/items[id6]/value[id14]");
+        diastolic.setMagnitude(80d);
+
+        EvaluationResult evaluationResult = ruleEvaluation.evaluate(root, archetype.getRules().getRules());
+        assertEquals(1, evaluationResult.getAssertionResults().size());
+        assertEquals(1, evaluationResult.getSetPathValues().size());
+        assertEquals(20.0d, (Double) evaluationResult.getSetPathValues().values().iterator().next().getValue(), 0.0001d);
     }
 
 
