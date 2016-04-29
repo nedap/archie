@@ -84,8 +84,14 @@ public class BinaryOperatorEvaluator implements Evaluator<BinaryOperator> {
 
     private ValueList evaluateBooleanOperator(RuleEvaluation evaluation, BinaryOperator statement) {
 
+        ValueList possibleNullResult = checkAndHandleNull(evaluation, statement);
+        if(possibleNullResult != null) {
+            possibleNullResult.setType(PrimitiveType.Boolean);
+            return possibleNullResult;
+        }
         ValueList leftValues = evaluation.evaluate(statement.getLeftOperand());
         ValueList rightValues = evaluation.evaluate(statement.getRightOperand());
+
         checkisBoolean(leftValues, rightValues);
 
         ValueList result = new ValueList();
