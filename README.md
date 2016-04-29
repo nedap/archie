@@ -117,9 +117,16 @@ An archetype constrains instances of the reference model. But a reference model 
 Archetype archetype = ADLParser.withRMConstraintsImposer().parse(adlFile);
 ```
 
+Or use the RMConstraintsImposer class yourself instead of directly from the parser.
+
+
 ### Use a different reference model implementation
 
-Archie uses its own reference model by default, but it can use any reference model you like. To do so, you can implement your own Constraints imposer, your own reference model info lookup and some other classes, and use those in the right places. This does not have documentation yet, check the sources for more information.
+Archie uses its own reference model by default, but it can use any reference model you like. To do so, you can implement your own Constraints imposer, your own reference model info lookup and some other classes, and use those in the right places. To do so, create an implementation of each of the following abstract classes and interfaces:
+
+- ModelNamingStrategy
+- ModelInfoLookup
+- ModelConstraintImposer or ReflectionConstraintImposer
 
 ### Intervals and primitive objects
 
