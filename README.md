@@ -1,6 +1,12 @@
-# Archie: ADL 2.0 parser    
+# Archie: OpenEHR Library 
 
-ADL 2.0 parser, Archetype Object Model and Reference Model implementation for use in openEHR-implementations, written in Java. Based on the ANTLR-grammar by Thomas Beale at https://github.com/openehr/adl-antlr . See also www.openehr.org.
+Archie is an openEHR Library written in Java, which can be used to implement openEHR tools and systems. See http://www.openehr.org for information about openEHR.
+Archie works with the most recent versions of openEHR. This includes ADL version 2.
+It contains an ADL 2 parser and an archetype object model implementation, as well as the EHR part of the reference model implementation.
+
+It uses the ANTLR adl-grammar written by Thomas Beale at https://github.com/openehr/adl-antlr.
+
+It is licensed under the Apache license.
 
 ## Build
 
@@ -20,15 +26,16 @@ To install to your local maven repository for use in other gradle or maven proje
 
 ## Usage
 
-### Parsing and Queries
+### Parsing and Archetype queries
 
 ```java
 Archetype archetype = new ADLParser().parse(adlFile);
 APathQuery query = new APathQuery("/context[id1]/items[id2]/value");
 ArchetypeModelObject object = query.find(archetype.getDefinition());
+ArchetypeModelObject sameObject = archetype.getDefinition().itemAtPath("/context[id1]/items[id2]/value")
 CAttribute attribute = archetype.getDefinition()
     .getAttribute("context").getChild("id1").getAttribute("items");
-String text = archetype.getTerminology().getTermDefinition("en", "id2").getText();
+String text = archetype.getTerm(object, "en").getText();
 ```
 
 Or, if you prefer your paths to be human readable, you could do:
@@ -39,7 +46,7 @@ CAttribute attribute = archetype.getDefinition()
     attribute.getLogicalPath(); // is 'context[systolic]/items'
 ```
 
-### Flattener
+### Flattener and Operational Template creation
 
 First, create an ArchetypeRepository - create your own or use the supplied in memory SimpleArchetypeRespository. You need it to contain all Archetypes that are to be used, in parsed form. Then do:
 
@@ -49,17 +56,50 @@ repository.addArchetype(archetype1); //repeat for all your archetypes
 Archetype flattened = new Flattener(repository).createOperationalTemplate(true).flatten(archetype);
 ```
 
+You will get a flattened copy of the original archetypes. This means all specalizations in your archetype will be merged with any parent archetypes.
+If you opted to create an operational template, also the occurrences of use_archetype and use_node will have been replaced with a copy of the contents of the specified archetype and node, and the component terminologies will have been added to the operational template.
+
 ### Terminology
 
-You can of course directly use archetype.terminology() to get the meaning in any desired language. But that doesn't work with OperationalTemplates because you need to handle component terminologies. So instead, do:
+You can directly use archetype.terminology() to get the meaning in any desired language. Archie contains convenience methods to make this easier for you in several ways. Since you likely will want to use the same language for many calls in the same thread, you can specify the language you are using as a thread local variable and just directly get terms for the Archetype Constraints.
+
+```java
+ArchieLanguageConfig.setThreadLocalMeaningAndDescriptionLanguage("nl");
+
+CObject cobject = archetype.getDefinition().getAttribute("context").getChild("id1");
+ArchetypeTerm term = cobject.getTerm();
+logger.info("and the archetype term text in Dutch is: " + term.getText());
+```
+
+This works with the normal terminology, but also with component terminologies from operational templates.
+
+Of couse, you can also specify the language yourself:
 
 ```java
 CObject cobject = archetype.getDefinition().getAttribute("context").getChild("id1");
 ArchetypeTerm term = archetype.getTerm(cobject, "en");
-logger.info("and the archetype term text is: " + term.getText());
+logger.info("and the archetype term text in English is: " + term.getText());
 ```
 
-This takes component terminologies into account as well. Alternatively, use ```archetype.getTerminology(cobject)``` to get the full terminology object for that path.
+Or you could access the terminology itself:
+
+```java
+archetype.getTerminology().getValueSets();
+operationalTemplates.getComponentTerminologies()
+```
+
+### Default constraints from the reference model
+
+An archetype constrains the reference model. But a reference model has some default constraints. For example, an observation only has a data field, which is a single field - not a list or set. You can apply these constraints so you get the explicitly in the resulting archetype-object. To do so:
+
+```java
+```
+Archetype archetype = ADLParser.withRMConstraintsImposer().parse(adlFile);
+```
+
+### Use a different reference model implementation
+
+Archie uses its own reference model by default, but it can use any reference model you like. To do so, you can implement your own Constraints imposer, your own reference model info lookup and some other classes, and use those in the right places.
 
 ### Intervals and primitive objects
 
@@ -83,18 +123,6 @@ cString.isValidValue("mooooore test"); //returns false
 
 ISO-8601 date constraint patterns are not yet implemented
 
-### Constraints imposed by default by the reference model
-
-The openEHR specification mentions that cardinality is not a required field, because the reference model has some default constraints. The value of is_multiple is determined in the same way,
-
-That means you need knowledge about the reference model to correctly fill an archetype object model.That's what the RMConstraintImposer does. For many use cases, you'll want to use it:
-
-```
-Archetype archetype = new ADLParser(new RMConstraintImposer()).parse(adlFile);
-```
-
-Archetypes can be used to further constrain any model. To use this for a different model than the reference model, see the superclasses of RMConstraintImposer - you can easily write your own.
-
 
 ### Archetype tree walking for openEHR reference models
 
@@ -109,8 +137,6 @@ public void walk(CObject cobject) {
 	}
 }
 ```
-
-There's also a specific implementation available with named predefined callbacks for every RM object constraint. See RMArchetypeTreeListener and BaseRMArchetypeTreeListener.
 
 ### ODIN
 
@@ -127,27 +153,52 @@ This means you can also convert ODIN to JSON.
 	String json = new OdinToJsonConverter().convert(odinText);
 ```
 
-Converting to JSON is a great way to get ODIN object mapping with very little code and it parses enough to parse the ODIN used in ADL 2. However, ODIN has a few features that are not supported natively in JSON, specifically object references and intervals. It's very possible to add interval support, object references are tricky.
+Converting to JSON is a great way to get ODIN object mapping with very little code and it parses enough to parse the ODIN used in ADL 2. Odin has a few advanced features not generally used in archetype metadata, which are object references and intervals. These are currently not yet supported.
 
-If someone wants to do a full Jackson extension for ODIN, plus perhaps ODIN-serialization support, it is welcome. It is not currently a priority for us.
+## Reference Model
 
-### Reference model
+### Reference model object creation
 
-A reference model implementation is available. It deserializes with Jackson into json, but probably not yet in a standard way.
+The RMObjectCreator creates empty reference model objects based on constraints. It can also set values based on attribute names. You can use it to create a reference model based on an archetype and user input. To create an empty one, for example, you can do this:
+
+
+```java
+ public RMObject constructEmptyRMObject(CObject object) {
+        RMObject result = creator.create(object);
+        for(CAttribute attribute: object.getAttributes()) {
+            List<Object> children = new ArrayList<>();
+            for(CObject childConstraint:attribute.getChildren()) {
+                if(childConstraint instanceof CComplexObject) {
+                    RMObject childObject = constructEmptyRMObject(childConstraint);
+                    children.add(childObject);
+                }
+            }
+            //will fail when a single valued attribute has two values, check code in TestUtil.java for how to solve.
+            creator.set(result, attribute.getRmAttributeName(), children);
+        }
+        return result;
+    }
+```
+
+### Rule evaluation
+
+Rule evaluation is implemented. Documentation follows. See the RuleEvaluator.
+
+### Reference model APath queries
+
 
 ## Status
 
-The project is quite usable for when you want to create an EHR implementation. It is not yet usable for when you want to create an ADL-editor, mainly because there is no serialization to ADL-files.
+The project is quite usable for when you want to create an EHR implementation, but it is still missing many openEHR features which could make this library easier to use and more complete.
 
 What we want this to do in the future:
 - Date Constraint parsing with patterns, not just intervals
 - Tests for the reference model
 - Many more convenience methods in the archetype object model
 - More complete APath-queries
-- Full rules parsing, once the adl-antlr grammar supports this fully
-- Probably rule evaluation
 - ADL serialization (to ADL and perhaps JSON and XML)
 - Many more tests
+- Validating if an RM object conforms to a certain archetype
 - ...
 
 ## Contributions
