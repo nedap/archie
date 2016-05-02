@@ -211,7 +211,7 @@ Setting primitive object values works in a similar way, with ```creator.set(...)
 
 ### Rule evaluation
 
-Basic rule evaluation is implemented, but the implementation is still experimental with missing features. Documentation is not yet complete. See RuleEvaluation.java on how to use this.
+Basic rule evaluation is implemented, but the implementation is still experimental with missing features. The API and implementation is likely to be changed in the near future. See RuleEvaluation.java on how to use.
 
 ### Reference model APath queries
 

@@ -8,9 +8,9 @@ import java.util.Set;
  * Created by pieter.bos on 27/10/15.
  */
 public enum OperatorKind {
-    eq("="), ne("!="), le("<"), lt("<="), ge(">="), gt(">"),
-    matches("matches", "∈", "is_in"), not("not", "!", "∼", "¬"), and("and", "∧"), or("or", "∨"), xor("xor"),
-    implies("implies", "®"), for_all("for_all", "∀"), exists("exists" ,"∃"),
+    eq("="), ne("!=", "≠"), le("<", "≤"), lt("<="), ge(">=", "≥"), gt(">"),
+    matches("matches", "∈", "is_in"), not("not", "!", "∼", "¬"), and("and", "∧"), or("or", "∨"), xor("xor", "⊻"),
+    implies("implies", "⇒"), for_all("for_all", "∀"), exists("exists" ,"∃"),
     plus("+"), minus("-"), multiply("*"), divide("/"), modulo("%"), exponent("^");
 
     private Set<String> codes;
