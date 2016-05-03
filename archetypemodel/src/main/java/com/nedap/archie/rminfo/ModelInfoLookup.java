@@ -181,6 +181,9 @@ public class ModelInfoLookup {
     }
 
 
+    public RMTypeInfo getTypeInfo(Class clazz) {
+        return this.classesToRmTypeInfo.get(clazz);
+    }
 
     public Field getField(Class clazz, String attributeName) {
         RMTypeInfo typeInfo = classesToRmTypeInfo.get(clazz);
@@ -209,4 +212,5 @@ public class ModelInfoLookup {
     public ModelNamingStrategy getNamingStrategy() {
         return namingStrategy;
     }
+
 }
