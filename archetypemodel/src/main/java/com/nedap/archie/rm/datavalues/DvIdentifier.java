@@ -1,8 +1,16 @@
 package com.nedap.archie.rm.datavalues;
 
+import javax.xml.bind.annotation.XmlType;
+
 /**
  * Created by pieter.bos on 04/11/15.
  */
+@XmlType(name = "DV_IDENTIFIER", propOrder = {
+        "issuer",
+        "assigner",
+        "id",
+        "type"
+})
 public class DvIdentifier extends DataValue {
 
     private String issuer;

@@ -2,6 +2,7 @@ package com.nedap.archie.rm.datavalues.quantity.datetime;
 
 import com.nedap.archie.rm.datavalues.SingleValuedDataValue;
 
+import javax.xml.bind.annotation.XmlType;
 import java.time.LocalDate;
 import java.time.temporal.ChronoField;
 import java.time.temporal.Temporal;
@@ -11,8 +12,11 @@ import java.time.temporal.Temporal;
  * TODO: implement java.time.Temporal for this
  * Created by pieter.bos on 04/11/15.
  */
+@XmlType(name = "DV_DATE", propOrder = {
+        "value"
+})
 public class DvDate extends DvTemporal<Long> implements SingleValuedDataValue<Temporal> {
-
+    //TODO: in XML this should be a string probably
     private Temporal value;
 
     @Override

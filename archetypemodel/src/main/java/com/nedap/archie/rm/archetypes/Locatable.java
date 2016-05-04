@@ -5,20 +5,32 @@ import com.nedap.archie.rm.datatypes.UIDBasedId;
 import com.nedap.archie.rm.datavalues.DvText;
 
 import javax.annotation.Nullable;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by pieter.bos on 04/11/15.
  */
+@XmlType(name = "LOCATABLE", propOrder = {
+        "name",
+        "uid",
+        "links",
+        "archetypeDetails"
+        //,"feederAudit"
+})
 public class Locatable extends Pathable {
 
     private String name;
+    @XmlAttribute(name = "archetype_node_id")
     private String archetypeNodeId;
     @Nullable
     private UIDBasedId uid;
 
     @Nullable
+    @XmlElement(name = "archetype_details")
     private Archetyped archetypeDetails;
 
     private List<Link> links = new ArrayList<>();

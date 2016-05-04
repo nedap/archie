@@ -1,8 +1,11 @@
 package com.nedap.archie.rm.datatypes;
 
+import javax.xml.bind.annotation.XmlType;
+
 /**
  * Created by pieter.bos on 04/11/15.
  */
+@XmlType(name = "TERMINOLOGY_ID")
 public class TerminologyId {
     private String value;
 

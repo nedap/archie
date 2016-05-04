@@ -2,6 +2,8 @@ package com.nedap.archie.rm.datatypes;
 
 import com.nedap.archie.rm.RMObject;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -9,9 +11,15 @@ import java.util.regex.Pattern;
  * TODO: reuse archetype model TerminologyCode? Thing is, that doesn't constrain as nicely with the archetype model...
  * Created by pieter.bos on 04/11/15.
  */
+@XmlType(name = "CODE_PHRASE", propOrder = {
+        "terminologyId",
+        "codeString"
+})
 public class CodePhrase extends RMObject {
 
+    @XmlElement(name = "terminology_id")
     private TerminologyId terminologyId;
+    @XmlElement(name = "code_string")
     private String codeString;
 
     public CodePhrase() {

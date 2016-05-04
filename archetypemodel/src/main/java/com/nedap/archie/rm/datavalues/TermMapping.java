@@ -4,10 +4,16 @@ import com.nedap.archie.rm.RMObject;
 import com.nedap.archie.rm.datatypes.CodePhrase;
 
 import javax.annotation.Nullable;
+import javax.xml.bind.annotation.XmlType;
 
 /**
  * Created by pieter.bos on 04/11/15.
  */
+@XmlType(name = "TERM_MAPPING", propOrder = {
+        "match",
+        "purpose",
+        "target"
+})
 public class TermMapping extends RMObject {
     /**
      * This is an interesting one, that could be implemented with an enum

@@ -2,9 +2,16 @@ package com.nedap.archie.rm.datatypes;
 
 import com.nedap.archie.rm.RMObject;
 
+import javax.xml.bind.annotation.XmlType;
+
 /**
  * Created by pieter.bos on 04/11/15.
  */
+@XmlType(name = "OBJECT_REF", propOrder = {
+        "id",
+        "namespace",
+        "type"
+})
 public class ObjectRef extends RMObject {
     private String namespace;
     private String type;

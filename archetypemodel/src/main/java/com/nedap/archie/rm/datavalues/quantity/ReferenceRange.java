@@ -3,9 +3,15 @@ package com.nedap.archie.rm.datavalues.quantity;
 import com.nedap.archie.rm.RMObject;
 import com.nedap.archie.rm.datavalues.DvText;
 
+import javax.xml.bind.annotation.XmlType;
+
 /**
  * Created by pieter.bos on 04/11/15.
  */
+@XmlType(name = "REFERENCE_RANGE", propOrder = {
+        "meaning",
+        "range"
+})
 public class ReferenceRange<T extends DvOrdered> extends RMObject {
 
     private DvInterval<T> range;

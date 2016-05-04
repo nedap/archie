@@ -2,9 +2,15 @@ package com.nedap.archie.rm.datavalues.encapsulated;
 
 import com.nedap.archie.rm.datavalues.SingleValuedDataValue;
 
+import javax.xml.bind.annotation.XmlType;
+
 /**
  * Created by pieter.bos on 04/11/15.
  */
+@XmlType(name = "DV_PARSABLE", propOrder = {
+        "value",
+        "formalism"
+})
 public class DvParsable extends DvEncapsulated implements SingleValuedDataValue<String> {
 
     private String value;

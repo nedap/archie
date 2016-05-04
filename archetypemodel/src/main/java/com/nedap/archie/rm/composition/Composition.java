@@ -7,6 +7,7 @@ import com.nedap.archie.rm.datatypes.PartyProxy;
 import com.nedap.archie.rm.datavalues.DvCodedText;
 
 import javax.annotation.Nullable;
+import javax.xml.bind.annotation.XmlType;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +15,14 @@ import java.util.List;
 /**
  * Created by pieter.bos on 03/11/15.
  */
+@XmlType(name = "COMPOSITION", propOrder = {
+        "language",
+        "territory",
+        "category",
+        "composer",
+        "context",
+        "content"
+})
 public class Composition extends Locatable {
 
     private CodePhrase language;

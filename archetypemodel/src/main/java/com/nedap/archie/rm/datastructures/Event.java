@@ -5,6 +5,7 @@ import com.nedap.archie.rm.datavalues.quantity.datetime.DvDateTime;
 import com.nedap.archie.rm.datavalues.quantity.datetime.DvDuration;
 
 import javax.annotation.Nullable;
+import javax.xml.bind.annotation.XmlType;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
@@ -14,6 +15,11 @@ import java.time.temporal.TemporalAccessor;
 /**
  * Created by pieter.bos on 03/11/15.
  */
+@XmlType(name = "EVENT", propOrder = {
+        "time",
+        "data",
+        "state"
+})
 public class Event<Type extends ItemStructure> extends Locatable {
 
     private DvDateTime time;

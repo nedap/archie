@@ -2,6 +2,7 @@ package com.nedap.archie.rm.datavalues.quantity.datetime;
 
 import com.nedap.archie.rm.datavalues.SingleValuedDataValue;
 
+import javax.xml.bind.annotation.XmlType;
 import java.time.LocalTime;
 import java.time.temporal.Temporal;
 import java.time.temporal.TemporalAccessor;
@@ -15,6 +16,9 @@ import java.time.temporal.TemporalAccessor;
  *
  * Created by pieter.bos on 04/11/15.
  */
+@XmlType(name = "DV_TIME", propOrder = {
+        "value"
+})
 public class DvTime extends DvTemporal<Double> implements SingleValuedDataValue<TemporalAccessor> {
 
     private TemporalAccessor value;

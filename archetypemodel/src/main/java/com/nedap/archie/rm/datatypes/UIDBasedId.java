@@ -1,11 +1,13 @@
 package com.nedap.archie.rm.datatypes;
 
 import javax.annotation.Nullable;
+import javax.xml.bind.annotation.XmlType;
 import java.rmi.server.UID;
 
 /**
  * Created by pieter.bos on 04/11/15.
  */
+@XmlType(name = "UID_BASED_ID")
 public class UIDBasedId extends ObjectId {
 
     private UID root;

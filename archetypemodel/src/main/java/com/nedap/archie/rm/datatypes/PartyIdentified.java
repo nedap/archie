@@ -2,12 +2,17 @@ package com.nedap.archie.rm.datatypes;
 
 import com.nedap.archie.rm.datavalues.DvIdentifier;
 
+import javax.xml.bind.annotation.XmlType;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by pieter.bos on 01/03/16.
  */
+@XmlType(name = "PARTY_IDENTIFIED", propOrder = {
+        "name",
+        "identifiers"
+})
 public class PartyIdentified extends PartyProxy {
     private String name;
     private List<DvIdentifier> identifiers = new ArrayList<>();

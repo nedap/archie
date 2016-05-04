@@ -6,17 +6,27 @@ import com.nedap.archie.rm.datavalues.encapsulated.DvParsable;
 import com.nedap.archie.rm.datavalues.quantity.datetime.DvDateTime;
 
 import javax.annotation.Nullable;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by pieter.bos on 03/11/15.
  */
+@XmlType(name = "INSTRUCTION", propOrder = {
+        "narrative",
+        "expiryTime",
+        "wfDefinition",
+        "activities"
+})
 public class Instruction extends CareEntry {
     private DvText narrative;
     @Nullable
+    @XmlElement(name = "expiry_time")
     private DvDateTime expiryTime;
     @Nullable
+    @XmlElement(name = "wf_definition")
     private DvParsable wfDefinition;
     private List<Activity> activities = new ArrayList<>();
 

@@ -6,19 +6,33 @@ import com.nedap.archie.rm.datavalues.DvCodedText;
 import com.nedap.archie.rm.datavalues.quantity.datetime.DvDateTime;
 
 import javax.annotation.Nullable;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 
 /**
  * Created by pieter.bos on 04/11/15.
  */
+@XmlType(name = "EVENT_CONTEXT", propOrder = {
+        "startTime",
+        "endTime",
+        "location",
+        "setting",
+        "otherContext",
+        "healthCareFacility",
+        "participations"
+})
 public class EventContext extends Pathable {
 
+    @XmlElement(name = "start_time")
     private DvDateTime startTime;
     @Nullable
+    @XmlElement(name = "end_time")
     private DvDateTime endTime;
     @Nullable
     private String location;
     private DvCodedText setting;
     @Nullable
+    @XmlElement(name = "other_context")
     private ItemStructure otherContext;
 
     public DvDateTime getStartTime() {

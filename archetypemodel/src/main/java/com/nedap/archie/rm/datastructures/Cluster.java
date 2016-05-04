@@ -1,11 +1,15 @@
 package com.nedap.archie.rm.datastructures;
 
+import javax.xml.bind.annotation.XmlType;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by pieter.bos on 04/11/15.
  */
+@XmlType(name = "CLUSTER", propOrder = {
+        "items"
+})
 public class Cluster extends Item {
 
     private List<Item> items = new ArrayList<>();

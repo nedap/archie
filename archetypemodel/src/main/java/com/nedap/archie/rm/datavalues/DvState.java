@@ -1,10 +1,18 @@
 package com.nedap.archie.rm.datavalues;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
+
 /**
  * Created by pieter.bos on 04/11/15.
  */
+@XmlType(name = "DV_STATE", propOrder = {
+        "value",
+        "isTerminal"
+})
 public class DvState extends DataValue implements SingleValuedDataValue<DvCodedText> {
 
+    @XmlElement(name = "is_terminal")
     private boolean terminal;
     private DvCodedText value;
 

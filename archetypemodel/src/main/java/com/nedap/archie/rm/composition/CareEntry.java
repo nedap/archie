@@ -4,15 +4,22 @@ import com.nedap.archie.rm.datastructures.ItemStructure;
 import com.nedap.archie.rm.datatypes.ObjectRef;
 
 import javax.annotation.Nullable;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 
 /**
  * Created by pieter.bos on 04/11/15.
  */
+@XmlType(name = "CARE_ENTRY", propOrder = {
+        "protocol",
+        "guidelineId"
+})
 public class CareEntry extends Entry {
 
     @Nullable
     private ItemStructure protocol;
     @Nullable
+    @XmlElement(name = "guideline_id")
     private ObjectRef guidelineId;
 
     @Nullable

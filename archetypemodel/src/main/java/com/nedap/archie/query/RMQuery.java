@@ -22,7 +22,7 @@ public class RMQuery {
         Pattern pattern = Pattern.compile("\\[(?<first>[^\\]]*)(?<idnode>id\\d+)(?<last>[^\\]]*)\\]");
         Matcher m = pattern.matcher(query);
 
-        this.query = m.replaceAll("[${first}archetype_node_id='${idnode}'${last}]");
+        this.query = m.replaceAll("[${first}@archetype_node_id='${idnode}'${last}]");
 
     }
 

@@ -4,14 +4,25 @@ import com.nedap.archie.rm.IsmTransition;
 import com.nedap.archie.rm.datastructures.ItemStructure;
 import com.nedap.archie.rm.datavalues.quantity.datetime.DvDateTime;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
+
 /**
  * Created by pieter.bos on 04/11/15.
  */
+@XmlType(name = "ACTION", propOrder = {
+        "time",
+        "description",
+        "ismTransition",
+        "instructionDetails"
+})
 public class Action extends CareEntry {
 
     private DvDateTime time;
     private ItemStructure description;
+    @XmlElement(name="ism_transition")
     private IsmTransition ismTransition;
+    @XmlElement(name="instruction_details")
     private InstructionDetails instructionDetails;
 
 

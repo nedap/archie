@@ -4,12 +4,20 @@ import com.nedap.archie.rm.datavalues.quantity.datetime.DvDateTime;
 import com.nedap.archie.rm.datavalues.quantity.datetime.DvDuration;
 
 import javax.annotation.Nullable;
+import javax.xml.bind.annotation.XmlType;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by pieter.bos on 04/11/15.
  */
+@XmlType(name = "HISTORY", propOrder = {
+        "origin",
+        "period",
+        "duration",
+        "events",
+        "summary"
+})
 public class History<Type extends ItemStructure> extends DataStructure {
 
     private DvDateTime origin;

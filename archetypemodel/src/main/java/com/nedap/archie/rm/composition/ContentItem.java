@@ -4,18 +4,22 @@ import com.nedap.archie.rm.archetypes.Locatable;
 import com.nedap.archie.rm.datatypes.PartyProxy;
 
 import javax.annotation.Nullable;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by pieter.bos on 03/11/15.
  */
+@XmlType(name = "CONTENT_ITEM")
 public class ContentItem extends Locatable {
 
     private PartyProxy subject;
     @Nullable
     private PartyProxy provider;
 
+    @XmlElement(name = "other_participations")
     private List<PartyProxy> otherParticipants = new ArrayList<>();
 
     public PartyProxy getSubject() {
