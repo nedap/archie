@@ -29,7 +29,6 @@ public class RMQueryTest {
 
     @Before
     public void setup() throws Exception {
-        RMObjectPointerFactory.register();
         archetype = ADLParser.withRMConstraintsImposer().parse(getClass().getResourceAsStream("/basic.adl"));
         testUtil = new TestUtil();
     }
