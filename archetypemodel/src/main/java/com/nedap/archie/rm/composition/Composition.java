@@ -8,6 +8,7 @@ import com.nedap.archie.rm.datavalues.DvCodedText;
 import javax.annotation.Nullable;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +25,7 @@ import java.util.List;
         "context",
         "content"
 })
+@XmlRootElement
 public class Composition extends Locatable {
 
     private CodePhrase language;

@@ -20,6 +20,11 @@ import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
@@ -37,6 +42,7 @@ public class RMQuery {
 
     private Binder<Node> binder;
     private Document domForQueries;
+    private RMObject rootNode;
 
     /**
      * Construct a query object for a given root node. You can later query subnodes of this rootnode if you desire.
@@ -44,6 +50,7 @@ public class RMQuery {
      */
     public RMQuery(RMObject rootNode) {
         try {
+            this.rootNode = rootNode;
             JAXBContext jaxbContext = JAXBContext.newInstance(rootNode.getClass());
             this.binder = jaxbContext.createBinder();
             domForQueries = createBlankDOMDocument(true);
@@ -52,14 +59,19 @@ public class RMQuery {
             //Binder will maintains association between two views.
             binder.marshal( rootNode/*new JAXBElement<Query>(qname, Query.class, query)*/  , domForQueries);
 
+            //print to stdout. Don't you love java xml api's?
+            TransformerFactory.newInstance().newTransformer().transform(new DOMSource(domForQueries), new StreamResult(System.out));
             //Search for all occurrences of Company using XPath.
 
 
 
         } catch (JAXBException e) {
             throw new RuntimeException(e);
+        } catch (TransformerConfigurationException e) {
+            throw new RuntimeException(e);
+        } catch (TransformerException e) {
+            throw new RuntimeException(e);
         }
-
 
 
     }

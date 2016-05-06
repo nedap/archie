@@ -4,9 +4,12 @@ import com.nedap.archie.rm.datavalues.SingleValuedDataValue;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.temporal.TemporalAccessor;
@@ -16,13 +19,18 @@ import java.time.temporal.TemporalAccessor;
  */
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @XmlType(name = "DV_DATE_TIME", propOrder = {
-        "value"
+        "value", "magnitude"
 })
 public class DvDateTime extends DvTemporal<Long> implements SingleValuedDataValue<TemporalAccessor> {
 
     private TemporalAccessor value;
 
     @Override
+    @XmlElements({
+            @XmlElement(type = OffsetDateTime.class),
+            @XmlElement(type = LocalDateTime.class)
+
+    })
     public TemporalAccessor getValue() {
         return value;
     }
@@ -33,7 +41,9 @@ public class DvDateTime extends DvTemporal<Long> implements SingleValuedDataValu
     }
 
     @Override
-    @XmlTransient
+    //@XmlTransient
+    @XmlElement(type=Long.class)
+    //@XmlElement(name="magnitude")
     public Long getMagnitude() {
         return value == null ? null : (long) ZonedDateTime.from(value).toEpochSecond();
     }
