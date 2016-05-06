@@ -13,22 +13,8 @@ import java.util.List;
  */
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @XmlType(name = "ITEM_STRUCTURE")
-public class ItemStructure<Type extends Item> extends DataStructure {
-    private List<Type> items = new ArrayList<>();
-    
-    public List<Type> getItems() {
-        return items;
-    }
+public abstract class ItemStructure<Type extends Item> extends DataStructure {
 
-    public void setItems(List<Type> items) {
-        this.items = items;
-        for(Type item:items) {
-            setThisAsParent(item, "item");
-        }
-    }
+    public abstract List<Type> getItems();
 
-    public void addItem(Type item) {
-        this.items.add(item);
-        setThisAsParent(item, "item");
-    }
 }

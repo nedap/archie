@@ -4,8 +4,13 @@ import com.nedap.archie.rm.datavalues.SingleValuedDataValue;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElements;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 import java.time.LocalDate;
+import java.time.Year;
+import java.time.YearMonth;
 import java.time.temporal.ChronoField;
 import java.time.temporal.Temporal;
 
@@ -23,6 +28,12 @@ public class DvDate extends DvTemporal<Long> implements SingleValuedDataValue<Te
     private Temporal value;
 
     @Override
+    @XmlElements({
+            @XmlElement(type=LocalDate.class),
+            @XmlElement(type=YearMonth.class),
+            @XmlElement(type=Year.class)
+
+    })
     public Temporal getValue() {
         return value;
     }
@@ -37,6 +48,7 @@ public class DvDate extends DvTemporal<Long> implements SingleValuedDataValue<Te
     }
 
     @Override
+    @XmlTransient
     public Long getMagnitude() {
         return value == null ? null : (long) LocalDate.from(value).toEpochDay();
     }

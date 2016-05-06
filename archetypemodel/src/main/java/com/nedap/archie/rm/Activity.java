@@ -1,6 +1,7 @@
 package com.nedap.archie.rm;
 
 import com.nedap.archie.rm.archetypes.Locatable;
+import com.nedap.archie.rm.datastructures.ItemStructure;
 import com.nedap.archie.rm.datavalues.encapsulated.DvParsable;
 
 import javax.annotation.Nullable;
@@ -20,9 +21,18 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class Activity extends Locatable {
 
+    private ItemStructure description;
     private DvParsable timing;
     @Nullable
     private String actionArchetypeId;
+
+    public ItemStructure getDescription() {
+        return description;
+    }
+
+    public void setDescription(ItemStructure description) {
+        this.description = description;
+    }
 
     public DvParsable getTiming() {
         return timing;

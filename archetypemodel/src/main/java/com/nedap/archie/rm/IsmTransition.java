@@ -18,7 +18,8 @@ import java.util.List;
 @XmlType(name = "ISM_TRANSITION", propOrder = {
         "currentState",
         "transition",
-        "careflowStep"
+        "careflowStep",
+        "reason"
 })
 public class IsmTransition extends Pathable {
 

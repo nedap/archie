@@ -11,14 +11,14 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @XmlType(name = "DV_STATE", propOrder = {
         "value",
-        "isTerminal"
+        "terminal"
 })
 public class DvState extends DataValue implements SingleValuedDataValue<DvCodedText> {
 
-    @XmlElement(name = "is_terminal")
     private boolean terminal;
     private DvCodedText value;
 
+    @XmlElement(name = "is_terminal")
     public boolean isTerminal() {
         return terminal;
     }

@@ -14,12 +14,11 @@ import javax.xml.bind.annotation.XmlType;
  * Created by pieter.bos on 04/11/15.
  */
 @XmlAccessorType(XmlAccessType.PROPERTY)
-//@XmlType(name = "DV_QUANTIFIED", propOrder = {
-//        "magnitudeStatus",
-//        "accuracy",
-//        "magnitude"
-//})
-@XmlTransient
+@XmlType(name = "DV_QUANTIFIED", propOrder = {
+        "magnitudeStatus",
+        "accuracy",
+        "magnitude"
+})
 public abstract class DvQuantified<AccuracyType, MagnitudeType extends Comparable> extends DvOrdered<MagnitudeType> {
 
     @Nullable

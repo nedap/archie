@@ -17,11 +17,11 @@ import javax.xml.bind.annotation.XmlType;
 public class DvQuantity extends DvAmount<Double> {
 
     @Nullable
-    @XmlElement(defaultValue = "-1")
     private Long precision;
     private String units;
 
     @Nullable
+    @XmlElement(defaultValue = "-1")
     public Long getPrecision() {
         return precision;
     }

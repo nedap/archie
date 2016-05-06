@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.nedap.archie.rm.RMObject;
 import com.nedap.archie.rm.composition.Composition;
 import com.nedap.archie.rm.datavalues.DvText;
+import com.nedap.archie.rminfo.ArchieRMInfoLookup;
 import org.apache.commons.jxpath.JXPathContext;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -15,6 +16,7 @@ import javax.xml.bind.Binder;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
@@ -45,19 +47,32 @@ public class RMQuery {
     private RMObject rootNode;
 
     /**
+     * TODO: for now w will add /firstXPathNode, because otherwise there will be something like '/composition' missing
+     * However that is rather annoying, because apath does not specify this. So find a way of fixing this.
+     */
+    private String firstXPathNode;
+
+
+    /**
      * Construct a query object for a given root node. You can later query subnodes of this rootnode if you desire.
      * @param rootNode
      */
     public RMQuery(RMObject rootNode) {
         try {
             this.rootNode = rootNode;
-            JAXBContext jaxbContext = JAXBContext.newInstance(rootNode.getClass());
+            //JAXB is QUITE a bit more finicky than jackson. So, some extra steps:
+            //input all RM classes into JAXB
+            JAXBContext jaxbContext = JAXBContext.newInstance(ArchieRMInfoLookup.getInstance().getRmTypeNameToClassMap().values().toArray(new Class[0]));
             this.binder = jaxbContext.createBinder();
             domForQueries = createBlankDOMDocument(true);
 
+
+            binder.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
             //Marshall Query object to a blank DOM document.
             //Binder will maintains association between two views.
             binder.marshal( rootNode/*new JAXBElement<Query>(qname, Query.class, query)*/  , domForQueries);
+
+            firstXPathNode = domForQueries.getFirstChild().getNodeName();
 
             //print to stdout. Don't you love java xml api's?
             TransformerFactory.newInstance().newTransformer().transform(new DOMSource(domForQueries), new StreamResult(System.out));
@@ -94,7 +109,12 @@ public class RMQuery {
         Pattern pattern = Pattern.compile("\\[(?<first>[^\\]]*)(?<idnode>id\\d+)(?<last>[^\\]]*)\\]");
         Matcher m = pattern.matcher(query);
 
-        return m.replaceAll("[${first}@archetype_node_id='${idnode}'${last}]");
+        query = m.replaceAll("[${first}@archetype_node_id='${idnode}'${last}]");
+        if(query.startsWith("/")) {
+            return "/" + firstXPathNode + query;
+        } else {
+            return query;
+        }
     }
 
     public <T> List<T> findList(String query) throws XPathExpressionException {

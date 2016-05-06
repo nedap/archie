@@ -30,7 +30,7 @@ public class Entry extends ContentItem {
     private CodePhrase encoding;
     @Nullable
 
-    private ObjectRef workflowId;
+    private ObjectRef workFlowId;
     private PartyProxy subject;
     @Nullable
     private PartyProxy provider;
@@ -85,11 +85,11 @@ public class Entry extends ContentItem {
 
     @Nullable
     @XmlElement(name = "work_flow_id")
-    public ObjectRef getWorkflowId() {
-        return workflowId;
+    public ObjectRef getWorkFlowId() {
+        return workFlowId;
     }
 
-    public void setWorkflowId(@Nullable ObjectRef workflowId) {
-        this.workflowId = workflowId;
+    public void setWorkFlowId(@Nullable ObjectRef workFlowId) {
+        this.workFlowId = workFlowId;
     }
 }
