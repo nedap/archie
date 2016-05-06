@@ -435,7 +435,7 @@ public class APathQuery {
                 }
                 throw new IllegalArgumentException("cannot handle RM-queries with archetype references yet");
             } else {
-                if(equalsName(locatable.getName(), segment.getNodeId())) {
+                if(equalsName(locatable.getNameAsString(), segment.getNodeId())) {
                     result.add(new RMObjectWithPath(object, path + buildPathConstraint(i, locatable.getArchetypeNodeId())));
                 }
             }
@@ -471,7 +471,7 @@ public class APathQuery {
                 }
                 throw new IllegalArgumentException("cannot handle RM-queries with archetype references yet");
             } else {
-                if(equalsName(locatable.getName(), segment.getNodeId())) {
+                if(equalsName(locatable.getNameAsString(), segment.getNodeId())) {
                     return o;
                 }
             }

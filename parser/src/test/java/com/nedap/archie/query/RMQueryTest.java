@@ -40,7 +40,7 @@ public class RMQueryTest {
 
         RMQuery queryContext = new RMQuery(root);
         assertEquals(Lists.newArrayList(composition.getContext()), queryContext.findList("/context"));
-        DvText text = queryContext.find("/context/other_context[id2]/items[id3]/items[id5]/value");
+        DvText text = (DvText) queryContext.findList("/context/other_context/items[name/value = 'Qualification']/items[id5]/value").get(0);
         assertNotNull(text);
     }
 

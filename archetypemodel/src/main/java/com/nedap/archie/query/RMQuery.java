@@ -25,6 +25,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
+ * EXPERIMENTAL: full xpath support for the reference model.
+ *
+ * It's done by converting the RM objects into an XML-DOM using JAXB's Binder. XPATH is then evaluated against the DOM.
+ * The binder enables us to return the original objects.
+ *
+ * The APATH-shorthand notation is converted to its equivalent XPATH-notation before evaluation
+ *
+ * KNOWN ISSUES: the shorthand notation with comma's instead of AND does not yet work
+ *
  * Created by pieter.bos on 03/05/16.
  */
 public class RMQuery {

@@ -37,6 +37,14 @@ public class DvText extends DataValue implements SingleValuedDataValue<String> {
     @Nullable
     private CodePhrase encoding;
 
+    public DvText() {
+
+    }
+
+    public DvText(String value) {
+        this.value = value;
+    }
+
 
     public List<TermMapping> getMappings() {
         return mappings;
