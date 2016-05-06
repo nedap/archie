@@ -6,6 +6,8 @@ import com.nedap.archie.rm.datavalues.encapsulated.DvParsable;
 import com.nedap.archie.rm.datavalues.quantity.datetime.DvDateTime;
 
 import javax.annotation.Nullable;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 import java.util.ArrayList;
@@ -14,6 +16,7 @@ import java.util.List;
 /**
  * Created by pieter.bos on 03/11/15.
  */
+@XmlAccessorType(XmlAccessType.PROPERTY)
 @XmlType(name = "INSTRUCTION", propOrder = {
         "narrative",
         "expiryTime",
@@ -23,10 +26,8 @@ import java.util.List;
 public class Instruction extends CareEntry {
     private DvText narrative;
     @Nullable
-    @XmlElement(name = "expiry_time")
     private DvDateTime expiryTime;
     @Nullable
-    @XmlElement(name = "wf_definition")
     private DvParsable wfDefinition;
     private List<Activity> activities = new ArrayList<>();
 
@@ -39,6 +40,7 @@ public class Instruction extends CareEntry {
     }
 
     @Nullable
+    @XmlElement(name = "expiry_time")
     public DvDateTime getExpiryTime() {
         return expiryTime;
     }
@@ -48,6 +50,7 @@ public class Instruction extends CareEntry {
     }
 
     @Nullable
+    @XmlElement(name = "wf_definition")
     public DvParsable getWfDefinition() {
         return wfDefinition;
     }

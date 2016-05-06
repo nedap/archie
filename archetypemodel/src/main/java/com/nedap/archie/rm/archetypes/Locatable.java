@@ -2,9 +2,10 @@ package com.nedap.archie.rm.archetypes;
 
 import com.nedap.archie.paths.PathSegment;
 import com.nedap.archie.rm.datatypes.UIDBasedId;
-import com.nedap.archie.rm.datavalues.DvText;
 
 import javax.annotation.Nullable;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
@@ -14,6 +15,7 @@ import java.util.List;
 /**
  * Created by pieter.bos on 04/11/15.
  */
+@XmlAccessorType(XmlAccessType.PROPERTY)
 @XmlType(name = "LOCATABLE", propOrder = {
         "name",
         "uid",
@@ -24,13 +26,11 @@ import java.util.List;
 public class Locatable extends Pathable {
 
     private String name;
-    @XmlAttribute(name = "archetype_node_id")
     private String archetypeNodeId;
     @Nullable
     private UIDBasedId uid;
 
     @Nullable
-    @XmlElement(name = "archetype_details")
     private Archetyped archetypeDetails;
 
     private List<Link> links = new ArrayList<>();
@@ -43,6 +43,7 @@ public class Locatable extends Pathable {
         this.name = name;
     }
 
+    @XmlAttribute(name = "archetype_node_id")
     public String getArchetypeNodeId() {
         return archetypeNodeId;
     }
@@ -59,6 +60,7 @@ public class Locatable extends Pathable {
         this.uid = uid;
     }
 
+    @XmlElement(name = "archetype_details")
     public Archetyped getArchetypeDetails() {
         return archetypeDetails;
     }

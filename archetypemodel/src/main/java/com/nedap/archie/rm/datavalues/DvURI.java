@@ -1,13 +1,14 @@
 package com.nedap.archie.rm.datavalues;
 
-import com.nedap.archie.rm.RMObject;
-
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 import java.net.URI;
 
 /**
  * Created by pieter.bos on 04/11/15.
  */
+@XmlAccessorType(XmlAccessType.PROPERTY)
 @XmlType(name = "DV_URI", propOrder = {
         "value"
 })

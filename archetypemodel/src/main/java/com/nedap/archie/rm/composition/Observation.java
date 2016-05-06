@@ -4,11 +4,14 @@ import com.nedap.archie.rm.datastructures.History;
 import com.nedap.archie.rm.datastructures.ItemStructure;
 
 import javax.annotation.Nullable;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 
 /**
  * Created by pieter.bos on 03/11/15.
  */
+@XmlAccessorType(XmlAccessType.PROPERTY)
 @XmlType(name = "OBSERVATION", propOrder = {
         "data",
         "state"

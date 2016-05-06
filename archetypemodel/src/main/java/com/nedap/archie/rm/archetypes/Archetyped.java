@@ -3,6 +3,8 @@ package com.nedap.archie.rm.archetypes;
 import com.nedap.archie.aom.ArchetypeID;
 
 import javax.annotation.Nullable;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -11,6 +13,7 @@ import javax.xml.bind.annotation.XmlType;
  * left it as an ARchetypeId
  * Created by pieter.bos on 04/11/15.
  */
+@XmlAccessorType(XmlAccessType.PROPERTY)
 @XmlType(name = "ARCHETYPED", propOrder = {
         "archetypeId",
         "templateId",
@@ -18,14 +21,13 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class Archetyped {
 
-    @XmlElement(name="archetype_id")
+
     private ArchetypeID archetypeId; //TODO: this is a different class in the RM. why?!
     @Nullable
-    @XmlElement(name="template_id")
     private ArchetypeID templateId; //not sure if this is still required in AOM/ADL 2
-    @XmlElement(name="rm_version")
     private String rmVersion;
 
+    @XmlElement(name="archetype_id")
     public ArchetypeID getArchetypeId() {
         return archetypeId;
     }
@@ -35,6 +37,7 @@ public class Archetyped {
     }
 
     @Nullable
+    @XmlElement(name="template_id")
     public ArchetypeID getTemplateId() {
         return templateId;
     }
@@ -43,6 +46,7 @@ public class Archetyped {
         this.templateId = templateId;
     }
 
+    @XmlElement(name="rm_version")
     public String getRmVersion() {
         return rmVersion;
     }

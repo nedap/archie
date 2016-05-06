@@ -2,20 +2,22 @@ package com.nedap.archie.rm.datavalues.quantity.datetime;
 
 import com.nedap.archie.rm.datavalues.SingleValuedDataValue;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 import java.time.LocalTime;
-import java.time.temporal.Temporal;
 import java.time.temporal.TemporalAccessor;
 
 /**
  * TODO: implement java.time.Temporal for this object?
- *
+ * <p>
  * Deviation from the standard: the standard uses a String to represent a value here.
  * We do not, we use the java time types. Perhaps we will add a parser later.
  * possible issue: people constraining the String field of DvTime directly instead of using a Ctime. Ask people if this is an issue.
- *
+ * <p>
  * Created by pieter.bos on 04/11/15.
  */
+@XmlAccessorType(XmlAccessType.PROPERTY)
 @XmlType(name = "DV_TIME", propOrder = {
         "value"
 })

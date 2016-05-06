@@ -32,13 +32,13 @@ public class RMQueryTest {
     }
 
     @Test
-    public void simpleTest() {
+    public void simpleTest() throws Exception {
         root = (Pathable) testUtil.constructEmptyRMObject(archetype.getDefinition());
         Composition composition = (Composition) root;
 
-        assertEquals(Lists.newArrayList(composition.getContext()), new RMQuery("/context").findList(composition));
-        DvText text = new RMQuery("/context/other_context[id2]/items[id3]/items[id5]/value")
-                .find(composition);
+        RMQuery queryContext = new RMQuery(root);
+        assertEquals(Lists.newArrayList(composition.getContext()), queryContext.findList("/context"));
+        DvText text = queryContext.find("/context/other_context[id2]/items[id3]/items[id5]/value");
         assertNotNull(text);
     }
 }

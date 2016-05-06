@@ -4,12 +4,15 @@ import com.nedap.archie.rm.archetypes.Locatable;
 import com.nedap.archie.rm.datavalues.encapsulated.DvParsable;
 
 import javax.annotation.Nullable;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
  * Created by pieter.bos on 04/11/15.
  */
+@XmlAccessorType(XmlAccessType.PROPERTY)
 @XmlType(name = "ACTIVITY", propOrder = {
         "description",
         "timing",
@@ -19,7 +22,6 @@ public class Activity extends Locatable {
 
     private DvParsable timing;
     @Nullable
-    @XmlElement(name = "action_archetype_id", required = true)
     private String actionArchetypeId;
 
     public DvParsable getTiming() {
@@ -31,6 +33,7 @@ public class Activity extends Locatable {
     }
 
     @Nullable
+    @XmlElement(name = "action_archetype_id", required = true)
     public String getActionArchetypeId() {
         return actionArchetypeId;
     }

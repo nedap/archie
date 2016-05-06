@@ -4,6 +4,8 @@ package com.nedap.archie.rm.datavalues;
 import com.nedap.archie.rm.datatypes.CodePhrase;
 
 import javax.annotation.Nullable;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +13,7 @@ import java.util.List;
 /**
  * Created by pieter.bos on 04/11/15.
  */
+@XmlAccessorType(XmlAccessType.PROPERTY)
 @XmlType(name = "DV_TEXT", propOrder = {
         "value",
         "hyperlink",

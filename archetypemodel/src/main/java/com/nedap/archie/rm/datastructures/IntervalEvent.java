@@ -4,12 +4,15 @@ import com.nedap.archie.rm.datavalues.DvCodedText;
 import com.nedap.archie.rm.datavalues.quantity.datetime.DvDuration;
 
 import javax.annotation.Nullable;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
  * Created by pieter.bos on 04/11/15.
  */
+@XmlAccessorType(XmlAccessType.PROPERTY)
 @XmlType(name = "INTERVAL_EVENT", propOrder = {
         "width",
         "sampleCount",
@@ -19,9 +22,9 @@ public class IntervalEvent<Type extends ItemStructure> extends Event<Type> {
 
     private DvDuration width;
     @Nullable
-    @XmlElement(name = "sample_count")
+
     private Long sampleCount;
-    @XmlElement(name = "math_function", required = true)
+
     private DvCodedText mathFunction;
 
     public DvDuration getWidth() {
@@ -33,6 +36,7 @@ public class IntervalEvent<Type extends ItemStructure> extends Event<Type> {
     }
 
     @Nullable
+    @XmlElement(name = "sample_count")
     public Long getSampleCount() {
         return sampleCount;
     }
@@ -41,6 +45,7 @@ public class IntervalEvent<Type extends ItemStructure> extends Event<Type> {
         this.sampleCount = sampleCount;
     }
 
+    @XmlElement(name = "math_function", required = true)
     public DvCodedText getMathFunction() {
         return mathFunction;
     }
