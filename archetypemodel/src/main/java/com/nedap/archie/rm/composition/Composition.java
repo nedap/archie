@@ -25,7 +25,7 @@ import java.util.List;
         "context",
         "content"
 })
-@XmlRootElement
+@XmlRootElement(name="composition")
 public class Composition extends Locatable {
 
     private CodePhrase language;

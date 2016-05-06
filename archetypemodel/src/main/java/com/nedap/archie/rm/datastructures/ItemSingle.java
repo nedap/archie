@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 import java.util.List;
 
@@ -30,6 +31,7 @@ public class ItemSingle extends ItemStructure<Item> {
     }
 
     @Override
+    @XmlTransient //no items in a single item, just the one item
     public List<Item> getItems() {
         return Lists.newArrayList(item);
     }
