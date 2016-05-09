@@ -8,6 +8,7 @@ import com.nedap.archie.aom.CAttribute;
 import com.nedap.archie.aom.CComplexObject;
 import com.nedap.archie.aom.CComplexObjectProxy;
 import com.nedap.archie.aom.CObject;
+import com.nedap.archie.aom.OperationalTemplate;
 import com.nedap.archie.query.APathQuery;
 import org.junit.Before;
 import org.junit.Test;
@@ -81,13 +82,13 @@ public class FlattenerTest {
         Stack<CObject> worklist = new Stack();
         worklist.add(flattened.getDefinition());
 
-        while(!worklist.isEmpty()) {
+        while (!worklist.isEmpty()) {
             CObject object = worklist.pop();
-            if(object.getArchetype() != flattened) {
+            if (object.getArchetype() != flattened) {
                 fail("wrong parent found!");
             }
-            for(CAttribute attr:object.getAttributes()) {
-                if(attr.getParent() != object) {
+            for (CAttribute attr : object.getAttributes()) {
+                if (attr.getParent() != object) {
                     fail("wrong parent found!");
                 }
                 worklist.addAll(attr.getChildren());
@@ -109,15 +110,15 @@ public class FlattenerTest {
         Stack<CObject> worklist = new Stack();
         worklist.add(flattened.getDefinition());
         boolean proxyFound = false;
-        while(!worklist.isEmpty()) {
+        while (!worklist.isEmpty()) {
             CObject object = worklist.pop();
-            if(object.getNodeId().equals("id1065")) {
+            if (object.getNodeId().equals("id1065")) {
                 assertFalse(object instanceof CComplexObjectProxy);
                 proxyFound = true;
                 assertNotNull(object.getAttribute("items").getChild("id5"));
             }
-            for(CAttribute attr:object.getAttributes()) {
-                if(attr.getParent() != object) {
+            for (CAttribute attr : object.getAttributes()) {
+                if (attr.getParent() != object) {
                     fail("wrong parent found!");
                 }
                 worklist.addAll(attr.getChildren());
@@ -133,7 +134,7 @@ public class FlattenerTest {
         //you definately need component terminologies to translate this :)
         CObject object = (CObject)
                 new APathQuery("/content[openEHR-EHR-OBSERVATION.ovl-blood_pressure-blood_pressure-001.v1.0.0]/protocol[id12]/items[id1011]")
-                .find(definition);
+                        .find(definition);
         assertNull(flattened.getTerminology().getTermDefinition("en", "id1011"));
         assertEquals("Diastolic endpoint", flattened.getTerm(object, "en").getText());
     }
@@ -161,6 +162,64 @@ data matches {
         CObject quantity = (CObject) new APathQuery("/content[openEHR-EHR-OBSERVATION.ovl-length-height-001.v1.0.0]/data[id2]/events[id3]/data[id4]/items[id5]/value[id21]").find(flattened.getDefinition());
         assertEquals("DV_QUANTITY", quantity.getRmTypeName());
 
+    }
+
+    @Test
+    public void removeLanguagesFromTerminology() throws Exception {
+        flattener.keepLanguages("en", "nl");
+        assertTrue(bloodPressureObservation.getTerminology().getTermDefinitions().containsKey("ru"));
+        assertTrue(bloodPressureObservation.getTerminology().getTermDefinitions().containsKey("nl"));
+        assertTrue(bloodPressureObservation.getTerminology().getTermDefinitions().containsKey("en"));
+
+        Archetype flattened = flattener.flatten(bloodPressureObservation);
+        assertFalse(flattened.getTerminology().getTermDefinitions().containsKey("ru"));
+        assertTrue(flattened.getTerminology().getTermDefinitions().containsKey("nl"));
+        assertTrue(flattened.getTerminology().getTermDefinitions().containsKey("en"));
+
+        //metadata still intact in this test - see removeLanguagesFromMetaData
+        assertTrue(flattened.getDescription().getDetails().containsKey("ru"));
+        assertTrue(flattened.getContent().getTranslations().containsKey("ru"));
+
+        //original should not be modified
+        assertTrue(bloodPressureObservation.getTerminology().getTermDefinitions().containsKey("ru"));
+        assertTrue(bloodPressureObservation.getTerminology().getTermDefinitions().containsKey("nl"));
+        assertTrue(bloodPressureObservation.getTerminology().getTermDefinitions().containsKey("en"));
+
+    }
+
+
+    @Test
+    public void removeLanguagesFromComponentTerminologies() throws Exception {
+        OperationalTemplate flattenedWithLanguages = (OperationalTemplate) flattener.flatten(bloodPressureComposition);
+
+        flattener = new Flattener(repository).createOperationalTemplate(true).keepLanguages("en", "nl");
+        OperationalTemplate flattenedWithoutLanguages = (OperationalTemplate) flattener.flatten(bloodPressureComposition);
+
+        for(String key:flattenedWithoutLanguages.getComponentTerminologies().keySet()) {
+            assertFalse(flattenedWithoutLanguages.getComponentTerminologies().get(key).getTermDefinitions().containsKey("ru"));
+            assertTrue(flattenedWithLanguages.getComponentTerminologies().get(key).getTermDefinitions().containsKey("ru"));
+        }
+        assertEquals(flattenedWithLanguages.getComponentTerminologies().size(), flattenedWithoutLanguages.getComponentTerminologies().size());
+    }
+
+    @Test
+    public void removeLanguagesFromMetaData() throws Exception {
+        flattener.keepLanguages("en", "nl").removeLanguagesFromMetadata(true);
+
+        assertTrue(bloodPressureObservation.getTerminology().getTermDefinitions().containsKey("ru"));
+        assertTrue(bloodPressureObservation.getTerminology().getTermDefinitions().containsKey("nl"));
+        assertTrue(bloodPressureObservation.getTerminology().getTermDefinitions().containsKey("en"));
+        Archetype flattened = flattener.flatten(bloodPressureObservation);
+        assertFalse(flattened.getTerminology().getTermDefinitions().containsKey("ru"));
+        assertTrue(flattened.getTerminology().getTermDefinitions().containsKey("nl"));
+        assertTrue(flattened.getTerminology().getTermDefinitions().containsKey("en"));
+        assertFalse(flattened.getDescription().getDetails().containsKey("ru"));
+        assertFalse(flattened.getContent().getTranslations().containsKey("ru"));
+
+        //original should not be modified
+        assertTrue(bloodPressureObservation.getTerminology().getTermDefinitions().containsKey("ru"));
+        assertTrue(bloodPressureObservation.getTerminology().getTermDefinitions().containsKey("nl"));
+        assertTrue(bloodPressureObservation.getTerminology().getTermDefinitions().containsKey("en"));
 
     }
 }

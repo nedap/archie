@@ -1,12 +1,16 @@
 package com.nedap.archie.flattener;
 
+import com.google.common.collect.Sets;
 import com.nedap.archie.aom.*;
 import com.nedap.archie.aom.terminology.ArchetypeTerm;
 import com.nedap.archie.aom.terminology.ArchetypeTerminology;
 import com.nedap.archie.aom.terminology.ValueSet;
 import com.nedap.archie.query.APathQuery;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Stack;
 
 /**
@@ -27,6 +31,9 @@ public class Flattener {
 
     private Archetype result;
     private boolean createOperationalTemplate;
+    private boolean removeLanguagesFromMetaData = false;
+
+    private String[] languagesToKeep = null;
 
     public Flattener(ArchetypeRepository repository) {
         this.repository = new OverridingArchetypeRepository(repository);
@@ -37,6 +44,22 @@ public class Flattener {
         return this;
     }
 
+    /**
+     * if this flattener is setup to create operational templates, also set it to remove all languages from the terminology
+     * except for the given languages
+     * @param languages
+     * @return
+     */
+    public Flattener keepLanguages(String... languages) {
+        languagesToKeep = languages;
+        return this;
+    }
+
+    public Flattener removeLanguagesFromMetadata(boolean remove) {
+        this.removeLanguagesFromMetaData = remove;
+        return this;
+    }
+
     public Archetype flatten(Archetype toFlatten) {
         if(parent != null) {
             throw new IllegalStateException("You've used this flattener before - single use instance, please create a new one!");
@@ -44,13 +67,16 @@ public class Flattener {
         //validate that we can legally flatten first
         String parentId = toFlatten.getParentArchetypeId();
         if(parentId == null) {
-            result = toFlatten.clone();
             if(createOperationalTemplate) {
+                OperationalTemplate template = createOperationalTemplate(toFlatten);
                 //make an operational template by just filling complex object proxies and archetype slots
-                fillComplexObjectProxies(result);
-                fillArchetypeSlots(result);
-
+                fillSlots(template);
+                filterLanguages(template);
+                result = template;
+            } else {
+                result = toFlatten.clone();
             }
+            result.getDefinition().setArchetype(result);
             return result;
         }
 
@@ -77,7 +103,8 @@ public class Flattener {
 
         this.result = null;
         if(createOperationalTemplate) {
-            result = createOperationalTemplate(parent, child);
+            result = createOperationalTemplate(parent);
+            overrideArchetypeId(result, child);
         } else {
             result = parent.clone();
         }
@@ -86,13 +113,70 @@ public class Flattener {
         //2. fill archetype slots if we are creating an operational template
         flatten(result, child);//TODO: this way around, or the other one? :)
         if(createOperationalTemplate) {
-            fillComplexObjectProxies(result);
-            fillArchetypeSlots(result);
+            fillSlots(result);
+
         }
         flattenTerminology();
 
+        if(createOperationalTemplate) {
+            filterLanguages((OperationalTemplate) result);
+        }
         result.getDefinition().setArchetype(result);
         return result;
+    }
+
+    /**
+     * Remove all languages from an archetype terminology unless listed in languages to keep.
+     * @param result
+     */
+    private void filterLanguages(OperationalTemplate result) {
+        if(languagesToKeep != null) {
+
+            Set<String> languagesSet = Sets.newHashSet(languagesToKeep);
+
+            filterLanguages(languagesSet, result.getTerminology());
+            for(ArchetypeTerminology terminology: result.getComponentTerminologies().values()) {
+                filterLanguages(languagesSet, terminology);
+            }
+            for(ArchetypeTerminology terminology: result.getTerminologyExtracts().values()) {
+                filterLanguages(languagesSet, terminology);
+            }
+
+            if(removeLanguagesFromMetaData) {
+                if(result.getDescription() != null) {
+                    filterLanguages(languagesSet, result.getDescription().getDetails());
+                }
+                if(result.getContent() != null) {
+                    filterLanguages(languagesSet, result.getContent().getTranslations());
+                }
+            }
+        }
+    }
+
+    private void filterLanguages(Set<String> languagesSet, ArchetypeTerminology terminology) {
+
+        filterLanguages(languagesSet, terminology.getTermDefinitions());
+        filterLanguages(languagesSet, terminology.getTerminologyExtracts());
+    }
+
+    private void filterLanguages(Set<String> languagesSet, Map<String, ?> termDefinitions) {
+        if(termDefinitions == null) {
+            return;
+        }
+        List<String> toRemove = new ArrayList<>();
+        for(String key: termDefinitions.keySet()) {
+            if(!languagesSet.contains(key)) {
+                toRemove.add(key);
+            }
+        }
+        for(String key:toRemove) {
+            termDefinitions.remove(key);
+        }
+    }
+
+    public void fillSlots(Archetype archetype) { //should this be OperationalTemplate?
+        fillComplexObjectProxies(archetype);
+        fillArchetypeSlots(archetype);
     }
 
     private void fillArchetypeSlots(Archetype result) {
@@ -237,13 +321,13 @@ public class Flattener {
         }
     }
 
-    private static Archetype createOperationalTemplate(Archetype parent, Archetype child) {
-        Archetype toClone = parent.clone(); //clone so we do not overwrite the parent archetype. never
+    private static OperationalTemplate createOperationalTemplate(Archetype archetype) {
+        Archetype toClone = archetype.clone(); //clone so we do not overwrite the parent archetype. never
         OperationalTemplate result = new OperationalTemplate();
-        result.setArchetypeId(child.getArchetypeId());
+
         result.setDefinition(toClone.getDefinition());
         result.setDifferential(false);
-        result.setParentArchetypeId(child.getParentArchetypeId());
+
         result.setRmRelease(toClone.getRmRelease());
         result.setAdlVersion(toClone.getAdlVersion());
         result.setTerminology(toClone.getTerminology());
@@ -254,7 +338,13 @@ public class Flattener {
         result.setDescription(toClone.getDescription());
         result.setOriginalLanguage(toClone.getOriginalLanguage());
         result.setTranslations(toClone.getTranslations());
+
         return result;
+    }
+
+    private static void overrideArchetypeId(Archetype result, Archetype override) {
+        result.setArchetypeId(override.getArchetypeId());
+        result.setParentArchetypeId(override.getParentArchetypeId());
     }
 
     private void flatten(Archetype parent, Archetype child) {
