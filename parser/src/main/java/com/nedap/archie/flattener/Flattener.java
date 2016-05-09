@@ -44,7 +44,14 @@ public class Flattener {
         //validate that we can legally flatten first
         String parentId = toFlatten.getParentArchetypeId();
         if(parentId == null) {
-            throw new IllegalArgumentException("Cannot flatten archetype without a parent");
+            result = toFlatten.clone();
+            if(createOperationalTemplate) {
+                //make an operational template by just filling complex object proxies and archetype slots
+                fillComplexObjectProxies(result);
+                fillArchetypeSlots(result);
+
+            }
+            return result;
         }
 
         this.parent = repository.getArchetype(toFlatten.getParentArchetypeId());
