@@ -6,6 +6,7 @@ import com.nedap.archie.rules.*;
 import com.nedap.archie.rules.evaluation.evaluators.AssertionEvaluator;
 import com.nedap.archie.rules.evaluation.evaluators.BinaryOperatorEvaluator;
 import com.nedap.archie.rules.evaluation.evaluators.ConstantEvaluator;
+import com.nedap.archie.rules.evaluation.evaluators.ForAllEvaluator;
 import com.nedap.archie.rules.evaluation.evaluators.ModelReferenceEvaluator;
 import com.nedap.archie.rules.evaluation.evaluators.UnaryOperatorEvaluator;
 import com.nedap.archie.rules.evaluation.evaluators.VariableDeclarationEvaluator;
@@ -48,6 +49,7 @@ public class RuleEvaluation {
         add(new UnaryOperatorEvaluator());
         add(new VariableReferenceEvaluator());
         add(new ModelReferenceEvaluator());
+        add(new ForAllEvaluator());
     }
 
     private void add(Evaluator evaluator) {
@@ -79,7 +81,7 @@ public class RuleEvaluation {
             logger.info("evaluated rule: {}", valueList);
             return valueList;
         }
-        return null;
+        throw new UnsupportedOperationException("no evaluator present for rule type " + rule.getClass().getSimpleName());
 //        if(rule instanceof Assertion) {
 //
 //        } else if (rule instanceof VariableDeclaration) {
@@ -95,8 +97,15 @@ public class RuleEvaluation {
         return variables;
     }
 
-    private void ruleElementValueSet(RuleElement expression, ValueList value) {
-        ruleElementValues.put(expression, value);
+    private void ruleElementValueSet(RuleElement expression, ValueList values) {
+        ValueList previousValue = ruleElementValues.get(expression);
+        if(previousValue == null) {
+            ruleElementValues.put(expression, values);
+        } else {
+            //in the case of a for_all, the same expression gets evaluated multiple times and we want to store all the results
+            previousValue.addValues(values);
+        }
+
     }
 
     /**

@@ -58,12 +58,8 @@ definition
 	}
 
 rules
-	--do not actually use this pattern this way unless you know what you are doing - see for_all.adls on what you should do in this case
-	$systolic:Real ::= /data[id2]/events[id3]/data[id4]/items[id5]/value[id13]/magnitude;
-
-	$diastolic:Real ::= /data[id2]/events[id3]/data[id4]/items[id6]/value[id14]/magnitude;
-
-	blood_pressure_valid: $systolic > $diastolic - 5;
+	blood_pressure_valid: for_all $event in /data[id2]/events satisfies
+	    $event/data[id4]/items[id5]/value[id13]/magnitude > $event/data[id4]/items[id6]/value[id14]/magnitude - 5;
 
 
 

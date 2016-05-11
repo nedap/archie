@@ -110,6 +110,7 @@ public class RMQuery {
     public <T> List<T> findList(String query) throws XPathExpressionException {
         String convertedQuery = convertQueryToXPath(query);
         XPath xpath = XPathFactory.newInstance().newXPath();
+
         xpath.setNamespaceContext( new NamespaceResolver(domForQueries));
         NodeList foundNodes = (NodeList)xpath.evaluate(convertedQuery, domForQueries, XPathConstants.NODESET);
         List<T> result = new ArrayList<T>();

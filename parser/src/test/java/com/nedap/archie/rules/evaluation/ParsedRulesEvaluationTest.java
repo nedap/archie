@@ -38,7 +38,7 @@ public class ParsedRulesEvaluationTest {
         Observation root = new Observation();
         ruleEvaluation.evaluate(root, archetype.getRules().getRules());
         VariableMap variables = ruleEvaluation.getVariableMap();
-        assertEquals(19l, variables.get("arithmetic_test").getObject(0));
+        assertEquals(8l, variables.get("arithmetic_test").getObject(0));
         assertTrue(variables.get("arithmetic_test").getPaths(0).isEmpty());
         assertEquals(false, variables.get("boolean_false_test").getObject(0));
         assertTrue(variables.get("boolean_false_test").getPaths(0).isEmpty());
@@ -50,7 +50,7 @@ public class ParsedRulesEvaluationTest {
         assertTrue(variables.get("not_false").getPaths(0).isEmpty());
         assertEquals(false, variables.get("not_not_not_true").getObject(0));
         assertTrue(variables.get("not_not_not_true").getPaths(0).isEmpty());
-        assertEquals(4l, variables.get("variable_reference").getObject(0));
+        assertEquals(3l, variables.get("variable_reference").getObject(0));
         assertTrue(variables.get("variable_reference").getPaths(0).isEmpty());
     }
 
@@ -131,6 +131,47 @@ public class ParsedRulesEvaluationTest {
             Observation observation = (Observation) root;
             Observation observation2 = (Observation) root2;
             observation.getData().addEvent(observation2.getData().getEvents().get(0));
+            //a strange reading that should lead to a failure. However, when reading 1 is correct, the rules specify everything is fine
+            //because default xpath relop (>=, <, ==, etc) syntax is 'some', not 'every'/'for_all'
+        }
+
+        ruleEvaluation.evaluate(root, archetype.getRules().getRules());
+
+        List<AssertionResult> assertionResults = ruleEvaluation.getEvaluationResult().getAssertionResults();
+        assertEquals("one assertion should have been checked", 1, assertionResults.size());
+        AssertionResult result = assertionResults.get(0);
+
+        assertEquals("the assertion should have succeeded", true, result.getResult());
+        assertEquals("the assertion tag should be correct", "blood_pressure_valid", result.getTag());
+    }
+
+    @Test
+    public void forAllExpression() throws Exception {
+        archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("for_all.adls"));
+        RuleEvaluation ruleEvaluation = new RuleEvaluation(archetype);
+
+        Pathable root = (Pathable) testUtil.constructEmptyRMObject(archetype.getDefinition());
+
+        {
+            DvQuantity systolic = (DvQuantity) root.itemAtPath("/data[id2]/events[id3]/data[id4]/items[id5]/value[id13]");
+            systolic.setMagnitude(76d);
+            DvQuantity diastolic = (DvQuantity) root.itemAtPath("/data[id2]/events[id3]/data[id4]/items[id6]/value[id14]");
+            diastolic.setMagnitude(80d);
+            //this is fine, because "blood_pressure_valid: $systolic > $diastolic - 5"
+        }
+
+
+        //add a second event
+        {
+            Pathable root2 = (Pathable) testUtil.constructEmptyRMObject(archetype.getDefinition());
+
+            DvQuantity systolic = (DvQuantity) root2.itemAtPath("/data[id2]/events[id3]/data[id4]/items[id5]/value[id13]");
+            systolic.setMagnitude(60d);
+            DvQuantity diastolic = (DvQuantity) root2.itemAtPath("/data[id2]/events[id3]/data[id4]/items[id6]/value[id14]");
+            diastolic.setMagnitude(80d);
+            Observation observation = (Observation) root;
+            Observation observation2 = (Observation) root2;
+            observation.getData().addEvent(observation2.getData().getEvents().get(0));
             //a strange reading that will lead to a failure
         }
 
@@ -140,26 +181,8 @@ public class ParsedRulesEvaluationTest {
         assertEquals("one assertion should have been checked", 1, assertionResults.size());
         AssertionResult result = assertionResults.get(0);
 
-        assertEquals("the assertion should not have succeeded", false, result.getResult());
+        assertEquals("the assertion should have succeeded", false, result.getResult());
         assertEquals("the assertion tag should be correct", "blood_pressure_valid", result.getTag());
-        ValueList rawResult = result.getRawResult();
-        assertEquals("two checks have been done", 2, rawResult.size());
-
-        {
-            Value<Boolean> value1 = rawResult.getValues().get(0);
-            assertTrue("assertion 1 should be true", value1.getValue());
-            //systolic and diastolic value 1. The original paths should be present, even if they have been computed through a variable
-            assertTrue(value1.getPaths().contains("/data[id2]/events[id3, 1]/data[id4]/items[id5, 1]/value/magnitude"));
-            assertTrue(value1.getPaths().contains("/data[id2]/events[id3, 1]/data[id4]/items[id6, 2]/value/magnitude"));
-        }
-
-        {
-            Value<Boolean> value2 = rawResult.getValues().get(1);
-            assertFalse("assertion 2 should be false", value2.getValue());
-            //systolic and diastolic value 2. The original paths should be present, even if they have been computed through a variable
-            assertTrue(value2.getPaths().contains("/data[id2]/events[id3, 2]/data[id4]/items[id5, 1]/value/magnitude"));
-            assertTrue(value2.getPaths().contains("/data[id2]/events[id3, 2]/data[id4]/items[id6, 2]/value/magnitude"));
-        }
     }
 
 

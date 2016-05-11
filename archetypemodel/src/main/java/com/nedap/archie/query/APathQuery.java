@@ -47,7 +47,7 @@ public class APathQuery {
         LocationPathContext locationPathContext = parser.locationPath();
         AbsoluteLocationPathNorootContext absoluteLocationPathNorootContext = locationPathContext.absoluteLocationPathNoroot();
         if(absoluteLocationPathNorootContext == null) {
-            throw new UnsupportedOperationException("relative xpath expressions not yet supported");
+            throw new UnsupportedOperationException("relative xpath expressions not yet supported: " + query);
         }
         if(!absoluteLocationPathNorootContext.getTokens(XPathLexer.ABRPATH).isEmpty()) {
             throw new UnsupportedOperationException("absolute path starting with // not yet supported");

@@ -27,9 +27,9 @@ public class CComplexObjectParser extends BaseTreeWalker {
         RulesSection result = new RulesSection();
 
         result.setContent(context.getText());
-        AssertionsParser assertionsParser = new AssertionsParser(getErrors());
+        RulesParser rulesParser = new RulesParser(getErrors());
         for(AssertionContext assertion:context.assertion_list().assertion()) {
-            result.addRule(assertionsParser.parse(assertion));
+            result.addRule(rulesParser.parse(assertion));
         }
 
         return result;
@@ -199,7 +199,7 @@ public class CComplexObjectParser extends BaseTreeWalker {
         if (headContext.c_occurrences() != null) {
             slot.setOccurences(parseMultiplicityInterval(headContext.c_occurrences()));
         }
-        AssertionsParser assertionParser = new AssertionsParser(getErrors());
+        RulesParser assertionParser = new RulesParser(getErrors());
         if (slotContext.c_excludes() != null) {
             for (AssertionContext assertionContext : slotContext.c_excludes().assertion()) {
                 slot.getExcludes().add(assertionParser.parse(assertionContext));

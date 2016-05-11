@@ -6,10 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Assertion object. For now contains all the text of the assertions, and not the parsed form
+ * Assertion object.
  * Created by pieter.bos on 15/10/15.
  */
-public class Assertion extends RuleStatement {
+public final class Assertion extends RuleStatement {
 
     private String stringExpression;
 
