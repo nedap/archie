@@ -36,7 +36,7 @@ import java.util.regex.Pattern;
  *
  * Created by pieter.bos on 03/05/16.
  */
-public class RMQuery {
+public class RMQueryContext {
 
     private Binder<Node> binder;
     private Document domForQueries;
@@ -52,7 +52,7 @@ public class RMQuery {
      * Construct a query object for a given root node. You can later query subnodes of this rootnode if you desire.
      * @param rootNode
      */
-    public RMQuery(Object rootNode) {
+    public RMQueryContext(Object rootNode) {
         this(rootNode, JAXBUtil.getArchieJAXBContext());
     }
 
@@ -61,7 +61,7 @@ public class RMQuery {
      * please construct your own JAXBContext, see JAXBUtil for how to do this
      * @param rootNode
      */
-    public RMQuery(Object rootNode, JAXBContext jaxbContext) {
+    public RMQueryContext(Object rootNode, JAXBContext jaxbContext) {
         try {
             this.binder = jaxbContext.createBinder();
             domForQueries = createBlankDOMDocument(true);
@@ -148,8 +148,12 @@ public class RMQuery {
             return path;
         } else {
             int index = findNodeIndex(node, parent);
-
-            return constructPath(parent) + "/" + node.getNodeName() + "[" + index + "]";
+            Node archetypeNodeId = node.getAttributes().getNamedItem("archetype_node_id");
+            if(archetypeNodeId != null) {
+                return constructPath(parent) + "/" + node.getNodeName() + "[" + archetypeNodeId.getNodeValue() + ", " + index + "]";
+            } else {
+                return constructPath(parent) + "/" + node.getNodeName() + "[" + index + "]";
+            }
 
         }
     }

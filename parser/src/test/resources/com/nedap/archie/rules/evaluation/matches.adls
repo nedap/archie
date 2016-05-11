@@ -51,7 +51,7 @@ definition
 	}
 
 rules
-	$extended_validity:Boolean ::= /data[id2]/events[id3]/data[id4]/items[id5]/value[id13]/magnitude matches {|0.0..30.0|};
+	$extended_validity:Boolean ::= /data[id2]/events[id3]/data[id4]/items[id5]/value/magnitude matches {|0.0..30.0|};
 
 terminology
 	term_definitions = <

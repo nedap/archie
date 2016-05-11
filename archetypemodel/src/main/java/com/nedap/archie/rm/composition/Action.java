@@ -7,11 +7,13 @@ import com.nedap.archie.rm.datavalues.quantity.datetime.DvDateTime;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
  * Created by pieter.bos on 04/11/15.
  */
+@XmlRootElement
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @XmlType(name = "ACTION", propOrder = {
         "time",

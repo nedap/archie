@@ -12,6 +12,7 @@ import com.nedap.archie.rules.evaluation.RuleEvaluation;
 import com.nedap.archie.rules.evaluation.Value;
 import com.nedap.archie.rules.evaluation.ValueList;
 
+import javax.xml.xpath.XPathExpressionException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -54,7 +55,12 @@ public class ModelReferenceEvaluator implements Evaluator<ModelReference> {
 
         //TODO: replace with RMQuery, with static query context in Evaluator
 
-        List<RMObjectWithPath> rmObjectsWithPath = new APathQuery(path).findList(ArchieRMInfoLookup.getInstance(), evaluation.getRMRoot());
+        List<RMObjectWithPath> rmObjectsWithPath = null;
+        try {
+            rmObjectsWithPath = evaluation.getQueryContext().findListWithPaths(path);
+        } catch (XPathExpressionException e) {
+            throw new RuntimeException(e);
+        }
         List<Value> values = rmObjectsWithPath.stream().map(
                 rmObjectWithPath ->
                         new Value(rmObjectWithPath.getObject(), Lists.newArrayList(rmObjectWithPath.getPath())))

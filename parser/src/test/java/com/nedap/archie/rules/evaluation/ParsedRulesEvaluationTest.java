@@ -76,7 +76,7 @@ public class ParsedRulesEvaluationTest {
         assertEquals("the assertion should have succeeded", true, result.getResult());
         assertEquals("the assertion tag should be correct", "blood_pressure_valid", result.getTag());
         assertEquals(1, result.getRawResult().getPaths(0).size());
-        assertEquals("/data[id2]/events[id3, 1]/data[id4]/items[id5, 1]/value/magnitude", result.getRawResult().getPaths(0).get(0));
+        assertEquals("/data[id2, 1]/events[id3, 1]/data[id4, 1]/items[id5, 1]/value[1]/magnitude[1]", result.getRawResult().getPaths(0).get(0));
 
     }
 
@@ -94,13 +94,13 @@ public class ParsedRulesEvaluationTest {
         ruleEvaluation.evaluate(root, archetype.getRules().getRules());
         assertEquals(false, ruleEvaluation.getVariableMap().get("extended_validity").getObject(0));
         ValueList extendedValidity = ruleEvaluation.getVariableMap().get("extended_validity");
-        assertEquals("/data[id2]/events[id3, 1]/data[id4]/items[id5, 1]/value/magnitude", extendedValidity.getPaths(0).get(0));
+        assertEquals("/data[id2, 1]/events[id3, 1]/data[id4, 1]/items[id5, 1]/value[1]/magnitude[1]", extendedValidity.getPaths(0).get(0));
         quantity.setMagnitude(20d);
 
         ruleEvaluation.evaluate(root, archetype.getRules().getRules());
         extendedValidity = ruleEvaluation.getVariableMap().get("extended_validity");
         assertEquals(true, extendedValidity.getObject(0));
-        assertEquals("/data[id2]/events[id3, 1]/data[id4]/items[id5, 1]/value/magnitude", extendedValidity.getPaths(0).get(0));
+        assertEquals("/data[id2, 1]/events[id3, 1]/data[id4, 1]/items[id5, 1]/value[1]/magnitude[1]", extendedValidity.getPaths(0).get(0));
 
     }
 

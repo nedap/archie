@@ -1,6 +1,7 @@
 package com.nedap.archie.rules.evaluation;
 
 import com.nedap.archie.aom.Archetype;
+import com.nedap.archie.query.RMQueryContext;
 import com.nedap.archie.rm.archetypes.Pathable;
 import com.nedap.archie.rules.*;
 import com.nedap.archie.rules.evaluation.evaluators.AssertionEvaluator;
@@ -36,6 +37,8 @@ public class RuleEvaluation {
     EvaluationResult evaluationResult;
     private List<AssertionResult> assertionResults;
 
+    private RMQueryContext queryContext;
+
     Map<RuleElement, ValueList> ruleElementValues = new HashMap<>();
 
 
@@ -66,6 +69,7 @@ public class RuleEvaluation {
         variables = new VariableMap();
         assertionResults = new ArrayList<>();
         evaluationResult = new EvaluationResult();
+        queryContext = new RMQueryContext(root);
         for(RuleStatement rule:rules) {
             evaluate(rule);
         }
@@ -82,11 +86,6 @@ public class RuleEvaluation {
             return valueList;
         }
         throw new UnsupportedOperationException("no evaluator present for rule type " + rule.getClass().getSimpleName());
-//        if(rule instanceof Assertion) {
-//
-//        } else if (rule instanceof VariableDeclaration) {
-//
-//        }
     }
 
     public Pathable getRMRoot() {
@@ -105,7 +104,10 @@ public class RuleEvaluation {
             //in the case of a for_all, the same expression gets evaluated multiple times and we want to store all the results
             previousValue.addValues(values);
         }
+    }
 
+    public RMQueryContext getQueryContext() {
+        return queryContext;
     }
 
     /**
