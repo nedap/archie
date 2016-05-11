@@ -95,23 +95,11 @@ public class RMQueryContext {
         return builder.newDocument();
     }
 
-    private String convertQueryToXPath(String query) {
-        Pattern pattern = Pattern.compile("\\[(?<first>[^\\]]*)(?<idnode>id\\d+)(?<last>[^\\]]*)\\]");
-        Matcher m = pattern.matcher(query);
-
-        query = m.replaceAll("[${first}@archetype_node_id='${idnode}'${last}]");
-        if(query.startsWith("/")) {
-            return "/" + firstXPathNode + query;
-        } else {
-            return query;
-        }
-    }
-
     public <T> List<T> findList(String query) throws XPathExpressionException {
-        String convertedQuery = convertQueryToXPath(query);
+        String convertedQuery = APathToXPathConverter.convertQueryToXPath(query, firstXPathNode);
         XPath xpath = XPathFactory.newInstance().newXPath();
 
-        xpath.setNamespaceContext( new NamespaceResolver(domForQueries));
+        xpath.setNamespaceContext( new ArchieNamespaceResolver(domForQueries));
         NodeList foundNodes = (NodeList)xpath.evaluate(convertedQuery, domForQueries, XPathConstants.NODESET);
         List<T> result = new ArrayList<T>();
         //Perform decoration
@@ -126,51 +114,20 @@ public class RMQueryContext {
     }
 
     public List<RMObjectWithPath> findListWithPaths(String query) throws XPathExpressionException {
-        String convertedQuery = convertQueryToXPath(query);
+        String convertedQuery = APathToXPathConverter.convertQueryToXPath(query, firstXPathNode);
         XPath xpath = XPathFactory.newInstance().newXPath();
-        xpath.setNamespaceContext( new NamespaceResolver(domForQueries));
+        xpath.setNamespaceContext( new ArchieNamespaceResolver(domForQueries));
         NodeList foundNodes = (NodeList)xpath.evaluate(convertedQuery, domForQueries, XPathConstants.NODESET);
         List<RMObjectWithPath> result = new ArrayList<>();
         for(int i=0; i<foundNodes.getLength(); i++){
             Node node = foundNodes.item(i);
-            String path = constructPath(node);
+            String path = UniqueNodePathBuilder.constructPath(node);
             result.add(new RMObjectWithPath(binder.getJAXBNode(node), path));
         }
         return result;
     }
 
-    private String constructPath(Node node) {
-        Node parent = node.getParentNode();
-        String path = "";
-        if(parent == null || parent.getParentNode() == null) {
-            //TODO: this is a bit of a hack, parent.getParentNode() == null means the current node is one below the parent
-            //that should not happen, but because of differences between xpath and apath...
-            return path;
-        } else {
-            int index = findNodeIndex(node, parent);
-            Node archetypeNodeId = node.getAttributes().getNamedItem("archetype_node_id");
-            if(archetypeNodeId != null) {
-                return constructPath(parent) + "/" + node.getNodeName() + "[" + archetypeNodeId.getNodeValue() + ", " + index + "]";
-            } else {
-                return constructPath(parent) + "/" + node.getNodeName() + "[" + index + "]";
-            }
 
-        }
-    }
-
-    private int findNodeIndex(Node node, Node parent) {
-        int index = 1;
-        for(int i = 0; i < parent.getChildNodes().getLength(); i++) {
-            //nodes with same name in XML means in the same collection in Java
-            if(parent.getChildNodes().item(i).getNodeName().equals(node.getNodeName())) {
-                if (parent.getChildNodes().item(i) == node) {
-                    return index;
-                }
-                index++;
-            }
-        }
-        return -1;
-    }
 
     public <T> T find(String query) throws XPathExpressionException {
         List result = findList(query);
@@ -187,32 +144,4 @@ public class RMQueryContext {
 //    public <T> T  find(RMObject object) {
 //        return (T) JXPathContext.newContext(object).getValue(query);
 //    }
-}
-
-class NamespaceResolver implements NamespaceContext {
-
-    private final Document document;
-
-    public NamespaceResolver(Document document) {
-        this.document = document;
-    }
-
-    public String getNamespaceURI(String prefix) {
-        if (prefix.equals(XMLConstants.DEFAULT_NS_PREFIX)) {
-            return document.lookupNamespaceURI(null);
-        } else {
-            return document.lookupNamespaceURI(prefix);
-        }
-    }
-
-    public String getPrefix(String namespaceURI) {
-        return document.lookupPrefix(namespaceURI);
-    }
-
-    @SuppressWarnings("rawtypes")
-    public Iterator getPrefixes(String namespaceURI) {
-        // not implemented
-        return null;
-    }
-
 }
