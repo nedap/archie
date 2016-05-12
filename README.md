@@ -208,10 +208,24 @@ The RMObjectCreator creates empty reference model objects based on constraints. 
 
 Setting primitive object values works in a similar way, with ```creator.set(...)```, or by setting them explicitly on the reference model object directly.
 
+#Experimental features
 
-### Rule evaluation
+The following features are experimental. This means its working will likely change somewhat in the near future, but they can already be used.
+
+## Full XPath support on reference model
+
+The RMQueryContext provides full XPath 1-support on reference model instances. APath shorthand notations like /items[id2] will automatically be converted to the corresponding xpath. JAXB's Binder is used to get a DOM on which to run XPath. You can choose your own JAXB-implementation with the usual mechanisms, although only the internal java one has been tested.
+
+## Rule evaluation
 
 Basic rule evaluation is implemented, but the implementation is still experimental with missing features. The API and implementation is likely to be changed in the near future. See RuleEvaluation.java on how to use.
+
+The syntax has a few deviations from the standard, for now. This can be changed when we switch to a whitespace-aware parser, but until then the grammar would contain ambiguities otherwise:
+
+- every assertion MUST end with a ';'
+- The specs say ```for_all $event in /events $event/something > 5``` is valid. We follow the XPath 2 syntax for this: ```every $event in /events satisfies $event/something > 5```. for_all and ∀ work, the XPath keyword 'every' is non-standard.
+
+Rules are very similar to XPath expressions, with a few exceptions. However, the specification is lacking a formal definition of how to handle several kind of multiplicities. Where multiplicities occur in the paths in rules outside of a for_all rule, the W3C XPath 1 specification is used.
 
 ### Reference model APath queries
 
