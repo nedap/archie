@@ -106,6 +106,7 @@ public class APathToXPathConverter {
     private static void writeTree(StringBuilder output, ParseTree tree, boolean inPredicate) {
 
         Pattern idCodePattern = Pattern.compile("id\\d+");
+        Pattern numberPattern = Pattern.compile("\\d+");
 
         Set<String> literalsThatShouldHaveSpacing = Sets.<String>newHashSet("and", "or", ",", "-", "+", "*", "|", "<", ">", "<=", ">=");
         for(int i = 0; i < tree.getChildCount(); i++) {
@@ -121,7 +122,7 @@ public class APathToXPathConverter {
                 }
             } else if (child instanceof AndExprContext) {
                 for(int j = 0; j < child.getChildCount(); j++) {
-                    ParseTree andChild = child.getChild(i);
+                    ParseTree andChild = child.getChild(j);
                     if(andChild instanceof TerminalNode) {
                         output.append(" and "); //this rewrites the "," syntax that is equivalent to 'and'
                     } else {
@@ -133,10 +134,20 @@ public class APathToXPathConverter {
                 writeTree(output, child, true);
             } else if(inPredicate && child instanceof RelativeLocationPathContext) {
                 Matcher idCodeMatcher = idCodePattern.matcher(child.getText());
-                if(idCodeMatcher.matches()) {
+
+                if (idCodeMatcher.matches()) {
                     output.append("@archetype_node_id = '");
                     output.append(child.getText());
                     output.append("'");
+                } else {
+                    writeTree(output, child, inPredicate);
+                }
+            } else if(inPredicate && child instanceof FilterExprContext) {
+                //not sure if we should support [id5, 1]. This is not standard xpath!
+                Matcher numberMatcher = numberPattern.matcher(child.getText());
+                if(numberMatcher.matches()) {
+                    output.append("position() = ");
+                    output.append(tree.getText());
                 } else {
                     writeTree(output, child, inPredicate);
                 }

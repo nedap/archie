@@ -59,7 +59,7 @@ public class ModelReferenceEvaluator implements Evaluator<ModelReference> {
         try {
             rmObjectsWithPath = evaluation.getQueryContext().findListWithPaths(path);
         } catch (XPathExpressionException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("error evaluating " + path, e);
         }
         List<Value> values = rmObjectsWithPath.stream().map(
                 rmObjectWithPath ->
