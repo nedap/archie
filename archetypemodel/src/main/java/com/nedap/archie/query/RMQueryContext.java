@@ -127,8 +127,6 @@ public class RMQueryContext {
         return result;
     }
 
-
-
     public <T> T find(String query) throws XPathExpressionException {
         List result = findList(query);
         if(result.isEmpty()) {
@@ -141,7 +139,5 @@ public class RMQueryContext {
 
 
     }
-//    public <T> T  find(RMObject object) {
-//        return (T) JXPathContext.newContext(object).getValue(query);
-//    }
+
 }
