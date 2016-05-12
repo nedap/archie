@@ -208,6 +208,17 @@ The RMObjectCreator creates empty reference model objects based on constraints. 
 
 Setting primitive object values works in a similar way, with ```creator.set(...)```, or by setting them explicitly on the reference model object directly.
 
+### Reference model APath queries
+
+```java
+List<Object> items = rmObject.itemsAtPath("/data[id2]/items");
+```
+Or if you want apath-expressions resolving to that single item together with every object returned, you can use the low-level method:
+
+```java
+List<RMObjectWithPath> itemsWithUniquePaths = new APathQuery("/data[id2]/items").findList(ArchieRMInfoLookup.getInstance(), rmObject);
+```
+
 #Experimental features
 
 The following features are experimental. This means its working will likely change somewhat in the near future, but they can already be used.
@@ -227,16 +238,6 @@ The syntax has a few deviations from the standard, for now. This can be changed 
 
 Rules are very similar to XPath expressions, with a few exceptions. However, the specification is lacking a formal definition of how to handle several kind of multiplicities. Where multiplicities occur in the paths in rules outside of a for_all rule, the W3C XPath 1 specification is used.
 
-### Reference model APath queries
-
-```java
-List<Object> items = rmObject.itemsAtPath("/data[id2]/items");
-```
-Or if you want apath-expressions resolving to that single item together with every object returned, you can use the low-level method:
-
-```java
-List<RMObjectWithPath> itemsWithUniquePaths = new APathQuery("/data[id2]/items").findList(ArchieRMInfoLookup.getInstance(), rmObject);
-```
 
 ## Status
 
@@ -245,8 +246,7 @@ The project is quite usable for when you want to create an EHR implementation, b
 What we want this to do in the future:
 - Date Constraint parsing with patterns, not just intervals
 - More tests
-- More complete APath-queries
-- ADL serialization (to ADL and perhaps JSON and XML)
+- AOM serialization (to ADL and perhaps JSON and XML)
 - Validating if an RM object conforms to a certain archetype, apart from the rules
 - ...
 
