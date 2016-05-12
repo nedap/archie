@@ -5,6 +5,7 @@ import com.nedap.archie.rm.RMObject;
 import org.reflections.ReflectionUtils;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
+import org.reflections.util.ClasspathHelper;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
@@ -56,24 +57,37 @@ public class ModelInfoLookup {
 
     //constructed as  a field to save some object creation
 
-    public ModelInfoLookup(ModelNamingStrategy namingStrategy, String packageName) {
-        this(namingStrategy, packageName, ModelInfoLookup.class.getClassLoader());
+    public ModelInfoLookup(ModelNamingStrategy namingStrategy, Class baseClass) {
+        this(namingStrategy, baseClass, ModelInfoLookup.class.getClassLoader());
     }
 
     public ModelInfoLookup(ModelNamingStrategy namingStrategy, String packageName, ClassLoader classLoader) {
-        this.namingStrategy = namingStrategy;
         this.packageName = packageName;
-        this.classLoader = classLoader;
+        this.namingStrategy = namingStrategy;
 
-        Set<String> typeNames = new Reflections(packageName, new SubTypesScanner(false)).getAllTypes();
+        this.classLoader = classLoader;
+        Reflections reflections = new Reflections(packageName, new SubTypesScanner(false));
+        Set<String> typeNames = reflections.getAllTypes();
+
         System.out.println("type names size: " + typeNames.size());
-        for(String typeName:typeNames) {
+        typeNames.forEach(typeName -> {
             try {
                 addClass(classLoader.loadClass(typeName));
             } catch (ClassNotFoundException e) {
-                logger.warn("error in ModelInfoLookup", e);
+                e.printStackTrace();
             }
-        }
+        });
+    }
+
+    public ModelInfoLookup(ModelNamingStrategy namingStrategy, Class baseClass, ClassLoader classLoader) {
+        this.namingStrategy = namingStrategy;
+
+        this.classLoader = classLoader;
+        Reflections reflections = new Reflections(ClasspathHelper.forClass(baseClass), new SubTypesScanner(false));
+        Set<Class<?>> classes = reflections.getSubTypesOf(baseClass);
+
+        System.out.println("type names size: " + classes.size());
+        classes.forEach(this::addClass);
     }
 
     private void addClass(Class clazz) {
@@ -181,6 +195,9 @@ public class ModelInfoLookup {
     }
 
 
+    public RMTypeInfo getTypeInfo(Class clazz) {
+        return this.classesToRmTypeInfo.get(clazz);
+    }
 
     public Field getField(Class clazz, String attributeName) {
         RMTypeInfo typeInfo = classesToRmTypeInfo.get(clazz);
@@ -209,4 +226,5 @@ public class ModelInfoLookup {
     public ModelNamingStrategy getNamingStrategy() {
         return namingStrategy;
     }
+
 }

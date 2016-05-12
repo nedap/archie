@@ -5,13 +5,28 @@ package com.nedap.archie.rules;
  */
 public class ModelReference extends Leaf {
 
+    /**
+     * The path can be prefixed with a variable, referencing another path.
+     * For example 'every $event in /data/events satisfies $event/value > 5'
+     */
+    private String variableReferencePrefix;
+
     private String path;
 
     public ModelReference() {
 
     }
 
+    public String getVariableReferencePrefix() {
+        return variableReferencePrefix;
+    }
+
     public ModelReference(String path) {
+        this.path = path;
+    }
+
+    public ModelReference(String variableReferencePrefix, String path) {
+        this.variableReferencePrefix = variableReferencePrefix;
         this.path = path;
     }
 
@@ -24,7 +39,11 @@ public class ModelReference extends Leaf {
     }
 
     public String toString() {
-        return path;
+        if(variableReferencePrefix == null) {
+            return path;
+        } else {
+            return "$" + variableReferencePrefix + path;
+        }
     }
 
 }

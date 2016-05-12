@@ -7,6 +7,6 @@ import com.nedap.archie.base.OpenEHRBase;
  *
  * Created by pieter.bos on 01/03/16.
  */
-public abstract class RMObject {
+public abstract class RMObject extends OpenEHRBase {
 
 }

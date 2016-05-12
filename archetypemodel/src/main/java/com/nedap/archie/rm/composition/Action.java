@@ -4,9 +4,23 @@ import com.nedap.archie.rm.IsmTransition;
 import com.nedap.archie.rm.datastructures.ItemStructure;
 import com.nedap.archie.rm.datavalues.quantity.datetime.DvDateTime;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+
 /**
  * Created by pieter.bos on 04/11/15.
  */
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlType(name = "ACTION", propOrder = {
+        "time",
+        "description",
+        "ismTransition",
+        "instructionDetails"
+})
 public class Action extends CareEntry {
 
     private DvDateTime time;
@@ -32,6 +46,7 @@ public class Action extends CareEntry {
         setThisAsParent(description, "description");
     }
 
+    @XmlElement(name="ism_transition")
     public IsmTransition getIsmTransition() {
         return ismTransition;
     }
@@ -41,6 +56,7 @@ public class Action extends CareEntry {
         setThisAsParent(ismTransition, "ism_transition");
     }
 
+    @XmlElement(name="instruction_details")
     public InstructionDetails getInstructionDetails() {
         return instructionDetails;
     }

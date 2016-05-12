@@ -1,20 +1,38 @@
 package com.nedap.archie.rm.datastructures;
 
+import com.google.common.collect.Lists;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
+import java.util.List;
+
 /**
  * added constraint is that this contains only one item
  * Created by pieter.bos on 04/11/15.
  */
+@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlType(name = "ITEM_SINGLE", propOrder = {
+        "item"
+})
 public class ItemSingle extends ItemStructure<Item> {
 
     private Item item;
 
+    @XmlElement
     public Item getItem() {
-        return getItems().isEmpty() ? null : getItems().get(0);
+        return item;
     }
 
     public void setITem(Item item) {
-        getItems().set(0, item);
         this.item = item;
-        setThisAsParent(item, "item");
+    }
+
+    @Override
+    @XmlTransient //no items in a single item, just the one item
+    public List<Item> getItems() {
+        return Lists.newArrayList(item);
     }
 }

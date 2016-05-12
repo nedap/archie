@@ -1,10 +1,19 @@
 package com.nedap.archie.rm.datavalues.quantity;
 
 import javax.annotation.Nullable;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 
 /**
  * Created by pieter.bos on 04/11/15.
  */
+@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlType(name = "DV_QUANTITY", propOrder = {
+        "units",
+        "precision"
+})
 public class DvQuantity extends DvAmount<Double> {
 
     @Nullable
@@ -12,6 +21,7 @@ public class DvQuantity extends DvAmount<Double> {
     private String units;
 
     @Nullable
+    @XmlElement(defaultValue = "-1")
     public Long getPrecision() {
         return precision;
     }

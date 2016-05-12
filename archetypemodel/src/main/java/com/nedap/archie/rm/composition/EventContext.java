@@ -6,14 +6,30 @@ import com.nedap.archie.rm.datavalues.DvCodedText;
 import com.nedap.archie.rm.datavalues.quantity.datetime.DvDateTime;
 
 import javax.annotation.Nullable;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 
 /**
  * Created by pieter.bos on 04/11/15.
  */
+@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlType(name = "EVENT_CONTEXT", propOrder = {
+        "startTime",
+        "endTime",
+        "location",
+        "setting",
+        "otherContext",
+       // "healthCareFacility",
+       // "participations"
+})
 public class EventContext extends Pathable {
+
 
     private DvDateTime startTime;
     @Nullable
+
     private DvDateTime endTime;
     @Nullable
     private String location;
@@ -21,6 +37,7 @@ public class EventContext extends Pathable {
     @Nullable
     private ItemStructure otherContext;
 
+    @XmlElement(name = "start_time")
     public DvDateTime getStartTime() {
         return startTime;
     }
@@ -29,6 +46,7 @@ public class EventContext extends Pathable {
         this.startTime = startTime;
     }
 
+    @XmlElement(name = "end_time")
     public DvDateTime getEndTime() {
         return endTime;
     }
@@ -53,6 +71,7 @@ public class EventContext extends Pathable {
         this.setting = setting;
     }
 
+    @XmlElement(name = "other_context")
     public ItemStructure getOtherContext() {
         return otherContext;
     }

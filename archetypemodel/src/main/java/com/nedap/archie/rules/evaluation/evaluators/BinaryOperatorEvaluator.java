@@ -84,13 +84,15 @@ public class BinaryOperatorEvaluator implements Evaluator<BinaryOperator> {
 
     private ValueList evaluateBooleanOperator(RuleEvaluation evaluation, BinaryOperator statement) {
 
-        ValueList possibleNullResult = checkAndHandleNull(evaluation, statement);
+        ValueList leftValues = evaluation.evaluate(statement.getLeftOperand());
+        ValueList rightValues = evaluation.evaluate(statement.getRightOperand());
+
+        ValueList possibleNullResult = checkAndHandleNull(evaluation, statement, leftValues, rightValues);
         if(possibleNullResult != null) {
             possibleNullResult.setType(PrimitiveType.Boolean);
             return possibleNullResult;
         }
-        ValueList leftValues = evaluation.evaluate(statement.getLeftOperand());
-        ValueList rightValues = evaluation.evaluate(statement.getRightOperand());
+
 
         checkisBoolean(leftValues, rightValues);
 
@@ -148,7 +150,7 @@ public class BinaryOperatorEvaluator implements Evaluator<BinaryOperator> {
         ValueList rightValues = evaluation.evaluate(statement.getRightOperand());
 
 
-        ValueList possibleNullResult = checkAndHandleNull(evaluation, statement);
+        ValueList possibleNullResult = checkAndHandleNull(evaluation, statement, leftValues, rightValues);
         if(possibleNullResult != null) {
             possibleNullResult.setType(PrimitiveType.Boolean);
             return possibleNullResult;
@@ -183,10 +185,8 @@ public class BinaryOperatorEvaluator implements Evaluator<BinaryOperator> {
 
     }
 
-    public ValueList checkAndHandleNull(RuleEvaluation evaluation, BinaryOperator statement) {
+    public ValueList checkAndHandleNull(RuleEvaluation evaluation, BinaryOperator statement, ValueList leftValues, ValueList rightValues) {
         ValueList result = new ValueList();
-        ValueList leftValues = evaluation.evaluate(statement.getLeftOperand());
-        ValueList rightValues = evaluation.evaluate(statement.getRightOperand());
         if (leftValues.isEmpty() && rightValues.isEmpty()) {
             //this solves part of the null-valued expression problem. But certainly not all.
             result.addValue(Value.createNull(Lists.newArrayList()));
@@ -267,7 +267,7 @@ public class BinaryOperatorEvaluator implements Evaluator<BinaryOperator> {
         ValueList rightValues = evaluation.evaluate(statement.getRightOperand());
 
 
-        ValueList possibleNullResult = checkAndHandleNull(evaluation, statement);
+        ValueList possibleNullResult = checkAndHandleNull(evaluation, statement, leftValues, rightValues);
         if(possibleNullResult != null) {
             possibleNullResult.setType(PrimitiveType.Boolean);
             return possibleNullResult;
@@ -277,39 +277,37 @@ public class BinaryOperatorEvaluator implements Evaluator<BinaryOperator> {
             ValueList result = new ValueList();
             result.setType(PrimitiveType.Boolean);
 
-            if (leftValues.size() == rightValues.size()) {
-                for (int i = 0; i < leftValues.size(); i++) {
-                    Value leftValue = leftValues.get(i);
-                    Value rightValue = rightValues.get(i);
-                    evaluateRelOp(statement, result, leftValue.getValue(), rightValue.getValue(), getPaths(leftValue, rightValue));
-
-                }
-            } else if (leftValues.size() == 1) {
-                Value leftValue = leftValues.get(0);
-                for (Value rightValue : rightValues.getValues()) {
-                    evaluateRelOp(statement, result, leftValue.getValue(), rightValue.getValue(), getPaths(leftValue, rightValue));
-                }
-            } else if (rightValues.size() == 1) {
-                Value rightValue = rightValues.get(0);
-                for (Value leftValue : leftValues.getValues()) {
-                    evaluateRelOp(statement, result, leftValue.getValue(), rightValue.getValue(), getPaths(leftValue, rightValue));
-                }
-            } else {
-                throw new IllegalArgumentException("sizes of operator arguments not compatible");
-            }
+            //according to the xpath spec, at least one pair from both collections must exist that matches the condition.
+            //want otherwise? Use for_all/every
+            result.addValue(evaluateMultipleValuesRelOp(statement, leftValues, rightValues));
 
             return result;
         }
     }
 
-    private void evaluateRelOp(BinaryOperator statement, ValueList result, Object leftValue, Object rightValue, List<String> paths) {
+    private Value evaluateMultipleValuesRelOp(BinaryOperator statement, ValueList leftValues, ValueList rightValues) {
+
+        List<String> allPaths = new ArrayList<>();
+        for(Value leftValue:leftValues.getValues()) {
+            for (Value rightValue:rightValues.getValues()) {
+                Value evaluatedRelOp = evaluateRelOp(statement, leftValue.getValue(), rightValue.getValue(), getPaths(leftValue, rightValue));
+                allPaths.addAll(evaluatedRelOp.getPaths());
+                if (((Boolean) evaluatedRelOp.getValue()).booleanValue()) {
+                    return evaluatedRelOp;
+                }
+            }
+        }
+        return new Value(false, allPaths);
+    }
+
+    private Value evaluateRelOp(BinaryOperator statement, Object leftValue, Object rightValue, List<String> paths) {
         if(leftValue instanceof Long && rightValue instanceof Long) {
-            result.addValue(evaluateIntegerRelOp(statement.getOperator(),
+            return new Value(evaluateIntegerRelOp(statement.getOperator(),
                     (Long) leftValue,
                     (Long) rightValue
             ), paths);
         } else {
-            result.addValue(evaluateRealRelOp(statement.getOperator(),
+            return new Value(evaluateRealRelOp(statement.getOperator(),
                     convertToDouble(leftValue),
                     convertToDouble(rightValue)
             ), paths);

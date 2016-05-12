@@ -13,11 +13,11 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Created by pieter.bos on 27/10/15.
  */
-public class AssertionsParser extends BaseTreeWalker {
+public class RulesParser extends BaseTreeWalker {
 
     private PrimitivesConstraintParser primitivesConstraintParser;
 
-    public AssertionsParser(ADLParserErrors errors) {
+    public RulesParser(ADLParserErrors errors) {
         super(errors);
         primitivesConstraintParser = new PrimitivesConstraintParser(errors);
     }
@@ -46,22 +46,13 @@ public class AssertionsParser extends BaseTreeWalker {
             setVariableNameAndType(context, result);
             result.setExpression(parseExpression(context.boolean_expression()));
             return result;
-//        } else if (context.adl_path() != null) {
-//            ExpressionVariable result = new ExpressionVariable();
-//            setVariableNameAndType(context, result);
-//            assertion.setExpression(parseModelReference(context.adl_path()));
-//            return result;
-//        } else if (context.adl_relative_path() != null) {
-//            ExpressionVariable result = new ExpressionVariable();
-//            setVariableNameAndType(context, result);
-//            assertion.setExpression(parseModelReference(context.adl_relative_path()));
-//            return result;
 
         } else if (context.arithmetic_expression() != null) {
             ExpressionVariable result = new ExpressionVariable();
             setVariableNameAndType(context, result);
             result.setExpression(parseArithmeticExpression(context.arithmetic_expression()));
             return result;
+
         }
         return null;
     }
@@ -78,8 +69,28 @@ public class AssertionsParser extends BaseTreeWalker {
             expression.setType(ExpressionType.BOOLEAN);
             expression.setOperator(OperatorKind.parse(context.SYM_IMPLIES().getText()));
             expression.addOperand(parseExpression(context.boolean_expression()));
-            expression.addOperand(parseOrExpression(context.boolean_or_expression()));
+            expression.addOperand(parseForAllExpression(context.boolean_for_all_expression()));
             return expression;
+        } else {
+            return parseForAllExpression(context.boolean_for_all_expression());
+        }
+
+    }
+
+    private Expression parseForAllExpression(Boolean_for_all_expressionContext context) {
+        if(context.SYM_FOR_ALL() != null) {
+
+            Expression pathExpression = null;
+
+            if (context.adl_rules_path() != null) {
+                pathExpression = parseModelReference(context.adl_rules_path());
+            } else {
+                pathExpression = parseVariableReference(context.variable_reference());
+            }
+            String variableName = context.identifier().getText();
+            return new ForAllStatement(variableName,
+                    pathExpression,
+                    parseForAllExpression(context.boolean_for_all_expression()));
         } else {
             return parseOrExpression(context.boolean_or_expression());
         }
@@ -139,8 +150,8 @@ public class AssertionsParser extends BaseTreeWalker {
 
             return result;
         }
-        if(context.adl_path() != null) {
-            ModelReference reference = parseModelReference(context.adl_path());
+        if(context.adl_rules_path() != null) {
+            ModelReference reference = parseModelReference(context.adl_rules_path());
             if(context.SYM_EXISTS() != null) {
                 return new UnaryOperator(ExpressionType.BOOLEAN, OperatorKind.exists, reference);
             } else {
@@ -166,22 +177,31 @@ public class AssertionsParser extends BaseTreeWalker {
     }
 
     @NotNull
-    private ModelReference parseModelReference(Adl_pathContext context) {
-        return new ModelReference(context.getText());
+    private ModelReference parseModelReference(Adl_rules_pathContext context) {
+        String variableReference = null;
+        if(context.variable_reference() != null) {
+            variableReference = context.variable_reference().identifier().getText();
+        }
+        StringBuilder path = new StringBuilder();
+        for(Adl_rules_path_segmentContext pathSegment:context.adl_rules_path_segment()){
+            path.append(pathSegment.getText());
+
+        }
+        return new ModelReference(variableReference, path.toString());
     }
 
     @NotNull
-    private ModelReference parseModelReference(Adl_relative_pathContext context) {
+    private ModelReference parseModelReference(Adl_rules_relative_pathContext context) {
         return new ModelReference(context.getText());
     }
 
     private Expression parseBooleanConstraint(Boolean_constraintContext context) {
-        String path = null;
-        if(context.adl_path() != null) {
-            path = context.adl_path().getText();
+        ModelReference modelReference = null;
+        if(context.adl_rules_path() != null) {
+            modelReference = parseModelReference(context.adl_rules_path());
         }
-        if(context.adl_relative_path() != null) {
-            path = context.adl_relative_path().getText();
+        if(context.adl_rules_relative_path() != null) {
+            modelReference = parseModelReference(context.adl_rules_relative_path());
         }
         CPrimitiveObject cPrimitiveObject = null;
         if(context.c_primitive_object() != null) {
@@ -189,7 +209,7 @@ public class AssertionsParser extends BaseTreeWalker {
         } else {
             cPrimitiveObject = primitivesConstraintParser.parseRegex(context.CONTAINED_REGEXP());
         }
-        return new BinaryOperator(ExpressionType.BOOLEAN, OperatorKind.matches, new ModelReference(path), new Constraint(cPrimitiveObject));
+        return new BinaryOperator(ExpressionType.BOOLEAN, OperatorKind.matches, modelReference, new Constraint(cPrimitiveObject));
     }
 
     private Expression parseArithmeticRelOpExpression(Arithmetic_relop_exprContext context) {
@@ -238,8 +258,8 @@ public class AssertionsParser extends BaseTreeWalker {
         if(context.real_value() != null) {
             return new Constant<>(ExpressionType.REAL, Double.parseDouble(context.real_value().getText()));
         }
-        if(context.adl_path() != null) {
-            return new ModelReference(context.adl_path().getText());//TODO: get type from archetype
+        if(context.adl_rules_path() != null) {
+            return parseModelReference(context.adl_rules_path());
         }
         if(context.arithmetic_expression() != null) {
             return parseArithmeticExpression(context.arithmetic_expression());//TODO: precedenceOverridden

@@ -58,11 +58,12 @@ definition
 	}
 
 rules
-	$systolic:Real ::= /data[id2]/events[id3]/data[id4]/items[id5]/value[id13]/magnitude
+	--do not actually use this pattern this way unless you know what you are doing - see for_all.adls on what you should do in this case
+	$systolic:Real ::= /data[id2]/events[id3]/data[id4]/items[id5]/value/magnitude;
 
-	$diastolic:Real ::= /data[id2]/events[id3]/data[id4]/items[id6]/value[id14]/magnitude
+	$diastolic:Real ::= /data[id2]/events[id3]/data[id4]/items[id6]/value/magnitude;
 
-	blood_pressure_valid: $systolic > $diastolic - 5
+	blood_pressure_valid: $systolic > $diastolic - 5;
 
 
 

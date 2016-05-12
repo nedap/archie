@@ -4,12 +4,29 @@ import com.nedap.archie.rm.datatypes.CodePhrase;
 import com.nedap.archie.rm.datavalues.DvURI;
 
 import javax.annotation.Nullable;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 
 /**
  * Created by pieter.bos on 04/11/15.
  */
+@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlType(name = "DV_MULTIMEDIA", propOrder = {
+        "alternateText",
+        "uri",
+        "data",
+        "mediaType",
+        "compressionAlgorithm",
+        "integrityCheck",
+        "integrityCheckAlgorithm",
+        "size",
+        "thumbnail"
+})
 public class DvMultimedia extends DvEncapsulated {
     @Nullable
+
     private String alternateText;
     @Nullable
     private DvURI uri;
@@ -19,16 +36,19 @@ public class DvMultimedia extends DvEncapsulated {
     @Nullable
     private CodePhrase compressionAlgorithm;
     @Nullable
-    private Byte integrityCheck;//TODO: one byte only?!
+    private byte[] integrityCheck;
 
     @Nullable
-    private CodePhrase integrity_check_algorithm;
+    private CodePhrase integrityCheckAlgorithm;
+
+    private Integer size;
 
     @Nullable
     private DvMultimedia thumbnail;
 
     @Nullable
 
+    @XmlElement(name = "alternate_text")
     public String getAlternateText() {
         return alternateText;
     }
@@ -55,6 +75,7 @@ public class DvMultimedia extends DvEncapsulated {
         this.data = data;
     }
 
+    @XmlElement(name = "media_type", required = true)
     public CodePhrase getMediaType() {
         return mediaType;
     }
@@ -64,6 +85,7 @@ public class DvMultimedia extends DvEncapsulated {
     }
 
     @Nullable
+    @XmlElement(name = "compression_algorithm")
     public CodePhrase getCompressionAlgorithm() {
         return compressionAlgorithm;
     }
@@ -73,22 +95,15 @@ public class DvMultimedia extends DvEncapsulated {
     }
 
     @Nullable
-    public Byte getIntegrityCheck() {
+    @XmlElement(name = "integrity_check")
+    public byte[] getIntegrityCheck() {
         return integrityCheck;
     }
 
-    public void setIntegrityCheck(@Nullable Byte integrityCheck) {
+    public void setIntegrityCheck(@Nullable byte[] integrityCheck) {
         this.integrityCheck = integrityCheck;
     }
 
-    @Nullable
-    public CodePhrase getIntegrity_check_algorithm() {
-        return integrity_check_algorithm;
-    }
-
-    public void setIntegrity_check_algorithm(@Nullable CodePhrase integrity_check_algorithm) {
-        this.integrity_check_algorithm = integrity_check_algorithm;
-    }
 
     @Nullable
     public DvMultimedia getThumbnail() {
@@ -97,5 +112,23 @@ public class DvMultimedia extends DvEncapsulated {
 
     public void setThumbnail(@Nullable DvMultimedia thumbnail) {
         this.thumbnail = thumbnail;
+    }
+
+    @Nullable
+    @XmlElement(name = "integrity_check_algorithm")
+    public CodePhrase getIntegrityCheckAlgorithm() {
+        return integrityCheckAlgorithm;
+    }
+
+    public void setIntegrityCheckAlgorithm(@Nullable CodePhrase integrityCheckAlgorithm) {
+        this.integrityCheckAlgorithm = integrityCheckAlgorithm;
+    }
+
+    public Integer getSize() {
+        return size;
+    }
+
+    public void setSize(Integer size) {
+        this.size = size;
     }
 }

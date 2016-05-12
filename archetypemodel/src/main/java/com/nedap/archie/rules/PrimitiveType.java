@@ -6,7 +6,7 @@ import java.util.Collection;
  * Created by pieter.bos on 31/03/16.
  */
 public enum PrimitiveType {
-    Integer, Real, Boolean, String, Character, Date, Time, DateTime, Duration, Interval, List, Unknown;//TODO: interval or list with generics?
+    Integer, Real, Boolean, String, Character, Date, Time, DateTime, Duration, Interval, List, Unknown, ObjectReference;//TODO: interval or list with generics?
 
     public static PrimitiveType fromJavaType(Class clazz) {
         if(Collection.class.isAssignableFrom(clazz)) {

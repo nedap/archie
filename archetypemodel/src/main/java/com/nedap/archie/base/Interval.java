@@ -5,6 +5,7 @@ import com.nedap.archie.aom.ArchetypeModelObject;
 import com.nedap.archie.rm.RMObject;
 
 import javax.annotation.Nullable;
+import javax.xml.bind.annotation.XmlElement;
 import java.time.Duration;
 import java.time.temporal.TemporalAmount;
 import java.util.Objects;
@@ -72,6 +73,7 @@ public class Interval<T>  extends OpenEHRBase {
         this.upper = upper;
     }
 
+    @XmlElement(name = "lower_unbounded")
     public boolean isLowerUnbounded() {
         return lowerUnbounded;
     }
@@ -80,6 +82,7 @@ public class Interval<T>  extends OpenEHRBase {
         this.lowerUnbounded = lowerUnbounded;
     }
 
+    @XmlElement(name = "upper_unbounded")
     public boolean isUpperUnbounded() {
         return upperUnbounded;
     }
@@ -88,6 +91,7 @@ public class Interval<T>  extends OpenEHRBase {
         this.upperUnbounded = upperUnbounded;
     }
 
+    @XmlElement(name = "lower_included")
     public boolean isLowerIncluded() {
         return lowerIncluded;
     }
@@ -96,6 +100,7 @@ public class Interval<T>  extends OpenEHRBase {
         this.lowerIncluded = lowerIncluded;
     }
 
+    @XmlElement(name = "upper_included")
     public boolean isUpperIncluded() {
         return upperIncluded;
     }

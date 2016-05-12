@@ -4,20 +4,33 @@ import com.nedap.archie.rm.archetypes.Pathable;
 import com.nedap.archie.rm.datavalues.DvCodedText;
 import com.nedap.archie.rm.datavalues.DvText;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by pieter.bos on 04/11/15.
  */
+@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlType(name = "ISM_TRANSITION", propOrder = {
+        "currentState",
+        "transition",
+        "careflowStep",
+        "reason"
+})
 public class IsmTransition extends Pathable {
 
     private DvCodedText currentState;
     private DvCodedText transition;
+
     private DvCodedText careflowStep;
 
     private List<DvText> reason = new ArrayList();
 
+    @XmlElement(name = "current_state")
     public DvCodedText getCurrentState() {
         return currentState;
     }
@@ -34,6 +47,7 @@ public class IsmTransition extends Pathable {
         this.transition = transition;
     }
 
+    @XmlElement(name = "careflow_step")
     public DvCodedText getCareflowStep() {
         return careflowStep;
     }

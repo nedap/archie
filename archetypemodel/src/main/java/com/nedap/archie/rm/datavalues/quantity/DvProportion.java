@@ -1,12 +1,22 @@
 package com.nedap.archie.rm.datavalues.quantity;
 
 import javax.annotation.Nullable;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlType;
 
 /**
  * TODO: This does not implement PROPORTION KIND, because multiple inheritance - won't work.
  * It does have a type=proportion kind enum
  * Created by pieter.bos on 04/11/15.
  */
+@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlType(name = "DV_PROPORTION", propOrder = {
+        "numerator",
+        "denominator",
+        "type",
+        "precision"
+})
 public class DvProportion extends DvAmount<Double> {
 
     private double numerator;

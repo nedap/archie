@@ -1,11 +1,13 @@
 package com.nedap.archie.rules.evaluation;
 
 import com.nedap.archie.aom.Archetype;
+import com.nedap.archie.query.RMQueryContext;
 import com.nedap.archie.rm.archetypes.Pathable;
 import com.nedap.archie.rules.*;
 import com.nedap.archie.rules.evaluation.evaluators.AssertionEvaluator;
 import com.nedap.archie.rules.evaluation.evaluators.BinaryOperatorEvaluator;
 import com.nedap.archie.rules.evaluation.evaluators.ConstantEvaluator;
+import com.nedap.archie.rules.evaluation.evaluators.ForAllEvaluator;
 import com.nedap.archie.rules.evaluation.evaluators.ModelReferenceEvaluator;
 import com.nedap.archie.rules.evaluation.evaluators.UnaryOperatorEvaluator;
 import com.nedap.archie.rules.evaluation.evaluators.VariableDeclarationEvaluator;
@@ -35,6 +37,8 @@ public class RuleEvaluation {
     EvaluationResult evaluationResult;
     private List<AssertionResult> assertionResults;
 
+    private RMQueryContext queryContext;
+
     Map<RuleElement, ValueList> ruleElementValues = new HashMap<>();
 
 
@@ -48,6 +52,7 @@ public class RuleEvaluation {
         add(new UnaryOperatorEvaluator());
         add(new VariableReferenceEvaluator());
         add(new ModelReferenceEvaluator());
+        add(new ForAllEvaluator());
     }
 
     private void add(Evaluator evaluator) {
@@ -64,6 +69,7 @@ public class RuleEvaluation {
         variables = new VariableMap();
         assertionResults = new ArrayList<>();
         evaluationResult = new EvaluationResult();
+        queryContext = new RMQueryContext(root);
         for(RuleStatement rule:rules) {
             evaluate(rule);
         }
@@ -79,12 +85,7 @@ public class RuleEvaluation {
             logger.info("evaluated rule: {}", valueList);
             return valueList;
         }
-        return null;
-//        if(rule instanceof Assertion) {
-//
-//        } else if (rule instanceof VariableDeclaration) {
-//
-//        }
+        throw new UnsupportedOperationException("no evaluator present for rule type " + rule.getClass().getSimpleName());
     }
 
     public Pathable getRMRoot() {
@@ -95,8 +96,18 @@ public class RuleEvaluation {
         return variables;
     }
 
-    private void ruleElementValueSet(RuleElement expression, ValueList value) {
-        ruleElementValues.put(expression, value);
+    private void ruleElementValueSet(RuleElement expression, ValueList values) {
+        ValueList previousValue = ruleElementValues.get(expression);
+        if(previousValue == null) {
+            ruleElementValues.put(expression, values);
+        } else {
+            //in the case of a for_all, the same expression gets evaluated multiple times and we want to store all the results
+            previousValue.addValues(values);
+        }
+    }
+
+    public RMQueryContext getQueryContext() {
+        return queryContext;
     }
 
     /**

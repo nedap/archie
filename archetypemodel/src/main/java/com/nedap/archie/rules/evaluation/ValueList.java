@@ -3,6 +3,7 @@ package com.nedap.archie.rules.evaluation;
 import com.nedap.archie.rules.PrimitiveType;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -22,6 +23,10 @@ public class ValueList {
 
     public ValueList(List<Value> values) {
         setValues(values);
+        determineTypeFromValues();
+    }
+
+    public void determineTypeFromValues() {
         if(!values.isEmpty()) {
             this.type = PrimitiveType.fromJavaType(values.get(0).getValue().getClass());
         } else{
@@ -109,5 +114,19 @@ public class ValueList {
 
     public boolean isEmpty() {
         return values.isEmpty();
+    }
+
+    public void addValues(ValueList evaluated) {
+        for(Value value:evaluated.getValues()) {
+            addValue(value);
+        }
+    }
+
+    public List<String> getAllPaths() {
+        List<String> result = new ArrayList<>();
+        for(Value value:values) {
+            result.addAll(value.getPaths());
+        }
+        return result;
     }
 }

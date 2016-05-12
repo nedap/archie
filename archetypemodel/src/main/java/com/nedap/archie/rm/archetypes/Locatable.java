@@ -1,19 +1,34 @@
 package com.nedap.archie.rm.archetypes;
 
 import com.nedap.archie.paths.PathSegment;
+import com.nedap.archie.rm.datatypes.CodePhrase;
 import com.nedap.archie.rm.datatypes.UIDBasedId;
 import com.nedap.archie.rm.datavalues.DvText;
 
 import javax.annotation.Nullable;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by pieter.bos on 04/11/15.
  */
+@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlType(name = "LOCATABLE", propOrder = {
+        "name",
+        "uid",
+        "links",
+        "archetypeDetails"
+        //,"feederAudit"
+})
 public class Locatable extends Pathable {
 
-    private String name;
+    private DvText name;
     private String archetypeNodeId;
     @Nullable
     private UIDBasedId uid;
@@ -22,15 +37,24 @@ public class Locatable extends Pathable {
     private Archetyped archetypeDetails;
 
     private List<Link> links = new ArrayList<>();
+    private String nameAsString;
 
-    public String getName() {
+    @XmlElement
+    public DvText getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(DvText name) {
         this.name = name;
     }
 
+    /** convenience method*/
+    @XmlTransient
+    public void setName(String name) {
+        this.name = new DvText(name);
+    }
+
+    @XmlAttribute(name = "archetype_node_id")
     public String getArchetypeNodeId() {
         return archetypeNodeId;
     }
@@ -47,6 +71,7 @@ public class Locatable extends Pathable {
         this.uid = uid;
     }
 
+    @XmlElement(name = "archetype_details")
     public Archetyped getArchetypeDetails() {
         return archetypeDetails;
     }
@@ -79,5 +104,9 @@ public class Locatable extends Pathable {
         return segments;
     }
 
+    @XmlTransient
+    public String getNameAsString() {
+        return name == null ? null : name.getValue();
+    }
 }
 

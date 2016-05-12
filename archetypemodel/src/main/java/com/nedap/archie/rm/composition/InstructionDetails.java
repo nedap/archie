@@ -5,10 +5,20 @@ import com.nedap.archie.rm.datastructures.ItemStructure;
 import com.nedap.archie.rm.datatypes.LocatableRef;
 
 import javax.annotation.Nullable;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 
 /**
  * Created by pieter.bos on 04/11/15.
  */
+@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlType(name = "INSTRUCTION_DETAILS", propOrder = {
+        "instructionId",
+        "activityId",
+        "wfDetails"
+})
 public class InstructionDetails extends Pathable {
 
     private LocatableRef instructionId;
@@ -16,6 +26,7 @@ public class InstructionDetails extends Pathable {
     @Nullable
     private ItemStructure wfDetails;
 
+    @XmlElement(name = "instruction_id")
     public LocatableRef getInstructionId() {
         return instructionId;
     }
@@ -24,6 +35,7 @@ public class InstructionDetails extends Pathable {
         this.instructionId = instructionId;
     }
 
+    @XmlElement(name = "activity_id")
     public String getActivityId() {
         return activityId;
     }
@@ -32,6 +44,7 @@ public class InstructionDetails extends Pathable {
         this.activityId = activityId;
     }
 
+    @XmlElement(name = "wf_details")
     public ItemStructure getWfDetails() {
         return wfDetails;
     }

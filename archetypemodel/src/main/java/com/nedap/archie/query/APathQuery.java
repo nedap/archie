@@ -47,7 +47,7 @@ public class APathQuery {
         LocationPathContext locationPathContext = parser.locationPath();
         AbsoluteLocationPathNorootContext absoluteLocationPathNorootContext = locationPathContext.absoluteLocationPathNoroot();
         if(absoluteLocationPathNorootContext == null) {
-            throw new UnsupportedOperationException("relative xpath expressions not yet supported");
+            throw new UnsupportedOperationException("relative xpath expressions not yet supported: " + query);
         }
         if(!absoluteLocationPathNorootContext.getTokens(XPathLexer.ABRPATH).isEmpty()) {
             throw new UnsupportedOperationException("absolute path starting with // not yet supported");
@@ -435,7 +435,7 @@ public class APathQuery {
                 }
                 throw new IllegalArgumentException("cannot handle RM-queries with archetype references yet");
             } else {
-                if(equalsName(locatable.getName(), segment.getNodeId())) {
+                if(equalsName(locatable.getNameAsString(), segment.getNodeId())) {
                     result.add(new RMObjectWithPath(object, path + buildPathConstraint(i, locatable.getArchetypeNodeId())));
                 }
             }
@@ -471,7 +471,7 @@ public class APathQuery {
                 }
                 throw new IllegalArgumentException("cannot handle RM-queries with archetype references yet");
             } else {
-                if(equalsName(locatable.getName(), segment.getNodeId())) {
+                if(equalsName(locatable.getNameAsString(), segment.getNodeId())) {
                     return o;
                 }
             }
