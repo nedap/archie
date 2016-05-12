@@ -1,6 +1,7 @@
 package com.nedap.archie.query;
 
 import com.google.common.collect.Lists;
+import com.nedap.archie.ArchieLanguageConfiguration;
 import com.nedap.archie.adlparser.ADLParser;
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.rm.archetypes.Pathable;
@@ -28,6 +29,7 @@ public class RMQueryContextTest {
 
     @Before
     public void setup() throws Exception {
+        ArchieLanguageConfiguration.setThreadLocalDescriptiongAndMeaningLanguage("en");
         archetype = ADLParser.withRMConstraintsImposer().parse(getClass().getResourceAsStream("/basic.adl"));
         testUtil = new TestUtil();
     }

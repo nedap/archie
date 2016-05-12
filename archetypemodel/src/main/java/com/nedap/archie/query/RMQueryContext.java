@@ -99,6 +99,7 @@ public class RMQueryContext {
         String convertedQuery = APathToXPathConverter.convertQueryToXPath(query, firstXPathNode);
         XPath xpath = XPathFactory.newInstance().newXPath();
 
+
         xpath.setNamespaceContext( new ArchieNamespaceResolver(domForQueries));
         NodeList foundNodes = (NodeList)xpath.evaluate(convertedQuery, domForQueries, XPathConstants.NODESET);
         List<T> result = new ArrayList<T>();
