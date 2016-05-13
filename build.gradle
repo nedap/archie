@@ -4,84 +4,175 @@ buildscript {
   }
   dependencies {
     classpath "org.jfrog.buildinfo:build-info-extractor-gradle:3.1.0"
+    classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.5.3"
+    classpath 'ch.raffael.pegdown-doclet:pegdown-doclet:1.2'
   }
 }
 
 def artifactoryUserMethod = hasProperty('artifactoryUser') ? artifactoryUser : ""
 def artifactoryPasswordMethod = hasProperty('artifactoryPassword') ? artifactoryPassword : ""
+def ossrhUsernameSafe = hasProperty('ossrhUsername') ? ossrhUsername : ""
+def ossrhPasswordSafe = hasProperty('ossrhPassword') ? ossrhPassword : ""
 
-allprojects {
-	apply plugin: 'maven' //so we can install to local repository
 
-	version = '0.1.0-SNAPSHOT'
-	group = 'com.nedap.healthcare.archie'
+apply plugin: 'maven' //so we can install to local repository
+if(hasProperty('signing.keyId')) {
+	apply plugin: 'signing'
+}
+apply plugin: 'java'
+apply plugin: 'antlr'
+apply plugin: 'maven-publish'
+apply plugin: "com.jfrog.artifactory"
+apply plugin: 'ch.raffael.pegdown-doclet'
+//apply plugin: 'io.codearte.nexus-staging'
 
-	ext.antlrVersion = '4.5.1-1'
+version = '0.1.0'
+group = 'com.nedap.healthcare'
+archivesBaseName = 'archie'
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+ext.antlrVersion = '4.5.1-1'
+
+repositories {
+    mavenCentral()
+	mavenLocal()
+	maven {
+		url "http://dl.bintray.com/guestful/maven"
+	}
+}
+
+ext.reflectionsVersion = '0.9.10'
+dependencies {
+
+	antlr "org.antlr:antlr4:${antlrVersion}"
+
+	compile 'org.slf4j:slf4j-api:1.7.12'
+    compile 'com.fasterxml.jackson.core:jackson-annotations:2.6.3'
+	compile 'com.guestful.module:guestful.module.jsr310-extensions:1.4' //kryo java.time serializers
+	compile 'com.google.guava:guava:19.0'
+
+	compile "org.reflections:reflections:${reflectionsVersion}"
+
+	compile 'com.fasterxml.jackson.core:jackson-databind:2.6.3'
+
+	compile 'org.checkerframework:checker:1.9.7'
+
+    compile 'com.esotericsoftware:kryo:3.0.3' //for easy and relatively fast object cloning
+	testCompile 'junit:junit:4.12'
+    testCompile 'org.slf4j:slf4j-simple:1.7.12'
 
 }
-subprojects {
 
-	apply plugin: 'java'
-	apply plugin: 'maven-publish'
-	apply plugin: "com.jfrog.artifactory"	
-
-	repositories {
-	    mavenCentral()
-		mavenLocal()
-		maven {
-			url "http://dl.bintray.com/guestful/maven"
-		}
-	}
-	ext.reflectionsVersion = '0.9.10'
-	dependencies {
-		compile 'org.slf4j:slf4j-api:1.7.12'
-        compile 'com.fasterxml.jackson.core:jackson-annotations:2.6.3'
-		compile 'com.guestful.module:guestful.module.jsr310-extensions:1.4' //kryo java.time serializers
-		compile 'com.google.guava:guava:19.0'
-
-		compile "org.reflections:reflections:${reflectionsVersion}"
-
-		compile 'com.fasterxml.jackson.core:jackson-databind:2.6.3'
-
-		compile 'org.checkerframework:checker:1.9.7'
-		testCompile 'junit:junit:4.12'
-        testCompile 'org.slf4j:slf4j-simple:1.7.12'
-
-//        testCompile 'org.slf4j:slf4j-log4j12:1.0.1'
-//        testCompile 'log4j:log4j:1.2.17'
-//        testCompile 'org.apache.logging.log4j:log4j-api:2.4.1'
-//		testCompile 'org.apache.logging.log4j:log4j-core:2.4.1'
-//        testCompile 'org.apache.logging.log4j:log4j-to-slf4j:2.4.1'
-	}
-
-
-
-	sourceCompatibility = '1.8'
-	targetCompatibility = '1.8'
-
-	publishing {
-	    publications {
-	        mavenJava(MavenPublication) {
-	            from components.java
-	        }
-	    }
-	}
-
-	artifactory {
-		//sorry about the private repository. Once we release a version, this will change to something public
-	    contextUrl = 'https://nedap.artifactoryonline.com/nedap/'
-	    publish {
-	        repository {
-	            repoKey = 'libs-snapshots-local'
-	            username = "${artifactoryUserMethod}"
-	            password = "${artifactoryPasswordMethod}"
-	            maven = true
-
-	        }       
-	        defaults {
-	            publications ('mavenJava')
-	        }
-	    }
-	}
-	artifactoryPublish.dependsOn 'generatePomFileForMavenJavaPublication', 'build'
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
 }
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives javadocJar, sourcesJar
+}
+
+if(hasProperty('signing.keyId')) {
+	signing {
+	    sign configurations.archives
+	}
+}
+
+generateGrammarSource { //antlr4
+	outputDirectory = new File("${project.buildDir}/generated-src/antlr/main/com/nedap/archie/adlparser/antlr".toString())
+    arguments = ['-package', 'com.nedap.archie.adlparser.antlr'] + arguments
+}
+
+classes {
+	dependsOn generateGrammarSource
+}
+
+uploadArchives {
+  repositories {
+    mavenDeployer {
+	  if(hasProperty('signing.keyId')) {
+        beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+      }
+
+      repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+        authentication(userName: ossrhUsernameSafe, password: ossrhPasswordSafe)
+      }
+
+      snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+        authentication(userName: ossrhUsernameSafe, password: ossrhPasswordSafe)
+      }
+
+      pom.project {
+        name 'Archie'
+        packaging 'jar'
+        // optionally artifactId can be defined here 
+        description 'An openEHR library, supporting ADL 2'
+        url 'https://github.com/nedap/archie'
+
+        scm {
+            connection 'scm:git:https://github.com/nedap/archie.git'
+            developerConnection 'scm:git:git@github.com:nedap/archie.git'
+            url 'https://github.com/nedap/archie.git'
+        }
+
+        licenses {
+          license {
+            name 'The Apache License, Version 2.0'
+            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+            distribution 'repo'
+          }
+        }
+
+        developers {
+          developer {
+            id 'pieterbos'
+            name 'Pieter Bos'
+            email 'pieterbos@nedap.com'
+            organization 'nedap'
+            organizationUrl 'http://www.nedap.com'
+          }
+        }
+      }
+    }
+  }
+}
+
+//nexusStaging {  
+//    username = ossrhUserSafe
+//    password = ossrhPasswordSafe
+//}
+
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+}
+
+artifactory {
+	//sorry about the private repository. Once we release a version, this will change to something public
+    contextUrl = 'https://nedap.artifactoryonline.com/nedap/'
+    publish {
+        repository {
+            repoKey = 'libs-snapshots-local'
+            username = "${artifactoryUserMethod}"
+            password = "${artifactoryPasswordMethod}"
+            maven = true
+
+        }       
+        defaults {
+            publications ('mavenJava')
+        }
+    }
+}
+artifactoryPublish.dependsOn 'generatePomFileForMavenJavaPublication', 'build'
+
