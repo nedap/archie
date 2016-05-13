@@ -5,7 +5,7 @@ buildscript {
   dependencies {
     classpath "org.jfrog.buildinfo:build-info-extractor-gradle:3.1.0"
     classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.5.3"
-    
+    classpath 'ch.raffael.pegdown-doclet:pegdown-doclet:1.2'
   }
 }
 
@@ -21,6 +21,7 @@ apply plugin: 'java'
 apply plugin: 'antlr'
 apply plugin: 'maven-publish'
 apply plugin: "com.jfrog.artifactory"
+apply plugin: 'ch.raffael.pegdown-doclet'
 //apply plugin: 'io.codearte.nexus-staging'
 
 version = '0.1.0'
@@ -128,6 +129,8 @@ uploadArchives {
             id 'pieterbos'
             name 'Pieter Bos'
             email 'pieterbos@nedap.com'
+            organization 'nedap'
+            organizationUrl 'http://www.nedap.com'
           }
         }
       }
