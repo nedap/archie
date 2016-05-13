@@ -10,78 +10,89 @@ buildscript {
 def artifactoryUserMethod = hasProperty('artifactoryUser') ? artifactoryUser : ""
 def artifactoryPasswordMethod = hasProperty('artifactoryPassword') ? artifactoryPassword : ""
 
-allprojects {
-	apply plugin: 'maven' //so we can install to local repository
+apply plugin: 'maven' //so we can install to local repository
+apply plugin: 'java'
+apply plugin: 'antlr'
+apply plugin: 'maven-publish'
+apply plugin: "com.jfrog.artifactory"	
 
-	version = '0.1.0-SNAPSHOT'
-	group = 'com.nedap.healthcare.archie'
+version = '0.1.0-SNAPSHOT'
+group = 'com.nedap.healthcare.archie'
 
-	ext.antlrVersion = '4.5.1-1'
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+ext.antlrVersion = '4.5.1-1'
+
+repositories {
+    mavenCentral()
+	mavenLocal()
+	maven {
+		url "http://dl.bintray.com/guestful/maven"
+	}
+}
+
+ext.reflectionsVersion = '0.9.10'
+dependencies {
+
+	antlr "org.antlr:antlr4:${antlrVersion}"
+
+	compile 'org.slf4j:slf4j-api:1.7.12'
+    compile 'com.fasterxml.jackson.core:jackson-annotations:2.6.3'
+	compile 'com.guestful.module:guestful.module.jsr310-extensions:1.4' //kryo java.time serializers
+	compile 'com.google.guava:guava:19.0'
+
+	compile "org.reflections:reflections:${reflectionsVersion}"
+
+	compile 'com.fasterxml.jackson.core:jackson-databind:2.6.3'
+
+	compile 'org.checkerframework:checker:1.9.7'
+
+    compile 'com.esotericsoftware:kryo:3.0.3' //for easy and relatively fast object cloning
+	testCompile 'junit:junit:4.12'
+    testCompile 'org.slf4j:slf4j-simple:1.7.12'
 
 }
-subprojects {
 
-	apply plugin: 'java'
-	apply plugin: 'maven-publish'
-	apply plugin: "com.jfrog.artifactory"	
+//generateGrammarSource { //antlr4
+//    outputDirectory = new File("${project.buildDir}/generated-src/antlr/main/com/nedap/archie/xpath.antlr".toString())
+//    arguments = ['-package', 'com.nedap.archie.xpath.antlr'] + arguments
+//}
 
-	repositories {
-	    mavenCentral()
-		mavenLocal()
-		maven {
-			url "http://dl.bintray.com/guestful/maven"
-		}
-	}
-	ext.reflectionsVersion = '0.9.10'
-	dependencies {
-		compile 'org.slf4j:slf4j-api:1.7.12'
-        compile 'com.fasterxml.jackson.core:jackson-annotations:2.6.3'
-		compile 'com.guestful.module:guestful.module.jsr310-extensions:1.4' //kryo java.time serializers
-		compile 'com.google.guava:guava:19.0'
-
-		compile "org.reflections:reflections:${reflectionsVersion}"
-
-		compile 'com.fasterxml.jackson.core:jackson-databind:2.6.3'
-
-		compile 'org.checkerframework:checker:1.9.7'
-		testCompile 'junit:junit:4.12'
-        testCompile 'org.slf4j:slf4j-simple:1.7.12'
-
-//        testCompile 'org.slf4j:slf4j-log4j12:1.0.1'
-//        testCompile 'log4j:log4j:1.2.17'
-//        testCompile 'org.apache.logging.log4j:log4j-api:2.4.1'
-//		testCompile 'org.apache.logging.log4j:log4j-core:2.4.1'
-//        testCompile 'org.apache.logging.log4j:log4j-to-slf4j:2.4.1'
-	}
-
-
-
-	sourceCompatibility = '1.8'
-	targetCompatibility = '1.8'
-
-	publishing {
-	    publications {
-	        mavenJava(MavenPublication) {
-	            from components.java
-	        }
-	    }
-	}
-
-	artifactory {
-		//sorry about the private repository. Once we release a version, this will change to something public
-	    contextUrl = 'https://nedap.artifactoryonline.com/nedap/'
-	    publish {
-	        repository {
-	            repoKey = 'libs-snapshots-local'
-	            username = "${artifactoryUserMethod}"
-	            password = "${artifactoryPasswordMethod}"
-	            maven = true
-
-	        }       
-	        defaults {
-	            publications ('mavenJava')
-	        }
-	    }
-	}
-	artifactoryPublish.dependsOn 'generatePomFileForMavenJavaPublication', 'build'
+generateGrammarSource { //antlr4
+	outputDirectory = new File("${project.buildDir}/generated-src/antlr/main/com/nedap/archie/adlparser/antlr".toString())
+    arguments = ['-package', 'com.nedap.archie.adlparser.antlr'] + arguments
 }
+
+classes {
+	dependsOn generateGrammarSource
+}
+
+
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+}
+
+artifactory {
+	//sorry about the private repository. Once we release a version, this will change to something public
+    contextUrl = 'https://nedap.artifactoryonline.com/nedap/'
+    publish {
+        repository {
+            repoKey = 'libs-snapshots-local'
+            username = "${artifactoryUserMethod}"
+            password = "${artifactoryPasswordMethod}"
+            maven = true
+
+        }       
+        defaults {
+            publications ('mavenJava')
+        }
+    }
+}
+artifactoryPublish.dependsOn 'generatePomFileForMavenJavaPublication', 'build'
+
