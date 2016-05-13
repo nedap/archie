@@ -4,20 +4,28 @@ buildscript {
   }
   dependencies {
     classpath "org.jfrog.buildinfo:build-info-extractor-gradle:3.1.0"
+    classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.5.3"
+    
   }
 }
 
 def artifactoryUserMethod = hasProperty('artifactoryUser') ? artifactoryUser : ""
 def artifactoryPasswordMethod = hasProperty('artifactoryPassword') ? artifactoryPassword : ""
+def ossrhUsernameSafe = hasProperty('ossrhUsername') ? ossrhUsername : ""
+def ossrhPasswordSafe = hasProperty('ossrhPassword') ? ossrhPassword : ""
+
 
 apply plugin: 'maven' //so we can install to local repository
+apply plugin: 'signing'
 apply plugin: 'java'
 apply plugin: 'antlr'
 apply plugin: 'maven-publish'
-apply plugin: "com.jfrog.artifactory"	
+apply plugin: "com.jfrog.artifactory"
+//apply plugin: 'io.codearte.nexus-staging'
 
 version = '0.1.0-SNAPSHOT'
-group = 'com.nedap.healthcare.archie'
+group = 'com.nedap.healthcare'
+archivesBaseName = 'archie'
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
@@ -54,10 +62,23 @@ dependencies {
 
 }
 
-//generateGrammarSource { //antlr4
-//    outputDirectory = new File("${project.buildDir}/generated-src/antlr/main/com/nedap/archie/xpath.antlr".toString())
-//    arguments = ['-package', 'com.nedap.archie.xpath.antlr'] + arguments
-//}
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives javadocJar, sourcesJar
+}
+
+signing {
+    sign configurations.archives
+}
 
 generateGrammarSource { //antlr4
 	outputDirectory = new File("${project.buildDir}/generated-src/antlr/main/com/nedap/archie/adlparser/antlr".toString())
@@ -68,6 +89,56 @@ classes {
 	dependsOn generateGrammarSource
 }
 
+uploadArchives {
+  repositories {
+    mavenDeployer {
+      beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+      repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+        authentication(userName: ossrhUsernameSafe, password: ossrhPasswordSafe)
+      }
+
+      snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+        authentication(userName: ossrhUsernameSafe, password: ossrhPasswordSafe)
+      }
+
+      pom.project {
+        name 'Archie'
+        packaging 'jar'
+        // optionally artifactId can be defined here 
+        description 'An openEHR library, supporting ADL 2'
+        url 'https://github.com/nedap/archie'
+
+        scm {
+            connection 'scm:git:https://github.com/nedap/archie.git'
+            developerConnection 'scm:git:git@github.com:nedap/archie.git'
+            url 'https://github.com/nedap/archie.git'
+        }
+
+        licenses {
+          license {
+            name 'The Apache License, Version 2.0'
+            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+            distribution 'repo'
+          }
+        }
+
+        developers {
+          developer {
+            id 'pieterbos'
+            name 'Pieter Bos'
+            email 'pieterbos@nedap.com'
+          }
+        }
+      }
+    }
+  }
+}
+
+//nexusStaging {  
+//    username = ossrhUserSafe
+//    password = ossrhPasswordSafe
+//}
 
 
 publishing {
