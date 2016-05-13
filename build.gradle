@@ -16,7 +16,9 @@ def ossrhPasswordSafe = hasProperty('ossrhPassword') ? ossrhPassword : ""
 
 
 apply plugin: 'maven' //so we can install to local repository
-apply plugin: 'signing'
+if(hasProperty('signing.keyId')) {
+	apply plugin: 'signing'
+}
 apply plugin: 'java'
 apply plugin: 'antlr'
 apply plugin: 'maven-publish'
@@ -77,8 +79,10 @@ artifacts {
     archives javadocJar, sourcesJar
 }
 
-signing {
-    sign configurations.archives
+if(hasProperty('signing.keyId')) {
+	signing {
+	    sign configurations.archives
+	}
 }
 
 generateGrammarSource { //antlr4
@@ -93,7 +97,9 @@ classes {
 uploadArchives {
   repositories {
     mavenDeployer {
-      beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+	  if(hasProperty('signing.keyId')) {
+        beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+      }
 
       repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
         authentication(userName: ossrhUsernameSafe, password: ossrhPasswordSafe)
