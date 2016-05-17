@@ -8,6 +8,22 @@ It uses the ANTLR adl-grammar written by Thomas Beale at https://github.com/open
 
 It is licensed under the Apache license.
 
+## dependency
+
+In gradle:
+
+```gradle
+compile 'com.nedap.healthcare:archie:0.1.0'
+```
+
+```maven
+<dependency>
+    <groupId>com.nedap.healthcare</groupId>
+    <artifactId>archie</artifactId>
+    <version>0.1.0</version>
+</dependency>
+```
+
 ## Build
 
 [![Build Status](https://travis-ci.org/nedap/archie.svg?branch=master)](https://travis-ci.org/nedap/archie)

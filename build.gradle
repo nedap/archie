@@ -37,25 +37,26 @@ ext.antlrVersion = '4.5.1-1'
 
 repositories {
     mavenCentral()
-	mavenLocal()
 	maven {
 		url "http://dl.bintray.com/guestful/maven"
 	}
 }
 
 ext.reflectionsVersion = '0.9.10'
+ext.jacksonVersion = '2.7.4'
 dependencies {
 
 	antlr "org.antlr:antlr4:${antlrVersion}"
 
 	compile 'org.slf4j:slf4j-api:1.7.12'
-    compile 'com.fasterxml.jackson.core:jackson-annotations:2.6.3'
+    compile "com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}"
+    compile "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
 	compile 'com.guestful.module:guestful.module.jsr310-extensions:1.4' //kryo java.time serializers
 	compile 'com.google.guava:guava:19.0'
 
 	compile "org.reflections:reflections:${reflectionsVersion}"
 
-	compile 'com.fasterxml.jackson.core:jackson-databind:2.6.3'
+
 
 	compile 'org.checkerframework:checker:1.9.7'
 
@@ -116,6 +117,15 @@ uploadArchives {
         description 'An openEHR library, supporting ADL 2'
         url 'https://github.com/nedap/archie'
 
+
+        repositories {
+        	repository {
+        		id 'guestful'
+        		name 'guestful repository for jsr-310 extensions'
+        		url 'http://dl.bintray.com/guestful/maven'
+        	}
+        }
+
         scm {
             connection 'scm:git:https://github.com/nedap/archie.git'
             developerConnection 'scm:git:git@github.com:nedap/archie.git'
@@ -140,6 +150,13 @@ uploadArchives {
           }
         }
       }
+      beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+//        pom.withXml {
+//            def guestFulRepositoryNode = asNode().appendNode('repositories').appendNode('repository')
+//            guestFulRepositoryNode.appendNode('id', 'guestful')
+//            guestFulRepositoryNode.appendNode('name', 'repo for the jsr310 jackson extension')
+//            guestFulRepositoryNode.appendNode('url', 'http://dl.bintray.com/guestful/maven')
+//        }
     }
   }
 }
