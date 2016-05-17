@@ -10,11 +10,15 @@ It is licensed under the Apache license.
 
 ## dependency
 
-In gradle:
+In gradle, include this dependency in your build.gradle:
 
 ```gradle
-compile 'com.nedap.healthcare:archie:0.1.0'
+dependencies {
+    compile 'com.nedap.healthcare:archie:0.1.0'
+}
 ```
+
+or if you use maven, in your pom.xml
 
 ```maven
 <dependency>
