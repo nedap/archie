@@ -20,7 +20,7 @@ dependencies {
 
 or if you use maven, in your pom.xml
 
-```maven
+```xml
 <dependency>
     <groupId>com.nedap.healthcare</groupId>
     <artifactId>archie</artifactId>
@@ -162,7 +162,7 @@ CPrimitiveObject has a isValidValue(value) method, so you can do:
 ```java
 CString cString = new CString();
 cString.addConstraint("test");
-cString.addConstraint("/more te+st");
+cString.addConstraint("/more te+st/");
 cString.isValidValue("test"); //returns true
 cString.isValidValue("more teeeeest"); //returns true - regexp matching
 cString.isValidValue("mooooore test"); //returns false
