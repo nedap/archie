@@ -157,7 +157,7 @@ new Interval<>(2,4).has(3); //returns true
 Interval.upperUnbounded(2).has(1); //returns false
 ```
 
-CPrimitiveObject has a isValidValue(value) method, so you can do:
+CPrimitiveObject has an ```isValidValue(value)``` method, so you can do:
 
 ```java
 CString cString = new CString();
