@@ -1,5 +1,7 @@
 package com.nedap.archie.rules.evaluation;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.query.RMQueryContext;
 import com.nedap.archie.rm.archetypes.Pathable;
@@ -16,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +28,7 @@ import java.util.Map;
  */
 public class RuleEvaluation {
 
-    private Logger logger = LoggerFactory.getLogger(RuleEvaluation.class);
+    private static Logger logger = LoggerFactory.getLogger(RuleEvaluation.class);
 
     private Archetype archetype;
     private List<Evaluator> evaluators = new ArrayList<>();
@@ -39,9 +42,8 @@ public class RuleEvaluation {
 
     private RMQueryContext queryContext;
 
-    Map<RuleElement, ValueList> ruleElementValues = new HashMap<>();
-
-
+    ArrayListMultimap<RuleElement, ValueList> ruleElementValues = ArrayListMultimap.create();
+    private FixableAssertionsChecker fixableAssertionsChecker;
 
     public RuleEvaluation(Archetype archetype) {
         this.archetype = archetype;
@@ -65,11 +67,14 @@ public class RuleEvaluation {
     public EvaluationResult evaluate(Pathable root, List<RuleStatement> rules) {
         this.root = root;
 
-        ruleElementValues = new HashMap<>();
+        ruleElementValues = ArrayListMultimap.create();
         variables = new VariableMap();
         assertionResults = new ArrayList<>();
         evaluationResult = new EvaluationResult();
         queryContext = new RMQueryContext(root);
+
+        fixableAssertionsChecker = new FixableAssertionsChecker(ruleElementValues);
+
         for(RuleStatement rule:rules) {
             evaluate(rule);
         }
@@ -97,13 +102,7 @@ public class RuleEvaluation {
     }
 
     private void ruleElementValueSet(RuleElement expression, ValueList values) {
-        ValueList previousValue = ruleElementValues.get(expression);
-        if(previousValue == null) {
-            ruleElementValues.put(expression, values);
-        } else {
-            //in the case of a for_all, the same expression gets evaluated multiple times and we want to store all the results
-            previousValue.addValues(values);
-        }
+        ruleElementValues.put(expression, values);
     }
 
     public RMQueryContext getQueryContext() {
@@ -118,37 +117,20 @@ public class RuleEvaluation {
         assertionResult.setTag(tag);
         assertionResult.setAssertion(expression);
 
-        boolean result = true;
-        for(Object singleResult: valueList.getValueObjects()) {
-            Boolean singleBoolean = (Boolean) singleResult;
-            if(singleBoolean != null && !singleBoolean) {
-                result = false;
-            }
-        }
+        boolean result = valueList.getSingleBooleanResult();
         assertionResult.setResult(result);
         assertionResult.setRawResult(valueList);
         evaluationResult.addAssertionResult(assertionResult);
-        if(expression instanceof BinaryOperator) {
-            BinaryOperator binaryExpression = (BinaryOperator) expression;
-            if (binaryExpression.getOperator() == OperatorKind.eq && binaryExpression.getLeftOperand() instanceof  ModelReference) {
-                //matches the form /path/to/something = 3 + 5 * /value[id23]
-                ModelReference pathToSet = (ModelReference) binaryExpression.getLeftOperand();
-
-                setPathsToValues(pathToSet.getPath(), ruleElementValues.get(binaryExpression.getRightOperand()));
-            }
+        if(!assertionResult.getResult()) {
+            fixableAssertionsChecker.checkAssertionForFixablePatterns(evaluationResult, expression, 0);
         }
-        //TODO: If expression matches:
-        //1. path = expression: set path value to value
-        //2. exists path: mark existence in form (Only for usage in implies ...)
-        //3. not exists path: mark existence in form (Only for usage in implies ...)
+
 
         //before re-evaluation, reset any overridden existence from evaluation?
     }
 
-    private void setPathsToValues(String path, ValueList value) {
-        logger.info("path {} set to value {} ", path, value);
-        evaluationResult.setSetPathValue(path, value);
-    }
+
+
 
     public EvaluationResult getEvaluationResult() {
         return evaluationResult;

@@ -129,4 +129,19 @@ public class ValueList {
         }
         return result;
     }
+
+    /**
+     * If this is a list of booleans and at least one of the values is false, return false. return true if all values are true
+     * @param valueList
+     * @return
+     */
+    public boolean getSingleBooleanResult() {
+        for(Value singleResult: values) {
+            Boolean singleBoolean = (Boolean) singleResult.getValue();
+            if(singleBoolean != null && !singleBoolean) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

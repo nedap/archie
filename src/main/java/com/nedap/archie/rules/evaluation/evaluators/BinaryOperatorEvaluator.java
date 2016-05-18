@@ -12,6 +12,7 @@ import com.nedap.archie.rules.evaluation.ValueList;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -87,7 +88,7 @@ public class BinaryOperatorEvaluator implements Evaluator<BinaryOperator> {
         ValueList leftValues = evaluation.evaluate(statement.getLeftOperand());
         ValueList rightValues = evaluation.evaluate(statement.getRightOperand());
 
-        ValueList possibleNullResult = checkAndHandleNull(evaluation, statement, leftValues, rightValues);
+        ValueList possibleNullResult = checkAndHandleNull(leftValues, rightValues);
         if(possibleNullResult != null) {
             possibleNullResult.setType(PrimitiveType.Boolean);
             return possibleNullResult;
@@ -150,7 +151,7 @@ public class BinaryOperatorEvaluator implements Evaluator<BinaryOperator> {
         ValueList rightValues = evaluation.evaluate(statement.getRightOperand());
 
 
-        ValueList possibleNullResult = checkAndHandleNull(evaluation, statement, leftValues, rightValues);
+        ValueList possibleNullResult = checkAndHandleNull(leftValues, rightValues);
         if(possibleNullResult != null) {
             possibleNullResult.setType(PrimitiveType.Boolean);
             return possibleNullResult;
@@ -185,7 +186,7 @@ public class BinaryOperatorEvaluator implements Evaluator<BinaryOperator> {
 
     }
 
-    public ValueList checkAndHandleNull(RuleEvaluation evaluation, BinaryOperator statement, ValueList leftValues, ValueList rightValues) {
+    public ValueList checkAndHandleNull(ValueList leftValues, ValueList rightValues) {
         ValueList result = new ValueList();
         if (leftValues.isEmpty() && rightValues.isEmpty()) {
             //this solves part of the null-valued expression problem. But certainly not all.
@@ -267,12 +268,12 @@ public class BinaryOperatorEvaluator implements Evaluator<BinaryOperator> {
         ValueList rightValues = evaluation.evaluate(statement.getRightOperand());
 
 
-        ValueList possibleNullResult = checkAndHandleNull(evaluation, statement, leftValues, rightValues);
+        ValueList possibleNullResult = handlePossibleNullRelOpResult(statement, leftValues, rightValues);
         if(possibleNullResult != null) {
-            possibleNullResult.setType(PrimitiveType.Boolean);
+
             return possibleNullResult;
         } else {
-            checkIsNumber(leftValues, rightValues);
+            checkIsNumberOrNull(leftValues, rightValues);
 
             ValueList result = new ValueList();
             result.setType(PrimitiveType.Boolean);
@@ -285,23 +286,48 @@ public class BinaryOperatorEvaluator implements Evaluator<BinaryOperator> {
         }
     }
 
+    private ValueList handlePossibleNullRelOpResult(BinaryOperator statement, ValueList leftValues, ValueList rightValues) {
+        switch(statement.getOperator()) {
+            case eq:
+            case ne:
+                //if null, can be true or false depending on checks
+                return null;
+            case gt:
+            case ge:
+            case lt:
+            case le:
+                //if null, result undefined, return null
+                return checkAndHandleNull(leftValues, rightValues);
+            default: throw new IllegalStateException("unknown relop operator");
+        }
+
+    }
+
     private Value evaluateMultipleValuesRelOp(BinaryOperator statement, ValueList leftValues, ValueList rightValues) {
 
-        List<String> allPaths = new ArrayList<>();
         for(Value leftValue:leftValues.getValues()) {
             for (Value rightValue:rightValues.getValues()) {
                 Value evaluatedRelOp = evaluateRelOp(statement, leftValue.getValue(), rightValue.getValue(), getPaths(leftValue, rightValue));
-                allPaths.addAll(evaluatedRelOp.getPaths());
                 if (((Boolean) evaluatedRelOp.getValue()).booleanValue()) {
                     return evaluatedRelOp;
                 }
             }
         }
-        return new Value(false, allPaths);
+        return new Value(false, getAllPaths(leftValues, rightValues));
+    }
+
+    private List<String> getAllPaths(ValueList leftValue, ValueList rightValue) {
+        List<String> allPaths = new ArrayList<>();
+        allPaths.addAll(leftValue.getAllPaths());
+        allPaths.addAll(rightValue.getAllPaths());
+        return allPaths;
     }
 
     private Value evaluateRelOp(BinaryOperator statement, Object leftValue, Object rightValue, List<String> paths) {
-        if(leftValue instanceof Long && rightValue instanceof Long) {
+        if(leftValue == null || rightValue == null) {
+            return new Value(evaluateNullRelOp(statement.getOperator(), leftValue, rightValue), paths);
+        }
+        else if(leftValue instanceof Long && rightValue instanceof Long) {
             return new Value(evaluateIntegerRelOp(statement.getOperator(),
                     (Long) leftValue,
                     (Long) rightValue
@@ -311,6 +337,27 @@ public class BinaryOperatorEvaluator implements Evaluator<BinaryOperator> {
                     convertToDouble(leftValue),
                     convertToDouble(rightValue)
             ), paths);
+        }
+    }
+
+    private Boolean evaluateNullRelOp(OperatorKind operator, Object leftValue, Object rightValue) {
+        switch(operator) {
+            case eq:
+                if(leftValue == null && rightValue == null) {
+                    return true;
+                }
+                if(leftValue == null && rightValue != null || leftValue != null && rightValue == null) {
+                    return false;
+                }
+            case ne:
+                if(leftValue == null && rightValue == null) {
+                    return false;
+                }
+                if(leftValue == null && rightValue != null || leftValue != null && rightValue == null) {
+                    return true;
+                }
+            default:
+                return null;
         }
     }
 
@@ -362,6 +409,19 @@ public class BinaryOperatorEvaluator implements Evaluator<BinaryOperator> {
         }
         if(!booleanTypes.contains(rightValueList.getType())) {
             throw new RuntimeException("not a boolean with boolean operator: " + rightValueList.getType());//TODO: proper errors
+        }
+    }
+
+    private void checkIsNumberOrNull(ValueList leftValueList, ValueList rightValueList) {
+        if(leftValueList.isEmpty() || rightValueList.isEmpty()) {
+            return;
+        }
+        EnumSet numberTypes = EnumSet.of(PrimitiveType.Integer, PrimitiveType.Real);
+        if(!numberTypes.contains(leftValueList.getType())) {
+            throw new RuntimeException("Type supplied to operator should be a number, but it is not: " + leftValueList.getType());//TODO: proper errors
+        }
+        if(!numberTypes.contains(rightValueList.getType())) {
+            throw new RuntimeException("Type supplied to operator should be a number, but it is not: " + rightValueList.getType());//TODO: proper errors
         }
     }
 

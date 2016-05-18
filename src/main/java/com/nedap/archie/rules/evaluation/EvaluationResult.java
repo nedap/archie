@@ -63,4 +63,12 @@ public class EvaluationResult {
         }
 
     }
+
+    public void addPathThatMustExist(String path) {
+        pathsThatMustExist.add(path);
+    }
+
+    public void addPathThatMustNotExist(String path) {
+        pathsThatMustNotExist.add(path);
+    }
 }
