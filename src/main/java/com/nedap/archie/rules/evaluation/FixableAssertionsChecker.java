@@ -1,17 +1,24 @@
 package com.nedap.archie.rules.evaluation;
 
 import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Lists;
+import com.nedap.archie.query.RMObjectWithPath;
 import com.nedap.archie.rules.BinaryOperator;
 import com.nedap.archie.rules.Expression;
 import com.nedap.archie.rules.ForAllStatement;
 import com.nedap.archie.rules.ModelReference;
 import com.nedap.archie.rules.OperatorKind;
+import com.nedap.archie.rules.PrimitiveType;
 import com.nedap.archie.rules.RuleElement;
 import com.nedap.archie.rules.UnaryOperator;
+import com.nedap.archie.rules.evaluation.evaluators.ModelReferenceEvaluator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.xml.xpath.XPathExpressionException;
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Checks evaluated assertions on what can be fixed automatically, and how this can be done.
@@ -24,8 +31,11 @@ class FixableAssertionsChecker {
 
     ArrayListMultimap<RuleElement, ValueList> ruleElementValues;
 
+    private VariableMap forAllVariables;
+
     protected FixableAssertionsChecker(ArrayListMultimap<RuleElement, ValueList> ruleElementValues) {
         this.ruleElementValues = ruleElementValues;
+        forAllVariables = new VariableMap();
     }
 
     /**
@@ -59,7 +69,7 @@ class FixableAssertionsChecker {
                     //matches exists /path/to/value
                     //TODO: this shows that a specific archetype path must exist. But it clould just as well be a path within a specific node. So find a way to get the RM Path
                     //pointing to the right node here
-                    evaluationResult.addPathThatMustExist(((ModelReference) binaryExpression.getRightOperand()).getPath());
+                    evaluationResult.addPathThatMustExist(resolveModelReference((ModelReference) binaryExpression.getRightOperand()));
                 }
             } else if (binaryExpression.getOperator() == OperatorKind.implies) {
                 handleImplies(evaluationResult, index, binaryExpression);
@@ -80,7 +90,7 @@ class FixableAssertionsChecker {
             BinaryOperator binaryOperator = (BinaryOperator) operand;
             if(binaryOperator.getRightOperand() instanceof  ModelReference) {
                 //matches exists /path/to/value
-                evaluationResult.addPathThatMustNotExist(((ModelReference) binaryOperator.getRightOperand()).getPath());
+                evaluationResult.addPathThatMustNotExist(resolveModelReference((ModelReference) binaryOperator.getRightOperand()));
             }
         }
     }
@@ -98,7 +108,7 @@ class FixableAssertionsChecker {
         //matches the form /path/to/something = 3 + 5 * /value[id23]
         ValueList valueList = this.ruleElementValues.get(binaryExpression.getRightOperand()).get(index);
         ModelReference pathToSet = (ModelReference) binaryExpression.getLeftOperand();
-        setPathsToValues(evaluationResult, pathToSet.getPath(), valueList);
+        setPathsToValues(evaluationResult, resolveModelReference(pathToSet), valueList);
     }
 
 
@@ -108,12 +118,58 @@ class FixableAssertionsChecker {
         ForAllStatement forAllStatement = (ForAllStatement) expression;
         Collection<ValueList> valueLists = ruleElementValues.get(forAllStatement.getAssertion());
         int i = 0;
+
+        ValueList pathExpressionValues = ruleElementValues.get(forAllStatement.getPathExpression()).get(0);
         for(ValueList valueList:valueLists) {
             if(!valueList.getSingleBooleanResult()) {
+                //TODO: this code is a bit hard to understand
+
+                //set the variables to what they were during the for all evaluation.
+                //this is a bit of code duplication from the ForAllEvaluator. I think improvement is possible in this place
+                Value value = pathExpressionValues.get(i);
+                Object context = value.getValue();
+                String path = (String) value.getPaths().get(0);
+
+                // according to the latest openEHR docs, this should be 'objectreference'.
+                // We could change the name of the java class
+
+                RMObjectWithPath rmObjectWithPath = new RMObjectWithPath(context, path);
+                ValueList variableValue = new ValueList(rmObjectWithPath);
+                variableValue.setType(PrimitiveType.ObjectReference);
+
+                forAllVariables.put(forAllStatement.getVariableName(), variableValue);
                 checkAssertionForFixablePatterns(evaluationResult, forAllStatement.getRightOperand(), i);
             }
             i++;
         }
+        forAllVariables.put(forAllStatement.getVariableName(), null);
+    }
+
+    private String resolveModelReference(ModelReference statement) {
+        String variable = statement.getVariableReferencePrefix();
+        String pathPrefix = "";
+        if(variable != null) {
+            //resolve variable and add path prefix
+            ValueList value = forAllVariables.get(variable);
+            if(value.size() > 1) {
+                throw new IllegalStateException("");
+            } else if (value.size() == 1) {
+                if(value.getType() == PrimitiveType.ObjectReference) {
+                    RMObjectWithPath reference = (RMObjectWithPath) value.get(0).getValue();
+                    pathPrefix = reference.getPath();
+                } else {
+                    //TODO: this is not correct
+                    if(value.get(0).getPaths().size() > 1) {
+                        throw new IllegalStateException("");
+                    }
+
+                    pathPrefix = (String) value.get(0).getPaths().get(0);
+                }
+
+            } //0: do nothing, empty value, no path prefix
+        }
+
+        return pathPrefix + statement.getPath();
     }
 
     private void setPathsToValues(EvaluationResult evaluationResult, String path, ValueList value) {

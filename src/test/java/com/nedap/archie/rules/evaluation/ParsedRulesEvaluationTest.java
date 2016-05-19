@@ -6,9 +6,11 @@ import com.nedap.archie.rm.archetypes.Pathable;
 import com.nedap.archie.rm.composition.Observation;
 import com.nedap.archie.rm.datavalues.quantity.DvQuantity;
 import com.nedap.archie.testutil.TestUtil;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Iterator;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -109,31 +111,7 @@ public class ParsedRulesEvaluationTest {
         archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("multiplicity.adls"));
         RuleEvaluation ruleEvaluation = new RuleEvaluation(archetype);
 
-        Pathable root = (Pathable) testUtil.constructEmptyRMObject(archetype.getDefinition());
-
-        {
-            DvQuantity systolic = (DvQuantity) root.itemAtPath("/data[id2]/events[id3]/data[id4]/items[id5]/value[id13]");
-            systolic.setMagnitude(76d);
-            DvQuantity diastolic = (DvQuantity) root.itemAtPath("/data[id2]/events[id3]/data[id4]/items[id6]/value[id14]");
-            diastolic.setMagnitude(80d);
-            //this is fine, because "blood_pressure_valid: $systolic > $diastolic - 5"
-        }
-
-
-        //add a second event
-        {
-            Pathable root2 = (Pathable) testUtil.constructEmptyRMObject(archetype.getDefinition());
-
-            DvQuantity systolic = (DvQuantity) root2.itemAtPath("/data[id2]/events[id3]/data[id4]/items[id5]/value[id13]");
-            systolic.setMagnitude(60d);
-            DvQuantity diastolic = (DvQuantity) root2.itemAtPath("/data[id2]/events[id3]/data[id4]/items[id6]/value[id14]");
-            diastolic.setMagnitude(80d);
-            Observation observation = (Observation) root;
-            Observation observation2 = (Observation) root2;
-            observation.getData().addEvent(observation2.getData().getEvents().get(0));
-            //a strange reading that should lead to a failure. However, when reading 1 is correct, the rules specify everything is fine
-            //because default xpath relop (>=, <, ==, etc) syntax is 'some', not 'every'/'for_all'
-        }
+        Pathable root = constructTwoBloodPressureObservations();
 
         ruleEvaluation.evaluate(root, archetype.getRules().getRules());
 
@@ -150,6 +128,20 @@ public class ParsedRulesEvaluationTest {
         archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("for_all.adls"));
         RuleEvaluation ruleEvaluation = new RuleEvaluation(archetype);
 
+        Pathable root = constructTwoBloodPressureObservations();
+
+        ruleEvaluation.evaluate(root, archetype.getRules().getRules());
+
+        List<AssertionResult> assertionResults = ruleEvaluation.getEvaluationResult().getAssertionResults();
+        assertEquals("one assertion should have been checked", 1, assertionResults.size());
+        AssertionResult result = assertionResults.get(0);
+
+        assertEquals("the assertion should have succeeded", false, result.getResult());
+        assertEquals("the assertion tag should be correct", "blood_pressure_valid", result.getTag());
+    }
+
+    @NotNull
+    public Pathable constructTwoBloodPressureObservations() {
         Pathable root = (Pathable) testUtil.constructEmptyRMObject(archetype.getDefinition());
 
         {
@@ -174,15 +166,7 @@ public class ParsedRulesEvaluationTest {
             observation.getData().addEvent(observation2.getData().getEvents().get(0));
             //a strange reading that will lead to a failure
         }
-
-        ruleEvaluation.evaluate(root, archetype.getRules().getRules());
-
-        List<AssertionResult> assertionResults = ruleEvaluation.getEvaluationResult().getAssertionResults();
-        assertEquals("one assertion should have been checked", 1, assertionResults.size());
-        AssertionResult result = assertionResults.get(0);
-
-        assertEquals("the assertion should have succeeded", false, result.getResult());
-        assertEquals("the assertion tag should be correct", "blood_pressure_valid", result.getTag());
+        return root;
     }
 
 
@@ -202,8 +186,25 @@ public class ParsedRulesEvaluationTest {
         assertFalse(evaluationResult.getAssertionResults().get(0).getResult());
         assertEquals(1, evaluationResult.getSetPathValues().size());
         assertEquals(20.0d, (Double) evaluationResult.getSetPathValues().values().iterator().next().getValue(), 0.0001d);
+    }
+
+    @Test
+    public void forAllCalculatedValues() throws Exception {
+        archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("for_all_calculated_path_values.adls"));
+        RuleEvaluation ruleEvaluation = new RuleEvaluation(archetype);
+
+        Pathable root = constructTwoBloodPressureObservations();
 
 
+        //4 and -20 (sorry about the strange input)
+
+        EvaluationResult evaluationResult = ruleEvaluation.evaluate(root, archetype.getRules().getRules());
+        assertEquals(1, evaluationResult.getAssertionResults().size());
+        assertFalse(evaluationResult.getAssertionResults().get(0).getResult());
+        assertEquals(2, evaluationResult.getSetPathValues().size());
+        Iterator<Value> setValuesIterator = evaluationResult.getSetPathValues().values().iterator();
+        assertEquals(-4.0d, (Double) setValuesIterator.next().getValue(), 0.0001d);
+        assertEquals(-20.0d, (Double) setValuesIterator.next().getValue(), 0.0001d);
     }
 
 
