@@ -195,8 +195,7 @@ public class ParsedRulesEvaluationTest {
 
         Pathable root = constructTwoBloodPressureObservations();
 
-
-        //4 and -20 (sorry about the strange input)
+        //-4 and -20 (sorry about the strange input)
 
         EvaluationResult evaluationResult = ruleEvaluation.evaluate(root, archetype.getRules().getRules());
         assertEquals(1, evaluationResult.getAssertionResults().size());
@@ -205,6 +204,27 @@ public class ParsedRulesEvaluationTest {
         Iterator<Value> setValuesIterator = evaluationResult.getSetPathValues().values().iterator();
         assertEquals(-4.0d, (Double) setValuesIterator.next().getValue(), 0.0001d);
         assertEquals(-20.0d, (Double) setValuesIterator.next().getValue(), 0.0001d);
+    }
+
+    @Test
+    public void exists() throws Exception {
+        archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("exists.adls"));
+        RuleEvaluation ruleEvaluation = new RuleEvaluation(archetype);
+
+        Pathable root = (Pathable) testUtil.constructEmptyRMObject(archetype.getDefinition());
+
+        EvaluationResult evaluationResult = ruleEvaluation.evaluate(root, archetype.getRules().getRules());
+        System.out.println("test: " + evaluationResult);
+    }
+
+    @Test
+    public void notExists() throws Exception {
+
+    }
+
+    @Test
+    public void forAllExists() throws Exception {
+
     }
 
 
