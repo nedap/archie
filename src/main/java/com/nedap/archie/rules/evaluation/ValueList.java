@@ -144,4 +144,13 @@ public class ValueList {
         }
         return true;
     }
+
+    public boolean containsOnlyNullValues() {
+        for(Value value:values) {
+            if(!value.isNull()) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

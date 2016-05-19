@@ -48,23 +48,22 @@ public class BinaryOperatorEvaluator implements Evaluator<BinaryOperator> {
                 return evaluateBooleanConstraint(evaluation, statement);
             case implies:
                 return evaluateImplies(evaluation, statement);
-                //for_all("for_all", "∀"), exists("exists" ,"∃"),;
+            //for all is not listed here; it has more information that just two operands, so it has its own evaluator
+            //not and exists are unary operators and not handled here
         }
         throw new RuntimeException("operation " + statement.getOperator() + " not yet supported");
     }
 
     private ValueList evaluateImplies(RuleEvaluation evaluation, BinaryOperator statement) {
-        return null;//TODO
-//        Value leftValue = evaluation.evaluate(statement.getLeftOperand());
-//        if(leftValue.getType() != PrimitiveType.Boolean) {
-//            throw new IllegalArgumentException("left operand type should be boolean, but was " + leftValue.getType());
-//        }
-//        if((Boolean) leftValue.getValue()) {
-//            //we could use the tag from the overall statement, but not sure if we should
-//            Value rightValue = evaluation.evaluate(statement.getRightOperand());
-//            evaluation.assertionEvaluated(null /* no tag present here*/, statement.getRightOperand(), rightValue);
-//        }
-//        return leftValue;//i think?
+        ValueList leftValue = evaluation.evaluate(statement.getLeftOperand());
+        if(leftValue.getSingleBooleanResult()) {
+            ValueList rightValue  = evaluation.evaluate(statement.getRightOperand());
+            return rightValue;
+        } else {
+            //if the left operand evaluates to false, the entire result is true, to not violate the assertion
+            //not sure if this should be the case
+            return new ValueList(true, leftValue.getAllPaths());
+        }
     }
 
     private ValueList evaluateBooleanConstraint(RuleEvaluation evaluation, BinaryOperator statement) {
