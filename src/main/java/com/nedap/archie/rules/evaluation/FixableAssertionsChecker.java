@@ -62,15 +62,6 @@ class FixableAssertionsChecker {
             BinaryOperator binaryExpression = (BinaryOperator) expression;
             if (binaryExpression.getOperator() == OperatorKind.eq && binaryExpression.getLeftOperand() instanceof ModelReference) {
                 handlePathEquals(evaluationResult, expressionResult, binaryExpression, index);
-            } else if (binaryExpression.getOperator() == OperatorKind.exists) {
-                //TODO exists expressions
-
-                if(binaryExpression.getRightOperand() instanceof ModelReference) {
-                    //matches exists /path/to/value
-                    //TODO: this shows that a specific archetype path must exist. But it clould just as well be a path within a specific node. So find a way to get the RM Path
-                    //pointing to the right node here
-                    evaluationResult.addPathThatMustExist(resolveModelReference((ModelReference) binaryExpression.getRightOperand()));
-                }
             } else if (binaryExpression.getOperator() == OperatorKind.implies) {
                 handleImplies(evaluationResult, index, binaryExpression);
             }
@@ -79,6 +70,15 @@ class FixableAssertionsChecker {
             if(unaryOperator.getOperator() == OperatorKind.not) {
                 handleNot(evaluationResult, unaryOperator);
             }
+            if (unaryOperator.getOperator() == OperatorKind.exists) {
+                //TODO exists expressions
+                if (unaryOperator.getOperand() instanceof ModelReference) { //TODO: this could also be an objectreference
+                    //matches exists /path/to/value
+                    //TODO: this shows that a specific archetype path must exist. But it could just as well be a path within a specific node. So find a way to get the RM Path
+                    //pointing to the right node here
+                    evaluationResult.addPathThatMustExist(resolveModelReference((ModelReference) unaryOperator.getOperand()));
+                }
+            }
         }
 
         //TODO: not expressions, reversing the expected value?
@@ -86,11 +86,12 @@ class FixableAssertionsChecker {
 
     private void handleNot(EvaluationResult evaluationResult, UnaryOperator unaryOperator) {
         Expression operand = unaryOperator.getOperand();
-        if(operand instanceof BinaryOperator && ((BinaryOperator) operand).getOperator() == OperatorKind.exists) {
-            BinaryOperator binaryOperator = (BinaryOperator) operand;
-            if(binaryOperator.getRightOperand() instanceof  ModelReference) {
+        if(operand instanceof UnaryOperator && ((UnaryOperator) operand).getOperator() == OperatorKind.exists) {
+            UnaryOperator existsOperator = (UnaryOperator) operand;
+            if(existsOperator.getOperand() instanceof  ModelReference) { //TODO: this could also be an objectreference
                 //matches exists /path/to/value
-                evaluationResult.addPathThatMustNotExist(resolveModelReference((ModelReference) binaryOperator.getRightOperand()));
+                List<ValueList> valueLists = ruleElementValues.get(existsOperator);
+                evaluationResult.addPathThatMustNotExist(resolveModelReference((ModelReference) existsOperator.getOperand()));
             }
         }
     }

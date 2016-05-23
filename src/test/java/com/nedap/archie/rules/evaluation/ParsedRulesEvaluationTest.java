@@ -207,27 +207,84 @@ public class ParsedRulesEvaluationTest {
     }
 
     @Test
-    public void exists() throws Exception {
+    public void existsSucceeded() throws Exception {
+        archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("exists.adls"));
+        RuleEvaluation ruleEvaluation = new RuleEvaluation(archetype);
+
+        Pathable root = constructTwoBloodPressureObservations();
+
+        EvaluationResult evaluationResult = ruleEvaluation.evaluate(root, archetype.getRules().getRules());
+        assertEquals(3, evaluationResult.getAssertionResults().size());
+        for(AssertionResult assertionResult:evaluationResult.getAssertionResults()) {
+            assertTrue(assertionResult.getResult());//TODO: check paths that caused this
+        }
+
+        assertEquals(0, evaluationResult.getPathsThatMustExist().size());
+        assertEquals(0, evaluationResult.getPathsThatMustNotExist().size());
+        assertEquals(0, evaluationResult.getSetPathValues().size());
+
+    }
+
+
+    @Test
+    public void existsFailed() throws Exception {
         archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("exists.adls"));
         RuleEvaluation ruleEvaluation = new RuleEvaluation(archetype);
 
         Pathable root = (Pathable) testUtil.constructEmptyRMObject(archetype.getDefinition());
 
         EvaluationResult evaluationResult = ruleEvaluation.evaluate(root, archetype.getRules().getRules());
-        System.out.println("test: " + evaluationResult);
+        assertEquals(3, evaluationResult.getAssertionResults().size());
+        for(AssertionResult assertionResult:evaluationResult.getAssertionResults()) {
+            assertFalse(assertionResult.getResult());
+        }
+
+        assertEquals(3, evaluationResult.getPathsThatMustExist().size());
+        assertEquals("/data[id2]/events[id3]/data[id4]/items[id5]/value/magnitude", evaluationResult.getPathsThatMustExist().get(0));
+        assertEquals("/data[id2]/events[id3]/data[id4]/items[id6]/value/magnitude", evaluationResult.getPathsThatMustExist().get(1));
+        assertEquals("/data[id2, 1]/events[id3, 1]/data[id4]/items[id5]/value/magnitude", evaluationResult.getPathsThatMustExist().get(2));
+        assertEquals(0, evaluationResult.getPathsThatMustNotExist().size());
+        assertEquals(0, evaluationResult.getSetPathValues().size());
+
     }
 
     @Test
-    public void notExists() throws Exception {
+    public void notExistsSucceeded() throws Exception {
+        archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("not_exists.adls"));
+        RuleEvaluation ruleEvaluation = new RuleEvaluation(archetype);
+
+        Pathable root = (Pathable) testUtil.constructEmptyRMObject(archetype.getDefinition());
+
+        EvaluationResult evaluationResult = ruleEvaluation.evaluate(root, archetype.getRules().getRules());
+        assertEquals(3, evaluationResult.getAssertionResults().size());
+        for(AssertionResult assertionResult:evaluationResult.getAssertionResults()) {
+            assertTrue(assertionResult.getResult());
+        }
+
+        assertEquals(0, evaluationResult.getPathsThatMustExist().size());
+        assertEquals(0, evaluationResult.getPathsThatMustNotExist().size());
+        assertEquals(0, evaluationResult.getSetPathValues().size());
 
     }
 
     @Test
-    public void forAllExists() throws Exception {
+    public void notExistsFailed() throws Exception {
+        archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("not_exists.adls"));
+        RuleEvaluation ruleEvaluation = new RuleEvaluation(archetype);
+
+        Pathable root = constructTwoBloodPressureObservations();
+
+        EvaluationResult evaluationResult = ruleEvaluation.evaluate(root, archetype.getRules().getRules());
+        assertEquals(3, evaluationResult.getAssertionResults().size());
+        for(AssertionResult assertionResult:evaluationResult.getAssertionResults()) {
+            assertFalse(assertionResult.getResult());
+        }
+
+        assertEquals(0, evaluationResult.getPathsThatMustExist().size());
+        assertEquals(4, evaluationResult.getPathsThatMustNotExist().size());
+        assertEquals(0, evaluationResult.getSetPathValues().size());
 
     }
-
-
 
 
 }
