@@ -11,12 +11,12 @@ import com.nedap.archie.rules.OperatorKind;
 import com.nedap.archie.rules.PrimitiveType;
 import com.nedap.archie.rules.RuleElement;
 import com.nedap.archie.rules.UnaryOperator;
-import com.nedap.archie.rules.evaluation.evaluators.ModelReferenceEvaluator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.xml.xpath.XPathExpressionException;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -62,35 +62,36 @@ class FixableAssertionsChecker {
             BinaryOperator binaryExpression = (BinaryOperator) expression;
             if (binaryExpression.getOperator() == OperatorKind.eq && binaryExpression.getLeftOperand() instanceof ModelReference) {
                 handlePathEquals(evaluationResult, expressionResult, binaryExpression, index);
-            } else if (binaryExpression.getOperator() == OperatorKind.exists) {
-                //TODO exists expressions
-
-                if(binaryExpression.getRightOperand() instanceof ModelReference) {
-                    //matches exists /path/to/value
-                    //TODO: this shows that a specific archetype path must exist. But it clould just as well be a path within a specific node. So find a way to get the RM Path
-                    //pointing to the right node here
-                    evaluationResult.addPathThatMustExist(resolveModelReference((ModelReference) binaryExpression.getRightOperand()));
-                }
             } else if (binaryExpression.getOperator() == OperatorKind.implies) {
                 handleImplies(evaluationResult, index, binaryExpression);
             }
         } else if (expression instanceof UnaryOperator) {
             UnaryOperator unaryOperator = (UnaryOperator) expression;
             if(unaryOperator.getOperator() == OperatorKind.not) {
-                handleNot(evaluationResult, unaryOperator);
+                handleNot(evaluationResult, unaryOperator, index);
+            }
+            if (unaryOperator.getOperator() == OperatorKind.exists) {
+                //TODO exists expressions
+                if (unaryOperator.getOperand() instanceof ModelReference) { //TODO: this could also be an objectreference
+                    //matches exists /path/to/value
+                    //TODO: this shows that a specific archetype path must exist. But it could just as well be a path within a specific node. So find a way to get the RM Path
+                    //pointing to the right node here
+                    evaluationResult.addPathThatMustExist(resolveModelReference((ModelReference) unaryOperator.getOperand()));
+                }
             }
         }
 
         //TODO: not expressions, reversing the expected value?
     }
 
-    private void handleNot(EvaluationResult evaluationResult, UnaryOperator unaryOperator) {
+    private void handleNot(EvaluationResult evaluationResult, UnaryOperator unaryOperator, int index) {
         Expression operand = unaryOperator.getOperand();
-        if(operand instanceof BinaryOperator && ((BinaryOperator) operand).getOperator() == OperatorKind.exists) {
-            BinaryOperator binaryOperator = (BinaryOperator) operand;
-            if(binaryOperator.getRightOperand() instanceof  ModelReference) {
+        if(operand instanceof UnaryOperator && ((UnaryOperator) operand).getOperator() == OperatorKind.exists) {
+            UnaryOperator existsOperator = (UnaryOperator) operand;
+            if(existsOperator.getOperand() instanceof  ModelReference) { //TODO: this could also be an objectreference
                 //matches exists /path/to/value
-                evaluationResult.addPathThatMustNotExist(resolveModelReference((ModelReference) binaryOperator.getRightOperand()));
+                List<ValueList> valueLists = ruleElementValues.get(existsOperator);
+                evaluationResult.addPathsThatMustNotExist(resolveModelReferenceNonNull((ModelReference) existsOperator.getOperand(), index));
             }
         }
     }
@@ -170,6 +171,18 @@ class FixableAssertionsChecker {
         }
 
         return pathPrefix + statement.getPath();
+    }
+
+    private List<String> resolveModelReferenceNonNull(ModelReference statement, int index) {
+
+        List<ValueList> values = ruleElementValues.get(statement);
+        if(index > values.size()) {
+            return Collections.EMPTY_LIST;
+        } else {
+            ValueList valueList = values.get(index);
+            return valueList.getAllPaths();
+        }
+
     }
 
     private void setPathsToValues(EvaluationResult evaluationResult, String path, ValueList value) {

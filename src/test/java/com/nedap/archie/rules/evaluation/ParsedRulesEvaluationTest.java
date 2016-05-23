@@ -169,6 +169,58 @@ public class ParsedRulesEvaluationTest {
         return root;
     }
 
+    @NotNull
+    public Pathable constructTwoBloodPressureObservationsOneEmptySystolic() {
+        Pathable root = (Pathable) testUtil.constructEmptyRMObject(archetype.getDefinition());
+
+        {
+            DvQuantity systolic = (DvQuantity) root.itemAtPath("/data[id2]/events[id3]/data[id4]/items[id5]/value[id13]");
+            systolic.setMagnitude(120d);
+            DvQuantity diastolic = (DvQuantity) root.itemAtPath("/data[id2]/events[id3]/data[id4]/items[id6]/value[id14]");
+            diastolic.setMagnitude(80d);
+        }
+
+
+        {
+            Pathable root2 = (Pathable) testUtil.constructEmptyRMObject(archetype.getDefinition());
+
+            DvQuantity systolic = (DvQuantity) root2.itemAtPath("/data[id2]/events[id3]/data[id4]/items[id5]/value[id13]");
+            //systolic.setMagnitude(60d);
+            DvQuantity diastolic = (DvQuantity) root2.itemAtPath("/data[id2]/events[id3]/data[id4]/items[id6]/value[id14]");
+            diastolic.setMagnitude(80d);
+            Observation observation = (Observation) root;
+            Observation observation2 = (Observation) root2;
+            observation.getData().addEvent(observation2.getData().getEvents().get(0));
+        }
+        return root;
+    }
+
+    @NotNull
+    public Pathable constructTwoBloodPressureObservationsOneEmptySystolicNoDiastolic() {
+        Pathable root = (Pathable) testUtil.constructEmptyRMObject(archetype.getDefinition());
+
+        {
+            DvQuantity systolic = (DvQuantity) root.itemAtPath("/data[id2]/events[id3]/data[id4]/items[id5]/value[id13]");
+            systolic.setMagnitude(120d);
+            DvQuantity diastolic = (DvQuantity) root.itemAtPath("/data[id2]/events[id3]/data[id4]/items[id6]/value[id14]");
+        }
+
+
+        //add a second event
+        {
+            Pathable root2 = (Pathable) testUtil.constructEmptyRMObject(archetype.getDefinition());
+
+            DvQuantity systolic = (DvQuantity) root2.itemAtPath("/data[id2]/events[id3]/data[id4]/items[id5]/value[id13]");
+            //systolic.setMagnitude(60d);
+            DvQuantity diastolic = (DvQuantity) root2.itemAtPath("/data[id2]/events[id3]/data[id4]/items[id6]/value[id14]");
+            Observation observation = (Observation) root;
+            Observation observation2 = (Observation) root2;
+            observation.getData().addEvent(observation2.getData().getEvents().get(0));
+        }
+        return root;
+    }
+
+
 
     @Test
     public void calculatedPathValues() throws Exception {
@@ -195,8 +247,7 @@ public class ParsedRulesEvaluationTest {
 
         Pathable root = constructTwoBloodPressureObservations();
 
-
-        //4 and -20 (sorry about the strange input)
+        //-4 and -20 (sorry about the strange input)
 
         EvaluationResult evaluationResult = ruleEvaluation.evaluate(root, archetype.getRules().getRules());
         assertEquals(1, evaluationResult.getAssertionResults().size());
@@ -207,7 +258,152 @@ public class ParsedRulesEvaluationTest {
         assertEquals(-20.0d, (Double) setValuesIterator.next().getValue(), 0.0001d);
     }
 
+    @Test
+    public void existsSucceeded() throws Exception {
+        archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("exists.adls"));
+        RuleEvaluation ruleEvaluation = new RuleEvaluation(archetype);
 
+        Pathable root = constructTwoBloodPressureObservations();
+
+        EvaluationResult evaluationResult = ruleEvaluation.evaluate(root, archetype.getRules().getRules());
+        assertEquals(3, evaluationResult.getAssertionResults().size());
+        for(AssertionResult assertionResult:evaluationResult.getAssertionResults()) {
+            assertTrue(assertionResult.getResult());//TODO: check paths that caused this
+        }
+
+        assertEquals(0, evaluationResult.getPathsThatMustExist().size());
+        assertEquals(0, evaluationResult.getPathsThatMustNotExist().size());
+        assertEquals(0, evaluationResult.getSetPathValues().size());
+
+    }
+
+
+    @Test
+    public void existsFailed() throws Exception {
+        archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("exists.adls"));
+        RuleEvaluation ruleEvaluation = new RuleEvaluation(archetype);
+
+        Pathable root = (Pathable) testUtil.constructEmptyRMObject(archetype.getDefinition());
+
+        EvaluationResult evaluationResult = ruleEvaluation.evaluate(root, archetype.getRules().getRules());
+        assertEquals(3, evaluationResult.getAssertionResults().size());
+        for(AssertionResult assertionResult:evaluationResult.getAssertionResults()) {
+            assertFalse(assertionResult.getResult());
+        }
+
+        assertEquals(3, evaluationResult.getPathsThatMustExist().size());
+        assertEquals("/data[id2]/events[id3]/data[id4]/items[id5]/value/magnitude", evaluationResult.getPathsThatMustExist().get(0));
+        assertEquals("/data[id2]/events[id3]/data[id4]/items[id6]/value/magnitude", evaluationResult.getPathsThatMustExist().get(1));
+        assertEquals("/data[id2, 1]/events[id3, 1]/data[id4]/items[id5]/value/magnitude", evaluationResult.getPathsThatMustExist().get(2));
+        assertEquals(0, evaluationResult.getPathsThatMustNotExist().size());
+        assertEquals(0, evaluationResult.getSetPathValues().size());
+
+    }
+
+    @Test
+    public void notExistsSucceeded() throws Exception {
+        archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("not_exists.adls"));
+        RuleEvaluation ruleEvaluation = new RuleEvaluation(archetype);
+
+        Pathable root = (Pathable) testUtil.constructEmptyRMObject(archetype.getDefinition());
+
+        EvaluationResult evaluationResult = ruleEvaluation.evaluate(root, archetype.getRules().getRules());
+        assertEquals(3, evaluationResult.getAssertionResults().size());
+        for(AssertionResult assertionResult:evaluationResult.getAssertionResults()) {
+            assertTrue(assertionResult.getResult());
+        }
+
+        assertEquals(0, evaluationResult.getPathsThatMustExist().size());
+        assertEquals(0, evaluationResult.getPathsThatMustNotExist().size());
+        assertEquals(0, evaluationResult.getSetPathValues().size());
+
+    }
+
+    @Test
+    public void notExistsFailed() throws Exception {
+        archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("not_exists.adls"));
+        RuleEvaluation ruleEvaluation = new RuleEvaluation(archetype);
+
+        Pathable root = constructTwoBloodPressureObservations();
+
+        EvaluationResult evaluationResult = ruleEvaluation.evaluate(root, archetype.getRules().getRules());
+        assertEquals(3, evaluationResult.getAssertionResults().size());
+        for(AssertionResult assertionResult:evaluationResult.getAssertionResults()) {
+            assertFalse(assertionResult.getResult());
+        }
+
+        assertEquals(0, evaluationResult.getPathsThatMustExist().size());
+        assertEquals(6, evaluationResult.getPathsThatMustNotExist().size());
+        assertEquals(0, evaluationResult.getSetPathValues().size());
+
+    }
+
+    @Test
+    public void existsMixed() throws Exception {
+        archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("exists.adls"));
+        RuleEvaluation ruleEvaluation = new RuleEvaluation(archetype);
+
+        Pathable root = constructTwoBloodPressureObservationsOneEmptySystolic();
+
+        EvaluationResult evaluationResult = ruleEvaluation.evaluate(root, archetype.getRules().getRules());
+        assertEquals(3, evaluationResult.getAssertionResults().size());
+        assertTrue(evaluationResult.getAssertionResults().get(0).getResult());//exists systolic. At least one true means true, so true
+        assertTrue(evaluationResult.getAssertionResults().get(1).getResult()); //exists diastolic. This is always true
+        assertFalse(evaluationResult.getAssertionResults().get(2).getResult()); //for all exists systolic - this is not true, so failed
+
+
+        assertEquals(1, evaluationResult.getPathsThatMustExist().size());
+
+        assertEquals(0, evaluationResult.getPathsThatMustNotExist().size());
+        //this is the most specific path we can construct to the missing node, using the for_all variable context
+        //or should this actually be /data[id4,1]/items[id5,1]/value[1]/magnitude, because the structure does exist?
+        //that last thing might be hard to do.
+        assertTrue(evaluationResult.getPathsThatMustExist().contains("/data[id2, 1]/events[id3, 2]/data[id4]/items[id5]/value/magnitude"));
+        assertEquals(0, evaluationResult.getSetPathValues().size());
+
+    }
+
+    @Test
+    public void notExistsMixed() throws Exception {
+        archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("not_exists.adls"));
+        RuleEvaluation ruleEvaluation = new RuleEvaluation(archetype);
+
+        Pathable root = constructTwoBloodPressureObservationsOneEmptySystolic();
+
+        EvaluationResult evaluationResult = ruleEvaluation.evaluate(root, archetype.getRules().getRules());
+        assertEquals(3, evaluationResult.getAssertionResults().size());
+        for(AssertionResult assertionResult:evaluationResult.getAssertionResults()) {
+            assertFalse(assertionResult.getResult());
+        }
+
+        assertEquals(0, evaluationResult.getPathsThatMustExist().size());
+        assertEquals(4, evaluationResult.getPathsThatMustNotExist().size());
+        assertTrue(evaluationResult.getPathsThatMustNotExist().contains("/data[id2, 1]/events[id3, 1]/data[id4, 1]/items[id5, 1]/value[1]/magnitude[1]"));
+        assertTrue(evaluationResult.getPathsThatMustNotExist().contains("/data[id2, 1]/events[id3, 2]/data[id4, 1]/items[id6, 2]/value[1]/magnitude[1]"));
+        assertEquals(0, evaluationResult.getSetPathValues().size());
+
+    }
+
+    @Test
+    public void implies() throws Exception {
+        archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("implies.adls"));
+        RuleEvaluation ruleEvaluation = new RuleEvaluation(archetype);
+
+        Pathable root = constructTwoBloodPressureObservationsOneEmptySystolicNoDiastolic();
+
+        EvaluationResult evaluationResult = ruleEvaluation.evaluate(root, archetype.getRules().getRules());
+        assertEquals(2, evaluationResult.getAssertionResults().size());
+        for(AssertionResult assertionResult:evaluationResult.getAssertionResults()) {
+            assertFalse(assertionResult.getResult());
+        }
+
+        assertEquals(2, evaluationResult.getPathsThatMustExist().size());//one from the non-specific exists operator, one from the for_all that is very specific indeed
+        assertTrue(evaluationResult.getPathsThatMustExist().contains("/data[id2, 1]/events[id3, 1]/data[id4]/items[id6]/value/magnitude"));
+        assertTrue(evaluationResult.getPathsThatMustExist().contains("/data[id2]/events[id3]/data[id4]/items[id6]/value/magnitude"));
+        assertEquals(0, evaluationResult.getPathsThatMustNotExist().size());
+        assertEquals(0, evaluationResult.getSetPathValues().size());
+
+    }
 
 
 }

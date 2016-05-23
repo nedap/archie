@@ -49,4 +49,22 @@ public class AssertionResult {
     public void setResult(boolean result) {
         this.result = result;
     }
+
+
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("assertion");
+        stringBuilder.append(" ");
+        if(tag != null) {
+            stringBuilder.append(tag);
+        } else {
+            stringBuilder.append(assertion);
+        }
+        if(result) {
+            stringBuilder.append(" succeeded");
+        } else {
+            stringBuilder.append(" failed");
+        }
+        return stringBuilder.toString();
+    }
 }
