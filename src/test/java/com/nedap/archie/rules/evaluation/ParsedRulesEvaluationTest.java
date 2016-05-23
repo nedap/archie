@@ -281,7 +281,7 @@ public class ParsedRulesEvaluationTest {
         }
 
         assertEquals(0, evaluationResult.getPathsThatMustExist().size());
-        assertEquals(4, evaluationResult.getPathsThatMustNotExist().size());
+        assertEquals(6, evaluationResult.getPathsThatMustNotExist().size());
         assertEquals(0, evaluationResult.getSetPathValues().size());
 
     }

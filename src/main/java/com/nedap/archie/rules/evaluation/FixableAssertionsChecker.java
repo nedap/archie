@@ -11,12 +11,12 @@ import com.nedap.archie.rules.OperatorKind;
 import com.nedap.archie.rules.PrimitiveType;
 import com.nedap.archie.rules.RuleElement;
 import com.nedap.archie.rules.UnaryOperator;
-import com.nedap.archie.rules.evaluation.evaluators.ModelReferenceEvaluator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.xml.xpath.XPathExpressionException;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -68,7 +68,7 @@ class FixableAssertionsChecker {
         } else if (expression instanceof UnaryOperator) {
             UnaryOperator unaryOperator = (UnaryOperator) expression;
             if(unaryOperator.getOperator() == OperatorKind.not) {
-                handleNot(evaluationResult, unaryOperator);
+                handleNot(evaluationResult, unaryOperator, index);
             }
             if (unaryOperator.getOperator() == OperatorKind.exists) {
                 //TODO exists expressions
@@ -84,14 +84,14 @@ class FixableAssertionsChecker {
         //TODO: not expressions, reversing the expected value?
     }
 
-    private void handleNot(EvaluationResult evaluationResult, UnaryOperator unaryOperator) {
+    private void handleNot(EvaluationResult evaluationResult, UnaryOperator unaryOperator, int index) {
         Expression operand = unaryOperator.getOperand();
         if(operand instanceof UnaryOperator && ((UnaryOperator) operand).getOperator() == OperatorKind.exists) {
             UnaryOperator existsOperator = (UnaryOperator) operand;
             if(existsOperator.getOperand() instanceof  ModelReference) { //TODO: this could also be an objectreference
                 //matches exists /path/to/value
                 List<ValueList> valueLists = ruleElementValues.get(existsOperator);
-                evaluationResult.addPathThatMustNotExist(resolveModelReference((ModelReference) existsOperator.getOperand()));
+                evaluationResult.addPathsThatMustNotExist(resolveModelReferenceNonNull((ModelReference) existsOperator.getOperand(), index));
             }
         }
     }
@@ -171,6 +171,18 @@ class FixableAssertionsChecker {
         }
 
         return pathPrefix + statement.getPath();
+    }
+
+    private List<String> resolveModelReferenceNonNull(ModelReference statement, int index) {
+
+        List<ValueList> values = ruleElementValues.get(statement);
+        if(index > values.size()) {
+            return Collections.EMPTY_LIST;
+        } else {
+            ValueList valueList = values.get(index);
+            return valueList.getAllPaths();
+        }
+
     }
 
     private void setPathsToValues(EvaluationResult evaluationResult, String path, ValueList value) {

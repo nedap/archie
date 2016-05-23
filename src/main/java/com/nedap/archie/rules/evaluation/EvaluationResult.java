@@ -71,4 +71,8 @@ public class EvaluationResult {
     public void addPathThatMustNotExist(String path) {
         pathsThatMustNotExist.add(path);
     }
+
+    public void addPathsThatMustNotExist(List<String> path) {
+        pathsThatMustNotExist.addAll(path);
+    }
 }
