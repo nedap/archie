@@ -178,11 +178,9 @@ public class ParsedRulesEvaluationTest {
             systolic.setMagnitude(120d);
             DvQuantity diastolic = (DvQuantity) root.itemAtPath("/data[id2]/events[id3]/data[id4]/items[id6]/value[id14]");
             diastolic.setMagnitude(80d);
-            //this is fine, because "blood_pressure_valid: $systolic > $diastolic - 5"
         }
 
 
-        //add a second event
         {
             Pathable root2 = (Pathable) testUtil.constructEmptyRMObject(archetype.getDefinition());
 
@@ -193,10 +191,35 @@ public class ParsedRulesEvaluationTest {
             Observation observation = (Observation) root;
             Observation observation2 = (Observation) root2;
             observation.getData().addEvent(observation2.getData().getEvents().get(0));
-            //a strange reading that will lead to a failure
         }
         return root;
     }
+
+    @NotNull
+    public Pathable constructTwoBloodPressureObservationsOneEmptySystolicNoDiastolic() {
+        Pathable root = (Pathable) testUtil.constructEmptyRMObject(archetype.getDefinition());
+
+        {
+            DvQuantity systolic = (DvQuantity) root.itemAtPath("/data[id2]/events[id3]/data[id4]/items[id5]/value[id13]");
+            systolic.setMagnitude(120d);
+            DvQuantity diastolic = (DvQuantity) root.itemAtPath("/data[id2]/events[id3]/data[id4]/items[id6]/value[id14]");
+        }
+
+
+        //add a second event
+        {
+            Pathable root2 = (Pathable) testUtil.constructEmptyRMObject(archetype.getDefinition());
+
+            DvQuantity systolic = (DvQuantity) root2.itemAtPath("/data[id2]/events[id3]/data[id4]/items[id5]/value[id13]");
+            //systolic.setMagnitude(60d);
+            DvQuantity diastolic = (DvQuantity) root2.itemAtPath("/data[id2]/events[id3]/data[id4]/items[id6]/value[id14]");
+            Observation observation = (Observation) root;
+            Observation observation2 = (Observation) root2;
+            observation.getData().addEvent(observation2.getData().getEvents().get(0));
+        }
+        return root;
+    }
+
 
 
     @Test
@@ -357,6 +380,27 @@ public class ParsedRulesEvaluationTest {
         assertEquals(4, evaluationResult.getPathsThatMustNotExist().size());
         assertTrue(evaluationResult.getPathsThatMustNotExist().contains("/data[id2, 1]/events[id3, 1]/data[id4, 1]/items[id5, 1]/value[1]/magnitude[1]"));
         assertTrue(evaluationResult.getPathsThatMustNotExist().contains("/data[id2, 1]/events[id3, 2]/data[id4, 1]/items[id6, 2]/value[1]/magnitude[1]"));
+        assertEquals(0, evaluationResult.getSetPathValues().size());
+
+    }
+
+    @Test
+    public void implies() throws Exception {
+        archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("implies.adls"));
+        RuleEvaluation ruleEvaluation = new RuleEvaluation(archetype);
+
+        Pathable root = constructTwoBloodPressureObservationsOneEmptySystolicNoDiastolic();
+
+        EvaluationResult evaluationResult = ruleEvaluation.evaluate(root, archetype.getRules().getRules());
+        assertEquals(2, evaluationResult.getAssertionResults().size());
+        for(AssertionResult assertionResult:evaluationResult.getAssertionResults()) {
+            assertFalse(assertionResult.getResult());
+        }
+
+        assertEquals(2, evaluationResult.getPathsThatMustExist().size());//one from the non-specific exists operator, one from the for_all that is very specific indeed
+        assertTrue(evaluationResult.getPathsThatMustExist().contains("/data[id2, 1]/events[id3, 1]/data[id4]/items[id6]/value/magnitude"));
+        assertTrue(evaluationResult.getPathsThatMustExist().contains("/data[id2]/events[id3]/data[id4]/items[id6]/value/magnitude"));
+        assertEquals(0, evaluationResult.getPathsThatMustNotExist().size());
         assertEquals(0, evaluationResult.getSetPathValues().size());
 
     }

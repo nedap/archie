@@ -61,7 +61,7 @@ public class AssertionResult {
             stringBuilder.append(assertion);
         }
         if(result) {
-            stringBuilder.append("succeeded");
+            stringBuilder.append(" succeeded");
         } else {
             stringBuilder.append(" failed");
         }
