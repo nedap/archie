@@ -115,7 +115,7 @@ public class FlattenerTest {
             if (object.getNodeId().equals("id1065")) {
                 assertFalse(object instanceof CComplexObjectProxy);
                 proxyFound = true;
-                assertNotNull(object.getAttribute("items").getChild("id5"));
+                assertNotNull(object.getAttribute("items").getChild("id5.1"));
             }
             for (CAttribute attr : object.getAttributes()) {
                 if (attr.getParent() != object) {
@@ -196,8 +196,8 @@ data matches {
         OperationalTemplate flattenedWithoutLanguages = (OperationalTemplate) flattener.flatten(bloodPressureComposition);
 
         for(String key:flattenedWithoutLanguages.getComponentTerminologies().keySet()) {
-            assertFalse(flattenedWithoutLanguages.getComponentTerminologies().get(key).getTermDefinitions().containsKey("ru"));
-            assertTrue(flattenedWithLanguages.getComponentTerminologies().get(key).getTermDefinitions().containsKey("ru"));
+            assertFalse(flattenedWithoutLanguages.getComponentTerminologies().get(key).getTermDefinitions().containsKey("es-ar"));
+            assertTrue(flattenedWithLanguages.getComponentTerminologies().get(key).getTermDefinitions().containsKey("es-ar"));
         }
         assertEquals(flattenedWithLanguages.getComponentTerminologies().size(), flattenedWithoutLanguages.getComponentTerminologies().size());
     }
