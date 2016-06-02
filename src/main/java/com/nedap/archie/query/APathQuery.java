@@ -469,7 +469,6 @@ public class APathQuery {
                 if (locatable.getArchetypeNodeId().equals(segment.getNodeId())) {
                     return o;
                 }
-                throw new IllegalArgumentException("cannot handle RM-queries with archetype references yet");
             } else {
                 if(equalsName(locatable.getNameAsString(), segment.getNodeId())) {
                     return o;
