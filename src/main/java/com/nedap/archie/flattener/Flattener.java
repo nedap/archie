@@ -179,7 +179,33 @@ public class Flattener {
         fillComplexObjectProxies(archetype);
         closeArchetypeSlots(archetype);
         fillArchetypeRoots(archetype);
+        removeZeroOccurrencesConstraints(archetype);
 
+    }
+
+    private void removeZeroOccurrencesConstraints(Archetype archetype) {
+        Stack<CObject> workList = new Stack<>();
+        workList.push(archetype.getDefinition());
+        while(!workList.isEmpty()) {
+            CObject object = workList.pop();
+            List<CAttribute> attributesToRemove = new ArrayList<>();
+            for(CAttribute attribute:object.getAttributes()) {
+                if(attribute.getExistence() != null && attribute.getExistence().getUpper() == 0 && !attribute.getExistence().isUpperUnbounded()) {
+                    attributesToRemove.add(attribute);
+                } else {
+                    List<CObject> objectsToRemove = new ArrayList<>();
+                    for (CObject child : attribute.getChildren()) {
+                        if (!child.isAllowed()) {
+                            objectsToRemove.add(child);
+                        }
+                        workList.push(child);
+                    }
+                    attribute.getChildren().removeAll(objectsToRemove);
+                }
+
+            }
+            object.getAttributes().removeAll(attributesToRemove);
+        }
     }
 
     private void closeArchetypeSlots(Archetype archetype) {
@@ -401,7 +427,7 @@ public class Flattener {
         }
         parent.setIncludes(getPossiblyOverridenListValue(parent.getIncludes(), child.getIncludes()));
         parent.setExcludes(getPossiblyOverridenListValue(parent.getExcludes(), child.getExcludes()));
-        
+
         //TODO: includes/excludes?
     }
 
