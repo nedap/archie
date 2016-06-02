@@ -1,5 +1,6 @@
 package com.nedap.archie.rm.archetypes;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nedap.archie.paths.PathSegment;
 import com.nedap.archie.rm.datatypes.CodePhrase;
 import com.nedap.archie.rm.datatypes.UIDBasedId;
@@ -93,6 +94,7 @@ public class Locatable extends Pathable {
     }
 
     @Override
+    @JsonIgnore
     public List<PathSegment> getPathSegments() {
         Pathable parent = getParent();
         if(parent == null) {
