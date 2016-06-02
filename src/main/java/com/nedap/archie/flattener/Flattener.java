@@ -436,7 +436,7 @@ public class Flattener {
         for(CAttribute attribute:child.getAttributes()) {
             if(attribute.getDifferentialPath() != null) {
                 //this overrides a specific path
-                ArchetypeModelObject object = new APathQuery(attribute.getDifferentialPath()).find(this.parent.getDefinition());
+                ArchetypeModelObject object = new APathQuery(attribute.getDifferentialPath()).find(parent);
                 if(object instanceof CAttribute) {
                     CAttribute realAttribute = (CAttribute) object;
                     flattenAttribute(parent, realAttribute, attribute);
