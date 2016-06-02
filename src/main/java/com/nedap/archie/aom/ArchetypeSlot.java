@@ -30,7 +30,7 @@ public class ArchetypeSlot extends CObject {
         this.excludes = excludes;
     }
 
-    public boolean getClosed() {
+    public boolean isClosed() {
         return closed;
     }
 

@@ -217,7 +217,7 @@ public class Flattener {
                 List<CObject> toRemove = new ArrayList<>();
                 for(CObject child:attribute.getChildren()) {
                     if(child instanceof ArchetypeSlot) { //use_archetype
-                        if(((ArchetypeSlot) child).getClosed()) {
+                        if(((ArchetypeSlot) child).isClosed()) {
                             toRemove.add(child);
                         }
                     }
@@ -422,7 +422,7 @@ public class Flattener {
     }
 
     private void flattenArchetypeSlot(ArchetypeSlot parent, ArchetypeSlot child) {
-        if(child.getClosed()) {
+        if(child.isClosed()) {
             parent.setClosed(true);
         }
         parent.setIncludes(getPossiblyOverridenListValue(parent.getIncludes(), child.getIncludes()));
