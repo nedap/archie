@@ -196,6 +196,9 @@ public class CComplexObjectParser extends BaseTreeWalker {
         C_archetype_slot_headContext headContext = slotContext.c_archetype_slot_head();
         slot.setNodeId(headContext.c_archetype_slot_id().ID_CODE().getText());
         slot.setRmTypeName(headContext.c_archetype_slot_id().type_id().getText());
+        if(headContext.c_archetype_slot_id().SYM_CLOSED() != null) {
+            slot.setClosed(true);
+        }
         if (headContext.c_occurrences() != null) {
             slot.setOccurences(parseMultiplicityInterval(headContext.c_occurrences()));
         }

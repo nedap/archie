@@ -6,6 +6,7 @@ import com.nedap.archie.aom.terminology.ArchetypeTerm;
 import com.nedap.archie.aom.terminology.ArchetypeTerminology;
 import com.nedap.archie.aom.terminology.ValueSet;
 import com.nedap.archie.query.APathQuery;
+import com.nedap.archie.rules.Assertion;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -176,10 +177,32 @@ public class Flattener {
 
     public void fillSlots(Archetype archetype) { //should this be OperationalTemplate?
         fillComplexObjectProxies(archetype);
-        fillArchetypeSlots(archetype);
+        closeArchetypeSlots(archetype);
+        fillArchetypeRoots(archetype);
+
     }
 
-    private void fillArchetypeSlots(Archetype result) {
+    private void closeArchetypeSlots(Archetype archetype) {
+        Stack<CObject> workList = new Stack<>();
+        workList.push(archetype.getDefinition());
+        while(!workList.isEmpty()) {
+            CObject object = workList.pop();
+            for(CAttribute attribute:object.getAttributes()) {
+                List<CObject> toRemove = new ArrayList<>();
+                for(CObject child:attribute.getChildren()) {
+                    if(child instanceof ArchetypeSlot) { //use_archetype
+                        if(((ArchetypeSlot) child).getClosed()) {
+                            toRemove.add(child);
+                        }
+                    }
+                    workList.push(child);
+                }
+                attribute.getChildren().removeAll(toRemove);
+            }
+        }
+    }
+
+    private void fillArchetypeRoots(Archetype result) {
 
         Stack<CObject> workList = new Stack<>();
         workList.push(result.getDefinition());
@@ -365,8 +388,21 @@ public class Flattener {
         if(parent instanceof CComplexObject) {
             flattenCComplexObject((CComplexObject) parent, (CComplexObject) child);
         }
+        if(parent instanceof ArchetypeSlot) {
+            flattenArchetypeSlot((ArchetypeSlot) parent, (ArchetypeSlot) child);
+        }
 
 
+    }
+
+    private void flattenArchetypeSlot(ArchetypeSlot parent, ArchetypeSlot child) {
+        if(child.getClosed()) {
+            parent.setClosed(true);
+        }
+        parent.setIncludes(getPossiblyOverridenListValue(parent.getIncludes(), child.getIncludes()));
+        parent.setExcludes(getPossiblyOverridenListValue(parent.getExcludes(), child.getExcludes()));
+        
+        //TODO: includes/excludes?
     }
 
     private void flattenCComplexObject(CComplexObject parent, CComplexObject child) {
@@ -435,7 +471,14 @@ public class Flattener {
         if(childObject.getNodeId().lastIndexOf('.') > 0) {
             childNode = childObject.getNodeId().substring(0, childObject.getNodeId().lastIndexOf('.'));//-1?
         }
-        return childNode.startsWith(possibleMatch.getNodeId());
+        return childNode.startsWith(possibleMatch.getNodeId()) && !(childObject instanceof CArchetypeRoot && possibleMatch instanceof ArchetypeSlot);
+    }
+
+    private List<Assertion> getPossiblyOverridenListValue(List<Assertion> parent, List<Assertion> child) {
+        if(child != null && !child.isEmpty()) {
+            return child;
+        }
+        return parent;
     }
 
     public <T> T getPossiblyOverridenValue(T parent, T child) {
