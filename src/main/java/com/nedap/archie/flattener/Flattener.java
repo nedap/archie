@@ -373,7 +373,7 @@ public class Flattener {
     private static OperationalTemplate createOperationalTemplate(Archetype archetype) {
         Archetype toClone = archetype.clone(); //clone so we do not overwrite the parent archetype. never
         OperationalTemplate result = new OperationalTemplate();
-
+        result.setArchetypeId((ArchetypeID) archetype.getArchetypeId().clone());
         result.setDefinition(toClone.getDefinition());
         result.setDifferential(false);
 
