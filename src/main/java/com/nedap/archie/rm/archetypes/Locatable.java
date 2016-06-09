@@ -38,7 +38,6 @@ public class Locatable extends Pathable {
     private Archetyped archetypeDetails;
 
     private List<Link> links = new ArrayList<>();
-    private String nameAsString;
 
     @XmlElement
     public DvText getName() {
