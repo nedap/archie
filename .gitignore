@@ -2,3 +2,5 @@ gradle.properties
 .gradle
 build/
 *.iml
+.idea
+
