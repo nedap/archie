@@ -2,6 +2,11 @@ package com.nedap.archie.rules.evaluation;
 
 import com.nedap.archie.rules.Expression;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * Created by pieter.bos on 04/04/16.
  */
@@ -17,6 +22,11 @@ public class AssertionResult {
      * The result: did this assertion pass?
      */
     private boolean result;
+
+
+    private Map<String, Value> setPathValues = new LinkedHashMap<>();
+    private List<String> pathsThatMustExist = new ArrayList<>();
+    private List<String> pathsThatMustNotExist = new ArrayList<>();
 
     public String getTag() {
         return tag;
@@ -50,6 +60,29 @@ public class AssertionResult {
         this.result = result;
     }
 
+    public Map<String, Value> getSetPathValues() {
+        return setPathValues;
+    }
+
+    public void setSetPathValues(Map<String, Value> setPathValues) {
+        this.setPathValues = setPathValues;
+    }
+
+    public List<String> getPathsThatMustExist() {
+        return pathsThatMustExist;
+    }
+
+    public void setPathsThatMustExist(List<String> pathsThatMustExist) {
+        this.pathsThatMustExist = pathsThatMustExist;
+    }
+
+    public List<String> getPathsThatMustNotExist() {
+        return pathsThatMustNotExist;
+    }
+
+    public void setPathsThatMustNotExist(List<String> pathsThatMustNotExist) {
+        this.pathsThatMustNotExist = pathsThatMustNotExist;
+    }
 
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
@@ -66,5 +99,25 @@ public class AssertionResult {
             stringBuilder.append(" failed");
         }
         return stringBuilder.toString();
+    }
+
+    public void addPathThatMustExist(String path) {
+        pathsThatMustExist.add(path);
+    }
+
+    public void addPathThatMustNotExist(String path) {
+        pathsThatMustNotExist.add(path);
+    }
+
+    public void addPathsThatMustNotExist(List<String> path) {
+        pathsThatMustNotExist.addAll(path);
+    }
+
+    public void setSetPathValue(String path, ValueList values) {
+        for(Value value: values.getValues()) {
+            //TODO
+            setPathValues.put(path, value);
+        }
+
     }
 }

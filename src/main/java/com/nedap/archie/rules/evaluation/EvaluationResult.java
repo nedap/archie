@@ -1,6 +1,7 @@
 package com.nedap.archie.rules.evaluation;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,10 +12,6 @@ import java.util.Map;
 public class EvaluationResult {
 
     private List<AssertionResult> assertionResults = new ArrayList<>();
-
-    private Map<String, Value> setPathValues = new LinkedHashMap<>();
-    private List<String> pathsThatMustExist = new ArrayList<>();
-    private List<String> pathsThatMustNotExist = new ArrayList<>();
 
     public EvaluationResult() {
     }
@@ -27,52 +24,34 @@ public class EvaluationResult {
         this.assertionResults = assertionResults;
     }
 
-    public Map<String, Value> getSetPathValues() {
-        return setPathValues;
-    }
-
-    public void setSetPathValues(Map<String, Value> setPathValues) {
-        this.setPathValues = setPathValues;
-    }
-
-    public List<String> getPathsThatMustExist() {
-        return pathsThatMustExist;
-    }
-
-    public void setPathsThatMustExist(List<String> pathsThatMustExist) {
-        this.pathsThatMustExist = pathsThatMustExist;
-    }
-
-    public List<String> getPathsThatMustNotExist() {
-        return pathsThatMustNotExist;
-    }
-
-    public void setPathsThatMustNotExist(List<String> pathsThatMustNotExist) {
-        this.pathsThatMustNotExist = pathsThatMustNotExist;
-    }
 
     protected void addAssertionResult(AssertionResult assertionResult) {
         this.assertionResults.add(assertionResult);
 
     }
 
-    public void setSetPathValue(String path, ValueList values) {
-        for(Value value: values.getValues()) {
-            //TODO
-            setPathValues.put(path, value);
+    public List<String> getPathsThatMustExist() {
+        List<String> result = new ArrayList<>();
+        for(AssertionResult assertionResult:assertionResults) {
+            result.addAll(assertionResult.getPathsThatMustExist());
         }
-
+        return result;
     }
 
-    public void addPathThatMustExist(String path) {
-        pathsThatMustExist.add(path);
+    public List<String> getPathsThatMustNotExist() {
+        List<String> result = new ArrayList<>();
+        for(AssertionResult assertionResult:assertionResults) {
+            result.addAll(assertionResult.getPathsThatMustNotExist());
+
+        }
+        return result;
     }
 
-    public void addPathThatMustNotExist(String path) {
-        pathsThatMustNotExist.add(path);
-    }
-
-    public void addPathsThatMustNotExist(List<String> path) {
-        pathsThatMustNotExist.addAll(path);
+    public Map<String, Value> getSetPathValues() {
+        Map<String, Value> result = new LinkedHashMap();
+        for(AssertionResult assertionResult:assertionResults) {
+            result.putAll(assertionResult.getSetPathValues());
+        }
+        return result;
     }
 }

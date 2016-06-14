@@ -48,27 +48,27 @@ class FixableAssertionsChecker {
      * for all .. in ... satisfies _another matched pattern
      *
      *
-     * @param evaluationResult the evaluationresult to set the fix instructions to
+     * @param assertionResult the evaluationresult to set the fix instructions to
      * @param expression the expression to be evaluated
      @param expression the current index, if in a for all expression. 0 (-1? TODO) otherwise
      */
-    protected void checkAssertionForFixablePatterns(EvaluationResult evaluationResult, Expression expression, int index) {
+    protected void checkAssertionForFixablePatterns(AssertionResult assertionResult, Expression expression, int index) {
 
         if(expression instanceof ForAllStatement) {
-            handleForAll(evaluationResult, expression);
+            handleForAll(assertionResult, expression);
 
         } else if (expression instanceof BinaryOperator) {
             ValueList expressionResult = ruleElementValues.get(expression).get(index);
             BinaryOperator binaryExpression = (BinaryOperator) expression;
             if (binaryExpression.getOperator() == OperatorKind.eq && binaryExpression.getLeftOperand() instanceof ModelReference) {
-                handlePathEquals(evaluationResult, expressionResult, binaryExpression, index);
+                handlePathEquals(assertionResult, expressionResult, binaryExpression, index);
             } else if (binaryExpression.getOperator() == OperatorKind.implies) {
-                handleImplies(evaluationResult, index, binaryExpression);
+                handleImplies(assertionResult, index, binaryExpression);
             }
         } else if (expression instanceof UnaryOperator) {
             UnaryOperator unaryOperator = (UnaryOperator) expression;
             if(unaryOperator.getOperator() == OperatorKind.not) {
-                handleNot(evaluationResult, unaryOperator, index);
+                handleNot(assertionResult, unaryOperator, index);
             }
             if (unaryOperator.getOperator() == OperatorKind.exists) {
                 //TODO exists expressions
@@ -76,7 +76,7 @@ class FixableAssertionsChecker {
                     //matches exists /path/to/value
                     //TODO: this shows that a specific archetype path must exist. But it could just as well be a path within a specific node. So find a way to get the RM Path
                     //pointing to the right node here
-                    evaluationResult.addPathThatMustExist(resolveModelReference((ModelReference) unaryOperator.getOperand()));
+                    assertionResult.addPathThatMustExist(resolveModelReference((ModelReference) unaryOperator.getOperand()));
                 }
             }
         }
@@ -84,36 +84,36 @@ class FixableAssertionsChecker {
         //TODO: not expressions, reversing the expected value?
     }
 
-    private void handleNot(EvaluationResult evaluationResult, UnaryOperator unaryOperator, int index) {
+    private void handleNot(AssertionResult assertionResult, UnaryOperator unaryOperator, int index) {
         Expression operand = unaryOperator.getOperand();
         if(operand instanceof UnaryOperator && ((UnaryOperator) operand).getOperator() == OperatorKind.exists) {
             UnaryOperator existsOperator = (UnaryOperator) operand;
             if(existsOperator.getOperand() instanceof  ModelReference) { //TODO: this could also be an objectreference
                 //matches exists /path/to/value
                 List<ValueList> valueLists = ruleElementValues.get(existsOperator);
-                evaluationResult.addPathsThatMustNotExist(resolveModelReferenceNonNull((ModelReference) existsOperator.getOperand(), index));
+                assertionResult.addPathsThatMustNotExist(resolveModelReferenceNonNull((ModelReference) existsOperator.getOperand(), index));
             }
         }
     }
 
-    private void handleImplies(EvaluationResult evaluationResult, int index, BinaryOperator binaryExpression) {
+    private void handleImplies(AssertionResult assertionResult, int index, BinaryOperator binaryExpression) {
         //matches ... implies ...
         ValueList leftOperandResult = ruleElementValues.get(binaryExpression.getLeftOperand()).get(index);
         boolean shouldEvaluate = leftOperandResult.getSingleBooleanResult();
         if(shouldEvaluate) {
-            checkAssertionForFixablePatterns(evaluationResult, binaryExpression.getRightOperand(), index);
+            checkAssertionForFixablePatterns(assertionResult, binaryExpression.getRightOperand(), index);
         }
     }
 
-    private void handlePathEquals(EvaluationResult evaluationResult, ValueList expressionResult, BinaryOperator binaryExpression, int index) {
+    private void handlePathEquals(AssertionResult assertionResult, ValueList expressionResult, BinaryOperator binaryExpression, int index) {
         //matches the form /path/to/something = 3 + 5 * /value[id23]
         ValueList valueList = this.ruleElementValues.get(binaryExpression.getRightOperand()).get(index);
         ModelReference pathToSet = (ModelReference) binaryExpression.getLeftOperand();
-        setPathsToValues(evaluationResult, resolveModelReference(pathToSet), valueList);
+        setPathsToValues(assertionResult, resolveModelReference(pathToSet), valueList);
     }
 
 
-    private void handleForAll(EvaluationResult evaluationResult, Expression expression) {
+    private void handleForAll(AssertionResult assertionResult, Expression expression) {
         //this handles forAll ..., even with an extra for all.
         //TODO: the nested loop forall .. in .. forall .. in .. will not yet work due to problems with the ruleElementValues. Refactor!
         ForAllStatement forAllStatement = (ForAllStatement) expression;
@@ -139,7 +139,7 @@ class FixableAssertionsChecker {
                 variableValue.setType(PrimitiveType.ObjectReference);
 
                 forAllVariables.put(forAllStatement.getVariableName(), variableValue);
-                checkAssertionForFixablePatterns(evaluationResult, forAllStatement.getRightOperand(), i);
+                checkAssertionForFixablePatterns(assertionResult, forAllStatement.getRightOperand(), i);
             }
             i++;
         }
@@ -185,8 +185,8 @@ class FixableAssertionsChecker {
 
     }
 
-    private void setPathsToValues(EvaluationResult evaluationResult, String path, ValueList value) {
+    private void setPathsToValues(AssertionResult assertionResult, String path, ValueList value) {
         logger.info("path {} set to value {} ", path, value);
-        evaluationResult.setSetPathValue(path, value);
+        assertionResult.setSetPathValue(path, value);
     }
 }

@@ -122,7 +122,7 @@ public class RuleEvaluation {
         assertionResult.setRawResult(valueList);
         evaluationResult.addAssertionResult(assertionResult);
         if(!assertionResult.getResult()) {
-            fixableAssertionsChecker.checkAssertionForFixablePatterns(evaluationResult, expression, 0);
+            fixableAssertionsChecker.checkAssertionForFixablePatterns(assertionResult, expression, 0);
         }
 
 
