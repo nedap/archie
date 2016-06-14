@@ -1,9 +1,5 @@
 package com.nedap.archie.base;
 
-import com.nedap.archie.aom.ArchetypeConstraint;
-import com.nedap.archie.aom.ArchetypeModelObject;
-import com.nedap.archie.rm.RMObject;
-
 import javax.annotation.Nullable;
 import javax.xml.bind.annotation.XmlElement;
 import java.time.Duration;
@@ -204,7 +200,7 @@ public class Interval<T>  extends OpenEHRBase {
             result.append(">");
         }
         result.append(lower);
-        result.append("...");
+        result.append("..");
         if(!upperIncluded) {
             result.append("<");
         }

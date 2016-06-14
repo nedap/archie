@@ -1,16 +1,13 @@
 package com.nedap.archie.aom;
 
 import com.nedap.archie.adlparser.ADLParser;
-import com.nedap.archie.query.APathQuery;
 import com.nedap.archie.rm.datavalues.quantity.DvQuantity;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Created by pieter.bos on 21/03/16.
@@ -101,7 +98,7 @@ public class AttributeTupleConstraintsTest {
     @Test
     public void toStringTest() {
         String toString = attributeTuple.toString().replace("\t", "").replace("\n", "");
-        assertEquals("[units, magnitude] ∈ {[{\"kg\"}, {|5.0...300.0|}],[{\"lb\"}, {|10.0...600.0|}]}", toString);
+        assertEquals("[units, magnitude] ∈ {[{\"kg\"}, {|5.0..300.0|}],[{\"lb\"}, {|10.0..600.0|}]}", toString);
 
     }
 }

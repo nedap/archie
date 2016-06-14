@@ -1,7 +1,7 @@
 package com.nedap.archie.rules;
 
-import java.util.Collections;
-import java.util.HashSet;
+import com.google.common.collect.ImmutableSet;
+
 import java.util.Set;
 
 /**
@@ -16,8 +16,11 @@ public enum OperatorKind {
     private Set<String> codes;
 
     OperatorKind(String... items) {
-        codes = new HashSet<>();
-        Collections.addAll(codes, items);
+        codes = ImmutableSet.copyOf(items);
+    }
+
+    public String getDefaultCode() {
+        return codes.iterator().next();
     }
 
     public static OperatorKind parse(String operatorString) {
