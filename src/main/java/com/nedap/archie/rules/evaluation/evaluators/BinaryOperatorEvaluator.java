@@ -152,7 +152,7 @@ public class BinaryOperatorEvaluator implements Evaluator<BinaryOperator> {
 
         ValueList possibleNullResult = checkAndHandleNull(leftValues, rightValues);
         if(possibleNullResult != null) {
-            possibleNullResult.setType(PrimitiveType.Boolean);
+            possibleNullResult.setType(PrimitiveType.Real);
             return possibleNullResult;
         } else {
             ValueList result = new ValueList();

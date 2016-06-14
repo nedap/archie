@@ -1,5 +1,7 @@
 package com.nedap.archie.rules;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +22,7 @@ public class Operator extends Expression {
         this.operator = operator;
     }
 
+    @JsonIgnore //the subclasses have the right methods for operands
     public List<Expression> getOperands() {
         return operands;
     }
