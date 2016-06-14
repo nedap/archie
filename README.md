@@ -70,6 +70,14 @@ CAttribute attribute = archetype.getDefinition()
     attribute.getLogicalPath(); // is 'context[systolic]/items'
 ```
 
+### Serializing
+
+Archetype models can be serialized to ADL thanks the the serializer written by @markopi64. To use:
+
+```java
+String serialized = ADLArchetypeSerializer.serialize(archetype);
+```
+
 ### Flattener and Operational Template creation
 
 First, create an ArchetypeRepository - create your own or use the supplied in memory SimpleArchetypeRespository. You need it to contain all Archetypes that are to be used, in parsed form. Then do:
