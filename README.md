@@ -72,7 +72,7 @@ CAttribute attribute = archetype.getDefinition()
 
 ### Serializing
 
-Archetype models can be serialized to ADL thanks the the serializer written by @markopi64. To use:
+Archetype models can be serialized to ADL thanks the the serializer written by @markopi64. This is not yet included in the 0.1.1 release, but is in the master and will be included in a release soon. To use:
 
 ```java
 String serialized = ADLArchetypeSerializer.serialize(archetype);
@@ -274,7 +274,6 @@ The project is quite usable for when you want to create an EHR implementation, b
 What we want this to do in the future:
 - Date Constraint parsing with patterns, not just intervals
 - More tests
-- AOM serialization (to ADL and perhaps JSON and XML)
 - Validating if an RM object conforms to a certain archetype, apart from the rules
 - ...
 
