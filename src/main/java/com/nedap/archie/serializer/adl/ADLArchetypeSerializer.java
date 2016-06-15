@@ -10,12 +10,14 @@ abstract public class ADLArchetypeSerializer<T extends Archetype> {
     protected final ADLStringBuilder builder = new ADLStringBuilder();
 
     private final ADLDefinitionSerializer definitionSerializer;
+    private final ADLRulesSerializer rulesSerializer;
 
 
     protected ADLArchetypeSerializer(T archetype) {
         this.archetype = archetype;
 
         this.definitionSerializer = new ADLDefinitionSerializer(builder);
+        this.rulesSerializer = new ADLRulesSerializer(builder, definitionSerializer);
     }
 
     public static String serialize(Archetype archetype) {
@@ -39,6 +41,7 @@ abstract public class ADLArchetypeSerializer<T extends Archetype> {
         appendDescription();
         appendDefinition();
         appendTerminology();
+        appendRules();
         appendAnnotations();
 
         return builder.toString();
@@ -49,6 +52,13 @@ abstract public class ADLArchetypeSerializer<T extends Archetype> {
         builder.newline().append("annotations").newIndentedLine()
                 .odin(archetype.getAnnotations())
                 .unindent();
+    }
+
+    protected void appendRules() {
+        if(archetype.getRules() == null) return;
+        builder.newline().append("rules").newIndentedLine();
+        rulesSerializer.appendRules(archetype.getRules());
+        builder.newUnindentedLine();
     }
 
     protected void appendTerminology() {

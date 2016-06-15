@@ -20,4 +20,18 @@ public enum ExpressionType {
         }
         return null;
     }
+
+    public String toString() {
+        switch(this) {
+            case BOOLEAN:
+                return "Boolean";
+            case STRING:
+                return "String";
+            case INTEGER:
+                return "Integer";
+            case REAL:
+                return "Real";
+        }
+        return null;
+    }
 }

@@ -28,7 +28,7 @@ import com.nedap.archie.serializer.adl.ADLStringBuilder;
 /**
  * @author Marko Pipan
  */
-abstract public class ConstraintSerializer<T extends CObject> {
+public abstract class ConstraintSerializer<T extends CObject> {
     protected final ADLDefinitionSerializer serializer;
     protected final ADLStringBuilder builder;
 
