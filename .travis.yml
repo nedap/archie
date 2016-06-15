@@ -8,3 +8,5 @@ cache:
     - $HOME/.gradle/native
     - $HOME/.gradle/daemon
     - $HOME/.gradle/caches
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
