@@ -19,11 +19,13 @@ apply plugin: 'maven' //so we can install to local repository
 if(hasProperty('signing.keyId')) {
 	apply plugin: 'signing'
 }
+
 apply plugin: 'java'
 apply plugin: 'antlr'
 apply plugin: 'maven-publish'
 apply plugin: "com.jfrog.artifactory"
 apply plugin: 'ch.raffael.pegdown-doclet'
+apply plugin: 'jacoco'
 //apply plugin: 'io.codearte.nexus-staging'
 
 version = '0.2.0-SNAPSHOT'
@@ -98,6 +100,15 @@ generateGrammarSource { //antlr4
 classes {
 	dependsOn generateGrammarSource
 }
+
+jacocoTestReport {
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+}
+
+check.dependsOn jacocoTestReport
 
 uploadArchives {
   repositories {
