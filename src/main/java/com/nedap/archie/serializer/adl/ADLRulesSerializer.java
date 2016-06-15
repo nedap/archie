@@ -56,10 +56,21 @@ public class ADLRulesSerializer {
     public void serializeRuleElement(RuleElement element) {
         RuleElementSerializer serializer = getSerializer(element);
         if (serializer != null) {
+            boolean shouldSerializeParentheses = isPrecedenceOverride(element);
+            if(shouldSerializeParentheses) {
+                builder.append(" (");
+            }
             serializer.serialize(element);
+            if(shouldSerializeParentheses) {
+                builder.append(" )");
+            }
         } else {
             throw new AssertionError("Unsupported rule element: " + element.getClass().getName());
         }
+    }
+
+    private boolean isPrecedenceOverride(RuleElement element) {
+        return element instanceof Expression && ((Expression) element).isPrecedenceOverriden();
     }
 
     private RuleElementSerializer getSerializer(RuleElement element) {
