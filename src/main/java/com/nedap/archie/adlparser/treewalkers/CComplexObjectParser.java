@@ -4,6 +4,7 @@ import com.nedap.archie.adlparser.ADLParserErrors;
 import com.nedap.archie.adlparser.antlr.AdlParser.*;
 import com.nedap.archie.aom.*;
 import com.nedap.archie.base.MultiplicityInterval;
+import com.nedap.archie.rules.Assertion;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.util.ArrayList;
@@ -205,12 +206,12 @@ public class CComplexObjectParser extends BaseTreeWalker {
         RulesParser assertionParser = new RulesParser(getErrors());
         if (slotContext.c_excludes() != null) {
             for (AssertionContext assertionContext : slotContext.c_excludes().assertion()) {
-                slot.getExcludes().add(assertionParser.parse(assertionContext));
+                slot.getExcludes().add((Assertion) assertionParser.parse(assertionContext));
             }
         }
         if (slotContext.c_includes() != null) {
             for (AssertionContext assertionContext : slotContext.c_includes().assertion()) {
-                slot.getIncludes().add(assertionParser.parse(assertionContext));
+                slot.getIncludes().add((Assertion) assertionParser.parse(assertionContext));
             }
         }
         return slot;

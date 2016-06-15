@@ -6,7 +6,6 @@ import com.nedap.archie.adlparser.antlr.AdlParser.*;
 
 import com.nedap.archie.aom.CPrimitiveObject;
 import com.nedap.archie.rules.*;
-import javassist.compiler.ast.Variable;
 import org.jetbrains.annotations.NotNull;
 
 
@@ -22,7 +21,7 @@ public class RulesParser extends BaseTreeWalker {
         primitivesConstraintParser = new PrimitivesConstraintParser(errors);
     }
 
-    public Assertion parse(AssertionContext assertionContext) {
+    public RuleStatement parse(AssertionContext assertionContext) {
 
         Assertion assertion = new Assertion();
         if(assertionContext.boolean_assertion() != null) {
@@ -32,9 +31,10 @@ public class RulesParser extends BaseTreeWalker {
                 assertion.setTag(context.identifier().getText());
             }
             assertion.setExpression(parseExpression(context.boolean_expression()));
+            return assertion;
         } else if (assertionContext.variable_declaration() != null) {
             VariableDeclaration declaration = parseVariableDeclaration(assertion, assertionContext.variable_declaration());
-            assertion.addVariable(declaration);
+            return declaration;
         }
         return assertion;
     }
@@ -160,7 +160,7 @@ public class RulesParser extends BaseTreeWalker {
         }
         if(context.boolean_expression() != null) {
             Expression expression = parseExpression(context.boolean_expression());
-            //expression.setPrecedenceOverridden(true);
+            expression.setPrecedenceOverridden(true);
             return expression;
         }
         if(context.arithmetic_relop_expr() != null) {
@@ -262,11 +262,13 @@ public class RulesParser extends BaseTreeWalker {
             return parseModelReference(context.adl_rules_path());
         }
         if(context.arithmetic_expression() != null) {
-            return parseArithmeticExpression(context.arithmetic_expression());//TODO: precedenceOverridden
+            Expression expression = parseArithmeticExpression(context.arithmetic_expression());
+            expression.setPrecedenceOverridden(true);
+            return expression;
         }
         if(context.arithmetic_leaf() != null) {
-            Expression expression = parseArithmeticLeaf(context.arithmetic_leaf());
-            return new UnaryOperator(expression.getType(), OperatorKind.minus, expression);
+            return new UnaryOperator(ExpressionType.REAL, OperatorKind.minus, parseArithmeticLeaf(context.arithmetic_leaf()));
+
         }
         if(context.variable_reference() != null) {
             return parseVariableReference(context.variable_reference());

@@ -26,8 +26,36 @@ public class UnaryOperatorEvaluator implements Evaluator<UnaryOperator> {
                 return handleNot(evaluation, statement);
             case exists:
                 return handleExists(evaluation, statement);
+            case minus:
+                return handleMinus(evaluation, statement);
             default:
                 throw new UnsupportedOperationException("not yet supported " + operator);
+        }
+    }
+
+    private ValueList handleMinus(RuleEvaluation evaluation, UnaryOperator statement) {
+        ValueList valueList = evaluation.evaluate(statement.getOperand());
+        if(valueList.getType() == PrimitiveType.Integer || valueList.getType() == PrimitiveType.Real) {
+            ValueList result = new ValueList();
+            for(Value value:valueList.getValues()) {
+                Value negatedValue = null;
+                if(value.getValue() instanceof Integer) {
+                    negatedValue = new Value(-((Integer) value.getValue()), value.getPaths());
+                }
+                else if(value.getValue() instanceof Long) {
+                    negatedValue = new Value(-((Long) value.getValue()), value.getPaths());
+                }
+                else if(value.getValue() instanceof Double) {
+                    negatedValue = new Value(-((Double) value.getValue()), value.getPaths());
+                }
+                else if(value.getValue() instanceof Float) {
+                    negatedValue = new Value(-((Float) value.getValue()), value.getPaths());
+                }
+                result.addValue(negatedValue);
+            }
+            return result;
+        } else {
+            throw new IllegalArgumentException("Unary Minus Operator only works on arithmetic expression, but " + valueList + " was supplied");
         }
     }
 

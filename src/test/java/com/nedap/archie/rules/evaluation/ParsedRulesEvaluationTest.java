@@ -5,6 +5,11 @@ import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.rm.archetypes.Pathable;
 import com.nedap.archie.rm.composition.Observation;
 import com.nedap.archie.rm.datavalues.quantity.DvQuantity;
+import com.nedap.archie.rules.Assertion;
+import com.nedap.archie.rules.BinaryOperator;
+import com.nedap.archie.rules.ExpressionVariable;
+import com.nedap.archie.rules.RuleStatement;
+import com.nedap.archie.rules.VariableDeclaration;
 import com.nedap.archie.testutil.TestUtil;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
@@ -12,6 +17,8 @@ import org.junit.Test;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
+
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -34,8 +41,25 @@ public class ParsedRulesEvaluationTest {
     }
 
     @Test
+    public void precedenceOverride() throws Exception {
+        archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("simplearithmetic.adls"));
+
+        ExpressionVariable booleanExtendedTest = (ExpressionVariable) getVariableDeclarationByName(archetype, "boolean_extended_test");
+        BinaryOperator operator = (BinaryOperator) booleanExtendedTest.getExpression();
+        assertTrue(operator.getLeftOperand().isPrecedenceOverriden());
+        assertFalse(operator.getRightOperand().isPrecedenceOverriden());
+
+        ExpressionVariable arithmeticParentheses = (ExpressionVariable) getVariableDeclarationByName(archetype, "arithmetic_parentheses");
+        BinaryOperator arithmeticOperator = (BinaryOperator) arithmeticParentheses.getExpression();
+        assertTrue(arithmeticOperator.getLeftOperand().isPrecedenceOverriden());
+        assertFalse(arithmeticOperator.getRightOperand().isPrecedenceOverriden());
+
+    }
+
+    @Test
     public void simpleArithmetic() throws Exception {
         archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("simplearithmetic.adls"));
+        assertTrue(parser.getErrors().hasNoMessages());
         RuleEvaluation ruleEvaluation = new RuleEvaluation(archetype);
         Observation root = new Observation();
         ruleEvaluation.evaluate(root, archetype.getRules().getRules());
@@ -54,7 +78,35 @@ public class ParsedRulesEvaluationTest {
         assertTrue(variables.get("not_not_not_true").getPaths(0).isEmpty());
         assertEquals(3l, variables.get("variable_reference").getObject(0));
         assertTrue(variables.get("variable_reference").getPaths(0).isEmpty());
+        assertEquals(25l, variables.get("arithmetic_parentheses").getObject(0));
+        assertTrue(variables.get("arithmetic_parentheses").getPaths(0).isEmpty());
+
     }
+
+    private VariableDeclaration getVariableDeclarationByName(Archetype archetype, String name) {
+        for(RuleStatement statement:archetype.getRules().getRules()) {
+            if(statement instanceof VariableDeclaration) {
+                VariableDeclaration variable = (VariableDeclaration) statement;
+                if(Objects.equals(variable.getName(), name)) {
+                    return variable;
+                }
+            }
+        }
+        return null;
+    }
+
+    private Assertion getAssertionByTag(Archetype archetype, String tag) {
+        for(RuleStatement statement:archetype.getRules().getRules()) {
+            if(statement instanceof Assertion) {
+                Assertion assertion = (Assertion) statement;
+                if(Objects.equals(assertion.getTag(), tag)) {
+                    return assertion;
+                }
+            }
+        }
+        return null;
+    }
+
 
 
     @Test

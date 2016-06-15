@@ -24,7 +24,7 @@ package com.nedap.archie.serializer.adl.constraints;
 import com.nedap.archie.aom.ArchetypeSlot;
 import com.nedap.archie.rules.Assertion;
 import com.nedap.archie.serializer.adl.ADLDefinitionSerializer;
-import com.nedap.archie.serializer.adl.ADLExpressionSerializer;
+import com.nedap.archie.serializer.adl.ADLRulesSerializer;
 import com.nedap.archie.serializer.adl.ArchetypeSerializeUtils;
 
 /**
@@ -63,15 +63,19 @@ public class ArchetypeSlotSerializer extends ConstraintSerializer<ArchetypeSlot>
     private void appendMatches(ArchetypeSlot cobj) {
         int mark = builder.mark();
         builder.append(" matches { ");
+        builder.lineComment(serializer.getTermText(cobj));
         boolean hasContent = false;
 
+        ADLRulesSerializer serializer = new ADLRulesSerializer(builder, super.serializer);
         if (cobj.getIncludes() != null && cobj.getIncludes().size() > 0) {
             hasContent = true;
             builder.indent().newline()
                     .append("include")
                     .indent();
+
             for (Assertion a : cobj.getIncludes()) {
-                builder.newline().append(ADLExpressionSerializer.serialize(a.getExpression()));
+                builder.newline();
+                serializer.serializeRuleElement(a.getExpression());
             }
             builder.unindent().unindent();
         }
@@ -81,7 +85,8 @@ public class ArchetypeSlotSerializer extends ConstraintSerializer<ArchetypeSlot>
                     .append("exclude")
                     .indent();
             for (Assertion a : cobj.getExcludes()) {
-                builder.newline().append(ADLExpressionSerializer.serialize(a.getExpression()));
+                builder.newline();
+                serializer.serializeRuleElement(a.getExpression());
             }
             builder.unindent().unindent();
         }

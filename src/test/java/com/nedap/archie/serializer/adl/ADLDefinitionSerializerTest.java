@@ -2,6 +2,7 @@ package com.nedap.archie.serializer.adl;
 
 import com.nedap.archie.adlparser.ADLParser;
 import com.nedap.archie.aom.Archetype;
+import com.nedap.archie.aom.ArchetypeSlot;
 import com.nedap.archie.aom.CComplexObject;
 import com.nedap.archie.aom.CObject;
 import com.nedap.archie.query.APathQuery;
@@ -199,6 +200,36 @@ public class ADLDefinitionSerializerTest {
                 "    }"));
 
 
+    }
+
+    @Test
+    public void serializeArchetypeSlot() throws Exception {
+        Archetype archetype = loadRoot("adl2-tests/features/aom_structures/slots/openEHR-EHR-SECTION.slot_include_any_exclude_empty.v1.adls");
+        ArchetypeSlot slot = archetype.itemAtPath("/items[id2]");
+        String serialized = serializeConstraint(slot);
+        assertThat(serialized, equalTo("\n    allow_archetype OBSERVATION[id2] occurrences matches {0..1} matches {     -- Vital signs\n" +
+                "        include\n" +
+                "            archetype_id/value matches {/.*/}\n" +
+                "    }"));
+
+
+
+        archetype = load("openEHR-EHR-CLUSTER.device.v1.adls");
+        slot = archetype.itemAtPath("/items[id10]");
+        serialized = serializeConstraint(slot);
+        assertThat(serialized, equalTo("\n    allow_archetype CLUSTER[id10] occurrences matches {0..*} matches {     -- Properties\n" +
+                "        include\n" +
+                "            archetype_id/value matches {/openEHR-EHR-CLUSTER\\.dimensions(-a-zA-Z0-9_]+)*\\.v1|openEHR-EHR-CLUSTER\\.catheter(-a-zA-Z0-9_]+)*\\.v1/}\n" +
+                "    }"));
+
+
+        archetype = loadRoot("adl2-tests/features/aom_structures/slots/openEHR-EHR-SECTION.slot_include_empty_exclude_non_any.v1.adls");
+        slot = archetype.itemAtPath("/items[id2]");
+        serialized = serializeConstraint(slot);
+        assertThat(serialized, equalTo("\n    allow_archetype OBSERVATION[id2] occurrences matches {0..1} matches {     -- Vital signs\n" +
+                "        exclude\n" +
+                "            archetype_id/value matches {/openEHR-EHR-OBSERVATION\\.blood_pressure([a-zA-Z0-9_]+)*\\.v1/}\n" +
+                "    }"));
     }
 
 

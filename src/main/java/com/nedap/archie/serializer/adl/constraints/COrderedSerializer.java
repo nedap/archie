@@ -7,7 +7,7 @@ import com.nedap.archie.serializer.adl.ADLDefinitionSerializer;
 /**
  * @author markopi
  */
-abstract public class COrderedSerializer<T extends COrdered<?>> extends ConstraintSerializer<T> {
+public abstract class COrderedSerializer<T extends COrdered<?>> extends ConstraintSerializer<T> {
     public COrderedSerializer(ADLDefinitionSerializer serializer) {
         super(serializer);
     }
