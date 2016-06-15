@@ -25,10 +25,6 @@ public class AssertionEvaluator implements Evaluator<Assertion> {
                 //variable declaration?
                 //throw new RuntimeException("assertion with type " + value.getType() + " found - should be boolean!");
             }
-        } else if (!statement.getVariables().isEmpty()) {
-            for(VariableDeclaration declaration:statement.getVariables()) {
-                evaluation.evaluate(declaration);
-            }
         }
         return null;
         //TODO: this assertion can be several things:

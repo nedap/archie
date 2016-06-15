@@ -21,7 +21,7 @@ public class RulesParser extends BaseTreeWalker {
         primitivesConstraintParser = new PrimitivesConstraintParser(errors);
     }
 
-    public Assertion parse(AssertionContext assertionContext) {
+    public RuleStatement parse(AssertionContext assertionContext) {
 
         Assertion assertion = new Assertion();
         if(assertionContext.boolean_assertion() != null) {
@@ -31,9 +31,10 @@ public class RulesParser extends BaseTreeWalker {
                 assertion.setTag(context.identifier().getText());
             }
             assertion.setExpression(parseExpression(context.boolean_expression()));
+            return assertion;
         } else if (assertionContext.variable_declaration() != null) {
             VariableDeclaration declaration = parseVariableDeclaration(assertion, assertionContext.variable_declaration());
-            assertion.addVariable(declaration);
+            return declaration;
         }
         return assertion;
     }

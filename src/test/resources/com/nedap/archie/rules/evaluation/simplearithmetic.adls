@@ -32,6 +32,7 @@ rules
     $not_false:Boolean ::= not false;
     $not_not_not_true:Boolean ::= ¬~! true;
     $variable_reference:Integer ::= $arithmetic_test % 5;
+    $arithmetic_parentheses:Integer ::= (3+2)*5;
 
 
 terminology

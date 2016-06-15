@@ -14,8 +14,8 @@ public class ConstraintSerializer extends RuleElementSerializer<Constraint> {
 
     @Override
     public void serialize(Constraint ruleElement) {
-        builder.append(" {");
+        builder.append("{");
         serializer.getDefinitionSerializer().appendCObject(ruleElement.getItem());
-        builder.append("} ");
+        builder.append("}");
     }
 }
