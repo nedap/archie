@@ -28,7 +28,7 @@ apply plugin: 'ch.raffael.pegdown-doclet'
 apply plugin: 'jacoco'
 //apply plugin: 'io.codearte.nexus-staging'
 
-version = '0.1.2'
+version = '0.2.0-SNAPSHOT'
 group = 'com.nedap.healthcare'
 archivesBaseName = 'archie'
 
