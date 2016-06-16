@@ -14,7 +14,7 @@ In gradle, include this dependency in your build.gradle:
 
 ```gradle
 dependencies {
-    compile 'com.nedap.healthcare:archie:0.1.0'
+    compile 'com.nedap.healthcare:archie:0.1.2'
 }
 ```
 
@@ -24,7 +24,7 @@ or if you use maven, in your pom.xml
 <dependency>
     <groupId>com.nedap.healthcare</groupId>
     <artifactId>archie</artifactId>
-    <version>0.1.0</version>
+    <version>0.1.2</version>
 </dependency>
 ```
 
@@ -72,7 +72,7 @@ CAttribute attribute = archetype.getDefinition()
 
 ### Serializing
 
-Archetype models can be serialized to ADL thanks the the serializer written by @markopi64. This is not yet included in the 0.1.1 release, but is in the master and will be included in a release soon. To use:
+Archetype models can be serialized to ADL thanks the the serializer written by @markopi64. To use:
 
 ```java
 String serialized = ADLArchetypeSerializer.serialize(archetype);
