@@ -32,7 +32,7 @@ or if you use maven, in your pom.xml
 
 [![Build Status](https://travis-ci.org/nedap/archie.svg?branch=master)](https://travis-ci.org/nedap/archie)
 
-You need Java 8 and Gradle to build. Then type:
+You need Java 8 to build. Check out the source and type:
 
 ```sh
 ./gradlew build
