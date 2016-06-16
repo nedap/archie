@@ -50,11 +50,13 @@ public class ForAllEvaluator implements Evaluator<ForAllStatement> {
             allPaths.addAll(evaluated.getAllPaths());
             if(evaluated.getType() == PrimitiveType.Boolean) {
                 for (Value evaluatedValue : evaluated.getValues()) {
-                    if (!((Boolean)evaluatedValue.getValue()).booleanValue()) {
+                    if (evaluatedValue.getValue() != null && !((Boolean)evaluatedValue.getValue()).booleanValue()) {
                         resultingCheck = false;
                     }
                 }
-            } else {
+            } else if(!evaluated.getSingleBooleanResult()){
+                resultingCheck = false;
+            } else if(evaluated.getType() == PrimitiveType.Integer || evaluated.getType() == PrimitiveType.Real) {
                 throw new UnsupportedOperationException("cannot convert type to boolean yet: " + evaluated.getType());
             }
         }
