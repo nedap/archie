@@ -13,6 +13,8 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.temporal.TemporalAccessor;
+import java.time.temporal.TemporalField;
+import java.time.temporal.TemporalQueries;
 
 /**
  * Created by pieter.bos on 04/11/15.
@@ -45,7 +47,14 @@ public class DvDateTime extends DvTemporal<Long> implements SingleValuedDataValu
     @XmlElement(type=Long.class)
     //@XmlElement(name="magnitude")
     public Long getMagnitude() {
-        return value == null ? null : (long) ZonedDateTime.from(value).toEpochSecond();
+        if(value == null) {
+            return null;
+        }
+        if(value.query(TemporalQueries.zone()) != null) {
+            return ZonedDateTime.from(value).toEpochSecond();
+        } else {
+            return LocalDateTime.from(value).toEpochSecond(ZoneOffset.UTC);
+        }
     }
 
     @Override
