@@ -54,5 +54,19 @@ public class ArchieRMInfoLookup extends ModelInfoLookup {
         result.setTerminologyId(codePhrase.getTerminologyId());
         return result;
     }
+
+    public Object convertConstrainedPrimitiveToRMObject(Object object) {
+        if(object instanceof TerminologyCode) {
+            return convertTerminologyCode((TerminologyCode) object);
+        }
+        return object;
+    }
+
+    private CodePhrase convertTerminologyCode(TerminologyCode terminologyCode) {
+        CodePhrase result = new CodePhrase();
+        result.setCodeString(terminologyCode.getCodeString());
+        result.setTerminologyId(terminologyCode.getTerminologyId());
+        return result;
+    }
 }
 

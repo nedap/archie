@@ -243,4 +243,9 @@ public class ModelInfoLookup {
     public Object convertToConstraintObject(Object object, CPrimitiveObject cPrimitiveObject) {
         return object;
     }
+
+    public Object convertConstrainedPrimitiveToRMObject(Object object) {
+        //TODO: this should take an AttributeInfo as param, so to be able to pick the right object
+        return object;
+    }
 }
