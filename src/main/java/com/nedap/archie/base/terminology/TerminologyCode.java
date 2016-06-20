@@ -4,14 +4,21 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.nedap.archie.rm.datatypes.CodePhrase;
 import com.nedap.archie.rm.datatypes.TerminologyId;
 
+import java.net.URI;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
  * Created by pieter.bos on 15/10/15.
  */
-public class TerminologyCode extends CodePhrase {
+public class TerminologyCode {
+
+    private TerminologyId terminologyId;
     private String terminologyVersion;
+    private String codeString;
+
+    private URI uri;
+
 
     public TerminologyCode() {
         super();
@@ -60,5 +67,29 @@ public class TerminologyCode extends CodePhrase {
         return terminologyVersion == null ?
                 "[" + getTerminologyId() + "::" + getCodeString() + "]" :
                 "[" + getTerminologyId() + "(" + terminologyVersion + ")::" + getCodeString() + "]";
+    }
+
+    public TerminologyId getTerminologyId() {
+        return terminologyId;
+    }
+
+    public void setTerminologyId(TerminologyId terminologyId) {
+        this.terminologyId = terminologyId;
+    }
+
+    public String getCodeString() {
+        return codeString;
+    }
+
+    public void setCodeString(String codeString) {
+        this.codeString = codeString;
+    }
+
+    public URI getUri() {
+        return uri;
+    }
+
+    public void setUri(URI uri) {
+        this.uri = uri;
     }
 }

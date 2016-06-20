@@ -1,5 +1,7 @@
 package com.nedap.archie.aom;
 
+import com.nedap.archie.rminfo.ModelInfoLookup;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -74,6 +76,19 @@ public class CPrimitiveObject<Constraint, ValueType> extends CDefinedObject<Valu
             }
         }
         return false;
+    }
+
+    /**
+     * True if the given value is a valid value for this constraint
+     * first Converts the value to a checkable value using the given ModelInfoLookup
+     * For example when it is an interval or pattern
+     *
+     * @param value
+     * @return
+     */
+    public boolean isValidValue(ModelInfoLookup lookup, Object value) {
+        Object convertedValue = lookup.convertToConstraintObject(value, this);
+        return isValidValue((ValueType) convertedValue);
     }
 
     @Override
