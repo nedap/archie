@@ -106,6 +106,7 @@ public class Locatable extends Pathable {
     }
 
     @XmlTransient
+    @JsonIgnore
     public String getNameAsString() {
         return name == null ? null : name.getValue();
     }
