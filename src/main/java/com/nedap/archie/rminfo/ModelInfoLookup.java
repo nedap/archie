@@ -181,9 +181,12 @@ public class ModelInfoLookup {
     }
 
     public Class getClass(String rmTypename) {
-
         RMTypeInfo rmTypeInfo = rmTypeNamesToRmTypeInfo.get(rmTypename);
         return rmTypeInfo == null ? null : rmTypeInfo.getJavaClass();
+    }
+
+    public Class getClassToBeCreated(String rmTypename) {
+        return getClass(rmTypename);
     }
 
     public  Map<String, Class> getRmTypeNameToClassMap() {

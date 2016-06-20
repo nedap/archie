@@ -20,7 +20,7 @@ import java.time.OffsetDateTime;
         "data",
         "state"
 })
-public class Event<Type extends ItemStructure> extends Locatable {
+public abstract class Event<Type extends ItemStructure> extends Locatable {
 
     private DvDateTime time;
     @Nullable

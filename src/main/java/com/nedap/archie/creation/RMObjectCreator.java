@@ -34,7 +34,7 @@ public class RMObjectCreator {
     }
 
     public <T> T create(CObject constraint) {
-        Class clazz = classLookup.getClass(constraint.getRmTypeName());
+        Class clazz = classLookup.getClassToBeCreated(constraint.getRmTypeName());
         if(clazz == null) {
             throw new IllegalArgumentException("cannot construct RMObject because of unknown constraint name " + constraint.getRmTypeName() + " full constraint " + constraint);
         }
