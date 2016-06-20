@@ -58,16 +58,15 @@ public class RMObjectCreator {
                 throw new IllegalArgumentException(String.format("Attribute %s not known for object %s", rmAttributeName, object.getClass().getSimpleName()));
             }
 
-            Field field = attributeInfo.getField();
             Type type = attributeInfo.getType();
             if(type instanceof Class) {
                 Class clazz = (Class) type;
                 if(Collection.class.isAssignableFrom(clazz)) {
                     Collection collection = (Collection) newInstance(attributeInfo);
-                    setField(object, attributeInfo, collection);
                     if(values != null) {
                         collection.addAll(values);
                     }
+                    setField(object, attributeInfo, collection);
                 } else {
                     setSingleValuedAttribute(object, rmAttributeName, values, attributeInfo);
                 }
