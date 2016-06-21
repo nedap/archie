@@ -11,6 +11,7 @@ import com.nedap.archie.rminfo.ArchieRMInfoLookup;
 import javax.annotation.Nullable;
 import javax.xml.bind.annotation.XmlTransient;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -63,6 +64,18 @@ public class Pathable extends RMObject {
         if(child != null) {
             child.setParent(this);
             child.setParentAttributeName(attributeName);
+        }
+    }
+
+    /**
+     * Utility method to set this object as the parent of the given child,
+     * if the child is not null
+     */
+    protected void setThisAsParent(Collection<? extends Pathable> children, String attributeName) {
+        if(children != null) {
+            for(Pathable child:children) {
+                this.setThisAsParent(child, attributeName);
+            }
         }
     }
 

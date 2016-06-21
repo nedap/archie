@@ -66,14 +66,12 @@ public class History<Type extends ItemStructure> extends DataStructure {
 
     public void setEvents(List<Event<Type>> events) {
         this.events = events;
-        for(Event event:events) {
-            setThisAsParent(event, "event");
-        }
+        setThisAsParent(events, "events");
     }
 
     public void addEvent(Event<Type> event) {
         events.add(event);
-        setThisAsParent(event, "event");
+        setThisAsParent(event, "events");
     }
 
     @Nullable

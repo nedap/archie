@@ -23,13 +23,11 @@ public class Section extends ContentItem {
 
     public void setItems(List<ContentItem> items) {
         this.items = items;
-        for(ContentItem item:items) {
-            setThisAsParent(item, "item");
-        }
+        setThisAsParent(items, "items");
     }
 
     public void addItem(ContentItem item) {
         this.items.add(item);
-        setThisAsParent(item, "item");
+        setThisAsParent(item, "items");
     }
 }

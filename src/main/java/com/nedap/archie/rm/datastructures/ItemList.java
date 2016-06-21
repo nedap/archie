@@ -23,9 +23,7 @@ public class ItemList extends ItemStructure<Element> {
 
         public void setItems(List<Element> items) {
                 this.items = items;
-                for(Element item:items) {
-                        setThisAsParent(item, "item");
-                }
+                setThisAsParent(items, "items");
         }
 
         public void addItem(Element item) {
