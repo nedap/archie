@@ -29,7 +29,7 @@ public class DefinitionTest {
         CComplexObject definition = archetype.getDefinition();
         assertEquals("COMPOSITION", definition.getRmTypeName());
         assertEquals("id1", definition.getNodeId());
-        assertNull(definition.getOccurences());
+        assertNull(definition.getOccurrences());
 
         List<CAttribute> attributes = definition.getAttributes();
         assertEquals(3, attributes.size());
@@ -40,7 +40,7 @@ public class DefinitionTest {
         CComplexObject categoryDefinition = (CComplexObject) categoryChildren.get(0);
         assertEquals("DV_CODED_TEXT", categoryDefinition.getRmTypeName());
         assertEquals("id10", categoryDefinition.getNodeId());
-        assertNull(categoryDefinition.getOccurences());
+        assertNull(categoryDefinition.getOccurrences());
         assertNull(categoryDefinition.getDefaultValue());
         CTerminologyCode code = (CTerminologyCode) categoryDefinition.getAttribute("defining_code").getChildren().get(0);
 

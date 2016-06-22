@@ -403,7 +403,7 @@ public class Flattener {
     }
 
     private void flattenCObject(CObject parent, CObject child) {
-        parent.setOccurences(getPossiblyOverridenValue(parent.getOccurences(), child.getOccurences()));
+        parent.setOccurrences(getPossiblyOverridenValue(parent.getOccurrences(), child.getOccurrences()));
         parent.setSiblingOrder(getPossiblyOverridenValue(parent.getSiblingOrder(), child.getSiblingOrder()));
 
         parent.setNodeId(getPossiblyOverridenValue(parent.getNodeId(), child.getNodeId()));
