@@ -54,6 +54,9 @@ public class CTerminologyCode extends CPrimitiveObject<String, TerminologyCode> 
         for(String constraint:getConstraint()) {
             if(constraint.startsWith("at")) {
                 ArchetypeTerm termDefinition = terminology.getTermDefinition(language, constraint);
+                if(termDefinition == null) {
+                    termDefinition = terminology.getTermDefinition(defaultLanguage, constraint);
+                }
                 if(termDefinition != null) {
                     result.add(new TerminologyCodeWithArchetypeTerm(constraint, termDefinition));
                 }
