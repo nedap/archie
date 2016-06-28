@@ -21,7 +21,7 @@ import java.util.List;
         "events",
         "summary"
 })
-public class History<Type extends ItemStructure> extends DataStructure {
+public final class History<Type extends ItemStructure> extends DataStructure {
 
     private DvDateTime origin;
     @Nullable
