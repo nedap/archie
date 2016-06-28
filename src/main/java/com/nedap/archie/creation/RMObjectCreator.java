@@ -43,7 +43,7 @@ public class RMObjectCreator {
             if(result instanceof Locatable) { //and most often, it will be
                 Locatable locatable = (Locatable) result;
                 locatable.setArchetypeNodeId(constraint.getNodeId());
-                locatable.setName(constraint.getMeaning());
+                locatable.setNameAsString(constraint.getMeaning());
             }
             return (T) result;
         } catch (InstantiationException | IllegalAccessException e) {

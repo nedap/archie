@@ -1,6 +1,8 @@
 package com.nedap.archie.rm.archetypes;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import com.nedap.archie.paths.PathSegment;
 import com.nedap.archie.rm.datatypes.CodePhrase;
 import com.nedap.archie.rm.datatypes.UIDBasedId;
@@ -49,8 +51,7 @@ public class Locatable extends Pathable {
     }
 
     /** convenience method*/
-    @XmlTransient
-    public void setName(String name) {
+    public void setNameAsString(String name) {
         this.name = new DvText(name);
     }
 
