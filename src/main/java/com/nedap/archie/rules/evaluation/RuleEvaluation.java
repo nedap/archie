@@ -121,9 +121,9 @@ public class RuleEvaluation {
         assertionResult.setResult(result);
         assertionResult.setRawResult(valueList);
         evaluationResult.addAssertionResult(assertionResult);
-        if(!assertionResult.getResult()) {
-            fixableAssertionsChecker.checkAssertionForFixablePatterns(assertionResult, expression, 0);
-        }
+
+        fixableAssertionsChecker.checkAssertionForFixablePatterns(assertionResult, expression, 0);
+
 
 
         //before re-evaluation, reset any overridden existence from evaluation?

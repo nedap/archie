@@ -91,7 +91,13 @@ class FixableAssertionsChecker {
             if(existsOperator.getOperand() instanceof  ModelReference) { //TODO: this could also be an objectreference
                 //matches exists /path/to/value
                 List<ValueList> valueLists = ruleElementValues.get(existsOperator);
-                assertionResult.addPathsThatMustNotExist(resolveModelReferenceNonNull((ModelReference) existsOperator.getOperand(), index));
+                ValueList list = valueLists.get(index);
+                if(list.getSingleBooleanResult()) { //it exists. It should not
+                    assertionResult.addPathsThatMustNotExist(resolveModelReferenceNonNull((ModelReference) existsOperator.getOperand(), index));
+                } else { //does not exist, it's fine but we should still know. We need another model reference lookup method
+                    assertionResult.addPathThatMustNotExist(resolveModelReference((ModelReference) existsOperator.getOperand()));
+                }
+
             }
         }
     }
@@ -122,7 +128,7 @@ class FixableAssertionsChecker {
 
         ValueList pathExpressionValues = ruleElementValues.get(forAllStatement.getPathExpression()).get(0);
         for(ValueList valueList:valueLists) {
-            if(!valueList.getSingleBooleanResult()) {
+            //if(!valueList.getSingleBooleanResult()) {
                 //TODO: this code is a bit hard to understand
 
                 //set the variables to what they were during the for all evaluation.
@@ -140,7 +146,7 @@ class FixableAssertionsChecker {
 
                 forAllVariables.put(forAllStatement.getVariableName(), variableValue);
                 checkAssertionForFixablePatterns(assertionResult, forAllStatement.getRightOperand(), i);
-            }
+           // }
             i++;
         }
         forAllVariables.put(forAllStatement.getVariableName(), null);
