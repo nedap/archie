@@ -8,6 +8,7 @@ import com.nedap.archie.aom.TranslationDetails;
 import com.nedap.archie.aom.terminology.ArchetypeTerm;
 import com.nedap.archie.aom.terminology.ArchetypeTerminology;
 import com.nedap.archie.aom.terminology.ValueSet;
+import com.nedap.archie.base.terminology.TerminologyCode;
 import com.nedap.archie.rm.datatypes.CodePhrase;
 import com.nedap.archie.serializer.odin.OdinObject;
 
@@ -82,7 +83,7 @@ public class ADLOdinObjectMapper implements Function<Object, Object> {
 
     private OdinObject map(ResourceDescription desc) {
         return new OdinObject()
-                .put("lifecycle_state", ofNullable(desc.getLifecycleState()).map(CodePhrase::getCodeString))
+                .put("lifecycle_state", ofNullable(desc.getLifecycleState()).map(TerminologyCode::getCodeString))
                 .put("original_author", desc.getOriginalAuthor())
                 .put("original_publisher", desc.getOriginalPublisher())
                 .put("original_namespace", desc.getOriginalNamespace())

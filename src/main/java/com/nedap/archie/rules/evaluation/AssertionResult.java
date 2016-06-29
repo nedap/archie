@@ -24,8 +24,18 @@ public class AssertionResult {
     private boolean result;
 
 
+    /**
+     * Paths that must have a specific value. Will be set even if this path already has the specific value,
+     * to let the UI know that this field can NOT manually be changed by the user right now
+     */
     private Map<String, Value> setPathValues = new LinkedHashMap<>();
+    /**
+     * Paths that must exist. Will be set even if it does exist, to let the UI know it should not be removed
+     */
     private List<String> pathsThatMustExist = new ArrayList<>();
+    /**
+     * Paths that must not exist. Will be set even if it does not exist, to let the UI know if should not be added.
+     */
     private List<String> pathsThatMustNotExist = new ArrayList<>();
 
     public String getTag() {

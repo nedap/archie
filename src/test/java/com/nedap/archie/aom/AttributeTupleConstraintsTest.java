@@ -2,6 +2,8 @@ package com.nedap.archie.aom;
 
 import com.nedap.archie.adlparser.ADLParser;
 import com.nedap.archie.rm.datavalues.quantity.DvQuantity;
+import com.nedap.archie.rminfo.ArchieRMInfoLookup;
+import com.nedap.archie.rminfo.ModelInfoLookup;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -15,6 +17,8 @@ import static org.junit.Assert.*;
 public class AttributeTupleConstraintsTest {
 
     static CAttributeTuple attributeTuple;
+
+    private ModelInfoLookup lookup = ArchieRMInfoLookup.getInstance();
 
     @BeforeClass
     public static void setup() throws Exception {

@@ -34,7 +34,7 @@ public class LocatableTest {
         PointEvent event = new PointEvent<>();
         history.addEvent(event);
         event.setArchetypeNodeId("id3");
-        event.setName("custom event");
+        event.setNameAsString("custom event");
         ItemTree itemTree = new ItemTree();
         event.setData(itemTree);
         itemTree.setArchetypeNodeId("id4");
@@ -75,7 +75,7 @@ public class LocatableTest {
         PointEvent event = new PointEvent<>();
         history.addEvent(event);
         event.setArchetypeNodeId("id3");
-        event.setName("custom event");
+        event.setNameAsString("custom event");
         ItemTree itemTree = new ItemTree();
         event.setData(itemTree);
         itemTree.setArchetypeNodeId("id4");

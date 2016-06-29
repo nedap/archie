@@ -1,11 +1,10 @@
 package com.nedap.archie.aom;
 
 import com.nedap.archie.rminfo.ArchieRMInfoLookup;
+import com.nedap.archie.rminfo.ModelInfoLookup;
 import com.nedap.archie.rminfo.RMAttributeInfo;
-import com.nedap.archie.util.NamingUtil;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,12 +34,19 @@ public class CAttributeTuple extends CSecondOrder<CAttribute> {
         this.tuples.add(tuple);
     }
 
+    public boolean isValid(HashMap<String, Object> values) {
+        return isValid(ArchieRMInfoLookup.getInstance(), values);
+    }
+
+    public boolean isValid(Object rmObjectValue) {
+        return isValid(ArchieRMInfoLookup.getInstance(), rmObjectValue);
+    }
+
     /**
      * Given a hashmap of attribute names mapping to its values, check the validity of this set of values
      * return true if and only if the given values are valid.
      */
-    public boolean isValid(HashMap<String, Object> values) {
-
+    public boolean isValid(ModelInfoLookup lookup, HashMap<String, Object> values) {
         for(CAttribute attribute:getMembers()) {
             if(!values.containsKey(attribute.getRmAttributeName())) {
                 return false;
@@ -48,7 +54,7 @@ public class CAttributeTuple extends CSecondOrder<CAttribute> {
         }
 
         for(CPrimitiveTuple tuple:tuples) {
-            if (isValid(tuple, values)) {
+            if (isValid(lookup, tuple, values)) {
                 return true;
             }
         }
@@ -56,12 +62,14 @@ public class CAttributeTuple extends CSecondOrder<CAttribute> {
     }
 
 
-    private boolean isValid(CPrimitiveTuple tuple, HashMap<String, Object> values) {
+    private boolean isValid(ModelInfoLookup lookup, CPrimitiveTuple tuple, HashMap<String, Object> values) {
 
         int index = 0;
         for(CAttribute attribute:getMembers()) {
             String attributeName = attribute.getRmAttributeName();
-            if(!tuple.getMembers().get(index).isValidValue(values.get(attributeName))) {
+
+            CPrimitiveObject cPrimitiveObject = tuple.getMembers().get(index);
+            if(!cPrimitiveObject.isValidValue(lookup, values.get(attributeName))) {
                 return false;
             }
             index++;
@@ -73,11 +81,11 @@ public class CAttributeTuple extends CSecondOrder<CAttribute> {
      * Given a reference model object, check if it is valid
      * return true if and only if the given values are valid.
      */
-    public boolean isValid(Object value) {
+    public boolean isValid(ModelInfoLookup lookup, Object value) {
 
         HashMap<String, Object> members = new HashMap();
         for(CAttribute attribute:getMembers()) {
-            RMAttributeInfo attributeInfo = ArchieRMInfoLookup.getInstance().getAttributeInfo(value.getClass(), attribute.getRmAttributeName());
+            RMAttributeInfo attributeInfo = lookup.getAttributeInfo(value.getClass(), attribute.getRmAttributeName());
             try {
                 if (attributeInfo != null && attributeInfo.getGetMethod() != null) {
                     members.put(attribute.getRmAttributeName(), attributeInfo.getGetMethod().invoke(value));
@@ -88,7 +96,7 @@ public class CAttributeTuple extends CSecondOrder<CAttribute> {
                 throw new RuntimeException(e);
             }
         }
-        return isValid(members);
+        return isValid(lookup, members);
     }
 
     public CAttribute getMember(String attributeName) {

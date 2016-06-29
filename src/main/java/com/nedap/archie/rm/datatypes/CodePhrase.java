@@ -41,7 +41,7 @@ public class CodePhrase extends RMObject {
      */
     public CodePhrase(String phrase) {
         //'[' NAME_CHAR+ ( '(' NAME_CHAR+ ')' )? '::' NAME_CHAR+ ']' ;
-        Pattern pattern = Pattern.compile("\\[?(?<terminologyId>.+)(\\((?<terminologyVersion>.+)\\))?::(?<codeString>.+)\\]?");
+        Pattern pattern = Pattern.compile("\\[?(?<terminologyId>.+)(\\((?<terminologyVersion>.+)\\))?::(?<codeString>[^\\]]+)\\]?");
         Matcher matcher = pattern.matcher(phrase);
 
         if(matcher.matches()) {

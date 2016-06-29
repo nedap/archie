@@ -323,7 +323,7 @@ public class ParsedRulesEvaluationTest {
             assertTrue(assertionResult.getResult());//TODO: check paths that caused this
         }
 
-        assertEquals(0, evaluationResult.getPathsThatMustExist().size());
+        assertEquals(4, evaluationResult.getPathsThatMustExist().size());
         assertEquals(0, evaluationResult.getPathsThatMustNotExist().size());
         assertEquals(0, evaluationResult.getSetPathValues().size());
 
@@ -366,7 +366,8 @@ public class ParsedRulesEvaluationTest {
         }
 
         assertEquals(0, evaluationResult.getPathsThatMustExist().size());
-        assertEquals(0, evaluationResult.getPathsThatMustNotExist().size());
+        //the paths should not be creatable, so they should still be present in the result
+        assertEquals(3, evaluationResult.getPathsThatMustNotExist().size());
         assertEquals(0, evaluationResult.getSetPathValues().size());
 
     }
@@ -404,7 +405,9 @@ public class ParsedRulesEvaluationTest {
         assertFalse(evaluationResult.getAssertionResults().get(2).getResult()); //for all exists systolic - this is not true, so failed
 
 
-        assertEquals(1, evaluationResult.getPathsThatMustExist().size());
+        //four paths evaluated to exist, so ALL of them will be added to the list
+        assertEquals(4, evaluationResult.getPathsThatMustExist().size());
+
 
         assertEquals(0, evaluationResult.getPathsThatMustNotExist().size());
         //this is the most specific path we can construct to the missing node, using the for_all variable context
@@ -429,7 +432,7 @@ public class ParsedRulesEvaluationTest {
         }
 
         assertEquals(0, evaluationResult.getPathsThatMustExist().size());
-        assertEquals(4, evaluationResult.getPathsThatMustNotExist().size());
+        assertEquals(5, evaluationResult.getPathsThatMustNotExist().size());
         assertTrue(evaluationResult.getPathsThatMustNotExist().contains("/data[id2, 1]/events[id3, 1]/data[id4, 1]/items[id5, 1]/value[1]/magnitude[1]"));
         assertTrue(evaluationResult.getPathsThatMustNotExist().contains("/data[id2, 1]/events[id3, 2]/data[id4, 1]/items[id6, 2]/value[1]/magnitude[1]"));
         assertEquals(0, evaluationResult.getSetPathValues().size());

@@ -1,6 +1,8 @@
 package com.nedap.archie.rm.datavalues.quantity.datetime;
 
 import com.nedap.archie.rm.datavalues.SingleValuedDataValue;
+import com.nedap.archie.util.jaxbtime.DateXmlAdapter;
+import com.nedap.archie.util.jaxbtime.TimeXmlAdapter;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -8,6 +10,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.time.LocalDate;
 import java.time.Year;
 import java.time.YearMonth;
@@ -34,6 +37,7 @@ public class DvDate extends DvTemporal<Long> implements SingleValuedDataValue<Te
             @XmlElement(type=Year.class)
 
     })
+    @XmlJavaTypeAdapter(DateXmlAdapter.class)
     public Temporal getValue() {
         return value;
     }

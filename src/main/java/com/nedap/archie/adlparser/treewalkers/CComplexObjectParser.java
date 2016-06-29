@@ -48,7 +48,7 @@ public class CComplexObjectParser extends BaseTreeWalker {
         }
         //TODO: object.setDeprecated(context.) ?;
         if (context.c_occurrences() != null) {
-            object.setOccurences(parseMultiplicityInterval(context.c_occurrences()));
+            object.setOccurrences(parseMultiplicityInterval(context.c_occurrences()));
         }
         for (C_attribute_defContext attribute : context.c_attribute_def()) {
             parseCAttribute(object, attribute);
@@ -173,7 +173,7 @@ public class CComplexObjectParser extends BaseTreeWalker {
     private CComplexObjectProxy parseCComplexObjectProxy(C_complex_object_proxyContext proxyContext) {
 
         CComplexObjectProxy proxy = new CComplexObjectProxy();
-        proxy.setOccurences(this.parseMultiplicityInterval(proxyContext.c_occurrences()));
+        proxy.setOccurrences(this.parseMultiplicityInterval(proxyContext.c_occurrences()));
         proxy.setTargetPath(proxyContext.adl_path().getText());
         proxy.setRmTypeName(proxyContext.type_id().getText());
         proxy.setNodeId(proxyContext.ID_CODE().getText());
@@ -187,7 +187,7 @@ public class CComplexObjectParser extends BaseTreeWalker {
         root.setNodeId(archetypeRootContext.ID_CODE().getText());
         root.setArchetypeRef(archetypeRootContext.archetype_ref().getText());
 
-        root.setOccurences(this.parseMultiplicityInterval(archetypeRootContext.c_occurrences()));
+        root.setOccurrences(this.parseMultiplicityInterval(archetypeRootContext.c_occurrences()));
 //((Archetype_slotContext) slotContext).start.getInputStream().getText(slotContext.getSourceInterval())
         return root;
     }
@@ -201,7 +201,7 @@ public class CComplexObjectParser extends BaseTreeWalker {
             slot.setClosed(true);
         }
         if (headContext.c_occurrences() != null) {
-            slot.setOccurences(parseMultiplicityInterval(headContext.c_occurrences()));
+            slot.setOccurrences(parseMultiplicityInterval(headContext.c_occurrences()));
         }
         RulesParser assertionParser = new RulesParser(getErrors());
         if (slotContext.c_excludes() != null) {

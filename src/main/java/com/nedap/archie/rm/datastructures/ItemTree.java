@@ -22,9 +22,7 @@ public class ItemTree extends ItemStructure<Item> {
 
         public void setItems(List<Item> items) {
                 this.items = items;
-                for(Item item:items) {
-                        setThisAsParent(item, "item");
-                }
+                setThisAsParent(items, "items");
         }
 
         public void addItem(Item item) {

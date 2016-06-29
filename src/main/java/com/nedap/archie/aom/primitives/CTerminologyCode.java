@@ -8,7 +8,6 @@ import com.nedap.archie.aom.terminology.ArchetypeTerminology;
 import com.nedap.archie.aom.terminology.TerminologyCodeWithArchetypeTerm;
 import com.nedap.archie.aom.terminology.ValueSet;
 import com.nedap.archie.base.terminology.TerminologyCode;
-import com.nedap.archie.rm.datatypes.CodePhrase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,15 +18,8 @@ import java.util.List;
  */
 public class CTerminologyCode extends CPrimitiveObject<String, TerminologyCode> {
 
+    @Override
     public boolean isValidValue(TerminologyCode value) {
-        return isValidValueCodePhrase(value);
-    }
-
-    public boolean isValidValue(CodePhrase value) {
-        return isValidValueCodePhrase(value);
-    }
-
-    private boolean isValidValueCodePhrase(CodePhrase value) {
         if(getConstraint().isEmpty()) {
             return true;
         }
@@ -62,6 +54,9 @@ public class CTerminologyCode extends CPrimitiveObject<String, TerminologyCode> 
         for(String constraint:getConstraint()) {
             if(constraint.startsWith("at")) {
                 ArchetypeTerm termDefinition = terminology.getTermDefinition(language, constraint);
+                if(termDefinition == null) {
+                    termDefinition = terminology.getTermDefinition(defaultLanguage, constraint);
+                }
                 if(termDefinition != null) {
                     result.add(new TerminologyCodeWithArchetypeTerm(constraint, termDefinition));
                 }

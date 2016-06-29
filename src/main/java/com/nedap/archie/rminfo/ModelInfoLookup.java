@@ -1,6 +1,7 @@
 package com.nedap.archie.rminfo;
 
 import com.google.common.reflect.TypeToken;
+import com.nedap.archie.aom.CPrimitiveObject;
 import com.nedap.archie.rm.RMObject;
 import org.reflections.ReflectionUtils;
 import org.reflections.Reflections;
@@ -230,4 +231,21 @@ public class ModelInfoLookup {
         return namingStrategy;
     }
 
+    /**
+     * Convert the given reference model object to the object required for the archetype constraint.
+     *
+     * for example, a CTerminologyCode can be used to check a CodePhrase or a DvCodedText. This cannot be directly checked and must be converted first.
+     *
+     * @param object
+     * @param cPrimitiveObject
+     * @return
+     */
+    public Object convertToConstraintObject(Object object, CPrimitiveObject cPrimitiveObject) {
+        return object;
+    }
+
+    public Object convertConstrainedPrimitiveToRMObject(Object object) {
+        //TODO: this should take an AttributeInfo as param, so to be able to pick the right object
+        return object;
+    }
 }

@@ -23,7 +23,7 @@ import java.util.List;
 public class CObject extends ArchetypeConstraint {
 
     private String rmTypeName;
-    private MultiplicityInterval occurences;
+    private MultiplicityInterval occurrences;
     private String nodeId;
     private Boolean deprecated;
 
@@ -38,12 +38,12 @@ public class CObject extends ArchetypeConstraint {
         this.rmTypeName = rmTypeName;
     }
 
-    public MultiplicityInterval getOccurences() {
-        return occurences;
+    public MultiplicityInterval getOccurrences() {
+        return occurrences;
     }
 
-    public void setOccurences(MultiplicityInterval occurences) {
-        this.occurences = occurences;
+    public void setOccurrences(MultiplicityInterval occurrences) {
+        this.occurrences = occurrences;
     }
 
     public String getNodeId() {
@@ -163,10 +163,10 @@ public class CObject extends ArchetypeConstraint {
     }
 
     public boolean isAllowed() {
-        if(occurences == null) {
+        if(occurrences == null) {
             return true;
         }
-        return occurences.isUpperUnbounded() || occurences.getUpper() > 0;
+        return occurrences.isUpperUnbounded() || occurrences.getUpper() > 0;
     }
 
     @Override
@@ -175,10 +175,10 @@ public class CObject extends ArchetypeConstraint {
     }
 
     public boolean isRequired() {
-        if(occurences == null) {
+        if(occurrences == null) {
             return false;
         }
-        return occurences.getLower() > 0;
+        return occurrences.getLower() > 0;
     }
 
     /**

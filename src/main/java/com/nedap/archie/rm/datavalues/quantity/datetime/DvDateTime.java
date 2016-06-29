@@ -1,19 +1,16 @@
 package com.nedap.archie.rm.datavalues.quantity.datetime;
 
 import com.nedap.archie.rm.datavalues.SingleValuedDataValue;
+import com.nedap.archie.util.jaxbtime.DateTimeXmlAdapter;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElements;
-import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.time.*;
 import java.time.temporal.TemporalAccessor;
-import java.time.temporal.TemporalField;
 import java.time.temporal.TemporalQueries;
 
 /**
@@ -31,8 +28,8 @@ public class DvDateTime extends DvTemporal<Long> implements SingleValuedDataValu
     @XmlElements({
             @XmlElement(type = OffsetDateTime.class),
             @XmlElement(type = LocalDateTime.class)
-
     })
+    @XmlJavaTypeAdapter(DateTimeXmlAdapter.class)
     public TemporalAccessor getValue() {
         return value;
     }
