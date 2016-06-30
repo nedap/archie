@@ -143,11 +143,15 @@ public class APathToXPathConverter {
                     writeTree(output, child, inPredicate);
                 }
             } else if(inPredicate && child instanceof FilterExprContext) {
+                FilterExprContext filterExprContext = (FilterExprContext) child;
                 //not sure if we should support [id5, 1]. This is not standard xpath!
                 Matcher numberMatcher = numberPattern.matcher(child.getText());
                 if(numberMatcher.matches()) {
                     output.append("position() = ");
-                    output.append(tree.getText());
+                    output.append(child.getText());
+                } else if(filterExprContext.primaryExpr().Literal() != null) {
+                    output.append("name/value = ");
+                    output.append(child.getText());
                 } else {
                     writeTree(output, child, inPredicate);
                 }

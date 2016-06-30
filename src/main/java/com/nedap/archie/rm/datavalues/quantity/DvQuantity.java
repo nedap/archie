@@ -11,6 +11,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @XmlType(name = "DV_QUANTITY", propOrder = {
+        "magnitude",
         "units",
         "precision"
 })
@@ -38,4 +39,14 @@ public class DvQuantity extends DvAmount<Double> {
         this.units = units;
     }
 
+    @XmlElement(type=Double.class)
+    @Override
+    public Double getMagnitude() {
+        return super.getMagnitude();
+    }
+
+    @Override
+    public void setMagnitude(Double magnitude) {
+        super.setMagnitude(magnitude);
+    }
 }

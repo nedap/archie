@@ -1,8 +1,9 @@
 package com.nedap.archie.rm.datavalues.quantity.datetime;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.nedap.archie.rm.datavalues.SingleValuedDataValue;
-import com.nedap.archie.util.jaxbtime.DateXmlAdapter;
-import com.nedap.archie.util.jaxbtime.TimeXmlAdapter;
+import com.nedap.archie.json.DateDeserializer;
+import com.nedap.archie.xml.DateXmlAdapter;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -31,13 +32,14 @@ public class DvDate extends DvTemporal<Long> implements SingleValuedDataValue<Te
     private Temporal value;
 
     @Override
-    @XmlElements({
-            @XmlElement(type=LocalDate.class),
-            @XmlElement(type=YearMonth.class),
-            @XmlElement(type=Year.class)
-
-    })
+//    @XmlElements({
+//            @XmlElement(type=LocalDate.class),
+//            @XmlElement(type=YearMonth.class),
+//            @XmlElement(type=Year.class)
+//
+//    })
     @XmlJavaTypeAdapter(DateXmlAdapter.class)
+    @JsonDeserialize(using= DateDeserializer.class)
     public Temporal getValue() {
         return value;
     }

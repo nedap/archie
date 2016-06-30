@@ -3,6 +3,8 @@ package com.nedap.archie.rm.datavalues.quantity;
 import javax.annotation.Nullable;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 /**
@@ -66,5 +68,11 @@ public class DvProportion extends DvAmount<Double> {
 
     public void setPrecision(@Nullable Long precision) {
         this.precision = precision;
+    }
+
+    @XmlTransient
+    @Override
+    public Double getMagnitude() {
+        return super.getMagnitude();
     }
 }

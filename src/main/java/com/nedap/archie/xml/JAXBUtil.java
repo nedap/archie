@@ -1,4 +1,4 @@
-package com.nedap.archie.util;
+package com.nedap.archie.xml;
 
 import com.nedap.archie.rminfo.ArchieRMInfoLookup;
 

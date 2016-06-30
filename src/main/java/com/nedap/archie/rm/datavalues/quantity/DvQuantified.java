@@ -1,12 +1,15 @@
 package com.nedap.archie.rm.datavalues.quantity;
 
 import com.nedap.archie.rm.datavalues.quantity.datetime.DvDateTime;
+import com.nedap.archie.rm.datavalues.quantity.datetime.DvTemporal;
 
 import javax.annotation.Nullable;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlElements;
+import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
@@ -16,8 +19,10 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @XmlType(name = "DV_QUANTIFIED", propOrder = {
         "magnitudeStatus",
-        "accuracy",
-        "magnitude"
+})
+@XmlSeeAlso({
+        DvTemporal.class,
+        DvAmount.class
 })
 public abstract class DvQuantified<AccuracyType, MagnitudeType extends Comparable> extends DvOrdered<MagnitudeType> {
 
@@ -37,11 +42,7 @@ public abstract class DvQuantified<AccuracyType, MagnitudeType extends Comparabl
         this.magnitudeStatus = magnitudeStatus;
     }
 
-    @XmlElements({
-            @XmlElement(type = Long.class),
-            @XmlElement(type = Double.class)
-
-    })
+    @XmlTransient
     public AccuracyType getAccuracy() {
         return accuracy;
     }
@@ -50,11 +51,7 @@ public abstract class DvQuantified<AccuracyType, MagnitudeType extends Comparabl
         this.accuracy = accuracy;
     }
 
-    @XmlElements({
-            @XmlElement(type = Long.class),
-            @XmlElement(type = Double.class)
-
-    })
+    @XmlTransient
     public MagnitudeType getMagnitude() {
         return magnitude;
     }

@@ -104,7 +104,7 @@ public class TemporalConstraintParser extends BaseTreeWalker {
             result.setPatternedConstraint(context.DURATION_CONSTRAINT_PATTERN().getText());
         }
         if(context.assumed_duration_value() != null) {
-            result.setAssumedValue(parseDurationValue(context.assumed_duration_value().duration_value()));
+            result.setAssumedValue(parseDurationValue(context.assumed_duration_value().duration_value().getText()));
         }
 
         Duration_valueContext durationValueContext = context.duration_value();
@@ -147,11 +147,11 @@ public class TemporalConstraintParser extends BaseTreeWalker {
         } else {
             interval = new Interval<>();
             if(context.duration_value().size() == 1) {
-                interval.setLower(parseDurationValue(context.duration_value(0)));
+                interval.setLower(parseDurationValue(context.duration_value(0).getText()));
                 interval.setUpper(interval.getLower());
             } else {
-                interval.setLower(parseDurationValue(context.duration_value(0)));
-                interval.setUpper(parseDurationValue(context.duration_value(1)));
+                interval.setLower(parseDurationValue(context.duration_value(0).getText()));
+                interval.setUpper(parseDurationValue(context.duration_value(1).getText()));
             }
             if(context.SYM_GT() != null) {//'|>a..b|'
                 interval.setLowerIncluded(false);
@@ -165,7 +165,7 @@ public class TemporalConstraintParser extends BaseTreeWalker {
 
     private Interval<TemporalAmount> parseRelOpDurationInterval(Duration_interval_valueContext context) {
         Interval<TemporalAmount> interval = new Interval<>();
-        TemporalAmount duration = parseDurationValue(context.duration_value().get(0));
+        TemporalAmount duration = parseDurationValue(context.duration_value().get(0).getText());
         switch(context.relop().getText()) {
             case "<":
                 interval.setUpperIncluded(false);
@@ -184,23 +184,22 @@ public class TemporalConstraintParser extends BaseTreeWalker {
     }
 
     private void parseDuration(CDuration result, Duration_valueContext durationValueContext) {
-        TemporalAmount duration = parseDurationValue(durationValueContext);
+        TemporalAmount duration = parseDurationValue(durationValueContext.getText());
         Interval<TemporalAmount> constraint = new Interval<>();
         constraint.setLower(duration);
         constraint.setUpper(duration);
         result.addConstraint(constraint);
     }
 
-    private TemporalAmount parseDurationValue(AdlParser.Duration_valueContext context) {
+    public static TemporalAmount parseDurationValue(String text) {
         try {
-            String text = context.getText();
             if(text.startsWith("PT")) {
                 return Duration.parse(text);
             } else {
                 return Period.parse(text);
             }
         } catch (DateTimeParseException e) {
-            throw new IllegalArgumentException(e.getMessage() + ":" + context.getText());
+            throw new IllegalArgumentException(e.getMessage() + ":" + text);
         }
     }
 

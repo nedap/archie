@@ -1,4 +1,4 @@
-package com.nedap.archie.util.jaxbtime;
+package com.nedap.archie.xml;
 
 import com.nedap.archie.adlparser.treewalkers.TemporalConstraintParser;
 
@@ -13,11 +13,6 @@ import java.util.Objects;
  * Created by pieter.bos on 24/06/16.
  */
 public class DateTimeXmlAdapter extends XmlAdapter<String, TemporalAccessor> {
-
-
-    public DateTimeXmlAdapter() {
-
-    }
 
     @Override
     public TemporalAccessor unmarshal(String stringValue) {
