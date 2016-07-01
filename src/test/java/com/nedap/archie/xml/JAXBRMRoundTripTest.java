@@ -71,8 +71,7 @@ public class JAXBRMRoundTripTest {
         //now parse again
         Cluster parsedCluster = (Cluster) JAXBUtil.getArchieJAXBContext().createUnmarshaller().unmarshal(new StringReader(writer.toString()));
         RMQueryContext parsedQueryContext = new RMQueryContext(parsedCluster);
-
-        parsedQueryContext.find("/items");
+        
         assertThat(parsedQueryContext.<DvText>find("/items['Text']/value").getValue(), is("test-text"));
         assertThat(parsedQueryContext.<DvDate>find("/items['Date']/value").getValue(), is(LocalDate.of(2016, 1, 1)));
         assertThat(parsedQueryContext.<DvDateTime>find("/items['Datetime']/value").getValue(), is(LocalDateTime.of(2016, 1, 1, 12, 00)));
