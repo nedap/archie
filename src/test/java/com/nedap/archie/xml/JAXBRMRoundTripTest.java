@@ -64,9 +64,14 @@ public class JAXBRMRoundTripTest {
 
         StringWriter writer = new StringWriter();
         Marshaller marshaller = JAXBUtil.getArchieJAXBContext().createMarshaller();
-        //marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
         marshaller.marshal(cluster, writer);
-        System.out.println(writer.toString());
+        String xml = writer.toString();
+        assertThat(xml, containsString(">12:00<"));
+        assertThat(xml, containsString(">2016-01-01T12:00<"));
+        assertThat(xml, containsString(">2016-01-01<"));
+
+        System.out.println(xml);
 
         //now parse again
         Cluster parsedCluster = (Cluster) JAXBUtil.getArchieJAXBContext().createUnmarshaller().unmarshal(new StringReader(writer.toString()));

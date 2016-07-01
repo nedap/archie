@@ -3,6 +3,8 @@ package com.nedap.archie.xml;
 import com.nedap.archie.adlparser.treewalkers.TemporalConstraintParser;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
+import java.time.LocalDate;
+import java.time.YearMonth;
 import java.time.temporal.Temporal;
 import java.time.temporal.TemporalAccessor;
 
@@ -18,6 +20,9 @@ public class DateXmlAdapter extends XmlAdapter<String, Temporal> {
 
     @Override
     public String marshal(Temporal value) {
+        if(value instanceof LocalDate || value instanceof YearMonth) {
+            return value.toString();
+        }
         return value != null?TemporalConstraintParser.ISO_8601_DATE.format(value):null;
     }
 }
