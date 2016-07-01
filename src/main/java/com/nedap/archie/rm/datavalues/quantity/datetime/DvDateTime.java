@@ -19,20 +19,20 @@ import java.time.temporal.TemporalQueries;
 /**
  * Created by pieter.bos on 04/11/15.
  */
-@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "DV_DATE_TIME", propOrder = {
         "value"
 })
 public class DvDateTime extends DvTemporal<Long> implements SingleValuedDataValue<TemporalAccessor> {
 
+    @XmlJavaTypeAdapter(DateTimeXmlAdapter.class)
     private TemporalAccessor value;
 
     @Override
 //    @XmlElements({
 //            @XmlElement(type = OffsetDateTime.class),
 //            @XmlElement(type = LocalDateTime.class)
-//    })
-    @XmlJavaTypeAdapter(DateTimeXmlAdapter.class)
+//    })    
     @JsonDeserialize(using = DateTimeDeserializer.class)
     public TemporalAccessor getValue() {
         return value;
@@ -56,7 +56,6 @@ public class DvDateTime extends DvTemporal<Long> implements SingleValuedDataValu
         }
     }
 
-    @Override
     public void setMagnitude(Long magnitude) {
         if(magnitude == null) {
             value = null;

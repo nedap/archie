@@ -13,7 +13,7 @@ import javax.xml.bind.annotation.XmlType;
 /**
  * Created by pieter.bos on 04/11/15.
  */
-@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "DV_AMOUNT", propOrder = {
         "accuracy",
         "accuracyIsPercent"
@@ -26,11 +26,12 @@ import javax.xml.bind.annotation.XmlType;
 })
 public abstract class DvAmount<MagnitudeType extends Comparable> extends DvQuantified<Double, MagnitudeType>{
     @Nullable
-
+    private Double accuracy;
+    @Nullable
+    @XmlElement(name = "accuracy_is_percent")
     private Boolean accuracyIsPercent;
 
     @Nullable
-    @XmlElement(name = "accuracy_is_percent")
     public Boolean getAccuracyIsPercent() {
         return accuracyIsPercent;
     }
@@ -40,13 +41,11 @@ public abstract class DvAmount<MagnitudeType extends Comparable> extends DvQuant
     }
 
     @Override
-    @XmlElement(type=Double.class)
     public Double getAccuracy() {
-        return super.getAccuracy();
+        return accuracy;
     }
 
-    @Override
     public void setAccuracy(Double accuracy) {
-        super.setAccuracy(accuracy);
+        this.accuracy = accuracy;
     }
 }

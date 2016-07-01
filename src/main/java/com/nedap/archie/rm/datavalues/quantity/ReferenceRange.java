@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlType;
 /**
  * Created by pieter.bos on 04/11/15.
  */
-@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "REFERENCE_RANGE", propOrder = {
         "meaning",
         "range"

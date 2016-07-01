@@ -13,7 +13,7 @@ import javax.xml.bind.annotation.XmlType;
 /**
  * Created by pieter.bos on 04/11/15.
  */
-@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "INSTRUCTION_DETAILS", propOrder = {
         "instructionId",
         "activityId",
@@ -21,12 +21,14 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class InstructionDetails extends Pathable {
 
+    @XmlElement(name = "instruction_id")
     private LocatableRef instructionId;
+    @XmlElement(name = "activity_id")
     private String activityId;
+    @XmlElement(name = "wf_details")
     @Nullable
     private ItemStructure wfDetails;
-
-    @XmlElement(name = "instruction_id")
+    
     public LocatableRef getInstructionId() {
         return instructionId;
     }
@@ -34,8 +36,7 @@ public class InstructionDetails extends Pathable {
     public void setInstructionId(LocatableRef instructionId) {
         this.instructionId = instructionId;
     }
-
-    @XmlElement(name = "activity_id")
+    
     public String getActivityId() {
         return activityId;
     }
@@ -44,7 +45,7 @@ public class InstructionDetails extends Pathable {
         this.activityId = activityId;
     }
 
-    @XmlElement(name = "wf_details")
+    
     public ItemStructure getWfDetails() {
         return wfDetails;
     }

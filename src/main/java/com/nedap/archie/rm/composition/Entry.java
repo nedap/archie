@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * Created by pieter.bos on 04/11/15.
  */
-@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ENTRY", propOrder = {
         "language",
         "encoding",
@@ -30,11 +30,13 @@ public class Entry extends ContentItem {
     private CodePhrase encoding;
     @Nullable
 
+    @XmlElement(name = "work_flow_id")
     private ObjectRef workFlowId;
     private PartyProxy subject;
     @Nullable
     private PartyProxy provider;
 
+    @XmlElement(name = "other_participations")
     private List<PartyProxy> otherParticipations = new ArrayList<>();
 
     public PartyProxy getSubject() {
@@ -53,8 +55,7 @@ public class Entry extends ContentItem {
     public void setProvider(@Nullable PartyProxy provider) {
         this.provider = provider;
     }
-
-    @XmlElement(name = "other_participations")
+    
     public List<PartyProxy> getOtherParticipations() {
         return otherParticipations;
     }
@@ -83,8 +84,7 @@ public class Entry extends ContentItem {
         this.encoding = encoding;
     }
 
-    @Nullable
-    @XmlElement(name = "work_flow_id")
+    @Nullable    
     public ObjectRef getWorkFlowId() {
         return workFlowId;
     }

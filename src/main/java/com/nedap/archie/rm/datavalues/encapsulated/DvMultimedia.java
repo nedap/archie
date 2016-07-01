@@ -12,7 +12,7 @@ import javax.xml.bind.annotation.XmlType;
 /**
  * Created by pieter.bos on 04/11/15.
  */
-@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "DV_MULTIMEDIA", propOrder = {
         "alternateText",
         "uri",
@@ -26,19 +26,23 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class DvMultimedia extends DvEncapsulated {
     @Nullable
-
+    @XmlElement(name = "alternate_text")
     private String alternateText;
     @Nullable
     private DvURI uri;
     @Nullable
     private byte[] data;
+    @XmlElement(name = "media_type", required = true)
     private CodePhrase mediaType;//TODO: construct default codephrase with mime type already set as terminology id
     @Nullable
+    @XmlElement(name = "compression_algorithm")
     private CodePhrase compressionAlgorithm;
     @Nullable
+    @XmlElement(name = "integrity_check")
     private byte[] integrityCheck;
 
     @Nullable
+    @XmlElement(name = "integrity_check_algorithm")
     private CodePhrase integrityCheckAlgorithm;
 
     private Integer size;
@@ -47,8 +51,7 @@ public class DvMultimedia extends DvEncapsulated {
     private DvMultimedia thumbnail;
 
     @Nullable
-
-    @XmlElement(name = "alternate_text")
+    
     public String getAlternateText() {
         return alternateText;
     }
@@ -75,7 +78,6 @@ public class DvMultimedia extends DvEncapsulated {
         this.data = data;
     }
 
-    @XmlElement(name = "media_type", required = true)
     public CodePhrase getMediaType() {
         return mediaType;
     }
@@ -85,7 +87,6 @@ public class DvMultimedia extends DvEncapsulated {
     }
 
     @Nullable
-    @XmlElement(name = "compression_algorithm")
     public CodePhrase getCompressionAlgorithm() {
         return compressionAlgorithm;
     }
@@ -95,7 +96,6 @@ public class DvMultimedia extends DvEncapsulated {
     }
 
     @Nullable
-    @XmlElement(name = "integrity_check")
     public byte[] getIntegrityCheck() {
         return integrityCheck;
     }
@@ -115,7 +115,6 @@ public class DvMultimedia extends DvEncapsulated {
     }
 
     @Nullable
-    @XmlElement(name = "integrity_check_algorithm")
     public CodePhrase getIntegrityCheckAlgorithm() {
         return integrityCheckAlgorithm;
     }

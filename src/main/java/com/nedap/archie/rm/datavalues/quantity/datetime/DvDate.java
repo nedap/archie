@@ -23,12 +23,13 @@ import java.time.temporal.Temporal;
  * TODO: implement java.time.Temporal for this
  * Created by pieter.bos on 04/11/15.
  */
-@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "DV_DATE", propOrder = {
         "value"
 })
 public class DvDate extends DvTemporal<Long> implements SingleValuedDataValue<Temporal> {
     //TODO: in XML this should be a string probably
+    @XmlJavaTypeAdapter(DateXmlAdapter.class)
     private Temporal value;
 
     @Override
@@ -38,7 +39,6 @@ public class DvDate extends DvTemporal<Long> implements SingleValuedDataValue<Te
 //            @XmlElement(type=Year.class)
 //
 //    })
-    @XmlJavaTypeAdapter(DateXmlAdapter.class)
     @JsonDeserialize(using= DateDeserializer.class)
     public Temporal getValue() {
         return value;
@@ -54,12 +54,10 @@ public class DvDate extends DvTemporal<Long> implements SingleValuedDataValue<Te
     }
 
     @Override
-    @XmlTransient
     public Long getMagnitude() {
         return value == null ? null : (long) LocalDate.from(value).toEpochDay();
     }
 
-    @Override
     public void setMagnitude(Long magnitude) {
         if(magnitude == null) {
             value = null;

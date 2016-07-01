@@ -8,7 +8,7 @@ import javax.xml.bind.annotation.XmlType;
 /**
  * Created by pieter.bos on 04/11/15.
  */
-@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "POINT_EVENT")
 public class PointEvent<Type extends ItemStructure> extends Event<Type> {
 }

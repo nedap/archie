@@ -64,18 +64,20 @@ public class JAXBRMRoundTripTest {
 
         StringWriter writer = new StringWriter();
         Marshaller marshaller = JAXBUtil.getArchieJAXBContext().createMarshaller();
-        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+        //marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
         marshaller.marshal(cluster, writer);
         System.out.println(writer.toString());
+
+        //now parse again
         Cluster parsedCluster = (Cluster) JAXBUtil.getArchieJAXBContext().createUnmarshaller().unmarshal(new StringReader(writer.toString()));
         RMQueryContext parsedQueryContext = new RMQueryContext(parsedCluster);
 
+        parsedQueryContext.find("/items");
         assertThat(parsedQueryContext.<DvText>find("/items['Text']/value").getValue(), is("test-text"));
-
         assertThat(parsedQueryContext.<DvDate>find("/items['Date']/value").getValue(), is(LocalDate.of(2016, 1, 1)));
         assertThat(parsedQueryContext.<DvDateTime>find("/items['Datetime']/value").getValue(), is(LocalDateTime.of(2016, 1, 1, 12, 00)));
         assertThat(parsedQueryContext.<DvTime>find("/items['Time']/value").getValue(), is(LocalTime.of(12, 0)));
-        assertEquals(parsedQueryContext.<DvQuantity>find("/items['Quantity']/value").getMagnitude(), 23d, 0.001d);
+        assertEquals("double should be correct", parsedQueryContext.find("/items['Quantity']/value/magnitude"), 23d, 0.001d);
     }
 
 }

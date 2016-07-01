@@ -13,7 +13,7 @@ import javax.xml.bind.annotation.XmlType;
 /**
  * Created by pieter.bos on 04/11/15.
  */
-@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ACTIVITY", propOrder = {
         "description",
         "timing",
@@ -24,6 +24,7 @@ public class Activity extends Locatable {
     private ItemStructure description;
     private DvParsable timing;
     @Nullable
+    @XmlElement(name = "action_archetype_id", required = true)
     private String actionArchetypeId;
 
     public ItemStructure getDescription() {
@@ -43,7 +44,6 @@ public class Activity extends Locatable {
     }
 
     @Nullable
-    @XmlElement(name = "action_archetype_id", required = true)
     public String getActionArchetypeId() {
         return actionArchetypeId;
     }

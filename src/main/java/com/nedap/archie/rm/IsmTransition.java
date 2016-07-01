@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Created by pieter.bos on 04/11/15.
  */
-@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ISM_TRANSITION", propOrder = {
         "currentState",
         "transition",
@@ -23,14 +23,15 @@ import java.util.List;
 })
 public class IsmTransition extends Pathable {
 
+    @XmlElement(name = "current_state")
     private DvCodedText currentState;
     private DvCodedText transition;
 
+    @XmlElement(name = "careflow_step")
     private DvCodedText careflowStep;
 
     private List<DvText> reason = new ArrayList();
-
-    @XmlElement(name = "current_state")
+    
     public DvCodedText getCurrentState() {
         return currentState;
     }
@@ -46,8 +47,7 @@ public class IsmTransition extends Pathable {
     public void setTransition(DvCodedText transition) {
         this.transition = transition;
     }
-
-    @XmlElement(name = "careflow_step")
+    
     public DvCodedText getCareflowStep() {
         return careflowStep;
     }

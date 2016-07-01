@@ -10,15 +10,15 @@ import javax.xml.bind.annotation.XmlType;
 /**
  * Created by pieter.bos on 04/11/15.
  */
-@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "DV_CODED_TEXT", propOrder = {
         "definingCode"
 })
 public class DvCodedText extends DvText {
 
+	@XmlElement(name = "defining_code")
     private CodePhrase definingCode;
-
-    @XmlElement(name = "defining_code")
+    
     public CodePhrase getDefiningCode() {
         return definingCode;
     }

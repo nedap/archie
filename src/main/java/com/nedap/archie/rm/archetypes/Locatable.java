@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * Created by pieter.bos on 04/11/15.
  */
-@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "LOCATABLE", propOrder = {
         "name",
         "uid",
@@ -31,17 +31,19 @@ import java.util.List;
 })
 public class Locatable extends Pathable {
 
+    @XmlElement
     private DvText name;
+    @XmlAttribute(name = "archetype_node_id")
     private String archetypeNodeId;
     @Nullable
     private UIDBasedId uid;
 
+    @XmlElement(name = "archetype_details")
     @Nullable
     private Archetyped archetypeDetails;
 
     private List<Link> links = new ArrayList<>();
 
-    @XmlElement
     public DvText getName() {
         return name;
     }
@@ -55,7 +57,7 @@ public class Locatable extends Pathable {
         this.name = new DvText(name);
     }
 
-    @XmlAttribute(name = "archetype_node_id")
+    
     public String getArchetypeNodeId() {
         return archetypeNodeId;
     }
@@ -72,7 +74,6 @@ public class Locatable extends Pathable {
         this.uid = uid;
     }
 
-    @XmlElement(name = "archetype_details")
     public Archetyped getArchetypeDetails() {
         return archetypeDetails;
     }
@@ -106,7 +107,6 @@ public class Locatable extends Pathable {
         return segments;
     }
 
-    @XmlTransient
     @JsonIgnore
     public String getNameAsString() {
         return name == null ? null : name.getValue();

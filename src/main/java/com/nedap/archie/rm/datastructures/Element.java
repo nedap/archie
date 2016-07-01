@@ -13,7 +13,7 @@ import javax.xml.bind.annotation.XmlType;
 /**
  * Created by pieter.bos on 04/11/15.
  */
-@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ELEMENT", propOrder = {
         "value",
         "nullFlavour"
@@ -23,10 +23,10 @@ public class Element extends Item implements SingleValuedDataValue<DataValue> {
     @Nullable
     private DataValue value;
 
-
+    @XmlElement(name = "null_flavour")
     private DvCodedText nullFlavour;
 
-    @XmlElement(name = "null_flavour")
+    
     public DvCodedText getNullFlavour() {
         return nullFlavour;
     }

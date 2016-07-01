@@ -21,20 +21,20 @@ import java.time.temporal.TemporalAmount;
  * TODO: magnitude of duration is not defined properly
  * Created by pieter.bos on 04/11/15.
  */
-@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "DV_DURATION", propOrder = {
         "value"
 })
 public class DvDuration extends DvAmount<Long> implements SingleValuedDataValue<TemporalAmount> {
 
+    @XmlJavaTypeAdapter(DurationXmlAdapter.class)
     private TemporalAmount value;
 
     @Override
 //    @XmlElements({
 //            @XmlElement(type=Period.class),
 //            @XmlElement(type=Duration.class)
-//    })
-    @XmlJavaTypeAdapter(DurationXmlAdapter.class)
+//    })    
     @JsonDeserialize(using=DurationDeserializer.class)
     public TemporalAmount getValue() {
         return value;
@@ -48,7 +48,7 @@ public class DvDuration extends DvAmount<Long> implements SingleValuedDataValue<
     @XmlTransient
     @Override
     public Long getMagnitude() {
-        return super.getMagnitude();
+        return null; //no magnitude defined in spec
     }
 
 }

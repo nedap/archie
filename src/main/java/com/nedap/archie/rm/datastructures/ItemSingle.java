@@ -13,7 +13,7 @@ import java.util.List;
  * added constraint is that this contains only one item
  * Created by pieter.bos on 04/11/15.
  */
-@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ITEM_SINGLE", propOrder = {
         "item"
 })
@@ -21,7 +21,6 @@ public class ItemSingle extends ItemStructure<Item> {
 
     private Item item;
 
-    @XmlElement
     public Item getItem() {
         return item;
     }
@@ -31,7 +30,6 @@ public class ItemSingle extends ItemStructure<Item> {
     }
 
     @Override
-    @XmlTransient //no items in a single item, just the one item
     public List<Item> getItems() {
         return Lists.newArrayList(item);
     }

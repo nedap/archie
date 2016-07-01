@@ -11,7 +11,7 @@ import javax.xml.bind.annotation.XmlType;
  * Created by pieter.bos on 04/11/15.
  */
 @XmlRootElement
-@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ADMIN_ENTRY")
 public class AdminEntry extends Entry {
     private ItemStructure data;

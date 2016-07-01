@@ -16,9 +16,9 @@ import javax.xml.bind.annotation.XmlType;
 /**
  * Created by pieter.bos on 04/11/15.
  */
-@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "DV_QUANTIFIED", propOrder = {
-        "magnitudeStatus",
+        "magnitudeStatus"
 })
 @XmlSeeAlso({
         DvTemporal.class,
@@ -27,13 +27,10 @@ import javax.xml.bind.annotation.XmlType;
 public abstract class DvQuantified<AccuracyType, MagnitudeType extends Comparable> extends DvOrdered<MagnitudeType> {
 
     @Nullable
+        @XmlElement(name = "magnitude_status")
     private String magnitudeStatus;
-    @Nullable
-    private AccuracyType accuracy;
-    private MagnitudeType magnitude;
 
     @Nullable
-    @XmlElement(name = "magnitude_status")
     public String getMagnitudeStatus() {
         return magnitudeStatus;
     }
@@ -42,26 +39,12 @@ public abstract class DvQuantified<AccuracyType, MagnitudeType extends Comparabl
         this.magnitudeStatus = magnitudeStatus;
     }
 
-    @XmlTransient
-    public AccuracyType getAccuracy() {
-        return accuracy;
-    }
+    public abstract AccuracyType getAccuracy();
 
-    public void setAccuracy(AccuracyType accuracy) {
-        this.accuracy = accuracy;
-    }
-
-    @XmlTransient
-    public MagnitudeType getMagnitude() {
-        return magnitude;
-    }
-
-    public void setMagnitude(MagnitudeType magnitude) {
-        this.magnitude = magnitude;
-    }
+    public abstract MagnitudeType getMagnitude();
 
     @Override
     public int compareTo(MagnitudeType other) {
-        return magnitude.compareTo(other);
+        return getMagnitude().compareTo(other);
     }
 }

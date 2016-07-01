@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Created by pieter.bos on 04/11/15.
  */
-@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "DV_ORDERED", propOrder = {
         "normalRange",
         "otherReferenceRanges",
@@ -23,13 +23,16 @@ import java.util.List;
 public abstract class DvOrdered<ComparableType> extends DataValue implements Comparable<ComparableType> {
 
     @Nullable
+    @XmlElement(name = "normal_status")
     private CodePhrase normalStatus;
     @Nullable
+    @XmlElement(name = "normal_range")
     private DvInterval normalRange;
 
+    @XmlElement(name = "other_reference_ranges")
     private List<ReferenceRange> otherReferenceRanges = new ArrayList<>();
 
-    @XmlElement(name = "normal_range")
+    
     public DvInterval getNormalRange() {
         return normalRange;
     }
@@ -37,8 +40,7 @@ public abstract class DvOrdered<ComparableType> extends DataValue implements Com
     public void setNormalRange(DvInterval normalRange) {
         this.normalRange = normalRange;
     }
-
-    @XmlElement(name = "other_reference_ranges")
+    
     public List<ReferenceRange> getOtherReferenceRanges() {
         return otherReferenceRanges;
     }
@@ -52,7 +54,6 @@ public abstract class DvOrdered<ComparableType> extends DataValue implements Com
     }
 
     @Nullable
-    @XmlElement(name = "normal_status")
     public CodePhrase getNormalStatus() {
         return normalStatus;
     }

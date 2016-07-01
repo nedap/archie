@@ -10,10 +10,10 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * TODO: templateId should be the class TemplateId. but that's not really well defined in the specs, so for now
- * left it as an ARchetypeId
+ * left it as an ArchetypeId
  * Created by pieter.bos on 04/11/15.
  */
-@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ARCHETYPED", propOrder = {
         "archetypeId",
         "templateId",
@@ -21,13 +21,14 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class Archetyped {
 
-
+    @XmlElement(name="archetype_id")
     private ArchetypeID archetypeId; //TODO: this is a different class in the RM. why?!
+    @XmlElement(name="template_id")
     @Nullable
     private ArchetypeID templateId; //not sure if this is still required in AOM/ADL 2
+    @XmlElement(name="rm_version")
     private String rmVersion;
-
-    @XmlElement(name="archetype_id")
+    
     public ArchetypeID getArchetypeId() {
         return archetypeId;
     }
@@ -37,7 +38,6 @@ public class Archetyped {
     }
 
     @Nullable
-    @XmlElement(name="template_id")
     public ArchetypeID getTemplateId() {
         return templateId;
     }
@@ -45,8 +45,7 @@ public class Archetyped {
     public void setTemplateId(@Nullable ArchetypeID templateId) {
         this.templateId = templateId;
     }
-
-    @XmlElement(name="rm_version")
+    
     public String getRmVersion() {
         return rmVersion;
     }

@@ -13,7 +13,7 @@ import javax.xml.bind.annotation.XmlType;
  * Created by pieter.bos on 03/11/15.
  */
 @XmlRootElement
-@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "OBSERVATION", propOrder = {
         "data",
         "state"

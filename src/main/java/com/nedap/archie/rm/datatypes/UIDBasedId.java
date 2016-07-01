@@ -9,7 +9,7 @@ import java.rmi.server.UID;
 /**
  * Created by pieter.bos on 04/11/15.
  */
-@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "UID_BASED_ID")
 public class UIDBasedId extends ObjectId {
 
