@@ -1,9 +1,7 @@
 package com.nedap.archie.serializer.adl.rules;
 
 import com.nedap.archie.rules.ExpressionVariable;
-import com.nedap.archie.rules.VariableDeclaration;
 import com.nedap.archie.serializer.adl.ADLRulesSerializer;
-import com.nedap.archie.serializer.adl.ADLStringBuilder;
 
 /**
  * Created by pieter.bos on 15/06/16.

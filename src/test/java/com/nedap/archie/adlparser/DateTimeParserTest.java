@@ -1,10 +1,6 @@
 package com.nedap.archie.adlparser;
 
 import com.nedap.archie.adlparser.treewalkers.TemporalConstraintParser;
-import com.nedap.archie.rm.archetypes.Locatable;
-import com.nedap.archie.rm.datavalues.quantity.datetime.DvDate;
-import com.nedap.archie.rm.datavalues.quantity.datetime.DvDateTime;
-import com.nedap.archie.rm.datavalues.quantity.datetime.DvTime;
 import org.junit.Test;
 
 import java.time.LocalDate;

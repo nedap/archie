@@ -1,16 +1,12 @@
 package com.nedap.archie.adlparser;
 
-import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.CAttribute;
-import com.nedap.archie.aom.CObject;
 import com.nedap.archie.aom.primitives.CString;
 import com.nedap.archie.rules.Assertion;
 import com.nedap.archie.rules.BinaryOperator;
 import com.nedap.archie.rules.Constraint;
-import com.nedap.archie.rules.Expression;
 import com.nedap.archie.rules.ModelReference;
 import com.nedap.archie.rules.RuleStatement;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.List;

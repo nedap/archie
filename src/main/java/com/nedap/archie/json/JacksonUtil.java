@@ -21,10 +21,8 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
  */
 public class JacksonUtil {
 
-    private volatile static ObjectMapper objectMapper;
-    private volatile static ObjectMapper simpleObjectMapper;
-
     //threadsafe, can be cached
+    private volatile static ObjectMapper objectMapper;
 
     /**
      * Get an object mapper that works with Archie RM and AOM objects. It will be cached in a static variable for

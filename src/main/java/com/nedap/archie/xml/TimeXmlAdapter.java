@@ -3,10 +3,6 @@ package com.nedap.archie.xml;
 import com.nedap.archie.adlparser.treewalkers.TemporalConstraintParser;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
-import java.time.temporal.ChronoField;
-import java.time.temporal.Temporal;
 import java.time.temporal.TemporalAccessor;
 
 /**

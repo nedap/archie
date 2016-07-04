@@ -37,11 +37,10 @@ public abstract class COrderedSerializer<T extends COrdered<?>> extends Constrai
     }
 
     protected boolean shouldIncludeAssumedValue(T cobj) {
-        if (!isSingleValueConstraint(cobj)) return true;
-        if (cobj.getConstraint().size()==1 && !cobj.getConstraint().get(0).getLower().equals(cobj.getAssumedValue())) {
-            return true;
-        }
-        return false;
+        return (!isSingleValueConstraint(cobj)) ||
+            (cobj.getConstraint().size()==1 &&
+                    !cobj.getConstraint().get(0).getLower().equals(cobj.getAssumedValue()));
+
     }
 
     private void serializeConstraintIntervals(T cobj) {

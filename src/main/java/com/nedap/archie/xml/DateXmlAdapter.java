@@ -6,7 +6,6 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.temporal.Temporal;
-import java.time.temporal.TemporalAccessor;
 
 /**
  * Created by pieter.bos on 24/06/16.

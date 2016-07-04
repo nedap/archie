@@ -1,13 +1,10 @@
 package com.nedap.archie.aom;
 
-import com.nedap.archie.aom.primitives.CDate;
 import com.nedap.archie.aom.primitives.CTime;
 import com.nedap.archie.base.Interval;
 import org.junit.Test;
 
-import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.Month;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -31,12 +28,12 @@ public class TimeConstraintsTest {
         assertFalse(interval.isValidValue(LocalTime.of(12, 1)));
 
         CTime twoInterVals = new CTime();
-        interval.addConstraint(new Interval<>(LocalTime.of(11, 0), LocalTime.of(12, 0)));
-        interval.addConstraint(new Interval<>(LocalTime.of(10, 0), LocalTime.of(11, 0)));
-        assertTrue(interval.isValidValue(LocalTime.of(11, 0)));
-        assertTrue(interval.isValidValue(LocalTime.of(12, 0)));
-        assertTrue(interval.isValidValue(LocalTime.of(10, 59)));
-        assertFalse(interval.isValidValue(LocalTime.of(12, 1)));
+        twoInterVals.addConstraint(new Interval<>(LocalTime.of(11, 0), LocalTime.of(12, 0)));
+        twoInterVals.addConstraint(new Interval<>(LocalTime.of(10, 0), LocalTime.of(11, 0)));
+        assertTrue(twoInterVals.isValidValue(LocalTime.of(11, 0)));
+        assertTrue(twoInterVals.isValidValue(LocalTime.of(12, 0)));
+        assertTrue(twoInterVals.isValidValue(LocalTime.of(10, 59)));
+        assertFalse(twoInterVals.isValidValue(LocalTime.of(12, 1)));
     }
 
     //TODO: date patterns. also the implementation :)

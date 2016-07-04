@@ -2,10 +2,8 @@ package com.nedap.archie.xml;
 
 import com.nedap.archie.adlparser.ADLParser;
 import com.nedap.archie.aom.Archetype;
-import com.nedap.archie.json.JacksonRMRoundTripTest;
-import com.nedap.archie.json.JacksonUtil;
+
 import com.nedap.archie.query.RMQueryContext;
-import com.nedap.archie.rm.RMObject;
 import com.nedap.archie.rm.datastructures.Cluster;
 import com.nedap.archie.rm.datavalues.DvText;
 import com.nedap.archie.rm.datavalues.quantity.DvQuantity;
@@ -15,7 +13,6 @@ import com.nedap.archie.rm.datavalues.quantity.datetime.DvTime;
 import com.nedap.archie.testutil.TestUtil;
 import org.junit.Before;
 import org.junit.Test;
-import org.omg.CORBA.MARSHAL;
 
 import javax.xml.bind.Marshaller;
 import java.io.StringReader;

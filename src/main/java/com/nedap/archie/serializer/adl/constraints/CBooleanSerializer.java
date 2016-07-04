@@ -37,8 +37,7 @@ public class CBooleanSerializer extends ConstraintSerializer<CBoolean> {
     }
 
     public static String capitalize(String str) {
-        int strLen;
-        if (str == null || (strLen = str.length()) == 0) {
+        if (str == null || str.length() == 0) {
             return str;
         }
         return Character.toString(Character.toUpperCase(str.charAt(0))) + str.substring(1);

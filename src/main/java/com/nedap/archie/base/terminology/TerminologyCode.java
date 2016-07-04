@@ -19,11 +19,6 @@ public class TerminologyCode {
 
     private URI uri;
 
-
-    public TerminologyCode() {
-        super();
-    }
-
     @JsonCreator
     public static TerminologyCode createFromString(String terminologyString) {
         if(terminologyString.isEmpty()) {

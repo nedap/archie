@@ -18,8 +18,6 @@ public class AttributeTupleConstraintsTest {
 
     static CAttributeTuple attributeTuple;
 
-    private ModelInfoLookup lookup = ArchieRMInfoLookup.getInstance();
-
     @BeforeClass
     public static void setup() throws Exception {
         Archetype archetype = new ADLParser().parse(AttributeTupleConstraintsTest.class.getResourceAsStream("/basic.adl"));

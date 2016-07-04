@@ -1,6 +1,5 @@
 package com.nedap.archie.serializer.adl;
 
-import com.nedap.archie.aom.CObject;
 import com.nedap.archie.aom.RulesSection;
 import com.nedap.archie.rules.*;
 

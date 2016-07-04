@@ -2,7 +2,6 @@ package com.nedap.archie.serializer.adl.rules;
 
 import com.nedap.archie.rules.ModelReference;
 import com.nedap.archie.serializer.adl.ADLRulesSerializer;
-import com.nedap.archie.serializer.adl.ADLStringBuilder;
 
 import java.util.function.BinaryOperator;
 

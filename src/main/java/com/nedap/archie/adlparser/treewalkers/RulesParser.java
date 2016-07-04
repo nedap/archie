@@ -33,13 +33,13 @@ public class RulesParser extends BaseTreeWalker {
             assertion.setExpression(parseExpression(context.boolean_expression()));
             return assertion;
         } else if (assertionContext.variable_declaration() != null) {
-            VariableDeclaration declaration = parseVariableDeclaration(assertion, assertionContext.variable_declaration());
+            VariableDeclaration declaration = parseVariableDeclaration(assertionContext.variable_declaration());
             return declaration;
         }
         return assertion;
     }
 
-    private VariableDeclaration parseVariableDeclaration(Assertion assertion, Variable_declarationContext context) {
+    private VariableDeclaration parseVariableDeclaration(Variable_declarationContext context) {
 
         if(context.boolean_expression() != null) {
             ExpressionVariable result = new ExpressionVariable();

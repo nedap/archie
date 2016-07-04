@@ -3,7 +3,6 @@ package com.nedap.archie.xml;
 import com.nedap.archie.adlparser.treewalkers.TemporalConstraintParser;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
-import java.time.temporal.TemporalAccessor;
 import java.time.temporal.TemporalAmount;
 
 /**

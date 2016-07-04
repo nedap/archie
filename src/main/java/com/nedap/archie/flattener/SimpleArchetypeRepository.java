@@ -14,9 +14,6 @@ public class SimpleArchetypeRepository implements ArchetypeRepository {
 
     private Map<String, Archetype> archetypes = new ConcurrentHashMap<>();
 
-    public SimpleArchetypeRepository() {
-    }
-
     @Override
     public Archetype getArchetype(String archetypeId) {
         return archetypes.get(new ArchetypeID(archetypeId).getSemanticId());

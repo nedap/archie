@@ -9,7 +9,6 @@ import com.nedap.archie.aom.terminology.ArchetypeTerm;
 import com.nedap.archie.aom.terminology.ArchetypeTerminology;
 import com.nedap.archie.aom.terminology.ValueSet;
 import com.nedap.archie.base.terminology.TerminologyCode;
-import com.nedap.archie.rm.datatypes.CodePhrase;
 import com.nedap.archie.serializer.odin.OdinObject;
 
 import javax.annotation.Nullable;

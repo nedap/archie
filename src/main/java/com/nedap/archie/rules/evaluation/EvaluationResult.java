@@ -13,9 +13,6 @@ public class EvaluationResult {
 
     private List<AssertionResult> assertionResults = new ArrayList<>();
 
-    public EvaluationResult() {
-    }
-
     public List<AssertionResult> getAssertionResults() {
         return assertionResults;
     }

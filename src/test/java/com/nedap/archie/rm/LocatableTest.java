@@ -2,9 +2,7 @@ package com.nedap.archie.rm;
 
 import com.google.common.collect.Lists;
 import com.nedap.archie.rm.composition.Composition;
-import com.nedap.archie.rm.composition.ContentItem;
 import com.nedap.archie.rm.composition.Observation;
-import com.nedap.archie.rm.datastructures.Cluster;
 import com.nedap.archie.rm.datastructures.Element;
 import com.nedap.archie.rm.datastructures.History;
 import com.nedap.archie.rm.datastructures.ItemStructure;

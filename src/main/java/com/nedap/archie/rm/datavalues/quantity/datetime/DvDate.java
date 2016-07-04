@@ -1,20 +1,15 @@
 package com.nedap.archie.rm.datavalues.quantity.datetime;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.nedap.archie.rm.datavalues.SingleValuedDataValue;
 import com.nedap.archie.json.DateDeserializer;
+import com.nedap.archie.rm.datavalues.SingleValuedDataValue;
 import com.nedap.archie.xml.DateXmlAdapter;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElements;
-import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.time.LocalDate;
-import java.time.Year;
-import java.time.YearMonth;
 import java.time.temporal.ChronoField;
 import java.time.temporal.Temporal;
 

@@ -96,7 +96,7 @@ public class CComplexObjectSerializer<T extends CComplexObject> extends Constrai
         }
         if (cattr.getExistence() != null) {
             builder.append(" existence matches {");
-            ArchetypeSerializeUtils.buildOccurrences(builder, cattr.getExistence());
+            buildOccurrences(builder, cattr.getExistence());
             builder.append("}");
         }
         if (cattr.getCardinality() != null) {
@@ -174,7 +174,7 @@ public class CComplexObjectSerializer<T extends CComplexObject> extends Constrai
     }
 
     private void appendCardinality(Cardinality card) {
-        ArchetypeSerializeUtils.buildOccurrences(builder, card.getInterval());
+        buildOccurrences(builder, card.getInterval());
         List<String> tags = new ArrayList<>();
         if (!card.isOrdered()) {
             tags.add("unordered");
