@@ -360,7 +360,7 @@ public class BinaryOperatorEvaluator implements Evaluator<BinaryOperator> {
         }
     }
 
-    private Boolean evaluateIntegerRelOp(OperatorKind operator, Long leftNumber, Long rightNumber) {
+    private Boolean evaluateIntegerRelOp(OperatorKind operator, long leftNumber, long rightNumber) {
 
         switch(operator) {
             case eq:

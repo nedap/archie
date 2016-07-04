@@ -12,13 +12,13 @@ import java.util.Objects;
 public class Interval<T>  extends OpenEHRBase {
 
     @Nullable
-    T lower;
+    private T lower;
     @Nullable
-    T upper;
-    boolean lowerUnbounded = false;
-    boolean upperUnbounded = false;
-    boolean lowerIncluded = true;
-    boolean upperIncluded = true;
+    private T upper;
+    private boolean lowerUnbounded = false;
+    private boolean upperUnbounded = false;
+    private boolean lowerIncluded = true;
+    private boolean upperIncluded = true;
 
     public Interval() {
 

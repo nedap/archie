@@ -42,7 +42,7 @@ public class RuleEvaluation {
 
     private RMQueryContext queryContext;
 
-    ArrayListMultimap<RuleElement, ValueList> ruleElementValues = ArrayListMultimap.create();
+    private ArrayListMultimap<RuleElement, ValueList> ruleElementValues = ArrayListMultimap.create();
     private FixableAssertionsChecker fixableAssertionsChecker;
 
     public RuleEvaluation(Archetype archetype) {

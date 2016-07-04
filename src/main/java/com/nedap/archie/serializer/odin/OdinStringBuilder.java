@@ -22,7 +22,7 @@ public class OdinStringBuilder {
         return "\"" + escapeText(str) + "\"";
     }
 
-    static String quoteChar(char c) {
+    public static String quoteChar(char c) {
         return "\'" + escapeText(Character.toString(c)) + "\'";
     }
 

@@ -55,7 +55,7 @@ public class TemporalConstraintParser extends BaseTreeWalker {
                 .appendLiteral('-')
                 .appendValue(ChronoField.DAY_OF_MONTH)
                 .appendLiteral('T')
-                .appendValue(ChronoField.HOUR_OF_DAY)
+                .appendValue(ChronoField.HOUR_OF_DAY, 2)
                 .optionalStart()
                     .appendLiteral(':')
                     .appendValue(ChronoField.MINUTE_OF_HOUR, 2)

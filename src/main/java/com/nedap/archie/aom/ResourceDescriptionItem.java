@@ -10,15 +10,15 @@ import java.util.Map;
  * Created by pieter.bos on 01/11/15.
  */
 public class ResourceDescriptionItem extends ArchetypeModelObject {
-    String language;
-    String purpose;
-    List<String> keywords;
-    String use;
-    String misuse;
-    String copyright;
-    String licence;
-    Map<String, URI> originalResourceUri;
-    Map<String, String> otherDetails;//TODO: string -> object?
+    private String language;
+    private String purpose;
+    private List<String> keywords;
+    private String use;
+    private String misuse;
+    private String copyright;
+    private String licence;
+    private Map<String, URI> originalResourceUri;
+    private Map<String, String> otherDetails;//TODO: string -> object?
 
 
     public String getLanguage() {

@@ -6,8 +6,8 @@ package com.nedap.archie.aom;
  */
 public class CDefinedObject<T> extends CObject {
 
-    Boolean frozen;
-    T defaultValue;
+    private Boolean frozen;
+    private T defaultValue;
 
     public Boolean getFrozen() {
         return frozen;

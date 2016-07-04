@@ -45,7 +45,7 @@ public class ModelInfoLookup {
     /**
      * All methods that cannot be called by using reflection. For example getClass();
      */
-    Set<String> forbiddenMethods = new HashSet();
+    private Set<String> forbiddenMethods = new HashSet();
 
     {
         forbiddenMethods.add("getClass");

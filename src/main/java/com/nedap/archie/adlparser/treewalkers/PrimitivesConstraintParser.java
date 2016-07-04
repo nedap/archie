@@ -96,11 +96,7 @@ public class PrimitivesConstraintParser extends BaseTreeWalker {
     }
 
     private boolean parseBoolean(Boolean_valueContext context) {
-        if(context.SYM_FALSE() != null) {
-            return false;
-        } else {
-            return true;
-        }
+        return context.SYM_FALSE() == null;
     }
 
     private void parseBooleanValues(CBoolean result, List<Boolean_valueContext> booleanValues) {

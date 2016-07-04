@@ -36,7 +36,7 @@ public class OdinToJsonConverter {
         return objectMapper;
     }
 
-    StringBuilder output = new StringBuilder();
+    private     StringBuilder output = new StringBuilder();
 
     public String convert(Odin_textContext context) {
         if (context.attr_vals() != null) {
