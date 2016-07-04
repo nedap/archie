@@ -1,5 +1,6 @@
 package com.nedap.archie.rm.datavalues;
 
+import com.google.common.base.MoreObjects;
 import com.nedap.archie.rm.datatypes.CodePhrase;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -25,5 +26,12 @@ public class DvCodedText extends DvText {
 
     public void setDefiningCode(CodePhrase definingCode) {
         this.definingCode = definingCode;
+    }
+
+    public String toString() {
+        return MoreObjects.toStringHelper(this).add("code_string", definingCode.getCodeString())
+                .add("terminology_id", definingCode.getTerminologyId())
+                .add("value", getValue())
+                .toString();
     }
 }
