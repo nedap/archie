@@ -31,6 +31,7 @@ or if you use maven, in your pom.xml
 ## Build
 
 [![Build Status](https://travis-ci.org/nedap/archie.svg?branch=master)](https://travis-ci.org/nedap/archie)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/dda8ce2b837a40b5b50cf52dae95764d)](https://www.codacy.com/app/pieter-bos/archie?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=nedap/archie&amp;utm_campaign=Badge_Grade)
 
 You need Java 8 to build. Check out the source and type:
 
