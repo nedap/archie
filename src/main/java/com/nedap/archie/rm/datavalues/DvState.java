@@ -8,17 +8,17 @@ import javax.xml.bind.annotation.XmlType;
 /**
  * Created by pieter.bos on 04/11/15.
  */
-@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "DV_STATE", propOrder = {
         "value",
         "terminal"
 })
 public class DvState extends DataValue implements SingleValuedDataValue<DvCodedText> {
 
+    @XmlElement(name = "is_terminal")
     private boolean terminal;
     private DvCodedText value;
-
-    @XmlElement(name = "is_terminal")
+    
     public boolean isTerminal() {
         return terminal;
     }

@@ -7,6 +7,8 @@ import com.nedap.archie.query.APathQuery;
 import com.nedap.archie.query.RMObjectWithPath;
 import com.nedap.archie.rm.RMObject;
 import com.nedap.archie.rminfo.ArchieRMInfoLookup;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 
 import javax.annotation.Nullable;
 import javax.xml.bind.annotation.XmlTransient;
@@ -17,6 +19,7 @@ import java.util.List;
 /**
  * Created by pieter.bos on 04/11/15.
  */
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Pathable extends RMObject {
     //TODO: implement according to spec: pathExists(path), pathUnique(path), pathOfItem(pathable)
 
@@ -43,7 +46,6 @@ public class Pathable extends RMObject {
     }
 
     @JsonIgnore
-    @XmlTransient
     public Pathable getParent() {
         return parent;
     }

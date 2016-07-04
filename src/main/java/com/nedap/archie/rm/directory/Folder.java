@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Created by pieter.bos on 21/06/16.
  */
-@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "FOLDER", propOrder = {
         "items",
         "folders"

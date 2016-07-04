@@ -1,7 +1,9 @@
 package com.nedap.archie.rm.datavalues.quantity.datetime;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.nedap.archie.rm.datavalues.SingleValuedDataValue;
-import com.nedap.archie.util.jaxbtime.TimeXmlAdapter;
+import com.nedap.archie.json.TimeDeserializer;
+import com.nedap.archie.xml.TimeXmlAdapter;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -10,11 +12,8 @@ import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.OffsetTime;
-import java.time.Year;
-import java.time.YearMonth;
 import java.time.temporal.TemporalAccessor;
 
 /**
@@ -26,12 +25,13 @@ import java.time.temporal.TemporalAccessor;
  * <p>
  * Created by pieter.bos on 04/11/15.
  */
-@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "DV_TIME", propOrder = {
         "value"
 })
 public class DvTime extends DvTemporal<Double> implements SingleValuedDataValue<TemporalAccessor> {
 
+    @XmlJavaTypeAdapter(TimeXmlAdapter.class)
     private TemporalAccessor value;
 
     @Override
@@ -40,23 +40,20 @@ public class DvTime extends DvTemporal<Double> implements SingleValuedDataValue<
     }
 
     @Override
-    @XmlElements({
-            @XmlElement(type=OffsetTime.class),
-            @XmlElement(type=LocalTime.class)
-    })
-    @XmlJavaTypeAdapter(TimeXmlAdapter.class)
+//    @XmlElements({
+//            @XmlElement(type=OffsetTime.class),
+//            @XmlElement(type=LocalTime.class)
+//    })    
+    @JsonDeserialize(using=TimeDeserializer.class)
     public TemporalAccessor getValue() {
         return value;
     }
 
     @Override
-    //TODO
-    @XmlTransient
     public Double getMagnitude() {
         return value == null ? null : (double) LocalTime.from(value).toSecondOfDay();
     }
 
-    @Override
     public void setMagnitude(Double magnitude) {
         if(magnitude == null) {
             value = null;

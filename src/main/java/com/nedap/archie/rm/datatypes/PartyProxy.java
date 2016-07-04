@@ -12,16 +12,16 @@ import javax.xml.bind.annotation.XmlType;
  * Created by pieter.bos on 04/11/15.
  * TODO: move to correct package
  */
-@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "PARTY_PROXY", propOrder = {
         "externalRef"
 })
 public class PartyProxy extends RMObject {
 
     @Nullable
-    private PartyRef externalRef;
-
     @XmlElement(name = "external_ref")
+    private PartyRef externalRef;
+    
     public PartyRef getExternalRef() {
         return externalRef;
     }

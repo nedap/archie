@@ -9,19 +9,22 @@ import javax.xml.bind.annotation.XmlType;
 /**
  * Created by pieter.bos on 04/11/15.
  */
-@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "DV_QUANTITY", propOrder = {
+        "magnitude",
         "units",
         "precision"
 })
 public class DvQuantity extends DvAmount<Double> {
 
     @Nullable
+    @XmlElement(defaultValue = "-1")
     private Long precision;
     private String units;
+    @XmlElement
+    private Double magnitude;
 
     @Nullable
-    @XmlElement(defaultValue = "-1")
     public Long getPrecision() {
         return precision;
     }
@@ -38,4 +41,12 @@ public class DvQuantity extends DvAmount<Double> {
         this.units = units;
     }
 
+    @Override
+    public Double getMagnitude() {
+        return magnitude;
+    }
+
+    public void setMagnitude(Double magnitude) {
+        this.magnitude = magnitude;
+    }
 }

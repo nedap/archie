@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlType;
 /**
  * Created by pieter.bos on 01/03/16.
  */
-@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "PARTY_REF")
 public class PartyRef extends ObjectRef {
 }

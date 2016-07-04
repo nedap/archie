@@ -1,28 +1,31 @@
 package com.nedap.archie.query;
 
-import com.nedap.archie.util.JAXBUtil;
+import com.nedap.archie.rminfo.ArchieRMInfoLookup;
+import com.nedap.archie.rminfo.RMAttributeInfo;
+import com.nedap.archie.xml.JAXBUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import javax.xml.XMLConstants;
 import javax.xml.bind.Binder;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-import javax.xml.namespace.NamespaceContext;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * EXPERIMENTAL: full xpath support for the reference model.
@@ -74,11 +77,16 @@ public class RMQueryContext {
             firstXPathNode = domForQueries.getFirstChild().getNodeName();
 
             //print to stdout. Don't you love java xml api's?
-            //TransformerFactory.newInstance().newTransformer().transform(new DOMSource(domForQueries), new StreamResult(System.out));
+          //  TransformerFactory.newInstance().newTransformer().transform(new DOMSource(domForQueries), new StreamResult(System.out));
 
         } catch (JAXBException e) {
             throw new RuntimeException(e);
         }
+//        catch (TransformerConfigurationException e) {
+//            e.printStackTrace();
+//        } catch (TransformerException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public Document createBlankDOMDocument(boolean namespaceAware) {
@@ -106,12 +114,30 @@ public class RMQueryContext {
         //Perform decoration
         for(int i=0; i<foundNodes.getLength(); i++){
             Node node = foundNodes.item(i);
-
-            result.add((T) binder.getJAXBNode(node));
+            result.add(getJAXBNode(node));
         }
 
-        //Synchronize the changes back to Query object.
         return result;
+    }
+
+    private <T> T getJAXBNode(Node node) {
+        T object = (T) binder.getJAXBNode(node);
+        if(object != null) {
+            return object;
+        } else{
+            //JAXB sometimes has trouble binding primitive values. Looks like a bug in Xerces
+            //very annoying. Here's our workaround: lookup the parent node and manually get the correct attribute
+            String nodeName = node.getNodeName();
+            //the parent usually can be found easily
+            Object parent = binder.getJAXBNode(node.getParentNode());
+            RMAttributeInfo attributeInfo = ArchieRMInfoLookup.getInstance().getAttributeInfo(parent.getClass(), nodeName);
+            try {
+                return (T) attributeInfo.getGetMethod().invoke(parent);
+            } catch (IllegalAccessException e) {
+            } catch (InvocationTargetException e) {
+            }
+        }
+        return null;
     }
 
     public List<RMObjectWithPath> findListWithPaths(String query) throws XPathExpressionException {
@@ -123,7 +149,7 @@ public class RMQueryContext {
         for(int i=0; i<foundNodes.getLength(); i++){
             Node node = foundNodes.item(i);
             String path = UniqueNodePathBuilder.constructPath(node);
-            result.add(new RMObjectWithPath(binder.getJAXBNode(node), path));
+            result.add(new RMObjectWithPath(getJAXBNode(node), path));
         }
         return result;
     }

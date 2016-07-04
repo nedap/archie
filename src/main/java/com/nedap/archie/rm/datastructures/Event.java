@@ -14,7 +14,7 @@ import java.time.OffsetDateTime;
 /**
  * Created by pieter.bos on 03/11/15.
  */
-@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "EVENT", propOrder = {
         "time",
         "data",

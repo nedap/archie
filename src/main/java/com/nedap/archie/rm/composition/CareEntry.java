@@ -12,7 +12,7 @@ import javax.xml.bind.annotation.XmlType;
 /**
  * Created by pieter.bos on 04/11/15.
  */
-@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "CARE_ENTRY", propOrder = {
         "protocol",
         "guidelineId"
@@ -22,7 +22,7 @@ public class CareEntry extends Entry {
     @Nullable
     private ItemStructure protocol;
     @Nullable
-
+    @XmlElement(name = "guideline_id")
     private ObjectRef guidelineId;
 
     @Nullable
@@ -35,8 +35,7 @@ public class CareEntry extends Entry {
         setThisAsParent(protocol, "protocol");
     }
 
-    @Nullable
-    @XmlElement(name = "guideline_id")
+    @Nullable    
     public ObjectRef getGuidelineId() {
         return guidelineId;
     }

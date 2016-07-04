@@ -1,8 +1,11 @@
-package com.nedap.archie.util.jaxbtime;
+package com.nedap.archie.xml;
 
 import com.nedap.archie.adlparser.treewalkers.TemporalConstraintParser;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
 import java.time.temporal.Temporal;
 import java.time.temporal.TemporalAccessor;
 
@@ -11,9 +14,6 @@ import java.time.temporal.TemporalAccessor;
  */
 public class TimeXmlAdapter extends XmlAdapter<String, TemporalAccessor> {
 
-    public TimeXmlAdapter() {
-
-    }
 
     @Override
     public TemporalAccessor unmarshal(String stringValue) {
@@ -22,6 +22,6 @@ public class TimeXmlAdapter extends XmlAdapter<String, TemporalAccessor> {
 
     @Override
     public String marshal(TemporalAccessor value) {
-        return value != null?TemporalConstraintParser.ISO_8601_TIME.format(value):null;
+        return value.toString();
     }
 }

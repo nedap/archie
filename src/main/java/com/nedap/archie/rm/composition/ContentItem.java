@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Created by pieter.bos on 03/11/15.
  */
-@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "CONTENT_ITEM")
 public class ContentItem extends Locatable {
 

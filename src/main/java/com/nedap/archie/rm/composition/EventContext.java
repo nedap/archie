@@ -14,7 +14,7 @@ import javax.xml.bind.annotation.XmlType;
 /**
  * Created by pieter.bos on 04/11/15.
  */
-@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "EVENT_CONTEXT", propOrder = {
         "startTime",
         "endTime",
@@ -26,18 +26,19 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class EventContext extends Pathable {
 
-
+    @XmlElement(name = "start_time")
     private DvDateTime startTime;
     @Nullable
 
+    @XmlElement(name = "end_time")
     private DvDateTime endTime;
     @Nullable
     private String location;
     private DvCodedText setting;
+    @XmlElement(name = "other_context")
     @Nullable
     private ItemStructure otherContext;
 
-    @XmlElement(name = "start_time")
     public DvDateTime getStartTime() {
         return startTime;
     }
@@ -46,7 +47,7 @@ public class EventContext extends Pathable {
         this.startTime = startTime;
     }
 
-    @XmlElement(name = "end_time")
+    
     public DvDateTime getEndTime() {
         return endTime;
     }
@@ -70,8 +71,7 @@ public class EventContext extends Pathable {
     public void setSetting(DvCodedText setting) {
         this.setting = setting;
     }
-
-    @XmlElement(name = "other_context")
+    
     public ItemStructure getOtherContext() {
         return otherContext;
     }

@@ -14,7 +14,7 @@ import javax.xml.bind.annotation.XmlType;
  * Created by pieter.bos on 04/11/15.
  */
 @XmlRootElement
-@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ACTION", propOrder = {
         "time",
         "description",
@@ -25,7 +25,9 @@ public class Action extends CareEntry {
 
     private DvDateTime time;
     private ItemStructure description;
+    @XmlElement(name="ism_transition")
     private IsmTransition ismTransition;
+    @XmlElement(name="instruction_details")
     private InstructionDetails instructionDetails;
 
 
@@ -45,8 +47,7 @@ public class Action extends CareEntry {
         this.description = description;
         setThisAsParent(description, "description");
     }
-
-    @XmlElement(name="ism_transition")
+    
     public IsmTransition getIsmTransition() {
         return ismTransition;
     }
@@ -55,8 +56,7 @@ public class Action extends CareEntry {
         this.ismTransition = ismTransition;
         setThisAsParent(ismTransition, "ism_transition");
     }
-
-    @XmlElement(name="instruction_details")
+    
     public InstructionDetails getInstructionDetails() {
         return instructionDetails;
     }

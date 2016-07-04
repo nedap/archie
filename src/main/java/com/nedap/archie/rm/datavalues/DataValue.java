@@ -11,7 +11,7 @@ import javax.xml.bind.annotation.XmlType;
  * <p>
  * Created by pieter.bos on 04/11/15.
  */
-@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "DATA_VALUE")
 public abstract class DataValue extends RMObject {
 }

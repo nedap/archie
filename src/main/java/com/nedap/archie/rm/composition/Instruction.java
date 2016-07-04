@@ -18,7 +18,7 @@ import java.util.List;
  * Created by pieter.bos on 03/11/15.
  */
 @XmlRootElement
-@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "INSTRUCTION", propOrder = {
         "narrative",
         "expiryTime",
@@ -28,8 +28,10 @@ import java.util.List;
 public class Instruction extends CareEntry {
     private DvText narrative;
     @Nullable
+    @XmlElement(name = "expiry_time")
     private DvDateTime expiryTime;
     @Nullable
+    @XmlElement(name = "wf_definition")
     private DvParsable wfDefinition;
     private List<Activity> activities = new ArrayList<>();
 
@@ -41,8 +43,7 @@ public class Instruction extends CareEntry {
         this.narrative = narrative;
     }
 
-    @Nullable
-    @XmlElement(name = "expiry_time")
+    @Nullable    
     public DvDateTime getExpiryTime() {
         return expiryTime;
     }
@@ -51,8 +52,7 @@ public class Instruction extends CareEntry {
         this.expiryTime = expiryTime;
     }
 
-    @Nullable
-    @XmlElement(name = "wf_definition")
+    @Nullable    
     public DvParsable getWfDefinition() {
         return wfDefinition;
     }

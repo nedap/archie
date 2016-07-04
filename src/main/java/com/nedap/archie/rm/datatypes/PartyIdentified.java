@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Created by pieter.bos on 01/03/16.
  */
-@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "PARTY_IDENTIFIED", propOrder = {
         "name",
         "identifiers"

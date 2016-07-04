@@ -47,7 +47,7 @@ public class RMObjectCreator {
             }
             return (T) result;
         } catch (InstantiationException | IllegalAccessException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("error creating class " + constraint.getRmTypeName(), e);
         }
     }
 
