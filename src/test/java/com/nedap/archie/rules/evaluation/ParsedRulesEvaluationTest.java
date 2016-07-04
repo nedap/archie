@@ -29,10 +29,10 @@ import static org.junit.Assert.assertTrue;
  */
 public class ParsedRulesEvaluationTest {
 
-    ADLParser parser;
-    Archetype archetype;
+    private ADLParser parser;
+    private Archetype archetype;
 
-    TestUtil testUtil;
+    private TestUtil testUtil;
 
     @Before
     public void setup() {

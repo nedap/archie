@@ -7,9 +7,7 @@ import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.atn.ATNConfigSet;
 import org.antlr.v4.runtime.dfa.DFA;
 
-import java.util.ArrayList;
 import java.util.BitSet;
-import java.util.List;
 
 import org.antlr.v4.runtime.misc.Interval;
 import org.slf4j.Logger;

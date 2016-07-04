@@ -1,7 +1,5 @@
 package com.nedap.archie.aom;
 
-import com.nedap.archie.adlparser.PrimitivesConstraintParserTest;
-import com.nedap.archie.adlparser.TemporalConstraintParserTest;
 import com.nedap.archie.aom.primitives.CInteger;
 import com.nedap.archie.aom.primitives.CReal;
 import com.nedap.archie.base.Interval;

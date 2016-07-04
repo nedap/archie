@@ -1,7 +1,6 @@
 package com.nedap.archie.serializer.adl.rules;
 
 import com.nedap.archie.rules.RuleElement;
-import com.nedap.archie.serializer.adl.ADLDefinitionSerializer;
 import com.nedap.archie.serializer.adl.ADLRulesSerializer;
 import com.nedap.archie.serializer.adl.ADLStringBuilder;
 

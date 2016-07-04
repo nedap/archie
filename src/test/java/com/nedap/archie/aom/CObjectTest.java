@@ -13,7 +13,7 @@ import static org.junit.Assert.assertFalse;
  */
 public class CObjectTest {
 
-    Archetype archetype;
+    private Archetype archetype;
 
     @Before
     public void setup() throws Exception {

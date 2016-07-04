@@ -4,7 +4,6 @@ import com.nedap.archie.adlparser.ADLParser;
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.rules.evaluation.ParsedRulesEvaluationTest;
 import com.nedap.archie.serializer.adl.ADLArchetypeSerializer;
-import com.nedap.archie.serializer.adl.ADLArchetypeSerializerTest;
 import org.junit.Test;
 
 import java.io.IOException;

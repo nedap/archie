@@ -13,7 +13,7 @@ import static org.junit.Assert.assertEquals;
  */
 public class PathTest {
 
-    Archetype archetype;
+    private Archetype archetype;
 
     @Before
     public void setup() throws Exception {

@@ -2,7 +2,6 @@ package com.nedap.archie.rules.evaluation.evaluators;
 
 import com.google.common.collect.Lists;
 import com.nedap.archie.query.RMObjectWithPath;
-import com.nedap.archie.rules.BinaryOperator;
 import com.nedap.archie.rules.Expression;
 import com.nedap.archie.rules.ForAllStatement;
 import com.nedap.archie.rules.PrimitiveType;

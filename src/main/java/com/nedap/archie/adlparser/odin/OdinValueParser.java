@@ -2,11 +2,6 @@ package com.nedap.archie.adlparser.odin;
 
 import com.nedap.archie.adlparser.antlr.AdlParser;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by pieter.bos on 15/10/15.
  */

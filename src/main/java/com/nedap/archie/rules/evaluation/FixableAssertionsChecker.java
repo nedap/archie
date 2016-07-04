@@ -1,7 +1,6 @@
 package com.nedap.archie.rules.evaluation;
 
 import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Lists;
 import com.nedap.archie.query.RMObjectWithPath;
 import com.nedap.archie.rules.BinaryOperator;
 import com.nedap.archie.rules.Expression;
@@ -14,11 +13,9 @@ import com.nedap.archie.rules.UnaryOperator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.xml.xpath.XPathExpressionException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Checks evaluated assertions on what can be fixed automatically, and how this can be done.

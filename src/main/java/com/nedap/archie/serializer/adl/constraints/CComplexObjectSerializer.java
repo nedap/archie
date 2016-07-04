@@ -23,7 +23,6 @@ package com.nedap.archie.serializer.adl.constraints;
 import com.google.common.base.Joiner;
 import com.nedap.archie.aom.*;
 import com.nedap.archie.serializer.adl.ADLDefinitionSerializer;
-import com.nedap.archie.serializer.adl.ArchetypeSerializeUtils;
 
 import java.util.ArrayList;
 import java.util.List;

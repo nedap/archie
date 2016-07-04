@@ -75,7 +75,7 @@ public class ModelInfoLookup {
             try {
                 addClass(classLoader.loadClass(typeName));
             } catch (ClassNotFoundException e) {
-                e.printStackTrace();
+                logger.error("error loading model info lookup", e);
             }
         });
     }

@@ -1,7 +1,5 @@
 package com.nedap.archie.rules;
 
-import javassist.compiler.ast.Variable;
-
 import java.util.ArrayList;
 import java.util.List;
 

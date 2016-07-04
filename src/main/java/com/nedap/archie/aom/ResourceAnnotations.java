@@ -1,7 +1,5 @@
 package com.nedap.archie.aom;
 
-import com.nedap.archie.base.OpenEHRBase;
-
 import java.util.Map;
 
 /**

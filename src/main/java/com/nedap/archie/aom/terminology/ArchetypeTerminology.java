@@ -2,7 +2,6 @@ package com.nedap.archie.aom.terminology;
 
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.ArchetypeModelObject;
-import com.nedap.archie.base.OpenEHRBase;
 
 import java.net.URI;
 import java.util.Map;

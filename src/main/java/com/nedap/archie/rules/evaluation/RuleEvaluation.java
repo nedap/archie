@@ -1,7 +1,6 @@
 package com.nedap.archie.rules.evaluation;
 
 import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Multimap;
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.query.RMQueryContext;
 import com.nedap.archie.rm.archetypes.Pathable;
@@ -18,11 +17,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 /**
  * Created by pieter.bos on 31/03/16.
  */

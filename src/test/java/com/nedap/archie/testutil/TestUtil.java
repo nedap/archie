@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class TestUtil {
 
-    RMObjectCreator creator = new RMObjectCreator();
+    private RMObjectCreator creator = new RMObjectCreator();
     /**
      * Creates an empty RM Object, fully nested, one object per CObject found.
      * For those familiar to the old java libs: this is a simple skeleton generator.

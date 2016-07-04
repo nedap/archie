@@ -3,8 +3,6 @@ package com.nedap.archie.serializer.adl.rules;
 import com.nedap.archie.rules.ModelReference;
 import com.nedap.archie.serializer.adl.ADLRulesSerializer;
 
-import java.util.function.BinaryOperator;
-
 /**
  * Created by pieter.bos on 15/06/16.
  */

@@ -1,7 +1,6 @@
 package com.nedap.archie.aom;
 
 import com.esotericsoftware.kryo.Kryo;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.nedap.archie.base.OpenEHRBase;
 import com.nedap.archie.util.KryoUtil;
 

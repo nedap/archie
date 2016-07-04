@@ -24,9 +24,9 @@ import static org.junit.Assert.assertNotNull;
 public class APathQueryRMTest {
 
 
-    TestUtil testUtil;
-    Archetype archetype;
-    Pathable root;
+    private TestUtil testUtil;
+    private Archetype archetype;
+    private Pathable root;
 
     @Before
     public void setup() throws Exception {

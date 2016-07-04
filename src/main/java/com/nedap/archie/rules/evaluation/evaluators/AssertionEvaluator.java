@@ -3,7 +3,6 @@ package com.nedap.archie.rules.evaluation.evaluators;
 import com.google.common.collect.Lists;
 import com.nedap.archie.rules.Assertion;
 import com.nedap.archie.rules.PrimitiveType;
-import com.nedap.archie.rules.VariableDeclaration;
 import com.nedap.archie.rules.evaluation.Evaluator;
 import com.nedap.archie.rules.evaluation.RuleEvaluation;
 import com.nedap.archie.rules.evaluation.ValueList;

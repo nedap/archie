@@ -30,10 +30,10 @@ import static org.junit.Assert.assertThat;
  */
 public class JacksonRMRoundTripTest {
 
-    ADLParser parser;
-    Archetype archetype;
+    private ADLParser parser;
+    private Archetype archetype;
 
-    TestUtil testUtil;
+    private TestUtil testUtil;
 
     @Before
     public void setup() {

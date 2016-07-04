@@ -1,10 +1,8 @@
 package com.nedap.archie.rules.evaluation.evaluators;
 
 import com.google.common.collect.Lists;
-import com.nedap.archie.query.APathQuery;
 import com.nedap.archie.query.RMObjectWithPath;
-import com.nedap.archie.rm.RMObject;
-import com.nedap.archie.rminfo.ArchieRMInfoLookup;
+
 import com.nedap.archie.rules.ModelReference;
 import com.nedap.archie.rules.PrimitiveType;
 import com.nedap.archie.rules.evaluation.Evaluator;
@@ -13,7 +11,6 @@ import com.nedap.archie.rules.evaluation.Value;
 import com.nedap.archie.rules.evaluation.ValueList;
 
 import javax.xml.xpath.XPathExpressionException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

@@ -11,7 +11,7 @@ import static org.junit.Assert.assertFalse;
  */
 public class ArchetypeCloneTest {
 
-    Archetype archetype;
+    private Archetype archetype;
 
     @Before
     public void setup() throws Exception {

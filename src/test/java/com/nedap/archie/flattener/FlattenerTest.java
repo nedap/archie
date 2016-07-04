@@ -25,14 +25,14 @@ import static org.junit.Assert.*;
  */
 public class FlattenerTest {
 
-    Archetype report;
-    Archetype device;
-    Archetype bloodPressureObservation;
-    Archetype reportResult;
-    Archetype bloodPressureComposition;
-    Archetype height;
-    Archetype heightTemplate;
-    SimpleArchetypeRepository repository;
+    private Archetype report;
+    private Archetype device;
+    private Archetype bloodPressureObservation;
+    private Archetype reportResult;
+    private Archetype bloodPressureComposition;
+    private Archetype height;
+    private Archetype heightTemplate;
+    private SimpleArchetypeRepository repository;
 
     Flattener flattener;
 

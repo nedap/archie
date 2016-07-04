@@ -1,7 +1,6 @@
 package com.nedap.archie.rules;
 
 import com.nedap.archie.aom.ArchetypeModelObject;
-import com.nedap.archie.base.OpenEHRBase;
 
 /**
  * Created by pieter.bos on 27/10/15.

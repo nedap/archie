@@ -15,7 +15,7 @@ import static org.junit.Assert.*;
  */
 public class RMConstraintImposerTest {
 
-    Archetype archetype;
+    private Archetype archetype;
 
     @Before
     public void setup() throws Exception {
