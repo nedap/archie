@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.nedap.archie.adlparser.treewalkers.TemporalConstraintParser;
 
 import java.io.IOException;
-import java.time.temporal.TemporalAccessor;
 import java.time.temporal.TemporalAmount;
 
 /**

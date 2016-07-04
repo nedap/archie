@@ -34,7 +34,7 @@ public class FlattenerTest {
     private Archetype heightTemplate;
     private SimpleArchetypeRepository repository;
 
-    Flattener flattener;
+    private Flattener flattener;
 
     @Before
     public void setup() throws Exception {

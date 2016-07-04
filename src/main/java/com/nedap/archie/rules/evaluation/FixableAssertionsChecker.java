@@ -26,7 +26,7 @@ class FixableAssertionsChecker {
 
     private static Logger logger = LoggerFactory.getLogger(FixableAssertionsChecker.class);
 
-    ArrayListMultimap<RuleElement, ValueList> ruleElementValues;
+    private ArrayListMultimap<RuleElement, ValueList> ruleElementValues;
 
     private VariableMap forAllVariables;
 

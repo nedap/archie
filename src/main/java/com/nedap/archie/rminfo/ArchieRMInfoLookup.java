@@ -2,7 +2,6 @@ package com.nedap.archie.rminfo;
 
 import com.nedap.archie.aom.CPrimitiveObject;
 import com.nedap.archie.aom.primitives.CTerminologyCode;
-import com.nedap.archie.base.OpenEHRBase;
 import com.nedap.archie.base.terminology.TerminologyCode;
 import com.nedap.archie.rm.RMObject;
 import com.nedap.archie.rm.datastructures.PointEvent;

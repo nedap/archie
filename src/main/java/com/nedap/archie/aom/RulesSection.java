@@ -1,6 +1,5 @@
 package com.nedap.archie.aom;
 
-import com.nedap.archie.base.OpenEHRBase;
 import com.nedap.archie.rules.RuleStatement;
 
 import java.util.ArrayList;

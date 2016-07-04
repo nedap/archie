@@ -3,7 +3,6 @@ package com.nedap.archie.aom.terminology;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.nedap.archie.aom.ArchetypeModelObject;
-import com.nedap.archie.base.OpenEHRBase;
 
 import java.util.Collection;
 import java.util.HashMap;

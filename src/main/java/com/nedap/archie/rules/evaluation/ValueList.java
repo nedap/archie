@@ -3,7 +3,6 @@ package com.nedap.archie.rules.evaluation;
 import com.nedap.archie.rules.PrimitiveType;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 

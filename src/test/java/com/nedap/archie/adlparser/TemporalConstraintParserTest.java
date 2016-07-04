@@ -7,7 +7,6 @@ import org.junit.Test;
 
 import java.time.Duration;
 import java.time.Period;
-import java.time.YearMonth;
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAmount;
 

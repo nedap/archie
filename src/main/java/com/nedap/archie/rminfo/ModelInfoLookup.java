@@ -2,7 +2,6 @@ package com.nedap.archie.rminfo;
 
 import com.google.common.reflect.TypeToken;
 import com.nedap.archie.aom.CPrimitiveObject;
-import com.nedap.archie.rm.RMObject;
 import org.reflections.ReflectionUtils;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;

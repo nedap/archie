@@ -1,17 +1,15 @@
 package com.nedap.archie.query;
 
 import com.google.common.collect.Sets;
-import com.nedap.archie.paths.PathSegment;
 import com.nedap.archie.adlparser.antlr.XPathLexer;
 import com.nedap.archie.adlparser.antlr.XPathParser;
 import com.nedap.archie.adlparser.antlr.XPathParser.*;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import java.util.List;
+
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

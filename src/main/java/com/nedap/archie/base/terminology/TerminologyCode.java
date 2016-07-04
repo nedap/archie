@@ -1,7 +1,6 @@
 package com.nedap.archie.base.terminology;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.nedap.archie.rm.datatypes.CodePhrase;
 import com.nedap.archie.rm.datatypes.TerminologyId;
 
 import java.net.URI;
