@@ -1,13 +1,22 @@
 package com.nedap.archie.aom;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nedap.archie.base.terminology.TerminologyCode;
 
 import java.util.Map;
 
 /**
+ * Authored Resource.
+ *
+ * Contains a small deviation from the spec that should not be noticed during use:
+ * All methods, including get and set methods from the AOM spec are present.
+ * However, where normally every attribute is directly mapped to a field, the field from the language section of an
+ * archetype in ADL are mapped to a LanguageSection object. This is done to enable odin parsing directly from odin to
+ * objects, instead of steps in between.
+ *
  * Created by pieter.bos on 15/10/15.
  */
-public class AuthoredResource extends ArchetypeModelObject{
+public class AuthoredResource extends ArchetypeModelObject {
 
     private Boolean controlled;
     private String uid;
@@ -41,14 +50,6 @@ public class AuthoredResource extends ArchetypeModelObject{
         this.description = description;
     }
 
-    public LanguageSection getContent() {
-        return content;
-    }
-
-    public void setContent(LanguageSection content) {
-        this.content = content;
-    }
-
     public TerminologyCode getOriginalLanguage() {
         return content.getOriginalLanguage();
     }
@@ -73,9 +74,11 @@ public class AuthoredResource extends ArchetypeModelObject{
         this.annotations = annotations;
     }
 
-    /** Not in archetype object model specs, but this is the full content of the language section.
+    /**
+     * Not in archetype object model specs, but this is the full content of the language section.
      *   All methods of this languageSection class are directly exposed by methods of AuthoredResource
      */
+    @JsonIgnore
     public LanguageSection getAuthoredResourceContent() {
         return content;
     }
