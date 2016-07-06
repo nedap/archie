@@ -3,6 +3,7 @@ package com.nedap.archie.json;
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.CComplexObject;
 import com.nedap.archie.rm.datastructures.Cluster;
+import com.nedap.archie.serializer.adl.ADLArchetypeSerializer;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -32,6 +33,8 @@ public class AOMParseTest {
             assertThat(cluster.getRmTypeName(), is("CLUSTER"));
             assertThat(cluster.getNodeId(), is("id4"));
             assertThat(cluster.getParent(), is(equalTo(archetype.getDefinition().itemAtPath("/data[id2]/items[id3]/items"))));
+            assertEquals("Groep1", cluster.getTerm().getText());
+            System.out.println(ADLArchetypeSerializer.serialize(archetype));
         }
     }
 }

@@ -135,7 +135,7 @@
                                     {
                                       "@type": "C_ATTRIBUTE",
                                       "rm_attribute_name": "value",
-
+                                      
                                       "children": []
                                     }
                                   ],
@@ -149,7 +149,7 @@
                                     {
                                       "@type": "C_ATTRIBUTE",
                                       "rm_attribute_name": "value",
-
+                                      
                                       "children": []
                                     }
                                   ],
@@ -163,7 +163,7 @@
                                     {
                                       "@type": "C_ATTRIBUTE",
                                       "rm_attribute_name": "value",
-
+                                      
                                       "children": []
                                     }
                                   ],
@@ -177,7 +177,7 @@
                                     {
                                       "@type": "C_ATTRIBUTE",
                                       "rm_attribute_name": "value",
-
+                                      
                                       "children": []
                                     }
                                   ],
@@ -191,7 +191,7 @@
                                     {
                                       "@type": "C_ATTRIBUTE",
                                       "rm_attribute_name": "value",
-
+                                      
                                       "children": []
                                     }
                                   ],
@@ -205,7 +205,7 @@
                                     {
                                       "@type": "C_ATTRIBUTE",
                                       "rm_attribute_name": "value",
-
+                                      
                                       "children": []
                                     }
                                   ],
@@ -219,7 +219,7 @@
                                     {
                                       "@type": "C_ATTRIBUTE",
                                       "rm_attribute_name": "value",
-
+                                      
                                       "children": []
                                     }
                                   ],
@@ -233,7 +233,7 @@
                                     {
                                       "@type": "C_ATTRIBUTE",
                                       "rm_attribute_name": "value",
-
+                                      
                                       "children": []
                                     }
                                   ],
@@ -247,7 +247,7 @@
                                     {
                                       "@type": "C_ATTRIBUTE",
                                       "rm_attribute_name": "value",
-
+                                      
                                       "children": []
                                     }
                                   ],
@@ -261,7 +261,7 @@
                                     {
                                       "@type": "C_ATTRIBUTE",
                                       "rm_attribute_name": "value",
-
+                                      
                                       "children": []
                                     }
                                   ],
@@ -275,7 +275,7 @@
                                     {
                                       "@type": "C_ATTRIBUTE",
                                       "rm_attribute_name": "value",
-
+                                      
                                       "children": []
                                     }
                                   ],
@@ -289,7 +289,7 @@
                                     {
                                       "@type": "C_ATTRIBUTE",
                                       "rm_attribute_name": "value",
-
+                                      
                                       "children": []
                                     }
                                   ],
@@ -303,7 +303,7 @@
                                     {
                                       "@type": "C_ATTRIBUTE",
                                       "rm_attribute_name": "value",
-
+                                      
                                       "children": []
                                     }
                                   ],
@@ -322,7 +322,7 @@
                             {
                               "@type": "C_ATTRIBUTE",
                               "rm_attribute_name": "items",
-
+                              
                               "children": [
                                 {
                                   "@type": "C_COMPLEX_OBJECT",
@@ -332,7 +332,7 @@
                                     {
                                       "@type": "C_ATTRIBUTE",
                                       "rm_attribute_name": "value",
-
+                                      
                                       "children": []
                                     }
                                   ],
@@ -346,7 +346,7 @@
                                     {
                                       "@type": "C_ATTRIBUTE",
                                       "rm_attribute_name": "value",
-
+                                      
                                       "children": []
                                     }
                                   ],
@@ -360,7 +360,7 @@
                                     {
                                       "@type": "C_ATTRIBUTE",
                                       "rm_attribute_name": "value",
-
+                                      
                                       "children": []
                                     }
                                   ],
@@ -374,6 +374,7 @@
                                     {
                                       "@type": "C_ATTRIBUTE",
                                       "rm_attribute_name": "value",
+                                      
                                       "children": []
                                     }
                                   ],
@@ -387,6 +388,7 @@
                                     {
                                       "@type": "C_ATTRIBUTE",
                                       "rm_attribute_name": "value",
+                                      
                                       "children": []
                                     }
                                   ],
@@ -400,6 +402,7 @@
                                     {
                                       "@type": "C_ATTRIBUTE",
                                       "rm_attribute_name": "value",
+                                      
                                       "children": []
                                     }
                                   ],
@@ -413,6 +416,7 @@
                                     {
                                       "@type": "C_ATTRIBUTE",
                                       "rm_attribute_name": "value",
+                                      
                                       "children": []
                                     }
                                   ],
@@ -426,6 +430,7 @@
                                     {
                                       "@type": "C_ATTRIBUTE",
                                       "rm_attribute_name": "value",
+                                      
                                       "children": []
                                     }
                                   ],
@@ -439,6 +444,7 @@
                                     {
                                       "@type": "C_ATTRIBUTE",
                                       "rm_attribute_name": "value",
+                                      
                                       "children": []
                                     }
                                   ],
@@ -452,6 +458,7 @@
                                     {
                                       "@type": "C_ATTRIBUTE",
                                       "rm_attribute_name": "value",
+                                      
                                       "children": []
                                     }
                                   ],
@@ -465,6 +472,7 @@
                                     {
                                       "@type": "C_ATTRIBUTE",
                                       "rm_attribute_name": "value",
+                                      
                                       "children": []
                                     }
                                   ],
@@ -478,6 +486,7 @@
                                     {
                                       "@type": "C_ATTRIBUTE",
                                       "rm_attribute_name": "value",
+                                      
                                       "children": []
                                     }
                                   ],
@@ -491,6 +500,7 @@
                                     {
                                       "@type": "C_ATTRIBUTE",
                                       "rm_attribute_name": "value",
+                                      
                                       "children": []
                                     }
                                   ],
@@ -509,6 +519,7 @@
                             {
                               "@type": "C_ATTRIBUTE",
                               "rm_attribute_name": "items",
+                              
                               "children": [
                                 {
                                   "@type": "C_COMPLEX_OBJECT",
@@ -518,6 +529,7 @@
                                     {
                                       "@type": "C_ATTRIBUTE",
                                       "rm_attribute_name": "value",
+                                      
                                       "children": []
                                     }
                                   ],
@@ -531,6 +543,7 @@
                                     {
                                       "@type": "C_ATTRIBUTE",
                                       "rm_attribute_name": "value",
+                                      
                                       "children": []
                                     }
                                   ],
@@ -544,6 +557,7 @@
                                     {
                                       "@type": "C_ATTRIBUTE",
                                       "rm_attribute_name": "value",
+                                      
                                       "children": []
                                     }
                                   ],
@@ -557,6 +571,7 @@
                                     {
                                       "@type": "C_ATTRIBUTE",
                                       "rm_attribute_name": "value",
+                                      
                                       "children": []
                                     }
                                   ],
@@ -570,6 +585,7 @@
                                     {
                                       "@type": "C_ATTRIBUTE",
                                       "rm_attribute_name": "value",
+                                      
                                       "children": []
                                     }
                                   ],
@@ -583,6 +599,7 @@
                                     {
                                       "@type": "C_ATTRIBUTE",
                                       "rm_attribute_name": "value",
+                                      
                                       "children": []
                                     }
                                   ],
@@ -596,6 +613,7 @@
                                     {
                                       "@type": "C_ATTRIBUTE",
                                       "rm_attribute_name": "value",
+                                      
                                       "children": []
                                     }
                                   ],
@@ -609,6 +627,7 @@
                                     {
                                       "@type": "C_ATTRIBUTE",
                                       "rm_attribute_name": "value",
+                                      
                                       "children": []
                                     }
                                   ],
@@ -622,6 +641,7 @@
                                     {
                                       "@type": "C_ATTRIBUTE",
                                       "rm_attribute_name": "value",
+                                      
                                       "children": []
                                     }
                                   ],
@@ -635,7 +655,7 @@
                                     {
                                       "@type": "C_ATTRIBUTE",
                                       "rm_attribute_name": "value",
-
+                                      
                                       "children": []
                                     }
                                   ],
@@ -649,6 +669,7 @@
                                     {
                                       "@type": "C_ATTRIBUTE",
                                       "rm_attribute_name": "value",
+                                      
                                       "children": []
                                     }
                                   ],
@@ -662,6 +683,7 @@
                                     {
                                       "@type": "C_ATTRIBUTE",
                                       "rm_attribute_name": "value",
+                                      
                                       "children": []
                                     }
                                   ],
@@ -675,6 +697,7 @@
                                     {
                                       "@type": "C_ATTRIBUTE",
                                       "rm_attribute_name": "value",
+                                      
                                       "children": []
                                     }
                                   ],
@@ -693,6 +716,7 @@
                             {
                               "@type": "C_ATTRIBUTE",
                               "rm_attribute_name": "items",
+                              
                               "children": [
                                 {
                                   "@type": "C_COMPLEX_OBJECT",
@@ -702,6 +726,7 @@
                                     {
                                       "@type": "C_ATTRIBUTE",
                                       "rm_attribute_name": "value",
+                                      
                                       "children": []
                                     }
                                   ],
@@ -726,7 +751,255 @@
   },
   "terminology": {
     "@type": "ARCHETYPE_TERMINOLOGY",
-    "term_definitions": {},
+    "term_definitions": {
+      "nl": {
+        "id5": {
+          "@type": "ARCHETYPE_TERM",
+          "description": "Naam beoordelaar (invulinstructie onder vraagteken)",
+          "text": "Naam beoordelaar (invulinstructie onder vraagteken)"
+        },
+        "id4": {
+          "@type": "ARCHETYPE_TERM",
+          "description": "Groep1",
+          "text": "Groep1"
+        },
+        "id3": {
+          "@type": "ARCHETYPE_TERM",
+          "description": "Algemene gegevens",
+          "text": "Algemene gegevens"
+        },
+        "id8": {
+          "@type": "ARCHETYPE_TERM",
+          "description": "Zakt weg tijdens gesprek of bezigheden ",
+          "text": "Zakt weg tijdens gesprek of bezigheden "
+        },
+        "id9": {
+          "@type": "ARCHETYPE_TERM",
+          "description": "Is snel afgeleid door prikkels uit de omgeving",
+          "text": "Is snel afgeleid door prikkels uit de omgeving"
+        },
+        "id10": {
+          "@type": "ARCHETYPE_TERM",
+          "description": "Heeft aandacht voor gesprek of handeling",
+          "text": "Heeft aandacht voor gesprek of handeling"
+        },
+        "id11": {
+          "@type": "ARCHETYPE_TERM",
+          "description": "Maakt vraag of antwoord niet af",
+          "text": "Maakt vraag of antwoord niet af"
+        },
+        "id12": {
+          "@type": "ARCHETYPE_TERM",
+          "description": "Geeft antwoorden die niet passen bij de vraag",
+          "text": "Geeft antwoorden die niet passen bij de vraag"
+        },
+        "id13": {
+          "@type": "ARCHETYPE_TERM",
+          "description": "Reageert traag op opdrachten",
+          "text": "Reageert traag op opdrachten"
+        },
+        "id14": {
+          "@type": "ARCHETYPE_TERM",
+          "description": "Denkt ergens ander te zijn",
+          "text": "Denkt ergens ander te zijn"
+        },
+        "id15": {
+          "@type": "ARCHETYPE_TERM",
+          "description": "Beseft wel welk dagdeel het is",
+          "text": "Beseft wel welk dagdeel het is"
+        },
+        "id16": {
+          "@type": "ARCHETYPE_TERM",
+          "description": "Herinnert zich recente gebeurtenis",
+          "text": "Herinnert zich recente gebeurtenis"
+        },
+        "id17": {
+          "@type": "ARCHETYPE_TERM",
+          "description": "Is plukkerig, rommelig, rusteloos",
+          "text": "Is plukkerig, rommelig, rusteloos"
+        },
+        "id18": {
+          "@type": "ARCHETYPE_TERM",
+          "description": "Trekt aan infuus, sonde, catheter enz.",
+          "text": "Trekt aan infuus, sonde, catheter enz."
+        },
+        "id19": {
+          "@type": "ARCHETYPE_TERM",
+          "description": "Is snel of plotseling geÃ«motioneerd",
+          "text": "Is snel of plotseling geÃ«motioneerd"
+        },
+        "id20": {
+          "@type": "ARCHETYPE_TERM",
+          "description": "Ziet/hoort dingen die er niet zijn",
+          "text": "Ziet/hoort dingen die er niet zijn"
+        },
+        "id7": {
+          "@type": "ARCHETYPE_TERM",
+          "description": "DAGDIENST",
+          "text": "DAGDIENST"
+        },
+        "id22": {
+          "@type": "ARCHETYPE_TERM",
+          "description": "Zakt weg tijdens gesprek of bezigheden",
+          "text": "Zakt weg tijdens gesprek of bezigheden"
+        },
+        "id23": {
+          "@type": "ARCHETYPE_TERM",
+          "description": "Is snel afgeleid door prikkels uit de omgeving",
+          "text": "Is snel afgeleid door prikkels uit de omgeving"
+        },
+        "id24": {
+          "@type": "ARCHETYPE_TERM",
+          "description": "Heeft aandacht voor gesprek of handeling",
+          "text": "Heeft aandacht voor gesprek of handeling"
+        },
+        "id25": {
+          "@type": "ARCHETYPE_TERM",
+          "description": "Maakt vraag of antwoord niet af",
+          "text": "Maakt vraag of antwoord niet af"
+        },
+        "id26": {
+          "@type": "ARCHETYPE_TERM",
+          "description": "Geeft antwoorden die niet passen bij de vraag",
+          "text": "Geeft antwoorden die niet passen bij de vraag"
+        },
+        "id27": {
+          "@type": "ARCHETYPE_TERM",
+          "description": "Reageert traag op opdrachten",
+          "text": "Reageert traag op opdrachten"
+        },
+        "id28": {
+          "@type": "ARCHETYPE_TERM",
+          "description": "Denkt ergens anders te zijn",
+          "text": "Denkt ergens anders te zijn"
+        },
+        "id29": {
+          "@type": "ARCHETYPE_TERM",
+          "description": "Beseft wel welk dagdeel het is",
+          "text": "Beseft wel welk dagdeel het is"
+        },
+        "id30": {
+          "@type": "ARCHETYPE_TERM",
+          "description": "Herinnert zich recente gebeurtenissen",
+          "text": "Herinnert zich recente gebeurtenissen"
+        },
+        "id31": {
+          "@type": "ARCHETYPE_TERM",
+          "description": "Is plukkerig, rommelig, rusteloos",
+          "text": "Is plukkerig, rommelig, rusteloos"
+        },
+        "id32": {
+          "@type": "ARCHETYPE_TERM",
+          "description": "Trekt aan infuus, sonde, catheter enz.",
+          "text": "Trekt aan infuus, sonde, catheter enz."
+        },
+        "id33": {
+          "@type": "ARCHETYPE_TERM",
+          "description": "Is snel of plotseling geÃ«motioneerd",
+          "text": "Is snel of plotseling geÃ«motioneerd"
+        },
+        "id34": {
+          "@type": "ARCHETYPE_TERM",
+          "description": "Ziet/hoort dingen die er niet zijn",
+          "text": "Ziet/hoort dingen die er niet zijn"
+        },
+        "id21": {
+          "@type": "ARCHETYPE_TERM",
+          "description": "LATE DIENST",
+          "text": "LATE DIENST"
+        },
+        "id36": {
+          "@type": "ARCHETYPE_TERM",
+          "description": "Zakt weg tijdens gesprek of bezigheden",
+          "text": "Zakt weg tijdens gesprek of bezigheden"
+        },
+        "id37": {
+          "@type": "ARCHETYPE_TERM",
+          "description": "Is snel afgeleid door prikkels uit de omgeving",
+          "text": "Is snel afgeleid door prikkels uit de omgeving"
+        },
+        "id38": {
+          "@type": "ARCHETYPE_TERM",
+          "description": "Heeft aandacht voor gesprek of handeling",
+          "text": "Heeft aandacht voor gesprek of handeling"
+        },
+        "id39": {
+          "@type": "ARCHETYPE_TERM",
+          "description": "Maakt vraag of antwoord niet af",
+          "text": "Maakt vraag of antwoord niet af"
+        },
+        "id40": {
+          "@type": "ARCHETYPE_TERM",
+          "description": "Geeft antwoorden die niet passen bij de vraag",
+          "text": "Geeft antwoorden die niet passen bij de vraag"
+        },
+        "id41": {
+          "@type": "ARCHETYPE_TERM",
+          "description": "Reageert traag op opdrachten",
+          "text": "Reageert traag op opdrachten"
+        },
+        "id42": {
+          "@type": "ARCHETYPE_TERM",
+          "description": "Denkt ergens ander te zijn",
+          "text": "Denkt ergens ander te zijn"
+        },
+        "id43": {
+          "@type": "ARCHETYPE_TERM",
+          "description": "Beseft welk dagdeel het is",
+          "text": "Beseft welk dagdeel het is"
+        },
+        "id44": {
+          "@type": "ARCHETYPE_TERM",
+          "description": "Herinnert zich recente gebeurtenis",
+          "text": "Herinnert zich recente gebeurtenis"
+        },
+        "id45": {
+          "@type": "ARCHETYPE_TERM",
+          "description": "Is plukkerig, rommelig, rusteloos",
+          "text": "Is plukkerig, rommelig, rusteloos"
+        },
+        "id46": {
+          "@type": "ARCHETYPE_TERM",
+          "description": "Trekt aan infuus, sonde, catheter enz.",
+          "text": "Trekt aan infuus, sonde, catheter enz."
+        },
+        "id47": {
+          "@type": "ARCHETYPE_TERM",
+          "description": "Is snel of plotseling geÃ«motioneerd",
+          "text": "Is snel of plotseling geÃ«motioneerd"
+        },
+        "id48": {
+          "@type": "ARCHETYPE_TERM",
+          "description": "Ziet/hoort dingen die er niet zijn",
+          "text": "Ziet/hoort dingen die er niet zijn"
+        },
+        "id35": {
+          "@type": "ARCHETYPE_TERM",
+          "description": "NACHTDIENST",
+          "text": "NACHTDIENST"
+        },
+        "id50": {
+          "@type": "ARCHETYPE_TERM",
+          "description": "Totaalscore",
+          "text": "Totaalscore"
+        },
+        "id49": {
+          "@type": "ARCHETYPE_TERM",
+          "description": "Totaalscore",
+          "text": "Totaalscore"
+        },
+        "id6": {
+          "@type": "ARCHETYPE_TERM",
+          "description": "Meting",
+          "text": "Meting"
+        },
+        "id1": {
+          "@type": "ARCHETYPE_TERM",
+          "description": "Delirium Observatie Screening (DOS) schaal",
+          "text": "De Delirium observatie screening (DOS) schaal is een beoordelingsschaal voor een delirium bij ouderen. De DOS bevat 13 observaties van gedrag (verbaal en non-verbaal) die de symptomen van het delirium weergeven."
+        }
+      }
+    },
     "term_bindings": {},
     "terminology_extracts": {},
     "value_sets": {}
@@ -737,6 +1010,7 @@
   "other_meta_data": {},
   "terminology_extracts": {},
   "component_terminologies": {},
-  "original_language": "ISO_639-1::nl",
-  "translations": {}
+  "original_language": "[ISO_639-1::nl]",
+  "translations": {},
+  "authored_resource_content": {}
 }

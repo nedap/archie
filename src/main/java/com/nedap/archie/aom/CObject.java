@@ -90,10 +90,14 @@ public class CObject extends ArchetypeConstraint {
         if(nodeId == null) {
             return null;
         }
-        ArchetypeTerm result = getArchetype().getTerm(this, ArchieLanguageConfiguration.getMeaningAndDescriptionLanguage());
+        Archetype archetype = getArchetype();
+        ArchetypeTerm result = archetype.getTerm(this, ArchieLanguageConfiguration.getMeaningAndDescriptionLanguage());
         if(result == null) {
             //no translation in the given language. Fall back to the default.
-            result = getArchetype().getTerm(this, ArchieLanguageConfiguration.getDefaultMeaningAndDescriptionLanguage());
+            result = archetype.getTerm(this, ArchieLanguageConfiguration.getDefaultMeaningAndDescriptionLanguage());
+        }
+        if(result == null && archetype.getOriginalLanguage() != null && archetype.getOriginalLanguage().getCodeString() != null) {
+            result = archetype.getTerm(this, archetype.getOriginalLanguage().getCodeString());
         }
         return result;
     }
