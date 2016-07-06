@@ -53,8 +53,11 @@ public class JacksonUtil {
         objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
         objectMapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
         objectMapper.enable(DeserializationFeature.UNWRAP_SINGLE_VALUE_ARRAYS);
+        objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        //objectMapper.
+
         objectMapper.registerModule(new JavaTimeModule());
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
 
         TypeResolverBuilder typeResolverBuilder = new ArchieTypeResolverBuilder()
                 .init(JsonTypeInfo.Id.NAME, new OpenEHRTypeNaming())

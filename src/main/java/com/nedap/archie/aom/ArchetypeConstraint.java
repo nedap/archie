@@ -48,7 +48,15 @@ public abstract class ArchetypeConstraint extends ArchetypeModelObject {
         return PathUtil.getPath(getPathSegments());
     }
 
+    private void setPath(String path){
+        //setter hack for jackson, unfortunately
+    }
+
     public abstract String getLogicalPath();
+
+    private void setLogicalPath(String path){
+        //setter hack for jackson, unfortunately
+    }
 
     public String path() {
         return getPath();

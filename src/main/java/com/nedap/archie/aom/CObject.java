@@ -1,6 +1,8 @@
 package com.nedap.archie.aom;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.nedap.archie.ArchieLanguageConfiguration;
 import com.nedap.archie.aom.terminology.ArchetypeTerm;
 import com.nedap.archie.base.MultiplicityInterval;
@@ -100,6 +102,10 @@ public class CObject extends ArchetypeConstraint {
             result = archetype.getTerm(this, archetype.getOriginalLanguage().getCodeString());
         }
         return result;
+    }
+
+    private void setTerm(ArchetypeTerm term) {
+        //hack to get Jackson to work for now
     }
 
     /**

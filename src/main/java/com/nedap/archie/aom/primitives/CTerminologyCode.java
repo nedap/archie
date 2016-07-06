@@ -8,6 +8,7 @@ import com.nedap.archie.aom.terminology.ArchetypeTerminology;
 import com.nedap.archie.aom.terminology.TerminologyCodeWithArchetypeTerm;
 import com.nedap.archie.aom.terminology.ValueSet;
 import com.nedap.archie.base.terminology.TerminologyCode;
+import com.sun.xml.internal.xsom.impl.Ref;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,6 +77,10 @@ public class CTerminologyCode extends CPrimitiveObject<String, TerminologyCode> 
             }
         }
         return result;
+    }
+
+    private void setTerms(List<TerminologyCodeWithArchetypeTerm> terms) {
+        //hack for jackson to work
     }
 
 }
