@@ -37,4 +37,14 @@ public class AOMParseTest {
             System.out.println(ADLArchetypeSerializer.serialize(archetype));
         }
     }
+
+    @Test
+    public void roundTripDeliriumObservationScreening() throws Exception {
+        try(InputStream stream = getClass().getResourceAsStream("delirium_observation_screening.json")) {
+            Archetype archetype = JacksonUtil.getObjectMapper().readValue(stream, Archetype.class);
+            String reserialized = JacksonUtil.getObjectMapper().writeValueAsString(archetype);
+            System.out.println(reserialized);
+            JacksonUtil.getObjectMapper().readValue(reserialized, Archetype.class);
+        }
+    }
 }
