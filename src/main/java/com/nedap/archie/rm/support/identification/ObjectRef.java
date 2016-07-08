@@ -1,4 +1,4 @@
-package com.nedap.archie.rm.datatypes;
+package com.nedap.archie.rm.support.identification;
 
 import com.nedap.archie.rm.RMObject;
 import com.nedap.archie.rm.support.identification.ObjectId;
@@ -16,10 +16,10 @@ import javax.xml.bind.annotation.XmlType;
         "namespace",
         "type"
 })
-public class ObjectRef extends RMObject {
+public class ObjectRef<Idtype extends ObjectId> extends RMObject {
     private String namespace;
     private String type;
-    private ObjectId id;
+    private Idtype id;
 
     public String getNamespace() {
         return namespace;
@@ -37,11 +37,11 @@ public class ObjectRef extends RMObject {
         this.type = type;
     }
 
-    public ObjectId getId() {
+    public Idtype getId() {
         return id;
     }
 
-    public void setId(ObjectId id) {
+    public void setId(Idtype id) {
         this.id = id;
     }
 }

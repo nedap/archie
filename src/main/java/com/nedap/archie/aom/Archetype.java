@@ -18,7 +18,7 @@ public class Archetype extends AuthoredResource {
 
     private String parentArchetypeId;
     private boolean differential = false;
-    private ArchetypeID archetypeId;
+    private ArchetypeHRID archetypeId;
 
     private CComplexObject definition;
     private ArchetypeTerminology terminology;
@@ -47,11 +47,11 @@ public class Archetype extends AuthoredResource {
         this.differential = differential;
     }
 
-    public ArchetypeID getArchetypeId() {
+    public ArchetypeHRID getArchetypeId() {
         return archetypeId;
     }
 
-    public void setArchetypeId(ArchetypeID archetypeId) {
+    public void setArchetypeId(ArchetypeHRID archetypeId) {
         this.archetypeId = archetypeId;
     }
 

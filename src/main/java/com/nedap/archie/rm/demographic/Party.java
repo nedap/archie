@@ -2,7 +2,7 @@ package com.nedap.archie.rm.demographic;
 
 import com.nedap.archie.rm.archetyped.Locatable;
 import com.nedap.archie.rm.datastructures.ItemStructure;
-import com.nedap.archie.rm.datatypes.LocatableRef;
+import com.nedap.archie.rm.support.identification.LocatableRef;
 
 import javax.annotation.Nullable;
 import javax.xml.bind.annotation.XmlAccessType;

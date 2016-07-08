@@ -1,6 +1,7 @@
 package com.nedap.archie.rm.archetyped;
 
-import com.nedap.archie.aom.ArchetypeID;
+import com.nedap.archie.aom.ArchetypeHRID;
+import com.nedap.archie.rm.support.identification.ArchetypeID;
 
 import javax.annotation.Nullable;
 import javax.xml.bind.annotation.XmlAccessType;

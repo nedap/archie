@@ -4,7 +4,6 @@ import javax.annotation.Nullable;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
-import java.rmi.server.UID;
 
 /**
  * Created by pieter.bos on 04/11/15.

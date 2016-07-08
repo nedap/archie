@@ -12,7 +12,7 @@
   },
   "differential": false,
   "archetype_id": {
-    "@type": "ARCHETYPE_ID",
+    "@type": "ARCHETYPE_HRID",
     "rm_publisher": "openEHR",
     "rm_package": "EHR",
     "rm_class": "GENERIC_ENTRY",

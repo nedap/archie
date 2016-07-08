@@ -1,6 +1,7 @@
 package com.nedap.archie.rm.datatypes;
 
 import com.nedap.archie.rm.RMObject;
+import com.nedap.archie.rm.support.identification.TerminologyId;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

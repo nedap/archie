@@ -2,7 +2,7 @@ package com.nedap.archie.base.terminology;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.nedap.archie.rm.datatypes.TerminologyId;
+import com.nedap.archie.rm.support.identification.TerminologyId;
 
 import java.net.URI;
 import java.util.regex.Matcher;

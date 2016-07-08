@@ -6,12 +6,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * TODO: both used in AOM and RM, but both are different - ArchetypeId and ArchetypeHRID. Problem: they are both the same
- * but slightly different
  *
  * Created by pieter.bos on 15/10/15.
  */
-public class ArchetypeID extends ArchetypeModelObject {
+public class ArchetypeHRID extends ArchetypeModelObject {
 
     private String namespace;
     private String rmPublisher;
@@ -23,11 +21,11 @@ public class ArchetypeID extends ArchetypeModelObject {
     private String buildCount;
 
 
-    public ArchetypeID() {
+    public ArchetypeHRID() {
 
     }
 
-    public ArchetypeID(String value) {
+    public ArchetypeHRID(String value) {
 
         Pattern p = Pattern.compile("((?<namespace>.*)::)?(?<publisher>.*)-(?<package>.*)-(?<class>.*)\\.(?<concept>.*)\\.v(?<version>.*)");
         Matcher m = p.matcher(value);

@@ -1,7 +1,7 @@
 package com.nedap.archie.rm.ehr;
 
 import com.nedap.archie.rm.RMObject;
-import com.nedap.archie.rm.datatypes.ObjectRef;
+import com.nedap.archie.rm.support.identification.ObjectRef;
 import com.nedap.archie.rm.datavalues.quantity.datetime.DvDateTime;
 import com.nedap.archie.rm.support.identification.HierObjectId;
 
