@@ -22,8 +22,8 @@ import java.util.List;
         "name",
         "uid",
         "links",
-        "archetypeDetails"
-        //,"feederAudit"
+        "archetypeDetails",
+        "feederAudit"
 })
 public class Locatable extends Pathable {
 

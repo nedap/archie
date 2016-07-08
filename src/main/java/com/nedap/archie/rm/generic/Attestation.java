@@ -30,6 +30,46 @@ public class Attestation extends AuditDetails {
     @XmlElement(name="is_pending")
     private boolean isPending;
 
+    @Nullable
+    public DvMultimedia getAttestedView() {
+        return attestedView;
+    }
 
+    public void setAttestedView(@Nullable DvMultimedia attestedView) {
+        this.attestedView = attestedView;
+    }
 
+    @Nullable
+    public String getProof() {
+        return proof;
+    }
+
+    public void setProof(@Nullable String proof) {
+        this.proof = proof;
+    }
+
+    @Nullable
+    public List<DvEHRURI> getItems() {
+        return items;
+    }
+
+    public void setItems(@Nullable List<DvEHRURI> items) {
+        this.items = items;
+    }
+
+    public DvText getReason() {
+        return reason;
+    }
+
+    public void setReason(DvText reason) {
+        this.reason = reason;
+    }
+
+    public boolean isPending() {
+        return isPending;
+    }
+
+    public void setPending(boolean pending) {
+        isPending = pending;
+    }
 }

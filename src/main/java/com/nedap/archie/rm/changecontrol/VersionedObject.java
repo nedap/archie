@@ -5,6 +5,8 @@ import com.nedap.archie.rm.datatypes.ObjectRef;
 import com.nedap.archie.rm.datavalues.quantity.datetime.DvDateTime;
 import com.nedap.archie.rm.support.identification.HierObjectId;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -14,6 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *
  * Created by pieter.bos on 08/07/16.
  */
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name="VERSIONED_OBJECT")
 public class VersionedObject<Type> extends RMObject {
     private HierObjectId uid;
