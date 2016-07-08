@@ -1,4 +1,4 @@
-package com.nedap.archie.rm.archetypes;
+package com.nedap.archie.rm.archetyped;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nedap.archie.paths.PathSegment;

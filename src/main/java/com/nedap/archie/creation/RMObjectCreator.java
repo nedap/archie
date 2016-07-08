@@ -1,7 +1,7 @@
 package com.nedap.archie.creation;
 
 import com.nedap.archie.aom.CObject;
-import com.nedap.archie.rm.archetypes.Locatable;
+import com.nedap.archie.rm.archetyped.Locatable;
 import com.nedap.archie.rminfo.ArchieRMInfoLookup;
 import com.nedap.archie.rminfo.ModelInfoLookup;
 import com.nedap.archie.rminfo.RMAttributeInfo;

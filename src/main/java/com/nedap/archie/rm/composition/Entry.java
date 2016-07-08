@@ -2,7 +2,7 @@ package com.nedap.archie.rm.composition;
 
 import com.nedap.archie.rm.datatypes.CodePhrase;
 import com.nedap.archie.rm.datatypes.ObjectRef;
-import com.nedap.archie.rm.datatypes.PartyProxy;
+import com.nedap.archie.rm.generic.PartyProxy;
 
 import javax.annotation.Nullable;
 import javax.xml.bind.annotation.XmlAccessType;

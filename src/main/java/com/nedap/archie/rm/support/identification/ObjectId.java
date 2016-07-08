@@ -1,4 +1,4 @@
-package com.nedap.archie.rm.datatypes;
+package com.nedap.archie.rm.support.identification;
 
 import com.nedap.archie.rm.RMObject;
 

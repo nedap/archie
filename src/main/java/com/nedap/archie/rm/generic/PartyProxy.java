@@ -1,6 +1,7 @@
-package com.nedap.archie.rm.datatypes;
+package com.nedap.archie.rm.generic;
 
 import com.nedap.archie.rm.RMObject;
+import com.nedap.archie.rm.datatypes.PartyRef;
 
 import javax.annotation.Nullable;
 import javax.xml.bind.annotation.XmlAccessType;

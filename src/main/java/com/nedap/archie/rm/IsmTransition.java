@@ -1,6 +1,6 @@
 package com.nedap.archie.rm;
 
-import com.nedap.archie.rm.archetypes.Pathable;
+import com.nedap.archie.rm.archetyped.Pathable;
 import com.nedap.archie.rm.datavalues.DvCodedText;
 import com.nedap.archie.rm.datavalues.DvText;
 

@@ -1,4 +1,4 @@
-package com.nedap.archie.rm.archetypes;
+package com.nedap.archie.rm.archetyped;
 
 import com.nedap.archie.rm.datavalues.DvEHRURI;
 import com.nedap.archie.rm.datavalues.DvText;

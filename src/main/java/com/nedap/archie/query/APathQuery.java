@@ -6,7 +6,7 @@ import com.nedap.archie.aom.ArchetypeModelObject;
 import com.nedap.archie.aom.CAttribute;
 import com.nedap.archie.aom.CComplexObject;
 import com.nedap.archie.paths.PathSegment;
-import com.nedap.archie.rm.archetypes.Locatable;
+import com.nedap.archie.rm.archetyped.Locatable;
 import com.nedap.archie.rminfo.ModelInfoLookup;
 import com.nedap.archie.rminfo.RMAttributeInfo;
 import com.nedap.archie.util.NamingUtil;

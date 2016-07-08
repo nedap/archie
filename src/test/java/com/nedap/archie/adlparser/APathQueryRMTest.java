@@ -3,7 +3,7 @@ package com.nedap.archie.adlparser;
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.query.APathQuery;
 import com.nedap.archie.query.RMObjectWithPath;
-import com.nedap.archie.rm.archetypes.Pathable;
+import com.nedap.archie.rm.archetyped.Pathable;
 import com.nedap.archie.rm.composition.Composition;
 import com.nedap.archie.rm.datavalues.DvText;
 import com.nedap.archie.rminfo.ArchieRMInfoLookup;

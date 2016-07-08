@@ -1,7 +1,9 @@
-package com.nedap.archie.rm.datatypes;
+package com.nedap.archie.rm.generic;
 
 import com.nedap.archie.rm.datavalues.DvIdentifier;
+import com.nedap.archie.rm.generic.PartyProxy;
 
+import javax.annotation.Nullable;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
@@ -17,7 +19,9 @@ import java.util.List;
         "identifiers"
 })
 public class PartyIdentified extends PartyProxy {
+    @Nullable
     private String name;
+    @Nullable
     private List<DvIdentifier> identifiers = new ArrayList<>();
 
     public String getName() {

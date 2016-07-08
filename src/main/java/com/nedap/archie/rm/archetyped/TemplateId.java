@@ -1,6 +1,6 @@
-package com.nedap.archie.rm.archetypes;
+package com.nedap.archie.rm.archetyped;
 
-import com.nedap.archie.rm.datatypes.ObjectId;
+import com.nedap.archie.rm.support.identification.ObjectId;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

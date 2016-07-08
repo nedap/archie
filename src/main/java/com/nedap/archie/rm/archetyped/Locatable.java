@@ -1,8 +1,8 @@
-package com.nedap.archie.rm.archetypes;
+package com.nedap.archie.rm.archetyped;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nedap.archie.paths.PathSegment;
-import com.nedap.archie.rm.datatypes.UIDBasedId;
+import com.nedap.archie.rm.support.identification.UIDBasedId;
 import com.nedap.archie.rm.datavalues.DvText;
 
 import javax.annotation.Nullable;
@@ -37,6 +37,9 @@ public class Locatable extends Pathable {
     @XmlElement(name = "archetype_details")
     @Nullable
     private Archetyped archetypeDetails;
+
+    @Nullable
+    private FeederAudit feederAudit;
 
     private List<Link> links = new ArrayList<>();
 
@@ -106,6 +109,15 @@ public class Locatable extends Pathable {
     @JsonIgnore
     public String getNameAsString() {
         return name == null ? null : name.getValue();
+    }
+
+    @Nullable
+    public FeederAudit getFeederAudit() {
+        return feederAudit;
+    }
+
+    public void setFeederAudit(@Nullable FeederAudit feederAudit) {
+        this.feederAudit = feederAudit;
     }
 }
 

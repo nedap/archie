@@ -1,8 +1,8 @@
 package com.nedap.archie.rm.composition;
 
-import com.nedap.archie.rm.archetypes.Locatable;
+import com.nedap.archie.rm.archetyped.Locatable;
 import com.nedap.archie.rm.datatypes.CodePhrase;
-import com.nedap.archie.rm.datatypes.PartyProxy;
+import com.nedap.archie.rm.generic.PartyProxy;
 import com.nedap.archie.rm.datavalues.DvCodedText;
 
 import javax.annotation.Nullable;

@@ -1,6 +1,6 @@
 package com.nedap.archie.rm.directory;
 
-import com.nedap.archie.rm.archetypes.Locatable;
+import com.nedap.archie.rm.archetyped.Locatable;
 import com.nedap.archie.rm.datatypes.ObjectRef;
 import javax.annotation.Nullable;
 import javax.xml.bind.annotation.XmlAccessType;

@@ -1,6 +1,6 @@
 package com.nedap.archie.rm;
 
-import com.nedap.archie.rm.archetypes.Locatable;
+import com.nedap.archie.rm.archetyped.Locatable;
 import com.nedap.archie.rm.datastructures.ItemStructure;
 import com.nedap.archie.rm.datavalues.encapsulated.DvParsable;
 
