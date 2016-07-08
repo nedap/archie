@@ -1,5 +1,6 @@
 package com.nedap.archie.rm.changecontrol;
 
+import com.nedap.archie.rm.RMObject;
 import com.nedap.archie.rm.support.identification.ObjectRef;
 import com.nedap.archie.rm.generic.AuditDetails;
 import com.nedap.archie.rm.support.identification.HierObjectId;
@@ -10,7 +11,7 @@ import java.util.List;
 /**
  * Created by pieter.bos on 08/07/16.
  */
-public class Contribution {
+public class Contribution extends RMObject {
 
     private HierObjectId uid;
     private List<ObjectRef> versions = new ArrayList<>();

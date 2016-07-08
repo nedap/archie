@@ -1,5 +1,6 @@
 package com.nedap.archie.rm.archetyped;
 
+import com.nedap.archie.rm.RMObject;
 import com.nedap.archie.rm.datavalues.quantity.datetime.DvDateTime;
 import com.nedap.archie.rm.generic.PartyIdentified;
 import com.nedap.archie.rm.generic.PartyProxy;
@@ -15,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "FEEDER_AUDIT_DETAILS")
-public class FeederAuditDetails {
+public class FeederAuditDetails extends RMObject {
 
     @XmlElement(name = "system_id")
     protected String systemId;

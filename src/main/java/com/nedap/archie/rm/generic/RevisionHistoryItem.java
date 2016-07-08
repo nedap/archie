@@ -1,5 +1,6 @@
 package com.nedap.archie.rm.generic;
 
+import com.nedap.archie.rm.RMObject;
 import com.nedap.archie.rm.support.identification.ObjectVersionId;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -13,7 +14,7 @@ import java.util.List;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name="REVISION_HISTORY_ITEM")
-public class RevisionHistoryItem {
+public class RevisionHistoryItem extends RMObject {
 
     private ObjectVersionId versionId;
     private List<AuditDetails> audits = new ArrayList<>();

@@ -1,5 +1,6 @@
 package com.nedap.archie.rm.archetyped;
 
+import com.nedap.archie.rm.RMObject;
 import com.nedap.archie.rm.datavalues.DvIdentifier;
 import com.nedap.archie.rm.datavalues.encapsulated.DvEncapsulated;
 
@@ -16,7 +17,7 @@ import java.util.List;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name="FEEDER_AUDIT")
-public class FeederAudit {
+public class FeederAudit extends RMObject {
 
     @Nullable
     @XmlElement(name = "originating_system_item_ids")
