@@ -83,6 +83,14 @@ public class ModelInfoLookup {
         this.namingStrategy = namingStrategy;
 
         this.classLoader = classLoader;
+        addSubtypesOf(baseClass);
+    }
+
+    /**
+     * Add all subtypes of the given class
+     * @param baseClass
+     */
+    protected void addSubtypesOf(Class baseClass) {
         Reflections reflections = new Reflections(ClasspathHelper.forClass(baseClass), new SubTypesScanner(false));
         Set<Class<?>> classes = reflections.getSubTypesOf(baseClass);
 
@@ -90,7 +98,7 @@ public class ModelInfoLookup {
         classes.forEach(this::addClass);
     }
 
-    private void addClass(Class clazz) {
+    protected void addClass(Class clazz) {
         String rmTypeName = namingStrategy.getRMTypeName(clazz);
         RMTypeInfo typeInfo = new RMTypeInfo(clazz, rmTypeName);
         addAttributeInfo(clazz, typeInfo);

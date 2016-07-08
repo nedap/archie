@@ -1,5 +1,6 @@
 package com.nedap.archie.aom.terminology;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.nedap.archie.aom.ArchetypeModelObject;
@@ -13,7 +14,8 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Created by pieter.bos on 15/10/15.
  */
-@JsonPropertyOrder({"@type", "text", "description", "other_items"})
+@JsonPropertyOrder({"text", "description", "other_items"})
+@JsonIgnoreProperties("@type")
 public class ArchetypeTerm extends ArchetypeModelObject implements Map<String, String> {
 
     private String code;

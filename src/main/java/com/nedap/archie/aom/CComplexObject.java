@@ -80,10 +80,14 @@ public class CComplexObject extends CDefinedObject<ArchetypeModelObject> {
         return attributes;
     }
 
-    public void setAttributes(List<CAttribute> attributes) { //TODO: do we want a setter for a list? or just an addAttribute/removeAttribute thing that's actually threadsafe?
-        this.attributes = attributes;
-        for(CAttribute attribute:attributes) {
-            attribute.setParent(this);
+    public void setAttributes(List<CAttribute> attributes) {
+        if(attributes == null) {
+            this.attributes = new ArrayList<>();
+        } else {
+            this.attributes = attributes;
+            for(CAttribute attribute:attributes) {
+                attribute.setParent(this);
+            }
         }
     }
 

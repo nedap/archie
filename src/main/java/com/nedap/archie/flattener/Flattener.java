@@ -147,8 +147,8 @@ public class Flattener {
                 if(result.getDescription() != null) {
                     filterLanguages(languagesSet, result.getDescription().getDetails());
                 }
-                if(result.getContent() != null) {
-                    filterLanguages(languagesSet, result.getContent().getTranslations());
+                if(result.getTranslations() != null) {
+                    filterLanguages(languagesSet, result.getTranslations());
                 }
             }
         }

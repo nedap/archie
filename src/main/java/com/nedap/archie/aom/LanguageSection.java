@@ -7,6 +7,11 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
+ * Model of the language section in ADL. In the AOM spec these are fields on the AuthoredResource, but this class is not
+ * in the AOM spec and you should not need to use it directly. Use the methods on AuthoredResource instead.
+ * It is included for proper ODIN parsing.
+ * See AuthoredResource for more information about this design choice.
+ *
  * Created by pieter.bos on 02/11/15.
  */
 public class LanguageSection extends ArchetypeModelObject {

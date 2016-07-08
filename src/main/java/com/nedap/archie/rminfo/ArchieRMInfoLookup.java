@@ -2,6 +2,7 @@ package com.nedap.archie.rminfo;
 
 import com.nedap.archie.aom.CPrimitiveObject;
 import com.nedap.archie.aom.primitives.CTerminologyCode;
+import com.nedap.archie.base.Interval;
 import com.nedap.archie.base.terminology.TerminologyCode;
 import com.nedap.archie.rm.RMObject;
 import com.nedap.archie.rm.datastructures.PointEvent;
@@ -17,6 +18,7 @@ public class ArchieRMInfoLookup extends ModelInfoLookup {
 
     public ArchieRMInfoLookup() {
         super(new ArchieRMNamingStrategy(), RMObject.class);
+        addSubtypesOf(Interval.class); //extra class from the base package. No RMObject because it is also used in the AOM
     }
 
     public static ArchieRMInfoLookup getInstance() {

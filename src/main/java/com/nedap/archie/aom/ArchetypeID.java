@@ -1,5 +1,7 @@
 package com.nedap.archie.aom;
 
+import com.google.common.base.Strings;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -10,8 +12,6 @@ import java.util.regex.Pattern;
  * Created by pieter.bos on 15/10/15.
  */
 public class ArchetypeID extends ArchetypeModelObject {
-
-    private String idValue;
 
     private String namespace;
     private String rmPublisher;
@@ -28,7 +28,6 @@ public class ArchetypeID extends ArchetypeModelObject {
     }
 
     public ArchetypeID(String value) {
-        this.idValue = value;
 
         Pattern p = Pattern.compile("((?<namespace>.*)::)?(?<publisher>.*)-(?<package>.*)-(?<class>.*)\\.(?<concept>.*)\\.v(?<version>.*)");
         Matcher m = p.matcher(value);
@@ -48,7 +47,25 @@ public class ArchetypeID extends ArchetypeModelObject {
     }
 
     public String getFullId() {
-        return idValue;
+        StringBuilder result = new StringBuilder(30);
+        if(!Strings.isNullOrEmpty(namespace)) {
+            result.append(namespace);
+            result.append("::");
+        }
+        result.append(rmPublisher);
+        result.append("-");
+        result.append(rmPackage);
+        result.append("-");
+        result.append(rmClass);
+        result.append(".");
+        result.append(conceptId);
+        if(releaseVersion.startsWith("v")) {
+            result.append(".");
+        } else {
+            result.append(".v");
+        }
+        result.append(releaseVersion);
+        return result.toString();
     }
 
     public String getSemanticId() {

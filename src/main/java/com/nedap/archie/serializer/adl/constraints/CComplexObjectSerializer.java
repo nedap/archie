@@ -182,7 +182,7 @@ public class CComplexObjectSerializer<T extends CComplexObject> extends Constrai
             tags.add("unique");
         }
         if (!tags.isEmpty()) {
-            builder.append("; ").append(Joiner.on(", ").join(tags));
+            builder.append("; ").append(Joiner.on("; ").join(tags));
         }
     }
 }

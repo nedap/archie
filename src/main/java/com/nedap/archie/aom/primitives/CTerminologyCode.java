@@ -78,4 +78,8 @@ public class CTerminologyCode extends CPrimitiveObject<String, TerminologyCode> 
         return result;
     }
 
+    private void setTerms(List<TerminologyCodeWithArchetypeTerm> terms) {
+        //hack for jackson to work
+    }
+
 }

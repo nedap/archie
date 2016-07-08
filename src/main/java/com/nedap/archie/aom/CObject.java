@@ -1,6 +1,8 @@
 package com.nedap.archie.aom;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.nedap.archie.ArchieLanguageConfiguration;
 import com.nedap.archie.aom.terminology.ArchetypeTerm;
 import com.nedap.archie.base.MultiplicityInterval;
@@ -90,12 +92,20 @@ public class CObject extends ArchetypeConstraint {
         if(nodeId == null) {
             return null;
         }
-        ArchetypeTerm result = getArchetype().getTerm(this, ArchieLanguageConfiguration.getMeaningAndDescriptionLanguage());
+        Archetype archetype = getArchetype();
+        ArchetypeTerm result = archetype.getTerm(this, ArchieLanguageConfiguration.getMeaningAndDescriptionLanguage());
         if(result == null) {
             //no translation in the given language. Fall back to the default.
-            result = getArchetype().getTerm(this, ArchieLanguageConfiguration.getDefaultMeaningAndDescriptionLanguage());
+            result = archetype.getTerm(this, ArchieLanguageConfiguration.getDefaultMeaningAndDescriptionLanguage());
+        }
+        if(result == null && archetype.getOriginalLanguage() != null && archetype.getOriginalLanguage().getCodeString() != null) {
+            result = archetype.getTerm(this, archetype.getOriginalLanguage().getCodeString());
         }
         return result;
+    }
+
+    private void setTerm(ArchetypeTerm term) {
+        //hack to get Jackson to work for now
     }
 
     /**

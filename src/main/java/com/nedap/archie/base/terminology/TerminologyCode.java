@@ -1,6 +1,7 @@
 package com.nedap.archie.base.terminology;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.nedap.archie.rm.datatypes.TerminologyId;
 
 import java.net.URI;
@@ -35,6 +36,17 @@ public class TerminologyCode {
         } else {
             result.setCodeString(terminologyString);
         }
+        return result;
+    }
+
+    @JsonCreator
+    public static TerminologyCode createFromString(@JsonProperty("terminology_id") TerminologyId terminologyId,
+                                                   @JsonProperty("terminology_version") String terminologyVersion,
+                                                   @JsonProperty("code_string") String codeString) {
+        TerminologyCode result = new TerminologyCode();
+        result.terminologyId = terminologyId;
+        result.terminologyVersion = terminologyVersion;
+        result.codeString = codeString;
         return result;
     }
 

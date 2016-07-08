@@ -178,7 +178,7 @@ data matches {
 
         //metadata still intact in this test - see removeLanguagesFromMetaData
         assertTrue(flattened.getDescription().getDetails().containsKey("ru"));
-        assertTrue(flattened.getContent().getTranslations().containsKey("ru"));
+        assertTrue(flattened.getTranslations().containsKey("ru"));
 
         //original should not be modified
         assertTrue(bloodPressureObservation.getTerminology().getTermDefinitions().containsKey("ru"));
@@ -214,7 +214,7 @@ data matches {
         assertTrue(flattened.getTerminology().getTermDefinitions().containsKey("nl"));
         assertTrue(flattened.getTerminology().getTermDefinitions().containsKey("en"));
         assertFalse(flattened.getDescription().getDetails().containsKey("ru"));
-        assertFalse(flattened.getContent().getTranslations().containsKey("ru"));
+        assertFalse(flattened.getTranslations().containsKey("ru"));
 
         //original should not be modified
         assertTrue(bloodPressureObservation.getTerminology().getTermDefinitions().containsKey("ru"));
