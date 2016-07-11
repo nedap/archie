@@ -1,9 +1,14 @@
 package com.nedap.archie.aom;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import com.nedap.archie.aom.terminology.ArchetypeTerm;
 import com.nedap.archie.aom.terminology.ArchetypeTerminology;
 import com.nedap.archie.paths.PathSegment;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -12,14 +17,18 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Created by pieter.bos on 15/10/15.
  */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name="OPERATIONAL_TEMPLATE")
+@XmlRootElement(name="archetype")
 public class OperationalTemplate extends AuthoredArchetype {
 
     /**
      * terminology extracts from subarchetypes, for example snomed codes, multiple choice thingies, etc
      */
+    @XmlElement(name="terminology_extracts") //TODO: requires an adapter for JAXB to work
     private Map<String, ArchetypeTerminology> terminologyExtracts = new ConcurrentHashMap<>();//TODO: is this correct?
+    @XmlElement(name="component_terminologies") //TODO: requires an adapter for JAXB to work
     private Map<String, ArchetypeTerminology> componentTerminologies = new ConcurrentHashMap<>();
-
 
 
     public Map<String, ArchetypeTerminology> getTerminologyExtracts() {

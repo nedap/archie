@@ -50,7 +50,6 @@ public class NumberConstraintParser extends BaseTreeWalker {
             Interval<Long> interval = result.getConstraint().get(0);
             if(interval.getLower() == interval.getUpper()) {
                 result.setAssumedValue(interval.getLower());
-                result.setDefaultValue(interval.getLower());
             }
         }
         return result;
@@ -142,7 +141,6 @@ public class NumberConstraintParser extends BaseTreeWalker {
             Interval<Double> interval = result.getConstraint().get(0);
             if(interval.getLower() == interval.getUpper()) {//TODO: check with a very small delta instead of ==?
                 result.setAssumedValue(interval.getLower());
-                result.setDefaultValue(interval.getLower());
             }
         }
         return result;

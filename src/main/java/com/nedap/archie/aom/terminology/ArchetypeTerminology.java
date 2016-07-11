@@ -3,6 +3,11 @@ package com.nedap.archie.aom.terminology;
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.ArchetypeModelObject;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
 import java.net.URI;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -10,18 +15,28 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Created by pieter.bos on 15/10/15.
  */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name="ARCHETYPE_TERMINOLOGY_TEST")
 public class ArchetypeTerminology extends ArchetypeModelObject {
 
     private Boolean differential;
+    @XmlElement(name="original_language")
     private String originalLanguage;
+    @XmlElement(name="concept_code")
     private String conceptCode;
+    @XmlTransient//TODO!
+    //@XmlElement(name="term_definitions")
     private Map<String, Map<String, ArchetypeTerm>> termDefinitions = new ConcurrentHashMap<>();
+    //@XmlElement(name="term_bindings")
+    @XmlTransient//TODO!
     private Map<String, Map<String, URI>> termBindings = new ConcurrentHashMap<>();
+    //@XmlElement(name="terminology_extracts")
+    @XmlTransient//TODO!
     private Map<String, Map<String, ArchetypeTerm>> terminologyExtracts = new ConcurrentHashMap<>();
+    @XmlElement(name="value_sets")
     private Map<String, ValueSet> valueSets = new ConcurrentHashMap<>();
 
-    private Archetype parent;
-
+    private transient Archetype parent;
 
     public Boolean getDifferential() {
         return differential;

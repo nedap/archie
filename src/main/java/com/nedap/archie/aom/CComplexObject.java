@@ -4,7 +4,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.nedap.archie.query.APathQuery;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,14 +16,19 @@ import java.util.List;
  * Created by pieter.bos on 15/10/15.
  */
 @JsonPropertyOrder({"@type", "rm_type_name", "node_id", "path", "logical_path", "term", "required", "allowed", "any_allowed", "occurrences", "root_node", "attributes", "attribute_tuples"})
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name="C_COMPLEX_OBJECT", propOrder = {
+        "attributes",
+        "attributeTuples"
+})
 public class CComplexObject extends CDefinedObject<ArchetypeModelObject> {
 
     private List<CAttribute> attributes = new ArrayList();
 
+    @XmlElement(name="attributeTuples")
     private List<CAttributeTuple> attributeTuples = new ArrayList();
 
     @JsonIgnore
-    @XmlTransient
     protected transient Archetype archetype;
 
     public boolean isAnyAllowed() {

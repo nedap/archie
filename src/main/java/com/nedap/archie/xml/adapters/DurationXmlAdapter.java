@@ -1,4 +1,4 @@
-package com.nedap.archie.xml;
+package com.nedap.archie.xml.adapters;
 
 import com.nedap.archie.adlparser.treewalkers.TemporalConstraintParser;
 

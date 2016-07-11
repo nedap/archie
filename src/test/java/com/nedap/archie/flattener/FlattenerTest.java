@@ -10,9 +10,13 @@ import com.nedap.archie.aom.CComplexObjectProxy;
 import com.nedap.archie.aom.CObject;
 import com.nedap.archie.aom.OperationalTemplate;
 import com.nedap.archie.query.APathQuery;
+import com.nedap.archie.xml.JAXBUtil;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import java.io.StringWriter;
 import java.util.Stack;
 
 import static org.junit.Assert.*;
@@ -130,6 +134,16 @@ public class FlattenerTest {
     @Test
     public void testComponentTerminologies() throws Exception {
         Archetype flattened = flattener.flatten(bloodPressureComposition);
+
+        StringWriter writer = new StringWriter();
+        Marshaller marshaller = JAXBUtil.getArchieJAXBContext().createMarshaller();
+        Unmarshaller unmarshaller = JAXBUtil.getArchieJAXBContext().createUnmarshaller();
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+        marshaller.marshal(flattened, writer);
+
+        String xml = writer.toString();
+        System.out.println(xml);
+
         CComplexObject definition = flattened.getDefinition();
         //you definately need component terminologies to translate this :)
         CObject object = (CObject)

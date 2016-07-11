@@ -4,14 +4,19 @@ import com.nedap.archie.rminfo.ArchieRMInfoLookup;
 import com.nedap.archie.rminfo.ModelInfoLookup;
 import com.nedap.archie.rminfo.RMAttributeInfo;
 
+import javax.xml.bind.annotation.XmlType;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 /**
+ * TODO: noone created an XML model for this.
  * Created by pieter.bos on 15/10/15.
  */
+@XmlType(name="C_ATTRIBUTE_TUPLE", propOrder={
+        "tuples"
+})
 public class CAttributeTuple extends CSecondOrder<CAttribute> {
 
     /**
@@ -20,6 +25,7 @@ public class CAttributeTuple extends CSecondOrder<CAttribute> {
      *
      * The members List of CSecondOrder contains the attribute names.
      */
+
     private List<CPrimitiveTuple> tuples = new ArrayList<>();
 
     public List<CPrimitiveTuple> getTuples() {

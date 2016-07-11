@@ -5,7 +5,13 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.nedap.archie.base.MultiplicityInterval;
 import com.nedap.archie.paths.PathSegment;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -14,11 +20,23 @@ import java.util.List;
  * Created by pieter.bos on 15/10/15.
  */
 @JsonPropertyOrder({"@type", "rm_attribute_name", "path", "logical_path", "differential_path", "multiple", "mandatory", "existence", "cardinality", "children"})
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name="C_ATTRIBUTE", propOrder = {
+        "existence",
+        "differentialPath",
+        "multiple",
+        "cardinality",
+        "children"
+})
+
 public class CAttribute extends ArchetypeConstraint {
 
+    @XmlAttribute(name="rm_attribute_name")
     private String rmAttributeName;
     private MultiplicityInterval existence;
+    @XmlElement(name="differential_path")
     private String differentialPath;
+    @XmlElement(name="is_multiple")
     private boolean multiple;
 
     private Cardinality cardinality;

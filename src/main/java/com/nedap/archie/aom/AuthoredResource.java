@@ -2,7 +2,18 @@ package com.nedap.archie.aom;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nedap.archie.base.terminology.TerminologyCode;
+import com.nedap.archie.xml.adapters.ResourceDescriptionAdapter;
+import com.nedap.archie.xml.adapters.TranslationDetailsAdapter;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -16,6 +27,8 @@ import java.util.Map;
  *
  * Created by pieter.bos on 15/10/15.
  */
+@XmlType(name="AUTHORED_RESOURCE")
+@XmlAccessorType(XmlAccessType.PROPERTY)
 public class AuthoredResource extends ArchetypeModelObject {
 
     private Boolean controlled;
@@ -26,6 +39,7 @@ public class AuthoredResource extends ArchetypeModelObject {
 
     private ResourceAnnotations annotations;
 
+    @XmlElement(name="is_controlled")
     public Boolean getControlled() {
         return controlled;
     }
@@ -34,6 +48,7 @@ public class AuthoredResource extends ArchetypeModelObject {
         this.controlled = controlled;
     }
 
+    @XmlElement(name="uid")
     public String getUid() {
         return uid;
     }
@@ -42,6 +57,8 @@ public class AuthoredResource extends ArchetypeModelObject {
         this.uid = uid;
     }
 
+    @XmlElement(name="description")
+    @XmlJavaTypeAdapter(ResourceDescriptionAdapter.class)
     public ResourceDescription getDescription() {
         return description;
     }
@@ -50,6 +67,7 @@ public class AuthoredResource extends ArchetypeModelObject {
         this.description = description;
     }
 
+    @XmlElement(name="original_language")
     public TerminologyCode getOriginalLanguage() {
         return content.getOriginalLanguage();
     }
@@ -58,6 +76,7 @@ public class AuthoredResource extends ArchetypeModelObject {
         content.setOriginalLanguage(originalLanguage);
     }
 
+    @XmlTransient
     public Map<String, TranslationDetails> getTranslations() {
         return content.getTranslations();
     }
@@ -66,6 +85,19 @@ public class AuthoredResource extends ArchetypeModelObject {
         content.setTranslations(translations);
     }
 
+    @XmlElement(name="translations")
+    @XmlJavaTypeAdapter(TranslationDetailsAdapter.class)
+    public List<TranslationDetails> getTranslationList() { return new ArrayList(content.getTranslations().values());}
+
+    public void setTranslationList(List<TranslationDetails> translationList) {
+        LinkedHashMap<String, TranslationDetails> translations = new LinkedHashMap<>();
+        for(TranslationDetails translationDetails:translationList) {
+            translations.put(translationDetails.getLanguage().getCodeString(), translationDetails);
+        }
+        content.setTranslations(translations);
+    }
+
+    @XmlElement(name="annotations")
     public ResourceAnnotations getAnnotations() {
         return annotations;
     }
@@ -79,6 +111,7 @@ public class AuthoredResource extends ArchetypeModelObject {
      *   All methods of this languageSection class are directly exposed by methods of AuthoredResource
      */
     @JsonIgnore
+    @XmlTransient
     public LanguageSection getAuthoredResourceContent() {
         return content;
     }

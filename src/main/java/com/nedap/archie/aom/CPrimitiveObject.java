@@ -2,6 +2,7 @@ package com.nedap.archie.aom;
 
 import com.nedap.archie.rminfo.ModelInfoLookup;
 
+import javax.xml.bind.annotation.XmlType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -12,21 +13,24 @@ import java.util.Objects;
  *
  * Created by pieter.bos on 15/10/15.
  */
-public class CPrimitiveObject<Constraint, ValueType> extends CDefinedObject<ValueType> {
+@XmlType(name="C_PRIMITIVE_OBJECT")
+//TODO: we might have to make this with abstract methods and move the attributes to the
+//lower classes to get this to work with JAXB, or create a custom XML adapter
+public abstract class CPrimitiveObject<Constraint, ValueType> extends CDefinedObject<ValueType> {
 
     public static final String PRIMITIVE_NODE_ID_VALUE = "Primitive_node_id";
 
-    private ValueType assumedValue;
     private Boolean enumeratedTypeConstraint;
-    private List<Constraint> constraints = new ArrayList<>();
 
-    public ValueType getAssumedValue() {
-        return assumedValue;
-    }
+    public abstract ValueType getAssumedValue();
 
-    public void setAssumedValue(ValueType assumedValue) {
-        this.assumedValue = assumedValue;
-    }
+    public abstract void setAssumedValue(ValueType assumedValue);
+
+    public abstract List<Constraint> getConstraint();
+
+    public abstract void setConstraint(List<Constraint> constraint);
+
+    public abstract void addConstraint(Constraint constraint);
 
     public Boolean getEnumeratedTypeConstraint() {
         return enumeratedTypeConstraint;
@@ -36,17 +40,7 @@ public class CPrimitiveObject<Constraint, ValueType> extends CDefinedObject<Valu
         this.enumeratedTypeConstraint = enumeratedTypeConstraint;
     }
 
-    public List<Constraint> getConstraint() {
-        return constraints;
-    }
 
-    public void setConstraint(List<Constraint> constraint) {
-        this.constraints = constraint;
-    }
-
-    public void addConstraint(Constraint constraint) {
-        this.constraints.add(constraint);
-    }
 
     public String getNodeId() {
         return PRIMITIVE_NODE_ID_VALUE;
@@ -96,7 +90,7 @@ public class CPrimitiveObject<Constraint, ValueType> extends CDefinedObject<Valu
         StringBuilder result = new StringBuilder();
         result.append("{");
         boolean first = true;
-        for(Constraint constraint:constraints) {
+        for(Constraint constraint:getConstraint()) {
             if(!first) {
                 result.append(", ");
             }

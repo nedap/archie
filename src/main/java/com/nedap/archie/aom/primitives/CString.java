@@ -2,12 +2,49 @@ package com.nedap.archie.aom.primitives;
 
 import com.nedap.archie.aom.CPrimitiveObject;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
  * Created by pieter.bos on 15/10/15.
  */
+@XmlType(name="C_STRING")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class CString extends CPrimitiveObject<String, String> {
+
+    @XmlElement(name="assumed_value")
+    private String assumedValue;
+    private List<String> constraint = new ArrayList<>();
+
+    @Override
+    public String getAssumedValue() {
+        return assumedValue;
+    }
+
+    @Override
+    public void setAssumedValue(String assumedValue) {
+        this.assumedValue = assumedValue;
+    }
+
+    @Override
+    public List<String> getConstraint() {
+        return constraint;
+    }
+
+    @Override
+    public void setConstraint(List<String> constraint) {
+        this.constraint = constraint;
+    }
+
+    @Override
+    public void addConstraint(String constraint) {
+        this.constraint.add(constraint);
+    }
 
     public boolean isValidValue(String value) {
         if(getConstraint().isEmpty()) {

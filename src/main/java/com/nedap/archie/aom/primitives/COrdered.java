@@ -6,7 +6,7 @@ import com.nedap.archie.base.Interval;
 /**
  * Created by pieter.bos on 15/10/15.
  */
-public class COrdered<T> extends CPrimitiveObject<Interval<T>, T> {
+public abstract class COrdered<T> extends CPrimitiveObject<Interval<T>, T> {
 
     @Override
     public boolean isValidValue(T value) {

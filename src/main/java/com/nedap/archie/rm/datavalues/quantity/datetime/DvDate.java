@@ -3,7 +3,7 @@ package com.nedap.archie.rm.datavalues.quantity.datetime;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.nedap.archie.json.DateDeserializer;
 import com.nedap.archie.rm.datavalues.SingleValuedDataValue;
-import com.nedap.archie.xml.DateXmlAdapter;
+import com.nedap.archie.xml.adapters.DateXmlAdapter;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

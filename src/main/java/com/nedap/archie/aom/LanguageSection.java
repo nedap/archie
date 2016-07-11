@@ -17,6 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class LanguageSection extends ArchetypeModelObject {
 
     private TerminologyCode originalLanguage;
+    //TODO: this needs an adapter
     private Map<String, TranslationDetails> translations = new ConcurrentHashMap<>();
 
 

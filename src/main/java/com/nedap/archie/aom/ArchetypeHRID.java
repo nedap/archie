@@ -4,6 +4,11 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Strings;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -11,16 +16,35 @@ import java.util.regex.Pattern;
  *
  * Created by pieter.bos on 15/10/15.
  */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "ARCHETYPE_HRID", propOrder = {
+        "conceptId",
+        "namespace",
+        "rmPublisher",
+        "rmPackage",
+        "rmClass",
+        "releaseVersion",
+        "versionStatus",
+        "buildCount"
+})
 public class ArchetypeHRID extends ArchetypeModelObject {
 
     private String namespace;
+    @XmlAttribute(name="rm_publisher")
     private String rmPublisher;
+    @XmlAttribute(name="rm_package")
     private String rmPackage;
+    @XmlAttribute(name="rm_class")
     private String rmClass;
+    @XmlAttribute(name="concept_id")
     private String conceptId;
+    @XmlAttribute(name="release_version")
     private String releaseVersion;
+    @XmlAttribute(name="version_status")
     private String versionStatus;
+    @XmlAttribute(name="build_count")
     private String buildCount;
+    //TODO: XML attribute 'physical id', which is the full id
 
 
     public ArchetypeHRID() {

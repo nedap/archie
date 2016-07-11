@@ -14,10 +14,8 @@ import java.util.List;
 public abstract class ArchetypeConstraint extends ArchetypeModelObject {
 
     @JsonIgnore //ignore these field in popular object mappers
-    @XmlTransient
     private transient ArchetypeConstraint parent;
     @JsonIgnore //ignore these field in popular object mappers, otherwise we get infinite loops
-    @XmlTransient
     private transient CSecondOrder socParent;
 
     @JsonIgnore

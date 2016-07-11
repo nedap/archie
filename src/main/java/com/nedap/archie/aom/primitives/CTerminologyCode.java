@@ -9,6 +9,10 @@ import com.nedap.archie.aom.terminology.TerminologyCodeWithArchetypeTerm;
 import com.nedap.archie.aom.terminology.ValueSet;
 import com.nedap.archie.base.terminology.TerminologyCode;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +20,38 @@ import java.util.List;
  *
  * Created by pieter.bos on 15/10/15.
  */
+@XmlType(name="C_TERMINOLOGY_CODE")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class CTerminologyCode extends CPrimitiveObject<String, TerminologyCode> {
+
+    @XmlElement(name="assumed_value")
+    private TerminologyCode assumedValue;
+    private List<String> constraint = new ArrayList<>();
+
+    @Override
+    public TerminologyCode getAssumedValue() {
+        return assumedValue;
+    }
+
+    @Override
+    public void setAssumedValue(TerminologyCode assumedValue) {
+        this.assumedValue = assumedValue;
+    }
+
+    @Override
+    public List<String> getConstraint() {
+        return this.constraint;
+    }
+
+    @Override
+    public void setConstraint(List<String> constraint) {
+        this.constraint = constraint;
+    }
+
+    @Override
+    public void addConstraint(String constraint) {
+        this.constraint.add(constraint);
+    }
 
     @Override
     public boolean isValidValue(TerminologyCode value) {

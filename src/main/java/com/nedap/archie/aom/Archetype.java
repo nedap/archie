@@ -3,8 +3,16 @@ package com.nedap.archie.aom;
 import com.nedap.archie.aom.terminology.ArchetypeTerm;
 import com.nedap.archie.aom.terminology.ArchetypeTerminology;
 import com.nedap.archie.query.APathQuery;
+import com.nedap.archie.xml.adapters.ArchetypeTerminologyAdapter;
 
-import java.util.HashMap;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -14,22 +22,46 @@ import java.util.Map;
  *
  * Created by pieter.bos on 15/10/15.
  */
+@XmlRootElement(name="archetype")
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "ARCHETYPE", propOrder = {
+        "archetypeId",
+        //"differential",
+        "parentArchetypeId",
+        "definition",
+        "terminology",
+        "rules",
+        "buildUid",
+        "rmRelease",
+        "generated",
+        "otherMetaData"
+})
 public class Archetype extends AuthoredResource {
 
+    @XmlElement(name="parent_archetype_id")
     private String parentArchetypeId;
+    @XmlAttribute(name="is_differential")
     private boolean differential = false;
+    @XmlElement(name = "archetype_id")
     private ArchetypeHRID archetypeId;
 
     private CComplexObject definition;
+    @XmlJavaTypeAdapter(ArchetypeTerminologyAdapter.class)
     private ArchetypeTerminology terminology;
     private RulesSection rules = null;
 
+    @XmlAttribute(name="adl_version")
     private String adlVersion;
+    @XmlElement(name="build_uid")
     private String buildUid;
+    @XmlAttribute(name="rm_release")
     private String rmRelease;
+    @XmlAttribute(name="is_generated")
     private Boolean generated;
 
-    private Map<String, String> otherMetaData = new HashMap<>();
+    @XmlElement(name="other_meta_data")
+    //TODO: this probably requires a custom XmlAdapter
+    private Map<String, String> otherMetaData = new LinkedHashMap<>();
 
     public String getParentArchetypeId() {
         return parentArchetypeId;

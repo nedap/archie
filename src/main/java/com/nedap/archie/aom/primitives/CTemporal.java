@@ -3,7 +3,7 @@ package com.nedap.archie.aom.primitives;
 /**
  * Created by pieter.bos on 15/10/15.
  */
-public  class CTemporal<T> extends COrdered<T>{
+public abstract class CTemporal<T> extends COrdered<T>{
 
     private String patternedConstraint;
 

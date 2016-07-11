@@ -5,6 +5,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.nedap.archie.aom.ArchetypeModelObject;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,11 +23,14 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @JsonPropertyOrder({"text", "description", "other_items"})
 @JsonIgnoreProperties("@type")
+@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlType(name="ARCHETYPE_TERM")
 public class ArchetypeTerm extends ArchetypeModelObject implements Map<String, String> {
 
     private String code;
     private Map<String,String> items = new ConcurrentHashMap<>();
 
+    @XmlAttribute(name="id")
     public String getCode() {
         return code;
     }
@@ -50,6 +60,7 @@ public class ArchetypeTerm extends ArchetypeModelObject implements Map<String, S
      * implemented here - it is faster and easier (and required for odin-parsing with jackson).
      * @return
      */
+    @XmlTransient //no way to do this in the current XSD!
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     public Map<String, String> getOtherItems() {
         Map<String, String> otherItems = new HashMap<>();

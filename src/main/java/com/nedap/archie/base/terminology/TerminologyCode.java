@@ -4,6 +4,10 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.nedap.archie.rm.support.identification.TerminologyId;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 import java.net.URI;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -11,10 +15,15 @@ import java.util.regex.Pattern;
 /**
  * Created by pieter.bos on 15/10/15.
  */
+@XmlType(name="TERMINOLOGY_CODE")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class TerminologyCode {
 
+    @XmlElement(name="terminology_id")
     private TerminologyId terminologyId;
+    @XmlElement(name="terminology_version")
     private String terminologyVersion;
+    @XmlElement(name="code_string")
     private String codeString;
 
     private URI uri;

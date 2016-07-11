@@ -1,9 +1,14 @@
 package com.nedap.archie.xml;
 
+import com.nedap.archie.rminfo.ArchieAOMInfoLookup;
 import com.nedap.archie.rminfo.ArchieRMInfoLookup;
+import com.nedap.archie.xml.types.XmlResourceDescriptionItem;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by pieter.bos on 06/05/16.
@@ -29,7 +34,12 @@ public class JAXBUtil {
     private static synchronized void initArchieJaxbContext() {
         if(archieJaxbContext == null) {
             try {
-                archieJaxbContext = JAXBContext.newInstance(ArchieRMInfoLookup.getInstance().getRmTypeNameToClassMap().values().toArray(new Class[0]));
+                List<Class> classes = new ArrayList<>();
+                classes.addAll(ArchieAOMInfoLookup.getInstance().getRmTypeNameToClassMap().values());
+                classes.addAll(ArchieRMInfoLookup.getInstance().getRmTypeNameToClassMap().values());
+                //extra classes from the adapters package that are not directly referenced.
+                classes.add(XmlResourceDescriptionItem.class);
+                archieJaxbContext = JAXBContext.newInstance(classes.toArray(new Class[0]));
             } catch (JAXBException e) {
                 throw new RuntimeException(e);//programmer error, tests will fail
             }

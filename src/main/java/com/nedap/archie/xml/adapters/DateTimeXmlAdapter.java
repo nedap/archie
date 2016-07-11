@@ -1,4 +1,4 @@
-package com.nedap.archie.xml;
+package com.nedap.archie.xml.adapters;
 
 import com.nedap.archie.adlparser.treewalkers.TemporalConstraintParser;
 
@@ -25,5 +25,7 @@ public class DateTimeXmlAdapter extends XmlAdapter<String, TemporalAccessor> {
         }
         return value != null?TemporalConstraintParser.ISO_8601_DATE_TIME.format(value):null;
     }
+
+
 
 }

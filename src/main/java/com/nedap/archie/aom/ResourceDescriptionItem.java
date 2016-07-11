@@ -1,5 +1,7 @@
 package com.nedap.archie.aom;
 
+import com.nedap.archie.base.terminology.TerminologyCode;
+
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
@@ -8,7 +10,7 @@ import java.util.Map;
  * Created by pieter.bos on 01/11/15.
  */
 public class ResourceDescriptionItem extends ArchetypeModelObject {
-    private String language;
+    private TerminologyCode language;
     private String purpose;
     private List<String> keywords;
     private String use;
@@ -19,11 +21,11 @@ public class ResourceDescriptionItem extends ArchetypeModelObject {
     private Map<String, String> otherDetails;//TODO: string -> object?
 
 
-    public String getLanguage() {
+    public TerminologyCode getLanguage() {
         return language;
     }
 
-    public void setLanguage(String language) {
+    public void setLanguage(TerminologyCode language) {
         this.language = language;
     }
 

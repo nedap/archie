@@ -8,7 +8,12 @@ import com.nedap.archie.aom.terminology.ArchetypeTerm;
 import com.nedap.archie.base.MultiplicityInterval;
 import com.nedap.archie.paths.PathSegment;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -22,13 +27,23 @@ import java.util.List;
  *
  * Created by pieter.bos on 15/10/15.
  */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name="C_OBJECT", propOrder= {
+        "occurrences",
+        "siblingOrder"
+})
 public class CObject extends ArchetypeConstraint {
 
+    @XmlAttribute(name="rm_type_name")
     private String rmTypeName;
+    @XmlElement(name="occurrences")
     private MultiplicityInterval occurrences;
+    @XmlAttribute(name="node_id")
     private String nodeId;
+    @XmlAttribute(name="is_deprecated")
     private Boolean deprecated;
 
+    @XmlElement(name="sibling_order")
     private SiblingOrder siblingOrder;
 
 

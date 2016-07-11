@@ -1,11 +1,13 @@
 package com.nedap.archie.aom;
 
+import javax.xml.bind.annotation.XmlType;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by pieter.bos on 15/10/15.
  */
+@XmlType(name="C_SECOND_ORDER")
 public class CSecondOrder<T extends ArchetypeConstraint> extends ArchetypeModelObject {
     private List<T> members = new ArrayList<>();
 

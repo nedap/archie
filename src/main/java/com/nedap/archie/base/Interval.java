@@ -1,7 +1,11 @@
 package com.nedap.archie.base;
 
 import javax.annotation.Nullable;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 import java.time.Duration;
 import java.time.temporal.TemporalAmount;
 import java.util.Objects;
@@ -9,15 +13,21 @@ import java.util.Objects;
 /**
  * Created by pieter.bos on 15/10/15.
  */
+@XmlType(name="INTERVAL")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Interval<T>  extends OpenEHRBase {
 
     @Nullable
     private T lower;
     @Nullable
     private T upper;
+    @XmlAttribute(name="lower_unbounded")
     private boolean lowerUnbounded = false;
+    @XmlAttribute(name="upper_unbounded")
     private boolean upperUnbounded = false;
+    @XmlAttribute(name="lower_included")
     private boolean lowerIncluded = true;
+    @XmlAttribute(name="upper_included")
     private boolean upperIncluded = true;
 
     public Interval() {
@@ -69,7 +79,6 @@ public class Interval<T>  extends OpenEHRBase {
         this.upper = upper;
     }
 
-    @XmlElement(name = "lower_unbounded")
     public boolean isLowerUnbounded() {
         return lowerUnbounded;
     }
@@ -78,7 +87,6 @@ public class Interval<T>  extends OpenEHRBase {
         this.lowerUnbounded = lowerUnbounded;
     }
 
-    @XmlElement(name = "upper_unbounded")
     public boolean isUpperUnbounded() {
         return upperUnbounded;
     }
@@ -87,7 +95,6 @@ public class Interval<T>  extends OpenEHRBase {
         this.upperUnbounded = upperUnbounded;
     }
 
-    @XmlElement(name = "lower_included")
     public boolean isLowerIncluded() {
         return lowerIncluded;
     }
@@ -95,8 +102,7 @@ public class Interval<T>  extends OpenEHRBase {
     public void setLowerIncluded(boolean lowerIncluded) {
         this.lowerIncluded = lowerIncluded;
     }
-
-    @XmlElement(name = "upper_included")
+    
     public boolean isUpperIncluded() {
         return upperIncluded;
     }

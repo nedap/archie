@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.nedap.archie.json.DurationDeserializer;
 import com.nedap.archie.rm.datavalues.SingleValuedDataValue;
 import com.nedap.archie.rm.datavalues.quantity.DvAmount;
-import com.nedap.archie.xml.DurationXmlAdapter;
+import com.nedap.archie.xml.adapters.DurationXmlAdapter;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

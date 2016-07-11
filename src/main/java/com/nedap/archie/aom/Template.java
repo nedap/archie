@@ -1,11 +1,18 @@
 package com.nedap.archie.aom;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by pieter.bos on 15/10/15.
  */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name="TEMPLATE")
+@XmlRootElement(name="archetype")
 public class Template extends AuthoredArchetype {
 
     private List<TemplateOverlay> templateOverlays = new ArrayList<>();

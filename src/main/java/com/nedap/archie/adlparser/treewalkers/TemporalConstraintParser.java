@@ -130,7 +130,6 @@ public class TemporalConstraintParser extends BaseTreeWalker {
             Interval<TemporalAmount> interval = result.getConstraint().get(0);
             if(interval.getLower() != null && interval.getUpper() != null && interval.getLower().equals(interval.getUpper())) {
                 result.setAssumedValue(interval.getLower());
-                result.setDefaultValue(interval.getLower());
             }
         }
 
@@ -236,7 +235,6 @@ public class TemporalConstraintParser extends BaseTreeWalker {
             Interval<TemporalAccessor> interval = result.getConstraint().get(0);
             if(interval.getLower() != null && interval.getUpper() != null && interval.getLower().equals(interval.getUpper())) {
                 result.setAssumedValue(interval.getLower());
-                result.setDefaultValue(interval.getLower());
             }
         }
 
@@ -331,7 +329,6 @@ public class TemporalConstraintParser extends BaseTreeWalker {
             Interval<TemporalAccessor> interval = result.getConstraint().get(0);
             if(interval.getLower() != null && interval.getUpper() != null && interval.getLower().equals(interval.getUpper())) {
                 result.setAssumedValue(interval.getLower());
-                result.setDefaultValue(interval.getLower());
             }
         }
 
@@ -427,7 +424,6 @@ public class TemporalConstraintParser extends BaseTreeWalker {
             Interval<Temporal> interval = result.getConstraint().get(0);
             if(interval.getLower() != null && interval.getUpper() != null && interval.getLower().equals(interval.getUpper())) {
                 result.setAssumedValue(interval.getLower());
-                result.setDefaultValue(interval.getLower());
             }
         }
 

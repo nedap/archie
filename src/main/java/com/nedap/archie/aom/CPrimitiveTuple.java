@@ -1,11 +1,14 @@
 package com.nedap.archie.aom;
 
+import javax.xml.bind.annotation.XmlType;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by pieter.bos on 15/10/15.
  */
+@XmlType(name="C_PRIMITIVE_TUPLE")
+//TODO: because of how jaxb works, this might need work for members
 public class CPrimitiveTuple extends CSecondOrder<CPrimitiveObject> {
 
     @Override
