@@ -1,5 +1,7 @@
 package com.nedap.archie.aom;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Strings;
 
 import java.util.regex.Matcher;
@@ -25,6 +27,7 @@ public class ArchetypeHRID extends ArchetypeModelObject {
 
     }
 
+    @JsonCreator
     public ArchetypeHRID(String value) {
 
         Pattern p = Pattern.compile("((?<namespace>.*)::)?(?<publisher>.*)-(?<package>.*)-(?<class>.*)\\.(?<concept>.*)\\.v(?<version>.*)");
@@ -42,6 +45,25 @@ public class ArchetypeHRID extends ArchetypeModelObject {
         conceptId = m.group("concept");
         releaseVersion = m.group("version");
         //TODO: versionStatus and build count
+    }
+
+    @JsonCreator
+    public ArchetypeHRID(@JsonProperty("namespace") String namespace,
+                         @JsonProperty("publisher") String rmPublisher,
+                         @JsonProperty("rm_package") String rmPackage,
+                         @JsonProperty("rm_class") String rmClass,
+                         @JsonProperty("concept_id") String conceptId,
+                         @JsonProperty("release_version") String releaseVersion,
+                         @JsonProperty("version_status") String versionStatus,
+                         @JsonProperty("build_count") String buildCount) {
+        this.namespace = namespace;
+        this.rmPublisher = rmPublisher;
+        this.rmPackage = rmPackage;
+        this.rmClass = rmClass;
+        this.conceptId = conceptId;
+        this.releaseVersion = releaseVersion;
+        this.versionStatus = versionStatus;
+        this.buildCount = buildCount;
     }
 
     public String getFullId() {

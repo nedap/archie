@@ -1,5 +1,7 @@
 package com.nedap.archie.rm.support.identification;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Strings;
 
 import java.util.regex.Matcher;
@@ -25,9 +27,14 @@ public class ArchetypeID extends ObjectId {
 
     }
 
+    /**
+     * Parse the Archetype id from a string
+     * @param value
+     */
+    @JsonCreator
     public ArchetypeID(String value) {
 
-        Pattern p = Pattern.compile("((?<namespace>.*)::)?(?<publisher>.*)-(?<package>.*)-(?<class>.*)\\.(?<concept>.*)\\.v(?<version>.*)");
+        Pattern p = Pattern.compile("((?<namespace>.*)::)?(?<publisher>.*)-(?<package>.*)-(?<class>.*)\\.(?<concept>.*)(-(?<specialisation>.*))?\\.v(?<version>.*)");
         Matcher m = p.matcher(value);
 
         if(!m.matches()) {
@@ -37,10 +44,37 @@ public class ArchetypeID extends ObjectId {
         rmName = m.group("package");
         rmEntity = m.group("class");
 
+        specialisation = m.group("specialisation");
 
         domainConcept = m.group("concept");
         versionId = m.group("version");
-        //TODO: versionStatus and build count
+    }
+
+    /**
+     * Constructor for creating the archetype id based on all fields separate in json
+     * @param qualifiedRmEntity
+     * @param domainConcept
+     * @param rmOriginator
+     * @param rmName
+     * @param rmEntity
+     * @param specialisation
+     * @param versionId
+     */
+    @JsonCreator
+    public ArchetypeID(@JsonProperty("qualified_rm_entity") String qualifiedRmEntity,
+                       @JsonProperty("domain_concept")String domainConcept,
+                       @JsonProperty("rm_originator") String rmOriginator,
+                       @JsonProperty("rm_name") String rmName,
+                       @JsonProperty("rm_entity") String rmEntity,
+                       @JsonProperty("specialisation") String specialisation,
+                       @JsonProperty("versionId") String versionId) {
+        this.qualifiedRmEntity = qualifiedRmEntity;
+        this.domainConcept = domainConcept;
+        this.rmOriginator = rmOriginator;
+        this.rmName = rmName;
+        this.rmEntity = rmEntity;
+        this.specialisation = specialisation;
+        this.versionId = versionId;
     }
 
     public String getFullId() {
