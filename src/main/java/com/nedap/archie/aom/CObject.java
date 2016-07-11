@@ -216,6 +216,7 @@ public class CObject extends ArchetypeConstraint {
      * Return true if and only if this is a root node.
      * @return
      */
+    @JsonIgnore
     public boolean isRootNode() {
         return false;
     }
