@@ -1,7 +1,7 @@
 package com.nedap.archie.rm.composition;
 
 import com.nedap.archie.rm.datastructures.ItemStructure;
-import com.nedap.archie.rm.datatypes.ObjectRef;
+import com.nedap.archie.rm.support.identification.ObjectRef;
 
 import javax.annotation.Nullable;
 import javax.xml.bind.annotation.XmlAccessType;

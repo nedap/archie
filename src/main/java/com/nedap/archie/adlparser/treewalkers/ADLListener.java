@@ -81,7 +81,7 @@ public class ADLListener extends AdlBaseListener {
 
     private void parseArchetypeHRID(TerminalNode hrId) {
         if(hrId != null) {
-            ArchetypeID archetypeID = new ArchetypeID(hrId.getText());
+            ArchetypeHRID archetypeID = new ArchetypeHRID(hrId.getText());
             archetype.setArchetypeId(archetypeID);
         }
     }

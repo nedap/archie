@@ -3,7 +3,7 @@ package com.nedap.archie.rules.evaluation;
 import com.google.common.collect.ArrayListMultimap;
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.query.RMQueryContext;
-import com.nedap.archie.rm.archetypes.Pathable;
+import com.nedap.archie.rm.archetyped.Pathable;
 import com.nedap.archie.rules.*;
 import com.nedap.archie.rules.evaluation.evaluators.AssertionEvaluator;
 import com.nedap.archie.rules.evaluation.evaluators.BinaryOperatorEvaluator;
