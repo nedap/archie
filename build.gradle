@@ -3,13 +3,17 @@ buildscript {
     jcenter()
   }
   dependencies {
-    classpath "org.jfrog.buildinfo:build-info-extractor-gradle:3.1.0"
+    classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.4.1"
     classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.5.3"
-    classpath 'ch.raffael.pegdown-doclet:pegdown-doclet:1.2'
+    classpath 'ch.raffael.pegdown-doclet:pegdown-doclet:1.3'
 
     classpath 'org.owasp:dependency-check-gradle:1.4.0'
 
   }
+}
+
+plugins {
+    id 'com.github.ben-manes.versions' version '0.13.0'
 }
 
 def artifactoryUserMethod = hasProperty('artifactoryUser') ? artifactoryUser : ""
@@ -30,6 +34,8 @@ apply plugin: "com.jfrog.artifactory"
 apply plugin: 'ch.raffael.pegdown-doclet'
 apply plugin: 'jacoco'
 apply plugin: 'org.owasp.dependencycheck'
+
+
 //apply plugin: 'io.codearte.nexus-staging'
 
 version = '0.3.0-SNAPSHOT'
@@ -53,7 +59,7 @@ dependencies {
 
     compile 'org.antlr:antlr4-runtime:4.5.3'
 
-	compile 'org.slf4j:slf4j-api:1.7.12'
+	compile 'org.slf4j:slf4j-api:1.7.21'
     compile "com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}"
     compile "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
     compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}"
@@ -66,7 +72,7 @@ dependencies {
 
     compile 'com.esotericsoftware:kryo:4.0.0' //for easy and relatively fast object cloning
 	testCompile 'junit:junit:4.12'
-    testCompile 'org.slf4j:slf4j-simple:1.7.12'
+    testCompile 'org.slf4j:slf4j-simple:1.7.21'
 
 }
 
