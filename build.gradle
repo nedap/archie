@@ -39,9 +39,6 @@ ext.antlrVersion = '4.5.1-1'
 
 repositories {
     mavenCentral()
-	maven {
-		url "http://dl.bintray.com/guestful/maven"
-	}
 }
 
 ext.reflectionsVersion = '0.9.10'
@@ -57,16 +54,13 @@ dependencies {
     compile "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
     compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}"
 
-	compile 'com.guestful.module:guestful.module.jsr310-extensions:1.4' //kryo java.time serializers. Once the next Kryo version is release, this becomes obsolete and should be removed
 	compile 'com.google.guava:guava:19.0'
 
 	compile "org.reflections:reflections:${reflectionsVersion}"
 
-
-
 	compile 'org.checkerframework:checker:1.9.7'
 
-    compile 'com.esotericsoftware:kryo:3.0.3' //for easy and relatively fast object cloning
+    compile 'com.esotericsoftware:kryo:4.0.0' //for easy and relatively fast object cloning
 	testCompile 'junit:junit:4.12'
     testCompile 'org.slf4j:slf4j-simple:1.7.12'
 
@@ -134,16 +128,7 @@ uploadArchives {
         packaging 'jar'
         // optionally artifactId can be defined here 
         description 'An openEHR library, supporting ADL 2'
-        url 'https://github.com/nedap/archie'
-
-
-        repositories {
-        	repository {
-        		id 'guestful'
-        		name 'guestful repository for jsr-310 extensions'
-        		url 'http://dl.bintray.com/guestful/maven'
-        	}
-        }
+        url 'https://github.com/nedap/archie'        
 
         scm {
             connection 'scm:git:https://github.com/nedap/archie.git'
@@ -170,12 +155,6 @@ uploadArchives {
         }
       }
       beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-//        pom.withXml {
-//            def guestFulRepositoryNode = asNode().appendNode('repositories').appendNode('repository')
-//            guestFulRepositoryNode.appendNode('id', 'guestful')
-//            guestFulRepositoryNode.appendNode('name', 'repo for the jsr310 jackson extension')
-//            guestFulRepositoryNode.appendNode('url', 'http://dl.bintray.com/guestful/maven')
-//        }
     }
   }
 }
