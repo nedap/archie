@@ -6,6 +6,9 @@ buildscript {
     classpath "org.jfrog.buildinfo:build-info-extractor-gradle:3.1.0"
     classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.5.3"
     classpath 'ch.raffael.pegdown-doclet:pegdown-doclet:1.2'
+
+    classpath 'org.owasp:dependency-check-gradle:1.4.0'
+
   }
 }
 
@@ -26,6 +29,7 @@ apply plugin: 'maven-publish'
 apply plugin: "com.jfrog.artifactory"
 apply plugin: 'ch.raffael.pegdown-doclet'
 apply plugin: 'jacoco'
+apply plugin: 'org.owasp.dependencycheck'
 //apply plugin: 'io.codearte.nexus-staging'
 
 version = '0.3.0-SNAPSHOT'
@@ -35,14 +39,14 @@ archivesBaseName = 'archie'
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
 
-ext.antlrVersion = '4.5.1-1'
+ext.antlrVersion = '4.5.3'
 
 repositories {
     mavenCentral()
 }
 
 ext.reflectionsVersion = '0.9.10'
-ext.jacksonVersion = '2.7.4'
+ext.jacksonVersion = '2.7.5'
 dependencies {
 
 	antlr "org.antlr:antlr4:${antlrVersion}"

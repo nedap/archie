@@ -1,6 +1,7 @@
 package com.nedap.archie.json;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.databind.DatabindContext;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.jsontype.impl.ClassNameIdResolver;
 import com.fasterxml.jackson.databind.type.TypeFactory;
@@ -9,6 +10,8 @@ import com.nedap.archie.rminfo.ArchieAOMInfoLookup;
 import com.nedap.archie.rminfo.ArchieRMInfoLookup;
 import com.nedap.archie.rminfo.ModelInfoLookup;
 import com.nedap.archie.rminfo.RMTypeInfo;
+
+import java.io.IOException;
 
 /**
  * Class that handles naming of Archie RM and AOM objects for use in Jackson.
@@ -48,15 +51,16 @@ public class OpenEHRTypeNaming extends ClassNameIdResolver {
     }
 
     @Override
-    protected JavaType _typeFromId(String typeName, TypeFactory typeFactory) {
+    protected JavaType _typeFromId(String typeName, DatabindContext ctxt) {
         Class result = rmInfoLookup.getClass(typeName);
         if(result == null) {
             //AOM class?
             result = aomInfoLookup.getClass(typeName);
         }
         if(result != null) {
+            TypeFactory typeFactory = (ctxt == null) ? _typeFactory : ctxt.getTypeFactory();
             return typeFactory.constructSpecializedType(_baseType, result);
         }
-        return super._typeFromId(typeName, typeFactory);
+        return super._typeFromId(typeName, ctxt);
     }
 }
