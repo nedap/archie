@@ -11,5 +11,5 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ITEM")
-public class Item extends Locatable {
+public abstract class Item extends Locatable {
 }

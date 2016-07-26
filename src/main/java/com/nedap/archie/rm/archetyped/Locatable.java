@@ -25,7 +25,7 @@ import java.util.List;
         "archetypeDetails",
         "feederAudit"
 })
-public class Locatable extends Pathable {
+public abstract class Locatable extends Pathable {
 
     @XmlElement
     private DvText name;

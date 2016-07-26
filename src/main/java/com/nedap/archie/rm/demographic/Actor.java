@@ -14,7 +14,7 @@ import java.util.List;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name="ACTOR")
-public class Actor extends Party {
+public abstract class Actor extends Party {
 
     private List<DvText> languages = new ArrayList<>();
     private List<PartyRef> roles = new ArrayList();

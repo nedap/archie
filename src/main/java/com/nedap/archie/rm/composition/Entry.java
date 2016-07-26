@@ -24,7 +24,7 @@ import java.util.List;
         "otherParticipations",
         "workFlowId"
 })
-public class Entry extends ContentItem {
+public abstract class Entry extends ContentItem {
 
     private CodePhrase language;
     private CodePhrase encoding;

@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "PARTY_PROXY", propOrder = {
         "externalRef"
 })
-public class PartyProxy extends RMObject {
+public abstract class PartyProxy extends RMObject {
 
     @Nullable
     @XmlElement(name = "external_ref")

@@ -60,7 +60,7 @@ public class RMObjectCreator {
             Type type = attributeInfo.getType();
             if(type instanceof Class) {
                 Class clazz = (Class) type;
-                if(Collection.class.isAssignableFrom(clazz)) {
+                if(attributeInfo.isMultipleValued()) {
                     Collection collection = (Collection) newInstance(attributeInfo);
                     if(values != null) {
                         collection.addAll(values);

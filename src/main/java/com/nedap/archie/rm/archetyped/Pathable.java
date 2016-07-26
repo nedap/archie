@@ -20,7 +20,7 @@ import java.util.List;
  * Created by pieter.bos on 04/11/15.
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Pathable extends RMObject {
+public abstract class Pathable extends RMObject {
     //TODO: implement according to spec: pathExists(path), pathUnique(path), pathOfItem(pathable)
 
     @JsonIgnore
