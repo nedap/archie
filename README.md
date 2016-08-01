@@ -193,6 +193,29 @@ public void walk(CObject cobject) {
 }
 ```
 
+### JSON and XML (de)serialization
+
+Both the Archetype and Reference Model objects serialize and deserialize to JSON and XML. JSON serialization works using Jackson. You can get a fully configured ObjectMapper using JacksonUtil:
+
+```java
+String json = JacksonUtil.getObjectMapper().writeValueAsString(archetype);
+Archetype parsedArchetype = JacksonUtil.getObjectMapper().readValue(json, Archetype.class);
+```
+
+The JSON output contains some features that make it easy to use in javascript, such as path attributes and translations in the language of your choice directly in the JSON. These features are ignored when parsing - as they should be.
+
+XML works using JAXB. The XML output for the reference model conforms to the official openEHR RM XSD. For the AOM this is a bit tricky, because there is no finished XSD yet. It currently conforms to the development AOM 2.0 format. This format is still subject to change. To use:
+
+```java
+Marshaller marshaller = JAXBUtil.getArchieJAXBContext().createMarshaller();
+StringWriter writer = new StringWriter();
+marshaller.marshal(archetype, writer);
+String xml = writer.toString();
+
+Unmarshaller unmarshaller = JAXBUtil.getArchieJAXBContext().createUnmarshaller();
+Archetype parsedArchetype = (Archetype) unmarshaller.unmarshal(new StringReader(xml));
+```
+
 ### ODIN
 
 ODIN is a JSON/YAML like notation used as part of ADL, for meta-data, terminologies and annotations. See https://github.com/openehr/odin for what more it can do. To our knowledge it's not used widely outside of ADL/openEHR. Archie can map ODIN data directly to Java-objects using Jackson. 
