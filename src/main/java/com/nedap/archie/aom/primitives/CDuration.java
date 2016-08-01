@@ -1,8 +1,8 @@
 package com.nedap.archie.aom.primitives;
 
 import com.nedap.archie.base.Interval;
-import com.nedap.archie.xml.adapters.DurationXmlAdapter;
 import com.nedap.archie.xml.adapters.DurationIntervalXmlAdapter;
+import com.nedap.archie.xml.adapters.DurationXmlAdapter;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

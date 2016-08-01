@@ -1,7 +1,6 @@
 package com.nedap.archie.xml.types;
 
 import com.nedap.archie.base.terminology.TerminologyCode;
-import com.nedap.archie.rm.datatypes.CodePhrase;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

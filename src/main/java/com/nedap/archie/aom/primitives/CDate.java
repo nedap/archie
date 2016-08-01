@@ -2,7 +2,6 @@ package com.nedap.archie.aom.primitives;
 
 import com.nedap.archie.base.Interval;
 import com.nedap.archie.xml.adapters.DateIntervalXmlAdapter;
-import com.nedap.archie.xml.adapters.DateTimeIntervalXmlAdapter;
 import com.nedap.archie.xml.adapters.DateXmlAdapter;
 
 import javax.xml.bind.annotation.XmlAccessType;

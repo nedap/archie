@@ -1,7 +1,5 @@
 package com.nedap.archie.xml.types;
 
-import com.nedap.archie.aom.ArchetypeModelObject;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;

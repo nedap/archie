@@ -1,6 +1,5 @@
 package com.nedap.archie.aom;
 
-import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**

@@ -1,8 +1,6 @@
 package com.nedap.archie.xml.adapters;
 
 import com.nedap.archie.xml.types.StringDictionaryItem;
-import com.nedap.archie.xml.types.TermBindingSet;
-import org.jetbrains.annotations.NotNull;
 
 import java.net.URI;
 import java.net.URISyntaxException;

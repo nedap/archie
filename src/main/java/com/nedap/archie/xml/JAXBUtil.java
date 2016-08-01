@@ -7,7 +7,6 @@ import com.nedap.archie.xml.types.XmlResourceDescriptionItem;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -37,7 +36,7 @@ public class JAXBUtil {
                 List<Class> classes = new ArrayList<>();
                 classes.addAll(ArchieAOMInfoLookup.getInstance().getRmTypeNameToClassMap().values());
                 classes.addAll(ArchieRMInfoLookup.getInstance().getRmTypeNameToClassMap().values());
-                //extra classes from the adapters package that are not directly referenced.
+                //extra classes from the adapters package that are not directly referenced.\
                 classes.add(XmlResourceDescriptionItem.class);
                 archieJaxbContext = JAXBContext.newInstance(classes.toArray(new Class[0]));
             } catch (JAXBException e) {

@@ -2,6 +2,8 @@ package com.nedap.archie.aom;
 
 import com.nedap.archie.rminfo.ModelInfoLookup;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,8 +16,7 @@ import java.util.Objects;
  * Created by pieter.bos on 15/10/15.
  */
 @XmlType(name="C_PRIMITIVE_OBJECT")
-//TODO: we might have to make this with abstract methods and move the attributes to the
-//lower classes to get this to work with JAXB, or create a custom XML adapter
+@XmlAccessorType(XmlAccessType.FIELD)
 public abstract class CPrimitiveObject<Constraint, ValueType> extends CDefinedObject<ValueType> {
 
     public static final String PRIMITIVE_NODE_ID_VALUE = "Primitive_node_id";

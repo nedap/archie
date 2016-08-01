@@ -6,9 +6,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
-import java.net.URI;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by pieter.bos on 01/08/16.
