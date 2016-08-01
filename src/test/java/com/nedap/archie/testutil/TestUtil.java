@@ -4,11 +4,17 @@ import com.google.common.collect.Lists;
 import com.nedap.archie.aom.CAttribute;
 import com.nedap.archie.aom.CComplexObject;
 import com.nedap.archie.aom.CObject;
+import com.nedap.archie.aom.CPrimitiveObject;
 import com.nedap.archie.creation.RMObjectCreator;
 import com.nedap.archie.rm.RMObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.*;
 
 /**
  * Created by pieter.bos on 06/04/16.
@@ -50,5 +56,52 @@ public class TestUtil {
             }
         }
         return result;
+    }
+
+    /**
+     * Assert that two CObjects are equal, including the entire tree defined by their attributes
+     *
+     * Currently does only classes, node ids, attribute names and rm type names. To be extended for better tests
+     * @param cobject1
+     * @param cobject2
+     * @throws Exception
+     */
+    public static void assertCObjectEquals(CObject cobject1, CObject cobject2) throws Exception {
+        assertThat(cobject1.getClass(), is(equalTo(cobject2.getClass())));
+        assertThat(cobject1.getRmTypeName(), is(cobject2.getRmTypeName()));
+        assertThat(cobject1.getNodeId(), is(cobject2.getNodeId()));
+        assertThat(cobject1.getAttributes().size(), is(cobject2.getAttributes().size()));
+        assertThat(cobject1.getOccurrences(), is(cobject2.getOccurrences()));
+        for(CAttribute attribute1:cobject1.getAttributes()) {
+            CAttribute attribute2 = cobject2.getAttribute(attribute1.getRmAttributeName());
+            assertThat(attribute2, is(notNullValue()));
+            assertThat(attribute1.getCardinality(), is(attribute2.getCardinality()));
+            assertThat(attribute1.getExistence(), is(attribute2.getExistence()));
+            for(CObject childObject1:attribute1.getChildren()) {
+                if(childObject1 instanceof  CComplexObject) {
+                    List<CObject> childObjects2 = attribute2.getChildren().stream()
+                            .filter(
+                                    o -> o.getNodeId().equals(childObject1.getNodeId())
+                            ).collect(Collectors.toList());
+                    assertThat(childObjects2 + " should equal " + childObject1, childObjects2.size(), is(1));
+                    assertCObjectEquals(childObject1, childObjects2.get(0));
+                } else if (childObject1 instanceof CPrimitiveObject) {
+                    CPrimitiveObject primitiveChild = (CPrimitiveObject) childObject1;
+                    List<CObject> childObjects2 = attribute2.getChildren().stream()
+                            .filter(
+                                    o -> primitiveObjectMatches(primitiveChild, o)
+                            ).collect(Collectors.toList());
+                    assertFalse("a primitive object should have a matching primitive object", childObjects2.isEmpty());
+                }
+
+            }
+
+        }
+
+    }
+
+    private static boolean primitiveObjectMatches(CPrimitiveObject o1, CObject o2) {
+        return (o2 instanceof CPrimitiveObject) && Objects.equals(((CPrimitiveObject) o2).getConstraint(), o1.getConstraint());
+
     }
 }

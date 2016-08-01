@@ -6,6 +6,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
+import java.util.Objects;
 
 /**
  * Created by pieter.bos on 18/10/15.
@@ -63,5 +64,15 @@ public class Cardinality extends ArchetypeModelObject {
         Cardinality result = new Cardinality();
         result.setInterval(MultiplicityInterval.unbounded());
         return result;
+    }
+
+    public boolean equals(Object other) {
+        if(other instanceof Cardinality) {
+            Cardinality otherCardinality = (Cardinality) other;
+            return ordered == otherCardinality.ordered &&
+                    unique == otherCardinality.unique &&
+                    Objects.equals(interval, otherCardinality.interval);
+        }
+        return false;
     }
 }

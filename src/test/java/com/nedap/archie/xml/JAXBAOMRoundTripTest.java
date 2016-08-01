@@ -5,6 +5,7 @@ import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.flattener.Flattener;
 import com.nedap.archie.flattener.FlattenerTest;
 import com.nedap.archie.flattener.SimpleArchetypeRepository;
+import com.nedap.archie.testutil.TestUtil;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -52,6 +53,7 @@ public class JAXBAOMRoundTripTest {
         Archetype parsedArchetype = (Archetype) unmarshaller.unmarshal(new StringReader(xml));
 
         assertThat(parsedArchetype.getTerminology().getTermDefinitions().size(), is(archetype.getTerminology().getTermDefinitions().size()));
+        TestUtil.assertCObjectEquals(archetype.getDefinition(), parsedArchetype.getDefinition());
 
     }
 
@@ -96,6 +98,7 @@ public class JAXBAOMRoundTripTest {
             System.out.println(xml);
 
             Archetype parsedArchetype = (Archetype) unmarshaller.unmarshal(new StringReader(xml));
+            TestUtil.assertCObjectEquals(operationalTemplate.getDefinition(), parsedArchetype.getDefinition());
     }
 
 }

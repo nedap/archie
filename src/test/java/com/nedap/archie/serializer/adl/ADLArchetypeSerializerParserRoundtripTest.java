@@ -6,6 +6,7 @@ import com.nedap.archie.aom.CAttribute;
 import com.nedap.archie.aom.CComplexObject;
 import com.nedap.archie.aom.primitives.CTerminologyCode;
 import com.nedap.archie.query.APathQuery;
+import com.nedap.archie.testutil.TestUtil;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -20,7 +21,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class ADLArchetypeSerializerParserRoundtripTest {
     @Test
     public void basic() throws Exception {
-        Archetype archetype = roundtrip(loadRoot("basic.adl"));
+        Archetype basic = loadRoot("basic.adl");
+        Archetype archetype = roundtrip(basic);
 
         CAttribute defining_code = new APathQuery("/category[id10]/defining_code").find(archetype.getDefinition());
         CTerminologyCode termCode = (CTerminologyCode) defining_code.getChildren().get(0);
@@ -32,6 +34,8 @@ public class ADLArchetypeSerializerParserRoundtripTest {
 
         assertThat(archetype.getAnnotations().getDocumentation().get("en").get("/context/start_time").get("local_name"),
                 equalTo("consultation start time"));
+
+        TestUtil.assertCObjectEquals(basic.getDefinition(), archetype.getDefinition());
     }
 
     @Test
