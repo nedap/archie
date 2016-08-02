@@ -154,10 +154,9 @@ public class ModelInfoLookup {
             Class typeInCollection = rawFieldType;
             if (Collection.class.isAssignableFrom(rawFieldType)) {
                 Type[] actualTypeArguments = ((ParameterizedType) fieldType.getType()).getActualTypeArguments();
-                if (actualTypeArguments.length == 1) {
-                    if (actualTypeArguments[0] instanceof Class) {
-                        typeInCollection = (Class) actualTypeArguments[0];
-                    }
+                if (actualTypeArguments.length == 1 &&
+                        actualTypeArguments[0] instanceof Class) {
+                    typeInCollection = (Class) actualTypeArguments[0];
                 }
             }
 
