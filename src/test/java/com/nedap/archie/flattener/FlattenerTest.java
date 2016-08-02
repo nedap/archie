@@ -135,15 +135,6 @@ public class FlattenerTest {
     public void testComponentTerminologies() throws Exception {
         Archetype flattened = flattener.flatten(bloodPressureComposition);
 
-        StringWriter writer = new StringWriter();
-        Marshaller marshaller = JAXBUtil.getArchieJAXBContext().createMarshaller();
-        Unmarshaller unmarshaller = JAXBUtil.getArchieJAXBContext().createUnmarshaller();
-        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-        marshaller.marshal(flattened, writer);
-
-        String xml = writer.toString();
-        System.out.println(xml);
-
         CComplexObject definition = flattened.getDefinition();
         //you definately need component terminologies to translate this :)
         CObject object = (CObject)
