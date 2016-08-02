@@ -10,7 +10,6 @@ import com.nedap.archie.rminfo.ModelNamingStrategy;
 import com.nedap.archie.rminfo.RMAttributeInfo;
 import com.nedap.archie.rminfo.RMTypeInfo;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -61,7 +60,7 @@ public class ReflectionConstraintImposer implements ModelConstraintImposer {
                     attribute.setCardinality(new Cardinality(0,1));
                 }
 
-                if(attributeInfo.getType() instanceof Class && Collection.class.isAssignableFrom(attributeInfo.getType())) {
+                if(attributeInfo.isMultipleValued()) {
                     attribute.setCardinality(Cardinality.unbounded());
                     attribute.setMultiple(true);
                 }

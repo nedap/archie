@@ -116,22 +116,22 @@ public class ModelInfoLookup {
             String javaFieldNameUpperCased = upperCaseFirstChar(javaFieldName);
             Method getMethod = getMethod(clazz, "get" + javaFieldNameUpperCased);
             Method setMethod = null, addMethod = null;
-            if(getMethod == null) {
+            if (getMethod == null) {
                 getMethod = getMethod(clazz, "is" + javaFieldNameUpperCased);
             }
-            if(getMethod != null) {
+            if (getMethod != null) {
                 setMethod = getMethod(clazz, "set" + javaFieldNameUpperCased, getMethod.getReturnType());
-                if(Collection.class.isAssignableFrom(getMethod.getReturnType())) {
+                if (Collection.class.isAssignableFrom(getMethod.getReturnType())) {
                     Type[] typeArguments = ((ParameterizedType) getMethod.getGenericReturnType()).getActualTypeArguments();
-                    if(typeArguments.length == 1) {
+                    if (typeArguments.length == 1) {
                         TypeToken singularParameter = typeToken.resolveType(typeArguments[0]);
                         //TODO: does this work or should we use the typeArguments[0].getSomething?
                         String addMethodName = "add" + toSingular(javaFieldNameUpperCased);
                         addMethod = getMethod(clazz, addMethodName, singularParameter.getRawType());
-                        if(addMethod == null) {
+                        if (addMethod == null) {
                             //Due to generics, this does not always work
                             Set<Method> allAddMethods = ReflectionUtils.getAllMethods(clazz, ReflectionUtils.withName(addMethodName));
-                            if(allAddMethods.size() == 1) {
+                            if (allAddMethods.size() == 1) {
                                 addMethod = allAddMethods.iterator().next();
                             } else {
                                 logger.warn("strange number of add methods for field {} on class {}", field.getName(), clazz.getSimpleName());
@@ -144,26 +144,39 @@ public class ModelInfoLookup {
             }
 
             TypeToken fieldType = null;
-            if(getMethod != null) {
+            if (getMethod != null) {
                 fieldType = typeToken.resolveType(getMethod.getGenericReturnType());
             } else {
                 fieldType = typeToken.resolveType(field.getGenericType());
             }
 
+            Class rawFieldType = fieldType.getRawType();
+            Class typeInCollection = rawFieldType;
+            if (Collection.class.isAssignableFrom(rawFieldType)) {
+                Type[] actualTypeArguments = ((ParameterizedType) fieldType.getType()).getActualTypeArguments();
+                if (actualTypeArguments.length == 1) {
+                    if (actualTypeArguments[0] instanceof Class) {
+                        typeInCollection = (Class) actualTypeArguments[0];
+                    }
+                }
+            }
 
-
-            RMAttributeInfo attributeInfo = new RMAttributeInfo(
-                    attributeName,
-                    field,
-                    fieldType.getRawType(),
-                    field.getAnnotation(Nullable.class) != null,
-                    getMethod,
-                    setMethod,
-                    addMethod
-            );
-            typeInfo.addAttribute(attributeInfo);
+            if (setMethod != null) {
+                RMAttributeInfo attributeInfo = new RMAttributeInfo(
+                        attributeName,
+                        field,
+                        rawFieldType,
+                        typeInCollection,
+                        field.getAnnotation(Nullable.class) != null,
+                        getMethod,
+                        setMethod,
+                        addMethod
+                );
+                typeInfo.addAttribute(attributeInfo);
+            } else {
+                logger.info("property without a set method ignored for field {} on class {}", field.getName(), clazz.getSimpleName());
+            }
         }
-
     }
 
     private String toSingular(String javaFieldNameUpperCased) {

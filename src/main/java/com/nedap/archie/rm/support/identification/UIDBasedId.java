@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "UID_BASED_ID")
-public class UIDBasedId extends ObjectId {
+public abstract class UIDBasedId extends ObjectId {
 
     private UID root;
     @Nullable

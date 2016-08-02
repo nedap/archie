@@ -5,5 +5,5 @@ import com.nedap.archie.rm.archetyped.Locatable;
 /**
  * Created by pieter.bos on 04/11/15.
  */
-public class DataStructure extends Locatable {
+public abstract class DataStructure extends Locatable {
 }

@@ -29,7 +29,7 @@ import java.util.Map;
  */
 @XmlType(name="AUTHORED_RESOURCE")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-public class AuthoredResource extends ArchetypeModelObject {
+public abstract class AuthoredResource extends ArchetypeModelObject {
 
     private Boolean controlled;
     private String uid;

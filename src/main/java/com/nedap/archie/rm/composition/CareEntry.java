@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
         "protocol",
         "guidelineId"
 })
-public class CareEntry extends Entry {
+public abstract class CareEntry extends Entry {
 
     @Nullable
     private ItemStructure protocol;

@@ -13,7 +13,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "OBJECT_ID", propOrder = {
         "value"
 })
-public class ObjectId extends RMObject {
+public abstract class ObjectId extends RMObject {
 
     private String value;
 

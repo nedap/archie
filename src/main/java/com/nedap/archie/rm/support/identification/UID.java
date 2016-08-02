@@ -5,7 +5,7 @@ import com.nedap.archie.rm.RMObject;
 /**
  * Created by pieter.bos on 08/07/16.
  */
-public class UID extends RMObject {
+public abstract class UID extends RMObject {
 
     String value;
 
