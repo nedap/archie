@@ -4,12 +4,16 @@ import com.nedap.archie.rm.archetyped.Pathable;
 import com.nedap.archie.rm.datastructures.ItemStructure;
 import com.nedap.archie.rm.datavalues.DvCodedText;
 import com.nedap.archie.rm.datavalues.quantity.datetime.DvDateTime;
+import com.nedap.archie.rm.generic.Participation;
+import com.nedap.archie.rm.generic.PartyIdentified;
 
 import javax.annotation.Nullable;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by pieter.bos on 04/11/15.
@@ -21,8 +25,8 @@ import javax.xml.bind.annotation.XmlType;
         "location",
         "setting",
         "otherContext",
-       // "healthCareFacility",
-       // "participations"
+        "healthCareFacility",
+        "participations"
 })
 public class EventContext extends Pathable {
 
@@ -38,6 +42,11 @@ public class EventContext extends Pathable {
     @XmlElement(name = "other_context")
     @Nullable
     private ItemStructure otherContext;
+
+    @XmlElement(name="health_care_facility")
+    private PartyIdentified healthCareFacility;
+
+    private List<Participation> participations = new ArrayList<>();
 
     public DvDateTime getStartTime() {
         return startTime;
@@ -79,5 +88,25 @@ public class EventContext extends Pathable {
     public void setOtherContext(ItemStructure otherContext) {
         this.otherContext = otherContext;
         setThisAsParent(otherContext, "other_context");
+    }
+
+    public PartyIdentified getHealthCareFacility() {
+        return healthCareFacility;
+    }
+
+    public void setHealthCareFacility(PartyIdentified healthCareFacility) {
+        this.healthCareFacility = healthCareFacility;
+    }
+
+    public List<Participation> getParticipations() {
+        return participations;
+    }
+
+    public void setParticipations(List<Participation> participations) {
+        this.participations = participations;
+    }
+
+    public void addParticipation(Participation participation) {
+        this.participations.add(participation);
     }
 }

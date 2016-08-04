@@ -1,6 +1,7 @@
 package com.nedap.archie.rm.composition;
 
 import com.nedap.archie.rm.datatypes.CodePhrase;
+import com.nedap.archie.rm.generic.Participation;
 import com.nedap.archie.rm.support.identification.ObjectRef;
 import com.nedap.archie.rm.generic.PartyProxy;
 
@@ -37,7 +38,7 @@ public abstract class Entry extends ContentItem {
     private PartyProxy provider;
 
     @XmlElement(name = "other_participations")
-    private List<PartyProxy> otherParticipations = new ArrayList<>();
+    private List<Participation> otherParticipations = new ArrayList<>();
 
     public PartyProxy getSubject() {
         return subject;
@@ -56,15 +57,15 @@ public abstract class Entry extends ContentItem {
         this.provider = provider;
     }
     
-    public List<PartyProxy> getOtherParticipations() {
+    public List<Participation> getOtherParticipations() {
         return otherParticipations;
     }
 
-    public void setOtherParticipations(List<PartyProxy> otherParticipations) {
+    public void setOtherParticipations(List<Participation> otherParticipations) {
         this.otherParticipations = otherParticipations;
     }
 
-    public void addOtherParticipant(PartyProxy participant) {
+    public void addOtherParticipant(Participation participant) {
         otherParticipations.add(participant);
     }
 
