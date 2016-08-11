@@ -74,6 +74,7 @@ abstract public class ADLArchetypeSerializer<T extends Archetype> {
 
         builder.newline().append("definition");
         definitionSerializer.appendCObject(archetype.getDefinition());
+        builder.tryNewLine();
     }
 
     protected abstract void appendLanguage();
