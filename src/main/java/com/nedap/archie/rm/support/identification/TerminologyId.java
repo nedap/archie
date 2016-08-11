@@ -17,7 +17,15 @@ public class TerminologyId {
     }
 
     public TerminologyId(String terminologyId, String terminologyVersion) {
-        value = terminologyId + "(" + terminologyVersion + ")";
+        if (terminologyVersion == null || terminologyVersion.isEmpty()) {
+            value = terminologyId;
+        } else {
+            value = terminologyId + "(" + terminologyVersion + ")";
+        }
+    }
+
+    public TerminologyId(String terminologyId) {
+        this(terminologyId, null);
     }
 
     public String getValue() {
