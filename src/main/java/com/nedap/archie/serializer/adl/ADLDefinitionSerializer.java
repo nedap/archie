@@ -3,10 +3,13 @@ package com.nedap.archie.serializer.adl;
 import com.nedap.archie.aom.*;
 import com.nedap.archie.aom.primitives.*;
 import com.nedap.archie.aom.terminology.ArchetypeTerm;
+import com.nedap.archie.base.terminology.TerminologyCode;
 import com.nedap.archie.serializer.adl.constraints.*;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static java.util.Optional.ofNullable;
 
 /**
  * @author markopi
@@ -35,13 +38,26 @@ public class ADLDefinitionSerializer {
         constraintSerializers.put(CTime.class, new CTimeSerializer(this));
     }
 
+    public static String serialize(CObject cons) {
+        final ADLStringBuilder builder = new ADLStringBuilder();
+        ADLDefinitionSerializer serializer = new ADLDefinitionSerializer(builder);
+        serializer.appendCObject(cons);
+        return builder.toString();
+    }
 
     public ADLStringBuilder getBuilder() {
         return builder;
     }
 
     public String getTermText(CObject cobj) {
-        ArchetypeTerm term = cobj.getArchetype().getTerm(cobj, cobj.getArchetype().getOriginalLanguage().getCodeString());
+        String originalLanguage = ofNullable(cobj)
+                .flatMap(c -> ofNullable(c.getArchetype()))
+                .flatMap(a -> ofNullable(a.getOriginalLanguage()))
+                .map(TerminologyCode::getCodeString)
+                .orElse(null);
+        if (originalLanguage == null) return null;
+
+        ArchetypeTerm term = cobj.getArchetype().getTerm(cobj, originalLanguage);
         if (term == null) return null;
         return term.getText();
     }
@@ -69,13 +85,6 @@ public class ADLDefinitionSerializer {
     @SuppressWarnings("unchecked")
     private ConstraintSerializer<CObject> getSerializer(CObject cobj) {
         return constraintSerializers.get(cobj.getClass());
-    }
-
-    public static String serialize(CObject cons) {
-        final ADLStringBuilder builder = new ADLStringBuilder();
-        ADLDefinitionSerializer serializer = new ADLDefinitionSerializer(builder);
-        serializer.appendCObject(cons);
-        return builder.toString();
     }
 
 }
