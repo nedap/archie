@@ -38,8 +38,8 @@ public class CTerminologyCodeSerializer extends ConstraintSerializer<CTerminolog
         if (!cobj.getConstraint().isEmpty()) {
             builder.append("[");
             builder.append(cobj.getConstraint().get(0));
-            if (cobj.getAssumedValue() != null) {
-                builder.append("; ").append(cobj.getAssumedValue());
+            if (cobj.getAssumedValue() != null && cobj.getAssumedValue().getCodeString()!=null) {
+                builder.append("; ").append(cobj.getAssumedValue().getCodeString());
             }
             builder.append("]");
         }

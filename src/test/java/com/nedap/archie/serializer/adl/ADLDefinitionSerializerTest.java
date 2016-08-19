@@ -36,6 +36,9 @@ public class ADLDefinitionSerializerTest {
         assertPrimitive("string_attr2", "/this|that|something else/");
         assertPrimitive("string_attr3", "/cardio.*/");
         assertPrimitive("string_attr5", "\"and\", \"something\", \"else\"");
+
+        assertPrimitive("string_attr102", "/this|that|something else/; \"something else\"");
+        assertPrimitive("string_attr105", "\"and\", \"something\", \"else\"; \"something\"");
     }
 
     @Test
@@ -43,7 +46,7 @@ public class ADLDefinitionSerializerTest {
         assertPrimitive("boolean_attr1", "True");
         assertPrimitive("boolean_attr2", "False");
         assertPrimitive("boolean_attr3", "True, False");
-        assertPrimitive("string_attr5", "\"and\", \"something\", \"else\"");
+        assertPrimitive("boolean_attr103", "True, False; True");
     }
 
     @Test
@@ -60,6 +63,9 @@ public class ADLDefinitionSerializerTest {
         assertPrimitive("integer_attr10", "|<=10|");
         assertPrimitive("integer_attr11", "|-10..-5|");
         assertPrimitive("integer_attr12", "10");
+
+        assertPrimitive("integer_attr102", "10, 20, 30; 20");
+        assertPrimitive("integer_attr106", "|>0..<100|; 56");
     }
 
     @Test
@@ -76,6 +82,9 @@ public class ADLDefinitionSerializerTest {
         assertPrimitive("real_attr10", "|<=10.0|");
         assertPrimitive("real_attr11", "|-10.0..-5.0|");
         assertPrimitive("real_attr12", "10.0");
+
+        assertPrimitive("real_attr102", "10.0, 20.0, 30.0; 20.0");
+        assertPrimitive("real_attr106", "|>0.0..<100.0|; 56.0");
     }
 
     @Test
@@ -91,6 +100,9 @@ public class ADLDefinitionSerializerTest {
         assertPrimitive("date_attr9", "|>2000-01-01..2000-02-01|");
         assertPrimitive("date_attr10", "|2000-01-01..<2000-02-01|");
         assertPrimitive("date_attr11", "|>2000-01-01..<2000-02-01|");
+
+        assertPrimitive("date_attr101", "yyyy-mm-dd; 2001-02-03");
+        assertPrimitive("date_attr108", "|2000-01-01..2000-02-01|; 2000-01-10");
     }
 
     @Test
@@ -107,6 +119,9 @@ public class ADLDefinitionSerializerTest {
         assertPrimitive("time_attr10", "|>01:00..02:00|");
         assertPrimitive("time_attr11", "|01:00..<02:00|");
         assertPrimitive("time_attr12", "|>01:00..<02:00|");
+
+        assertPrimitive("time_attr101", "hh:mm:ss; 14:34:20");
+        assertPrimitive("time_attr109", "|01:00..02:00|; 01:30:12");
     }
 
     @Test
@@ -124,6 +139,9 @@ public class ADLDefinitionSerializerTest {
         assertPrimitive("date_time_attr11", "|>2000-01-01T01:00..2000-01-01T02:00|");
         assertPrimitive("date_time_attr12", "|2000-01-01T01:00..<2000-01-01T02:00|");
         assertPrimitive("date_time_attr13", "|>2000-01-01T01:00..<2000-01-01T02:00|");
+
+        assertPrimitive("date_time_attr101", "yyyy-mm-ddThh:mm:ss; 2014-10-28T05:12:56");
+        assertPrimitive("date_time_attr110", "|2000-01-01T01:00..2000-01-01T02:00|; 2000-01-01T01:32:33");
     }
 
     @Test
@@ -167,6 +185,19 @@ public class ADLDefinitionSerializerTest {
 //        assertPrimitive("duration_attr34", "PTs/|P38W..P39W4D|");
 //        assertPrimitive("duration_attr35", "PThm/|P38W..P39W4D|");
         assertPrimitive("duration_attr36", "|>=PT0S|");
+
+        assertPrimitive("duration_attr104", "PD; P4D");
+        assertPrimitive("duration_attr118", "|<=PT1H|; PT30M");
+        assertPrimitive("duration_attr128", "Pw/|P266D..P277D|; P268D"); // duration in weeks is serialized as days
+
+    }
+
+    @Test
+    public void serializeTerminologyCode() {
+        assertPrimitive("terminology_code_attr1", "[at1001]");
+        assertPrimitive("terminology_code_attr2", "[ac1]");
+
+        assertPrimitive("terminology_code_attr102", "[ac1; at1003]");
     }
 
     @Test
