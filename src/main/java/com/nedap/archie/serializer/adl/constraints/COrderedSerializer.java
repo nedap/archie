@@ -31,7 +31,7 @@ public abstract class COrderedSerializer<T extends COrdered<?>> extends Constrai
     private void serializeAssumedValue(T cobj) {
         if (cobj.getAssumedValue() != null) {
             if (shouldIncludeAssumedValue(cobj)) {
-                builder.append(";").append(cobj.getAssumedValue());
+                builder.append("; ").append(cobj.getAssumedValue());
             }
         }
     }

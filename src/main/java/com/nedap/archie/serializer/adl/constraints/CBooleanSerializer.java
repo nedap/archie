@@ -60,7 +60,7 @@ public class CBooleanSerializer extends ConstraintSerializer<CBoolean> {
         }
 
         if (cobj.getAssumedValue() != null) {
-            builder.append("; ").append(cobj.getAssumedValue());
+            builder.append("; ").append(capitalize(cobj.getAssumedValue().toString()));
             constrained = true;
         }
 

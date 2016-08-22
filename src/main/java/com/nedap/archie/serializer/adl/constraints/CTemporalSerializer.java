@@ -30,7 +30,9 @@ abstract public class CTemporalSerializer<T extends CTemporal<?>> extends COrder
     protected boolean shouldIncludeAssumedValue(T cobj) {
         boolean result =  super.shouldIncludeAssumedValue(cobj);
         if (!result) return false;
-        return (cobj.getPatternedConstraint()!=null);
+
+        return (cobj.getPatternedConstraint()!=null ||
+                (cobj.getConstraint()!=null && !cobj.getConstraint().isEmpty()));
     }
 
 }
