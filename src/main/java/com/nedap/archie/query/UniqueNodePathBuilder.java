@@ -1,6 +1,9 @@
 package com.nedap.archie.query;
 
+import com.nedap.archie.paths.PathSegment;
 import org.w3c.dom.Node;
+
+import java.util.Optional;
 
 /**
  * Constructs unique paths to archetype DOM node objects.
@@ -10,35 +13,40 @@ import org.w3c.dom.Node;
 public class UniqueNodePathBuilder {
 
     public static String constructPath(Node node) {
-        Node parent = node.getParentNode();
-        String path = "";
-        if(parent == null || parent.getParentNode() == null) {
-            //TODO: this is a bit of a hack, parent.getParentNode() == null means the current node is one below the parent
-            //that should not happen, but because of differences between xpath and apath...
-            return path;
-        } else {
-            int index = findNodeIndex(node, parent);
-            Node archetypeNodeId = node.getAttributes().getNamedItem("archetype_node_id");
-            if(archetypeNodeId != null) {
-                return constructPath(parent) + "/" + node.getNodeName() + "[" + archetypeNodeId.getNodeValue() + ", " + index + "]";
-            } else {
-                return constructPath(parent) + "/" + node.getNodeName() + "[" + index + "]";
-            }
+        return constructPathInner(node).toString();
+    }
 
+    private static StringBuilder constructPathInner(Node node) {
+        Node parent = node.getParentNode();
+        if (parent == null || parent.getParentNode() == null) {
+            return new StringBuilder("");
+        } else {
+            String archetypeNodeId = Optional.ofNullable(node.getAttributes().getNamedItem("archetype_node_id"))
+                .map(Node::getNodeValue)
+                .orElse(null);
+            String pathSegment = new PathSegment(node.getNodeName(), archetypeNodeId, findNodeIndex(node, parent)).toString();
+            return constructPathInner(parent).append(pathSegment);
         }
     }
 
-    private static int findNodeIndex(Node node, Node parent) {
-        int index = 1;
+    private static Integer findNodeIndex(Node node, Node parent) {
+        Integer nodeIndex = null;
+        int numberOfFoundNodes = 0;
+
         for(int i = 0; i < parent.getChildNodes().getLength(); i++) {
             //nodes with same name in XML means in the same collection in Java
             if(parent.getChildNodes().item(i).getNodeName().equals(node.getNodeName())) {
+                numberOfFoundNodes++;
                 if (parent.getChildNodes().item(i) == node) {
-                    return index;
+                    nodeIndex = numberOfFoundNodes;
                 }
-                index++;
             }
         }
-        return -1;
+
+        if (numberOfFoundNodes <= 1) {
+            return null;
+        } else {
+            return nodeIndex;
+        }
     }
 }

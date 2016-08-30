@@ -98,14 +98,14 @@ public class RMQueryContextTest {
         //now check that retrieving this retrieves more than one, even with the same ID.
         List<RMObjectWithPath> items = queryContext.findListWithPaths("/context/other_context[id2]/items");
         assertEquals(2, items.size());
-        assertEquals("/context[1]/other_context[id2, 1]/items[id3, 1]", items.get(0).getPath());
-        assertEquals("/context[1]/other_context[id2, 1]/items[id3, 2]", items.get(1).getPath());
+        assertEquals("/context/other_context[id2]/items[id3, 1]", items.get(0).getPath());
+        assertEquals("/context/other_context[id2]/items[id3, 2]", items.get(1).getPath());
 
 
         //and check that retrieving a sub-element also retrieves more than one element
         List<RMObjectWithPath> values = queryContext.findListWithPaths("/context/other_context[id2]/items[id3]/items[id5]/value");
-        assertEquals("/context[1]/other_context[id2, 1]/items[id3, 1]/items[id5, 2]/value[1]", values.get(0).getPath());
-        assertEquals("/context[1]/other_context[id2, 1]/items[id3, 2]/items[id5, 2]/value[1]", values.get(1).getPath());
+        assertEquals("/context/other_context[id2]/items[id3, 1]/items[id5, 2]/value", values.get(0).getPath());
+        assertEquals("/context/other_context[id2]/items[id3, 2]/items[id5, 2]/value", values.get(1).getPath());
         assertEquals(2, values.size());
     }
 }

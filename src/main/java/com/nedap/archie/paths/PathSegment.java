@@ -7,7 +7,7 @@ import com.google.common.base.Joiner;
  * Created by pieter.bos on 19/10/15.
  */
 public class PathSegment {
-    private static Joiner expressionJoiner = Joiner.on(", ").skipNulls();
+    private final static Joiner expressionJoiner = Joiner.on(", ").skipNulls();
 
     private String nodeName;
     private String nodeId;
