@@ -198,7 +198,7 @@ public class APathQuery {
 
     }
 
-
+    @Deprecated
     public <T> T find(ModelInfoLookup lookup, Object root) {
         Object currentObject = root;
         try {
@@ -265,6 +265,7 @@ public class APathQuery {
 
     }
 
+    @Deprecated
     public <T> List<RMObjectWithPath> findList(ModelInfoLookup lookup, Object root) {
         List<RMObjectWithPath> currentObjects = Lists.newArrayList(new RMObjectWithPath(root, "/"));
         try {

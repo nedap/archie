@@ -21,10 +21,7 @@ public class ArchetypeID extends ObjectId {
     private String specialisation;
     private String versionId;
 
-
-
     public ArchetypeID() {
-
     }
 
     /**
