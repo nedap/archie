@@ -85,7 +85,7 @@ public class ModelInfoLookup {
     }
 
     protected void addClass(Class clazz) {
-        String rmTypeName = namingStrategy.getRMTypeName(clazz);
+        String rmTypeName = namingStrategy.getTypeName(clazz);
         RMTypeInfo typeInfo = new RMTypeInfo(clazz, rmTypeName);
         addAttributeInfo(clazz, typeInfo);
         rmTypeNamesToRmTypeInfo.put(rmTypeName, typeInfo);
@@ -97,7 +97,7 @@ public class ModelInfoLookup {
         TypeToken typeToken = TypeToken.of(clazz);
 
         for(Field field: ReflectionUtils.getAllFields(clazz)) {
-            String attributeName = namingStrategy.getRMAttributeName(field);
+            String attributeName = namingStrategy.getAttributeName(field);
             String javaFieldName = field.getName();
             String javaFieldNameUpperCased = upperCaseFirstChar(javaFieldName);
             Method getMethod = getMethod(clazz, "get" + javaFieldNameUpperCased);
