@@ -10,15 +10,12 @@ import java.lang.reflect.Method;
  */
 public class ArchieRMNamingStrategy implements ModelNamingStrategy {
 
-    protected PropertyNamingStrategy.LowerCaseWithUnderscoresStrategy lowerCaseWithUnderscoresStrategy = new PropertyNamingStrategy.LowerCaseWithUnderscoresStrategy();
+    protected PropertyNamingStrategy.SnakeCaseStrategy snakeCaseStrategy = new PropertyNamingStrategy.SnakeCaseStrategy();
 
     @Override
     public String getRMTypeName(Class clazz) {
         String name = clazz.getSimpleName();
         switch(name) {
-            //some overrides to get every name right. The DV_URI is not really required i think, just to be sure
-            case "DvURI":
-                return "DV_URI";
             case "DvEHRURI":
                 return "DV_EHR_URI";
             case "UIDBasedId":
@@ -26,7 +23,7 @@ public class ArchieRMNamingStrategy implements ModelNamingStrategy {
             default:
 
         }
-        String result = lowerCaseWithUnderscoresStrategy.translate(clazz.getSimpleName()).toUpperCase();
+        String result = snakeCaseStrategy.translate(clazz.getSimpleName()).toUpperCase();
         if(name.length() > 1 && name.startsWith("C") && Character.isUpperCase(name.charAt(1))) {
             result = result.replaceFirst("C", "C_");
         }
@@ -36,11 +33,11 @@ public class ArchieRMNamingStrategy implements ModelNamingStrategy {
     @Override
     public String getRMAttributeName(Class clazz, Method getMethod) {
         String methodName = getMethod.getName();
-        return lowerCaseWithUnderscoresStrategy.translate(methodName).toUpperCase();
+        return snakeCaseStrategy.translate(methodName).toUpperCase();
     }
 
     @Override
     public String getRMAttributeName(Field field) {
-        return lowerCaseWithUnderscoresStrategy.translate(field.getName());
+        return snakeCaseStrategy.translate(field.getName());
     }
 }
