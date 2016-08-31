@@ -1,12 +1,9 @@
 package com.nedap.archie.adlparser.modelconstraints;
 
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.nedap.archie.aom.CAttribute;
 import com.nedap.archie.aom.CComplexObject;
 import com.nedap.archie.aom.Cardinality;
-import com.nedap.archie.rminfo.ArchieRMNamingStrategy;
 import com.nedap.archie.rminfo.ModelInfoLookup;
-import com.nedap.archie.rminfo.ModelNamingStrategy;
 import com.nedap.archie.rminfo.RMAttributeInfo;
 import com.nedap.archie.rminfo.RMTypeInfo;
 
@@ -26,21 +23,6 @@ public class ReflectionConstraintImposer implements ModelConstraintImposer {
 
     /** Contains complex object structure of the specified model. Attributes NEVER will have children. Sorry bout that :)*/
     private Map<String, CComplexObject> objects = new ConcurrentHashMap<>();
-
-    //constructed as  a field to save some object creation
-    protected PropertyNamingStrategy.LowerCaseWithUnderscoresStrategy lowerCaseWithUnderscoresStrategy = new PropertyNamingStrategy.LowerCaseWithUnderscoresStrategy();
-
-    public ReflectionConstraintImposer(String packageName) {
-        this(packageName, ReflectionConstraintImposer.class.getClassLoader());
-    }
-
-    public ReflectionConstraintImposer(String packageName, ClassLoader classLoader) {
-        this(new ArchieRMNamingStrategy(), packageName, classLoader);
-    }
-
-    public ReflectionConstraintImposer(ModelNamingStrategy strategy, String packageName, ClassLoader classLoader) {
-        this(new ModelInfoLookup(strategy, packageName, classLoader));
-    }
 
     public ReflectionConstraintImposer(ModelInfoLookup classLookup) {
         List<RMTypeInfo> rmTypes = classLookup.getAllTypes();
