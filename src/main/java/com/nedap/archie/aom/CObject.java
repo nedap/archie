@@ -1,8 +1,6 @@
 package com.nedap.archie.aom;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.nedap.archie.ArchieLanguageConfiguration;
 import com.nedap.archie.aom.terminology.ArchetypeTerm;
 import com.nedap.archie.base.MultiplicityInterval;

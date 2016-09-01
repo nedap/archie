@@ -175,6 +175,8 @@ public class TemporalConstraintParser extends BaseTreeWalker {
                 interval.setUpperUnbounded(true);
                 interval.setLower(duration);
                 break;
+            default:
+                throw new RuntimeException("Unexpected operator: " + context.relop().getText());
         }
         return interval;
     }

@@ -3,7 +3,6 @@ package com.nedap.archie.rminfo;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 
 /**
  * Created by pieter.bos on 29/03/16.
