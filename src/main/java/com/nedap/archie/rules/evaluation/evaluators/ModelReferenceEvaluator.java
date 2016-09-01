@@ -50,9 +50,7 @@ public class ModelReferenceEvaluator implements Evaluator<ModelReference> {
 
         String path = pathPrefix + statement.getPath();
 
-        //TODO: replace with RMQuery, with static query context in Evaluator
-
-        List<RMObjectWithPath> rmObjectsWithPath = null;
+        List<RMObjectWithPath> rmObjectsWithPath;
         try {
             rmObjectsWithPath = evaluation.getQueryContext().findListWithPaths(path);
         } catch (XPathExpressionException e) {

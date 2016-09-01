@@ -1,10 +1,13 @@
 package com.nedap.archie.paths;
 
+import com.google.common.base.Joiner;
+
 /**
  * Segment of an apath-query
  * Created by pieter.bos on 19/10/15.
  */
 public class PathSegment {
+    private final static Joiner expressionJoiner = Joiner.on(", ").skipNulls();
 
     private String nodeName;
     private String nodeId;
@@ -64,26 +67,11 @@ public class PathSegment {
 
     @Override
     public String toString() {
-
-        StringBuilder result = new StringBuilder("/");
-        result.append(nodeName);
         if(hasExpressions()) {
-            result.append("[");
-            boolean first = true;
-            if(nodeId != null) {
-                result.append(nodeId);
-                first = false;
-            }
-            if(index != null) {
-                if(!first) {
-                    result.append(", ");
-                }
-                result.append(Integer.toString(index));
-            }
-            result.append("]");
+            return String.format("/%s[%s]", nodeName, expressionJoiner.join(nodeId, index));
+        } else {
+            return String.format("/%s", nodeName);
         }
-        return result.toString();
-
     }
 
     public boolean hasExpressions() {

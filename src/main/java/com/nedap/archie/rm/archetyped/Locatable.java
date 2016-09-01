@@ -38,6 +38,7 @@ public abstract class Locatable extends Pathable {
     @Nullable
     private Archetyped archetypeDetails;
 
+    @XmlElement(name = "feeder_audit")
     @Nullable
     private FeederAudit feederAudit;
 

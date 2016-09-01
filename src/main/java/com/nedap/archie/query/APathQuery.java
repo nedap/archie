@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 /**
- * For now only accepts rather simple xpath-like expressions. TODO: get a proper parser library, there should be one out there, like jaxen (seems old?)
+ * For now only accepts rather simple xpath-like expressions.
  *
  * The only queries fully supported at the moment are absolute queries with node ids, such as '/items[id1]/content[id2]/value'.
  *
@@ -198,7 +198,11 @@ public class APathQuery {
 
     }
 
-
+    /**
+     * Deprecated for querying RMObjects. Use RMQueryContext instead.
+     * For querying CObjects there is no other solution yet.
+     */
+    @Deprecated
     public <T> T find(ModelInfoLookup lookup, Object root) {
         Object currentObject = root;
         try {
@@ -262,9 +266,13 @@ public class APathQuery {
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
-
     }
 
+    /**
+     * Deprecated for querying RMObjects. Use RMQueryContext instead.
+     * For querying CObjects there is no other solution yet.
+     */
+    @Deprecated
     public <T> List<RMObjectWithPath> findList(ModelInfoLookup lookup, Object root) {
         List<RMObjectWithPath> currentObjects = Lists.newArrayList(new RMObjectWithPath(root, "/"));
         try {

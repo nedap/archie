@@ -130,7 +130,7 @@ public class ParsedRulesEvaluationTest {
         assertEquals("the assertion should have succeeded", true, result.getResult());
         assertEquals("the assertion tag should be correct", "blood_pressure_valid", result.getTag());
         assertEquals(1, result.getRawResult().getPaths(0).size());
-        assertEquals("/data[id2, 1]/events[id3, 1]/data[id4, 1]/items[id5, 1]/value[1]/magnitude[1]", result.getRawResult().getPaths(0).get(0));
+        assertEquals("/data[id2]/events[id3]/data[id4]/items[id5]/value/magnitude", result.getRawResult().getPaths(0).get(0));
 
     }
 
@@ -148,13 +148,13 @@ public class ParsedRulesEvaluationTest {
         ruleEvaluation.evaluate(root, archetype.getRules().getRules());
         assertEquals(false, ruleEvaluation.getVariableMap().get("extended_validity").getObject(0));
         ValueList extendedValidity = ruleEvaluation.getVariableMap().get("extended_validity");
-        assertEquals("/data[id2, 1]/events[id3, 1]/data[id4, 1]/items[id5, 1]/value[1]/magnitude[1]", extendedValidity.getPaths(0).get(0));
+        assertEquals("/data[id2]/events[id3]/data[id4]/items[id5]/value/magnitude", extendedValidity.getPaths(0).get(0));
         quantity.setMagnitude(20d);
 
         ruleEvaluation.evaluate(root, archetype.getRules().getRules());
         extendedValidity = ruleEvaluation.getVariableMap().get("extended_validity");
         assertEquals(true, extendedValidity.getObject(0));
-        assertEquals("/data[id2, 1]/events[id3, 1]/data[id4, 1]/items[id5, 1]/value[1]/magnitude[1]", extendedValidity.getPaths(0).get(0));
+        assertEquals("/data[id2]/events[id3]/data[id4]/items[id5]/value/magnitude", extendedValidity.getPaths(0).get(0));
 
     }
 
@@ -346,7 +346,7 @@ public class ParsedRulesEvaluationTest {
         assertEquals(3, evaluationResult.getPathsThatMustExist().size());
         assertEquals("/data[id2]/events[id3]/data[id4]/items[id5]/value/magnitude", evaluationResult.getPathsThatMustExist().get(0));
         assertEquals("/data[id2]/events[id3]/data[id4]/items[id6]/value/magnitude", evaluationResult.getPathsThatMustExist().get(1));
-        assertEquals("/data[id2, 1]/events[id3, 1]/data[id4]/items[id5]/value/magnitude", evaluationResult.getPathsThatMustExist().get(2));
+        assertEquals("/data[id2]/events[id3]/data[id4]/items[id5]/value/magnitude", evaluationResult.getPathsThatMustExist().get(2));
         assertEquals(0, evaluationResult.getPathsThatMustNotExist().size());
         assertEquals(0, evaluationResult.getSetPathValues().size());
 
@@ -413,7 +413,7 @@ public class ParsedRulesEvaluationTest {
         //this is the most specific path we can construct to the missing node, using the for_all variable context
         //or should this actually be /data[id4,1]/items[id5,1]/value[1]/magnitude, because the structure does exist?
         //that last thing might be hard to do.
-        assertTrue(evaluationResult.getPathsThatMustExist().contains("/data[id2, 1]/events[id3, 2]/data[id4]/items[id5]/value/magnitude"));
+        assertTrue(evaluationResult.getPathsThatMustExist().contains("/data[id2]/events[id3]/data[id4]/items[id5]/value/magnitude"));
         assertEquals(0, evaluationResult.getSetPathValues().size());
 
     }
@@ -433,8 +433,8 @@ public class ParsedRulesEvaluationTest {
 
         assertEquals(0, evaluationResult.getPathsThatMustExist().size());
         assertEquals(5, evaluationResult.getPathsThatMustNotExist().size());
-        assertTrue(evaluationResult.getPathsThatMustNotExist().contains("/data[id2, 1]/events[id3, 1]/data[id4, 1]/items[id5, 1]/value[1]/magnitude[1]"));
-        assertTrue(evaluationResult.getPathsThatMustNotExist().contains("/data[id2, 1]/events[id3, 2]/data[id4, 1]/items[id6, 2]/value[1]/magnitude[1]"));
+        assertTrue(evaluationResult.getPathsThatMustNotExist().contains("/data[id2]/events[id3, 1]/data[id4]/items[id5, 1]/value/magnitude"));
+        assertTrue(evaluationResult.getPathsThatMustNotExist().contains("/data[id2]/events[id3, 2]/data[id4]/items[id6, 2]/value/magnitude"));
         assertEquals(0, evaluationResult.getSetPathValues().size());
 
     }
@@ -453,7 +453,7 @@ public class ParsedRulesEvaluationTest {
         }
 
         assertEquals(2, evaluationResult.getPathsThatMustExist().size());//one from the non-specific exists operator, one from the for_all that is very specific indeed
-        assertTrue(evaluationResult.getPathsThatMustExist().contains("/data[id2, 1]/events[id3, 1]/data[id4]/items[id6]/value/magnitude"));
+        assertTrue(evaluationResult.getPathsThatMustExist().contains("/data[id2]/events[id3]/data[id4]/items[id6]/value/magnitude"));
         assertTrue(evaluationResult.getPathsThatMustExist().contains("/data[id2]/events[id3]/data[id4]/items[id6]/value/magnitude"));
         assertEquals(0, evaluationResult.getPathsThatMustNotExist().size());
         assertEquals(0, evaluationResult.getSetPathValues().size());

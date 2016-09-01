@@ -17,7 +17,7 @@ public class ArchieRMInfoLookup extends ModelInfoLookup {
     private static ArchieRMInfoLookup instance;
 
     public ArchieRMInfoLookup() {
-        super(new ArchieRMNamingStrategy(), RMObject.class);
+        super(new ArchieModelNamingStrategy(), RMObject.class);
         addSubtypesOf(Interval.class); //extra class from the base package. No RMObject because it is also used in the AOM
     }
 

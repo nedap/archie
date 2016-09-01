@@ -12,8 +12,7 @@ import java.lang.reflect.Method;
  */
 public interface ModelNamingStrategy {
 
-    String getRMAttributeName(Class clazz, Method getMethod);
-    public String getRMAttributeName(Field field);
-    String getRMTypeName(Class clazz);
+    String getAttributeName(Field field);
+    String getTypeName(Class clazz);
 
 }

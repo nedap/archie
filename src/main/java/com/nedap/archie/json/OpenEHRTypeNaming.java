@@ -26,7 +26,6 @@ public class OpenEHRTypeNaming extends ClassNameIdResolver {
 
     protected OpenEHRTypeNaming() {
         super(TypeFactory.defaultInstance().constructType(OpenEHRBase.class), TypeFactory.defaultInstance());
-
     }
 
     public JsonTypeInfo.Id getMechanism() {
@@ -38,7 +37,7 @@ public class OpenEHRTypeNaming extends ClassNameIdResolver {
 
         RMTypeInfo typeInfo = rmInfoLookup.getTypeInfo(value.getClass());
         if(typeInfo == null) {
-            return rmInfoLookup.getNamingStrategy().getRMTypeName(value.getClass());
+            return rmInfoLookup.getNamingStrategy().getTypeName(value.getClass());
         } else {
             //this case is faster and should always work. If for some reason it does not, the above case works fine instead.
             return typeInfo.getRmName();

@@ -23,15 +23,13 @@ public class APathToXPathConverter {
 
     public static String convertQueryToXPath(String query, String firstNodeName) {
         String convertedQuery = convertWithAntlr(query);
-        if(query.startsWith("/")) {
+        if(query.startsWith("//")) {
+            return convertedQuery;
+        } if(query.startsWith("/")) {
             return "/" + firstNodeName + convertedQuery;
         } else {
             return convertedQuery;
         }
-//        Pattern pattern = Pattern.compile("\\[(?<first>[^\\]]*)(?<idnode>id\\d+)(?<last>[^\\]]*)\\]");
-//        Matcher m = pattern.matcher(query);
-//
-//        query = m.replaceAll("[${first}@archetype_node_id='${idnode}'${last}]");
 
     }
 

@@ -14,13 +14,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Utility that defines the java mapping of type and attribute names of a given reference model.
@@ -44,18 +38,10 @@ public class ModelInfoLookup {
     /**
      * All methods that cannot be called by using reflection. For example getClass();
      */
-    private Set<String> forbiddenMethods = new HashSet();
-
-    {
-        forbiddenMethods.add("getClass");
-        forbiddenMethods.add("wait");
-        forbiddenMethods.add("notify");
-        forbiddenMethods.add("notifyAll");
-        forbiddenMethods.add("clone");
-        forbiddenMethods.add("finalize");
-    }
-
-    //constructed as  a field to save some object creation
+    @SuppressWarnings("unchecked")
+    private Set<String> forbiddenMethods = new HashSet(
+        Arrays.asList("getClass", "wait", "notify", "notifyAll", "clone", "finalize")
+    );
 
     public ModelInfoLookup(ModelNamingStrategy namingStrategy, Class baseClass) {
         this(namingStrategy, baseClass, ModelInfoLookup.class.getClassLoader());
@@ -99,7 +85,7 @@ public class ModelInfoLookup {
     }
 
     protected void addClass(Class clazz) {
-        String rmTypeName = namingStrategy.getRMTypeName(clazz);
+        String rmTypeName = namingStrategy.getTypeName(clazz);
         RMTypeInfo typeInfo = new RMTypeInfo(clazz, rmTypeName);
         addAttributeInfo(clazz, typeInfo);
         rmTypeNamesToRmTypeInfo.put(rmTypeName, typeInfo);
@@ -111,7 +97,7 @@ public class ModelInfoLookup {
         TypeToken typeToken = TypeToken.of(clazz);
 
         for(Field field: ReflectionUtils.getAllFields(clazz)) {
-            String attributeName = namingStrategy.getRMAttributeName(field);
+            String attributeName = namingStrategy.getAttributeName(field);
             String javaFieldName = field.getName();
             String javaFieldNameUpperCased = upperCaseFirstChar(javaFieldName);
             Method getMethod = getMethod(clazz, "get" + javaFieldNameUpperCased);
@@ -209,14 +195,13 @@ public class ModelInfoLookup {
         return getClass(rmTypename);
     }
 
-    public  Map<String, Class> getRmTypeNameToClassMap() {
+    public Map<String, Class> getRmTypeNameToClassMap() {
         HashMap<String, Class> result = new HashMap<>();
         for(String rmTypeName: rmTypeNamesToRmTypeInfo.keySet()) {
             result.put(rmTypeName, rmTypeNamesToRmTypeInfo.get(rmTypeName).getJavaClass());
         }
         return result;
     }
-
 
     public RMTypeInfo getTypeInfo(Class clazz) {
         return this.classesToRmTypeInfo.get(clazz);
