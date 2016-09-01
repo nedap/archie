@@ -27,14 +27,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * EXPERIMENTAL: full xpath support for the reference model.
- *
  * It's done by converting the RM objects into an XML-DOM using JAXB's Binder. XPATH is then evaluated against the DOM.
  * The binder enables us to return the original objects.
  *
  * The APATH-shorthand notation is converted to its equivalent XPATH-notation before evaluation
- *
- * KNOWN ISSUES: the shorthand notation with comma's instead of AND does not yet work
  *
  * Created by pieter.bos on 03/05/16.
  */
@@ -44,11 +40,10 @@ public class RMQueryContext {
     private Document domForQueries;
 
     /**
-     * TODO: for now w will add /firstXPathNode, because otherwise there will be something like '/composition' missing
+     * TODO: for now we will add /firstXPathNode, because otherwise there will be something like '/composition' missing
      * However that is rather annoying, because apath does not specify this. So find a way of fixing this.
      */
     private String firstXPathNode;
-
 
     /**
      * Construct a query object for a given root node. You can later query subnodes of this rootnode if you desire.
@@ -84,11 +79,6 @@ public class RMQueryContext {
         } catch (JAXBException e) {
             throw new RuntimeException(e);
         }
-//        catch (TransformerConfigurationException e) {
-//            e.printStackTrace();
-//        } catch (TransformerException e) {
-//            e.printStackTrace();
-//        }
     }
 
     public Document createBlankDOMDocument(boolean namespaceAware) {
@@ -165,8 +155,6 @@ public class RMQueryContext {
         } else {
             throw new RuntimeException("query returned more than one element: " + result.size());
         }
-
-
     }
 
 }
