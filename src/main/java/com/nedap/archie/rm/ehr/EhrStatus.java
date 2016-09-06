@@ -54,6 +54,6 @@ public class EhrStatus extends Locatable {
 
     public void setOtherDetails(@Nullable ItemStructure otherDetails) {
         this.otherDetails = otherDetails;
-        setThisAsParent(otherDetails, "otherDetails");
+        setThisAsParent(otherDetails, "other_details");
     }
 }

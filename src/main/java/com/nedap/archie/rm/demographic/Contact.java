@@ -41,7 +41,7 @@ public class Contact extends Locatable {
 
     public void addAddress(Address address) {
         this.addresses.add(address);
-        this.setThisAsParent(address, "address");
+        this.setThisAsParent(address, "addresses");
     }
 
     @Nullable
