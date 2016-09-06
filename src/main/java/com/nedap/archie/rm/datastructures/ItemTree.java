@@ -27,6 +27,6 @@ public class ItemTree extends ItemStructure<Item> {
 
         public void addItem(Item item) {
                 this.items.add(item);
-                setThisAsParent(item, "item");
+                setThisAsParent(item, "items");
         }
 }

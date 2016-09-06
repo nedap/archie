@@ -28,6 +28,6 @@ public class ItemList extends ItemStructure<Element> {
 
         public void addItem(Element item) {
                 this.items.add(item);
-                setThisAsParent(item, "item");
+                setThisAsParent(item, "items");
         }
 }

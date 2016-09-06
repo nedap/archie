@@ -82,17 +82,17 @@ public abstract class Party extends Locatable {
     }
 
     @Nullable
-    public List<PartyRelationship> getRelationShips() {
+    public List<PartyRelationship> getRelationships() {
         return relationships;
     }
 
-    public void setRelationShips(@Nullable List<PartyRelationship> relationShips) {
-        this.relationships = relationShips;
-        setThisAsParent(relationShips, "relationShips");
+    public void setRelationShips(@Nullable List<PartyRelationship> relationships) {
+        this.relationships = relationships;
+        setThisAsParent(relationships, "relationships");
     }
 
     public void addRelationship(PartyRelationship relationship) {
         this.relationships.add(relationship);
-        this.setThisAsParent(relationship, "relationShips");
+        this.setThisAsParent(relationship, "relationships");
     }
 }
