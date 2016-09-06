@@ -99,14 +99,12 @@ public class Composition extends Locatable {
 
     public void setContent(List<ContentItem> content) {
         this.content = content;
-        for(ContentItem item:content) {
-            setThisAsParent(item, "item");
-        }
+        setThisAsParent(content, "content");
     }
 
     public void addContent(ContentItem item) {
         this.content.add(item);
-        setThisAsParent(item, "item");
+        setThisAsParent(item, "content");
     }
 
 
