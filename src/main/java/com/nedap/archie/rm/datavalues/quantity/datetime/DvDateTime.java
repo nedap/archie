@@ -1,5 +1,6 @@
 package com.nedap.archie.rm.datavalues.quantity.datetime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.nedap.archie.json.DateTimeDeserializer;
 import com.nedap.archie.rm.datavalues.SingleValuedDataValue;
@@ -45,6 +46,7 @@ public class DvDateTime extends DvTemporal<Long> implements SingleValuedDataValu
 
     @Override
     @XmlTransient
+    @JsonIgnore
     public Long getMagnitude() {
         if(value == null) {
             return null;
