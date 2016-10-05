@@ -11,9 +11,30 @@ public class StructureStringBuilder implements StructuredStringAppendable {
     private final StringBuilder builder = new StringBuilder();
     private int indentDepth = 0;
     private boolean startOfLine = true;
-    private int startOfLineIndex=0;
+    private int startOfLineIndex = 0;
 
     public StructureStringBuilder() {
+    }
+
+    public static String padRight(String str, int size) {
+        return padRight(str, size, ' ');
+    }
+
+    private static String padRight(String str, int size, char padChar) {
+        if (str == null) {
+            return null;
+        }
+        int pads = size - str.length();
+        if (pads <= 0) {
+            return str;
+        }
+        return str + padding(padChar, pads);
+    }
+
+    private static String padding(char padChar, int repeat) throws IndexOutOfBoundsException {
+        final char[] buf = new char[repeat];
+        Arrays.fill(buf, padChar);
+        return new String(buf);
     }
 
     @Override
@@ -31,15 +52,6 @@ public class StructureStringBuilder implements StructuredStringAppendable {
             resetLineIndentation();
         }
         return this;
-    }
-
-    private void resetLineIndentation() {
-        builder.setLength(startOfLineIndex);
-        appendIndentation();
-    }
-
-    private void appendIndentation() {
-        builder.append(padding(' ', indentDepth * INDENTATION_SIZE));
     }
 
     @Override
@@ -74,11 +86,6 @@ public class StructureStringBuilder implements StructuredStringAppendable {
     }
 
     @Override
-    public String toString() {
-        return builder.toString();
-    }
-
-    @Override
     public int mark() {
         return builder.length();
     }
@@ -88,25 +95,27 @@ public class StructureStringBuilder implements StructuredStringAppendable {
         builder.setLength(previousMark);
     }
 
-    public static String padRight(String str, int size) {
-        return padRight(str, size, ' ');
+    @Override
+    public StructuredStringAppendable ensureSpace() {
+        if (builder.length() == 0) return this;
+        char lastChar = builder.charAt(builder.length() - 1);
+        if (Character.isWhitespace(lastChar)) return this;
+        builder.append(" ");
+        return this;
     }
 
-    private static String padRight(String str, int size, char padChar) {
-        if (str == null) {
-            return null;
-        }
-        int pads = size - str.length();
-        if (pads <= 0) {
-            return str;
-        }
-        return str + padding(padChar, pads);
+    private void resetLineIndentation() {
+        builder.setLength(startOfLineIndex);
+        appendIndentation();
     }
 
-    private static String padding(char padChar, int repeat) throws IndexOutOfBoundsException {
-        final char[] buf = new char[repeat];
-        Arrays.fill(buf, padChar);
-        return new String(buf);
+    private void appendIndentation() {
+        builder.append(padding(' ', indentDepth * INDENTATION_SIZE));
+    }
+
+    @Override
+    public String toString() {
+        return builder.toString();
     }
 
 }
