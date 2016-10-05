@@ -107,7 +107,7 @@ public class ADLOdinObjectMapper implements Function<Object, Object> {
                 .put("use", rdi.getUse())
                 .put("misuse", rdi.getMisuse())
                 .put("keywords", rdi.getKeywords())
-                .put(rdi.getCopyright(), rdi.getCopyright())
+                .put("copyright", rdi.getCopyright())
                 .put("original_resource_uri", rdi.getOriginalResourceUri())
                 .put("other_details", rdi.getOtherDetails());
     }
