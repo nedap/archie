@@ -20,4 +20,5 @@ public interface StructuredStringAppendable {
 
     void revert(int previousMark);
 
+    StructuredStringAppendable ensureSpace();
 }

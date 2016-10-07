@@ -86,5 +86,9 @@ public class ADLStringBuilder implements StructuredStringAppendable {
     }
 
 
+    public ADLStringBuilder ensureSpace() {
+        builder.ensureSpace();
+        return this;
+    }
 }
 

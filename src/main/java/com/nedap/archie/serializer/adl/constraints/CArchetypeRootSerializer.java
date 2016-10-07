@@ -44,6 +44,9 @@ public class CArchetypeRootSerializer extends ConstraintSerializer<CArchetypeRoo
         builder.append(cobj.getArchetypeRef());
         builder.append("]");
 
+        appendOccurrences(cobj);
+
+
         builder.unindent();
     }
 }

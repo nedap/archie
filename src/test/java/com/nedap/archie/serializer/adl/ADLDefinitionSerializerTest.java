@@ -10,6 +10,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.List;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
@@ -244,7 +245,6 @@ public class ADLDefinitionSerializerTest {
                 "    }"));
 
 
-
         archetype = load("openEHR-EHR-CLUSTER.device.v1.adls");
         slot = archetype.itemAtPath("/items[id10]");
         serialized = serializeConstraint(slot);
@@ -261,6 +261,33 @@ public class ADLDefinitionSerializerTest {
                 "        exclude\n" +
                 "            archetype_id/value matches {/openEHR-EHR-OBSERVATION\\.blood_pressure([a-zA-Z0-9_]+)*\\.v1/}\n" +
                 "    }"));
+    }
+
+    @Test
+    public void serializeCArchetypeRoot() throws IOException {
+        Archetype archetype = loadRoot("adl2-tests/features/aom_structures/use_archetype/openEHR-EHR-COMPOSITION.ext_ref.v1.adls");
+
+        List<CObject> archetypeRoots = archetype.getDefinition().getAttribute("content").getChildren();
+
+        assertThat(serializeConstraint(archetypeRoots.get(0)).trim(),
+                equalTo("use_archetype SECTION[id2, openEHR-EHR-SECTION.section_parent.v1] occurrences matches {0..1}"));
+        assertThat(serializeConstraint(archetypeRoots.get(1)).trim(),
+                equalTo("use_archetype OBSERVATION[id3, openEHR-EHR-OBSERVATION.spec_test_obs.v1] occurrences matches {1}"));
+    }
+
+    @Test
+    public void serializeCComplexObjectProxy() throws IOException {
+        Archetype archetype = loadRoot("adl2-tests/features/aom_structures/use_node/openEHR-DEMOGRAPHIC-PERSON.use_node_occurrences.v1.adls");
+
+        CObject parentCObj = archetype.getDefinition().itemAtPath("/contacts[id10]");
+        List<CObject> ccobjProxies = parentCObj.getAttribute("addresses").getChildren();
+
+        assertThat(serializeConstraint(ccobjProxies.get(0)).trim(),
+                equalTo("use_node ADDRESS[id11] /contacts[id6]/addresses[id7]"));
+        assertThat(serializeConstraint(ccobjProxies.get(1)).trim(),
+                equalTo("use_node ADDRESS[id12] /contacts[id6]/addresses[id8]"));
+        assertThat(serializeConstraint(ccobjProxies.get(2)).trim(),
+                equalTo("use_node ADDRESS[id13] occurrences matches {1..3} /contacts[id6]/addresses[id9]"));
     }
 
 
