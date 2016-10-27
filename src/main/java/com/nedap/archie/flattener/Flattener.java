@@ -249,20 +249,28 @@ public class Flattener {
 
         Stack<CObject> workList = new Stack<>();
         workList.push(result.getDefinition());
+        List<ComplexObjectProxyReplacement> replacements = new ArrayList<>();
         while(!workList.isEmpty()) {
             CObject object = workList.pop();
             for(CAttribute attribute:object.getAttributes()) {
                 for(CObject child:attribute.getChildren()) {
                     if(child instanceof CComplexObjectProxy) { //use_node
-                        fillComplexObjectProxy((CComplexObjectProxy) child);
+                        ComplexObjectProxyReplacement possibleReplacement = getComplexObjectProxyReplacement((CComplexObjectProxy) child);
+                        if(possibleReplacement != null) {
+                            replacements.add(possibleReplacement);
+                        }
+
                     }
                     workList.push(child);
                 }
             }
         }
+        for(ComplexObjectProxyReplacement replacement:replacements) {
+            replacement.replace();
+        }
     }
 
-    private void fillComplexObjectProxy(CComplexObjectProxy proxy) {
+    private ComplexObjectProxyReplacement getComplexObjectProxyReplacement(CComplexObjectProxy proxy) {
         if(createOperationalTemplate) {
             CObject newObject = new APathQuery(proxy.getTargetPath()).find(proxy.getArchetype().getDefinition());
             if(newObject == null) {
@@ -270,8 +278,28 @@ public class Flattener {
             } else {
                 CComplexObject clone = (CComplexObject) newObject.clone();
                 clone.setNodeId(proxy.getNodeId());
-                proxy.getParent().replaceChild(proxy.getNodeId(), clone);
+                return new ComplexObjectProxyReplacement(proxy, clone);
+
             }
+        }
+        return null;
+    }
+
+    /**
+     * little class used for a CompelxObjectProxyReplacement because we cannot replace in a collection
+     * that we iterate at the same time
+     */
+    private static class ComplexObjectProxyReplacement {
+        private final CComplexObject object;
+        private final CComplexObjectProxy proxy;
+
+        public ComplexObjectProxyReplacement(CComplexObjectProxy proxy, CComplexObject object) {
+            this.proxy = proxy;
+            this.object = object;
+        }
+
+        public void replace() {
+            proxy.getParent().replaceChild(proxy.getNodeId(), object);
         }
     }
 
