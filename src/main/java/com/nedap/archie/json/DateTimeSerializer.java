@@ -20,7 +20,7 @@ import java.time.temporal.TemporalAccessor;
  */
 public class DateTimeSerializer extends JsonSerializer<TemporalAccessor> {
 
-    private static final DateTimeFormatter ISO_8601_DATE_TIME = new DateTimeFormatterBuilder()
+    public static final DateTimeFormatter ISO_8601_DATE_TIME = new DateTimeFormatterBuilder()
         .parseCaseInsensitive()
         .appendValue(ChronoField.YEAR)
         .appendLiteral('-')
