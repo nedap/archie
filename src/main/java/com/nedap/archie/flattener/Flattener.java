@@ -305,8 +305,15 @@ public class Flattener {
 
     private void fillArchetypeRoot(CArchetypeRoot root) {
         if(createOperationalTemplate) {
-            String archetypeRef = root.getArchetypeRef(); //TODO: is a ref always an id, or can it be a bit different?
+            String archetypeRef = root.getArchetypeRef();
+            String newArchetypeRef = archetypeRef;
             Archetype archetype = this.repository.getArchetype(archetypeRef);
+            if(archetype instanceof TemplateOverlay){
+                //we want to be able to check which archetype this is in the UI. If it's an overlay, that means retrieving the non-operational template
+                //which is a hassle.
+                //That's a problem. Is this the way to fix is?
+                newArchetypeRef = archetype.getParentArchetypeId();
+            }
             if (archetype == null) {
                 throw new IllegalArgumentException("Archetype with reference :" + archetypeRef + " not found.");
             }
@@ -337,6 +344,7 @@ public class Flattener {
             }
 
             root.setNodeId(newNodeId);
+            root.setArchetypeRef(newArchetypeRef);
             OperationalTemplate templateResult = (OperationalTemplate) result;
 
             //todo: should we filter this?
