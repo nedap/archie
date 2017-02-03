@@ -42,6 +42,18 @@ public class CObjectTest {
         assertEquals("/context[id11]/other_context[id2]/items[Kwalificatie]", qualitification.getLogicalPath());
     }
 
+    @Test
+    public void testReplaceChild() {
+        CObject orderId = archetype.getDefinition().itemAtPath("/context[id11]/other_context[id2]/items[id3]/items[id4]");
+        CObject comment = archetype.getDefinition().itemAtPath("/context[id11]/other_context[id2]/items[id3]/items[id7]");
+        CAttribute parent = orderId.getParent();
+        parent.getChildren().remove(parent.getChildren().size() -1);//don't do this in real code :)
+        parent.replaceChild("id4", comment);
+        assertEquals(comment, parent.getChildren().get(0));
+
+
+    }
+
 
 
 

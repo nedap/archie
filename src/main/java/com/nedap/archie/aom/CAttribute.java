@@ -120,15 +120,27 @@ public class CAttribute extends ArchetypeConstraint {
     }
 
 
-    public void replaceChild(String nodeId, CComplexObject definition) {
-        Iterator<CObject> iter = children.iterator();
-        while(iter.hasNext()) {
-            CObject child = iter.next();
+    public void replaceChild(String nodeId, CObject definition) {
+
+        int index = getIndexOfChildWithnodeId(nodeId);
+        if(index > -1) {
+            children.set(index, definition);
+            definition.setParent(this);
+        } else {
+            addChild(definition);
+        }
+
+
+    }
+
+    private int getIndexOfChildWithnodeId(String nodeId) {
+        for(int i = 0; i < children.size(); i++) {
+            CObject child = children.get(i);
             if(nodeId.equals(child.getNodeId())) {
-                iter.remove();
+                return i;
             }
         }
-        addChild(definition);
+        return -1;
     }
 
     public Cardinality getCardinality() {
