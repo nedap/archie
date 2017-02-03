@@ -292,6 +292,33 @@ public class ParsedRulesEvaluationTest {
         assertEquals(20.0d, (Double) evaluationResult.getSetPathValues().values().iterator().next().getValue(), 0.0001d);
     }
 
+    /**
+     * Calculate a path value, then use that calculated path value in another rule to calculate more
+     * Tests that calculated values are immediately set in the RMObject for further calculation correctly
+     * @throws Exception
+     */
+    @Test
+    public void calculatedPathValues2() throws Exception {
+        archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("calculated_path_values_2.adls"));
+        RuleEvaluation ruleEvaluation = new RuleEvaluation(archetype);
+
+        Pathable root = (Pathable) testUtil.constructEmptyRMObject(archetype.getDefinition());
+        DvQuantity systolic = (DvQuantity) root.itemAtPath("/data[id2]/events[id3]/data[id4]/items[id5]/value[id13]");
+        systolic.setMagnitude(100d);
+        DvQuantity diastolic = (DvQuantity) root.itemAtPath("/data[id2]/events[id3]/data[id4]/items[id6]/value[id14]");
+        diastolic.setMagnitude(80d);
+
+        EvaluationResult evaluationResult = ruleEvaluation.evaluate(root, archetype.getRules().getRules());
+        assertEquals(2, evaluationResult.getAssertionResults().size());
+        assertFalse(evaluationResult.getAssertionResults().get(0).getResult());
+        assertFalse(evaluationResult.getAssertionResults().get(1).getResult());
+        assertEquals(2, evaluationResult.getSetPathValues().size());
+        Iterator<Value> iterator = evaluationResult.getSetPathValues().values().iterator();
+        assertEquals(20.0d, (Double) iterator.next().getValue(), 0.0001d);
+        assertEquals(23.0d, (Double) iterator.next().getValue(), 0.0001d);
+    }
+
+
     @Test
     public void forAllCalculatedValues() throws Exception {
         archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("for_all_calculated_path_values.adls"));

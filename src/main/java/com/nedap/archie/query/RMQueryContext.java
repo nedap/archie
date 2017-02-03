@@ -3,6 +3,8 @@ package com.nedap.archie.query;
 import com.nedap.archie.rminfo.ArchieRMInfoLookup;
 import com.nedap.archie.rminfo.RMAttributeInfo;
 import com.nedap.archie.xml.JAXBUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -40,6 +42,7 @@ public class RMQueryContext {
      * However that is rather annoying, because apath does not specify this. So find a way of fixing this.
      */
     private String firstXPathNode;
+    private static Logger logger = LoggerFactory.getLogger(RMQueryContext.class);
 
     /**
      * Construct a query object for a given root node. You can later query subnodes of this rootnode if you desire.
@@ -118,6 +121,10 @@ public class RMQueryContext {
             String nodeName = node.getNodeName();
             //the parent usually can be found easily
             Object parent = binder.getJAXBNode(node.getParentNode());
+            if(parent == null) {
+                logger.error("trying to get a node without a parent");
+                return null;
+            }
             RMAttributeInfo attributeInfo = ArchieRMInfoLookup.getInstance().getAttributeInfo(parent.getClass(), nodeName);
             try {
                 return (T) attributeInfo.getGetMethod().invoke(parent);
@@ -153,4 +160,12 @@ public class RMQueryContext {
         }
     }
 
+    /**
+     * Call this to mark the RMObject value as updated in the XML context
+     * @param parent
+     */
+    public void updateValue(Object parent) throws JAXBException {
+        this.binder.updateXML(parent);
+
+    }
 }

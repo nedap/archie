@@ -11,7 +11,7 @@ import java.io.Serializable;
  * Created by pieter.bos on 15/10/15.
  */
 //@JsonTypeInfo(use=JsonTypeInfo.Id.CLASS, include=JsonTypeInfo.As.PROPERTY, property="@class")
-public abstract class ArchetypeModelObject extends OpenEHRBase implements Serializable, Cloneable{
+public abstract class ArchetypeModelObject extends OpenEHRBase implements Serializable, Cloneable {
 
     public ArchetypeModelObject clone() {
         Kryo kryo = null;

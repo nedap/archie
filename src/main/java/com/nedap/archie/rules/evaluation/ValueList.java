@@ -1,6 +1,8 @@
 package com.nedap.archie.rules.evaluation;
 
 import com.nedap.archie.rules.PrimitiveType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,6 +17,8 @@ import java.util.List;
 public class ValueList {
     private PrimitiveType type;
     private List<Value> values = new ArrayList<>();
+
+    private static Logger logger = LoggerFactory.getLogger(ValueList.class);
 
     public ValueList() {
 
@@ -112,6 +116,13 @@ public class ValueList {
     }
 
     public boolean isEmpty() {
+
+        for(Value value:this.values) {
+            if(value.isNull()) {
+                logger.warn("value null:", value);
+                logger.warn("other values: ", this.values);
+            }
+        }
         return values.isEmpty();
     }
 
