@@ -53,31 +53,20 @@ boolean_xor_expression
 
 boolean_constraint_expression
     : boolean_constraint
-    | boolean_leaf;
+    | arithmetic_relop_expr;
 
 
 boolean_constraint: ( adl_rules_path | adl_rules_relative_path ) SYM_MATCHES ('{' c_primitive_object '}' | CONTAINED_REGEXP );
 
-boolean_leaf:
-      boolean_literal
-    //| adl_path
-    | variable_reference
-    | SYM_EXISTS adl_rules_path
-    | '(' boolean_expression ')'
-    | arithmetic_relop_expr
-    | SYM_NOT boolean_leaf
-    ;
 
-boolean_literal:
-      SYM_TRUE
-    | SYM_FALSE
-    ;
 
 //
 // Expressions evaluating to arithmetic values
 //
 
-arithmetic_relop_expr: arithmetic_expression relational_binop arithmetic_expression ;
+arithmetic_relop_expr:
+    arithmetic_expression
+    | arithmetic_relop_expr relational_binop arithmetic_expression ;
 
 
 arithmetic_expression
@@ -96,11 +85,14 @@ pow_expression
    ;
 
 arithmetic_leaf:
-      integer_value
+      boolean_literal
+    | integer_value
     | real_value
     | adl_rules_path
+    | SYM_EXISTS adl_rules_path
+    | SYM_NOT boolean_expression
     | variable_reference
-    | '(' arithmetic_expression ')'
+    | '(' boolean_expression ')'
     | '-' arithmetic_leaf
     ;
 
@@ -121,6 +113,11 @@ relational_binop:
     | '<'
     | '>='
     | '>'
+    ;
+
+boolean_literal:
+      SYM_TRUE
+    | SYM_FALSE
     ;
 
 SYM_FOR_ALL:

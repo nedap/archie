@@ -140,40 +140,12 @@ public class RulesParser extends BaseTreeWalker {
         if(context.boolean_constraint() != null) {
             return parseBooleanConstraint(context.boolean_constraint());
         } else {
-            return parseBooleanLeaf(context.boolean_leaf());
+            return parseArithmeticRelOpExpression(context.arithmetic_relop_expr());
         }
     }
 
-    private Expression parseBooleanLeaf(Boolean_leafContext context) {
-        if(context.boolean_literal() != null) {
-            Constant result = new Constant<Boolean>(ExpressionType.BOOLEAN, context.boolean_literal().SYM_TRUE() != null ? true : false);
-
-            return result;
-        }
-        if(context.adl_rules_path() != null) {
-            ModelReference reference = parseModelReference(context.adl_rules_path());
-            if(context.SYM_EXISTS() != null) {
-                return new UnaryOperator(ExpressionType.BOOLEAN, OperatorKind.exists, reference);
-            } else {
-                return reference;
-            }
-        }
-        if(context.boolean_expression() != null) {
-            Expression expression = parseExpression(context.boolean_expression());
-            expression.setPrecedenceOverridden(true);
-            return expression;
-        }
-        if(context.arithmetic_relop_expr() != null) {
-            return parseArithmeticRelOpExpression(context.arithmetic_relop_expr());
-        }
-        if(context.SYM_NOT() != null) {
-            return new UnaryOperator(ExpressionType.BOOLEAN, OperatorKind.not, parseBooleanLeaf(context.boolean_leaf()));
-        }
-        if(context.variable_reference() != null) {
-            return parseVariableReference(context.variable_reference());
-        }
-
-        throw new IllegalArgumentException("cannot parse unknown boolean leaf type");
+    private Expression parseBooleanLiteral(Boolean_literalContext context) {
+        return new Constant<Boolean>(ExpressionType.BOOLEAN, context.SYM_TRUE() != null ? true : false);
     }
 
     @NotNull
@@ -213,12 +185,17 @@ public class RulesParser extends BaseTreeWalker {
     }
 
     private Expression parseArithmeticRelOpExpression(Arithmetic_relop_exprContext context) {
-        Expression left = parseArithmeticExpression(context.arithmetic_expression(0));
-        Expression right = parseArithmeticExpression(context.arithmetic_expression(1));
-        if(left.getType() != null && right.getType() != null && left.getType() != right.getType()) {
-            throw new IllegalArgumentException("arithmetic relop expression with different types: " + left.getType() + " + " + right.getType());
+        if(context.relational_binop() != null) {
+            Expression left = parseArithmeticRelOpExpression(context.arithmetic_relop_expr());
+            Expression right = parseArithmeticExpression(context.arithmetic_expression());
+            if(left.getType() != null && right.getType() != null && left.getType() != right.getType()) {
+                throw new IllegalArgumentException("arithmetic relop expression with different types: " + left.getType() + " + " + right.getType());
+            }
+            return new BinaryOperator(left.getType(), OperatorKind.parse(context.relational_binop().getText()), left, right);
+        } else {
+            return parseArithmeticExpression(context.arithmetic_expression());
         }
-        return new BinaryOperator(left.getType(), OperatorKind.parse(context.relational_binop().getText()), left, right);
+
     }
 
     private Expression parseArithmeticExpression(Arithmetic_expressionContext context) {
@@ -259,16 +236,30 @@ public class RulesParser extends BaseTreeWalker {
             return new Constant<>(ExpressionType.REAL, Double.parseDouble(context.real_value().getText()));
         }
         if(context.adl_rules_path() != null) {
-            return parseModelReference(context.adl_rules_path());
+            ModelReference reference = parseModelReference(context.adl_rules_path());
+            if(context.SYM_EXISTS() != null) {
+                return new UnaryOperator(ExpressionType.BOOLEAN, OperatorKind.exists, reference);
+            } else {
+                return reference;
+            }
         }
-        if(context.arithmetic_expression() != null) {
-            Expression expression = parseArithmeticExpression(context.arithmetic_expression());
-            expression.setPrecedenceOverridden(true);
-            return expression;
+        if(context.boolean_expression() != null) {
+            Expression expression = this.parseExpression(context.boolean_expression());
+            if(context.SYM_NOT() != null) {
+                return new UnaryOperator(ExpressionType.BOOLEAN, OperatorKind.not, expression);
+            } else { //'this is '(' boolean_expression ')'
+                expression.setPrecedenceOverridden(true);
+                return expression;
+            }
         }
-        if(context.arithmetic_leaf() != null) {
+        if(context.arithmetic_leaf() != null) { // - arithmetic expression
             return new UnaryOperator(ExpressionType.REAL, OperatorKind.minus, parseArithmeticLeaf(context.arithmetic_leaf()));
-
+        }
+        if(context.variable_reference() != null) {
+            return parseVariableReference(context.variable_reference());
+        }
+        if(context.boolean_literal() != null) {
+            return parseBooleanLiteral(context.boolean_literal());
         }
         if(context.variable_reference() != null) {
             return parseVariableReference(context.variable_reference());

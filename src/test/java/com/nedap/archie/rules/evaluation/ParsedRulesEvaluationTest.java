@@ -59,7 +59,7 @@ public class ParsedRulesEvaluationTest {
     @Test
     public void simpleArithmetic() throws Exception {
         archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("simplearithmetic.adls"));
-        assertTrue(parser.getErrors().hasNoMessages());
+        assertTrue(parser.getErrors().hasNoErrors());
         RuleEvaluation ruleEvaluation = new RuleEvaluation(archetype);
         Observation root = new Observation();
         ruleEvaluation.evaluate(root, archetype.getRules().getRules());
