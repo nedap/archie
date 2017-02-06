@@ -3,6 +3,7 @@ package com.nedap.archie.rules.evaluation.evaluators;
 import com.google.common.collect.Lists;
 import com.nedap.archie.rules.BinaryOperator;
 import com.nedap.archie.rules.Constraint;
+import com.nedap.archie.rules.Operator;
 import com.nedap.archie.rules.OperatorKind;
 import com.nedap.archie.rules.PrimitiveType;
 import com.nedap.archie.rules.evaluation.Evaluator;
@@ -270,6 +271,20 @@ public class BinaryOperatorEvaluator implements Evaluator<BinaryOperator> {
         if(possibleNullResult != null) {
             possibleNullResult.setType(PrimitiveType.Boolean);
             return possibleNullResult;
+        } else if(leftValues.getType() == PrimitiveType.Boolean || rightValues.getType() == PrimitiveType.Boolean) {
+            //TODO: check types
+            if(!EnumSet.of(OperatorKind.eq, OperatorKind.ne).contains(statement.getOperator()) ) {
+                throw new IllegalStateException("Operator " + statement.getOperator().toString() + " not valid for boolean type");
+            }
+            ValueList result = new ValueList();
+            result.setType(PrimitiveType.Boolean);
+
+            //according to the xpath spec, at least one pair from both collections must exist that matches the condition.
+            //want otherwise? Use for_all/every
+            result.addValue(evaluateMultipleValuesBooleanRelOp(statement, leftValues, rightValues));
+
+            return result;
+
         } else {
             checkIsNumberOrNull(leftValues, rightValues);
 
@@ -301,6 +316,19 @@ public class BinaryOperatorEvaluator implements Evaluator<BinaryOperator> {
 
     }
 
+    private Value evaluateMultipleValuesBooleanRelOp(BinaryOperator statement, ValueList leftValues, ValueList rightValues) {
+
+        for(Value leftValue:leftValues.getValues()) {
+            for (Value rightValue:rightValues.getValues()) {
+                Value evaluatedRelOp = evaluateBooleanRelOp(statement, leftValue.getValue(), rightValue.getValue(), getPaths(leftValue, rightValue));
+                if (((Boolean) evaluatedRelOp.getValue()).booleanValue()) {
+                    return evaluatedRelOp;
+                }
+            }
+        }
+        return new Value(false, getAllPaths(leftValues, rightValues));
+    }
+
     private Value evaluateMultipleValuesRelOp(BinaryOperator statement, ValueList leftValues, ValueList rightValues) {
 
         for(Value leftValue:leftValues.getValues()) {
@@ -319,6 +347,31 @@ public class BinaryOperatorEvaluator implements Evaluator<BinaryOperator> {
         allPaths.addAll(leftValue.getAllPaths());
         allPaths.addAll(rightValue.getAllPaths());
         return allPaths;
+    }
+
+    private Value evaluateBooleanRelOp(BinaryOperator statement, Object leftValue, Object rightValue, List<String> paths) {
+        if(leftValue == null || rightValue == null) {
+            return new Value(evaluateNullRelOp(statement.getOperator(), leftValue, rightValue), paths);
+        }
+        else if(leftValue instanceof Boolean && rightValue instanceof Boolean) {
+            return new Value(evaluateBooleanRelOp(statement.getOperator(),
+                    (boolean) leftValue,
+                    (boolean) rightValue
+            ), paths);
+        } else {
+            throw new IllegalStateException("operand types not ok");//TODO!
+        }
+    }
+
+    private Object evaluateBooleanRelOp(OperatorKind operator, boolean leftValue, boolean rightValue) {
+        switch(operator) {
+            case eq:
+                return leftValue == rightValue;
+            case ne:
+                return leftValue != rightValue;
+            default:
+                throw new IllegalArgumentException("Not a boolean operator with boolean operands: " + operator);
+        }
     }
 
     private Value evaluateRelOp(BinaryOperator statement, Object leftValue, Object rightValue, List<String> paths) {
