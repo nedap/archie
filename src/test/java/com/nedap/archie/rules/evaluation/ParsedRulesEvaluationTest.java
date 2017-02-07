@@ -559,5 +559,20 @@ public class ParsedRulesEvaluationTest {
         assertEquals(false, variables.get("arithmetic_boolean_operands_false").getObject(0));
     }
 
+    @Test
+    public void stringLiterals() throws Exception {
+        archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("string_literals.adls"));
+        assertTrue(parser.getErrors().hasNoErrors());
+        RuleEvaluation ruleEvaluation = new RuleEvaluation(archetype);
+        Observation root = new Observation();
+        ruleEvaluation.evaluate(root, archetype.getRules().getRules());
+        VariableMap variables = ruleEvaluation.getVariableMap();
+
+        assertEquals(false, variables.get("test_neq_test").getObject(0));
+        assertEquals(true, variables.get("test_eq_test").getObject(0));
+        assertEquals("string contents", variables.get("string_variable").getObject(0));
+
+    }
+
 
 }
