@@ -27,7 +27,7 @@ definition
 rules
 	$test_neq_test:Boolean ::= "test" != "test";
     $test_eq_test:Boolean ::= "test" = "test";
-    $string_variable:String ::= "string content";
+    $string_variable:String ::= "string contents";
 
 terminology
 	term_definitions = <

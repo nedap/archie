@@ -1,8 +1,10 @@
 package com.nedap.archie.adlparser.treewalkers;
 
+import com.nedap.archie.adlparser.ADLParser;
 import com.nedap.archie.adlparser.ADLParserErrors;
 import com.nedap.archie.adlparser.antlr.AdlParser.*;
 
+import com.nedap.archie.adlparser.odin.OdinValueParser;
 import com.nedap.archie.aom.CPrimitiveObject;
 import com.nedap.archie.rules.*;
 import org.jetbrains.annotations.NotNull;
@@ -246,6 +248,8 @@ public class RulesParser extends BaseTreeWalker {
         }
         else if(context.real_value() != null) {
             return new Constant<>(ExpressionType.REAL, Double.parseDouble(context.real_value().getText()));
+        } else if (context.string_value() != null) {
+            return new Constant<>(ExpressionType.STRING, OdinValueParser.parseOdinStringValue(context.string_value()));
         }
         else if(context.adlRulesPath() != null) {
             ModelReference reference = parseModelReference(context.adlRulesPath());
