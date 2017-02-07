@@ -58,12 +58,6 @@ booleanConstraintExpression
 
 booleanConstraint: ( adlRulesPath | adlRulesRelativePath ) SYM_MATCHES ('{' c_primitive_object '}' | CONTAINED_REGEXP );
 
-
-
-//
-// Expressions evaluating to arithmetic values
-//
-
 equalityExpression:
     relOpExpression
     | equalityExpression equalityBinop relOpExpression ;
@@ -73,6 +67,10 @@ relOpExpression:
     | relOpExpression relationalBinop plusExpression ;
 
 
+//
+// Expressions evaluating to all kinds of value types
+//
+
 plusExpression
    : multiplyingExpression
    | plusExpression plusMinusBinop multiplyingExpression
@@ -80,7 +78,7 @@ plusExpression
 
 multiplyingExpression
    : powExpression
-   | multiplyingExpression mult_binop powExpression
+   | multiplyingExpression multBinop powExpression
    ;
 
 powExpression
@@ -100,15 +98,15 @@ expressionLeaf:
     | '-' expressionLeaf
     ;
 
-adlRulesPath          : variableReference? adlRulesPathSegment+;//(adl_path_segment ({_input.LA(-1) != WS && _input.LA(-1) != LINE}?))+ adl_path_segment? ;
-adlRulesRelativePath : adlRulesPathElement adlRulesPath ;  // TODO: remove when current slots no longer needed
+adlRulesPath          : variableReference? adlRulesPathSegment+;
+adlRulesRelativePath : adlRulesPathElement adlRulesPath ;
 adlRulesPathSegment  : ('/' | '//') adlRulesPathElement;
 adlRulesPathElement  : attribute_id ( '[' (ID_CODE | ARCHETYPE_REF) ']' )?;
 
 variableReference: SYM_VARIABLE_START identifier;
 
 plusMinusBinop: '+' | '-';
-mult_binop: '*' | '/' | '%';
+multBinop: '*' | '/' | '%';
 
 equalityBinop:
       '='

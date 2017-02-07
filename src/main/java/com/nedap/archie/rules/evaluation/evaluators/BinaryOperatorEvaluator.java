@@ -3,7 +3,6 @@ package com.nedap.archie.rules.evaluation.evaluators;
 import com.google.common.collect.Lists;
 import com.nedap.archie.rules.BinaryOperator;
 import com.nedap.archie.rules.Constraint;
-import com.nedap.archie.rules.Operator;
 import com.nedap.archie.rules.OperatorKind;
 import com.nedap.archie.rules.PrimitiveType;
 import com.nedap.archie.rules.evaluation.Evaluator;
@@ -272,7 +271,7 @@ public class BinaryOperatorEvaluator implements Evaluator<BinaryOperator> {
             possibleNullResult.setType(PrimitiveType.Boolean);
             return possibleNullResult;
         } else if(leftValues.getType() == PrimitiveType.Boolean || rightValues.getType() == PrimitiveType.Boolean) {
-            //TODO: check types
+            //TODO: check types and throw error when one of the types is not either boolean or null
             if(!EnumSet.of(OperatorKind.eq, OperatorKind.ne).contains(statement.getOperator()) ) {
                 throw new IllegalStateException("Operator " + statement.getOperator().toString() + " not valid for boolean type");
             }

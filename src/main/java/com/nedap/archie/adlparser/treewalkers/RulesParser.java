@@ -49,7 +49,7 @@ public class RulesParser extends BaseTreeWalker {
         } else if (context.plusExpression() != null) {
             ExpressionVariable result = new ExpressionVariable();
             setVariableNameAndType(context, result);
-            result.setExpression(parseArithmeticExpression(context.plusExpression()));
+            result.setExpression(parsePlusExpression(context.plusExpression()));
             return result;
 
         }
@@ -186,33 +186,33 @@ public class RulesParser extends BaseTreeWalker {
     private Expression parseEqualityExpression(EqualityExpressionContext context) {
         if(context.equalityBinop() != null) {
             Expression left = parseEqualityExpression(context.equalityExpression());
-            Expression right = parseArithmeticRelOpExpression(context.relOpExpression());
+            Expression right = parseRelOpExpression(context.relOpExpression());
             if(left.getType() != null && right.getType() != null && left.getType() != right.getType()) {
                 throw new IllegalArgumentException("arithmetic relop expression with different types: " + left.getType() + " + " + right.getType());
             }
             return new BinaryOperator(left.getType(), OperatorKind.parse(context.equalityBinop().getText()), left, right);
         } else {
-            return parseArithmeticRelOpExpression(context.relOpExpression());
+            return parseRelOpExpression(context.relOpExpression());
         }
     }
 
-    private Expression parseArithmeticRelOpExpression(RelOpExpressionContext context) {
+    private Expression parseRelOpExpression(RelOpExpressionContext context) {
         if(context.relationalBinop() != null) {
-            Expression left = parseArithmeticRelOpExpression(context.relOpExpression());
-            Expression right = parseArithmeticExpression(context.plusExpression());
+            Expression left = parseRelOpExpression(context.relOpExpression());
+            Expression right = parsePlusExpression(context.plusExpression());
             if(left.getType() != null && right.getType() != null && left.getType() != right.getType()) {
                 throw new IllegalArgumentException("arithmetic relop expression with different types: " + left.getType() + " + " + right.getType());
             }
             return new BinaryOperator(left.getType(), OperatorKind.parse(context.relationalBinop().getText()), left, right);
         } else {
-            return parseArithmeticExpression(context.plusExpression());
+            return parsePlusExpression(context.plusExpression());
         }
 
     }
 
-    private Expression parseArithmeticExpression(PlusExpressionContext context) {
+    private Expression parsePlusExpression(PlusExpressionContext context) {
         if(context.plusMinusBinop() != null) {
-            Expression left = parseArithmeticExpression(context.plusExpression());
+            Expression left = parsePlusExpression(context.plusExpression());
             Expression right = parseMultiplyingExpression(context.multiplyingExpression());
             return new BinaryOperator(right.getType(), OperatorKind.parse(context.plusMinusBinop().getText()), left, right);
         } else {
@@ -221,10 +221,10 @@ public class RulesParser extends BaseTreeWalker {
     }
 
     private Expression parseMultiplyingExpression(MultiplyingExpressionContext context) {
-        if(context.mult_binop() != null) {
+        if(context.multBinop() != null) {
             Expression left = parseMultiplyingExpression(context.multiplyingExpression());
             Expression right = parsePowExpression(context.powExpression());
-            return new BinaryOperator(right.getType(), OperatorKind.parse(context.mult_binop().getText()), left, right);
+            return new BinaryOperator(right.getType(), OperatorKind.parse(context.multBinop().getText()), left, right);
         } else {
             return parsePowExpression(context.powExpression());
         }
@@ -233,21 +233,21 @@ public class RulesParser extends BaseTreeWalker {
     private Expression parsePowExpression(PowExpressionContext context) {
         if(context.powExpression() != null) {
             Expression left = parsePowExpression(context.powExpression());
-            Expression right = parseArithmeticLeaf(context.expressionLeaf());
+            Expression right = parseExpressionLeaf(context.expressionLeaf());
             return new BinaryOperator(right.getType(), OperatorKind.parse("^"), left, right);
         } else {
-            return parseArithmeticLeaf(context.expressionLeaf());
+            return parseExpressionLeaf(context.expressionLeaf());
         }
     }
 
-    private Expression parseArithmeticLeaf(ExpressionLeafContext context) {
+    private Expression parseExpressionLeaf(ExpressionLeafContext context) {
         if(context.integer_value() != null) {
             return new Constant<>(ExpressionType.INTEGER, Long.parseLong(context.integer_value().getText()));
         }
-        if(context.real_value() != null) {
+        else if(context.real_value() != null) {
             return new Constant<>(ExpressionType.REAL, Double.parseDouble(context.real_value().getText()));
         }
-        if(context.adlRulesPath() != null) {
+        else if(context.adlRulesPath() != null) {
             ModelReference reference = parseModelReference(context.adlRulesPath());
             if(context.SYM_EXISTS() != null) {
                 return new UnaryOperator(ExpressionType.BOOLEAN, OperatorKind.exists, reference);
@@ -255,7 +255,7 @@ public class RulesParser extends BaseTreeWalker {
                 return reference;
             }
         }
-        if(context.booleanExpression() != null) {
+        else if(context.booleanExpression() != null) {
             Expression expression = this.parseExpression(context.booleanExpression());
             if(context.SYM_NOT() != null) {
                 return new UnaryOperator(ExpressionType.BOOLEAN, OperatorKind.not, expression);
@@ -264,16 +264,16 @@ public class RulesParser extends BaseTreeWalker {
                 return expression;
             }
         }
-        if(context.expressionLeaf() != null) { // - arithmetic expression
-            return new UnaryOperator(ExpressionType.REAL, OperatorKind.minus, parseArithmeticLeaf(context.expressionLeaf()));
+        else if(context.expressionLeaf() != null) { // - arithmetic expression
+            return new UnaryOperator(ExpressionType.REAL, OperatorKind.minus, parseExpressionLeaf(context.expressionLeaf()));
         }
-        if(context.variableReference() != null) {
+        else if(context.variableReference() != null) {
             return parseVariableReference(context.variableReference());
         }
-        if(context.booleanLiteral() != null) {
+        else if(context.booleanLiteral() != null) {
             return parseBooleanLiteral(context.booleanLiteral());
         }
-        if(context.variableReference() != null) {
+        else if(context.variableReference() != null) {
             return parseVariableReference(context.variableReference());
         }
         throw new IllegalArgumentException("cannot parse unknown arithmetic leaf type: " + context.getText());
