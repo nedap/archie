@@ -1,0 +1,44 @@
+archetype (adl_version=2.0.5; rm_release=1.0.2; generated)
+	openEHR-EHR-OBSERVATION.boolean_relops.v1.0.0
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	original_author = <
+		["name"] = <"Pieter Bos">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"Test for rules, simple constant arithmetics">
+			keywords = <"ADL", "test">
+		>
+	>
+	lifecycle_state = <"published">
+	other_details = <
+		["regression"] = <"PASS">
+	>
+	copyright = <"copyright © 2004 openEHR Foundation <http://www.openEHR.org>">
+
+definition
+	OBSERVATION[id1]
+
+rules
+	$false_is_not_true:Boolean ::= false != true;
+    $false_is_false:Boolean ::= false = false;
+    $false_is_true:Boolean ::= false = true;
+    $true_is_false:Boolean ::= true = false;
+    $arithmetic_boolean_operands_true:Boolean ::= 1 > 3 = 5 > 8;
+    $arithmetic_boolean_operands_false:Boolean ::= 1 < 3 = 5 > 8;
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Blood Pressure">
+				description = <"The local measurement of arterial blood pressure which is a surrogate for arterial. pressure in the systemic circulation.  Most commonly, use of the term 'blood pressure' refers to measurement of brachial artery pressure in the upper arm.">
+			>
+		>
+    >
+

@@ -487,5 +487,20 @@ public class ParsedRulesEvaluationTest {
 
     }
 
+    @Test
+    public void booleanOperandRelOps() throws Exception {
+        archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("boolean_operand_relops.adls"));
+        assertTrue(parser.getErrors().hasNoErrors());
+        RuleEvaluation ruleEvaluation = new RuleEvaluation(archetype);
+        Observation root = new Observation();
+        ruleEvaluation.evaluate(root, archetype.getRules().getRules());
+        VariableMap variables = ruleEvaluation.getVariableMap();
+        assertEquals(true, variables.get("false_is_not_true").getObject(0));
+        assertEquals(true, variables.get("false_is_false").getObject(0));
+        assertEquals(false, variables.get("false_is_true").getObject(0));
+        assertEquals(true, variables.get("arithmetic_boolean_operands_true").getObject(0));
+        assertEquals(false, variables.get("arithmetic_boolean_operands_false").getObject(0));
+    }
+
 
 }
