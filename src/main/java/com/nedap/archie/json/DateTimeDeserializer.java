@@ -21,6 +21,9 @@ public class DateTimeDeserializer extends JsonDeserializer<TemporalAccessor>{
     @Override
     public TemporalAccessor deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
         String valueAsString = p.getValueAsString();
+        if(valueAsString == null) {
+            return null;
+        }
         return TemporalConstraintParser.parseDateTimeValue(valueAsString);
     }
 

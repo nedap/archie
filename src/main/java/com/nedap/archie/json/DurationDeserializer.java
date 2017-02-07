@@ -16,6 +16,9 @@ public class DurationDeserializer extends JsonDeserializer<TemporalAmount> {
     @Override
     public TemporalAmount deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
         String valueAsString = p.getValueAsString();
+        if(valueAsString == null) {
+            return null;
+        }
         return TemporalConstraintParser.parseDurationValue(valueAsString);
     }
 }
