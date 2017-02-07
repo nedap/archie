@@ -116,14 +116,13 @@ public class ValueList {
     }
 
     public boolean isEmpty() {
-
+        boolean containsValue = false;
         for(Value value:this.values) {
-            if(value.isNull()) {
-                logger.warn("value null:", value);
-                logger.warn("other values: ", this.values);
+            if(!value.isNull()) {
+                containsValue = true;
             }
         }
-        return values.isEmpty();
+        return !containsValue;
     }
 
     public void addValues(ValueList evaluated) {

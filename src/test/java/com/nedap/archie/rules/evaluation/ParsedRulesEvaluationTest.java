@@ -4,6 +4,7 @@ import com.nedap.archie.adlparser.ADLParser;
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.rm.archetyped.Pathable;
 import com.nedap.archie.rm.composition.Observation;
+import com.nedap.archie.rm.datastructures.Element;
 import com.nedap.archie.rm.datavalues.quantity.DvQuantity;
 import com.nedap.archie.rules.Assertion;
 import com.nedap.archie.rules.BinaryOperator;
@@ -320,6 +321,26 @@ public class ParsedRulesEvaluationTest {
         systolic.setMagnitude(null);
         DvQuantity diastolic = (DvQuantity) root.itemAtPath("/data[id2]/events[id3]/data[id4]/items[id6]/value[id14]");
         diastolic.setMagnitude(80d);
+
+        EvaluationResult evaluationResult = ruleEvaluation.evaluate(root, archetype.getRules().getRules());
+        assertEquals(1, evaluationResult.getAssertionResults().size());
+        assertFalse(evaluationResult.getAssertionResults().get(0).getResult());
+        assertEquals(1, evaluationResult.getSetPathValues().size());
+        assertEquals(null, evaluationResult.getSetPathValues().values().iterator().next().getValue());
+    }
+
+    @Test
+    public void calculatedPathValuesWithNulls3() throws Exception {
+        archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("extended_calculated_path_values.adls"));
+        RuleEvaluation ruleEvaluation = new RuleEvaluation(archetype);
+
+        Pathable root = (Pathable) testUtil.constructEmptyRMObject(archetype.getDefinition());
+        Element systolic = (Element) root.itemAtPath("/data[id2]/events[id3]/data[id4]/items[id5]");
+        systolic.setValue(null);
+        Element diastolic = (Element) root.itemAtPath("/data[id2]/events[id3]/data[id4]/items[id6]");
+        diastolic.setValue(null);
+        DvQuantity value3 = (DvQuantity) root.itemAtPath("/data[id2]/events[id3]/data[id4]/items[id7]/value");
+        value3.setMagnitude(80d);
 
         EvaluationResult evaluationResult = ruleEvaluation.evaluate(root, archetype.getRules().getRules());
         assertEquals(1, evaluationResult.getAssertionResults().size());
