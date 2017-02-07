@@ -292,6 +292,42 @@ public class ParsedRulesEvaluationTest {
         assertEquals(20.0d, (Double) evaluationResult.getSetPathValues().values().iterator().next().getValue(), 0.0001d);
     }
 
+    @Test
+    public void calculatedPathValuesWithNulls1() throws Exception {
+        archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("calculated_path_values.adls"));
+        RuleEvaluation ruleEvaluation = new RuleEvaluation(archetype);
+
+        Pathable root = (Pathable) testUtil.constructEmptyRMObject(archetype.getDefinition());
+        DvQuantity systolic = (DvQuantity) root.itemAtPath("/data[id2]/events[id3]/data[id4]/items[id5]/value[id13]");
+        systolic.setMagnitude(80d);
+        DvQuantity diastolic = (DvQuantity) root.itemAtPath("/data[id2]/events[id3]/data[id4]/items[id6]/value[id14]");
+        diastolic.setMagnitude(null);
+
+        EvaluationResult evaluationResult = ruleEvaluation.evaluate(root, archetype.getRules().getRules());
+        assertEquals(1, evaluationResult.getAssertionResults().size());
+        assertFalse(evaluationResult.getAssertionResults().get(0).getResult());
+        assertEquals(1, evaluationResult.getSetPathValues().size());
+        assertEquals(null, evaluationResult.getSetPathValues().values().iterator().next().getValue());
+    }
+
+    @Test
+    public void calculatedPathValuesWithNulls2() throws Exception {
+        archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("calculated_path_values.adls"));
+        RuleEvaluation ruleEvaluation = new RuleEvaluation(archetype);
+
+        Pathable root = (Pathable) testUtil.constructEmptyRMObject(archetype.getDefinition());
+        DvQuantity systolic = (DvQuantity) root.itemAtPath("/data[id2]/events[id3]/data[id4]/items[id5]/value[id13]");
+        systolic.setMagnitude(null);
+        DvQuantity diastolic = (DvQuantity) root.itemAtPath("/data[id2]/events[id3]/data[id4]/items[id6]/value[id14]");
+        diastolic.setMagnitude(80d);
+
+        EvaluationResult evaluationResult = ruleEvaluation.evaluate(root, archetype.getRules().getRules());
+        assertEquals(1, evaluationResult.getAssertionResults().size());
+        assertFalse(evaluationResult.getAssertionResults().get(0).getResult());
+        assertEquals(1, evaluationResult.getSetPathValues().size());
+        assertEquals(null, evaluationResult.getSetPathValues().values().iterator().next().getValue());
+    }
+
     /**
      * Calculate a path value, then use that calculated path value in another rule to calculate more
      * Tests that calculated values are immediately set in the RMObject for further calculation correctly
