@@ -90,6 +90,7 @@ expressionLeaf:
       booleanLiteral
     | integer_value
     | real_value
+    | string_value
     | adlRulesPath
     | SYM_EXISTS adlRulesPath
     | SYM_NOT booleanExpression

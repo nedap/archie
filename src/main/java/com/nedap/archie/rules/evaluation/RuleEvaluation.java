@@ -6,6 +6,9 @@ import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.creation.RMObjectCreator;
 import com.nedap.archie.query.RMQueryContext;
 import com.nedap.archie.rm.archetyped.Pathable;
+import com.nedap.archie.rminfo.ArchieAOMInfoLookup;
+import com.nedap.archie.rminfo.ArchieRMInfoLookup;
+import com.nedap.archie.rminfo.RMAttributeInfo;
 import com.nedap.archie.rules.*;
 import com.nedap.archie.rules.evaluation.evaluators.AssertionEvaluator;
 import com.nedap.archie.rules.evaluation.evaluators.BinaryOperatorEvaluator;
@@ -150,7 +153,21 @@ public class RuleEvaluation {
                 parents = queryContext.findList(pathOfParent);
 
                 for(Object parent:parents) {
-                    creator.set(parent, lastPathSegment, Lists.newArrayList(value.getValue()));
+                    RMAttributeInfo attributeInfo = ArchieRMInfoLookup.getInstance().getAttributeInfo(parent.getClass(), lastPathSegment);
+                    if(attributeInfo == null) {
+                        throw new IllegalStateException("attribute " + lastPathSegment + " does not exist on type " + parent.getClass());
+                    }
+                    if(value.getValue() == null) {
+                        creator.set(parent, lastPathSegment, Lists.newArrayList(value.getValue()));
+                    } else if(attributeInfo.getType().equals(Long.class) && value.getValue().getClass().equals(Double.class)) {
+                        Long convertedValue = ((Double) value.getValue()).longValue(); //TODO or should this round?
+                        creator.set(parent, lastPathSegment, Lists.newArrayList(convertedValue));
+                    } else if(attributeInfo.getType().equals(Double.class) && value.getValue().getClass().equals(Long.class)) {
+                        Double convertedValue = ((Long) value.getValue()).doubleValue(); //TODO or should this round?
+                        creator.set(parent, lastPathSegment, Lists.newArrayList(convertedValue));
+                    } else {
+                        creator.set(parent, lastPathSegment, Lists.newArrayList(value.getValue()));
+                    }
                     //TODO: this should be something like:
                     // queryContext.updateValue(parent);
                     //but it does not work. So we do it the slow/ugly way, which does work.

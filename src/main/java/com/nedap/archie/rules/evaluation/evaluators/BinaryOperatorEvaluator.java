@@ -22,6 +22,9 @@ import java.util.List;
 public class BinaryOperatorEvaluator implements Evaluator<BinaryOperator> {
     private static final double EPSILON = 0.00001d;
 
+    private BinaryBooleanOperandEvaluator booleanOperandEvaluator = new BinaryBooleanOperandEvaluator(this);
+    private BinaryStringOperandEvaluator stringOperandEvaluator = new BinaryStringOperandEvaluator(this);
+
     @Override
     public ValueList evaluate(RuleEvaluation evaluation, BinaryOperator statement) {
         switch(statement.getOperator()) {
@@ -59,8 +62,7 @@ public class BinaryOperatorEvaluator implements Evaluator<BinaryOperator> {
             ValueList rightValue  = evaluation.evaluate(statement.getRightOperand());
             return rightValue;
         } else {
-            //if the left operand evaluates to false, the entire result is true, to not violate the assertion
-            //not sure if this should be the case
+            //if the left operand evaluates to false, this implies nothing and the result is true
             return new ValueList(true, leftValue.getAllPaths());
         }
     }
@@ -124,7 +126,7 @@ public class BinaryOperatorEvaluator implements Evaluator<BinaryOperator> {
     }
 
     @NotNull
-    private List<String> getPaths(Value<Boolean> leftValue, Value<Boolean> rightValue) {
+    protected List<String> getPaths(Value<Boolean> leftValue, Value<Boolean> rightValue) {
         List<String> paths = new ArrayList<>();
         paths.addAll(leftValue.getPaths());
         paths.addAll(rightValue.getPaths());
@@ -280,10 +282,23 @@ public class BinaryOperatorEvaluator implements Evaluator<BinaryOperator> {
 
             //according to the xpath spec, at least one pair from both collections must exist that matches the condition.
             //want otherwise? Use for_all/every
-            result.addValue(evaluateMultipleValuesBooleanRelOp(statement, leftValues, rightValues));
+            result.addValue(booleanOperandEvaluator.evaluateMultipleValuesBooleanRelOp(statement, leftValues, rightValues));
 
             return result;
 
+        } else if (leftValues.getType() == PrimitiveType.String || rightValues.getType() == PrimitiveType.String) {
+            //TODO: check types and throw error when one of the types is not either boolean or null
+            if(!EnumSet.of(OperatorKind.eq, OperatorKind.ne).contains(statement.getOperator()) ) {
+                throw new IllegalStateException("Operator " + statement.getOperator().toString() + " not valid for boolean type");
+            }
+            ValueList result = new ValueList();
+            result.setType(PrimitiveType.Boolean);
+
+            //according to the xpath spec, at least one pair from both collections must exist that matches the condition.
+            //want otherwise? Use for_all/every
+            result.addValue(stringOperandEvaluator.evaluateMultipleValuesStringRelOp(statement, leftValues, rightValues));
+
+            return result;
         } else {
             checkIsNumberOrNull(leftValues, rightValues);
 
@@ -315,19 +330,6 @@ public class BinaryOperatorEvaluator implements Evaluator<BinaryOperator> {
 
     }
 
-    private Value evaluateMultipleValuesBooleanRelOp(BinaryOperator statement, ValueList leftValues, ValueList rightValues) {
-
-        for(Value leftValue:leftValues.getValues()) {
-            for (Value rightValue:rightValues.getValues()) {
-                Value evaluatedRelOp = evaluateBooleanRelOp(statement, leftValue.getValue(), rightValue.getValue(), getPaths(leftValue, rightValue));
-                if (((Boolean) evaluatedRelOp.getValue()).booleanValue()) {
-                    return evaluatedRelOp;
-                }
-            }
-        }
-        return new Value(false, getAllPaths(leftValues, rightValues));
-    }
-
     private Value evaluateMultipleValuesRelOp(BinaryOperator statement, ValueList leftValues, ValueList rightValues) {
 
         for(Value leftValue:leftValues.getValues()) {
@@ -341,36 +343,11 @@ public class BinaryOperatorEvaluator implements Evaluator<BinaryOperator> {
         return new Value(false, getAllPaths(leftValues, rightValues));
     }
 
-    private List<String> getAllPaths(ValueList leftValue, ValueList rightValue) {
+    protected List<String> getAllPaths(ValueList leftValue, ValueList rightValue) {
         List<String> allPaths = new ArrayList<>();
         allPaths.addAll(leftValue.getAllPaths());
         allPaths.addAll(rightValue.getAllPaths());
         return allPaths;
-    }
-
-    private Value evaluateBooleanRelOp(BinaryOperator statement, Object leftValue, Object rightValue, List<String> paths) {
-        if(leftValue == null || rightValue == null) {
-            return new Value(evaluateNullRelOp(statement.getOperator(), leftValue, rightValue), paths);
-        }
-        else if(leftValue instanceof Boolean && rightValue instanceof Boolean) {
-            return new Value(evaluateBooleanRelOp(statement.getOperator(),
-                    (boolean) leftValue,
-                    (boolean) rightValue
-            ), paths);
-        } else {
-            throw new IllegalStateException("operand types not ok");//TODO!
-        }
-    }
-
-    private Object evaluateBooleanRelOp(OperatorKind operator, boolean leftValue, boolean rightValue) {
-        switch(operator) {
-            case eq:
-                return leftValue == rightValue;
-            case ne:
-                return leftValue != rightValue;
-            default:
-                throw new IllegalArgumentException("Not a boolean operator with boolean operands: " + operator);
-        }
     }
 
     private Value evaluateRelOp(BinaryOperator statement, Object leftValue, Object rightValue, List<String> paths) {
@@ -390,7 +367,7 @@ public class BinaryOperatorEvaluator implements Evaluator<BinaryOperator> {
         }
     }
 
-    private Boolean evaluateNullRelOp(OperatorKind operator, Object leftValue, Object rightValue) {
+    protected Boolean evaluateNullRelOp(OperatorKind operator, Object leftValue, Object rightValue) {
         switch(operator) {
             case eq:
                 if(leftValue == null && rightValue == null) {

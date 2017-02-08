@@ -102,9 +102,11 @@ class FixableAssertionsChecker {
     private void handleImplies(AssertionResult assertionResult, int index, BinaryOperator binaryExpression) {
         //matches ... implies ...
         ValueList leftOperandResult = ruleElementValues.get(binaryExpression.getLeftOperand()).get(index);
-        boolean shouldEvaluate = leftOperandResult.getSingleBooleanResult();
-        if(shouldEvaluate) {
-            checkAssertionForFixablePatterns(assertionResult, binaryExpression.getRightOperand(), index);
+        if(!leftOperandResult.isEmpty()) { //if the left operand cannot be evaluated, do not attempt to fix anything
+            boolean shouldEvaluate = leftOperandResult.getSingleBooleanResult();
+            if (shouldEvaluate) {
+                checkAssertionForFixablePatterns(assertionResult, binaryExpression.getRightOperand(), index);
+            }
         }
     }
 
