@@ -62,8 +62,7 @@ public class BinaryOperatorEvaluator implements Evaluator<BinaryOperator> {
             ValueList rightValue  = evaluation.evaluate(statement.getRightOperand());
             return rightValue;
         } else {
-            //if the left operand evaluates to false, the entire result is true, to not violate the assertion
-            //not sure if this should be the case
+            //if the left operand evaluates to false, this implies nothing and the result is true
             return new ValueList(true, leftValue.getAllPaths());
         }
     }

@@ -140,11 +140,15 @@ public class ValueList {
     }
 
     /**
-     * If this is a list of booleans and at least one of the values is false, return false. return true if all values are true
+     * If this is a list of booleans and at least one of the values is false, return false. return true if all values are true.
+     * Returns false if there are no booleans
      * @param valueList
      * @return
      */
     public boolean getSingleBooleanResult() {
+        if(isEmpty()) {
+            return false;
+        }
         for(Value singleResult: values) {
             Boolean singleBoolean = (Boolean) singleResult.getValue();
             if(singleBoolean != null && !singleBoolean) {

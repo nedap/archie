@@ -531,7 +531,7 @@ public class ParsedRulesEvaluationTest {
         Pathable root = constructTwoBloodPressureObservationsOneEmptySystolicNoDiastolic();
 
         EvaluationResult evaluationResult = ruleEvaluation.evaluate(root, archetype.getRules().getRules());
-        assertEquals(2, evaluationResult.getAssertionResults().size());
+        assertEquals(3, evaluationResult.getAssertionResults().size());
         for(AssertionResult assertionResult:evaluationResult.getAssertionResults()) {
             assertFalse(assertionResult.getResult());
         }
@@ -539,6 +539,25 @@ public class ParsedRulesEvaluationTest {
         assertEquals(2, evaluationResult.getPathsThatMustExist().size());//one from the non-specific exists operator, one from the for_all that is very specific indeed
         assertTrue(evaluationResult.getPathsThatMustExist().contains("/data[id2]/events[id3]/data[id4]/items[id6]/value/magnitude"));
         assertTrue(evaluationResult.getPathsThatMustExist().contains("/data[id2]/events[id3]/data[id4]/items[id6]/value/magnitude"));
+        assertEquals(0, evaluationResult.getPathsThatMustNotExist().size());
+        assertEquals(1, evaluationResult.getSetPathValues().size());
+    }
+
+    @Test
+    public void impliesEvaluatesToNull() throws Exception {
+        archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("implies.adls"));
+        RuleEvaluation ruleEvaluation = new RuleEvaluation(archetype);
+
+        Pathable root = (Pathable) testUtil.constructEmptyRMObject(archetype.getDefinition());
+
+        EvaluationResult evaluationResult = ruleEvaluation.evaluate(root, archetype.getRules().getRules());
+        assertEquals(3, evaluationResult.getAssertionResults().size());
+        for(AssertionResult assertionResult:evaluationResult.getAssertionResults()) {
+            assertTrue(assertionResult + " failed and it should not", assertionResult.getResult()); //all three assertions should not lead to validation errors
+        }
+
+        //no paths must exist, not exist or set
+        assertEquals(0, evaluationResult.getPathsThatMustExist().size());
         assertEquals(0, evaluationResult.getPathsThatMustNotExist().size());
         assertEquals(0, evaluationResult.getSetPathValues().size());
 
