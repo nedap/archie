@@ -14,22 +14,22 @@ import cadl_primitives;
 //  ============== Parser rules ==============
 //
 
-assertion_list: (assertion (';'))+ ;// {_input.LA(1) == WS || _input.LA(1) == LINE}?) +;//whitespace parsing to prevent ambiguity
+assertion_list: (assertion (';')?)+ ;// {_input.LA(1) == WS || _input.LA(1) == LINE}?) +;//whitespace parsing to prevent ambiguity
 
 assertion: variableDeclaration | booleanAssertion;
 
-variableDeclaration: SYM_VARIABLE_START identifier SYM_COLON identifier SYM_ASSIGNMENT (booleanExpression | plusExpression);
+variableDeclaration: SYM_VARIABLE_START identifier SYM_COLON identifier SYM_ASSIGNMENT expression;
 
-booleanAssertion: ( identifier SYM_COLON )? booleanExpression ;
+booleanAssertion: ( identifier SYM_COLON )? expression ;
 
 //
 // Expressions evaluating to boolean values
 //
 
 
-booleanExpression
+expression
     : booleanForAllExpression
-    | booleanExpression SYM_IMPLIES booleanForAllExpression
+    | expression SYM_IMPLIES booleanForAllExpression
     ;
 
 booleanForAllExpression
@@ -93,11 +93,19 @@ expressionLeaf:
     | string_value
     | adlRulesPath
     | SYM_EXISTS adlRulesPath
-    | SYM_NOT booleanExpression
+    | SYM_NOT expression
+    | functionName '(' (argumentList)? ')'
     | variableReference
-    | '(' booleanExpression ')'
+    | '(' expression ')'
     | '-' expressionLeaf
     ;
+
+argumentList:
+    expression (',' expression)*
+    ;
+
+functionName:
+    identifier;
 
 adlRulesPath          : variableReference? adlRulesPathSegment+;
 adlRulesRelativePath : adlRulesPathElement adlRulesPath ;

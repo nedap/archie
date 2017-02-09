@@ -31,7 +31,7 @@ public class RulesParser extends BaseTreeWalker {
             if (context.identifier() != null) {
                 assertion.setTag(context.identifier().getText());
             }
-            assertion.setExpression(parseExpression(context.booleanExpression()));
+            assertion.setExpression(parseExpression(context.expression()));
             return assertion;
         } else if (assertionContext.variableDeclaration() != null) {
             VariableDeclaration declaration = parseVariableDeclaration(assertionContext.variableDeclaration());
@@ -41,21 +41,11 @@ public class RulesParser extends BaseTreeWalker {
     }
 
     private VariableDeclaration parseVariableDeclaration(VariableDeclarationContext context) {
+        ExpressionVariable result = new ExpressionVariable();
+        setVariableNameAndType(context, result);
+        result.setExpression(parseExpression(context.expression()));
+        return result;
 
-        if(context.booleanExpression() != null) {
-            ExpressionVariable result = new ExpressionVariable();
-            setVariableNameAndType(context, result);
-            result.setExpression(parseExpression(context.booleanExpression()));
-            return result;
-
-        } else if (context.plusExpression() != null) {
-            ExpressionVariable result = new ExpressionVariable();
-            setVariableNameAndType(context, result);
-            result.setExpression(parsePlusExpression(context.plusExpression()));
-            return result;
-
-        }
-        return null;
     }
 
     private void setVariableNameAndType(VariableDeclarationContext context, ExpressionVariable result) {
@@ -63,13 +53,13 @@ public class RulesParser extends BaseTreeWalker {
         result.setType(ExpressionType.fromString(context.identifier(1).getText()));
     }
 
-    private Expression parseExpression(BooleanExpressionContext context) {
+    private Expression parseExpression(ExpressionContext context) {
 
         if(context.SYM_IMPLIES() != null) {
             BinaryOperator expression = new BinaryOperator();
             expression.setType(ExpressionType.BOOLEAN);
             expression.setOperator(OperatorKind.parse(context.SYM_IMPLIES().getText()));
-            expression.addOperand(parseExpression(context.booleanExpression()));
+            expression.addOperand(parseExpression(context.expression()));
             expression.addOperand(parseForAllExpression(context.booleanForAllExpression()));
             return expression;
         } else {
@@ -259,8 +249,8 @@ public class RulesParser extends BaseTreeWalker {
                 return reference;
             }
         }
-        else if(context.booleanExpression() != null) {
-            Expression expression = this.parseExpression(context.booleanExpression());
+        else if(context.expression() != null) {
+            Expression expression = this.parseExpression(context.expression());
             if(context.SYM_NOT() != null) {
                 return new UnaryOperator(ExpressionType.BOOLEAN, OperatorKind.not, expression);
             } else { //'this is '(' boolean_expression ')'
