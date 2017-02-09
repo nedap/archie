@@ -22,6 +22,8 @@ variableDeclaration: SYM_VARIABLE_START identifier SYM_COLON identifier SYM_ASSI
 
 booleanAssertion: ( identifier SYM_COLON )? expression ;
 
+
+
 //
 // Expressions evaluating to boolean values
 //
@@ -63,31 +65,23 @@ equalityExpression:
     | equalityExpression equalityBinop relOpExpression ;
 
 relOpExpression:
-    plusExpression
-    | relOpExpression relationalBinop plusExpression ;
+    arithmeticExpression
+    | relOpExpression relationalBinop arithmeticExpression ;
 
 
 //
 // Expressions evaluating to all kinds of value types
 //
 
-plusExpression
-   : multiplyingExpression
-   | plusExpression plusMinusBinop multiplyingExpression
+arithmeticExpression
+   : <assoc=right> arithmeticExpression powBinop arithmeticExpression
+   | arithmeticExpression multBinop arithmeticExpression
+   | arithmeticExpression plusMinusBinop arithmeticExpression
+   | expressionLeaf
    ;
 
-multiplyingExpression
-   : powExpression
-   | multiplyingExpression multBinop powExpression
-   ;
-
-powExpression
-   : expressionLeaf
-   | <assoc=right> powExpression '^' expressionLeaf
-   ;
-
-expressionLeaf:
-      booleanLiteral
+expressionLeaf
+    : booleanLiteral
     | integer_value
     | real_value
     | string_value
@@ -113,26 +107,27 @@ variableReference: SYM_VARIABLE_START identifier;
 
 plusMinusBinop: '+' | '-';
 multBinop: '*' | '/' | '%';
+powBinop: '^';
 
-equalityBinop:
-      '='
+equalityBinop
+    : '='
     | '!='
     ;
 
-relationalBinop:
-    | '<='
+relationalBinop
+    : '<='
     | '<'
     | '>='
     | '>'
     ;
 
-booleanLiteral:
-      SYM_TRUE
+booleanLiteral
+    : SYM_TRUE
     | SYM_FALSE
     ;
 
-SYM_FOR_ALL:
-    'for_all'
+SYM_FOR_ALL
+    : 'for_all'
     | '∀'
     | 'every' //if we follow xpath syntax, let's do that here as well (xpath 2 and xpath 3)
     ;

@@ -25,9 +25,9 @@ definition
 	OBSERVATION[id1]
 
 rules
-	$test_neq_test:Boolean ::= "test" != "test";
-    $test_eq_test:Boolean ::= "test" = "test";
-    $string_variable:String ::= "string contents";
+	$test_neq_test:Boolean ::= "test" != "test"
+    $test_eq_test:Boolean ::= "test" = "test"
+    $string_variable:String ::= "string contents"
 
 terminology
 	term_definitions = <

@@ -58,8 +58,8 @@ definition
 	}
 
 rules
-	blood_pressure_valid: for_all $event in /data[id2]/events satisfies
-	    $event/data[id4]/items[id5]/value/magnitude > $event/data[id4]/items[id6]/value/magnitude - 5;
+	blood_pressure_valid: for_all $event in /data[id2]/events
+	    $event/data[id4]/items[id5]/value/magnitude > $event/data[id4]/items[id6]/value/magnitude - 5
 
 
 

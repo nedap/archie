@@ -67,9 +67,9 @@ definition
 	}
 
 rules
-    path_systolic: exists /data[id2]/events[id3]/data[id4]/items[id5]/value/magnitude implies exists /data[id2]/events[id3]/data[id4]/items[id6]/value/magnitude;
-    must_exists: every $event in /data[id2]/events[id3] satisfies (exists $event/data[id4]/items[id5]/value/magnitude implies exists $event/data[id4]/items[id6]/value/magnitude);
-    must_set_value: every $event in /data[id2]/events[id3] satisfies ($event/data[id4]/items[id5]/value/magnitude > 3 implies $event/data[id4]/items[id6]/value/magnitude = 6);
+    path_systolic: exists /data[id2]/events[id3]/data[id4]/items[id5]/value/magnitude implies exists /data[id2]/events[id3]/data[id4]/items[id6]/value/magnitude
+    must_exists: every $event in /data[id2]/events[id3] (exists $event/data[id4]/items[id5]/value/magnitude implies exists $event/data[id4]/items[id6]/value/magnitude)
+    must_set_value: every $event in /data[id2]/events[id3] ($event/data[id4]/items[id5]/value/magnitude > 3 implies $event/data[id4]/items[id6]/value/magnitude = 6)
 terminology
 	term_definitions = <
 		["en"] = <

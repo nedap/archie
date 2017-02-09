@@ -51,9 +51,9 @@ definition
 	}
 
 rules
-	$arithmetic_test:Real ::= /data[id2]/events[id3]/data[id4]/items[id5]/value/magnitude;
+	$arithmetic_test:Real ::= /data[id2]/events[id3]/data[id4]/items[id5]/value/magnitude
 
-	blood_pressure_valid: $arithmetic_test > 50;
+	blood_pressure_valid: $arithmetic_test > 50
 
 
 
