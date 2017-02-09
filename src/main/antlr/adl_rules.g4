@@ -56,7 +56,7 @@ booleanConstraintExpression
     | equalityExpression;
 
 
-booleanConstraint: ( adlRulesPath | adlRulesRelativePath ) SYM_MATCHES ('{' c_primitive_object '}' | CONTAINED_REGEXP );
+booleanConstraint: adlRulesPath SYM_MATCHES ('{' c_primitive_object '}' | CONTAINED_REGEXP );
 
 equalityExpression:
     relOpExpression
@@ -107,10 +107,7 @@ argumentList:
 functionName:
     identifier;
 
-adlRulesPath          : variableReference? adlRulesPathSegment+;
-adlRulesRelativePath : adlRulesPathElement adlRulesPath ;
-adlRulesPathSegment  : ('/' | '//') adlRulesPathElement;
-adlRulesPathElement  : attribute_id ( '[' (ID_CODE | ARCHETYPE_REF) ']' )?;
+adlRulesPath          : SYM_VARIABLE_START? ADL_PATH;
 
 variableReference: SYM_VARIABLE_START identifier;
 

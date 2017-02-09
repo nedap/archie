@@ -41,7 +41,7 @@ c_time: ( TIME_CONSTRAINT_PATTERN | time_value | time_list_value | time_interval
 assumed_time_value: ';' time_value ;
 
 c_duration: (
-      DURATION_CONSTRAINT_PATTERN ( '/' ( duration_interval_value | duration_value ))?
+      DURATION_CONSTRAINT_PATTERN ( ( duration_interval_value | duration_value ))?
     | duration_value | duration_list_value | duration_interval_value | duration_interval_list_value ) assumed_duration_value?
     ;
 assumed_duration_value: ';' duration_value ;
@@ -58,11 +58,14 @@ c_terminology_code: '[' ( ( AC_CODE ( ';' AT_CODE )? ) | AT_CODE ) ']' ;
 c_boolean: ( boolean_value | boolean_list_value ) assumed_boolean_value? ;
 assumed_boolean_value: ';' boolean_value ;
 
-adl_path          : adl_path_segment+;//(adl_path_segment ({_input.LA(-1) != WS && _input.LA(-1) != LINE}?))+ adl_path_segment? ;
-adl_relative_path : adl_path_element adl_path ;  // TODO: remove when current slots no longer needed
-adl_path_segment  : SYM_SLASH adl_path_element ;
-adl_path_element  : attribute_id ( SYM_LEFT_BRACKET ID_CODE SYM_RIGHT_BRACKET )? ;
+adl_path          : ADL_PATH;
 
+ADL_PATH          : ADL_ABSOLUTE_PATH | ADL_RELATIVE_PATH;
+fragment ADL_ABSOLUTE_PATH : ('/' PATH_SEGMENT)+;
+fragment ADL_RELATIVE_PATH : PATH_SEGMENT ('/' PATH_SEGMENT)+;
+
+fragment PATH_SEGMENT      : ALPHA_LC_ID ('[' PATH_ATTRIBUTE ']')?;
+fragment PATH_ATTRIBUTE    : ID_CODE | STRING | INTEGER | ARCHETYPE_REF;
 
 //
 //  ======================= Lexical rules ========================
@@ -81,7 +84,7 @@ fragment CODE_STR : ('0' | [1-9][0-9]*) ( '.' ('0' | [1-9][0-9]* ))* ;
 DATE_CONSTRAINT_PATTERN      : YEAR_PATTERN '-' MONTH_PATTERN '-' DAY_PATTERN ;
 TIME_CONSTRAINT_PATTERN      : HOUR_PATTERN SYM_COLON MINUTE_PATTERN SYM_COLON SECOND_PATTERN ;
 DATE_TIME_CONSTRAINT_PATTERN : DATE_CONSTRAINT_PATTERN 'T' TIME_CONSTRAINT_PATTERN ;
-DURATION_CONSTRAINT_PATTERN  : 'P' [yY]?[mM]?[Ww]?[dD]? ( 'T' [hH]?[mM]?[sS]? )? ;
+DURATION_CONSTRAINT_PATTERN  : 'P' [yY]?[mM]?[Ww]?[dD]? ( 'T' [hH]?[mM]?[sS]? )? ('/')?; //TODO: can also be a list!
 
 // date time pattern
 fragment YEAR_PATTERN   : ( 'yyy' 'y'? ) | ( 'YYY' 'Y'? ) ;

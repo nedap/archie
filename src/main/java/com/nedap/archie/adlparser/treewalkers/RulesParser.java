@@ -142,30 +142,22 @@ public class RulesParser extends BaseTreeWalker {
     @NotNull
     private ModelReference parseModelReference(AdlRulesPathContext context) {
         String variableReference = null;
-        if(context.variableReference() != null) {
-            variableReference = context.variableReference().identifier().getText();
+        String path = context.ADL_PATH().getText();
+        if(context.SYM_VARIABLE_START() != null) {
+            variableReference = CComplexObjectParser.getFirstAttributeOfPath(path);
+            path = CComplexObjectParser.getPathMinusFirstAttribute(path);
         }
-        StringBuilder path = new StringBuilder();
-        for(AdlRulesPathSegmentContext pathSegment:context.adlRulesPathSegment()){
-            path.append(pathSegment.getText());
 
-        }
-        return new ModelReference(variableReference, path.toString());
+        return new ModelReference(variableReference, path);
     }
 
-    @NotNull
-    private ModelReference parseModelReference(AdlRulesRelativePathContext context) {
-        return new ModelReference(context.getText());
-    }
 
     private Expression parseBooleanConstraint(BooleanConstraintContext context) {
         ModelReference modelReference = null;
         if(context.adlRulesPath() != null) {
             modelReference = parseModelReference(context.adlRulesPath());
         }
-        if(context.adlRulesRelativePath() != null) {
-            modelReference = parseModelReference(context.adlRulesRelativePath());
-        }
+
         CPrimitiveObject cPrimitiveObject = null;
         if(context.c_primitive_object() != null) {
             cPrimitiveObject = primitivesConstraintParser.parsePrimitiveObject(context.c_primitive_object());

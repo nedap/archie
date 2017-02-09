@@ -48,9 +48,7 @@ c_attribute_def:
     | c_attribute_tuple
     ;
 
-c_attribute: adl_dir? attribute_id c_existence? c_cardinality? ( SYM_MATCHES ('{' c_objects '}' | CONTAINED_REGEXP) )? ;
-
-adl_dir  : '/' | ( adl_path_segment+ '/' ) ;
+c_attribute: (ADL_PATH | attribute_id) c_existence? c_cardinality? ( SYM_MATCHES ('{' c_objects '}' | CONTAINED_REGEXP) )? ;
 
 c_attribute_tuple : '[' attribute_id ( ',' attribute_id )* ']' SYM_MATCHES '{' c_object_tuple ( ',' c_object_tuple )* '}' ;
 
