@@ -281,15 +281,39 @@ The RMQueryContext provides full XPath 1-support on reference model instances. A
 
 ## Rule evaluation
 
-Basic rule evaluation is implemented, but the implementation is still experimental with missing features. The API and implementation is likely to be changed in the near future. See RuleEvaluation.java on how to use.
+Basic rule evaluation is implemented, but the implementation is still experimental. See RuleEvaluation.java on how to use.
 
-The syntax has a few deviations from the standard, for now. This can be changed when we switch to a whitespace-aware parser, but until then the grammar would contain ambiguities otherwise:
+The rule evaluation means assertions can be defined, then passed through the ```RuleEvaluation``` class. The result is:
 
-- every assertion MUST end with a ';'
-- The specs say ```for_all $event in /events $event/something > 5``` is valid. We follow the XPath 2 syntax for this: ```every $event in /events satisfies $event/something > 5```. for_all and ∀ work, the XPath keyword 'every' is non-standard.
+- a list of assertions, each noting:
+    - whether it evaluated to true or false
+    - whether it can be automatically fixed or a step by the user is needed
+    - what must be done to automatically fix this rule, by setting paths to values and paths that must exist or not exist
+    - which fields were used to evaluate to the result so errors can be shown
+
+This means you can link the RuleEvaluation to a user interface, implement a way to set paths to a value, hide or show some fields and display validations, and you have a working rule evaluation.
+
+Automatically fixing rules means that rules in the following form can be used for score calculations:
+
+```
+/path/to[id12]/score_result = /path/to[id12]/field_one + /path/to[id12]/field_two
+```
+
+Or for conditionally hiding fields:
+
+```
+/path/to[id12]/score_result > 3 implies exists /path/to/hidden/field
+```
+
+Or for validations that a user must fix themselves:
+
+```
+total_score_must_be_high: /path/to[id12]/score_result + /some_other_score > 24
+```
+
+And many more things. Currently supported is comparison and arithmetic operators, path retrieval, exists and not exists, implies, variable declaration and use, for_all. integer, string and boolean literals are implemented, although currently the string literal support is limited to the != and = operator. That means you can set fields with string values, including code_strings of DV_CODED_TEXT and DV_ORDINAL fields.
 
 Rules are very similar to XPath expressions, with a few exceptions. However, the specification is lacking a formal definition of how to handle several kind of multiplicities. Where multiplicities occur in the paths in rules outside of a for_all rule, the W3C XPath 1 specification is used.
-
 
 ## Status
 
