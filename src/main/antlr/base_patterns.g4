@@ -8,6 +8,25 @@ grammar base_patterns;
 // -------------------------- Parse Rules --------------------------
 //
 
+ADL_PATH          : ADL_ABSOLUTE_PATH | ADL_RELATIVE_PATH;
+fragment ADL_ABSOLUTE_PATH : ('/' PATH_SEGMENT)+;
+fragment ADL_RELATIVE_PATH : PATH_SEGMENT ('/' PATH_SEGMENT)+;
+
+fragment PATH_SEGMENT      : ALPHA_LC_ID ('[' PATH_ATTRIBUTE ']')?;
+fragment PATH_ATTRIBUTE    : ID_CODE | STRING | INTEGER | ARCHETYPE_REF;
+
+//
+//  ======================= Lexical rules ========================
+//
+
+// ---------- various ADL2 codes -------
+
+ROOT_ID_CODE : 'id1' '.1'* ;
+ID_CODE      : 'id' CODE_STR ;
+AT_CODE      : 'at' CODE_STR ;
+AC_CODE      : 'ac' CODE_STR ;
+fragment CODE_STR : ('0' | [1-9][0-9]*) ( '.' ('0' | [1-9][0-9]* ))* ;
+
 type_id      : ALPHA_UC_ID ( '<' type_id ( ',' type_id )* '>' )? ;
 attribute_id : ALPHA_LC_ID ;
 identifier   : ALPHA_UC_ID | ALPHA_LC_ID ;

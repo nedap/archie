@@ -60,6 +60,7 @@ public class ADLParser {
         parser = new AdlParser(new CommonTokenStream(lexer));
         parser.addErrorListener(errorListener);
         tree = parser.adl(); // parse
+        //System.out.println(tree.toStringTree(parser));
 
         ADLListener listener = new ADLListener(errors);
         walker= new ParseTreeWalker();

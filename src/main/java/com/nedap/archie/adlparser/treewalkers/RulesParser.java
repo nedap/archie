@@ -31,7 +31,7 @@ public class RulesParser extends BaseTreeWalker {
             if (context.identifier() != null) {
                 assertion.setTag(context.identifier().getText());
             }
-            assertion.setExpression(parseExpression(context.booleanExpression()));
+            assertion.setExpression(parseExpression(context.expression()));
             return assertion;
         } else if (assertionContext.variableDeclaration() != null) {
             VariableDeclaration declaration = parseVariableDeclaration(assertionContext.variableDeclaration());
@@ -41,21 +41,11 @@ public class RulesParser extends BaseTreeWalker {
     }
 
     private VariableDeclaration parseVariableDeclaration(VariableDeclarationContext context) {
+        ExpressionVariable result = new ExpressionVariable();
+        setVariableNameAndType(context, result);
+        result.setExpression(parseExpression(context.expression()));
+        return result;
 
-        if(context.booleanExpression() != null) {
-            ExpressionVariable result = new ExpressionVariable();
-            setVariableNameAndType(context, result);
-            result.setExpression(parseExpression(context.booleanExpression()));
-            return result;
-
-        } else if (context.plusExpression() != null) {
-            ExpressionVariable result = new ExpressionVariable();
-            setVariableNameAndType(context, result);
-            result.setExpression(parsePlusExpression(context.plusExpression()));
-            return result;
-
-        }
-        return null;
     }
 
     private void setVariableNameAndType(VariableDeclarationContext context, ExpressionVariable result) {
@@ -63,13 +53,13 @@ public class RulesParser extends BaseTreeWalker {
         result.setType(ExpressionType.fromString(context.identifier(1).getText()));
     }
 
-    private Expression parseExpression(BooleanExpressionContext context) {
+    private Expression parseExpression(ExpressionContext context) {
 
         if(context.SYM_IMPLIES() != null) {
             BinaryOperator expression = new BinaryOperator();
             expression.setType(ExpressionType.BOOLEAN);
             expression.setOperator(OperatorKind.parse(context.SYM_IMPLIES().getText()));
-            expression.addOperand(parseExpression(context.booleanExpression()));
+            expression.addOperand(parseExpression(context.expression()));
             expression.addOperand(parseForAllExpression(context.booleanForAllExpression()));
             return expression;
         } else {
@@ -152,30 +142,22 @@ public class RulesParser extends BaseTreeWalker {
     @NotNull
     private ModelReference parseModelReference(AdlRulesPathContext context) {
         String variableReference = null;
-        if(context.variableReference() != null) {
-            variableReference = context.variableReference().identifier().getText();
+        String path = context.ADL_PATH().getText();
+        if(context.SYM_VARIABLE_START() != null) {
+            variableReference = CComplexObjectParser.getFirstAttributeOfPath(path);
+            path = CComplexObjectParser.getPathMinusFirstAttribute(path);
         }
-        StringBuilder path = new StringBuilder();
-        for(AdlRulesPathSegmentContext pathSegment:context.adlRulesPathSegment()){
-            path.append(pathSegment.getText());
 
-        }
-        return new ModelReference(variableReference, path.toString());
+        return new ModelReference(variableReference, path);
     }
 
-    @NotNull
-    private ModelReference parseModelReference(AdlRulesRelativePathContext context) {
-        return new ModelReference(context.getText());
-    }
 
     private Expression parseBooleanConstraint(BooleanConstraintContext context) {
         ModelReference modelReference = null;
         if(context.adlRulesPath() != null) {
             modelReference = parseModelReference(context.adlRulesPath());
         }
-        if(context.adlRulesRelativePath() != null) {
-            modelReference = parseModelReference(context.adlRulesRelativePath());
-        }
+
         CPrimitiveObject cPrimitiveObject = null;
         if(context.c_primitive_object() != null) {
             cPrimitiveObject = primitivesConstraintParser.parsePrimitiveObject(context.c_primitive_object());
@@ -201,46 +183,36 @@ public class RulesParser extends BaseTreeWalker {
     private Expression parseRelOpExpression(RelOpExpressionContext context) {
         if(context.relationalBinop() != null) {
             Expression left = parseRelOpExpression(context.relOpExpression());
-            Expression right = parsePlusExpression(context.plusExpression());
+            Expression right = parseArithmeticExpression(context.arithmeticExpression());
             if(left.getType() != null && right.getType() != null && left.getType() != right.getType()) {
                 throw new IllegalArgumentException("arithmetic relop expression with different types: " + left.getType() + " + " + right.getType());
             }
             return new BinaryOperator(left.getType(), OperatorKind.parse(context.relationalBinop().getText()), left, right);
         } else {
-            return parsePlusExpression(context.plusExpression());
+            return parseArithmeticExpression(context.arithmeticExpression());
         }
 
     }
 
-    private Expression parsePlusExpression(PlusExpressionContext context) {
+    private Expression parseArithmeticExpression(ArithmeticExpressionContext context) {
         if(context.plusMinusBinop() != null) {
-            Expression left = parsePlusExpression(context.plusExpression());
-            Expression right = parseMultiplyingExpression(context.multiplyingExpression());
+            Expression left = parseArithmeticExpression(context.arithmeticExpression().get(0));
+            Expression right = parseArithmeticExpression(context.arithmeticExpression().get(1));
             return new BinaryOperator(right.getType(), OperatorKind.parse(context.plusMinusBinop().getText()), left, right);
-        } else {
-            return parseMultiplyingExpression(context.multiplyingExpression());
-        }
-    }
-
-    private Expression parseMultiplyingExpression(MultiplyingExpressionContext context) {
-        if(context.multBinop() != null) {
-            Expression left = parseMultiplyingExpression(context.multiplyingExpression());
-            Expression right = parsePowExpression(context.powExpression());
+        } else if(context.multBinop() != null) {
+            Expression left = parseArithmeticExpression(context.arithmeticExpression().get(0));
+            Expression right = parseArithmeticExpression(context.arithmeticExpression().get(1));
             return new BinaryOperator(right.getType(), OperatorKind.parse(context.multBinop().getText()), left, right);
-        } else {
-            return parsePowExpression(context.powExpression());
-        }
-    }
-
-    private Expression parsePowExpression(PowExpressionContext context) {
-        if(context.powExpression() != null) {
-            Expression left = parsePowExpression(context.powExpression());
-            Expression right = parseExpressionLeaf(context.expressionLeaf());
-            return new BinaryOperator(right.getType(), OperatorKind.parse("^"), left, right);
-        } else {
+        } else if(context.powBinop() != null) {
+            Expression left = parseArithmeticExpression(context.arithmeticExpression().get(0));
+            Expression right = parseArithmeticExpression(context.arithmeticExpression().get(1));
+            return new BinaryOperator(right.getType(), OperatorKind.parse(context.powBinop().getText()), left, right);
+        }else {
             return parseExpressionLeaf(context.expressionLeaf());
         }
     }
+
+
 
     private Expression parseExpressionLeaf(ExpressionLeafContext context) {
         if(context.integer_value() != null) {
@@ -259,8 +231,8 @@ public class RulesParser extends BaseTreeWalker {
                 return reference;
             }
         }
-        else if(context.booleanExpression() != null) {
-            Expression expression = this.parseExpression(context.booleanExpression());
+        else if(context.expression() != null) {
+            Expression expression = this.parseExpression(context.expression());
             if(context.SYM_NOT() != null) {
                 return new UnaryOperator(ExpressionType.BOOLEAN, OperatorKind.not, expression);
             } else { //'this is '(' boolean_expression ')'

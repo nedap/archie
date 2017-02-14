@@ -61,12 +61,15 @@ public class CComplexObjectParser extends BaseTreeWalker {
         if (attributeDefContext.c_attribute() != null) {
             CAttribute attribute = new CAttribute();
             C_attributeContext attributeContext = attributeDefContext.c_attribute();
-            attribute.setRmAttributeName(attributeContext.attribute_id().getText());
+            if(attributeContext.attribute_id() != null) {
+                attribute.setRmAttributeName(attributeContext.attribute_id().getText());
+            } else {
+                attribute.setDifferentialPath(attributeContext.ADL_PATH().getText());
+
+                attribute.setRmAttributeName(getLastAttributeFromPath(attribute.getDifferentialPath()));
+            }
             if (attributeContext.c_existence() != null) {
                 attribute.setExistence(parseMultiplicityInterval(attributeContext.c_existence()));
-            }
-            if(attributeContext.adl_dir() != null) {
-                attribute.setDifferentialPath(attributeContext.adl_dir().getText() + attributeContext.attribute_id().getText());
             }
 
             if (attributeContext.c_cardinality() != null) {
@@ -82,6 +85,18 @@ public class CComplexObjectParser extends BaseTreeWalker {
             parent.addAttributeTuple(parseAttributeTuple(parent, attributeDefContext.c_attribute_tuple()));
         }
 
+    }
+
+    public static String getFirstAttributeOfPath(String path) {
+        return path.substring(0, path.indexOf('/'));
+    }
+
+    public static String getPathMinusFirstAttribute(String path) {
+        return path.substring(path.indexOf('/'));
+    }
+
+    public static String getLastAttributeFromPath(String path) {
+           return path.substring(path.lastIndexOf('/')+1);
     }
 
     private CAttributeTuple parseAttributeTuple(CComplexObject parent, C_attribute_tupleContext attributeTupleContext) {

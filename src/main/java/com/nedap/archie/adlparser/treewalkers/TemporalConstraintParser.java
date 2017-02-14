@@ -98,7 +98,15 @@ public class TemporalConstraintParser extends BaseTreeWalker {
         //TODO: surround with try catch, do a nice error reporting with line numbers and other nice messages here :)
         CDuration result = new CDuration();
         if(context.DURATION_CONSTRAINT_PATTERN() != null) {
-            result.setPatternedConstraint(context.DURATION_CONSTRAINT_PATTERN().getText());
+
+            String durationPattern = context.DURATION_CONSTRAINT_PATTERN().getText();
+            //This is a bit of a hack - the duration pattern can be followed by a '/'.
+            // To not clash with path, the lexer has to parse this '/' and include it in the pattern
+            //so remove it here.
+            if(durationPattern.endsWith("/")) {
+                durationPattern = durationPattern.substring(0, durationPattern.length()-1);
+            }
+            result.setPatternedConstraint(durationPattern);
         }
         if(context.assumed_duration_value() != null) {
             result.setAssumedValue(parseDurationValue(context.assumed_duration_value().duration_value().getText()));

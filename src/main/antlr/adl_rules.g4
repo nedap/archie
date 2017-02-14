@@ -14,22 +14,24 @@ import cadl_primitives;
 //  ============== Parser rules ==============
 //
 
-assertion_list: (assertion (';'))+ ;// {_input.LA(1) == WS || _input.LA(1) == LINE}?) +;//whitespace parsing to prevent ambiguity
+assertion_list: (assertion (';')?)+ ;// {_input.LA(1) == WS || _input.LA(1) == LINE}?) +;//whitespace parsing to prevent ambiguity
 
 assertion: variableDeclaration | booleanAssertion;
 
-variableDeclaration: SYM_VARIABLE_START identifier SYM_COLON identifier SYM_ASSIGNMENT (booleanExpression | plusExpression);
+variableDeclaration: SYM_VARIABLE_START identifier SYM_COLON identifier SYM_ASSIGNMENT expression;
 
-booleanAssertion: ( identifier SYM_COLON )? booleanExpression ;
+booleanAssertion: ( identifier SYM_COLON )? expression ;
+
+
 
 //
 // Expressions evaluating to boolean values
 //
 
 
-booleanExpression
+expression
     : booleanForAllExpression
-    | booleanExpression SYM_IMPLIES booleanForAllExpression
+    | expression SYM_IMPLIES booleanForAllExpression
     ;
 
 booleanForAllExpression
@@ -56,78 +58,76 @@ booleanConstraintExpression
     | equalityExpression;
 
 
-booleanConstraint: ( adlRulesPath | adlRulesRelativePath ) SYM_MATCHES ('{' c_primitive_object '}' | CONTAINED_REGEXP );
+booleanConstraint: adlRulesPath SYM_MATCHES ('{' c_primitive_object '}' | CONTAINED_REGEXP );
 
 equalityExpression:
     relOpExpression
     | equalityExpression equalityBinop relOpExpression ;
 
 relOpExpression:
-    plusExpression
-    | relOpExpression relationalBinop plusExpression ;
+    arithmeticExpression
+    | relOpExpression relationalBinop arithmeticExpression ;
 
 
 //
 // Expressions evaluating to all kinds of value types
 //
 
-plusExpression
-   : multiplyingExpression
-   | plusExpression plusMinusBinop multiplyingExpression
+arithmeticExpression
+   : <assoc=right> arithmeticExpression powBinop arithmeticExpression
+   | arithmeticExpression multBinop arithmeticExpression
+   | arithmeticExpression plusMinusBinop arithmeticExpression
+   | expressionLeaf
    ;
 
-multiplyingExpression
-   : powExpression
-   | multiplyingExpression multBinop powExpression
-   ;
-
-powExpression
-   : expressionLeaf
-   | <assoc=right> powExpression '^' expressionLeaf
-   ;
-
-expressionLeaf:
-      booleanLiteral
+expressionLeaf
+    : booleanLiteral
     | integer_value
     | real_value
     | string_value
     | adlRulesPath
     | SYM_EXISTS adlRulesPath
-    | SYM_NOT booleanExpression
+    | SYM_NOT expression
+    | functionName '(' (argumentList)? ')'
     | variableReference
-    | '(' booleanExpression ')'
+    | '(' expression ')'
     | '-' expressionLeaf
     ;
 
-adlRulesPath          : variableReference? adlRulesPathSegment+;
-adlRulesRelativePath : adlRulesPathElement adlRulesPath ;
-adlRulesPathSegment  : ('/' | '//') adlRulesPathElement;
-adlRulesPathElement  : attribute_id ( '[' (ID_CODE | ARCHETYPE_REF) ']' )?;
+argumentList:
+    expression (',' expression)*
+    ;
+
+functionName:
+    identifier;
+
+adlRulesPath          : SYM_VARIABLE_START? ADL_PATH;
 
 variableReference: SYM_VARIABLE_START identifier;
 
 plusMinusBinop: '+' | '-';
 multBinop: '*' | '/' | '%';
+powBinop: '^';
 
-equalityBinop:
-      '='
+equalityBinop
+    : '='
     | '!='
     ;
 
-relationalBinop:
-    | '<='
+relationalBinop
+    : '<='
     | '<'
     | '>='
     | '>'
     ;
 
-booleanLiteral:
-      SYM_TRUE
+booleanLiteral
+    : SYM_TRUE
     | SYM_FALSE
     ;
 
-SYM_FOR_ALL:
-    'for_all'
+SYM_FOR_ALL
+    : 'for_all'
     | '∀'
     | 'every' //if we follow xpath syntax, let's do that here as well (xpath 2 and xpath 3)
     ;

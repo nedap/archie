@@ -68,6 +68,4 @@ primitive_interval_value :
 object_reference_block : '<' odin_path_list '>' ;
 
 odin_path_list     : odin_path ( ( ',' odin_path )+ | SYM_LIST_CONTINUE )? ;
-odin_path          : '/' | odin_path_segment+ ;
-odin_path_segment  : '/' odin_path_element ;
-odin_path_element  : attribute_id ( '[' ( STRING | INTEGER ) ']' )? ;
+odin_path          : '/' | ADL_PATH ;
