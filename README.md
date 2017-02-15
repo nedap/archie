@@ -323,6 +323,7 @@ What we want this to do in the future:
 - Date Constraint parsing with patterns, not just intervals
 - More tests
 - Validating if an RM object conforms to a certain archetype, apart from the rules
+- Validating archetypes to see if they are valid
 - ...
 
 ## Contributions
