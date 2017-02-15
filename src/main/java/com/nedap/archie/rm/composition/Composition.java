@@ -1,5 +1,6 @@
 package com.nedap.archie.rm.composition;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nedap.archie.rm.archetyped.Locatable;
 import com.nedap.archie.rm.datatypes.CodePhrase;
 import com.nedap.archie.rm.generic.PartyProxy;
@@ -47,6 +48,7 @@ public class Composition extends Locatable {
         this.language = language;
     }
 
+    @JsonIgnore
     public void setLanguage(String codePhrase) {
         this.language = new CodePhrase(codePhrase);
     }
