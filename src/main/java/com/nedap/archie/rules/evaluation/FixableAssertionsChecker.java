@@ -191,7 +191,7 @@ class FixableAssertionsChecker {
     }
 
     private void setPathsToValues(AssertionResult assertionResult, String path, ValueList value) {
-        logger.info("path {} set to value {} ", path, value);
+        logger.debug("path {} set to value {} ", path, value);
         assertionResult.setSetPathValue(path, value);
     }
 }

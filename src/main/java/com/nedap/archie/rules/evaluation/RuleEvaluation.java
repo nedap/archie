@@ -94,7 +94,7 @@ public class RuleEvaluation {
         if(evaluator != null) {
             ValueList valueList = evaluator.evaluate(this, rule);
             ruleElementValueSet(rule, valueList);
-            logger.info("evaluated rule: {}", valueList);
+            logger.debug("evaluated rule: {}", valueList);
             return valueList;
         }
         throw new UnsupportedOperationException("no evaluator present for rule type " + rule.getClass().getSimpleName());
