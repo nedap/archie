@@ -24,7 +24,7 @@ or if you use maven, in your pom.xml
 <dependency>
     <groupId>com.nedap.healthcare</groupId>
     <artifactId>archie</artifactId>
-    <version>0.3.4</version>
+    <version>0.3.5</version>
 </dependency>
 ```
 
