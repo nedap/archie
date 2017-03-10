@@ -14,7 +14,7 @@ In gradle, include this dependency in your build.gradle:
 
 ```gradle
 dependencies {
-    compile 'com.nedap.healthcare:archie:0.3.4'
+    compile 'com.nedap.healthcare:archie:0.3.5'
 }
 ```
 
