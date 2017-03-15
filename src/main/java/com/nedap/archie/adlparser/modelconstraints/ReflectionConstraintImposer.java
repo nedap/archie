@@ -6,6 +6,7 @@ import com.nedap.archie.aom.Cardinality;
 import com.nedap.archie.rminfo.ModelInfoLookup;
 import com.nedap.archie.rminfo.RMAttributeInfo;
 import com.nedap.archie.rminfo.RMTypeInfo;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Map;
@@ -22,43 +23,40 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ReflectionConstraintImposer implements ModelConstraintImposer {
 
     /** Contains complex object structure of the specified model. Attributes NEVER will have children. Sorry bout that :)*/
-    private Map<String, CComplexObject> objects = new ConcurrentHashMap<>();
+
+    private ModelInfoLookup lookup;
 
     public ReflectionConstraintImposer(ModelInfoLookup classLookup) {
-        List<RMTypeInfo> rmTypes = classLookup.getAllTypes();
+        this.lookup = classLookup;
+    }
 
-        for(RMTypeInfo typeInfo:rmTypes) {
-            CComplexObject object = new CComplexObject();
-            object.setRmTypeName(typeInfo.getRmName());
+    @NotNull
+    private CAttribute createCAttribute(RMAttributeInfo attributeInfo) {
+        CAttribute attribute = new CAttribute();
+        attribute.setCardinality(new Cardinality(1,1));
+        attribute.setMultiple(false);
+        attribute.setRmAttributeName(attributeInfo.getRmName());
 
-            for(RMAttributeInfo attributeInfo:typeInfo.getAttributes().values()) {
-                CAttribute attribute = new CAttribute();
-                attribute.setCardinality(new Cardinality(1,1));
-                attribute.setMultiple(false);
-                attribute.setRmAttributeName(attributeInfo.getRmName());
-
-                if(attributeInfo.isNullable()) {
-                    //TODO: not correct. Should be existence?
-                    attribute.setCardinality(new Cardinality(0,1));
-                }
-
-                if(attributeInfo.isMultipleValued()) {
-                    attribute.setCardinality(Cardinality.unbounded());
-                    attribute.setMultiple(true);
-                }
-                object.addAttribute(attribute);
-            }
-            objects.put(object.getRmTypeName(), object);
-
+        if(attributeInfo.isNullable()) {
+            //TODO: not correct. Should be existence?
+            attribute.setCardinality(new Cardinality(0,1));
         }
+
+        if(attributeInfo.isMultipleValued()) {
+            attribute.setCardinality(Cardinality.unbounded());
+            attribute.setMultiple(true);
+        }
+        return attribute;
     }
 
     @Override
     public CAttribute getDefaultAttribute(String typeId, String attribute) {
-        CComplexObject object = objects.get(typeId);
-        if(object == null) {
+        RMAttributeInfo info = lookup.getAttributeInfo(typeId, attribute);
+        if(info == null) {
             return null;
         }
-        return object.getAttribute(attribute);
+        return createCAttribute(info);
     }
+
+
 }
