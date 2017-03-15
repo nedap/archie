@@ -21,6 +21,10 @@ import java.util.regex.Pattern;
  */
 public class APathToXPathConverter {
 
+    //Pattern is thread-safe and immutable, so fine to store here for performance reasons
+    private static Pattern idCodePattern = Pattern.compile("id\\d+");
+    private static Pattern numberPattern = Pattern.compile("\\d+");
+
     public static String convertQueryToXPath(String query, String firstNodeName) {
         String convertedQuery = convertWithAntlr(query);
         if(query.startsWith("//")) {
@@ -101,8 +105,7 @@ public class APathToXPathConverter {
      */
     private static void writeTree(StringBuilder output, ParseTree tree, boolean inPredicate) {
 
-        Pattern idCodePattern = Pattern.compile("id\\d+");
-        Pattern numberPattern = Pattern.compile("\\d+");
+
 
         Set<String> literalsThatShouldHaveSpacing = Sets.<String>newHashSet("and", "or", ",", "-", "+", "*", "|", "<", ">", "<=", ">=");
         for(int i = 0; i < tree.getChildCount(); i++) {

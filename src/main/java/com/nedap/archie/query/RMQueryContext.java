@@ -34,6 +34,7 @@ import java.util.List;
  */
 public class RMQueryContext {
 
+    private final XPathFactory xPathFactory;
     private Binder<Node> binder;
     private Document domForQueries;
 
@@ -78,6 +79,7 @@ public class RMQueryContext {
         } catch (JAXBException e) {
             throw new RuntimeException(e);
         }
+        xPathFactory = XPathFactory.newInstance();
     }
 
     public Document createBlankDOMDocument(boolean namespaceAware) {
@@ -96,7 +98,7 @@ public class RMQueryContext {
 
     public <T> List<T> findList(String query) throws XPathExpressionException {
         String convertedQuery = APathToXPathConverter.convertQueryToXPath(query, firstXPathNode);
-        XPath xpath = XPathFactory.newInstance().newXPath();
+        XPath xpath = xPathFactory.newXPath();
 
 
         xpath.setNamespaceContext( new ArchieNamespaceResolver(domForQueries));
@@ -137,7 +139,7 @@ public class RMQueryContext {
 
     public List<RMObjectWithPath> findListWithPaths(String query) throws XPathExpressionException {
         String convertedQuery = APathToXPathConverter.convertQueryToXPath(query, firstXPathNode);
-        XPath xpath = XPathFactory.newInstance().newXPath();
+        XPath xpath = xPathFactory.newXPath();
         xpath.setNamespaceContext( new ArchieNamespaceResolver(domForQueries));
         NodeList foundNodes = (NodeList)xpath.evaluate(convertedQuery, domForQueries, XPathConstants.NODESET);
         List<RMObjectWithPath> result = new ArrayList<>();
