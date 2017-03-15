@@ -1,5 +1,6 @@
 package com.nedap.archie.query;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import com.nedap.archie.adlparser.antlr.XPathLexer;
 import com.nedap.archie.adlparser.antlr.XPathParser;
@@ -24,6 +25,9 @@ public class APathToXPathConverter {
     //Pattern is thread-safe and immutable, so fine to store here for performance reasons
     private static Pattern idCodePattern = Pattern.compile("id\\d+");
     private static Pattern numberPattern = Pattern.compile("\\d+");
+    //warning: do NOT modify this set, only create it!
+    private static Set<String> literalsThatShouldHaveSpacing = new ImmutableSet.Builder().add("and", "or", ",", "-", "+", "*", "|", "<", ">", "<=", ">=").build();
+
 
     public static String convertQueryToXPath(String query, String firstNodeName) {
         String convertedQuery = convertWithAntlr(query);
@@ -106,8 +110,6 @@ public class APathToXPathConverter {
     private static void writeTree(StringBuilder output, ParseTree tree, boolean inPredicate) {
 
 
-
-        Set<String> literalsThatShouldHaveSpacing = Sets.<String>newHashSet("and", "or", ",", "-", "+", "*", "|", "<", ">", "<=", ">=");
         for(int i = 0; i < tree.getChildCount(); i++) {
             ParseTree child = tree.getChild(i);
             if(child instanceof TerminalNode) {
