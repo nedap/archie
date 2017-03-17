@@ -67,7 +67,7 @@ public class PathSegment {
     public boolean hasNumberIndex() { return index != null;}
 
     public boolean hasArchetypeRef() {
-        return nodeId != null && archetypeRefPattern.matcher(nodeId).matches());
+        return nodeId != null && archetypeRefPattern.matcher(nodeId).matches();
     }
 
     @Override
