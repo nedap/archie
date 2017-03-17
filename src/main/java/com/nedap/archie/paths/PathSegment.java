@@ -2,12 +2,17 @@ package com.nedap.archie.paths;
 
 import com.google.common.base.Joiner;
 
+import java.util.regex.Pattern;
+
 /**
  * Segment of an apath-query
  * Created by pieter.bos on 19/10/15.
  */
 public class PathSegment {
     private final static Joiner expressionJoiner = Joiner.on(", ").skipNulls();
+
+    private static final Pattern archetypeRefPattern = Pattern.compile("(.*::)?.*-.*-.*\\..*\\.v.*");
+    private static final Pattern nodeIdPattern = Pattern.compile("id(\\.?\\d)+");
 
     private String nodeName;
     private String nodeId;
@@ -56,21 +61,21 @@ public class PathSegment {
     }
 
     public boolean hasIdCode() {
-        return nodeId != null && nodeId.matches("id(\\.?\\d)+");
+        return nodeId != null && nodeIdPattern.matcher(nodeId).matches();
     }
 
     public boolean hasNumberIndex() { return index != null;}
 
     public boolean hasArchetypeRef() {
-        return nodeId != null && nodeId.matches("(.*::)?.*-.*-.*\\..*\\.v.*");
+        return nodeId != null && archetypeRefPattern.matcher(nodeId).matches());
     }
 
     @Override
     public String toString() {
         if(hasExpressions()) {
-            return String.format("/%s[%s]", nodeName, expressionJoiner.join(nodeId, index));
+            return "/" + nodeName + "[" +  expressionJoiner.join(nodeId, index) + "]";
         } else {
-            return String.format("/%s", nodeName);
+            return "/" + nodeName;
         }
     }
 
