@@ -1,0 +1,56 @@
+package com.nedap.archie.archetypevalidator;
+
+import com.google.common.base.Strings;
+import com.nedap.archie.rm.generic.Participation;
+
+/**
+ * Created by pieter.bos on 31/03/2017.
+ */
+public class ValidationMessage {
+    private ErrorType type;
+    private String pathInArchetype;
+    private String message;
+
+    public ValidationMessage(ErrorType type, String pathInArchetype) {
+        this.type = type;
+        this.pathInArchetype = pathInArchetype;
+    }
+
+    public ValidationMessage(ErrorType type, String pathInArchetype, String message) {
+        this.type = type;
+        this.pathInArchetype = pathInArchetype;
+        this.message = message;
+    }
+
+    public ErrorType getType() {
+        return type;
+    }
+
+    public void setType(ErrorType type) {
+        this.type = type;
+    }
+
+    public String getPathInArchetype() {
+        return pathInArchetype;
+    }
+
+    public void setPathInArchetype(String pathInArchetype) {
+        this.pathInArchetype = pathInArchetype;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public String toString() {
+        String result = type.toString() + " at " + pathInArchetype;
+        if(!Strings.isNullOrEmpty(message)) {
+            result += ": " + message;
+        }
+        return result;
+    }
+}

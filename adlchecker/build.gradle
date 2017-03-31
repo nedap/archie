@@ -3,10 +3,11 @@ apply plugin: 'application'
 
 repositories {
     mavenCentral()
+    mavenLocal()
 }
 
 dependencies {
-    compile 'com.nedap.healthcare:archie:0.3.6'
+    compile 'com.nedap.healthcare:archie:0.4.0-SNAPSHOT'
     compile 'net.sourceforge.argparse4j:argparse4j:0.7.0'
 }
 
