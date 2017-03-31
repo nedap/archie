@@ -3,6 +3,10 @@ package com.nedap.archie.adlchecker;
 import com.nedap.archie.adlparser.ADLParser;
 import com.nedap.archie.adlparser.ADLParserMessage;
 import com.nedap.archie.aom.Archetype;
+import com.nedap.archie.aom.CAttribute;
+import com.nedap.archie.aom.CObject;
+import com.nedap.archie.archetypevalidator.ArchetypeValidator;
+import com.nedap.archie.archetypevalidator.ValidationMessage;
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;
@@ -10,6 +14,10 @@ import net.sourceforge.argparse4j.inf.Namespace;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayDeque;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
 
 public class AdlChecker {
 
@@ -17,8 +25,10 @@ public class AdlChecker {
         ArgumentParser parser = ArgumentParsers.newArgumentParser("AdlChecker")
                 .defaultHelp(true)
                 .description("Checks the syntax of ADL files");
+
         parser.addArgument("file").nargs("*")
                 .help("File to calculate checksum");
+
         Namespace ns = null;
         try {
             ns = parser.parseArgs(args);
@@ -32,11 +42,16 @@ public class AdlChecker {
             parser.printHelp();
         }
 
-        for (String name : ns.<String> getList("file")) {
+        validateArchetypes(ns.getList("file"));
+    }
+
+    private static void validateArchetypes(List<String> files) {
+        for (String name : files) {
             ADLParser adlParser = new ADLParser();
             try (FileInputStream stream = new FileInputStream(name)) {
                 try {
                     Archetype parsed = adlParser.parse(stream);
+                    check(parsed);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -59,4 +74,14 @@ public class AdlChecker {
 
         }
     }
+
+    public static void check(Archetype archetype) {
+        ArchetypeValidator validator = new ArchetypeValidator();
+        List<ValidationMessage> messages = validator.validate(archetype);
+        for(ValidationMessage message:messages) {
+            System.err.println(message);
+        }
+    }
+
+
 }

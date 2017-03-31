@@ -140,9 +140,20 @@ public class ModelInfoLookup {
             Class typeInCollection = rawFieldType;
             if (Collection.class.isAssignableFrom(rawFieldType)) {
                 Type[] actualTypeArguments = ((ParameterizedType) fieldType.getType()).getActualTypeArguments();
-                if (actualTypeArguments.length == 1 &&
-                        actualTypeArguments[0] instanceof Class) {
-                    typeInCollection = (Class) actualTypeArguments[0];
+                for (Type t : actualTypeArguments) {
+                    //System.out.println(clazz.getSimpleName() + ": " + field.getName() + ": " + t);
+                }
+                if (actualTypeArguments.length == 1) {
+                    if (actualTypeArguments[0] instanceof Class) {
+                        typeInCollection = (Class) actualTypeArguments[0];
+                    } else if (actualTypeArguments[0] instanceof ParameterizedType) {
+                        ParameterizedType parameterizedTypeInCollection = (ParameterizedType) actualTypeArguments[0];
+                        typeInCollection = (Class) parameterizedTypeInCollection.getRawType();
+                    } else {
+                        for (Type t : actualTypeArguments) {
+                            System.out.println("STRANGE: " + clazz.getSimpleName() + ": " + field.getName() + ": " + t.getClass());
+                        }
+                    }
                 }
             }
 
