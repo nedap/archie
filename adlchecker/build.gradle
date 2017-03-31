@@ -1,0 +1,17 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'com.nedap.healthcare:archie:0.3.6'
+    compile 'net.sourceforge.argparse4j:argparse4j:0.7.0'
+}
+
+run {
+    args = ['testadl']
+}
+
+mainClassName='com.nedap.archie.adlchecker.AdlChecker'
