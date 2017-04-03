@@ -5,6 +5,7 @@ import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.CAttribute;
 import com.nedap.archie.aom.CObject;
 import com.nedap.archie.archetypevalidator.validations.AttributeUniquenessValidation;
+import com.nedap.archie.archetypevalidator.validations.CTerminologyCodeValidation;
 import com.nedap.archie.archetypevalidator.validations.ModelConformanceValidation;
 import com.nedap.archie.archetypevalidator.validations.NodeIdValidation;
 
@@ -44,6 +45,7 @@ public class ArchetypeValidator {
         validations.add(new AttributeUniquenessValidation());
         validations.add(new ValueSetValidation());
         validations.add(new TerminologyValidation());
+        validations.add(new CTerminologyCodeValidation());
 
     }
 
