@@ -14,7 +14,6 @@ import com.nedap.archie.rminfo.RMTypeInfo;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Created by pieter.bos on 31/03/2017.
@@ -24,8 +23,7 @@ public class ModelConformanceValidation extends ValidatingVisitor {
     public ModelConformanceValidation(ModelInfoLookup lookup) {
         super(lookup);
     }
-
-    /* TODO: check the type of a CPrimitiveObject with respect to CAttribute */
+    
     @Override
     protected List<ValidationMessage> validate(CComplexObject cObject) {
         List<ValidationMessage> result = new ArrayList<>();

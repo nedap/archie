@@ -97,82 +97,89 @@ public class ModelInfoLookup {
         TypeToken typeToken = TypeToken.of(clazz);
 
         for(Field field: ReflectionUtils.getAllFields(clazz)) {
-            String attributeName = namingStrategy.getAttributeName(field);
-            String javaFieldName = field.getName();
-            String javaFieldNameUpperCased = upperCaseFirstChar(javaFieldName);
-            Method getMethod = getMethod(clazz, "get" + javaFieldNameUpperCased);
-            Method setMethod = null, addMethod = null;
-            if (getMethod == null) {
-                getMethod = getMethod(clazz, "is" + javaFieldNameUpperCased);
-            }
-            if (getMethod != null) {
-                setMethod = getMethod(clazz, "set" + javaFieldNameUpperCased, getMethod.getReturnType());
-                if (Collection.class.isAssignableFrom(getMethod.getReturnType())) {
-                    Type[] typeArguments = ((ParameterizedType) getMethod.getGenericReturnType()).getActualTypeArguments();
-                    if (typeArguments.length == 1) {
-                        TypeToken singularParameter = typeToken.resolveType(typeArguments[0]);
-                        //TODO: does this work or should we use the typeArguments[0].getSomething?
-                        String addMethodName = "add" + toSingular(javaFieldNameUpperCased);
-                        addMethod = getMethod(clazz, addMethodName, singularParameter.getRawType());
-                        if (addMethod == null) {
-                            //Due to generics, this does not always work
-                            Set<Method> allAddMethods = ReflectionUtils.getAllMethods(clazz, ReflectionUtils.withName(addMethodName));
-                            if (allAddMethods.size() == 1) {
-                                addMethod = allAddMethods.iterator().next();
-                            } else {
-                                logger.warn("strange number of add methods for field {} on class {}", field.getName(), clazz.getSimpleName());
-                            }
-                        }
-                    }
-                }
-            } else {
-                logger.warn("No get method found for field {} on class {}", field.getName(), clazz.getSimpleName());
-            }
+            addRMAttributeInfo(clazz, typeInfo, typeToken, field);
+        }
+    }
 
-            TypeToken fieldType = null;
-            if (getMethod != null) {
-                fieldType = typeToken.resolveType(getMethod.getGenericReturnType());
-            } else {
-                fieldType = typeToken.resolveType(field.getGenericType());
-            }
+    private void addRMAttributeInfo(Class clazz, RMTypeInfo typeInfo, TypeToken typeToken, Field field) {
+        String attributeName = namingStrategy.getAttributeName(field);
+        String javaFieldName = field.getName();
+        String javaFieldNameUpperCased = upperCaseFirstChar(javaFieldName);
+        Method getMethod = getMethod(clazz, "get" + javaFieldNameUpperCased);
+        Method setMethod = null, addMethod = null;
+        if (getMethod == null) {
+            getMethod = getMethod(clazz, "is" + javaFieldNameUpperCased);
+        }
+        if (getMethod != null) {
+            setMethod = getMethod(clazz, "set" + javaFieldNameUpperCased, getMethod.getReturnType());
+            addMethod = getAddMethod(clazz, typeToken, field, javaFieldNameUpperCased, getMethod);
+        } else {
+            logger.warn("No get method found for field {} on class {}", field.getName(), clazz.getSimpleName());
+        }
 
-            Class rawFieldType = fieldType.getRawType();
-            Class typeInCollection = rawFieldType;
-            if (Collection.class.isAssignableFrom(rawFieldType)) {
-                Type[] actualTypeArguments = ((ParameterizedType) fieldType.getType()).getActualTypeArguments();
-                for (Type t : actualTypeArguments) {
-                    //System.out.println(clazz.getSimpleName() + ": " + field.getName() + ": " + t);
-                }
-                if (actualTypeArguments.length == 1) {
-                    if (actualTypeArguments[0] instanceof Class) {
-                        typeInCollection = (Class) actualTypeArguments[0];
-                    } else if (actualTypeArguments[0] instanceof ParameterizedType) {
-                        ParameterizedType parameterizedTypeInCollection = (ParameterizedType) actualTypeArguments[0];
-                        typeInCollection = (Class) parameterizedTypeInCollection.getRawType();
-                    } else {
-                        for (Type t : actualTypeArguments) {
-                            System.out.println("STRANGE: " + clazz.getSimpleName() + ": " + field.getName() + ": " + t.getClass());
-                        }
-                    }
-                }
-            }
+        TypeToken fieldType = null;
+        if (getMethod != null) {
+            fieldType = typeToken.resolveType(getMethod.getGenericReturnType());
+        } else {
+            fieldType = typeToken.resolveType(field.getGenericType());
+        }
 
-            if (setMethod != null) {
-                RMAttributeInfo attributeInfo = new RMAttributeInfo(
-                        attributeName,
-                        field,
-                        rawFieldType,
-                        typeInCollection,
-                        field.getAnnotation(Nullable.class) != null,
-                        getMethod,
-                        setMethod,
-                        addMethod
-                );
-                typeInfo.addAttribute(attributeInfo);
-            } else {
-                logger.info("property without a set method ignored for field {} on class {}", field.getName(), clazz.getSimpleName());
+        Class rawFieldType = fieldType.getRawType();
+        Class typeInCollection = getTypeInCollection(fieldType);
+        if (setMethod != null) {
+            RMAttributeInfo attributeInfo = new RMAttributeInfo(
+                    attributeName,
+                    field,
+                    rawFieldType,
+                    typeInCollection,
+                    field.getAnnotation(Nullable.class) != null,
+                    getMethod,
+                    setMethod,
+                    addMethod
+            );
+            typeInfo.addAttribute(attributeInfo);
+        } else {
+            logger.info("property without a set method ignored for field {} on class {}", field.getName(), clazz.getSimpleName());
+        }
+    }
+
+    private Class getTypeInCollection(TypeToken fieldType) {
+        Class rawFieldType = fieldType.getRawType();
+        if (Collection.class.isAssignableFrom(rawFieldType)) {
+            Type[] actualTypeArguments = ((ParameterizedType) fieldType.getType()).getActualTypeArguments();
+            if (actualTypeArguments.length == 1) {
+                if (actualTypeArguments[0] instanceof Class) {
+                    return (Class) actualTypeArguments[0];
+                } else if (actualTypeArguments[0] instanceof ParameterizedType) {
+                    ParameterizedType parameterizedTypeInCollection = (ParameterizedType) actualTypeArguments[0];
+                    return (Class) parameterizedTypeInCollection.getRawType();
+                }
             }
         }
+        return rawFieldType;
+    }
+
+    private Method getAddMethod(Class clazz, TypeToken typeToken, Field field, String javaFieldNameUpperCased, Method getMethod) {
+        Method addMethod = null;
+        if (Collection.class.isAssignableFrom(getMethod.getReturnType())) {
+            Type[] typeArguments = ((ParameterizedType) getMethod.getGenericReturnType()).getActualTypeArguments();
+            if (typeArguments.length == 1) {
+                TypeToken singularParameter = typeToken.resolveType(typeArguments[0]);
+                //TODO: does this work or should we use the typeArguments[0].getSomething?
+                String addMethodName = "add" + toSingular(javaFieldNameUpperCased);
+                addMethod = getMethod(clazz, addMethodName, singularParameter.getRawType());
+                if (addMethod == null) {
+                    //Due to generics, this does not always work
+                    Set<Method> allAddMethods = ReflectionUtils.getAllMethods(clazz, ReflectionUtils.withName(addMethodName));
+                    if (allAddMethods.size() == 1) {
+                        addMethod = allAddMethods.iterator().next();
+                    } else {
+                        logger.warn("strange number of add methods for field {} on class {}", field.getName(), clazz.getSimpleName());
+                    }
+                }
+            }
+        }
+        return addMethod;
     }
 
     private String toSingular(String javaFieldNameUpperCased) {

@@ -48,10 +48,19 @@ public abstract class ValidatingVisitor implements ArchetypeValidation {
     }
 
 
+    /**
+     * Override to get a callback when validation begins
+     * @param archetype the archetype that is currently being validated
+     */
     protected void beginValidation(Archetype archetype) {
 
     }
 
+    /**
+     * Override to get a callback when validation ends
+     * @param archetype the archetype that is currently being validated
+     * @return
+     */
     protected List<ValidationMessage> endValidation(Archetype archetype) {
         return Collections.emptyList();
     }
@@ -69,14 +78,29 @@ public abstract class ValidatingVisitor implements ArchetypeValidation {
         throw new IllegalStateException("this code should be unreachable");
     }
 
+    /**
+     * Override for validation on archetype slots
+     * @param cObject
+     * @return
+     */
     protected List<ValidationMessage> validate(ArchetypeSlot cObject) {
         return Collections.emptyList();
     }
 
+    /**
+     * Override for validation on complex object proxy constraints
+     * @param cObject
+     * @return
+     */
     protected List<ValidationMessage> validate(CComplexObjectProxy cObject) {
         return Collections.emptyList();
     }
 
+    /**
+     * Override for validation on complex objects
+     * @param cObject
+     * @return
+     */
     protected List<ValidationMessage> validate(CComplexObject cObject) {
         return Collections.emptyList();
     }

@@ -1,7 +1,6 @@
 package com.nedap.archie.archetypevalidator;
 
 import com.google.common.base.Strings;
-import com.nedap.archie.rm.generic.Participation;
 
 /**
  * Created by pieter.bos on 31/03/2017.
