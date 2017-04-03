@@ -29,7 +29,7 @@ public class ValueSetValidation implements ArchetypeValidation {
         return result;
     }
 
-    private void acCodeMustExist(List<ValidationMessage> result, ArchetypeTerminology terminology, String acCode) {
+    public static void acCodeMustExist(List<ValidationMessage> result, ArchetypeTerminology terminology, String acCode) {
         Map<String, Map<String, ArchetypeTerm>> termDefinitions = terminology.getTermDefinitions();
         for(String language: termDefinitions.keySet()) {
             Map<String, ArchetypeTerm> translations = termDefinitions.get(language);
@@ -39,7 +39,7 @@ public class ValueSetValidation implements ArchetypeValidation {
         }
     }
 
-    private void atCodeMustExist(List<ValidationMessage> result, ArchetypeTerminology terminology, String atCode) {
+    public static void atCodeMustExist(List<ValidationMessage> result, ArchetypeTerminology terminology, String atCode) {
         Map<String, Map<String, ArchetypeTerm>> termDefinitions = terminology.getTermDefinitions();
         for(String language: termDefinitions.keySet()) {
             Map<String, ArchetypeTerm> translations = termDefinitions.get(language);
