@@ -3,8 +3,6 @@ package com.nedap.archie.adlchecker;
 import com.nedap.archie.adlparser.ADLParser;
 import com.nedap.archie.adlparser.ADLParserMessage;
 import com.nedap.archie.aom.Archetype;
-import com.nedap.archie.aom.CAttribute;
-import com.nedap.archie.aom.CObject;
 import com.nedap.archie.archetypevalidator.ArchetypeValidator;
 import com.nedap.archie.archetypevalidator.ValidationMessage;
 import net.sourceforge.argparse4j.ArgumentParsers;
@@ -14,10 +12,7 @@ import net.sourceforge.argparse4j.inf.Namespace;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayDeque;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 
 public class AdlChecker {
 

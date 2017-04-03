@@ -2,13 +2,10 @@ package com.nedap.archie.archetypevalidator;
 
 import com.google.common.base.Joiner;
 import com.nedap.archie.aom.Archetype;
-import com.nedap.archie.aom.CAttribute;
-import com.nedap.archie.aom.CObject;
 import com.nedap.archie.archetypevalidator.validations.AttributeUniquenessValidation;
 import com.nedap.archie.archetypevalidator.validations.CTerminologyCodeValidation;
 import com.nedap.archie.archetypevalidator.validations.ModelConformanceValidation;
 import com.nedap.archie.archetypevalidator.validations.NodeIdValidation;
-
 import com.nedap.archie.archetypevalidator.validations.TerminologyValidation;
 import com.nedap.archie.archetypevalidator.validations.ValueSetValidation;
 import com.nedap.archie.rminfo.ArchieRMInfoLookup;
@@ -16,12 +13,8 @@ import com.nedap.archie.rminfo.ModelInfoLookup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Stack;
 
 /**
  * Created by pieter.bos on 31/03/2017.

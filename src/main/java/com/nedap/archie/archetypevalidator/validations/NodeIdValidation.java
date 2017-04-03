@@ -1,16 +1,13 @@
 package com.nedap.archie.archetypevalidator.validations;
 
 import com.nedap.archie.aom.Archetype;
-import com.nedap.archie.aom.CAttribute;
 import com.nedap.archie.aom.CObject;
 import com.nedap.archie.archetypevalidator.ErrorType;
 import com.nedap.archie.archetypevalidator.ValidatingVisitor;
 import com.nedap.archie.archetypevalidator.ValidationMessage;
-import com.nedap.archie.rminfo.ModelInfoLookup;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -21,7 +18,7 @@ import java.util.List;
 public class NodeIdValidation extends ValidatingVisitor {
 
     //for every id code, it's path
-    HashMap<String, String> nodeIds = new HashMap<>();
+    private HashMap<String, String> nodeIds = new HashMap<>();
 
     @Override
     protected void beginValidation(Archetype archetype) {
