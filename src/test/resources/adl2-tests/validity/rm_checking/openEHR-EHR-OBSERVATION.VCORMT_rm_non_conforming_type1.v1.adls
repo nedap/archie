@@ -1,5 +1,5 @@
 archetype (adl_version=1.5.1; rm_release=1.0.2)
-	openEHR-EHR-OBSERVATION.VCORMT_rm_non_conforming_type1.v1
+	openEHR-EHR-OBSERVATION.VCORMT_rm_non_conforming_type1.v1.0.0
 
 language
 	original_language = <[ISO_639-1::en]>
@@ -25,11 +25,11 @@ description
 definition
 	OBSERVATION[id1] matches {
 		data matches {
-			HISTORY<ITEM_LIST>[id2] matches {	
+			HISTORY<ITEM_LIST>[id2] matches {
 				events cardinality matches {1..*; unordered} matches {
 					EVENT<CLUSTER> [id3] occurrences matches {0..*} matches {
 						data matches {
-							ITEM_LIST[id4] matches {*}
+							ITEM_LIST[id4]
 						}
 					}
 				}
