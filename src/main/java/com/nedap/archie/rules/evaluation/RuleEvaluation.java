@@ -3,13 +3,19 @@ package com.nedap.archie.rules.evaluation;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Lists;
 import com.nedap.archie.aom.Archetype;
+import com.nedap.archie.aom.ArchetypeModelObject;
+import com.nedap.archie.aom.CAttribute;
+import com.nedap.archie.aom.CComplexObject;
+import com.nedap.archie.aom.CObject;
 import com.nedap.archie.creation.RMObjectCreator;
 import com.nedap.archie.query.RMQueryContext;
+import com.nedap.archie.rm.RMObject;
 import com.nedap.archie.rm.archetyped.Pathable;
-import com.nedap.archie.rminfo.ArchieAOMInfoLookup;
 import com.nedap.archie.rminfo.ArchieRMInfoLookup;
 import com.nedap.archie.rminfo.RMAttributeInfo;
-import com.nedap.archie.rules.*;
+import com.nedap.archie.rules.Expression;
+import com.nedap.archie.rules.RuleElement;
+import com.nedap.archie.rules.RuleStatement;
 import com.nedap.archie.rules.evaluation.evaluators.AssertionEvaluator;
 import com.nedap.archie.rules.evaluation.evaluators.BinaryOperatorEvaluator;
 import com.nedap.archie.rules.evaluation.evaluators.ConstantEvaluator;
@@ -21,7 +27,6 @@ import com.nedap.archie.rules.evaluation.evaluators.VariableReferenceEvaluator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.xml.bind.JAXBException;
 import javax.xml.xpath.XPathExpressionException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,7 +55,13 @@ public class RuleEvaluation {
     private ArrayListMultimap<RuleElement, ValueList> ruleElementValues = ArrayListMultimap.create();
     private FixableAssertionsChecker fixableAssertionsChecker;
 
+
     private RMObjectCreator creator = new RMObjectCreator();
+
+    private final AssertionsFixer assertionsFixer = new AssertionsFixer(this, creator);
+
+
+
 
     public RuleEvaluation(Archetype archetype) {
         this.archetype = archetype;
@@ -116,6 +127,12 @@ public class RuleEvaluation {
         return queryContext;
     }
 
+    public void refreshQueryContext() {
+        //updating a single node does not seem to work with the default JAXB-implementation, so just reload the entire query
+        //context
+        queryContext = new RMQueryContext(root);
+    }
+
     /**
      * Callback: an assertion has been evaluated with the given result
      */
@@ -134,77 +151,11 @@ public class RuleEvaluation {
         //Fix any assertions that should be fixed before processing the next rule
         //this means we can calculate a score, then use that score in the next rule
         //otherwise this would mean several passes through the evaluator
-        fixAssertions(assertionResult);
+        assertionsFixer.fixAssertions(archetype, assertionResult);
 
 
         //before re-evaluation, reset any overridden existence from evaluation?
     }
-
-    private void fixAssertions(AssertionResult assertionResult) {
-        try {
-            Map<String, Value> setPathValues = assertionResult.getSetPathValues();
-            for(String path:setPathValues.keySet()) {
-                Value value = setPathValues.get(path);
-
-                String pathOfParent = stripLastPathSegment(path);
-                String lastPathSegment = getLastPathSegment(path);
-                List<Object> parents = null;
-
-                parents = queryContext.findList(pathOfParent);
-
-                for(Object parent:parents) {
-                    RMAttributeInfo attributeInfo = ArchieRMInfoLookup.getInstance().getAttributeInfo(parent.getClass(), lastPathSegment);
-                    if(attributeInfo == null) {
-                        throw new IllegalStateException("attribute " + lastPathSegment + " does not exist on type " + parent.getClass());
-                    }
-                    if(value.getValue() == null) {
-                        creator.set(parent, lastPathSegment, Lists.newArrayList(value.getValue()));
-                    } else if(attributeInfo.getType().equals(Long.class) && value.getValue().getClass().equals(Double.class)) {
-                        Long convertedValue = ((Double) value.getValue()).longValue(); //TODO or should this round?
-                        creator.set(parent, lastPathSegment, Lists.newArrayList(convertedValue));
-                    } else if(attributeInfo.getType().equals(Double.class) && value.getValue().getClass().equals(Long.class)) {
-                        Double convertedValue = ((Long) value.getValue()).doubleValue(); //TODO or should this round?
-                        creator.set(parent, lastPathSegment, Lists.newArrayList(convertedValue));
-                    } else {
-                        creator.set(parent, lastPathSegment, Lists.newArrayList(value.getValue()));
-                    }
-                    //TODO: this should be something like:
-                    // queryContext.updateValue(parent);
-                    //but it does not work. So we do it the slow/ugly way, which does work.
-                    queryContext = new RMQueryContext(root);
-                }
-            }
-        } catch (XPathExpressionException e) {
-            logger.error("error fixing assertionResult {}", assertionResult, e);
-        }
-    }
-
-    /**
-     * Return the path with everything except the last path segment, so /items/value becomes /items
-     * @param path
-     * @return
-     */
-    private String stripLastPathSegment(String path) {
-        int lastIndex = path.lastIndexOf('/');
-        if(lastIndex < 0) {
-            return path;
-        }
-        return path.substring(0, lastIndex);
-    }
-
-    /**
-     * Return the path with everything except the last path segment, so /items/value becomes /items
-     * @param path
-     * @return
-     */
-    private String getLastPathSegment(String path) {
-        int lastIndex = path.lastIndexOf('/');
-        if(lastIndex < 0) {
-            return path;
-        }
-        return path.substring(lastIndex+1);
-    }
-
 
 
     public EvaluationResult getEvaluationResult() {

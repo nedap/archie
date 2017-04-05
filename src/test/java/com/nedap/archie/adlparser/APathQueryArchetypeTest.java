@@ -34,7 +34,7 @@ public class APathQueryArchetypeTest {
         assertEquals("EVENT_CONTEXT", ((CComplexObject) archetypeModelObject).getRmTypeName());
 
         //"/context[id11]/other_context[id2]/items[id3]/items[id4]/value
-        query = new APathQuery("/context[id11]/other_context");
+        query = new APathQuery("/context/other_context");
         archetypeModelObject = query.find(archetype.getDefinition());
         assertEquals("other_context", ((CAttribute) archetypeModelObject).getRmAttributeName());
 

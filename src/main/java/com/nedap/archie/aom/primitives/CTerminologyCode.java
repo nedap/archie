@@ -83,6 +83,11 @@ public class CTerminologyCode extends CPrimitiveObject<String, TerminologyCode> 
     public List<TerminologyCodeWithArchetypeTerm> getTerms() {
         List<TerminologyCodeWithArchetypeTerm> result = new ArrayList<>();
         Archetype archetype = getArchetype();
+        if(archetype == null) {
+            //ideally this would not happen, but no reference to archetype exists in leaf constraints in rules so far
+            //so for now fix it so it doesn't throw a NullPointerException
+            return result;
+        }
         ArchetypeTerminology terminology = archetype.getTerminology(this);
         String language = ArchieLanguageConfiguration.getMeaningAndDescriptionLanguage();
         String defaultLanguage = ArchieLanguageConfiguration.getDefaultMeaningAndDescriptionLanguage();

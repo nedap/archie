@@ -68,7 +68,6 @@ public class RMQueryContext {
             //Binder will maintains association between two views.
             binder.marshal( rootNode/*new JAXBElement<Query>(qname, Query.class, query)*/  , domForQueries);
 
-
             firstXPathNode = domForQueries.getFirstChild().getNodeName();
 
             //print to stdout
