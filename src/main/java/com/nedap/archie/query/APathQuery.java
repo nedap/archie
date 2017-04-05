@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import com.nedap.archie.aom.ArchetypeModelObject;
 import com.nedap.archie.aom.CAttribute;
 import com.nedap.archie.aom.CComplexObject;
+import com.nedap.archie.aom.CObject;
 import com.nedap.archie.paths.PathSegment;
 import com.nedap.archie.rm.archetyped.Locatable;
 import com.nedap.archie.rminfo.ModelInfoLookup;
@@ -83,43 +84,58 @@ public class APathQuery {
     }
 
     public <T extends ArchetypeModelObject> T find(CComplexObject root) {
-        ArchetypeModelObject currentObject = root;
-        int i =0;
-        for(PathSegment segment:pathSegments) {
-            if(i >= pathSegments.size()) {
-                return (T) currentObject;
+       List<T> list = findList(root);
+        if(list.isEmpty()) {
+            return null;
+        } else if (list.size() == 1) {
+            return list.get(0);
+        } else {
+            throw new UnsupportedOperationException("cannot find without list with more than 1 element");
+        }
+    }
+
+    public <T extends ArchetypeModelObject> List<T> findList(CComplexObject root) {
+        List<ArchetypeModelObject> result = new ArrayList<>();
+        result.add(root);
+        for(PathSegment segment:this.pathSegments) {
+            if (result.size() == 0) {
+                return Collections.emptyList();
             }
-            CAttribute attribute = null;
-            if(currentObject instanceof CComplexObject) {
-                attribute = ((CComplexObject) currentObject).getAttribute(segment.getNodeName());
+            result = findOneSegment(segment, result);
+        }
+        return (List<T>) result;
+    }
+
+    private List<ArchetypeModelObject> findOneSegment(PathSegment pathSegment, List<ArchetypeModelObject> objects) {
+        List<ArchetypeModelObject> result = new ArrayList<>();
+
+        List<ArchetypeModelObject> preProcessedObjects = new ArrayList<>();
+
+        for(ArchetypeModelObject object:objects) {
+            if (object instanceof CAttribute) {
+                CAttribute cAttribute = (CAttribute) object;
+                preProcessedObjects.addAll(cAttribute.getChildren());
             } else {
-                //erm.. right. we could do something with reflection and return a bean property/field/whatever?
-                return null;
-            }
-            if(attribute == null) {
-                return null;
-            }
-            currentObject = attribute;
-            if(!segment.hasExpressions()) {
-                if(i == pathSegments.size()-1) {
-                    return (T) attribute;
-                }
-                continue;
-            }
-            if(segment.hasIdCode() || segment.hasArchetypeRef()) {
-                currentObject = attribute.getChild(segment.getNodeId());
-            } else if(segment.hasNumberIndex()) {
-                currentObject = attribute.getChildren().get(segment.getIndex()-1);//APath path numbers start at 1 instead of 0
-            } else {
-                currentObject = attribute.getChildByMeaning(segment.getNodeId());//TODO: the ANTLR grammar removes all whitespace. what to do here?
-            }
-            if(currentObject == null) {
-                return null;
+                preProcessedObjects.add(object);
             }
 
-            i++;
         }
-        return (T) currentObject;
+        for(ArchetypeModelObject object:preProcessedObjects) {
+            if(object instanceof CObject) {
+                CObject cobject = (CObject) object;
+                CAttribute attribute = cobject.getAttribute(pathSegment.getNodeName());
+                if(pathSegment.hasIdCode() || pathSegment.hasArchetypeRef()) {
+                    result.add(attribute.getChild(pathSegment.getNodeId()));
+                } else if(pathSegment.hasNumberIndex()) {
+                    result.add(attribute.getChildren().get(pathSegment.getIndex()-1));//APath path numbers start at 1 instead of 0
+                } else if(pathSegment.getNodeId() != null) {
+                    result.add(attribute.getChildByMeaning(pathSegment.getNodeId()));//TODO: the ANTLR grammar removes all whitespace. what to do here?
+                } else {
+                    result.add(attribute);
+                }
+            }
+        }
+        return result;
     }
 
     //TODO: get diagnostic information about where the finder stopped in the path - could be very useful!

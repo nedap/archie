@@ -1,8 +1,10 @@
 package com.nedap.archie.rules.evaluation;
 
 import com.google.common.collect.ArrayListMultimap;
+import com.nedap.archie.aom.CPrimitiveObject;
 import com.nedap.archie.query.RMObjectWithPath;
 import com.nedap.archie.rules.BinaryOperator;
+import com.nedap.archie.rules.Constraint;
 import com.nedap.archie.rules.Expression;
 import com.nedap.archie.rules.ForAllStatement;
 import com.nedap.archie.rules.ModelReference;
@@ -61,6 +63,8 @@ class FixableAssertionsChecker {
                 handlePathEquals(assertionResult, expressionResult, binaryExpression, index);
             } else if (binaryExpression.getOperator() == OperatorKind.implies) {
                 handleImplies(assertionResult, index, binaryExpression);
+            } else if (binaryExpression.getOperator() == OperatorKind.matches) {
+                handleMatches(assertionResult, index, binaryExpression);
             }
         } else if (expression instanceof UnaryOperator) {
             UnaryOperator unaryOperator = (UnaryOperator) expression;
@@ -80,6 +84,8 @@ class FixableAssertionsChecker {
 
         //TODO: not expressions, reversing the expected value?
     }
+
+
 
     private void handleNot(AssertionResult assertionResult, UnaryOperator unaryOperator, int index) {
         Expression operand = unaryOperator.getOperand();
@@ -115,6 +121,51 @@ class FixableAssertionsChecker {
         ValueList valueList = this.ruleElementValues.get(binaryExpression.getRightOperand()).get(index);
         ModelReference pathToSet = (ModelReference) binaryExpression.getLeftOperand();
         setPathsToValues(assertionResult, resolveModelReference(pathToSet), valueList);
+    }
+
+
+    private void handleMatches(AssertionResult assertionResult, int index, BinaryOperator binaryExpression) {
+        // matches the form '/path matches {|at6|}' - only doing something is the constraint matches a constant value
+        Expression rightOperand = binaryExpression.getRightOperand();
+        ModelReference pathToSet = (ModelReference) binaryExpression.getLeftOperand();
+        if(rightOperand instanceof Constraint) {
+            Constraint c = (Constraint) rightOperand;
+            CPrimitiveObject object = c.getItem();
+            List constraints = object.getConstraint();
+            if(constraints.size() != 1) {
+                return;
+            }
+            ValueList valueList = new ValueList();
+            switch(object.getClass().getSimpleName()) {
+                case "CTerminologyCode":  {
+                        String constraint = (String) constraints.get(0);
+                        valueList.addValue(constraint, Collections.emptyList());
+                        String path = resolveModelReference(pathToSet);
+                        if(path.endsWith("symbol")) { // different for DV_CODED_TEXT and DV_CODEPHRASE
+                            /// it would be better to check the actual type, but hasn't been done now
+                            //this limits this to the OpenEHR RM
+                            path = path + "/defining_code/code_string";
+                        } else if(path.endsWith("defining_code")) {
+                            path = path + "/code_string";
+                        }
+                        setPathsToValues(assertionResult, path, valueList);
+                    }
+                    break;
+                case "CString": {
+                        String constraint = (String) constraints.get(0);
+                        valueList.addValue(constraint, Collections.emptyList());
+                        setPathsToValues(assertionResult, resolveModelReference(pathToSet), valueList);
+                    }
+                    break;
+                //TODO: more type of constraints
+
+            }
+
+
+        } else {
+            //cannot be evaluated?
+        }
+
     }
 
 
