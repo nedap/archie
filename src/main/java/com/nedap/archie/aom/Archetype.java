@@ -13,6 +13,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -196,10 +197,13 @@ public class Archetype extends AuthoredResource {
         return new APathQuery(path).find(getDefinition());
     }
 
+    public List<ArchetypeModelObject> itemsAtPath(String path) {
+        return new APathQuery(path).findList(getDefinition());
+    }
 
     @Override
     public String toString() {
         return"archetype: " + getArchetypeId();
     }
 
-}
+    }
