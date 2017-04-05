@@ -1,5 +1,5 @@
 archetype (adl_version=1.5.1; rm_release=1.0.2)
-	openEHR-TEST_PKG-ENTRY.VACDF_ac_code_in_definition_not_in_terminology.v1
+	openEHR-TEST_PKG-ENTRY.VACDF_ac_code_in_definition_not_in_terminology.v1.0.0
 
 language
 	original_language = <[ISO_639-1::en]>

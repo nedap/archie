@@ -15,7 +15,6 @@ public enum ErrorType {
     //terminology validity rules
     VTVSID("value-set id defined. The identifying code of a value set must be defined in the term definitions of the terminology of the current archetype"),
     VTVSMD("value-set members defined. The member codes of a value set must be defined in the term definitions of the terminology of the flattened form of the current archetype"),
-    VTVSUQ("value-set members unique. The member codes of a value set must be unique within the value set"),
     VTLC("language consistency. Languages consistent: all term codes and constraint codes exist in all languages"),
     OTHER("an error occurred that has no standard codes");
 
