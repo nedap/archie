@@ -2,12 +2,16 @@ package com.nedap.archie.adlparser.treewalkers;
 
 import com.nedap.archie.adlparser.ADLParser;
 import com.nedap.archie.adlparser.ADLParserErrors;
+import com.nedap.archie.adlparser.antlr.AdlParser;
 import com.nedap.archie.adlparser.antlr.AdlParser.*;
 
 import com.nedap.archie.adlparser.odin.OdinValueParser;
 import com.nedap.archie.aom.CPrimitiveObject;
 import com.nedap.archie.rules.*;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -251,8 +255,24 @@ public class RulesParser extends BaseTreeWalker {
         }
         else if(context.variableReference() != null) {
             return parseVariableReference(context.variableReference());
+        } else if(context.functionName() != null) {
+            return parseFunctionCall(context);
         }
         throw new IllegalArgumentException("cannot parse unknown arithmetic leaf type: " + context.getText());
+    }
+
+    private Expression parseFunctionCall(ExpressionLeafContext context) {
+        String functionName = context.functionName().getText();
+        List<Expression> arguments = parseArgumentList(context.argumentList());
+        return new Function(functionName, arguments);
+    }
+
+    private List<Expression> parseArgumentList(ArgumentListContext argumentListContext) {
+        List<Expression> expressions = new ArrayList<>(argumentListContext.expression().size());
+        for(ExpressionContext expressionContext:argumentListContext.expression()) {
+            expressions.add(parseExpression(expressionContext));
+        }
+        return expressions;
     }
 
     @NotNull

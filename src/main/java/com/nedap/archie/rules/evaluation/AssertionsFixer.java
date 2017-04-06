@@ -223,5 +223,5 @@ public class AssertionsFixer {
         }
         return path.substring(lastIndex+1);
     }
-    
+
 }
