@@ -35,10 +35,6 @@ class EmptyRMObjectConstructor {
                 if(childConstraint instanceof CComplexObject) {
                     RMObject childObject = constructEmptyRMObject(childConstraint);
                     children.add(childObject);
-//                    if(childConstraint.getRmTypeName().equals("EVENT")) {
-//                        childObject = constructEmptyRMObject(childConstraint);
-//                        children.add(childObject);
-//                    }
                 }
             }
             if(!children.isEmpty()) {
