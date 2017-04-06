@@ -36,15 +36,12 @@ public class AssertionsFixer {
     private final RuleEvaluation ruleEvaluation;
     private final EmptyRMObjectConstructor emptyRMObjectConstructor = new EmptyRMObjectConstructor();
 
-    private List<MissingStructure> createdMissingStructure = new ArrayList<>();
-
     public AssertionsFixer(RuleEvaluation evaluation, RMObjectCreator creator) {
         this.creator = creator;
         this.ruleEvaluation = evaluation;
     }
     
     public void fixAssertions(Archetype archetype, AssertionResult assertionResult) {
-        createdMissingStructure.clear();
         try {
             Map<String, Value> setPathValues = assertionResult.getSetPathValues();
             for(String path:setPathValues.keySet()) {
@@ -82,11 +79,6 @@ public class AssertionsFixer {
                         fixCodePhrase(archetype, pathOfParent, parent);
                     }
                     ruleEvaluation.refreshQueryContext();
-                }
-
-                for(MissingStructure structure:createdMissingStructure) {
-                    //fill missing fields, for example the value of an ordinal if only the AT-code has been set
-                    completeStructure(archetype, structure);
                 }
             }
         } catch (XPathExpressionException e) {
@@ -129,19 +121,6 @@ public class AssertionsFixer {
         }
     }
 
-    private void completeStructure(Archetype archetype, MissingStructure structure) {
-//        if(structure.getObject() instanceof DvCodedText && structure.getPath().endsWith("symbol")) {
-//            //ordinal, set numeric ordinal value and dv_coded_text value
-//            System.out.println(structure);
-//        } else if(structure.getObject() instanceof DvCodedText) {
-//            //dv coded text, set value
-//            System.out.println(structure);
-//        } else if(structure.getObject() instanceof CodePhrase && structure.getPath().endsWith("/value/defining_code")){
-//            //this is all for now
-//            System.out.println(structure);
-//        }
-    }
-
     private List<Object> constructMissingStructure(Archetype archetype, String pathOfParent, String lastPathSegment, List<Object> parents) throws XPathExpressionException {
         //TODO: this is great but not enough. Fix it by hardcoding support for DV_CODED_TEXT and DV_ORDINAL, here or in the FixableAssertionsChecker.
         String newPathOfParent = pathOfParent;
@@ -158,7 +137,6 @@ public class AssertionsFixer {
 
             Object newEmptyObject = null;
             newEmptyObject = constructEmptySimpleObject(newLastPathSegment, object, newEmptyObject);
-            createdMissingStructure.add(new MissingStructure(newPathOfParent + "/" + newLastPathSegment, newEmptyObject, constraints));
 
             creator.set(object, newLastPathSegment, Lists.newArrayList(newEmptyObject));
             ruleEvaluation.refreshQueryContext();
@@ -174,7 +152,6 @@ public class AssertionsFixer {
                 } else {
                     newEmptyObject = constructEmptySimpleObject(newLastPathSegment, object, newEmptyObject);
                 }
-                createdMissingStructure.add(new MissingStructure(newPathOfParent + "/" + newLastPathSegment, newEmptyObject, constraint));
                 creator.set(object, newLastPathSegment, Lists.newArrayList(newEmptyObject));
                 ruleEvaluation.refreshQueryContext();
                 parents = ruleEvaluation.getQueryContext().findList(pathOfParent);
@@ -185,7 +162,7 @@ public class AssertionsFixer {
 
     private CObject getCObjectFromResult(List<? extends ArchetypeModelObject> objects) {
         if(objects.size() != 1) {
-            //screw you, i'm going home
+            //if there's more than one CObject this represents a user choice and we cannot return a single object and this cannot be automatically fixed
             return null;
         } else {
             ArchetypeModelObject object = objects.get(0);
