@@ -25,7 +25,7 @@ import static org.junit.Assert.assertEquals;
  */
 public class ArchieRMInfoLookupTest {
 
-    private ModelInfoLookup modelInfoLookup = new ArchieRMInfoLookup();
+    private ModelInfoLookup modelInfoLookup = ArchieRMInfoLookup.getInstance();
 
     @Test
     public void classForRMType() {
