@@ -223,32 +223,5 @@ public class AssertionsFixer {
         }
         return path.substring(lastIndex+1);
     }
-
-    private static class MissingStructure {
-        private final String path;
-        private final Object object;
-        private final List<? extends ArchetypeModelObject> constraints;
-
-        public MissingStructure(String path, Object object, List<? extends ArchetypeModelObject> constraints) {
-            this.path = path;
-            this.object = object;
-            this.constraints = constraints;
-        }
-
-        public MissingStructure(String path, Object object, CObject constraint) {
-            this(path, object, Lists.newArrayList(constraint));
-        }
-
-        public String getPath() {
-            return path;
-        }
-
-        public Object getObject() {
-            return object;
-        }
-
-        public List<? extends ArchetypeModelObject> getConstraints() {
-            return constraints;
-        }
-    }
+    
 }
