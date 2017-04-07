@@ -60,23 +60,6 @@ public class FunctionEvaluator  implements Evaluator<Function> {
     }
 
 
-    private ValueList min(List<ValueList> argumentResults) {
-        return new ValueList(Collections.emptyList());
-    }
-
-    private ValueList max(List<ValueList> argumentResults) {
-        return new ValueList(Collections.emptyList());
-    }
-
-    private ValueList mean(List<ValueList> argumentResults) {
-        return new ValueList(Collections.emptyList());
-    }
-
-    private ValueList sum(List<ValueList> argumentResults) {
-        return new ValueList(Collections.emptyList());
-    }
-
-
     @Override
     public List<Class> getSupportedClasses() {
         return Lists.newArrayList(Function.class);

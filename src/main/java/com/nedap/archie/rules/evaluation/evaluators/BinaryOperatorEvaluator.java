@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
+import static com.nedap.archie.rules.evaluation.evaluators.FunctionUtil.*;
+
 
 /**
  * Created by pieter.bos on 01/04/16.
@@ -187,26 +189,6 @@ public class BinaryOperatorEvaluator implements Evaluator<BinaryOperator> {
             }
             return result;
         }
-
-    }
-
-    public ValueList checkAndHandleNull(ValueList leftValues, ValueList rightValues) {
-        ValueList result = new ValueList();
-        if (leftValues.isEmpty() && rightValues.isEmpty()) {
-            //this solves part of the null-valued expression problem. But certainly not all.
-            result.addValue(Value.createNull(Lists.newArrayList()));
-        } else if (leftValues.isEmpty()) {
-            for (Value value : rightValues.getValues()) {
-                result.addValue(Value.createNull(value.getPaths()));
-            }
-        } else if (rightValues.isEmpty()) {
-            for (Value value : leftValues.getValues()) {
-                result.addValue(Value.createNull(value.getPaths()));
-            }
-        } else {
-            return null;
-        }
-        return result;
 
     }
 
@@ -433,7 +415,7 @@ public class BinaryOperatorEvaluator implements Evaluator<BinaryOperator> {
         }
     }
 
-    private void checkisBoolean(ValueList leftValueList, ValueList rightValueList) {
+    public static void checkisBoolean(ValueList leftValueList, ValueList rightValueList) {
         EnumSet booleanTypes = EnumSet.of(PrimitiveType.Boolean);
         if(!booleanTypes.contains(leftValueList.getType())) {
             throw new RuntimeException("not a boolean with boolean operator: " + leftValueList.getType());//TODO: proper errors
@@ -443,7 +425,7 @@ public class BinaryOperatorEvaluator implements Evaluator<BinaryOperator> {
         }
     }
 
-    private void checkIsNumberOrNull(ValueList leftValueList, ValueList rightValueList) {
+    public static  void checkIsNumberOrNull(ValueList leftValueList, ValueList rightValueList) {
         if(leftValueList.isEmpty() || rightValueList.isEmpty()) {
             return;
         }
@@ -456,7 +438,7 @@ public class BinaryOperatorEvaluator implements Evaluator<BinaryOperator> {
         }
     }
 
-    private void checkIsNumber(ValueList leftValueList, ValueList rightValueList) {
+    public static void checkIsNumber(ValueList leftValueList, ValueList rightValueList) {
         EnumSet numberTypes = EnumSet.of(PrimitiveType.Integer, PrimitiveType.Real);
         if(!numberTypes.contains(leftValueList.getType())) {
             throw new RuntimeException("Type supplied to operator should be a number, but it is not: " + leftValueList.getType());//TODO: proper errors

@@ -30,10 +30,27 @@ public class FunctionsTest {
     }
 
     @Test
-    public void minmax() throws Exception {
+    public void min() throws Exception {
         archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("functions.adls"));
         assertTrue(parser.getErrors().hasNoErrors());
         System.out.println(archetype);
+        RuleEvaluation ruleEvaluation = new RuleEvaluation(archetype);
+        Observation root = new Observation();
+        ruleEvaluation.evaluate(root, archetype.getRules().getRules());
+        ValueList min = ruleEvaluation.getVariableMap().get("min");
+        assertEquals("min should work", 3.0, (double) min.getValues().get(0).getValue(), 0.001);
+    }
+
+    @Test
+    public void max() throws Exception {
+        archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("functions.adls"));
+        assertTrue(parser.getErrors().hasNoErrors());
+        System.out.println(archetype);
+        RuleEvaluation ruleEvaluation = new RuleEvaluation(archetype);
+        Observation root = new Observation();
+        ruleEvaluation.evaluate(root, archetype.getRules().getRules());
+        ValueList min = ruleEvaluation.getVariableMap().get("max");
+        assertEquals("max should work", 2.0, (double) min.getValues().get(0).getValue(), 0.001);
     }
 
     @Test
