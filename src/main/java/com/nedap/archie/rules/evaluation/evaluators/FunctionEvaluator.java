@@ -56,7 +56,7 @@ public class FunctionEvaluator  implements Evaluator<Function> {
                 throw new RuntimeException(e);//TODO: proper exceptions when evaluating rules
             }
         }
-        throw new IllegalStateException("unknown function: + " +  function.getFunctionName());
+        throw new IllegalStateException("unknown function: " +  function.getFunctionName());
     }
 
 
