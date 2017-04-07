@@ -20,6 +20,7 @@ import com.nedap.archie.rules.evaluation.evaluators.AssertionEvaluator;
 import com.nedap.archie.rules.evaluation.evaluators.BinaryOperatorEvaluator;
 import com.nedap.archie.rules.evaluation.evaluators.ConstantEvaluator;
 import com.nedap.archie.rules.evaluation.evaluators.ForAllEvaluator;
+import com.nedap.archie.rules.evaluation.evaluators.FunctionEvaluator;
 import com.nedap.archie.rules.evaluation.evaluators.ModelReferenceEvaluator;
 import com.nedap.archie.rules.evaluation.evaluators.UnaryOperatorEvaluator;
 import com.nedap.archie.rules.evaluation.evaluators.VariableDeclarationEvaluator;
@@ -60,9 +61,6 @@ public class RuleEvaluation {
 
     private final AssertionsFixer assertionsFixer = new AssertionsFixer(this, creator);
 
-
-
-
     public RuleEvaluation(Archetype archetype) {
         this.archetype = archetype;
         add(new VariableDeclarationEvaluator());
@@ -73,6 +71,7 @@ public class RuleEvaluation {
         add(new VariableReferenceEvaluator());
         add(new ModelReferenceEvaluator());
         add(new ForAllEvaluator());
+        add(new FunctionEvaluator());
     }
 
     private void add(Evaluator evaluator) {

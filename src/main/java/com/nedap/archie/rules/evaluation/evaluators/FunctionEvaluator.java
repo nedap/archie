@@ -3,22 +3,42 @@ package com.nedap.archie.rules.evaluation.evaluators;
 import com.google.common.collect.Lists;
 import com.nedap.archie.rules.Expression;
 import com.nedap.archie.rules.Function;
+import com.nedap.archie.rules.evaluation.FunctionImplementation;
 import com.nedap.archie.rules.evaluation.Evaluator;
+import com.nedap.archie.rules.evaluation.FunctionCallException;
 import com.nedap.archie.rules.evaluation.RuleEvaluation;
 import com.nedap.archie.rules.evaluation.ValueList;
+import com.nedap.archie.rules.evaluation.evaluators.functions.Max;
+import com.nedap.archie.rules.evaluation.evaluators.functions.Mean;
+import com.nedap.archie.rules.evaluation.evaluators.functions.Min;
+import com.nedap.archie.rules.evaluation.evaluators.functions.Sum;
+import com.nedap.archie.rules.evaluation.evaluators.functions.ValueWhenUndefined;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by pieter.bos on 06/04/2017.
  */
 public class FunctionEvaluator  implements Evaluator<Function> {
 
-    public static final String MIN = "min";
-    public static final String MAX = "max";
-    public static final String MEAN = "mean";
-    public static final String SUM = "sum";
+    private Map<String, FunctionImplementation> functions = new LinkedHashMap<>();
+
+    public void registerFunction(FunctionImplementation function) {
+        functions.put(function.getName(), function);
+    }
+
+
+    public FunctionEvaluator() {
+        registerFunction(new Max());
+        registerFunction(new Min());
+        registerFunction(new Mean());
+        registerFunction(new Sum());
+        registerFunction(new ValueWhenUndefined());
+    }
 
     @Override
     public ValueList evaluate(RuleEvaluation evaluation, Function function) {
@@ -28,34 +48,32 @@ public class FunctionEvaluator  implements Evaluator<Function> {
             argumentResults.add(evaluation.evaluate(argument));
         }
 
-        switch(function.getFunctionName()) {
-            case MIN:
-                return min(argumentResults);
-            case MAX:
-                return max(argumentResults);
-            case MEAN:
-                return mean(argumentResults);
-            case SUM:
-                return sum(argumentResults);
+        FunctionImplementation functionImplementation = functions.get(function.getFunctionName());
+        if(functionImplementation != null) {
+            try {
+                return functionImplementation.evaluate(argumentResults);
+            } catch (FunctionCallException e) {
+                throw new RuntimeException(e);//TODO: proper exceptions when evaluating rules
+            }
         }
-        return null;
+        throw new IllegalStateException("unknown function: + " +  function.getFunctionName());
     }
 
 
     private ValueList min(List<ValueList> argumentResults) {
-        return new ValueList(null);
+        return new ValueList(Collections.emptyList());
     }
 
     private ValueList max(List<ValueList> argumentResults) {
-        return new ValueList(null);
+        return new ValueList(Collections.emptyList());
     }
 
     private ValueList mean(List<ValueList> argumentResults) {
-        return new ValueList(null);
+        return new ValueList(Collections.emptyList());
     }
 
     private ValueList sum(List<ValueList> argumentResults) {
-        return new ValueList(null);
+        return new ValueList(Collections.emptyList());
     }
 
 

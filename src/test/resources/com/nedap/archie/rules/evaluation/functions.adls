@@ -71,6 +71,8 @@ rules
 
 	$min:Real ::= min(-10.0, /data[id2]/events[id3]/data[id4]/items[id6]/value/magnitude)
 
+	$value_when_undefined:Real ::= value_when_undefined(10.0, /data[id2]/events[id3]/data[id4]/items[id5]/value/magnitude)
+
 
 
 terminology
