@@ -18,6 +18,6 @@ public class Sum implements FunctionImplementation {
 
     @Override
     public ValueList evaluate(List<ValueList> arguments) throws FunctionCallException {
-        return new ValueList(Collections.emptyList());
+        throw new UnsupportedOperationException("The function sum has not yet been implemented");
     }
 }
