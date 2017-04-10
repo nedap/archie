@@ -9,6 +9,11 @@ public class Function extends Expression {
     private String functionName;
     private List<Expression> arguments;
 
+    /** No argument constructor for kryo cloning and json parsing */
+    public Function() {
+
+    }
+
     public Function(String functionName, List<Expression> arguments) {
         this.functionName = functionName;
         this.arguments = arguments;
