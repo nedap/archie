@@ -73,6 +73,10 @@ rules
 
 	$value_when_undefined:Real ::= value_when_undefined(10.0, /data[id2]/events[id3]/data[id4]/items[id5]/value/magnitude)
 
+	$value_when_undefined_2:Real ::=
+	    value_when_undefined(10.0, /data[id2]/events[id3]/data[id4]/items[id5]/value/magnitude) +
+	    max(1.0, 2.0)
+
 
 
 terminology
