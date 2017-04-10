@@ -32,6 +32,7 @@ public class ValueWhenUndefined implements FunctionImplementation {
         ValueList result = new ValueList();
         if(argument.isEmpty()) {
             result.addValue(valueWhenUndefined.getValue(), new ArrayList<>(valueWhenUndefined.getPaths()));
+            result.setType(valueWhenUndefinedList.getType());
         } else {
             for (Value value : argument.getValues()) {
                 if (value.isNull()) {
@@ -42,7 +43,9 @@ public class ValueWhenUndefined implements FunctionImplementation {
                     result.addValue(value);
                 }
             }
+            result.setType(argument.getType());
         }
+
         return result;
     }
 }
