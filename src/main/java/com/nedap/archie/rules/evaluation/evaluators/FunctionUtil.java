@@ -22,7 +22,7 @@ public class FunctionUtil {
         throw new FunctionCallException("cannot cast " + value.getValue().getClass() + " to a number");
     }
 
-    public static int checkLength(List<ValueList> arguments) {
+    public static int checkEqualLength(List<ValueList> arguments) {
         int length = 1;
         boolean first = true;
         for(ValueList list:arguments) {

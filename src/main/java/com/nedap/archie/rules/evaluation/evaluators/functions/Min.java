@@ -5,7 +5,6 @@ import com.nedap.archie.rules.evaluation.FunctionCallException;
 import com.nedap.archie.rules.evaluation.FunctionImplementation;
 import com.nedap.archie.rules.evaluation.Value;
 import com.nedap.archie.rules.evaluation.ValueList;
-import com.nedap.archie.rules.evaluation.evaluators.BinaryOperatorEvaluator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +29,7 @@ public class Min implements FunctionImplementation {
             return possiblyNullResult;
         }
         //check that all valueList are equal length or 1 length
-        int length = checkLength(arguments);
+        int length = checkEqualLength(arguments);
         if(length == -1) {
             throw new FunctionCallException("value lists of min operator not the same length");
         }

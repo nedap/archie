@@ -7,12 +7,11 @@ import com.nedap.archie.rules.evaluation.Value;
 import com.nedap.archie.rules.evaluation.ValueList;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static com.nedap.archie.rules.evaluation.evaluators.FunctionUtil.castToDouble;
 import static com.nedap.archie.rules.evaluation.evaluators.FunctionUtil.checkAndHandleNull;
-import static com.nedap.archie.rules.evaluation.evaluators.FunctionUtil.checkLength;
+import static com.nedap.archie.rules.evaluation.evaluators.FunctionUtil.checkEqualLength;
 
 /**
  * Created by pieter.bos on 07/04/2017.
@@ -32,7 +31,7 @@ public class Max implements FunctionImplementation {
             return possiblyNullResult;
         }
         //check that all valueList are equal length or 1 length
-        int length = checkLength(arguments);
+        int length = checkEqualLength(arguments);
         if(length == -1) {
             throw new FunctionCallException("value lists of min operator not the same length");
         }
