@@ -4,7 +4,6 @@ import com.nedap.archie.rules.evaluation.FunctionCallException;
 import com.nedap.archie.rules.evaluation.FunctionImplementation;
 import com.nedap.archie.rules.evaluation.ValueList;
 
-import java.util.Collections;
 import java.util.List;
 
 /**

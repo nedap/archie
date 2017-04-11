@@ -3,9 +3,9 @@ package com.nedap.archie.rules.evaluation.evaluators;
 import com.google.common.collect.Lists;
 import com.nedap.archie.rules.Expression;
 import com.nedap.archie.rules.Function;
-import com.nedap.archie.rules.evaluation.FunctionImplementation;
 import com.nedap.archie.rules.evaluation.Evaluator;
 import com.nedap.archie.rules.evaluation.FunctionCallException;
+import com.nedap.archie.rules.evaluation.FunctionImplementation;
 import com.nedap.archie.rules.evaluation.RuleEvaluation;
 import com.nedap.archie.rules.evaluation.ValueList;
 import com.nedap.archie.rules.evaluation.evaluators.functions.Max;
@@ -15,7 +15,6 @@ import com.nedap.archie.rules.evaluation.evaluators.functions.Sum;
 import com.nedap.archie.rules.evaluation.evaluators.functions.ValueWhenUndefined;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
