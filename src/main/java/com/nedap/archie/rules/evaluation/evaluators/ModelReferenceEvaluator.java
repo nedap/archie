@@ -27,6 +27,9 @@ public class ModelReferenceEvaluator implements Evaluator<ModelReference> {
         if(variable != null) {
             //resolve variable and add path prefix
             ValueList value = evaluation.getVariableMap().get(variable);
+            if(value == null) {
+                throw new RuntimeException("Variable " + variable + " not defined");
+            }
             if(value.size() > 1) {
                 throw new IllegalStateException("");
             } else if (value.size() == 1) {
