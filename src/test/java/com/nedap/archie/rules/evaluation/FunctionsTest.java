@@ -2,7 +2,6 @@ package com.nedap.archie.rules.evaluation;
 
 import com.nedap.archie.adlparser.ADLParser;
 import com.nedap.archie.aom.Archetype;
-import com.nedap.archie.rm.RMObject;
 import com.nedap.archie.rm.archetyped.Locatable;
 import com.nedap.archie.rm.composition.Observation;
 import com.nedap.archie.rm.datavalues.quantity.DvQuantity;
@@ -21,11 +20,8 @@ public class FunctionsTest {
     private ADLParser parser;
     private Archetype archetype;
 
-    private TestUtil testUtil;
-
     @Before
     public void setup() {
-        testUtil = new TestUtil();
         parser = ADLParser.withRMConstraintsImposer();
     }
 
