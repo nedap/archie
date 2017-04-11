@@ -14,7 +14,7 @@ In gradle, include this dependency in your build.gradle:
 
 ```gradle
 dependencies {
-    compile 'com.nedap.healthcare:archie:0.3.6'
+    compile 'com.nedap.healthcare:archie:0.3.7'
 }
 ```
 
@@ -24,7 +24,7 @@ or if you use maven, in your pom.xml
 <dependency>
     <groupId>com.nedap.healthcare</groupId>
     <artifactId>archie</artifactId>
-    <version>0.3.6</version>
+    <version>0.3.7</version>
 </dependency>
 ```
 
@@ -71,6 +71,24 @@ CAttribute attribute = archetype.getDefinition()
     .getAttribute("context").getChildByMeaning("systolic").getAttribute("items");
     attribute.getLogicalPath(); // is 'context[systolic]/items'
 ```
+
+### Archetype Validation
+
+After parsing you can check if you archetype is valid. The parser will try to continue parsing as much as possible without throwing Exceptions. This means you will have to check the errors manually. This happens even with some syntax errors, so checking errors is important!
+
+```
+if(!parser.getErrors().hasNoErrors()) {
+    parser.getErrors().logToLogger();
+}
+```
+
+The second round of checks comes after parsing, in the form of running the ArchetypeValidator:
+
+```
+List<ValidationMessage> messages = new ArchetypeValidator().validate(archetype);
+```
+
+This runs some basic checks agains the archetype, such as id-code uniqueness, completeness of translations and existence of constrained properties in the reference model. It does not yet check specialization.
 
 ### Serializing
 
