@@ -285,10 +285,8 @@ public class APathQuery {
     }
 
     /**
-     * Deprecated for querying RMObjects. Use RMQueryContext instead.
-     * For querying CObjects there is no other solution yet.
+     * You will want to use RMQueryContext in many cases. For perforamnce reasons, this could still be useful
      */
-    @Deprecated
     public <T> List<RMObjectWithPath> findList(ModelInfoLookup lookup, Object root) {
         List<RMObjectWithPath> currentObjects = Lists.newArrayList(new RMObjectWithPath(root, "/"));
         try {
@@ -341,7 +339,7 @@ public class APathQuery {
                                 //operational templates in RM Objects have their archetype node ID set to an archetype ref. That
                                 //we support. Other things not so much
                                 if (!locatable.getArchetypeNodeId().equals(segment.getNodeId())) {
-                                    throw new IllegalArgumentException("cannot handle RM-queries with node names or archetype references yet");
+                                    continue;
                                 }
 
                             }
@@ -455,7 +453,6 @@ public class APathQuery {
                 if (locatable.getArchetypeNodeId().equals(segment.getNodeId())) {
                     result.add(new RMObjectWithPath(object, path + buildPathConstraint(i, locatable.getArchetypeNodeId())));
                 }
-                throw new IllegalArgumentException("cannot handle RM-queries with archetype references yet");
             } else {
                 if(equalsName(locatable.getNameAsString(), segment.getNodeId())) {
                     result.add(new RMObjectWithPath(object, path + buildPathConstraint(i, locatable.getArchetypeNodeId())));
