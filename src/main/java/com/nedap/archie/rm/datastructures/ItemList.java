@@ -11,23 +11,23 @@ import java.util.List;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ITEM_LIST", propOrder = {
-        "items"
+    "items"
 })
 public class ItemList extends ItemStructure<Element> {
 
-        private List<Element> items = new ArrayList<>();
+    private List<Element> items = new ArrayList<>();
 
-        public List<Element> getItems() {
-                return items;
-        }
+    public List<Element> getItems() {
+return items;
+}
 
-        public void setItems(List<Element> items) {
-                this.items = items;
-                setThisAsParent(items, "items");
-        }
+    public void setItems(List<Element> items) {
+        this.items = items;
+        setThisAsParent(items, "items");
+    }
 
-        public void addItem(Element item) {
-                this.items.add(item);
-                setThisAsParent(item, "items");
-        }
+    public void addItem(Element item) {
+        this.items.add(item);
+        setThisAsParent(item, "items");
+    }
 }

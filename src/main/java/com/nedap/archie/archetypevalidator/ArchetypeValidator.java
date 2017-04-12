@@ -53,7 +53,7 @@ public class ArchetypeValidator {
                 logger.error("error running validation processor", e);
                 messages.add(new ValidationMessage(ErrorType.OTHER, "unknown path", "error running validator : " + Joiner.on("\n").join(e.getStackTrace())));
             }
-         }
+        }
         return messages;
     }
 

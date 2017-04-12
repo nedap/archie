@@ -62,10 +62,11 @@ public class ADLAuthoredArchetypeSerializer<T extends AuthoredArchetype> extends
         if (!attributes.isEmpty()) {
             List<String> elements = attributes.entrySet().stream()
                     .map(e -> {
-                        if (e.getValue() == null)
+                        if (e.getValue() == null) {
                             return e.getKey();
-                        else
+                        } else {
                             return e.getKey() + "=" + e.getValue();
+                        }
                     })
                     .collect(Collectors.toList());
             builder.append(" (").append(Joiner.on("; ").join(elements)).append(")");

@@ -14,7 +14,7 @@ import java.util.Objects;
 public class BinaryStringOperandEvaluator {
 
 
-    BinaryOperatorEvaluator mainEvaluator;
+    private BinaryOperatorEvaluator mainEvaluator;
 
     public BinaryStringOperandEvaluator(BinaryOperatorEvaluator mainEvaluator) {
         this.mainEvaluator = mainEvaluator;

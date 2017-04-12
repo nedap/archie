@@ -60,8 +60,8 @@ public class ModelReferenceEvaluator implements Evaluator<ModelReference> {
             throw new RuntimeException("error evaluating " + path, e);
         }
         List<Value> values = rmObjectsWithPath.stream().map(
-                rmObjectWithPath ->
-                        new Value(rmObjectWithPath.getObject(), Lists.newArrayList(rmObjectWithPath.getPath())))
+            rmObjectWithPath ->
+                new Value(rmObjectWithPath.getObject(), Lists.newArrayList(rmObjectWithPath.getPath())))
             .collect(Collectors.toList());
 
         return new ValueList(values);
