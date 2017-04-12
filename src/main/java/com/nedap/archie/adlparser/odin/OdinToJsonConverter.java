@@ -21,20 +21,18 @@ import java.util.List;
 public class OdinToJsonConverter {
 
     private static ObjectMapper objectMapper = new ObjectMapper();
+    private     StringBuilder output = new StringBuilder();
 
     static {
         objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
         //keywords = <"value"> is indistinguishable from keywords = <"value1", "value2">
         objectMapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
-
     }
 
 
     public static ObjectMapper getObjectMapper() {
         return objectMapper;
     }
-
-    private     StringBuilder output = new StringBuilder();
 
     public String convert(Odin_textContext context) {
         if (context.attr_vals() != null) {

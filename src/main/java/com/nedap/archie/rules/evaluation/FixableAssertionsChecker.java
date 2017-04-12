@@ -179,24 +179,23 @@ class FixableAssertionsChecker {
         ValueList pathExpressionValues = ruleElementValues.get(forAllStatement.getPathExpression()).get(0);
         for(ValueList valueList:valueLists) {
             //if(!valueList.getSingleBooleanResult()) {
-                //TODO: this code is a bit hard to understand
+            //TODO: this code is a bit hard to understand
 
-                //set the variables to what they were during the for all evaluation.
-                //this is a bit of code duplication from the ForAllEvaluator. I think improvement is possible in this place
-                Value value = pathExpressionValues.get(i);
-                Object context = value.getValue();
-                String path = (String) value.getPaths().get(0);
+            //set the variables to what they were during the for all evaluation.
+            //this is a bit of code duplication from the ForAllEvaluator. I think improvement is possible in this place
+            Value value = pathExpressionValues.get(i);
+            Object context = value.getValue();
+            String path = (String) value.getPaths().get(0);
 
-                // according to the latest openEHR docs, this should be 'objectreference'.
-                // We could change the name of the java class
+            // according to the latest openEHR docs, this should be 'objectreference'.
+            // We could change the name of the java class
 
-                RMObjectWithPath rmObjectWithPath = new RMObjectWithPath(context, path);
-                ValueList variableValue = new ValueList(rmObjectWithPath);
-                variableValue.setType(PrimitiveType.ObjectReference);
+            RMObjectWithPath rmObjectWithPath = new RMObjectWithPath(context, path);
+            ValueList variableValue = new ValueList(rmObjectWithPath);
+            variableValue.setType(PrimitiveType.ObjectReference);
 
-                forAllVariables.put(forAllStatement.getVariableName(), variableValue);
-                checkAssertionForFixablePatterns(assertionResult, forAllStatement.getRightOperand(), i);
-           // }
+            forAllVariables.put(forAllStatement.getVariableName(), variableValue);
+            checkAssertionForFixablePatterns(assertionResult, forAllStatement.getRightOperand(), i);
             i++;
         }
         forAllVariables.put(forAllStatement.getVariableName(), null);

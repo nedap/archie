@@ -96,7 +96,7 @@ public class CComplexObjectParser extends BaseTreeWalker {
     }
 
     public static String getLastAttributeFromPath(String path) {
-           return path.substring(path.lastIndexOf('/')+1);
+       return path.substring(path.lastIndexOf('/')+1);
     }
 
     private CAttributeTuple parseAttributeTuple(CComplexObject parent, C_attribute_tupleContext attributeTupleContext) {
@@ -119,7 +119,7 @@ public class CComplexObjectParser extends BaseTreeWalker {
             for(C_object_tuple_itemContext tupleObjectContext:primitiveObjectContexts) {
                 CPrimitiveObject primitiveObject = null;
                 if(tupleObjectContext.c_primitive_object() != null) {
-                     primitiveObject = primitivesConstraintParser.parsePrimitiveObject(tupleObjectContext.c_primitive_object());
+                    primitiveObject = primitivesConstraintParser.parsePrimitiveObject(tupleObjectContext.c_primitive_object());
                 } else if (tupleObjectContext.CONTAINED_REGEXP() != null) {
                     primitiveObject = primitivesConstraintParser.parseRegex(tupleObjectContext.CONTAINED_REGEXP());
                 }

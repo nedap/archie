@@ -80,17 +80,17 @@ public class TestUtil {
             for(CObject childObject1:attribute1.getChildren()) {
                 if(childObject1 instanceof  CComplexObject) {
                     List<CObject> childObjects2 = attribute2.getChildren().stream()
-                            .filter(
-                                    o -> o.getNodeId().equals(childObject1.getNodeId())
-                            ).collect(Collectors.toList());
+                        .filter(
+                            o -> o.getNodeId().equals(childObject1.getNodeId())
+                        ).collect(Collectors.toList());
                     assertThat(childObjects2 + " should equal " + childObject1, childObjects2.size(), is(1));
                     assertCObjectEquals(childObject1, childObjects2.get(0));
                 } else if (childObject1 instanceof CPrimitiveObject) {
                     CPrimitiveObject primitiveChild = (CPrimitiveObject) childObject1;
                     List<CObject> childObjects2 = attribute2.getChildren().stream()
-                            .filter(
-                                    o -> primitiveObjectMatches(primitiveChild, o)
-                            ).collect(Collectors.toList());
+                        .filter(
+                            o -> primitiveObjectMatches(primitiveChild, o)
+                        ).collect(Collectors.toList());
                     assertFalse("a primitive object should have a matching primitive object", childObjects2.isEmpty());
                 }
 
