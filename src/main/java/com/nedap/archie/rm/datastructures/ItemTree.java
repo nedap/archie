@@ -2,6 +2,7 @@ package com.nedap.archie.rm.datastructures;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.List;
 @XmlType(name = "ITEM_TREE", propOrder = {
         "items"
 })
+@XmlRootElement(name="item_tree")
 public class ItemTree extends ItemStructure<Item> {
         private List<Item> items = new ArrayList<>();
 

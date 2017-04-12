@@ -136,6 +136,23 @@ public class RMQueryContext {
         return null;
     }
 
+    public Node getNode(Object object) {
+        return binder.getXMLNode(object);
+    }
+
+    public String getUniquePath(Object object) {
+        if(object == null) {
+            return null;
+        }
+        Node node = getNode(object);
+        if(node == null) {
+            return null;
+        } else {
+            return UniqueNodePathBuilder.constructPath(node);
+        }
+    }
+
+
     public List<RMObjectWithPath> findListWithPaths(String query) throws XPathExpressionException {
         String convertedQuery = APathToXPathConverter.convertQueryToXPath(query, firstXPathNode);
         XPath xpath = xPathFactory.newXPath();
