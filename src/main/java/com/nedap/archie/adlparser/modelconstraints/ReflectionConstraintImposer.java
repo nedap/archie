@@ -3,6 +3,7 @@ package com.nedap.archie.adlparser.modelconstraints;
 import com.nedap.archie.aom.CAttribute;
 import com.nedap.archie.aom.CComplexObject;
 import com.nedap.archie.aom.Cardinality;
+import com.nedap.archie.base.MultiplicityInterval;
 import com.nedap.archie.rminfo.ModelInfoLookup;
 import com.nedap.archie.rminfo.RMAttributeInfo;
 import com.nedap.archie.rminfo.RMTypeInfo;
@@ -38,8 +39,9 @@ public class ReflectionConstraintImposer implements ModelConstraintImposer {
         attribute.setRmAttributeName(attributeInfo.getRmName());
 
         if(attributeInfo.isNullable()) {
-            //TODO: not correct. Should be existence?
-            attribute.setCardinality(new Cardinality(0,1));
+            attribute.setExistence(new MultiplicityInterval(0, 1));
+        } else {
+            attribute.setExistence(new MultiplicityInterval(1, 1));
         }
 
         if(attributeInfo.isMultipleValued()) {
