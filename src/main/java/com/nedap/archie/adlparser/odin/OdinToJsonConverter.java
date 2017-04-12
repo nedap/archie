@@ -156,10 +156,10 @@ public class OdinToJsonConverter {
 
     private void outputEscaped(String text) {
         try {
-            //strip "" if present, all the other "-characters will have to be escaped
+            //strip " if present, all the other "-characters will have to be escaped
             if(text.startsWith("\"") && text.endsWith("\"")) {
-                text = text.substring(1, text.length()-1);
-                output.append(objectMapper.writeValueAsString(text));
+                String textWithoutQuotationMarks = text.substring(1, text.length()-1);
+                output.append(objectMapper.writeValueAsString(textWithoutQuotationMarks));
             } else {
                 output.append(text);
             }
