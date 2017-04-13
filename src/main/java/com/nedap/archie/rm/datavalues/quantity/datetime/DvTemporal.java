@@ -2,6 +2,7 @@ package com.nedap.archie.rm.datavalues.quantity.datetime;
 
 import com.nedap.archie.rm.datavalues.quantity.DvAbsoluteQuantity;
 
+import javax.annotation.Nullable;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
@@ -13,6 +14,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "DV_TEMPORAL")
 public abstract class DvTemporal<MagnitudeType extends Comparable> extends DvAbsoluteQuantity<DvDuration, MagnitudeType> {
 
+    @Nullable
     private DvDuration accuracy;
 
     @Override

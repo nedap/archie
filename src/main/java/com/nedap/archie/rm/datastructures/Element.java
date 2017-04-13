@@ -23,6 +23,7 @@ public class Element extends Item implements SingleValuedDataValue<DataValue> {
     @Nullable
     private DataValue value;
 
+    @Nullable
     @XmlElement(name = "null_flavour")
     private DvCodedText nullFlavour;
 
