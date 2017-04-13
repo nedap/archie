@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlType;
 public abstract class DvQuantified<AccuracyType, MagnitudeType extends Comparable> extends DvOrdered<MagnitudeType> {
 
     @Nullable
-        @XmlElement(name = "magnitude_status")
+    @XmlElement(name = "magnitude_status")
     private String magnitudeStatus;
 
     @Nullable

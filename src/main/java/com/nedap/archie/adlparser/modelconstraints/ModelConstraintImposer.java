@@ -56,6 +56,9 @@ public interface ModelConstraintImposer {
                         if (attribute.getCardinality() == null) {
                             attribute.setCardinality(defaultAttribute.getCardinality());
                         }
+                        if(attribute.getExistence() == null) {
+                            attribute.setExistence(defaultAttribute.getExistence());
+                        }
                     }
                 }
                 for (CObject child : attribute.getChildren()) {
