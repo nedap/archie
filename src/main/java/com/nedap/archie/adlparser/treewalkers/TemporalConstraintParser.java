@@ -136,6 +136,9 @@ public class TemporalConstraintParser extends BaseTreeWalker {
 
         if(result.getConstraint().size() == 1) {
             Interval<TemporalAmount> interval = result.getConstraint().get(0);
+            if(interval.getLower() != null && interval.getUpper() != null && interval.getLower().equals(interval.getUpper())) {
+                result.setAssumedValue(interval.getLower());
+            }
         }
 
         return result;
@@ -240,6 +243,9 @@ public class TemporalConstraintParser extends BaseTreeWalker {
 
         if(result.getConstraint().size() == 1) {
             Interval<TemporalAccessor> interval = result.getConstraint().get(0);
+            if(interval.getLower() != null && interval.getUpper() != null && interval.getLower().equals(interval.getUpper())) {
+                result.setAssumedValue(interval.getLower());
+            }
         }
 
         return result;
@@ -331,6 +337,9 @@ public class TemporalConstraintParser extends BaseTreeWalker {
 
         if(result.getConstraint().size() == 1) {
             Interval<TemporalAccessor> interval = result.getConstraint().get(0);
+            if(interval.getLower() != null && interval.getUpper() != null && interval.getLower().equals(interval.getUpper())) {
+                result.setAssumedValue(interval.getLower());
+            }
         }
 
         return result;
@@ -423,6 +432,9 @@ public class TemporalConstraintParser extends BaseTreeWalker {
 
         if(result.getConstraint().size() == 1) {
             Interval<Temporal> interval = result.getConstraint().get(0);
+            if(interval.getLower() != null && interval.getUpper() != null && interval.getLower().equals(interval.getUpper())) {
+                result.setAssumedValue(interval.getLower());
+            }
         }
 
         return result;

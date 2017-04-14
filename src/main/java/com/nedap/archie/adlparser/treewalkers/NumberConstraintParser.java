@@ -48,6 +48,9 @@ public class NumberConstraintParser extends BaseTreeWalker {
         //TODO: set assumedValue if there's only one interval with upper=lower, bounded
         if(result.getConstraint().size() == 1) {
             Interval<Long> interval = result.getConstraint().get(0);
+            if(interval.getLower() == interval.getUpper()) {
+                result.setAssumedValue(interval.getLower());
+            }
         }
         return result;
     }
@@ -136,6 +139,9 @@ public class NumberConstraintParser extends BaseTreeWalker {
         //TODO: set assumedValue if there's only one interval with upper=lower, bounded
         if(result.getConstraint().size() == 1) {
             Interval<Double> interval = result.getConstraint().get(0);
+            if(interval.getLower() == interval.getUpper()) {//TODO: check with a very small delta instead of ==?
+                result.setAssumedValue(interval.getLower());
+            }
         }
         return result;
     }
