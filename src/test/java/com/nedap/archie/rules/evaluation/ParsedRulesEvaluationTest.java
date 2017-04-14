@@ -517,8 +517,8 @@ public class ParsedRulesEvaluationTest {
 
         assertEquals(0, evaluationResult.getPathsThatMustExist().size());
         assertEquals(5, evaluationResult.getPathsThatMustNotExist().size());
-        assertTrue(evaluationResult.getPathsThatMustNotExist().contains("/data[id2]/events[id3, 1]/data[id4]/items[id5, 1]/value/magnitude"));
-        assertTrue(evaluationResult.getPathsThatMustNotExist().contains("/data[id2]/events[id3, 2]/data[id4]/items[id6, 2]/value/magnitude"));
+        assertTrue(evaluationResult.getPathsThatMustNotExist().contains("/data[id2]/events[id3,1]/data[id4]/items[id5,1]/value/magnitude"));
+        assertTrue(evaluationResult.getPathsThatMustNotExist().contains("/data[id2]/events[id3,2]/data[id4]/items[id6,2]/value/magnitude"));
         assertEquals(0, evaluationResult.getSetPathValues().size());
 
     }
