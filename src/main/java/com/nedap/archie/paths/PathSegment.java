@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
  * Created by pieter.bos on 19/10/15.
  */
 public class PathSegment {
-    private final static Joiner expressionJoiner = Joiner.on(", ").skipNulls();
+    private final static Joiner expressionJoiner = Joiner.on(",").skipNulls();
 
     private static final Pattern archetypeRefPattern = Pattern.compile("(.*::)?.*-.*-.*\\..*\\.v.*");
     private static final Pattern nodeIdPattern = Pattern.compile("id(\\.?\\d)+");
