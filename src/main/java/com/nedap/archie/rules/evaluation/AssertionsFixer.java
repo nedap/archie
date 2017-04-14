@@ -8,9 +8,11 @@ import com.nedap.archie.aom.CAttribute;
 import com.nedap.archie.aom.CAttributeTuple;
 import com.nedap.archie.aom.CComplexObject;
 import com.nedap.archie.aom.CObject;
+import com.nedap.archie.aom.CPrimitiveObject;
 import com.nedap.archie.aom.CPrimitiveTuple;
 import com.nedap.archie.aom.CSecondOrder;
 import com.nedap.archie.aom.terminology.ArchetypeTerm;
+import com.nedap.archie.base.Interval;
 import com.nedap.archie.creation.RMObjectCreator;
 import com.nedap.archie.rm.datatypes.CodePhrase;
 import com.nedap.archie.rm.datavalues.DvCodedText;
@@ -106,7 +108,14 @@ public class AssertionsFixer {
                         if (valueIndex != -1 && symbolIndex != -1) {
                             for (CPrimitiveTuple tuple : socParent.getTuples()) {
                                 if (tuple.getMembers().get(symbolIndex).getConstraint().get(0).equals(ordinal.getSymbol().getDefiningCode().getCodeString())) {
-                                    ordinal.setValue((Long) tuple.getMembers().get(valueIndex).getAssumedValue());
+                                    List<Interval> valueConstraint = tuple.getMembers().get(valueIndex).getConstraint();
+                                    if(valueConstraint.size() == 1) {
+                                        Interval<Long> interval  = valueConstraint.get(0);
+                                        if(interval.getLower().equals(interval.getUpper()) && !interval.isLowerUnbounded() && !interval.isUpperUnbounded()) {
+                                            ordinal.setValue(interval.getLower());
+                                        }
+
+                                    }
                                 }
                             }
 

@@ -52,7 +52,8 @@ definition
 		integer_attr10 matches {|<=10|}
 		integer_attr11 matches {|-10..-5|}
 		integer_attr12 matches {10}
-		integer_attr13 
+		integer_attr13
+		integer_attr14 matches {|0..1|,|2..3|}
 		real_attr1 matches {100.0}
 		real_attr2 matches {10.0, 20.0, 30.0}
 		real_attr3 matches {|0.0..100.0|}
@@ -65,7 +66,8 @@ definition
 		real_attr10 matches {|<=10.0|}
 		real_attr11 matches {|-10.0..-5.0|}
 		real_attr12 matches {10.0}
-		real_attr13 
+		real_attr13
+        real_attr14 matches {|0.0..1.0|,|2.0..3.0|}
 		date_attr1 matches {yyyy-mm-dd}
 		date_attr2 matches {yyyy-??-??}
 		date_attr3 matches {yyyy-mm-??}
