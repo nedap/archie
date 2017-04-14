@@ -11,15 +11,18 @@ import com.nedap.archie.rm.datavalues.DvEHRURI;
 import com.nedap.archie.rm.datavalues.DvIdentifier;
 import com.nedap.archie.rm.datavalues.DvURI;
 import com.nedap.archie.rm.datavalues.encapsulated.DvParsable;
+import com.nedap.archie.rm.datavalues.quantity.DvQuantity;
 import com.nedap.archie.rm.support.identification.ArchetypeID;
 import com.nedap.archie.rm.support.identification.UID;
 import com.nedap.archie.rm.support.identification.UIDBasedId;
 import com.nedap.archie.rm.support.identification.UUID;
 import org.junit.Test;
 
+import java.lang.reflect.Field;
+import java.net.URI;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 /**
  * Created by stefan.teijgeler on 31/08/16.
@@ -99,6 +102,52 @@ public class ArchieRMInfoLookupTest {
         assertEquals(attributeInfo.getType(), List.class);
         assertEquals(attributeInfo.getTypeInCollection(), Item.class);
         assertEquals(attributeInfo.isMultipleValued(), true);
+    }
+
+    @Test
+    public void getField() throws Exception {
+        Field items = ArchieRMInfoLookup.getInstance().getField(Cluster.class, "items");
+        assertEquals(items, Cluster.class.getDeclaredField("items"));
+    }
+
+    @Test
+    public void rmTypeInfo() {
+        RMTypeInfo uriInfo = modelInfoLookup.getTypeInfo("DV_URI");
+        assertEquals("DV_URI", uriInfo.getRmName());
+        assertEquals(DvURI.class, uriInfo.getJavaClass());
+        RMAttributeInfo valueAttribute = uriInfo.getAttribute("value");
+        assertNotNull(valueAttribute);
+        assertEquals("value", valueAttribute.getRmName());
+        assertEquals(URI.class, valueAttribute.getType());
+        assertFalse(valueAttribute.isNullable());
+        assertNotNull(valueAttribute.getGetMethod());
+        assertNotNull(valueAttribute.getSetMethod());
+        assertNull(valueAttribute.getAddMethod());
+    }
+
+    @Test
+    public void genericType() {
+        RMTypeInfo quantityInfo = modelInfoLookup.getTypeInfo("DV_QUANTITY");
+        assertEquals("DV_QUANTITY", quantityInfo.getRmName());
+        assertEquals(DvQuantity.class, quantityInfo.getJavaClass());
+        RMAttributeInfo valueAttribute = quantityInfo.getAttribute("magnitude");
+        assertNotNull(valueAttribute);
+        assertEquals("magnitude", valueAttribute.getRmName());
+        assertFalse(valueAttribute.isNullable());
+        assertEquals("DvQuantity extends DvAmount<Double> should have a double magnitude field", Double.class, valueAttribute.getType());
+
+    }
+
+    @Test
+    public void addMethod() {
+        RMTypeInfo itemListInfo = modelInfoLookup.getTypeInfo("ITEM_LIST");
+        assertEquals("addItem", itemListInfo.getAttribute("items").getAddMethod().getName());
+    }
+
+    @Test
+    public void nullable() {
+        RMAttributeInfo precisionInfo = modelInfoLookup.getAttributeInfo("DV_QUANTITY", "precision");
+        assertTrue(precisionInfo.isNullable());
     }
 
 

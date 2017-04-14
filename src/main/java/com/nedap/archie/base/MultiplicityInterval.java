@@ -23,4 +23,21 @@ public class MultiplicityInterval extends Interval<Integer> {
         result.setUpperUnbounded(true);
         return result;
     }
+
+    public boolean isOpen() {
+        return Integer.valueOf(0).equals(getLower()) && isUpperUnbounded() && isLowerIncluded();
+    }
+
+    public boolean isOptional() {
+        return Integer.valueOf(0).equals(getLower()) && Integer.valueOf(1).equals(getUpper()) && !isUpperUnbounded() && isLowerIncluded() && isUpperIncluded();
+    }
+
+    public boolean isMandatory() {
+        return Integer.valueOf(1).equals(getLower()) && Integer.valueOf(1).equals(getUpper()) && !isUpperUnbounded() && isLowerIncluded() && isUpperIncluded();
+    }
+
+    public boolean isProhibited() {
+        return Integer.valueOf(0).equals(getLower()) && Integer.valueOf(0).equals(getUpper()) && !isUpperUnbounded();
+    }
+
 }

@@ -197,15 +197,22 @@ public class CAttribute extends ArchetypeConstraint {
 
     public boolean isMandatory() {
         if(existence != null) {
-            return existence.getLower() == 1 && existence.getUpper() == 1 && existence.isUpperIncluded();
+            return existence.isMandatory();
         }
         return false;
     }
 
     public boolean anyAllowed() {
-        return children.isEmpty();
+        return children.isEmpty() && !isProhibited();
     }
 
+
+    public boolean isProhibited() {
+        if(existence != null) {
+            return existence.isProhibited();
+        }
+        return false;
+    }
     //TODO: congruent and conforms to?
 
 }
