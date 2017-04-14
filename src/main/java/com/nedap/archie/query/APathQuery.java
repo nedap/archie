@@ -6,6 +6,7 @@ import com.nedap.archie.aom.ArchetypeModelObject;
 import com.nedap.archie.aom.CAttribute;
 import com.nedap.archie.aom.CComplexObject;
 import com.nedap.archie.aom.CObject;
+import com.nedap.archie.aom.CPrimitiveObject;
 import com.nedap.archie.paths.PathSegment;
 import com.nedap.archie.rm.archetyped.Locatable;
 import com.nedap.archie.rminfo.ModelInfoLookup;
@@ -401,15 +402,15 @@ public class APathQuery {
 
     @NotNull
     private String buildPathConstraint(Integer index, String archetypeNodeId) {
-        if(index == null && archetypeNodeId == null) {
+        if(index == null && !archetypeNodeIdPresent(archetypeNodeId)) {
             return "";//nothing to add
         }
-        if(archetypeNodeId != null && index == null) {
+        if(archetypeNodeIdPresent(archetypeNodeId) && index == null) {
             return "[" + archetypeNodeId + "]";
         }
         StringBuilder constraint = new StringBuilder("[");
         boolean first = true;
-        if(archetypeNodeId != null) {
+        if(archetypeNodeIdPresent(archetypeNodeId)) {
             constraint.append(archetypeNodeId);
             first = false;
         }
@@ -422,6 +423,10 @@ public class APathQuery {
 
         constraint.append("]");
         return constraint.toString();
+    }
+
+    private boolean archetypeNodeIdPresent(String archetypeNodeId) {
+        return archetypeNodeId != null && !archetypeNodeId.equals(CPrimitiveObject.PRIMITIVE_NODE_ID_VALUE);
     }
 
     private Collection<RMObjectWithPath> findRMObjectsWithPathCollection(PathSegment segment, Collection<Object> collection, String path) {

@@ -19,7 +19,7 @@ import java.util.Objects;
 @XmlAccessorType(XmlAccessType.FIELD)
 public abstract class CPrimitiveObject<Constraint, ValueType> extends CDefinedObject<ValueType> {
 
-    public static final String PRIMITIVE_NODE_ID_VALUE = "Primitive_node_id";
+    public static final String PRIMITIVE_NODE_ID_VALUE = "id9999";
 
     private Boolean enumeratedTypeConstraint;
 
