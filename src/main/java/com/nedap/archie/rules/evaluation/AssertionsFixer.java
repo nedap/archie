@@ -8,9 +8,7 @@ import com.nedap.archie.aom.CAttribute;
 import com.nedap.archie.aom.CAttributeTuple;
 import com.nedap.archie.aom.CComplexObject;
 import com.nedap.archie.aom.CObject;
-import com.nedap.archie.aom.CPrimitiveObject;
 import com.nedap.archie.aom.CPrimitiveTuple;
-import com.nedap.archie.aom.CSecondOrder;
 import com.nedap.archie.aom.terminology.ArchetypeTerm;
 import com.nedap.archie.base.Interval;
 import com.nedap.archie.creation.RMObjectCreator;
@@ -23,7 +21,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.xml.xpath.XPathExpressionException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
