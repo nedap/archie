@@ -1,5 +1,6 @@
 package com.nedap.archie.rm.composition;
 
+import javax.annotation.Nullable;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
@@ -15,6 +16,7 @@ import java.util.List;
 })
 public class Section extends ContentItem {
 
+    @Nullable
     private List<ContentItem> items = new ArrayList<>();
 
     public List<ContentItem> getItems() {

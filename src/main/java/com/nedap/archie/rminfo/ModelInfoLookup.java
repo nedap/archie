@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
 import javax.annotation.Nullable;
+import javax.lang.model.type.TypeVariable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
@@ -148,11 +149,14 @@ public class ModelInfoLookup {
         if (Collection.class.isAssignableFrom(rawFieldType)) {
             Type[] actualTypeArguments = ((ParameterizedType) fieldType.getType()).getActualTypeArguments();
             if (actualTypeArguments.length == 1) {
+                //the java reflection api is kind of tricky with types. This works for the archie RM, but may cause problems for other RMs. The fix is implementing more ways
                 if (actualTypeArguments[0] instanceof Class) {
                     return (Class) actualTypeArguments[0];
                 } else if (actualTypeArguments[0] instanceof ParameterizedType) {
                     ParameterizedType parameterizedTypeInCollection = (ParameterizedType) actualTypeArguments[0];
                     return (Class) parameterizedTypeInCollection.getRawType();
+                } else if (actualTypeArguments[0] instanceof java.lang.reflect.TypeVariable) {
+                    return (Class) ((java.lang.reflect.TypeVariable) actualTypeArguments[0]).getBounds()[0];
                 }
             }
         }

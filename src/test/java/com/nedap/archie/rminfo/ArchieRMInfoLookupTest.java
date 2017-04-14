@@ -6,6 +6,7 @@ import com.nedap.archie.rm.composition.Observation;
 import com.nedap.archie.rm.datastructures.Cluster;
 import com.nedap.archie.rm.datastructures.Event;
 import com.nedap.archie.rm.datastructures.History;
+import com.nedap.archie.rm.datastructures.Item;
 import com.nedap.archie.rm.datavalues.DvEHRURI;
 import com.nedap.archie.rm.datavalues.DvIdentifier;
 import com.nedap.archie.rm.datavalues.DvURI;
@@ -88,6 +89,15 @@ public class ArchieRMInfoLookupTest {
 
         assertEquals(attributeInfo.getType(), List.class);
         assertEquals(attributeInfo.getTypeInCollection(), Event.class);
+        assertEquals(attributeInfo.isMultipleValued(), true);
+    }
+
+    @Test
+    public void attributeInfoOfParameterizedExtendsCollectionType() {
+        RMAttributeInfo attributeInfo = modelInfoLookup.getAttributeInfo(Cluster.class, "items");
+
+        assertEquals(attributeInfo.getType(), List.class);
+        assertEquals(attributeInfo.getTypeInCollection(), Item.class);
         assertEquals(attributeInfo.isMultipleValued(), true);
     }
 

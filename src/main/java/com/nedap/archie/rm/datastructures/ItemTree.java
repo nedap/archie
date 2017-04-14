@@ -1,5 +1,6 @@
 package com.nedap.archie.rm.datastructures;
 
+import javax.annotation.Nullable;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -16,6 +17,7 @@ import java.util.List;
 })
 @XmlRootElement(name="item_tree")
 public class ItemTree extends ItemStructure<Item> {
+        @Nullable
         private List<Item> items = new ArrayList<>();
 
         public List<Item> getItems() {
