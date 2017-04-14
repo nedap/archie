@@ -33,7 +33,7 @@ public class MultiplicityInterval extends Interval<Integer> {
     }
 
     public boolean isMandatory() {
-        return Integer.valueOf(1).equals(getLower()) && Integer.valueOf(1).equals(getUpper()) && !isUpperUnbounded() && isLowerIncluded() && isUpperIncluded();
+        return !isLowerUnbounded() && getLower() >= 1 ;
     }
 
     public boolean isProhibited() {
