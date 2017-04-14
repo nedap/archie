@@ -109,11 +109,24 @@ classes {
 	dependsOn generateGrammarSource
 }
 
+def generatedSources = ["**/com/nedap/archie/adlparser/antlr**"]
+
+test {
+  jacoco {
+    excludes = generatedSources
+  }
+}
+
 jacocoTestReport {
+    doFirst {
+          classDirectories = fileTree(dir: "${buildDir}/classes/main/").exclude(generatedSources)
+    }
     reports {
         xml.enabled = true
         html.enabled = true
     }
+    sourceSets sourceSets.main
+    //do not check the generated source 
 }
 
 check.dependsOn jacocoTestReport
