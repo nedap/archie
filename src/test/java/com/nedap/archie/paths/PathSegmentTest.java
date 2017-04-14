@@ -26,6 +26,6 @@ public class PathSegmentTest {
 
     @Test
     public void stringOfNodeNameIdAndIndex() {
-        assertEquals("/data[id4, 2]", new PathSegment("data", "id4", 2).toString());
+        assertEquals("/data[id4,2]", new PathSegment("data", "id4", 2).toString());
     }
 }
