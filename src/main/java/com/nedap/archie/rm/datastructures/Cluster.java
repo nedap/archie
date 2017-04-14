@@ -15,22 +15,22 @@ import java.util.List;
         "items"
 })
 @XmlRootElement
-public class Cluster extends Item {
+public class Cluster<Type extends Item> extends Item {
 
-    private List<Item> items = new ArrayList<>();
+    private List<Type> items = new ArrayList<>();
 
-    public List<Item> getItems() {
+    public List<Type> getItems() {
         return items;
     }
 
-    public void setItems(List<Item> items) {
+    public void setItems(List<Type> items) {
         this.items = items;
 
         setThisAsParent(items, "items");
 
     }
 
-    public void addItem(Item item) {
+    public void addItem(Type item) {
         items.add(item);
         setThisAsParent(item, "items");
     }

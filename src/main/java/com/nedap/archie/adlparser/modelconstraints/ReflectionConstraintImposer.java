@@ -17,7 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * ModelConstraintImposer that checks the constraint with java-reflection. javax.annotation.NonNull is implemented
  * as being NonNull. Other attributes are assumed to be non-null. Collection attributes are assumed to be 0..*
  *
- * Fully thread-safe, but rather expensive to create. Caching in a static field is encouraged.
+ * Fully thread-safe, inexpensive to create as long as you cached your ModelInfoLookup
  *
  * Created by pieter.bos on 04/11/15.
  */
@@ -34,7 +34,7 @@ public class ReflectionConstraintImposer implements ModelConstraintImposer {
     @NotNull
     private CAttribute createCAttribute(RMAttributeInfo attributeInfo) {
         CAttribute attribute = new CAttribute();
-        attribute.setCardinality(new Cardinality(1,1));
+
         attribute.setMultiple(false);
         attribute.setRmAttributeName(attributeInfo.getRmName());
 
@@ -47,6 +47,10 @@ public class ReflectionConstraintImposer implements ModelConstraintImposer {
         if(attributeInfo.isMultipleValued()) {
             attribute.setCardinality(Cardinality.unbounded());
             attribute.setMultiple(true);
+        } else {
+            //only for container attributes (list, set, etc)
+            attribute.setCardinality(null);
+            attribute.setMultiple(false);
         }
         return attribute;
     }

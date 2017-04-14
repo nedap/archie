@@ -12,6 +12,7 @@ import java.util.List;
 @XmlType(name = "ITEM_STRUCTURE")
 public abstract class ItemStructure<Type extends Item> extends DataStructure {
 
+    /** In the default model it's in the subclasses, but defined here as well because it has a lot of uses */
     public abstract List<Type> getItems();
 
 }
