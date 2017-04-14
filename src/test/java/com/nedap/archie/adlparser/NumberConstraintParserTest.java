@@ -138,6 +138,7 @@ public class NumberConstraintParserTest extends PrimitivesConstraintParserTest {
 		CInteger integerAttr8 = getAttribute("integer_attr8");
 
 		assertEquals(new Interval<>(55l), integerAttr1.getConstraint().get(0));
+        assertEquals((Long) 55l, integerAttr1.getAssumedValue());//only one value means its automatically assumed, for now
 		//2 = list!
 		assertEquals(new Interval<>(10l), integerAttr2.getConstraint().get(0));
 		assertEquals(new Interval<>(20l), integerAttr2.getConstraint().get(1));
