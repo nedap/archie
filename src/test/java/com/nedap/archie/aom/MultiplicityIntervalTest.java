@@ -18,7 +18,7 @@ public class MultiplicityIntervalTest {
         assertTrue(new MultiplicityInterval(1, 1).isMandatory());
         assertFalse(MultiplicityInterval.unbounded().isMandatory());
     }
-    
+
     @Test
     public void open() {
         assertFalse(new MultiplicityInterval(0, 0).isOpen());

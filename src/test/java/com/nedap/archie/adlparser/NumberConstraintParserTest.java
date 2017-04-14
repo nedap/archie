@@ -1,5 +1,6 @@
 package com.nedap.archie.adlparser;
 
+import com.google.common.collect.Lists;
 import com.nedap.archie.aom.primitives.CInteger;
 import com.nedap.archie.aom.primitives.CReal;
 import com.nedap.archie.base.Interval;
@@ -43,6 +44,7 @@ public class NumberConstraintParserTest extends PrimitivesConstraintParserTest {
 		CInteger integerAttr10 = getAttribute("integer_attr10");
 		CInteger integerAttr11 = getAttribute("integer_attr11");
 		CInteger integerAttr12 = getAttribute("integer_attr12");
+		CInteger integerAttr14 = getAttribute("integer_attr14");
         assertEquals(new Interval<>(55l), integerAttr1.getConstraint().get(0));
 		//2 = list!
 		assertEquals(new Interval<>(10l), integerAttr2.getConstraint().get(0));
@@ -59,6 +61,7 @@ public class NumberConstraintParserTest extends PrimitivesConstraintParserTest {
 		assertEquals(Interval.lowerUnbounded(10l, true), integerAttr10.getConstraint().get(0));
 		assertEquals(new Interval<>(-10l, -5l), integerAttr11.getConstraint().get(0));
 		assertEquals(new Interval<>(10l), integerAttr12.getConstraint().get(0));
+		assertEquals(Lists.newArrayList(new Interval<Long>(0l, 1l), new Interval<Long>(2l, 3l)), integerAttr14.getConstraint());
     }
 
 
@@ -91,6 +94,7 @@ public class NumberConstraintParserTest extends PrimitivesConstraintParserTest {
 		CReal realAttr10 = getAttribute("real_attr10");
 		CReal realAttr11 = getAttribute("real_attr11");
 		CReal realAttr12 = getAttribute("real_attr12");
+        CReal realAttr14 = getAttribute("real_attr14");
 		assertEquals(new Interval<>(100d), realAttr1.getConstraint().get(0));
 		//2 = list!
 		assertEquals(new Interval<>(10d), realAttr2.getConstraint().get(0));
@@ -107,6 +111,7 @@ public class NumberConstraintParserTest extends PrimitivesConstraintParserTest {
 		assertEquals(Interval.lowerUnbounded(10d, true), realAttr10.getConstraint().get(0));
 		assertEquals(new Interval<>(-10d, -5d), realAttr11.getConstraint().get(0));
 		assertEquals(new Interval<>(10d), realAttr12.getConstraint().get(0));
+        assertEquals(Lists.newArrayList(new Interval<Double>(0.0d, 1.0d), new Interval<Double>(2.0d, 3.0d)), realAttr14.getConstraint());
     }
 
 
@@ -133,7 +138,6 @@ public class NumberConstraintParserTest extends PrimitivesConstraintParserTest {
 		CInteger integerAttr8 = getAttribute("integer_attr8");
 
 		assertEquals(new Interval<>(55l), integerAttr1.getConstraint().get(0));
-		assertEquals((Long) 55l, integerAttr1.getAssumedValue());//only one value means its automatically assumed :)
 		//2 = list!
 		assertEquals(new Interval<>(10l), integerAttr2.getConstraint().get(0));
 		assertEquals(new Interval<>(20l), integerAttr2.getConstraint().get(1));
