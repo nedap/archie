@@ -17,7 +17,6 @@ import com.nedap.archie.adlparser.antlr.XPathParser;
 import com.nedap.archie.adlparser.antlr.XPathParser.*;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -400,7 +399,6 @@ public class APathQuery {
         }
     }
 
-    @NotNull
     private String buildPathConstraint(Integer index, String archetypeNodeId) {
         if(index == null && !archetypeNodeIdPresent(archetypeNodeId)) {
             return "";//nothing to add

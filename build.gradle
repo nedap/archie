@@ -68,7 +68,7 @@ dependencies {
 
 	compile "org.reflections:reflections:${reflectionsVersion}"
 
-	compile 'org.checkerframework:checker:1.9.7'
+	
 
     compile 'com.esotericsoftware:kryo:4.0.0' //for easy and relatively fast object cloning
 	testCompile 'junit:junit:4.12'

@@ -11,7 +11,6 @@ import com.nedap.archie.rules.evaluation.Evaluator;
 import com.nedap.archie.rules.evaluation.RuleEvaluation;
 import com.nedap.archie.rules.evaluation.Value;
 import com.nedap.archie.rules.evaluation.ValueList;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -131,7 +130,6 @@ public class BinaryOperatorEvaluator implements Evaluator<BinaryOperator> {
         return result;
     }
 
-    @NotNull
     protected List<String> getPaths(Value<Boolean> leftValue, Value<Boolean> rightValue) {
         List<String> paths = new ArrayList<>();
         paths.addAll(leftValue.getPaths());
@@ -248,7 +246,6 @@ public class BinaryOperatorEvaluator implements Evaluator<BinaryOperator> {
         }
     }
 
-    @NotNull
     private ValueList evaluateRelOpOperator(RuleEvaluation evaluation, BinaryOperator statement) {
         ValueList leftValues = evaluation.evaluate(statement.getLeftOperand());
         ValueList rightValues = evaluation.evaluate(statement.getRightOperand());

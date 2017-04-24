@@ -7,7 +7,6 @@ import com.nedap.archie.base.MultiplicityInterval;
 import com.nedap.archie.rminfo.ModelInfoLookup;
 import com.nedap.archie.rminfo.RMAttributeInfo;
 import com.nedap.archie.rminfo.RMTypeInfo;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Map;
@@ -31,7 +30,6 @@ public class ReflectionConstraintImposer implements ModelConstraintImposer {
         this.lookup = classLookup;
     }
 
-    @NotNull
     private CAttribute createCAttribute(RMAttributeInfo attributeInfo) {
         CAttribute attribute = new CAttribute();
 

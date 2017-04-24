@@ -12,7 +12,6 @@ import com.nedap.archie.rules.ExpressionVariable;
 import com.nedap.archie.rules.RuleStatement;
 import com.nedap.archie.rules.VariableDeclaration;
 import com.nedap.archie.testutil.TestUtil;
-import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -193,7 +192,6 @@ public class ParsedRulesEvaluationTest {
         assertEquals("the assertion tag should be correct", "blood_pressure_valid", result.getTag());
     }
 
-    @NotNull
     public Pathable constructTwoBloodPressureObservations() {
         Pathable root = (Pathable) testUtil.constructEmptyRMObject(archetype.getDefinition());
 
@@ -222,7 +220,6 @@ public class ParsedRulesEvaluationTest {
         return root;
     }
 
-    @NotNull
     public Pathable constructTwoBloodPressureObservationsOneEmptySystolic() {
         Pathable root = (Pathable) testUtil.constructEmptyRMObject(archetype.getDefinition());
 
@@ -247,8 +244,7 @@ public class ParsedRulesEvaluationTest {
         }
         return root;
     }
-
-    @NotNull
+    
     public Pathable constructTwoBloodPressureObservationsOneEmptySystolicNoDiastolic() {
         Pathable root = (Pathable) testUtil.constructEmptyRMObject(archetype.getDefinition());
 

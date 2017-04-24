@@ -5,7 +5,6 @@ import com.nedap.archie.adlparser.antlr.AdlParser.*;
 import com.nedap.archie.adlparser.odin.OdinValueParser;
 import com.nedap.archie.aom.CPrimitiveObject;
 import com.nedap.archie.rules.*;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -140,7 +139,6 @@ public class RulesParser extends BaseTreeWalker {
         return new Constant<Boolean>(ExpressionType.BOOLEAN, context.SYM_TRUE() != null ? true : false);
     }
 
-    @NotNull
     private ModelReference parseModelReference(AdlRulesPathContext context) {
         String variableReference = null;
         String path = context.ADL_PATH().getText();
@@ -272,7 +270,6 @@ public class RulesParser extends BaseTreeWalker {
         return expressions;
     }
 
-    @NotNull
     private Expression parseVariableReference(VariableReferenceContext context) {
         VariableReference reference = new VariableReference();
         //TODO: retrieve declaration from actual declaration, instead of just setting the name

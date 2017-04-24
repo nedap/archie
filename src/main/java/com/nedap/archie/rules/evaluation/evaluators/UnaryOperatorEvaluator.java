@@ -9,7 +9,6 @@ import com.nedap.archie.rules.evaluation.Evaluator;
 import com.nedap.archie.rules.evaluation.RuleEvaluation;
 import com.nedap.archie.rules.evaluation.Value;
 import com.nedap.archie.rules.evaluation.ValueList;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -68,7 +67,6 @@ public class UnaryOperatorEvaluator implements Evaluator<UnaryOperator> {
         }
     }
 
-    @NotNull
     public ValueList handleNot(RuleEvaluation evaluation, UnaryOperator statement) {
         Expression operand = statement.getOperand();
         ValueList input = evaluation.evaluate(operand);
