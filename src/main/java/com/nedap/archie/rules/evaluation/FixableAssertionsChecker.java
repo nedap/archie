@@ -65,6 +65,9 @@ class FixableAssertionsChecker {
                 handleImplies(assertionResult, index, binaryExpression);
             } else if (binaryExpression.getOperator() == OperatorKind.matches) {
                 handleMatches(assertionResult, index, binaryExpression);
+            } else if (binaryExpression.getOperator() == OperatorKind.and) {
+                checkAssertionForFixablePatterns(assertionResult, binaryExpression.getLeftOperand(), index);
+                checkAssertionForFixablePatterns(assertionResult, binaryExpression.getRightOperand(), index);
             }
         } else if (expression instanceof UnaryOperator) {
             UnaryOperator unaryOperator = (UnaryOperator) expression;
