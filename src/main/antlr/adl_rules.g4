@@ -49,8 +49,13 @@ booleanAndExpression
 	;
 
 booleanXorExpression
-	:	booleanConstraintExpression
-	|	booleanXorExpression SYM_XOR booleanConstraintExpression
+	:	booleanNotExpression
+	|	booleanXorExpression SYM_XOR booleanNotExpression
+	;
+
+booleanNotExpression
+    : SYM_NOT booleanNotExpression
+    | booleanConstraintExpression
 	;
 
 booleanConstraintExpression
@@ -87,7 +92,6 @@ expressionLeaf
     | string_value
     | adlRulesPath
     | SYM_EXISTS adlRulesPath
-    | SYM_NOT expression
     | functionName '(' (argumentList)? ')'
     | variableReference
     | '(' expression ')'
