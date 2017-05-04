@@ -12,6 +12,7 @@ import com.nedap.archie.aom.CPrimitiveTuple;
 import com.nedap.archie.aom.terminology.ArchetypeTerm;
 import com.nedap.archie.base.Interval;
 import com.nedap.archie.creation.RMObjectCreator;
+import com.nedap.archie.paths.PathSegment;
 import com.nedap.archie.rm.datatypes.CodePhrase;
 import com.nedap.archie.rm.datavalues.DvCodedText;
 import com.nedap.archie.rm.datavalues.quantity.DvOrdinal;
@@ -158,7 +159,12 @@ public class AssertionsFixer {
                 } else {
                     newEmptyObject = constructEmptySimpleObject(newLastPathSegment, object, newEmptyObject);
                 }
-                creator.set(object, newLastPathSegment, Lists.newArrayList(newEmptyObject));
+                int bracketIndex = newLastPathSegment.indexOf('[');
+                String attributeName = newLastPathSegment;
+                if(bracketIndex > -1) {
+                    attributeName = newLastPathSegment.substring(0, bracketIndex);
+                }
+                creator.set(object, attributeName, Lists.newArrayList(newEmptyObject));
                 ruleEvaluation.refreshQueryContext();
                 parents = ruleEvaluation.getQueryContext().findList(pathOfParent);
             }
