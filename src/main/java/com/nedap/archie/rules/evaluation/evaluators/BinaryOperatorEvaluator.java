@@ -147,9 +147,15 @@ public class BinaryOperatorEvaluator implements Evaluator<BinaryOperator> {
                 if(leftBoolean == null && rightBoolean == null) {
                     return null;
                 } else if (leftBoolean == null) {
-                    return rightBoolean;
+                    if(rightBoolean) {
+                        return rightBoolean;
+                    }
+                    return null;
                 } else if (rightBoolean == null) {
-                    return leftBoolean;
+                    if(leftBoolean) {
+                        return leftBoolean;
+                    }
+                    return null;
                 }
                 return leftBoolean | rightBoolean;
             case xor:
