@@ -158,16 +158,14 @@ public class AssertionsFixer {
                 } else {
                     newEmptyObject = constructEmptySimpleObject(newLastPathSegment, object, newEmptyObject);
                 }
-<<<<<<< Updated upstream
-                creator.set(object, newLastPathSegment, Lists.newArrayList(newEmptyObject));
-=======
+
                 int bracketIndex = newLastPathSegment.indexOf('[');
                 String attributeName = newLastPathSegment;
                 if(bracketIndex > -1) {
                     attributeName = newLastPathSegment.substring(0, bracketIndex);
                 }
                 creator.addElementToListOrSetSingleValues(object, attributeName, Lists.newArrayList(newEmptyObject));
->>>>>>> Stashed changes
+
                 ruleEvaluation.refreshQueryContext();
                 parents = ruleEvaluation.getQueryContext().findList(pathOfParent);
             }

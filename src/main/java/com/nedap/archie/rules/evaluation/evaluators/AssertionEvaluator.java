@@ -24,6 +24,7 @@ public class AssertionEvaluator implements Evaluator<Assertion> {
                 //variable declaration?
                 //throw new RuntimeException("assertion with type " + value.getType() + " found - should be boolean!");
             }
+
         }
         return null;
         //TODO: this assertion can be several things:
