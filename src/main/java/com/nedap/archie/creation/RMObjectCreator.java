@@ -1,5 +1,6 @@
 package com.nedap.archie.creation;
 
+import com.google.common.collect.Lists;
 import com.nedap.archie.aom.CObject;
 import com.nedap.archie.rm.archetyped.Locatable;
 import com.nedap.archie.rminfo.ArchieRMInfoLookup;
@@ -132,6 +133,27 @@ public class RMObjectCreator {
 
         } catch (IllegalAccessException | InstantiationException | InvocationTargetException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public void addElementToListOrSetSingleValues(Object object, String attribute, Object element) {
+        RMAttributeInfo attributeInfo = this.classLookup.getAttributeInfo(object.getClass(), attribute);
+        if(!attributeInfo.isMultipleValued()) {
+            if(element instanceof Collection) {
+                set(object, attribute, new ArrayList((Collection) element));
+            } else {
+                set(object, attribute, Lists.newArrayList(element));
+            }
+        } else {
+            if(element instanceof Collection) {
+                Collection collection = (Collection) element;
+                for(Object el:collection) {
+                    addElementToList(object, attributeInfo, el);
+                }
+            } else {
+                addElementToList(object, attributeInfo, element);
+            }
+
         }
     }
 }
