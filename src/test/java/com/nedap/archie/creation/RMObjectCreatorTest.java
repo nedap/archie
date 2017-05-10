@@ -42,6 +42,22 @@ public class RMObjectCreatorTest {
         assertEquals("id6", e.getArchetypeNodeId());
     }
 
+    @Test(expected=IllegalArgumentException.class)
+    public void createUnknownType() {
+        Archetype archetype = new AuthoredArchetype();
+        archetype.setTerminology(new ArchetypeTerminology());
+        LinkedHashMap<String, ArchetypeTerm> termDefinitions = new LinkedHashMap<>();
+        termDefinitions.put("id6", new ArchetypeTerm("id6", "text", "description"));
+        archetype.getTerminology().getTermDefinitions().put("en", termDefinitions);
+
+        CComplexObject elementConstraint = new CComplexObject();
+        elementConstraint.setRmTypeName("DOUBLE");
+        elementConstraint.setNodeId("id6");
+        archetype.setDefinition(elementConstraint);
+
+        Object o = creator.create(elementConstraint);
+    }
+
     @Test
     public void setSingleValuedValue() {
         Element element = new Element();
@@ -50,12 +66,26 @@ public class RMObjectCreatorTest {
         assertEquals(booleanValue, element.getValue());
     }
 
+    @Test
+    public void setSingleValuedValuePrimitive() {
+        DvBoolean booleanValue = new DvBoolean();
+        creator.set(booleanValue, "value", Lists.newArrayList(true));
+        assertEquals(true, booleanValue.getValue());
+    }
+
     @Test(expected = IllegalArgumentException.class)
     public void setSingleValuedValueIncorrectly() {
         Element element = new Element();
         DvBoolean booleanValue = new DvBoolean();
         DvBoolean booleanValue2 = new DvBoolean();
         creator.set(element, "value", Lists.newArrayList(booleanValue, booleanValue2));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void setSingleValuedValueUnknownArgument() {
+        Element element = new Element();
+        DvBoolean booleanValue = new DvBoolean();
+        creator.set(element, "values", Lists.newArrayList(booleanValue));
     }
 
     @Test
