@@ -119,9 +119,17 @@ public class RulesParser extends BaseTreeWalker {
             BinaryOperator expression = new BinaryOperator();
             expression.setType(ExpressionType.BOOLEAN);
             expression.setOperator(OperatorKind.parse(context.SYM_XOR().getText()));
-            expression.addOperand(parseBooleanConstraintExpression(context.booleanConstraintExpression()));
+            expression.addOperand(parseBooleanNotExpression(context.booleanNotExpression()));
             expression.addOperand(parseXorExpression(context.booleanXorExpression()));
             return expression;
+        } else {
+            return parseBooleanNotExpression(context.booleanNotExpression());
+        }
+    }
+
+    private Expression parseBooleanNotExpression(BooleanNotExpressionContext context) {
+        if(context.SYM_NOT() != null) {
+            return new UnaryOperator(ExpressionType.BOOLEAN, OperatorKind.not, parseBooleanNotExpression(context.booleanNotExpression()));
         } else {
             return parseBooleanConstraintExpression(context.booleanConstraintExpression());
         }
@@ -232,12 +240,8 @@ public class RulesParser extends BaseTreeWalker {
         }
         else if(context.expression() != null) {
             Expression expression = this.parseExpression(context.expression());
-            if(context.SYM_NOT() != null) {
-                return new UnaryOperator(ExpressionType.BOOLEAN, OperatorKind.not, expression);
-            } else { //'this is '(' boolean_expression ')'
-                expression.setPrecedenceOverridden(true);
-                return expression;
-            }
+            expression.setPrecedenceOverridden(true);
+            return expression;
         }
         else if(context.expressionLeaf() != null) { // - arithmetic expression
             return new UnaryOperator(ExpressionType.REAL, OperatorKind.minus, parseExpressionLeaf(context.expressionLeaf()));

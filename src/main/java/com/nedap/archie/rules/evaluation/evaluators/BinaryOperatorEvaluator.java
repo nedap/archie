@@ -93,10 +93,12 @@ public class BinaryOperatorEvaluator implements Evaluator<BinaryOperator> {
         ValueList leftValues = evaluation.evaluate(statement.getLeftOperand());
         ValueList rightValues = evaluation.evaluate(statement.getRightOperand());
 
-        ValueList possibleNullResult = checkAndHandleNull(leftValues, rightValues);
-        if(possibleNullResult != null) {
-            possibleNullResult.setType(PrimitiveType.Boolean);
-            return possibleNullResult;
+        if(statement.getOperator() != OperatorKind.or) {
+            ValueList possibleNullResult = checkAndHandleNull(leftValues, rightValues);
+            if (possibleNullResult != null) {
+                possibleNullResult.setType(PrimitiveType.Boolean);
+                return possibleNullResult;
+            }
         }
 
 
@@ -142,6 +144,19 @@ public class BinaryOperatorEvaluator implements Evaluator<BinaryOperator> {
             case and:
                 return leftBoolean & rightBoolean;
             case or:
+                if(leftBoolean == null && rightBoolean == null) {
+                    return null;
+                } else if (leftBoolean == null) {
+                    if(rightBoolean) {
+                        return rightBoolean;
+                    }
+                    return null;
+                } else if (rightBoolean == null) {
+                    if(leftBoolean) {
+                        return leftBoolean;
+                    }
+                    return null;
+                }
                 return leftBoolean | rightBoolean;
             case xor:
                 return leftBoolean ^ rightBoolean;

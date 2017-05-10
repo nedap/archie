@@ -76,6 +76,20 @@ public class BinaryOperatorTest {
         testBinaryOperator(8d, ExpressionType.REAL, 2d, 3d, OperatorKind.exponent);
     }
 
+    @Test
+    public void or() {
+        testBinaryOperator(true, ExpressionType.BOOLEAN, null, true, OperatorKind.or);
+        testBinaryOperator(true, ExpressionType.BOOLEAN, true, null, OperatorKind.or);
+        testBinaryOperator(null, ExpressionType.BOOLEAN, false, null, OperatorKind.or);
+        testBinaryOperator(null, ExpressionType.BOOLEAN, null, false, OperatorKind.or);
+        testBinaryOperator(null, ExpressionType.BOOLEAN, null, null, OperatorKind.or);
+        testBinaryOperator(false, ExpressionType.BOOLEAN, false, false, OperatorKind.or);
+        testBinaryOperator(true, ExpressionType.BOOLEAN, true, false, OperatorKind.or);
+        testBinaryOperator(true, ExpressionType.BOOLEAN, false, true, OperatorKind.or);
+        testBinaryOperator(true, ExpressionType.BOOLEAN, true, true, OperatorKind.or);
+    }
+
+
     private void testBinaryOperator(Object expected, ExpressionType type, Object left, Object right, OperatorKind operatorKind) {
         BinaryOperator operator = new BinaryOperator();
         operator.setOperator(operatorKind);

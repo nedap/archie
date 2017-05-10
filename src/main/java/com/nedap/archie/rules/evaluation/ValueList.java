@@ -44,6 +44,14 @@ public class ValueList {
         this(value, Collections.EMPTY_LIST);
     }
 
+    /*
+     * Construct a value list of a single value, that does not have a path.
+     */
+    public ValueList(Object value, PrimitiveType type) {
+        this(value, Collections.EMPTY_LIST);
+        setType(type);
+    }
+
     /**
      * Construct a value list of a single object, with its paths
      * @param value
@@ -52,6 +60,7 @@ public class ValueList {
     public ValueList(Object value, List<String> paths){
         if(value == null) {
             this.type = null;
+            addValue(value, paths);
         } else {
             addValue(value, paths);
 

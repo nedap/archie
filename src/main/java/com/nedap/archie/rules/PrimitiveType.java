@@ -28,4 +28,18 @@ public enum PrimitiveType {
         return Unknown;//or throw exception?
 
     }
+
+    public static PrimitiveType fromExpressionType(ExpressionType type) {
+        switch(type) {
+            case STRING:
+                return String;
+            case BOOLEAN:
+                return Boolean;
+            case INTEGER:
+                return Integer;
+            case REAL:
+                return Real;
+        }
+        return null;
+    }
 }
