@@ -12,7 +12,6 @@ import com.nedap.archie.aom.CPrimitiveTuple;
 import com.nedap.archie.aom.terminology.ArchetypeTerm;
 import com.nedap.archie.base.Interval;
 import com.nedap.archie.creation.RMObjectCreator;
-import com.nedap.archie.paths.PathSegment;
 import com.nedap.archie.rm.datatypes.CodePhrase;
 import com.nedap.archie.rm.datavalues.DvCodedText;
 import com.nedap.archie.rm.datavalues.quantity.DvOrdinal;

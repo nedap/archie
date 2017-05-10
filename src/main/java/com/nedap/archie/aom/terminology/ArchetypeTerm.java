@@ -55,6 +55,16 @@ public class ArchetypeTerm extends ArchetypeModelObject implements Map<String, S
         items.put("description", description);
     }
 
+    public ArchetypeTerm() {
+        super();
+    }
+
+    public ArchetypeTerm(String code, String text, String description) {
+        this.code = code;
+        this.setText(text);
+        this.setDescription(description);
+    }
+
     /**
      * For compatibility with the AOM, the other items is explicitly modelled here. You could just use the map interface
      * implemented here - it is faster and easier (and required for odin-parsing with jackson).

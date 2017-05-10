@@ -2,6 +2,7 @@ package com.nedap.archie.rules.evaluation.evaluators;
 
 import com.google.common.collect.Lists;
 import com.nedap.archie.rules.Constant;
+import com.nedap.archie.rules.PrimitiveType;
 import com.nedap.archie.rules.evaluation.Evaluator;
 import com.nedap.archie.rules.evaluation.RuleEvaluation;
 import com.nedap.archie.rules.evaluation.ValueList;
@@ -14,7 +15,7 @@ import java.util.List;
 public class ConstantEvaluator implements Evaluator<Constant> {
     @Override
     public ValueList evaluate(RuleEvaluation evaluation, Constant statement) {
-        return new ValueList(statement.getValue());
+        return new ValueList(statement.getValue(), PrimitiveType.fromExpressionType(statement.getType()));
     }
 
     @Override

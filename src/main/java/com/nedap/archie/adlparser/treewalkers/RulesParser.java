@@ -1,7 +1,6 @@
 package com.nedap.archie.adlparser.treewalkers;
 
 import com.nedap.archie.adlparser.ADLParserErrors;
-import com.nedap.archie.adlparser.antlr.AdlParser;
 import com.nedap.archie.adlparser.antlr.AdlParser.*;
 import com.nedap.archie.adlparser.odin.OdinValueParser;
 import com.nedap.archie.aom.CPrimitiveObject;
