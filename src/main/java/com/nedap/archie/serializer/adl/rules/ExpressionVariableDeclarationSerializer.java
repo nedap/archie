@@ -21,7 +21,6 @@ public class ExpressionVariableDeclarationSerializer extends RuleElementSerializ
         builder.append(variableDeclaration.getType().toString());
         builder.append(" ::= ");
         serializer.serializeRuleElement(variableDeclaration.getExpression());
-        builder.append(";");
         builder.newline();
 
     }

@@ -27,7 +27,7 @@ import com.nedap.archie.serializer.adl.ADLDefinitionSerializer;
 /**
  * @author Marko Pipan
  */
-public class CArchetypeRootSerializer extends ConstraintSerializer<CArchetypeRoot> {
+public class CArchetypeRootSerializer extends CComplexObjectSerializer<CArchetypeRoot> {
     public CArchetypeRootSerializer(ADLDefinitionSerializer serializer) {
         super(serializer);
     }
@@ -45,6 +45,17 @@ public class CArchetypeRootSerializer extends ConstraintSerializer<CArchetypeRoo
         builder.append("]");
 
         appendOccurrences(cobj);
+        //this is not according to the grammar, won't parse and not according to the AOM, but according to specs.
+        //it only occurs when you flatten a use_archetype node. You can change it into complex objects with an option in the flattener
+        //See https://openehr.atlassian.net/browse/SPECPR-217 and https://openehr.atlassian.net/browse/SPECPR-218
+        //on why this is a good idea
+        if(cobj.getAttributes() != null && !cobj.getAttributes().isEmpty()) {
+            builder.ensureSpace();
+            builder.append("matches {");
+            builder.lineComment(serializer.getTermText(cobj));
+            buildAttributesAndTuples(cobj);
+            builder.append("}");
+        }
 
 
         builder.unindent();

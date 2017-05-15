@@ -24,7 +24,7 @@ abstract public class ADLArchetypeSerializer<T extends Archetype> {
         if (archetype instanceof Template) {
             return new ADLTemplateSerializer((Template) archetype).serialize();
         } else if (archetype instanceof OperationalTemplate) {
-            throw new UnsupportedOperationException("Serialization of operational template is not yet supported");
+            return new ADLOperationalTemplateSerializer((OperationalTemplate) archetype).serialize();
         } else if (archetype instanceof TemplateOverlay) {
             return new ADLTemplateOverlaySerializer((TemplateOverlay) archetype).serialize();
         } else if (archetype instanceof AuthoredArchetype) {
@@ -40,8 +40,8 @@ abstract public class ADLArchetypeSerializer<T extends Archetype> {
         appendLanguage();
         appendDescription();
         appendDefinition();
-        appendTerminology();
         appendRules();
+        appendTerminology();
         appendAnnotations();
 
         return builder.toString();

@@ -23,7 +23,6 @@ public class ForAllStatementSerializer extends RuleElementSerializer<ForAllState
         builder.append(" ");
         serializer.serializeRuleElement(ruleElement.getPathExpression());
         builder.newIndentedLine();
-        builder.append("satisfies");
         builder.append(" ");
         serializer.serializeRuleElement(ruleElement.getAssertion());
         builder.unindent();
