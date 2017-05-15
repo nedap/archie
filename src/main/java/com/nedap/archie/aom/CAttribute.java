@@ -78,6 +78,10 @@ public class CAttribute extends ArchetypeConstraint {
         for(CObject child:children) {
             if(nodeId.equals(child.getNodeId())) {
                 return child;
+            } else if(child instanceof CArchetypeRoot) {
+                if (((CArchetypeRoot) child).getArchetypeRef().equals(nodeId)) {
+                    return child;
+                }
             }
         }
         return null;

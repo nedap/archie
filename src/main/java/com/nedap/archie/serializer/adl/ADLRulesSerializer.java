@@ -33,6 +33,7 @@ public class ADLRulesSerializer {
         ruleElementSerializers.put(VariableReference.class, new VariableReferenceSerializer(this));
         ruleElementSerializers.put(Constant.class, new ConstantSerializer(this));
         ruleElementSerializers.put(ForAllStatement.class, new ForAllStatementSerializer(this));
+        ruleElementSerializers.put(Function.class, new FunctionSerializer(this));
 
     }
 

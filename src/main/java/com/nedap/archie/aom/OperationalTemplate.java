@@ -64,6 +64,8 @@ public class OperationalTemplate extends AuthoredArchetype {
             if(segment.hasArchetypeRef()) {
                 //this is [archetypeId] instead of [idcode]
                 return segment.getNodeId();
+            } else if(segment.getArchetypeRef() != null) {
+                return segment.getArchetypeRef();
             }
         }
         return null;
@@ -88,7 +90,11 @@ public class OperationalTemplate extends AuthoredArchetype {
         } else {
             ArchetypeTerminology terminology = getComponentTerminologies().get(archetypeId);
             if(terminology != null) {
-                return terminology.getTermDefinition(language, code);
+                ArchetypeTerm term = terminology.getTermDefinition(language, code);
+                if(term == null && object instanceof CArchetypeRoot) {
+                    return terminology.getTermDefinition(language, ((CArchetypeRoot) object).getArchetypeRef());
+                }
+                return term;
             } else {
                 //TODO: check if we should do this or just return null
                 throw new IllegalStateException("Expected an archetype terminology for archetype id " + archetypeId);

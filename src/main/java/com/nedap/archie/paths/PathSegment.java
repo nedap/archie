@@ -16,6 +16,8 @@ public class PathSegment {
 
     private String nodeName;
     private String nodeId;
+    // An explicit archetype ref from a C_ARCHETYPE_ROOT (use archetype...). null otherwise
+    private String archetypeRef = null;
     private Integer index;
 
     public PathSegment(String nodeName, Integer index) {
@@ -58,6 +60,14 @@ public class PathSegment {
 
     public void setIndex(Integer index) {
         this.index = index;
+    }
+
+    public String getArchetypeRef() {
+        return archetypeRef;
+    }
+
+    public void setArchetypeRef(String archetypeRef) {
+        this.archetypeRef = archetypeRef;
     }
 
     public boolean hasIdCode() {
