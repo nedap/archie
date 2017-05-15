@@ -30,7 +30,7 @@ c_non_primitive_object:
     | archetype_slot
     ;
 
-c_archetype_root: SYM_USE_ARCHETYPE type_id '[' ID_CODE SYM_COMMA archetype_ref ']' c_occurrences? ;
+c_archetype_root: SYM_USE_ARCHETYPE type_id '[' ID_CODE SYM_COMMA archetype_ref ']' c_occurrences? ( SYM_MATCHES '{' c_attribute_def+ '}' )? ;
 
 c_complex_object_proxy: SYM_USE_NODE type_id '[' ID_CODE ']' c_occurrences? adl_path ;
 

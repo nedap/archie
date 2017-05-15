@@ -15,6 +15,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by pieter.bos on 15/05/2017.
@@ -61,7 +62,7 @@ public class RulesFlattenerTest {
     }
 
     @Test
-    public void flattenedRules() {
+    public void flattenedRules() throws Exception {
         Archetype flattened = flattener.flatten(containingRules);
         CObject systolicCObject = new APathQuery("/content[id5]/data/events/data/items[id5]").find(flattened.getDefinition());
         assertEquals("systolic", systolicCObject.getTerm().getText());
@@ -78,6 +79,11 @@ public class RulesFlattenerTest {
         assertEquals("specialized_rules_blood_pressure", bloodPressure.getTag());
         assertEquals(BinaryOperator.class, biggerThan90.getExpression().getClass());
         assertEquals("/content[id5]/data[id2]/events[id3]/data[id4]/items[id5]/value/magnitude", ((ModelReference)((BinaryOperator)biggerThan90.getExpression()).getLeftOperand()).getPath());
+
+        //test that we can actually parse the output
+        ADLParser parser = new ADLParser();
+        Archetype parsed = parser.parse(ADLArchetypeSerializer.serialize(flattened));
+        assertTrue(parser.getErrors().hasNoErrors());
     }
 
 }
