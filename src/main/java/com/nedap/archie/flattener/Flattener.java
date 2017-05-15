@@ -325,11 +325,11 @@ public class Flattener {
             if (archetype == null) {
                 throw new IllegalArgumentException("Archetype with reference :" + archetypeRef + " not found.");
             }
-            if (archetype.getParentArchetypeId() != null) {
+            //if (archetype.getParentArchetypeId() != null) {
                 archetype = getNewFlattener().flatten(archetype);
-            } else {
-                archetype = archetype.clone();//make sure we don't change this archetype :)
-            }
+           // } else {
+           //     archetype = archetype.clone();//make sure we don't change this archetype :)
+           // }
 
             //
             CComplexObject rootToFill = root;
