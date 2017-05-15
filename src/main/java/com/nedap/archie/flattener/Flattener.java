@@ -33,12 +33,8 @@ public class Flattener {
     private Archetype result;
     private boolean createOperationalTemplate;
     private boolean removeLanguagesFromMetaData = false;
-    private boolean useComplexObjectForArchetypeSlotReplacement = false;
 
     private String[] languagesToKeep = null;
-
-    private RulesFlattener rulesFlattener = new RulesFlattener();
-
 
     public Flattener(ArchetypeRepository repository) {
         this.repository = new OverridingArchetypeRepository(repository);
@@ -74,7 +70,6 @@ public class Flattener {
         if(parentId == null) {
             if(createOperationalTemplate) {
                 OperationalTemplate template = createOperationalTemplate(toFlatten);
-                result = template;
                 //make an operational template by just filling complex object proxies and archetype slots
                 fillSlots(template);
                 filterLanguages(template);
@@ -91,7 +86,6 @@ public class Flattener {
             throw new IllegalArgumentException("parent archetype not found in repository: " + toFlatten.getParentArchetypeId());
         }
         this.child = toFlatten.clone();//just to be sure, so we don't have to copy more things deeper down
-
 
         if(child instanceof Template) {
             Template childTemplate = (Template) child;
@@ -119,8 +113,6 @@ public class Flattener {
         //1. redefine structure
         //2. fill archetype slots if we are creating an operational template
         flatten(result, child);//TODO: this way around, or the other one? :)
-
-        rulesFlattener.combineRules(child, result, "prefix", "", "", true /* override statements with same tag */);//TODO: actually set a unique prefix
         if(createOperationalTemplate) {
             fillSlots(result);
 
@@ -331,17 +323,13 @@ public class Flattener {
                 archetype = archetype.clone();//make sure we don't change this archetype :)
             }
 
-            //
-            CComplexObject rootToFill = root;
-            if(useComplexObjectForArchetypeSlotReplacement) {
-                rootToFill = archetype.getDefinition();
-                root.getParent().replaceChild(root.getNodeId(), rootToFill);
-            } else {
-                rootToFill.setAttributes(archetype.getDefinition().getAttributes());
-                rootToFill.setAttributeTuples(archetype.getDefinition().getAttributeTuples());
-                rootToFill.setDefaultValue(archetype.getDefinition().getDefaultValue());
-            }
+
+
+            //root.getParent().replaceChild(root.getNodeId(), archetype.getDefinition());
             String newNodeId = archetype.getArchetypeId().getFullId();
+            root.setAttributes(archetype.getDefinition().getAttributes());
+            root.setAttributeTuples(archetype.getDefinition().getAttributeTuples());
+            root.setDefaultValue(archetype.getDefinition().getDefaultValue());
 
             ArchetypeTerminology terminology = archetype.getTerminology();
 
@@ -353,13 +341,10 @@ public class Flattener {
                 Map<String, ArchetypeTerm> translations = termDefinitions.get(language);
                 ArchetypeTerm term = translations.get(archetype.getDefinition().getNodeId());
                 translations.put(newNodeId, term);
-                //translations.put(root.getNodeId(), term);
             }
 
-            //rootToFill.setNodeId(newNodeId);
-            if(!useComplexObjectForArchetypeSlotReplacement) {
-                root.setArchetypeRef(newNodeId);
-            }
+            root.setNodeId(newNodeId);
+            root.setArchetypeRef(newArchetypeRef);
             OperationalTemplate templateResult = (OperationalTemplate) result;
 
             //todo: should we filter this?
@@ -372,15 +357,11 @@ public class Flattener {
             }
 
             templateResult.addComponentTerminology(newNodeId, terminology);
-
-            String prefix = archetype.getArchetypeId().getConceptId() + "_";
-            rulesFlattener.combineRules(archetype, root.getArchetype(), prefix, prefix, rootToFill.getPath(), false); //TODO: add prefixes to make them unique, or some other way of making unique
             //todo: do we have to put something in the terminology extracts?
             //templateResult.addTerminologyExtract(child.getNodeId(), archetype.getTerminology().);
         }
 
     }
-
 
     private void flattenTerminology() {
 
@@ -507,13 +488,9 @@ public class Flattener {
     }
 
     private Flattener getNewFlattener() {
-        return new Flattener(repository).createOperationalTemplate(createOperationalTemplate).useComplexObjectForArchetypeSlotReplacement(useComplexObjectForArchetypeSlotReplacement);
+        return new Flattener(repository).createOperationalTemplate(createOperationalTemplate);
     }
 
-    private Flattener useComplexObjectForArchetypeSlotReplacement(boolean useComplexObjectForArchetypeSlotReplacement) {
-        this.useComplexObjectForArchetypeSlotReplacement = useComplexObjectForArchetypeSlotReplacement;
-        return this;
-    }
 
 
     private void flattenAttribute(CComplexObject root, CAttribute parent, CAttribute child) {

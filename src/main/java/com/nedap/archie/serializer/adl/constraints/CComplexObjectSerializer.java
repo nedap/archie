@@ -61,7 +61,7 @@ public class CComplexObjectSerializer<T extends CComplexObject> extends Constrai
         builder.unindent();
     }
 
-    protected void buildAttributesAndTuples(T cobj) {
+    private void buildAttributesAndTuples(T cobj) {
         builder.indent().newline();
         Set<String> tupleAttributes = getTupleAttributeNames(cobj);
 

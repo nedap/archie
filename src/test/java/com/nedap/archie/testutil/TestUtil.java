@@ -83,25 +83,8 @@ public class TestUtil {
                         .filter(
                             o -> o.getNodeId().equals(childObject1.getNodeId())
                         ).collect(Collectors.toList());
-                    boolean oneSucceeded = false;
-                    AssertionError lastException = null;
-                    for(CObject childObject2:childObjects2) { //it's possible to get the same id twice with C_ARCHETYPE_ROOT according to ADL specs
-                        try {
-                            assertCObjectEquals(childObject1, childObject2);
-                            oneSucceeded = true;
-                        } catch (AssertionError e) {
-                            lastException = e;
-                        }
-                    }
-                    if(!oneSucceeded) {
-                        if(lastException != null) {
-                            throw lastException;
-                        } else {
-                            fail("no objects for cobject: " + childObject1);
-                        }
-                    }
-
-
+                    assertThat(childObjects2 + " should equal " + childObject1, childObjects2.size(), is(1));
+                    assertCObjectEquals(childObject1, childObjects2.get(0));
                 } else if (childObject1 instanceof CPrimitiveObject) {
                     CPrimitiveObject primitiveChild = (CPrimitiveObject) childObject1;
                     List<CObject> childObjects2 = attribute2.getChildren().stream()

@@ -46,7 +46,4 @@ public class ModelReference extends Leaf {
         }
     }
 
-    public void setVariableReferencePrefix(String variableReferencePrefix) {
-        this.variableReferencePrefix = variableReferencePrefix;
-    }
 }

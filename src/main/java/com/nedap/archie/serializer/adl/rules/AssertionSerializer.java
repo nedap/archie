@@ -20,6 +20,7 @@ public class AssertionSerializer extends RuleElementSerializer<Assertion> {
         }
 
         serializer.serializeRuleElement(ruleElement.getExpression());
+        builder.append(";");
         builder.newline();
 
     }
