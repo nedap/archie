@@ -24,6 +24,10 @@ public class ForAllStatement extends Operator {
         return variableName;
     }
 
+    public void setVariableName(String variableName) {
+        this.variableName = variableName;
+    }
+
     public Expression getPathExpression() {
         return getLeftOperand();
     }
