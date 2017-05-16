@@ -4,6 +4,8 @@ import com.google.common.collect.Lists;
 import com.nedap.archie.ArchieLanguageConfiguration;
 import com.nedap.archie.adlparser.ADLParser;
 import com.nedap.archie.aom.Archetype;
+import com.nedap.archie.rm.RMObject;
+import com.nedap.archie.rm.archetyped.Locatable;
 import com.nedap.archie.rm.archetyped.Pathable;
 import com.nedap.archie.rm.composition.Composition;
 import com.nedap.archie.rm.datavalues.DvText;
@@ -42,6 +44,18 @@ public class RMQueryContextTest {
         RMQueryContext queryContext = new RMQueryContext(root);
         assertEquals(Lists.newArrayList(composition.getContext()), queryContext.findList("/context"));
         DvText text = (DvText) queryContext.findList("/context/other_context/items[name/value = 'Qualification']/items[id5]/value").get(0);
+        assertNotNull(text);
+    }
+
+    @Test
+    public void withDotInNodeId() throws Exception {
+        root = (Pathable) testUtil.constructEmptyRMObject(archetype.getDefinition());
+        Composition composition = (Composition) root;
+
+        ((Locatable) ((Composition) root).getContext().getOtherContext().getItems().get(0)).setArchetypeNodeId("id3.1");
+        RMQueryContext queryContext = new RMQueryContext(root);
+        assertEquals(Lists.newArrayList(composition.getContext()), queryContext.findList("/context"));
+        DvText text = (DvText) queryContext.findList("/context/other_context/items[id3.1]/items[id5]/value").get(0);
         assertNotNull(text);
     }
 
