@@ -102,9 +102,9 @@ public class Flattener {
             }
         }
 
-        while(parent.getParentArchetypeId() != null && parent.isDifferential()) {
+        if(parent.getParentArchetypeId() != null) {
             //parent needs flattening first
-            parent = getNewFlattener().flatten(parent);//TODO: this might end up in an infinite loop. Detect depth?
+            parent = getNewFlattener().flatten(parent);
         }
 
 

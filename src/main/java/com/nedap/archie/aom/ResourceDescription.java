@@ -98,8 +98,8 @@ public class ResourceDescription extends ArchetypeModelObject {
         return licence;
     }
 
-    public void setLicence(String license) {
-        this.licence = license;
+    public void setLicence(String licence) {
+        this.licence = licence;
     }
 
     public Map<String, String> getIpAcknowledgements() {
