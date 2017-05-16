@@ -86,7 +86,7 @@ public class ADLOdinObjectMapper implements Function<Object, Object> {
                 .put("original_author", desc.getOriginalAuthor())
                 .put("original_publisher", desc.getOriginalPublisher())
                 .put("original_namespace", desc.getOriginalNamespace())
-                .put("license", desc.getLicence())
+                .put("licence", desc.getLicence())
                 .put("copyright", desc.getCopyright())
                 .put("other_contributors", desc.getOtherContributors())
                 .put("custodian_organization", desc.getCustodianOrganisation())
