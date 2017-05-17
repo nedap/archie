@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.nedap.archie.adlparser.ADLParser;
 import com.nedap.archie.aom.Archetype;
+import com.nedap.archie.aom.CArchetypeRoot;
 import com.nedap.archie.aom.CAttribute;
 import com.nedap.archie.aom.CComplexObject;
 import com.nedap.archie.aom.CComplexObjectProxy;
@@ -12,11 +13,13 @@ import com.nedap.archie.aom.OperationalTemplate;
 import com.nedap.archie.query.APathQuery;
 import com.nedap.archie.xml.JAXBUtil;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import java.io.StringWriter;
+import java.util.List;
 import java.util.Stack;
 
 import static org.junit.Assert.*;
@@ -29,19 +32,23 @@ import static org.junit.Assert.*;
  */
 public class FlattenerTest {
 
-    private Archetype report;
-    private Archetype device;
-    private Archetype bloodPressureObservation;
-    private Archetype reportResult;
-    private Archetype bloodPressureComposition;
-    private Archetype height;
-    private Archetype heightTemplate;
-    private SimpleArchetypeRepository repository;
+    private static Archetype report;
+    private static Archetype device;
+    private static Archetype bloodPressureObservation;
+    private static Archetype reportResult;
+    private static Archetype bloodPressureComposition;
+    private static Archetype height;
+    private static Archetype heightTemplate;
+    private static Archetype reportWithSynopsis;
+    private static Archetype clinicalSynopsis;
+    private static Archetype bloodPressureWithSynopsis;
+    private static SimpleArchetypeRepository repository;
+
 
     private Flattener flattener;
 
-    @Before
-    public void setup() throws Exception {
+    @BeforeClass
+    public static void setup() throws Exception {
 
         // reportresult specializes report.
         // blood pressure composition specializes report result.
@@ -56,9 +63,13 @@ public class FlattenerTest {
         bloodPressureObservation = new ADLParser().parse(FlattenerTest.class.getResourceAsStream("openEHR-EHR-OBSERVATION.blood_pressure.v1.adls"));
         bloodPressureComposition = new ADLParser().parse(FlattenerTest.class.getResourceAsStream("openEHR-EHR-COMPOSITION.blood_pressure.v1.0.0.adlt"));
 
-
         height = new ADLParser().parse(FlattenerTest.class.getResourceAsStream("openEHR-EHR-OBSERVATION.height.v1.adls"));
         heightTemplate = new ADLParser().parse(FlattenerTest.class.getResourceAsStream("openEHR-EHR-COMPOSITION.length.v1.0.0.adlt"));
+
+        reportWithSynopsis = new ADLParser().parse(FlattenerTest.class.getResourceAsStream("openEHR-EHR-COMPOSITION.report-result-with-synopsis.v1.0.0.adls"));
+        clinicalSynopsis = new ADLParser().parse(FlattenerTest.class.getResourceAsStream("openEHR-EHR-EVALUATION.clinical_synopsis.v1.0.0.adls"));
+        bloodPressureWithSynopsis = new ADLParser().parse(FlattenerTest.class.getResourceAsStream("openEHR-EHR-COMPOSITION.blood_pressure_with_synopsis.v1.0.0.adlt"));
+
 
         repository = new SimpleArchetypeRepository();
         repository.addArchetype(report);
@@ -69,7 +80,35 @@ public class FlattenerTest {
         repository.addArchetype(height);
         repository.addArchetype(heightTemplate);
 
+        repository.addArchetype(reportWithSynopsis);
+        repository.addArchetype(clinicalSynopsis);
+        repository.addArchetype(bloodPressureWithSynopsis);
+    }
+
+    @Before
+    public void before() {
         flattener = new Flattener(repository).createOperationalTemplate(true);
+    }
+
+    @Test
+    public void archetypeSlotReplacement() {
+        Archetype flattened = flattener.flatten(bloodPressureWithSynopsis);
+        List<CObject> content = flattened.getDefinition().getAttribute("content").getChildren();
+        assertEquals(2, content.size());
+        //one archetyperoot, one slot. Slot is closed and this is an operational template
+        //so it should have been removed. Ordering of original should have been preserved
+        //archetype roots should have structure added
+        CObject child1 = content.get(0);
+        CObject child2 = content.get(1);
+
+        assertEquals("id2.1", child1.getNodeId());
+        assertTrue(child1 instanceof CArchetypeRoot);
+        assertEquals("id3", child2.getNodeId());
+        assertTrue(child2 instanceof CArchetypeRoot);
+        assertEquals(2, child1.getAttributes().size());
+        assertEquals(1, child2.getAttributes().size());
+
+
     }
 
     @Test
