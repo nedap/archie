@@ -82,7 +82,7 @@ public class RulesFlattenerTest {
 
         //test that we can actually parse the output
         ADLParser parser = new ADLParser();
-        Archetype parsed = parser.parse(ADLArchetypeSerializer.serialize(flattened));
+        parser.parse(ADLArchetypeSerializer.serialize(flattened));
         assertTrue(parser.getErrors().hasNoErrors());
     }
 

@@ -327,11 +327,8 @@ public class Flattener {
             if (archetype == null) {
                 throw new IllegalArgumentException("Archetype with reference :" + archetypeRef + " not found.");
             }
-            //if (archetype.getParentArchetypeId() != null) {
-                archetype = getNewFlattener().flatten(archetype);
-           // } else {
-           //     archetype = archetype.clone();//make sure we don't change this archetype :)
-           // }
+
+            archetype = getNewFlattener().flatten(archetype);
 
             //
             CComplexObject rootToFill = root;
@@ -562,7 +559,6 @@ public class Flattener {
         if(parent == null) {
             CAttribute childCloned = specialized.clone();
             root.addAttribute(childCloned);
-            parent = childCloned;
         } else {
             parent.setMultiple(getPossiblyOverridenValue(parent.isMultiple(), specialized.isMultiple()));
             parent.setExistence(getPossiblyOverridenValue(parent.getExistence(), specialized.getExistence()));
