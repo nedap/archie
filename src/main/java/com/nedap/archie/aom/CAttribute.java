@@ -12,7 +12,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -124,20 +123,39 @@ public class CAttribute extends ArchetypeConstraint {
     }
 
 
-    public void replaceChild(String nodeId, CObject definition) {
+    public void replaceChild(String nodeId, CObject constraint) {
 
-        int index = getIndexOfChildWithnodeId(nodeId);
+        int index = getIndexOfChildWithNodeId(nodeId);
         if(index > -1) {
-            children.set(index, definition);
-            definition.setParent(this);
+            children.set(index, constraint);
+            constraint.setParent(this);
         } else {
-            addChild(definition);
+            addChild(constraint);
         }
-
 
     }
 
-    private int getIndexOfChildWithnodeId(String nodeId) {
+    public void replaceChildren(String nodeId, List<CObject> toReplaceParentWith, boolean keepOriginal) {
+        int index = getIndexOfChildWithNodeId(nodeId);
+        if(index > -1) {
+            List<CObject> childrenBefore = children.subList(0, index+1);
+            if(!keepOriginal) {
+                childrenBefore.remove(index);
+            }
+            childrenBefore.addAll(toReplaceParentWith);
+            //List<CObject> childrenAfter = children.subList(index, children.size());
+            for(CObject constraint:toReplaceParentWith) {
+                constraint.setParent(this);
+            }
+        } else {
+            for(CObject constraint:toReplaceParentWith) {
+                addChild(constraint);
+            }
+        }
+
+    }
+
+    private int getIndexOfChildWithNodeId(String nodeId) {
         for(int i = 0; i < children.size(); i++) {
             CObject child = children.get(i);
             if(nodeId.equals(child.getNodeId())) {
@@ -217,6 +235,7 @@ public class CAttribute extends ArchetypeConstraint {
         }
         return false;
     }
+
     //TODO: congruent and conforms to?
 
 }

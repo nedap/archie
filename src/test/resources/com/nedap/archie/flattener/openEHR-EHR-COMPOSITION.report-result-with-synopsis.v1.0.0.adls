@@ -1,0 +1,53 @@
+archetype (adl_version=2.0.5; rm_release=1.0.2; generated)
+	openEHR-EHR-COMPOSITION.report-result-with-synopsis.v1.0.0
+
+specialize
+	openEHR-EHR-COMPOSITION.report-result.v1
+
+language
+	original_language = <[ISO_639-1::nl]>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Pieter Bos">
+		["organisation"] = <"Nedap">
+		["email"] = <"pieter.bos@nedap.com">
+	>
+	copyright = <"none">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To report results together with a clinical synopsis">
+			use = <"To report results together with a clinical synopsis">
+			keywords = <"report", "result report", "synopsis">
+			misuse = <"">
+		>
+	>
+
+definition
+	 COMPOSITION[id1.1.1] matches {
+        content matches {
+            allow_archetype OBSERVATION[id2]
+            use_archetype EVALUATION[id3, openEHR-EHR-EVALUATION.clinical_synopsis.v1] occurrences matches {0..*}
+        }
+    }
+
+
+terminology
+	term_definitions = <
+		["nl"] = <
+			["id1.1.1"] = <
+				text = <"Rapportage met resultaat van een meting en samenvatting">
+				description = <"Rapportage met resultaat van een meting en samenvatting">
+			>
+			["id2"] = <
+                text = <"Een observatie">
+                description = <"Een observatie">
+            >
+            ["id3"] = <
+                text = <"Opmerkingen">
+                description = <"Opmerkingen bij de metingen">
+            >
+		>
+	>

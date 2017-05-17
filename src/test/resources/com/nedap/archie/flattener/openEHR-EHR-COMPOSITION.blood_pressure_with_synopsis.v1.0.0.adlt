@@ -1,0 +1,49 @@
+template (adl_version=2.0.5; rm_release=1.0.2; generated)
+	openEHR-EHR-OBSERVATION.blood_pressure_with_synopsis.v1.0.0
+
+specialize
+	openEHR-EHR-COMPOSITION.report-result-with-synopsis.v1
+
+language
+	original_language = <[ISO_639-1::nl]>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Pieter Bos">
+		["organisation"] = <"Nedap">
+		["email"] = <"pieter.bos@nedap.com">
+	>
+	copyright = <"none">
+	details = <
+		["nl"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"specialized archetypes test">
+			use = <"testing specialized archetypes">
+			keywords = <"test">
+			misuse = <"">
+		>
+	>
+
+definition
+	 COMPOSITION[id1.1.1.1] matches {
+        content matches {
+            use_archetype OBSERVATION[id2.1, openEHR-EHR-OBSERVATION.blood_pressure.v1]
+            allow_archetype OBSERVATION[id2.1] closed
+        }
+    }
+
+
+terminology
+	term_definitions = <
+		["nl"] = <
+			["id1.1.1.1"] = <
+				text = <"Blood pressure with optionally a synopsis">
+				description = <"Blood pressure with optionally a synopsis">
+			>
+			["id2.1"] = <
+                text = <"Blood pressure">
+                description = <"Blood pressure">
+            >
+		>
+	>
