@@ -1,5 +1,6 @@
 package com.nedap.archie.flattener;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.nedap.archie.aom.*;
 import com.nedap.archie.aom.terminology.ArchetypeTerm;
@@ -9,6 +10,7 @@ import com.nedap.archie.query.APathQuery;
 import com.nedap.archie.rules.Assertion;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -451,44 +453,84 @@ public class Flattener {
         result.setParentArchetypeId(override.getParentArchetypeId());
     }
 
-    private void flatten(Archetype parent, Archetype child) {
-        parent.setArchetypeId(child.getArchetypeId()); //TODO: override all metadata?
-        flattenCObject(parent.getDefinition(), child.getDefinition());
+    private void flatten(Archetype parent, Archetype specialized) {
+        parent.setArchetypeId(specialized.getArchetypeId()); //TODO: override all metadata?
+        flattenCObject(null, parent.getDefinition(), Lists.newArrayList(specialized.getDefinition()));
 
     }
 
-    private void flattenCObject(CObject parent, CObject child) {
-        parent.setOccurrences(getPossiblyOverridenValue(parent.getOccurrences(), child.getOccurrences()));
-        parent.setSiblingOrder(getPossiblyOverridenValue(parent.getSiblingOrder(), child.getSiblingOrder()));
+    private void flattenCObject(CAttribute attribute, CObject parent, List<CObject> specializedList) {
+        List<CObject> toReplaceParentWith = new ArrayList<CObject>();
+        for(CObject specialized:specializedList) {
+            CObject newObject;
+            if(attribute == null) {
+                //root of archetype. don't clone anything.. alternative: make a mock attribute at the root
+                newObject = parent;
+            } else {
+                newObject = (CObject) parent.clone();
+            }
+            if(newObject instanceof ArchetypeSlot && specialized instanceof CArchetypeRoot) {
+                newObject = (CObject) specialized.clone();
+            }
+            newObject.setOccurrences(getPossiblyOverridenValue(newObject.getOccurrences(), specialized.getOccurrences()));
+            newObject.setSiblingOrder(getPossiblyOverridenValue(newObject.getSiblingOrder(), specialized.getSiblingOrder()));
 
-        parent.setNodeId(getPossiblyOverridenValue(parent.getNodeId(), child.getNodeId()));
-        parent.setRmTypeName(getPossiblyOverridenValue(parent.getRmTypeName(), child.getRmTypeName()));
-//        if(child != null && child instanceof CArchetypeRoot) {
-//            fillArchetypeRoot(parent, (CArchetypeRoot) child);
-//        }
-        if(parent instanceof CComplexObject) {
-            flattenCComplexObject((CComplexObject) parent, (CComplexObject) child);
-        }
-        if(parent instanceof ArchetypeSlot) {
-            flattenArchetypeSlot((ArchetypeSlot) parent, (ArchetypeSlot) child);
+            newObject.setNodeId(getPossiblyOverridenValue(newObject.getNodeId(), specialized.getNodeId()));
+            newObject.setRmTypeName(getPossiblyOverridenValue(newObject.getRmTypeName(), specialized.getRmTypeName()));
+            //        if(specialized != null && specialized instanceof CArchetypeRoot) {
+            //            fillArchetypeRoot(parent, (CArchetypeRoot) specialized);
+            //        }
+            if (parent instanceof CComplexObject) {
+                flattenCComplexObject((CComplexObject) newObject, (CComplexObject) specialized);
+            }
+            else if (newObject instanceof ArchetypeSlot) {//archetypeslot is NOT a complex object. It's replacement can be
+                if(specialized instanceof ArchetypeSlot) {
+                    flattenArchetypeSlot((ArchetypeSlot) newObject, (ArchetypeSlot) specialized);
+                } else if(specialized instanceof CArchetypeRoot) {
+                    //TODO: handle as if this is a template overlay, but inline. Probably needed in the fillArchetypeRoot method, not here?
+                } else {
+                    //TODO: throw exception, this is an illegal replacement
+                }
+            }
+            toReplaceParentWith.add(newObject);
         }
 
+        if(attribute != null && !toReplaceParentWith.isEmpty()) {
+            boolean shouldReplaceParent = shouldReplaceParent(parent, toReplaceParentWith);
+            attribute.replaceChildren(parent.getNodeId(), toReplaceParentWith, !shouldReplaceParent /* remove original */);
+        }
 
     }
 
-    private void flattenArchetypeSlot(ArchetypeSlot parent, ArchetypeSlot child) {
-        if(child.isClosed()) {
+    private boolean shouldReplaceParent(CObject parent, List<CObject> toReplaceParentWith) {
+        boolean shouldReplaceParent = true;
+        if (parent instanceof ArchetypeSlot) {
+            //only replace the parent if a new archetype slot is present.
+            //closing is an explicit operation
+            //TODO: double check specs on this for other objects
+            shouldReplaceParent = false;
+            for (CObject object : toReplaceParentWith) {
+                if (object instanceof ArchetypeSlot) {
+                    shouldReplaceParent = true;
+                }
+            }
+        }
+        return shouldReplaceParent;
+    }
+
+    private void flattenArchetypeSlot(ArchetypeSlot parent, ArchetypeSlot specialized) {
+        if(specialized.isClosed()) {
             parent.setClosed(true);
         }
-        parent.setIncludes(getPossiblyOverridenListValue(parent.getIncludes(), child.getIncludes()));
-        parent.setExcludes(getPossiblyOverridenListValue(parent.getExcludes(), child.getExcludes()));
+        parent.setIncludes(getPossiblyOverridenListValue(parent.getIncludes(), specialized.getIncludes()));
+        parent.setExcludes(getPossiblyOverridenListValue(parent.getExcludes(), specialized.getExcludes()));
 
         //TODO: includes/excludes?
     }
 
-    private void flattenCComplexObject(CComplexObject parent, CComplexObject child) {
+    private void flattenCComplexObject(CComplexObject parent, CComplexObject specialized) {
 
-        for(CAttribute attribute:child.getAttributes()) {
+        for(CAttribute attribute:specialized.getAttributes()) {
             if(attribute.getDifferentialPath() != null) {
                 //this overrides a specific path
                 ArchetypeModelObject object = new APathQuery(attribute.getDifferentialPath()).find(parent);
@@ -516,35 +558,35 @@ public class Flattener {
     }
 
 
-    private void flattenAttribute(CComplexObject root, CAttribute parent, CAttribute child) {
+    private void flattenAttribute(CComplexObject root, CAttribute parent, CAttribute specialized) {
         if(parent == null) {
-            CAttribute childCloned = child.clone();
+            CAttribute childCloned = specialized.clone();
             root.addAttribute(childCloned);
             parent = childCloned;
         } else {
-            parent.setMultiple(getPossiblyOverridenValue(parent.isMultiple(), child.isMultiple()));
-            parent.setExistence(getPossiblyOverridenValue(parent.getExistence(), child.getExistence()));
-            parent.setCardinality(getPossiblyOverridenValue(parent.getCardinality(), child.getCardinality()));
-            if (child.getChildren().size() > 0 && child.getChildren().get(0) instanceof CPrimitiveObject) {
-                //TODO: is this correct? replace all child nodes
-                parent.setChildren(child.getChildren());
+            parent.setMultiple(getPossiblyOverridenValue(parent.isMultiple(), specialized.isMultiple()));
+            parent.setExistence(getPossiblyOverridenValue(parent.getExistence(), specialized.getExistence()));
+            parent.setCardinality(getPossiblyOverridenValue(parent.getCardinality(), specialized.getCardinality()));
+            if (specialized.getChildren().size() > 0 && specialized.getChildren().get(0) instanceof CPrimitiveObject) {
+                //TODO: is this correct? replace all specialized nodes
+                parent.setChildren(specialized.getChildren());
             } else {
 
-                for (CObject childObject : child.getChildren()) {
-                    boolean childObjectIsNew = false;
+                Set<CObject> newChildObjects = new LinkedHashSet<>(specialized.getChildren());
+                for (CObject parentCObject : new ArrayList<>(parent.getChildren())) {
+                    List<CObject> matchingChildren = new ArrayList<>();
+                    for (CObject specializedChildCObject : specialized.getChildren()) {
 
-                    for (CObject possibleMatch : parent.getChildren()) {
-                        if (isOverridenCObject(childObject, possibleMatch)) { //TODO: we now replace the node. but it's possible to replace one node by multiple ones in the archetype
-                            flattenCObject(possibleMatch, childObject);
-                            childObjectIsNew = true;
+                        if (isOverridenCObject(specializedChildCObject, parentCObject)) { //TODO: we now replace the node. but it's possible to replace one node by multiple ones in the archetype
+                            matchingChildren.add(specializedChildCObject);
+                            newChildObjects.remove(specializedChildCObject);
                         }
+
                     }
-                    if (!childObjectIsNew) {
-                        //if override found, it will have been handled by flattenCObject and we do not have to add
-                        //otherwise it is a new CObject and should be added to the parent node.
-                        parent.addChild(childObject);
-                        //flattenCObject(childObject, null);
-                    }
+                    flattenCObject(parent, parentCObject, matchingChildren);
+                }
+                for(CObject newChild:newChildObjects) {
+                    parent.addChild(newChild);
                 }
             }
         }
@@ -556,7 +598,7 @@ public class Flattener {
         if(childObject.getNodeId().lastIndexOf('.') > 0) {
             childNode = childObject.getNodeId().substring(0, childObject.getNodeId().lastIndexOf('.'));//-1?
         }
-        return childNode.startsWith(possibleMatch.getNodeId()) && !(childObject instanceof CArchetypeRoot && possibleMatch instanceof ArchetypeSlot);
+        return childNode.startsWith(possibleMatch.getNodeId());
     }
 
     private List<Assertion> getPossiblyOverridenListValue(List<Assertion> parent, List<Assertion> child) {
@@ -566,9 +608,9 @@ public class Flattener {
         return parent;
     }
 
-    public <T> T getPossiblyOverridenValue(T parent, T child) {
-        if(child != null) {
-            return child;
+    public <T> T getPossiblyOverridenValue(T parent, T specialized) {
+        if(specialized != null) {
+            return specialized;
         }
         return parent;
     }
