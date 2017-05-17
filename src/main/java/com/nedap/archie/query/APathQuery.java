@@ -510,4 +510,8 @@ public class APathQuery {
         return name.equalsIgnoreCase(nameFromQuery);
 
     }
+
+    public List<PathSegment> getPathSegments() {
+        return pathSegments;
+    }
 }
