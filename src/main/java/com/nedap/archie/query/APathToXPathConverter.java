@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 public class APathToXPathConverter {
 
     //Pattern is thread-safe and immutable, so fine to store here for performance reasons
-    private static Pattern idCodePattern = Pattern.compile("id(\\d|\\.)+");
+    private static Pattern idCodePattern = Pattern.compile("id(\\d|\\.\\d)+");
     private static Pattern numberPattern = Pattern.compile("\\d+");
     //warning: do NOT modify this set, only create it!
     private static Set<String> literalsThatShouldHaveSpacing = new ImmutableSet.Builder().add("and", "or", ",", "-", "+", "*", "|", "<", ">", "<=", ">=").build();

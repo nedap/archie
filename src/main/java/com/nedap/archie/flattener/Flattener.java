@@ -486,7 +486,7 @@ public class Flattener {
                 } else if(specialized instanceof CArchetypeRoot) {
                     //TODO: handle as if this is a template overlay, but inline. Probably needed in the fillArchetypeRoot method, not here?
                 } else {
-                    //TODO: throw exception, this is an illegal replacement
+                    throw new IllegalArgumentException("Can only replace an archetype slot with an archetype root or another archetype slot, not with a " + newObject.getClass());
                 }
             }
             toReplaceParentWith.add(newObject);
