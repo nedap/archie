@@ -135,20 +135,25 @@ public class CAttribute extends ArchetypeConstraint {
 
     }
 
-    public void replaceChildren(String nodeId, List<CObject> toReplaceParentWith, boolean keepOriginal) {
+    /**
+     * Replace the child at node nodeId with all the objects from the parameter newChildren.
+     * If keepOriginal is true, it will not replace the original, but keep it in place
+     * and add the new elements directly after it
+     * Useful operation for flattening
+     */
+    public void replaceChildren(String nodeId, List<CObject> newChildren, boolean keepOriginal) {
         int index = getIndexOfChildWithNodeId(nodeId);
         if(index > -1) {
             List<CObject> childrenBefore = children.subList(0, index+1);
             if(!keepOriginal) {
                 childrenBefore.remove(index);
             }
-            childrenBefore.addAll(toReplaceParentWith);
-            //List<CObject> childrenAfter = children.subList(index, children.size());
-            for(CObject constraint:toReplaceParentWith) {
+            childrenBefore.addAll(newChildren);
+            for(CObject constraint:newChildren) {
                 constraint.setParent(this);
             }
         } else {
-            for(CObject constraint:toReplaceParentWith) {
+            for(CObject constraint:newChildren) {
                 addChild(constraint);
             }
         }
