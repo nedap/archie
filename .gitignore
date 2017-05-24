@@ -1,4 +1,5 @@
 gradle.properties
+settings.gradle
 .gradle
 build/
 target/
