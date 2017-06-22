@@ -10,7 +10,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.nedap.healthcare</groupId>
   <artifactId>archie</artifactId>
-  <version>0.3.0-SNAPSHOT</version>
+  <version>0.4.0-SNAPSHOT</version>
   <name>Archie</name>
   <description>An openEHR library, supporting ADL 2</description>
   <url>https://github.com/nedap/archie</url>
