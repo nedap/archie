@@ -49,20 +49,13 @@ public class OpenEHRTypeNaming extends ClassNameIdResolver {
 //        }
     }
 
-
-    @Deprecated // since 2.3
     @Override
-    public JavaType typeFromId(String id) {
-        return _typeFromId(id, null);
-    }
-
-    @Override
-    public JavaType typeFromId(DatabindContext context, String id) {
+    public JavaType typeFromId(DatabindContext context, String id) throws IOException {
         return _typeFromId(id, context);
     }
 
     @Override
-    protected JavaType _typeFromId(String typeName, DatabindContext ctxt) {
+    protected JavaType _typeFromId(String typeName, DatabindContext ctxt) throws IOException {
         Class result = rmInfoLookup.getClass(typeName);
         if(result == null) {
             //AOM class?
