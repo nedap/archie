@@ -33,7 +33,6 @@ public class EventContext extends Pathable {
     @XmlElement(name = "start_time")
     private DvDateTime startTime;
     @Nullable
-
     @XmlElement(name = "end_time")
     private DvDateTime endTime;
     @Nullable
@@ -43,6 +42,7 @@ public class EventContext extends Pathable {
     @Nullable
     private ItemStructure otherContext;
 
+    @Nullable
     @XmlElement(name="health_care_facility")
     private PartyIdentified healthCareFacility;
 

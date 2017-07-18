@@ -29,6 +29,7 @@ public abstract class DvOrdered<ComparableType> extends DataValue implements Com
     @XmlElement(name = "normal_range")
     private DvInterval normalRange;
 
+    @Nullable
     @XmlElement(name = "other_reference_ranges")
     private List<ReferenceRange> otherReferenceRanges = new ArrayList<>();
 

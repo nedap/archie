@@ -42,6 +42,7 @@ public abstract class Locatable extends Pathable {
     @Nullable
     private FeederAudit feederAudit;
 
+    @Nullable
     private List<Link> links = new ArrayList<>();
 
     public DvText getName() {
