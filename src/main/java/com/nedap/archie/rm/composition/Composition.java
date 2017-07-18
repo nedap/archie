@@ -1,6 +1,7 @@
 package com.nedap.archie.rm.composition;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.nedap.archie.rm.archetyped.Locatable;
 import com.nedap.archie.rm.datatypes.CodePhrase;
 import com.nedap.archie.rm.generic.PartyProxy;
@@ -10,6 +11,7 @@ import javax.annotation.Nullable;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,10 +42,12 @@ public class Composition extends Locatable {
 
     private List<ContentItem> content = new ArrayList<>();
 
+    @JsonProperty
     public CodePhrase getLanguage() {
         return language;
     }
 
+    @JsonProperty
     public void setLanguage(CodePhrase language) {
         this.language = language;
     }
@@ -53,26 +57,32 @@ public class Composition extends Locatable {
         this.language = new CodePhrase(codePhrase);
     }
 
+    @JsonProperty
     public CodePhrase getTerritory() {
         return territory;
     }
 
+    @JsonProperty
     public void setTerritory(CodePhrase territory) {
         this.territory = territory;
     }
 
+    @JsonIgnore
     public void setTerritory(String codePhrase) {
         this.territory = new CodePhrase(codePhrase);
     }
 
+    @JsonProperty
     public DvCodedText getCategory() {
         return category;
     }
 
+    @JsonProperty
     public void setCategory(DvCodedText category) {
         this.category = category;
     }
 
+    @JsonIgnore
     public void setCategory(String codePhrase) {
         this.category = new DvCodedText();
         category.setDefiningCode(new CodePhrase(codePhrase));

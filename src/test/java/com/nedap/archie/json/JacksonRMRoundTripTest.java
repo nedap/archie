@@ -5,6 +5,7 @@ import com.nedap.archie.aom.Archetype;
 
 import com.nedap.archie.query.RMQueryContext;
 import com.nedap.archie.rm.RMObject;
+import com.nedap.archie.rm.composition.Composition;
 import com.nedap.archie.rm.datastructures.Cluster;
 import com.nedap.archie.rm.datavalues.DvText;
 import com.nedap.archie.rm.datavalues.quantity.DvQuantity;
@@ -21,6 +22,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -72,6 +74,20 @@ public class JacksonRMRoundTripTest {
 
     }
 
+    @Test
+    public void composition() throws Exception {
+        Composition composition = new Composition();
+        composition.setCategory("openEhr::123");
+        composition.setTerritory("openEhr::456");
+        composition.setLanguage("openEhr::nl");
+        String json = JacksonUtil.getObjectMapper().writeValueAsString(composition);
+
+        Composition parsedComposition = (Composition) JacksonUtil.getObjectMapper().readValue(json, RMObject.class);
+        assertEquals(composition.getCategory().getDefiningCode().getCodeString(), parsedComposition.getCategory().getDefiningCode().getCodeString());
+        assertEquals(composition.getLanguage().getCodeString(), parsedComposition.getLanguage().getCodeString());
+        assertEquals(composition.getTerritory().getCodeString(), parsedComposition.getTerritory().getCodeString());
+
+    }
 
 
 }
