@@ -37,6 +37,7 @@ public abstract class Entry extends ContentItem {
     @Nullable
     private PartyProxy provider;
 
+    @Nullable
     @XmlElement(name = "other_participations")
     private List<Participation> otherParticipations = new ArrayList<>();
 
