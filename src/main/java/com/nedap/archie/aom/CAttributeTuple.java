@@ -75,7 +75,13 @@ public class CAttributeTuple extends CSecondOrder<CAttribute> {
             String attributeName = attribute.getRmAttributeName();
 
             CPrimitiveObject cPrimitiveObject = tuple.getMembers().get(index);
-            if(!cPrimitiveObject.isValidValue(lookup, values.get(attributeName))) {
+            Object value = values.get(attributeName);
+            if(value == null) {
+                return false;
+                //alternatively, look at occurrences or parent attribute existence?
+                //not sure if we should in a tuple - a constrained value that is null is generally an error
+            }
+            if(!cPrimitiveObject.isValidValue(lookup, value)) {
                 return false;
             }
             index++;
