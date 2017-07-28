@@ -283,7 +283,13 @@ public class AssertionsFixer {
         if(lastIndex < 0) {
             return path;
         }
-        return path.substring(0, lastIndex);
+
+        String result = path.substring(0, lastIndex);
+        if( result.equals("")) {
+            return "/";
+        }
+
+        return result;
     }
 
     /**
