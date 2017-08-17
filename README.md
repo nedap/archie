@@ -14,7 +14,7 @@ In gradle, include this dependency in your build.gradle:
 
 ```gradle
 dependencies {
-    compile 'com.nedap.healthcare:archie:0.3.11'
+    compile 'com.nedap.healthcare:archie:0.3.12'
 }
 ```
 
@@ -24,7 +24,7 @@ or if you use maven, in your pom.xml
 <dependency>
     <groupId>com.nedap.healthcare</groupId>
     <artifactId>archie</artifactId>
-    <version>0.3.11</version>
+    <version>0.3.12</version>
 </dependency>
 ```
 

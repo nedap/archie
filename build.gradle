@@ -38,7 +38,7 @@ apply plugin: 'org.owasp.dependencycheck'
 
 //apply plugin: 'io.codearte.nexus-staging'
 
-version = '0.3.11'
+version = '0.3.12'
 group = 'com.nedap.healthcare'
 archivesBaseName = 'archie'
 
