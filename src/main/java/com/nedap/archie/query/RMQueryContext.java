@@ -37,6 +37,7 @@ public class RMQueryContext {
     private final XPathFactory xPathFactory;
     private Binder<Node> binder;
     private Document domForQueries;
+    private Object rootNode;
 
     /**
      * TODO: for now we will add /firstXPathNode, because otherwise there will be something like '/composition' missing
@@ -60,6 +61,7 @@ public class RMQueryContext {
      */
     public RMQueryContext(Object rootNode, JAXBContext jaxbContext) {
         try {
+            this.rootNode = rootNode;
             this.binder = jaxbContext.createBinder();
             domForQueries = createBlankDOMDocument(true);
 
@@ -96,17 +98,24 @@ public class RMQueryContext {
     }
 
     public <T> List<T> findList(String query) throws XPathExpressionException {
-        String convertedQuery = APathToXPathConverter.convertQueryToXPath(query, firstXPathNode);
-        XPath xpath = xPathFactory.newXPath();
-
-
-        xpath.setNamespaceContext( new ArchieNamespaceResolver(domForQueries));
-        NodeList foundNodes = (NodeList)xpath.evaluate(convertedQuery, domForQueries, XPathConstants.NODESET);
         List<T> result = new ArrayList<T>();
-        //Perform decoration
-        for(int i=0; i<foundNodes.getLength(); i++){
-            Node node = foundNodes.item(i);
-            result.add(getJAXBNode(node));
+
+        if (query.equals("/")) {
+            result.add((T) rootNode);
+        } else {
+
+            String convertedQuery = APathToXPathConverter.convertQueryToXPath(query, firstXPathNode);
+            XPath xpath = xPathFactory.newXPath();
+
+
+            xpath.setNamespaceContext(new ArchieNamespaceResolver(domForQueries));
+            NodeList foundNodes = (NodeList) xpath.evaluate(convertedQuery, domForQueries, XPathConstants.NODESET);
+
+            //Perform decoration
+            for (int i = 0; i < foundNodes.getLength(); i++) {
+                Node node = foundNodes.item(i);
+                result.add(getJAXBNode(node));
+            }
         }
 
         return result;

@@ -19,10 +19,12 @@ public class FixableAssertionsCheckerTest {
     private Archetype archetype;
 
     private TestUtil testUtil;
+    private EmptyRMObjectConstructor emptyRMObjectConstructor;
 
     @Before
     public void setup() {
         testUtil = new TestUtil();
+        emptyRMObjectConstructor = new EmptyRMObjectConstructor();
         parser = ADLParser.withRMConstraintsImposer();
     }
 
@@ -80,6 +82,30 @@ public class FixableAssertionsCheckerTest {
         assertEquals(0l, ruleEvaluation.getRMRoot().itemAtPath("/data[id2]/events[id3]/data[id4]/items[id7]/value/value"));
         assertEquals("Option 1", ruleEvaluation.getRMRoot().itemAtPath("/data[id2]/events[id3]/data[id4]/items[id6]/value/value"));
 
+
+        evaluate = ruleEvaluation.evaluate(ruleEvaluation.getRMRoot(), archetype.getRules().getRules());
+        for(AssertionResult result:evaluate.getAssertionResults()) {
+            assertTrue(result.getResult());
+        }
+
+    }
+
+    @Test
+    public void constructOnlyNecessaryStructure() throws Exception {
+        archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("construct_only_necessary_structure.adls"));
+        RuleEvaluation ruleEvaluation = new RuleEvaluation(archetype);
+
+        Pathable root = (Pathable) emptyRMObjectConstructor.constructEmptyRMObject(archetype.getDefinition());
+        EvaluationResult evaluate = ruleEvaluation.evaluate(root, archetype.getRules().getRules());
+        assertEquals("there must be three values that must be set", 1, evaluate.getSetPathValues().size());
+
+        //assert that paths must be set to specific values
+        assertEquals("test string", evaluate.getSetPathValues().get("/data[id2]/events[id3]/data[id4]/items[id5]/value/value").getValue());
+        assertEquals(null, evaluate.getSetPathValues().get("d/ata[id2]/events[id3]/data[id4]/items[id6]/value"));
+
+        //now assert that the RM Object cloned by rule evaluation has been modified with the new values for further evaluation
+        assertEquals("test string", ruleEvaluation.getRMRoot().itemAtPath("/data[id2]/events[id3]/data[id4]/items[id5]/value/value"));
+        assertEquals(null, ruleEvaluation.getRMRoot().itemAtPath("/data[id2]/events[id3]/data[id4]/items[id6]/value"));
 
         evaluate = ruleEvaluation.evaluate(ruleEvaluation.getRMRoot(), archetype.getRules().getRules());
         for(AssertionResult result:evaluate.getAssertionResults()) {
