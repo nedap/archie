@@ -60,7 +60,8 @@ public class AssertionsFixer {
 
                 while(parents.isEmpty()) {
                     //there's object missing in the RMObject. Construct it here.
-                    parents = constructMissingStructure(archetype, pathOfParent, lastPathSegment, parents);
+                    constructMissingStructure(archetype, pathOfParent, lastPathSegment, parents);
+                    parents = ruleEvaluation.getQueryContext().findList(pathOfParent);
                 }
 
                 for(Object parent:parents) {
@@ -188,7 +189,7 @@ public class AssertionsFixer {
         }
     }
 
-    private List<Object> constructMissingStructure(Archetype archetype, String pathOfParent, String lastPathSegment, List<Object> parents) throws XPathExpressionException {
+    private void constructMissingStructure(Archetype archetype, String pathOfParent, String lastPathSegment, List<Object> parents) throws XPathExpressionException {
         //TODO: this is great but not enough. Fix it by hardcoding support for DV_CODED_TEXT and DV_ORDINAL, here or in the FixableAssertionsChecker.
         String newPathOfParent = pathOfParent;
         String newLastPathSegment = lastPathSegment;
@@ -198,7 +199,13 @@ public class AssertionsFixer {
             newPathOfParent = stripLastPathSegment(newPathOfParent);
             parents = ruleEvaluation.getQueryContext().findList(newPathOfParent);
         }
-        List<ArchetypeModelObject> constraints = archetype.itemsAtPath(newPathOfParent + "/" + newLastPathSegment);
+        List<ArchetypeModelObject> constraints;
+        if (newPathOfParent.equals("/")) {
+            constraints = archetype.itemsAtPath("/" + newLastPathSegment);
+        } else {
+            constraints = archetype.itemsAtPath(newPathOfParent + "/" + newLastPathSegment);
+        }
+
         if (constraintsHasNoComplexObjects(constraints)) {
             Object object = parents.get(0);
 
@@ -207,7 +214,6 @@ public class AssertionsFixer {
 
             creator.addElementToListOrSetSingleValues(object, newLastPathSegment, Lists.newArrayList(newEmptyObject));
             ruleEvaluation.refreshQueryContext();
-            parents = ruleEvaluation.getQueryContext().findList(pathOfParent);
         } else {
             CObject constraint = getCObjectFromResult(constraints);
             if (constraint != null) {
@@ -229,10 +235,8 @@ public class AssertionsFixer {
                 creator.addElementToListOrSetSingleValues(object, attributeName, Lists.newArrayList(newEmptyObject));
 
                 ruleEvaluation.refreshQueryContext();
-                parents = ruleEvaluation.getQueryContext().findList(pathOfParent);
             }
         }
-        return parents;
     }
 
     private CObject getCObjectFromResult(List<? extends ArchetypeModelObject> objects) {

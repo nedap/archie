@@ -28,24 +28,6 @@ class EmptyRMObjectConstructor {
      * @return
      */
     RMObject constructEmptyRMObject(CObject object) {
-        RMObject result = creator.create(object);
-        for(CAttribute attribute: object.getAttributes()) {
-            List<Object> children = new ArrayList<>();
-            for(CObject childConstraint:attribute.getChildren()) {
-                if(childConstraint instanceof CComplexObject) {
-                    RMObject childObject = constructEmptyRMObject(childConstraint);
-                    children.add(childObject);
-                }
-            }
-            if(!children.isEmpty()) {
-                if(attribute.isMultiple()) {
-                    creator.set(result, attribute.getRmAttributeName(), children);
-                } else if(!children.isEmpty()){
-                    //set the first possible result in case of multiple children for a single valued value
-                    creator.set(result, attribute.getRmAttributeName(), Lists.newArrayList(children.get(0)));
-                }
-            }
-        }
-        return result;
+        return creator.create(object);
     }
 }

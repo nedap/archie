@@ -31,9 +31,11 @@ public class APathToXPathConverter {
 
     public static String convertQueryToXPath(String query, String firstNodeName) {
         String convertedQuery = convertWithAntlr(query);
-        if(query.startsWith("//")) {
+        if(convertedQuery.equals("/")) {
+            return "/" + firstNodeName;
+        } else if(query.startsWith("//")) {
             return convertedQuery;
-        } if(query.startsWith("/")) {
+        } else if(query.startsWith("/")) {
             return "/" + firstNodeName + convertedQuery;
         } else {
             return convertedQuery;
