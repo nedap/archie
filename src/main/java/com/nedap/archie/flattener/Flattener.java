@@ -589,12 +589,12 @@ public class Flattener {
 
     }
 
-    private boolean isOverridenCObject(CObject childObject, CObject possibleMatch) {
-        String childNode = childObject.getNodeId();
-        if(childObject.getNodeId().lastIndexOf('.') > 0) {
-            childNode = childObject.getNodeId().substring(0, childObject.getNodeId().lastIndexOf('.'));//-1?
+    private boolean isOverridenCObject(CObject specialized, CObject parent) {
+        String specializedNodeId = specialized.getNodeId();
+        if(specializedNodeId.lastIndexOf('.') > 0) {
+            specializedNodeId = specializedNodeId.substring(0, specializedNodeId.lastIndexOf('.'));//-1?
         }
-        return childNode.startsWith(possibleMatch.getNodeId());
+        return specializedNodeId.equals(parent.getNodeId()) || specializedNodeId.startsWith(parent.getNodeId() + ".");
     }
 
     private List<Assertion> getPossiblyOverridenListValue(List<Assertion> parent, List<Assertion> child) {
