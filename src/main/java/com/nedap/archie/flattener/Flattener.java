@@ -79,7 +79,7 @@ public class Flattener {
                 result = template;
                 //make an operational template by just filling complex object proxies and archetype slots
                 fillSlots(template);
-                filterLanguages(template);
+                TerminologyFlattener.filterLanguages(template, removeLanguagesFromMetaData, languagesToKeep);
                 result = template;
             } else {
                 result = toFlatten.clone();
@@ -127,63 +127,15 @@ public class Flattener {
             fillSlots(result);
 
         }
-        flattenTerminology();
+        TerminologyFlattener.flattenTerminology(result, child);
 
         if(createOperationalTemplate) {
-            filterLanguages((OperationalTemplate) result);
+            TerminologyFlattener.filterLanguages((OperationalTemplate) result, removeLanguagesFromMetaData, languagesToKeep);
         }
         result.getDefinition().setArchetype(result);
         return result;
     }
 
-    /**
-     * Remove all languages from an archetype terminology unless listed in languages to keep.
-     * @param result
-     */
-    private void filterLanguages(OperationalTemplate result) {
-        if(languagesToKeep != null) {
-
-            Set<String> languagesSet = Sets.newHashSet(languagesToKeep);
-
-            filterLanguages(languagesSet, result.getTerminology());
-            for(ArchetypeTerminology terminology: result.getComponentTerminologies().values()) {
-                filterLanguages(languagesSet, terminology);
-            }
-            for(ArchetypeTerminology terminology: result.getTerminologyExtracts().values()) {
-                filterLanguages(languagesSet, terminology);
-            }
-
-            if(removeLanguagesFromMetaData) {
-                if(result.getDescription() != null) {
-                    filterLanguages(languagesSet, result.getDescription().getDetails());
-                }
-                if(result.getTranslations() != null) {
-                    filterLanguages(languagesSet, result.getTranslations());
-                }
-            }
-        }
-    }
-
-    private void filterLanguages(Set<String> languagesSet, ArchetypeTerminology terminology) {
-
-        filterLanguages(languagesSet, terminology.getTermDefinitions());
-        filterLanguages(languagesSet, terminology.getTerminologyExtracts());
-    }
-
-    private void filterLanguages(Set<String> languagesSet, Map<String, ?> termDefinitions) {
-        if(termDefinitions == null) {
-            return;
-        }
-        List<String> toRemove = new ArrayList<>();
-        for(String key: termDefinitions.keySet()) {
-            if(!languagesSet.contains(key)) {
-                toRemove.add(key);
-            }
-        }
-        for(String key:toRemove) {
-            termDefinitions.remove(key);
-        }
-    }
 
     public void fillSlots(Archetype archetype) { //should this be OperationalTemplate?
         fillComplexObjectProxies(archetype);
@@ -348,12 +300,14 @@ public class Flattener {
             //so store it in the terminology as well
             //TODO: value sets, term bindings, etc.
             Map<String, Map<String, ArchetypeTerm>> termDefinitions = terminology.getTermDefinitions();
+
             for(String language: termDefinitions.keySet()) {
                 Map<String, ArchetypeTerm> translations = termDefinitions.get(language);
-                ArchetypeTerm term = translations.get(archetype.getDefinition().getNodeId());
-                translations.put(newNodeId, term);
-                //translations.put(root.getNodeId(), term);
+                translations.put(newNodeId, getTerm(terminology.getTermDefinitions(), language, archetype.getDefinition().getNodeId()));
             }
+
+
+            //TODO: if someone adds for example id1.1, but does not translate it, should we automatically add it to the terminology?
 
             //rootToFill.setNodeId(newNodeId);
             if(!useComplexObjectForArchetypeSlotReplacement) {
@@ -380,49 +334,21 @@ public class Flattener {
 
     }
 
-
-    private void flattenTerminology() {
-
-        ArchetypeTerminology resultTerminology = result.getTerminology();
-        ArchetypeTerminology childTerminology = child.getTerminology();
-
-        flattenTerminologyDefinitions(resultTerminology.getTermDefinitions(), childTerminology.getTermDefinitions());
-        flattenTerminologyDefinitions(resultTerminology.getTerminologyExtracts(), childTerminology.getTerminologyExtracts());
-        flattenTerminologyDefinitions(resultTerminology.getTermBindings(), childTerminology.getTermBindings());
-        resultTerminology.setDifferential(false);//TODO: correct?
-
-        Map<String, ValueSet> childValueSets = childTerminology.getValueSets();
-        Map<String, ValueSet> resultValueSets = resultTerminology.getValueSets();
-
-        flattenValueSets(childValueSets, resultValueSets);
-    }
-
-    private void flattenValueSets(Map<String, ValueSet> childValueSets, Map<String, ValueSet> resultValueSets) {
-        for(String key:childValueSets.keySet()) {
-            ValueSet childValueSet = childValueSets.get(key);
-            if(!resultValueSets.containsKey(key)) {
-                resultValueSets.put(key, childValueSet);
-            } else {
-                ValueSet resultValueSet = resultValueSets.get(key);
-                for(String member:childValueSet.getMembers()) {
-                    resultValueSet.addMember(member);
+    private ArchetypeTerm getTerm(Map<String, Map<String, ArchetypeTerm>> termDefinitions, String language, String nodeId) {
+        Map<String, ArchetypeTerm> translations = termDefinitions.get(language);
+        ArchetypeTerm term = translations.get(nodeId);
+        if(term == null) {
+            for(Map.Entry<String, ArchetypeTerm> entry: translations.entrySet()) {
+                if(nodeId.startsWith(entry.getKey() + ".")) {
+                    return entry.getValue();
                 }
             }
+
         }
+        return term;
     }
 
-    private <T> void flattenTerminologyDefinitions(Map<String, Map<String, T>> resultTermDefinitions, Map<String, Map<String, T>> childTermDefinitions) {
-        for(String language:childTermDefinitions.keySet()) {
-            if(!resultTermDefinitions.containsKey(language)) {
-                resultTermDefinitions.put(language, childTermDefinitions.get(language));
-            } else {
-                for(String nodeId:childTermDefinitions.get(language).keySet()) {
-                    resultTermDefinitions.get(language)
-                            .put(nodeId, childTermDefinitions.get(language).get(nodeId));
-                }
-            }
-        }
-    }
+
 
     private static OperationalTemplate createOperationalTemplate(Archetype archetype) {
         Archetype toClone = archetype.clone(); //clone so we do not overwrite the parent archetype. never
