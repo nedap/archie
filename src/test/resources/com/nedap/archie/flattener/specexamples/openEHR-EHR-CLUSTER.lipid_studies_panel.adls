@@ -1,5 +1,8 @@
 archetype (adl_version=2.0.5; rm_release=1.0.2; generated)
-	openEHR-EHR-EVALUATION.problem.v1.0.0
+	openEHR-EHR-EVALUATION.lipid_studies_panel.v1.0.0
+
+specialize
+    openEHR-EHR-EVALUATION.laboratory_test_panel.v1.0.0
 
 language
 	original_language = <[ISO_639-1::en]>
@@ -89,6 +92,7 @@ terminology
                 description = <"some item">
             >
 		>
+    >
     value_sets = <
         ["ac0.1"] = < -- synthesized
             id = <"ac0.1">

@@ -40,4 +40,8 @@ public class MultiplicityInterval extends Interval<Integer> {
         return Integer.valueOf(0).equals(getLower()) && Integer.valueOf(0).equals(getUpper()) && !isUpperUnbounded();
     }
 
+    public boolean upperIsOne() {
+        return has(1) && !has(2);
+    }
+
 }

@@ -33,11 +33,12 @@ public class FlattenerExamplesFromSpecTest {
 
     @Test
     public void specializationPaths() throws Exception {
-        Archetype specializationPaths = parse("openEHR-EHR-OBSERVATION.lab-test.v1.0.0.adls");
+        Archetype specializationPaths = parse("specialization_paths.adls");
         Archetype flattened = new Flattener(repository).flatten(specializationPaths);
-        CObject originalConstraint = (CObject) flattened.itemAtPath("/data[id2]/events[id3]/data[id4]/items[id79]");
-        CObject firstAddedConstraint = (CObject) flattened.itemAtPath("/data[id2]/events[id3]/data[id4]/items[id79.2]");
-        CObject secondAddedConstraint = (CObject) flattened.itemAtPath("/data[id2]/events[id3]/data[id4]/items[id79.7]");
+
+        CObject originalConstraint = flattened.itemAtPath("/data[id2]/events[id3]/data[id4]/items[id79]");
+        CObject firstAddedConstraint = flattened.itemAtPath("/data[id2]/events[id3]/data[id4]/items[id79.2]");
+        CObject secondAddedConstraint = flattened.itemAtPath("/data[id2]/events[id3]/data[id4]/items[id79.7]");
 
         assertNotNull("first constraint should have been added", firstAddedConstraint);
         assertEquals(new MultiplicityInterval(0, 1), firstAddedConstraint.getOccurrences());
@@ -45,10 +46,11 @@ public class FlattenerExamplesFromSpecTest {
 
         assertNotNull("second constraint should have been added", secondAddedConstraint);
         assertEquals(new MultiplicityInterval(0, 1), secondAddedConstraint.getOccurrences());
+        assertNull("second added constraint should not have a value attribute", secondAddedConstraint.getAttribute("value"));
 
         //original constraint should not have been closed and still be present
         assertNotNull("original constraint should not have been removed", originalConstraint);
-        assertTrue("original constraint should not have been closed", originalConstraint.getOccurrences().isOpen());
+        assertNull("original constraint should not have been closed", originalConstraint.getOccurrences());
     }
 
     @Test
@@ -57,6 +59,8 @@ public class FlattenerExamplesFromSpecTest {
         repository.addArchetype(problem);
         Archetype diagnosis = parse("diagnosis.adls");
         Archetype flattenedDiagnosis = new Flattener(repository).flatten(diagnosis);
+
+        assertEquals("Recording of diagnosis", flattenedDiagnosis.getDefinition().getTerm().getText());
 
         CObject nodeWithId4 = (CObject) flattenedDiagnosis.itemAtPath("/data[id2]/items[id3]/value[id4]");
         assertEquals("DV_CODED_TEXT", nodeWithId4.getRmTypeName());
@@ -67,6 +71,7 @@ public class FlattenerExamplesFromSpecTest {
         CObject firstAddedNode = flattenedDiagnosis.itemAtPath("/data/items[id0.32]");
         CObject secondAddedNode = flattenedDiagnosis.itemAtPath("/data/items[id0.35]");
         CObject thirdAddedNode = flattenedDiagnosis.itemAtPath("/data/items[id0.37]");
+
         assertEquals("Status", firstAddedNode.getTerm().getText());
         assertEquals("Diag. criteria", secondAddedNode.getTerm().getText());
         assertEquals("Clin. staging", thirdAddedNode.getTerm().getText());
@@ -89,14 +94,20 @@ public class FlattenerExamplesFromSpecTest {
     public void specialisationWithCloning() throws Exception {
         Archetype labTestPanel = parse("openEHR-EHR-CLUSTER.laboratory_test_panel.v1.0.0.adls");
         repository.addArchetype(labTestPanel);
-        Archetype lipidStudiesPanel = parse("diagnosis.adls");
+        Archetype lipidStudiesPanel = parse("openEHR-EHR-CLUSTER.lipid_studies_panel.adls");
         Archetype flattenedLipidStudies = new Flattener(repository).flatten(lipidStudiesPanel);
 
         for(String nodeId: Lists.newArrayList("1", "2", "5")) {
+
             assertNotNull("node id3." + nodeId + " should have subnode id4",
-                    flattenedLipidStudies.itemAtPath(String.format("/items/items[id3.%s]/items[id4]", nodeId)));
+                    flattenedLipidStudies.itemAtPath(String.format("/items[id3.%s]/items[id4]", nodeId)));
+
             assertNotNull("node id3." + nodeId + " should have subnode id2." + nodeId,
-                    flattenedLipidStudies.itemAtPath(String.format("/items/items[id3.%s]/items[id2.%s]", nodeId, nodeId)));
+                    flattenedLipidStudies.itemAtPath(String.format("/items[id3.%s]/items[id2.%s]", nodeId, nodeId)));
+
+            assertNull("node id3." + nodeId + " should have subnode id2." + nodeId,
+                    flattenedLipidStudies.itemAtPath(String.format("/items[id3.%s]/items[id2]", nodeId)));
+
         }
 
     }

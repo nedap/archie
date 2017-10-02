@@ -124,14 +124,16 @@ public class APathQuery {
             if(object instanceof CObject) {
                 CObject cobject = (CObject) object;
                 CAttribute attribute = cobject.getAttribute(pathSegment.getNodeName());
-                if(pathSegment.hasIdCode() || pathSegment.hasArchetypeRef()) {
-                    result.add(attribute.getChild(pathSegment.getNodeId()));
-                } else if(pathSegment.hasNumberIndex()) {
-                    result.add(attribute.getChildren().get(pathSegment.getIndex()-1));//APath path numbers start at 1 instead of 0
-                } else if(pathSegment.getNodeId() != null) {
-                    result.add(attribute.getChildByMeaning(pathSegment.getNodeId()));//TODO: the ANTLR grammar removes all whitespace. what to do here?
-                } else {
-                    result.add(attribute);
+                if(attribute != null) {
+                    if (pathSegment.hasIdCode() || pathSegment.hasArchetypeRef()) {
+                        result.add(attribute.getChild(pathSegment.getNodeId()));
+                    } else if (pathSegment.hasNumberIndex()) {
+                        result.add(attribute.getChildren().get(pathSegment.getIndex() - 1));//APath path numbers start at 1 instead of 0
+                    } else if (pathSegment.getNodeId() != null) {
+                        result.add(attribute.getChildByMeaning(pathSegment.getNodeId()));//TODO: the ANTLR grammar removes all whitespace. what to do here?
+                    } else {
+                        result.add(attribute);
+                    }
                 }
             }
         }
