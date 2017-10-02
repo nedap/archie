@@ -3,6 +3,7 @@ package com.nedap.archie.flattener;
 import com.google.common.collect.Sets;
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.OperationalTemplate;
+import com.nedap.archie.aom.terminology.ArchetypeTerm;
 import com.nedap.archie.aom.terminology.ArchetypeTerminology;
 import com.nedap.archie.aom.terminology.ValueSet;
 
@@ -27,6 +28,28 @@ public class TerminologyFlattener {
         Map<String, ValueSet> resultValueSets = resultTerminology.getValueSets();
 
         flattenValueSets(childValueSets, resultValueSets);
+    }
+
+    /**
+     * Gets a term definition for a nodeId. If a direct match is not found, try to find for matching node ids - so looking for id1.1.1 will then find id1.1 if id1.1.1 is not defined
+     * @param termDefinitions
+     * @param language
+     * @param nodeId
+     * @return
+     */
+    protected static ArchetypeTerm getTerm(Map<String, Map<String, ArchetypeTerm>> termDefinitions, String language, String nodeId) {
+        Map<String, ArchetypeTerm> translations = termDefinitions.get(language);
+        ArchetypeTerm term = translations.get(nodeId);
+        if(term == null) {
+            for(Map.Entry<String, ArchetypeTerm> entry: translations.entrySet()) {
+                if(nodeId.startsWith(entry.getKey() + ".")) {
+                    NodeId.parse(nodeId);
+                    return entry.getValue();
+                }
+            }
+
+        }
+        return term;
     }
 
     private static void flattenValueSets(Map<String, ValueSet> childValueSets, Map<String, ValueSet> resultValueSets) {

@@ -33,7 +33,7 @@ public class Flattener {
     private Archetype child;
 
     private Archetype result;
-    private boolean createOperationalTemplate;
+    private boolean createOperationalTemplate = false;
     private boolean removeLanguagesFromMetaData = false;
     private boolean useComplexObjectForArchetypeSlotReplacement = false;
 
@@ -303,7 +303,7 @@ public class Flattener {
 
             for(String language: termDefinitions.keySet()) {
                 Map<String, ArchetypeTerm> translations = termDefinitions.get(language);
-                translations.put(newNodeId, getTerm(terminology.getTermDefinitions(), language, archetype.getDefinition().getNodeId()));
+                translations.put(newNodeId, TerminologyFlattener.getTerm(terminology.getTermDefinitions(), language, archetype.getDefinition().getNodeId()));
             }
 
 
@@ -334,19 +334,7 @@ public class Flattener {
 
     }
 
-    private ArchetypeTerm getTerm(Map<String, Map<String, ArchetypeTerm>> termDefinitions, String language, String nodeId) {
-        Map<String, ArchetypeTerm> translations = termDefinitions.get(language);
-        ArchetypeTerm term = translations.get(nodeId);
-        if(term == null) {
-            for(Map.Entry<String, ArchetypeTerm> entry: translations.entrySet()) {
-                if(nodeId.startsWith(entry.getKey() + ".")) {
-                    return entry.getValue();
-                }
-            }
 
-        }
-        return term;
-    }
 
 
 
