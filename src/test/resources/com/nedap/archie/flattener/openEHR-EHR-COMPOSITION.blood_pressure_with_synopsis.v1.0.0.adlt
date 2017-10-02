@@ -29,7 +29,7 @@ definition
 	 COMPOSITION[id1.1.1.1] matches {
         content matches {
             use_archetype OBSERVATION[id2.1, openEHR-EHR-OBSERVATION.blood_pressure.v1]
-            allow_archetype OBSERVATION[id2.1] closed
+            allow_archetype OBSERVATION[id2] closed
         }
     }
 

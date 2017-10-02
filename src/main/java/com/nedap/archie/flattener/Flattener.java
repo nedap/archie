@@ -436,7 +436,9 @@ public class Flattener {
         if(parent.getOccurrences() != null && parent.getOccurrences().upperIsOne()) {
             //REFINE the parent node case 1, the parent has occurrences upper == 1
             return true;
-        } else if (differentialNodes.size() == 1 && differentialNodes.get(0).getOccurrences().upperIsOne()) {
+        } else if (differentialNodes.size() == 1
+                && differentialNodes.get(0).getOccurrences() != null
+                && differentialNodes.get(0).getOccurrences().upperIsOne()) {
             //REFINE the parent node case 2, only one child with occurrences upper == 1
             return true;
         }
