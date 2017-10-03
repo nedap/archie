@@ -3,7 +3,10 @@ package com.nedap.archie.flattener.specexamples;
 import com.google.common.collect.Lists;
 import com.nedap.archie.adlparser.ADLParser;
 import com.nedap.archie.aom.Archetype;
+import com.nedap.archie.aom.ArchetypeModelObject;
+import com.nedap.archie.aom.CAttribute;
 import com.nedap.archie.aom.CObject;
+import com.nedap.archie.aom.Cardinality;
 import com.nedap.archie.aom.primitives.CTerminologyCode;
 import com.nedap.archie.base.MultiplicityInterval;
 import com.nedap.archie.flattener.Flattener;
@@ -111,6 +114,71 @@ public class FlattenerExamplesFromSpecTest {
         }
 
     }
+
+    //9.4.1 in adl specs
+    @Test
+    public void existenceRedefinition() throws Exception {
+        Archetype emptyObservation = parse("openEHR-EHR-OBSERVATION.empty_observation.v1.0.0.adls");
+        repository.addArchetype(emptyObservation);
+
+        Archetype mandatory = parse("openEHR-EHR-OBSERVATION.protocol_mandatory.v1.0.0.adls");
+        Archetype exclusion = parse("openEHR-EHR-OBSERVATION.protocol_exclusion.v1.0.0.adls");
+
+        Archetype mandatoryFlat = new Flattener(repository).flatten(mandatory);
+        Archetype exclusionFlat = new Flattener(repository).flatten(exclusion);
+
+        CAttribute mandatoryProtocol = mandatoryFlat.getDefinition().getAttribute("protocol");
+        assertTrue(mandatoryProtocol.getExistence().isMandatory());
+        assertEquals(1, mandatoryProtocol.getChildren().size());
+
+        CAttribute prohibitedProtocol = exclusionFlat.getDefinition().getAttribute("protocol");
+        assertTrue(prohibitedProtocol.getExistence().isProhibited());
+        assertEquals(0, mandatoryProtocol.getChildren().size());
+    }
+
+
+    @Test
+    public void cardinalityRedefinition() throws Exception {
+        Archetype cardinalityParent = parse("openEHR-EHR-CLUSTER.cardinality_parent.v1.0.0.adls");
+        repository.addArchetype(cardinalityParent);
+        Archetype specialized = parse("openEHR-EHR-CLUSTER.cardinality_specialized.v1.0.0.adls");
+
+        Archetype flat = new Flattener(repository).flatten(specialized);
+
+        CAttribute items = flat.getDefinition().getAttribute("items").getChildren().get(0).getAttribute("items");
+        assertEquals(new Cardinality(3, 10), items.getCardinality());
+        assertEquals(11, items.getChildren().size());
+        assertEquals(new MultiplicityInterval(1, 1), items.getChild("id12.1").getOccurrences());
+        assertEquals(new MultiplicityInterval(1, 1), items.getChild("id12.2").getOccurrences());
+        assertEquals(new MultiplicityInterval(1, 1), items.getChild("id12.3").getOccurrences());
+        assertEquals(new MultiplicityInterval(0, 1), items.getChild("id12.4").getOccurrences());
+    }
+
+    //ordering already fully covered in previous examples
+    //node identifiers already fully covered in previous examples
+    //occurrences redefinition already fully covered
+
+
+    @Test
+    public void exclusion() throws Exception {
+        Archetype occurrencesParent = parse("openEHR-EHR-CLUSTER.occurrences_parent.v1.0.0.adls");
+        repository.addArchetype(occurrencesParent);
+
+        Archetype occurrencesSpecialized = parse("openEHR-EHR-CLUSTER.occurrences_parent.v1.0.0.adls");
+
+        Archetype flat = new Flattener(repository).flatten(occurrencesSpecialized);
+        CAttribute attribute = flat.itemAtPath("/items[id3]/value");
+        assertNotNull(flat.itemAtPath("/items[id3]/value[id5]"));
+        assertNotNull(flat.itemAtPath("/items[id3]/value[id6]"));
+        assertNull(flat.itemAtPath("/items[id3]/value[id4]"));
+        assertNull(flat.itemAtPath("/items[id3]/value[id7]"));
+        assertEquals(2, attribute.getChildren().size());
+
+    }
+
+    //TODO: Reference Model Type Refinement with properties both in parent and child
+    //9.5.6. Internal Reference (Proxy Object) Redefinition
+
 
 
     private Archetype parse(String filename) throws IOException {
