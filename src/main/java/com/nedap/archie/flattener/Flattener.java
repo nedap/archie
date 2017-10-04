@@ -118,7 +118,8 @@ public class Flattener {
 
         //1. redefine structure
         //2. fill archetype slots if we are creating an operational template
-        flatten(result, child);
+        flattenDefinition(result, child);
+        removeZeroOccurrencesConstraints(result);
 
         rulesFlattener.combineRules(child, result, "prefix", "", "", true /* override statements with same tag */);//TODO: actually set a unique prefix
         if(createOperationalTemplate) {
@@ -139,7 +140,6 @@ public class Flattener {
         fillComplexObjectProxies(archetype);
         closeArchetypeSlots(archetype);
         fillArchetypeRoots(archetype);
-        removeZeroOccurrencesConstraints(archetype);
 
     }
 
@@ -362,7 +362,7 @@ public class Flattener {
         result.setParentArchetypeId(override.getParentArchetypeId());
     }
 
-    private void flatten(Archetype parent, Archetype specialized) {
+    private void flattenDefinition(Archetype parent, Archetype specialized) {
         parent.setArchetypeId(specialized.getArchetypeId()); //TODO: override all metadata?
         flattenCObject(null, parent.getDefinition(), Lists.newArrayList(specialized.getDefinition()));
 
@@ -389,7 +389,6 @@ public class Flattener {
             boolean shouldReplaceParent = shouldReplaceParent(parent, newNodes);
             attribute.replaceChildren(parent.getNodeId(), newNodes, !shouldReplaceParent /* remove original */);
         }
-
     }
 
     private void specializeContent(CObject parent, CObject specialized, CObject newObject) {

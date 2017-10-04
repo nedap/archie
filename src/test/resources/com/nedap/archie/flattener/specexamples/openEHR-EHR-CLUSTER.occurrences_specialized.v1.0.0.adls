@@ -1,4 +1,7 @@
 archetype (adl_version=2.0.5; rm_release=1.0.2; generated)
+	openEHR-EHR-CLUSTER.occurrences_specialized.v1.0.0
+
+specialize
 	openEHR-EHR-CLUSTER.occurrences_parent.v1.0.0
 
 language

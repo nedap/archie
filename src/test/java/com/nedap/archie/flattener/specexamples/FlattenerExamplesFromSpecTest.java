@@ -7,6 +7,7 @@ import com.nedap.archie.aom.ArchetypeModelObject;
 import com.nedap.archie.aom.CAttribute;
 import com.nedap.archie.aom.CObject;
 import com.nedap.archie.aom.Cardinality;
+import com.nedap.archie.aom.primitives.CReal;
 import com.nedap.archie.aom.primitives.CTerminologyCode;
 import com.nedap.archie.base.MultiplicityInterval;
 import com.nedap.archie.flattener.Flattener;
@@ -132,8 +133,8 @@ public class FlattenerExamplesFromSpecTest {
         assertEquals(1, mandatoryProtocol.getChildren().size());
 
         CAttribute prohibitedProtocol = exclusionFlat.getDefinition().getAttribute("protocol");
-        assertTrue(prohibitedProtocol.getExistence().isProhibited());
-        assertEquals(0, mandatoryProtocol.getChildren().size());
+        assertNull(prohibitedProtocol); //according to spec, prohibited existence should be removed. That also means you can override them in a further specialization to exist again, which could be a problem..
+
     }
 
 
@@ -164,7 +165,7 @@ public class FlattenerExamplesFromSpecTest {
         Archetype occurrencesParent = parse("openEHR-EHR-CLUSTER.occurrences_parent.v1.0.0.adls");
         repository.addArchetype(occurrencesParent);
 
-        Archetype occurrencesSpecialized = parse("openEHR-EHR-CLUSTER.occurrences_parent.v1.0.0.adls");
+        Archetype occurrencesSpecialized = parse("openEHR-EHR-CLUSTER.occurrences_specialized.v1.0.0.adls");
 
         Archetype flat = new Flattener(repository).flatten(occurrencesSpecialized);
         CAttribute attribute = flat.itemAtPath("/items[id3]/value");
@@ -177,6 +178,33 @@ public class FlattenerExamplesFromSpecTest {
     }
 
     //TODO: Reference Model Type Refinement with properties both in parent and child
+
+    @Test
+    public void RMTypeRefinement() throws Exception {
+        Archetype rmTypeRefinement = parse("openEHR-EHR-ELEMENT.type_refinement_parent.v1.0.0.adls");
+        Archetype specialized = parse("openEHR-EHR-ELEMENT.type_refinement_specialized.v1.0.0.adls");
+        repository.addArchetype(rmTypeRefinement);
+
+        Archetype flat = new Flattener(repository).flatten(specialized);
+
+        CAttribute value = flat.itemAtPath("/value");
+        assertEquals(3, value.getChildren().size());
+
+        //value with single constraint, child has three.
+
+        //all three are descendants in the RM Of the value constraint, so they should match and take over any attributes of the parent
+        //regardless of parent node id - it's the same constraint after all.
+        //if the parent has two possible constraints, the flattener should match the correct constraint, which is a tricky thing to do!
+        for(CObject child:value.getChildren()) {
+            CAttribute accuracyAttribute = child.getAttribute("accuracy");
+            assertNotNull(child.getNodeId() + " should have accuraccy != null", accuracyAttribute);
+            assertFalse(child.getNodeId() + " should have accuraccy !empty", accuracyAttribute.getChildren().isEmpty());
+            CReal accuracy = (CReal) accuracyAttribute.getChildren().get(0);
+            CReal parentAccuracy = rmTypeRefinement.itemAtPath("/value/accuracy[1]");
+            assertEquals(parentAccuracy.getConstraints(), accuracy.getConstraints());
+        }
+
+    }
     //9.5.6. Internal Reference (Proxy Object) Redefinition
 
 
