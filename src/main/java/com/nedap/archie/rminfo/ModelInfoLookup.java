@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
 import javax.annotation.Nullable;
-import javax.lang.model.type.TypeVariable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
@@ -35,6 +34,8 @@ public class ModelInfoLookup {
 
     private Map<String, RMTypeInfo> rmTypeNamesToRmTypeInfo = new HashMap<>();
     private Map<Class, RMTypeInfo> classesToRmTypeInfo = new HashMap<>();
+
+    private boolean inConstructor = true;
 
     /**
      * All methods that cannot be called by using reflection. For example getClass();
@@ -64,6 +65,8 @@ public class ModelInfoLookup {
                 logger.error("error loading model info lookup", e);
             }
         });
+        addSuperAndSubclassInfo();
+        inConstructor = false;
     }
 
     public ModelInfoLookup(ModelNamingStrategy namingStrategy, Class baseClass, ClassLoader classLoader) {
@@ -71,6 +74,30 @@ public class ModelInfoLookup {
 
         this.classLoader = classLoader;
         addSubtypesOf(baseClass);
+        addSuperAndSubclassInfo();
+        inConstructor = false;
+    }
+
+    private void addSuperAndSubclassInfo() {
+        for(RMTypeInfo typeInfo:rmTypeNamesToRmTypeInfo.values()) {
+            Class superclass = typeInfo.getJavaClass().getSuperclass();
+            if(!superclass.equals(Object.class)) {
+                addDescendantClass(typeInfo, superclass);
+            }
+
+            for(Class interfaceClass:typeInfo.getJavaClass().getInterfaces()) {
+                addDescendantClass(typeInfo, interfaceClass);
+            }
+        }
+
+    }
+
+    private void addDescendantClass(RMTypeInfo typeInfo, Class interfaceClass) {
+        RMTypeInfo superClassTypeInfo = this.getTypeInfo(interfaceClass);
+        if(superClassTypeInfo != null) {
+            typeInfo.addDirectParentClass(superClassTypeInfo);
+            superClassTypeInfo.addDirectDescendantClass(typeInfo);
+        }
     }
 
     /**
@@ -91,6 +118,12 @@ public class ModelInfoLookup {
         addAttributeInfo(clazz, typeInfo);
         rmTypeNamesToRmTypeInfo.put(rmTypeName, typeInfo);
         classesToRmTypeInfo.put(clazz, typeInfo);
+        if(!inConstructor) {
+            //if someone called this after initial creation, we need to update super/subclass info.
+            //could be done more efficiently by only updating for the added class and parents/descendants, but
+            //should not be a problem to do it this way
+            addSuperAndSubclassInfo();
+        }
     }
 
     private void addAttributeInfo(Class clazz, RMTypeInfo typeInfo) {

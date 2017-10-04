@@ -5,6 +5,8 @@ import com.nedap.archie.adlparser.ADLParser;
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.ArchetypeModelObject;
 import com.nedap.archie.aom.CAttribute;
+import com.nedap.archie.aom.CComplexObject;
+import com.nedap.archie.aom.CComplexObjectProxy;
 import com.nedap.archie.aom.CObject;
 import com.nedap.archie.aom.Cardinality;
 import com.nedap.archie.aom.primitives.CReal;
@@ -14,7 +16,9 @@ import com.nedap.archie.flattener.Flattener;
 import com.nedap.archie.flattener.FlattenerTest;
 import com.nedap.archie.flattener.SimpleArchetypeRepository;
 import com.nedap.archie.rm.datavalues.DvText;
+import com.nedap.archie.serializer.adl.ADLArchetypeSerializer;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -177,9 +181,11 @@ public class FlattenerExamplesFromSpecTest {
 
     }
 
-    //TODO: Reference Model Type Refinement with properties both in parent and child
 
+    //the spec has an issue here in the given examples which does not validate in the ADL workbench. Which means the test cannot be run yet until the spec issue has been resolved
+    //because we don't know what it should do in this case
     @Test
+    @Ignore
     public void RMTypeRefinement() throws Exception {
         Archetype rmTypeRefinement = parse("openEHR-EHR-ELEMENT.type_refinement_parent.v1.0.0.adls");
         Archetype specialized = parse("openEHR-EHR-ELEMENT.type_refinement_specialized.v1.0.0.adls");
@@ -205,7 +211,39 @@ public class FlattenerExamplesFromSpecTest {
         }
 
     }
+
+
     //9.5.6. Internal Reference (Proxy Object) Redefinition
+    @Test
+    public void internalReferenceRedefinition() throws Exception {
+        Archetype parent = parse("openEHR-EHR-ENTRY.reference_redefinition_parent.v1.0.0.adls");
+        repository.addArchetype(parent);
+        Archetype specialized = parse("openEHR-EHR-ENTRY.reference_redefinition_specialized.v1.0.0.adls");
+
+        Archetype flat = new Flattener(repository).flatten(specialized);
+        assertNotNull(flat.itemAtPath("/data[id3]/items[id4]"));
+        assertNotNull(flat.itemAtPath("/data[id3]/items[id0.1]"));
+        assertNull(flat.itemAtPath("/data[id2]/items[id0.1]"));
+        CObject id3 = flat.itemAtPath("/data[id3]");
+        assertEquals("the complex object proxy should have been replaced with a regular complex object", CComplexObject.class, id3.getClass());
+        //TODO: test case where it should not be replaced as well?
+    }
+
+    @Test
+    public void internalReferenceRedefinitionNoReplacement() throws Exception {
+        Archetype parent = parse("openEHR-EHR-ENTRY.reference_redefinition_parent.v1.0.0.adls");
+        repository.addArchetype(parent);
+        Archetype specialized = parse("openEHR-EHR-ENTRY.reference_redefinition_no_replacement.v1.0.0.adls");
+
+        Archetype flat = new Flattener(repository).flatten(specialized);
+        assertNull(flat.itemAtPath("/data[id3]/items[id4]"));
+        assertNull(flat.itemAtPath("/data[id3]/items[id0.1]"));
+        assertNotNull(flat.itemAtPath("/data[id2]/items[id0.1]"));
+        CObject id3 = flat.itemAtPath("/data[id3]");
+        assertEquals("the complex object proxy should have been replaced with a regular complex object", CComplexObjectProxy.class, id3.getClass());
+        //TODO: test case where it should not be replaced as well?
+    }
+
 
 
 

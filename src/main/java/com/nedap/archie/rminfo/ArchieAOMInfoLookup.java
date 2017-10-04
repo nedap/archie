@@ -14,6 +14,7 @@ public class ArchieAOMInfoLookup extends ModelInfoLookup {
     public ArchieAOMInfoLookup() {
         super(new ArchieModelNamingStrategy(), ArchetypeModelObject.class);
         addSubtypesOf(Interval.class); //extra class from the base package. No RMObject because it is also used in the AOM
+
     }
 
     public static ArchieAOMInfoLookup getInstance() {

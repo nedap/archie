@@ -1,4 +1,4 @@
- archetype (adl_version=2.0.5; rm_release=1.0.2; generated)
+archetype (adl_version=2.0.5; rm_release=1.0.2; generated)
  	openEHR-EHR-ELEMENT.type_refinement_specialized.v1.0.0
 
 specialize
@@ -14,16 +14,16 @@ definition
     ELEMENT[id1.1] matches {
 
          /value ∈ {
-             DV_QUANTITY[id4] ∈ {
-                 magnitude ∈ {|2.0..10.0|}
-                 units ∈ {"mmol/ml"}
+             DV_QUANTITY[id4] matches {
+                 magnitude matches {|2.0..10.0|}
+                 units matches {"mmol/ml"}
              }
-             DV_PROPORTION[id5] ∈ {
-                 numerator ∈ {|2.0..10.0|}
-                 type ∈ {1}
+             DV_PROPORTION[id5] matches {
+                 numerator matches {|2.0..10.0|}
+                 type matches {1}
              }
-             DV_AMOUNT[id6] ∈ {
-                 accuracy ∈ {|-0.05..0.05|}
+             DV_AMOUNT[id6] matches {
+                 accuracy matches {|-0.05..0.05|}
              }
         }
 

@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import com.nedap.archie.aom.ArchetypeModelObject;
 import com.nedap.archie.aom.CAttribute;
 import com.nedap.archie.aom.CComplexObject;
+import com.nedap.archie.aom.CComplexObjectProxy;
 import com.nedap.archie.aom.CObject;
 import com.nedap.archie.aom.CPrimitiveObject;
 import com.nedap.archie.paths.PathSegment;
@@ -515,5 +516,26 @@ public class APathQuery {
 
     public List<PathSegment> getPathSegments() {
         return pathSegments;
+    }
+
+
+    /**
+     * Find any CComplexObjectProxy anywhere inside the APath query. Can be at the end of the full query, at the first matching CComplexObjectProxy or anywhere in between
+     * Useful mainly when flattening, probably does not have many other uses
+     */
+    public CComplexObjectProxy findAnyInternalReference(CComplexObject root) {
+        List<ArchetypeModelObject> result = new ArrayList<>();
+        result.add(root);
+        for(PathSegment segment:this.pathSegments) {
+            if (result.size() == 0) {
+                return null;
+            }
+            result = findOneSegment(segment, result);
+            if(result.size() == 1 && result.get(0) instanceof CComplexObjectProxy) {
+                return (CComplexObjectProxy) result.get(0);
+            }
+        }
+        return null;
+
     }
 }

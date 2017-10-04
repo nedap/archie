@@ -231,18 +231,15 @@ public class Flattener {
     }
 
     private ComplexObjectProxyReplacement getComplexObjectProxyReplacement(CComplexObjectProxy proxy) {
-        if(createOperationalTemplate) {
-            CObject newObject = new APathQuery(proxy.getTargetPath()).find(proxy.getArchetype().getDefinition());
-            if(newObject == null) {
-                throw new RuntimeException("cannot find target in CComplexObjectProxy");
-            } else {
-                CComplexObject clone = (CComplexObject) newObject.clone();
-                clone.setNodeId(proxy.getNodeId());
-                return new ComplexObjectProxyReplacement(proxy, clone);
+        CObject newObject = new APathQuery(proxy.getTargetPath()).find(proxy.getArchetype().getDefinition());
+        if(newObject == null) {
+            throw new RuntimeException("cannot find target in CComplexObjectProxy");
+        } else {
+            CComplexObject clone = (CComplexObject) newObject.clone();
+            clone.setNodeId(proxy.getNodeId());
+            return new ComplexObjectProxyReplacement(proxy, clone);
 
-            }
         }
-        return null;
     }
 
     /**
@@ -466,20 +463,40 @@ public class Flattener {
     private void flattenCComplexObject(CComplexObject newObject, CComplexObject specialized) {
 
         for(CAttribute attribute:specialized.getAttributes()) {
-            if(attribute.getDifferentialPath() != null) {
-                //this overrides a specific path
-                ArchetypeModelObject object = new APathQuery(attribute.getDifferentialPath()).find(newObject);
-                if(object instanceof CAttribute) {
-                    CAttribute realAttribute = (CAttribute) object;
-                    flattenAttribute(newObject, realAttribute, attribute);
-                } else if (object instanceof CObject) {
-                    //TODO: what does this mean?
-                }
+            flattenSingleAttribute(newObject, attribute);
+        }
+    }
 
-            } else {
-                //this overrides the same path
-                flattenAttribute(newObject, newObject.getAttribute(attribute.getRmAttributeName()), attribute);
+    private void flattenSingleAttribute(CComplexObject newObject, CAttribute attribute) {
+        if(attribute.getDifferentialPath() != null) {
+            //this overrides a specific path
+            ArchetypeModelObject object = new APathQuery(attribute.getDifferentialPath()).find(newObject);
+            if(object == null) {
+                //it is possible that the object points to a reference, in which case we need to clone the referenced node, then try again
+                //AOM spec paragraph 7.2: 'proxy reference targets are expanded inline if the child archetype overrides them.'
+                //also examples in ADL2 spec about internal references
+                //so find the internal references here!
+                CComplexObjectProxy internalReference = new APathQuery(attribute.getDifferentialPath()).findAnyInternalReference(newObject);
+                if(internalReference != null) {
+                    //in theory this can be a use node within a use node.
+                    ComplexObjectProxyReplacement complexObjectProxyReplacement = getComplexObjectProxyReplacement(internalReference);
+                    if(complexObjectProxyReplacement != null) {
+                        complexObjectProxyReplacement.replace();
+                        //and again!
+                        flattenSingleAttribute(newObject, attribute);
+                    }
+                }
             }
+            else if(object instanceof CAttribute) {
+                CAttribute realAttribute = (CAttribute) object;
+                flattenAttribute(newObject, realAttribute, attribute);
+            } else if (object instanceof CObject) {
+                //TODO: what does this mean?
+            }
+
+        } else {
+            //this overrides the same path
+            flattenAttribute(newObject, newObject.getAttribute(attribute.getRmAttributeName()), attribute);
         }
     }
 
@@ -531,6 +548,7 @@ public class Flattener {
     }
 
     private boolean isOverridenCObject(CObject specialized, CObject parent) {
+
         String specializedNodeId = specialized.getNodeId();
         if(specializedNodeId.lastIndexOf('.') > 0) {
             specializedNodeId = specializedNodeId.substring(0, specializedNodeId.lastIndexOf('.'));//-1?
