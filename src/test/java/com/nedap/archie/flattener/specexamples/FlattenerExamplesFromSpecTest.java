@@ -250,11 +250,11 @@ public class FlattenerExamplesFromSpecTest {
         Archetype specialized = parse("openEHR-EHR-ELEMENT.numeric_primitive_specialized.v1.0.0.adls");
         Archetype flat = new Flattener(repository).flatten(specialized);
 
-        CReal flatConstraint = flat.itemAtPath("/value[id3]/magnitude");
+        CReal flatConstraint = flat.itemAtPath("/value[id3]/magnitude[1]");
         assertEquals(4.0d, flatConstraint.getConstraints().get(0).getLower(), 0.0001d);
         assertEquals(6.5d, flatConstraint.getConstraints().get(0).getUpper(), 0.0001d);
 
-        CString units = flat.itemAtPath("/value[id3]/units");
+        CString units = flat.itemAtPath("/value[id3]/units[1]");
         assertNotNull(units);
         assertEquals(Lists.newArrayList("mmol/ml"), units.getConstraint());
     }
