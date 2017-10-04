@@ -185,7 +185,6 @@ public class FlattenerExamplesFromSpecTest {
     //the spec has an issue here in the given examples which does not validate in the ADL workbench. Which means the test cannot be run yet until the spec issue has been resolved
     //because we don't know what it should do in this case
     @Test
-    @Ignore
     public void RMTypeRefinement() throws Exception {
         Archetype rmTypeRefinement = parse("openEHR-EHR-ELEMENT.type_refinement_parent.v1.0.0.adls");
         Archetype specialized = parse("openEHR-EHR-ELEMENT.type_refinement_specialized.v1.0.0.adls");

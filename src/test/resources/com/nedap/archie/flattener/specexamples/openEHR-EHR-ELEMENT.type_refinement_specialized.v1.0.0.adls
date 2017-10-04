@@ -14,15 +14,15 @@ definition
     ELEMENT[id1.1] matches {
 
          /value ∈ {
-             DV_QUANTITY[id4] matches {
+             DV_QUANTITY[id4.1] matches {
                  magnitude matches {|2.0..10.0|}
                  units matches {"mmol/ml"}
              }
-             DV_PROPORTION[id5] matches {
+             DV_PROPORTION[id4.2] matches {
                  numerator matches {|2.0..10.0|}
                  type matches {1}
              }
-             DV_AMOUNT[id6] matches {
+             DV_AMOUNT[id4.3] matches {
                  accuracy matches {|-0.05..0.05|}
              }
         }
