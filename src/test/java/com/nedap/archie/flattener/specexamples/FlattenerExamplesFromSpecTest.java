@@ -198,8 +198,6 @@ public class FlattenerExamplesFromSpecTest {
         //value with single constraint, child has three.
 
         //all three are descendants in the RM Of the value constraint, so they should match and take over any attributes of the parent
-        //regardless of parent node id - it's the same constraint after all.
-        //if the parent has two possible constraints, the flattener should match the correct constraint, which is a tricky thing to do!
         for(CObject child:value.getChildren()) {
             CAttribute accuracyAttribute = child.getAttribute("accuracy");
             assertNotNull(child.getNodeId() + " should have accuraccy != null", accuracyAttribute);

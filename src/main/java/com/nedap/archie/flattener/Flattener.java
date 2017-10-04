@@ -429,7 +429,9 @@ public class Flattener {
                 return true;
             }
         }
-        if(parent.getOccurrences() != null && parent.getOccurrences().upperIsOne()) {
+        if(parent.getParent().isSingle()) {
+            return true;
+        } else if(parent.getOccurrences() != null && parent.getOccurrences().upperIsOne()) {
             //REFINE the parent node case 1, the parent has occurrences upper == 1
             return true;
         } else if (differentialNodes.size() == 1
@@ -515,7 +517,7 @@ public class Flattener {
             CAttribute childCloned = specialized.clone();
             root.addAttribute(childCloned);
         } else {
-            parent.setMultiple(getPossiblyOverridenValue(parent.isMultiple(), specialized.isMultiple()));
+
             parent.setExistence(getPossiblyOverridenValue(parent.getExistence(), specialized.getExistence()));
             parent.setCardinality(getPossiblyOverridenValue(parent.getCardinality(), specialized.getCardinality()));
 
