@@ -263,7 +263,11 @@ public class FlattenerExamplesFromSpecTest {
 
     private Archetype parse(String filename) throws IOException {
         ADLParser parser = ADLParser.withRMConstraintsImposer();
-        Archetype result = parser.parse(FlattenerExamplesFromSpecTest.class.getResourceAsStream(filename));
+        InputStream stream = FlattenerExamplesFromSpecTest.class.getResourceAsStream(filename);
+        if(stream == null) {
+            fail("cannot find file: " + filename);
+        }
+        Archetype result = parser.parse(stream);
         assertTrue("there should be no errors parsing " + filename + ", but was: " + parser.getErrors(), parser.getErrors().hasNoMessages());
         return result;
     }
