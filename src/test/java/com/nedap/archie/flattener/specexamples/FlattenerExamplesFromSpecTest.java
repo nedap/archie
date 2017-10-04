@@ -10,6 +10,7 @@ import com.nedap.archie.aom.CComplexObjectProxy;
 import com.nedap.archie.aom.CObject;
 import com.nedap.archie.aom.Cardinality;
 import com.nedap.archie.aom.primitives.CReal;
+import com.nedap.archie.aom.primitives.CString;
 import com.nedap.archie.aom.primitives.CTerminologyCode;
 import com.nedap.archie.base.MultiplicityInterval;
 import com.nedap.archie.flattener.Flattener;
@@ -231,8 +232,8 @@ public class FlattenerExamplesFromSpecTest {
         Archetype parent = parse("openEHR-EHR-ENTRY.reference_redefinition_parent.v1.0.0.adls");
         repository.addArchetype(parent);
         Archetype specialized = parse("openEHR-EHR-ENTRY.reference_redefinition_no_replacement.v1.0.0.adls");
-
         Archetype flat = new Flattener(repository).flatten(specialized);
+
         assertNull(flat.itemAtPath("/data[id3]/items[id4]"));
         assertNull(flat.itemAtPath("/data[id3]/items[id0.1]"));
         assertNotNull(flat.itemAtPath("/data[id2]/items[id0.1]"));
@@ -241,6 +242,22 @@ public class FlattenerExamplesFromSpecTest {
         //TODO: test case where it should not be replaced as well?
     }
 
+
+    @Test
+    public void numericPrimitiveRedefinition() throws Exception {
+        Archetype parent = parse("openEHR-EHR-ELEMENT.numeric_primitive_parent.v1.0.0.adls");
+        repository.addArchetype(parent);
+        Archetype specialized = parse("openEHR-EHR-ELEMENT.numeric_primitive_specialized.v1.0.0.adls");
+        Archetype flat = new Flattener(repository).flatten(specialized);
+
+        CReal flatConstraint = flat.itemAtPath("/value[id3]/magnitude");
+        assertEquals(4.0d, flatConstraint.getConstraints().get(0).getLower(), 0.0001d);
+        assertEquals(6.5d, flatConstraint.getConstraints().get(0).getUpper(), 0.0001d);
+
+        CString units = flat.itemAtPath("/value[id3]/units");
+        assertNotNull(units);
+        assertEquals(Lists.newArrayList("mmol/ml"), units.getConstraint());
+    }
 
 
 
