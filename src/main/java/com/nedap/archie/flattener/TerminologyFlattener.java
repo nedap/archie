@@ -8,6 +8,7 @@ import com.nedap.archie.aom.terminology.ArchetypeTerminology;
 import com.nedap.archie.aom.terminology.ValueSet;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -55,15 +56,30 @@ public class TerminologyFlattener {
     private static void flattenValueSets(Map<String, ValueSet> childValueSets, Map<String, ValueSet> resultValueSets) {
         for(String key:childValueSets.keySet()) {
             ValueSet childValueSet = childValueSets.get(key);
-            if(!resultValueSets.containsKey(key)) {
+            ValueSet overriddenValueSet = findMatchingValueSet(resultValueSets, key);
+            if(overriddenValueSet == null) {
                 resultValueSets.put(key, childValueSet);
             } else {
-                ValueSet resultValueSet = resultValueSets.get(key);
-                for(String member:childValueSet.getMembers()) {
-                    resultValueSet.addMember(member);
+                //we could just set the overridden value set to the new value and remove the old one
+                //but that would mean you could also add codes in a specialized archetype- and you cannot
+                Set<String> newMembers = new LinkedHashSet<>();
+                for(String member: overriddenValueSet.getMembers()) {
+                    if(childValueSet.getMembers().contains(member)) {
+                        //can only delete, not add members.
+                        newMembers.add(member);
+                    }
                 }
+                overriddenValueSet.setMembers(newMembers);
+                resultValueSets.remove(overriddenValueSet.getId());
+                resultValueSets.put(key, overriddenValueSet);
             }
         }
+    }
+
+    private static ValueSet findMatchingValueSet(Map<String, ValueSet> resultValueSets, String specializedId) {
+        return resultValueSets.values().stream()
+                .filter((valueSet) -> Flattener.isOverriddenIdCode(specializedId, valueSet.getId()))
+                .findAny().orElse(null);
     }
 
     private static <T> void flattenTerminologyDefinitions(Map<String, Map<String, T>> resultTermDefinitions, Map<String, Map<String, T>> childTermDefinitions) {

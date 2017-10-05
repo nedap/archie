@@ -619,12 +619,16 @@ public class Flattener {
     }
 
     private boolean isOverridenCObject(CObject specialized, CObject parent) {
-
         String specializedNodeId = specialized.getNodeId();
+        String parentNodeId = parent.getNodeId();
+        return isOverriddenIdCode(specializedNodeId, parentNodeId);
+    }
+
+    public static boolean isOverriddenIdCode(String specializedNodeId, String parentNodeId) {
         if(specializedNodeId.lastIndexOf('.') > 0) {
             specializedNodeId = specializedNodeId.substring(0, specializedNodeId.lastIndexOf('.'));//-1?
         }
-        return specializedNodeId.equals(parent.getNodeId()) || specializedNodeId.startsWith(parent.getNodeId() + ".");
+        return specializedNodeId.equals(parentNodeId) || specializedNodeId.startsWith(parentNodeId + ".");
     }
 
     private List<Assertion> getPossiblyOverridenListValue(List<Assertion> parent, List<Assertion> child) {
