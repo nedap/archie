@@ -115,6 +115,10 @@ test {
   jacoco {
     excludes = generatedSources
   }
+   testLogging {
+      events "failed"
+      exceptionFormat "full"
+  }
 }
 
 jacocoTestReport {
