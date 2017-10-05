@@ -9,6 +9,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * TODO: noone created an XML model for this.
@@ -165,4 +166,7 @@ public class CAttributeTuple extends CSecondOrder<CAttribute> {
 
     }
 
+    public List<String> getMemberNames() {
+        return getMembers().stream().map((attr) -> attr.getRmAttributeName()).collect(Collectors.toList());
+    }
 }

@@ -273,6 +273,48 @@ public class FlattenerExamplesFromSpecTest {
         assertEquals(1, dvQuantity.getAttributeTuples().size());
         CAttributeTuple tuple = dvQuantity.getAttributeTuples().get(0);
         assertEquals(1, tuple.getTuples().size());//only the mm[Hg] should be left
+        assertEquals(Lists.newArrayList("magnitude", "units"), tuple.getMemberNames());
+        assertEquals("socParent should have been updated for units", tuple, dvQuantity.getAttribute("units").getSocParent());
+        assertEquals("socParent should have been updated for magnitude", tuple, dvQuantity.getAttribute("magnitude").getSocParent());
+
+        assertEquals(1, dvQuantity.getAttribute("magnitude").getChildren().size());
+        CReal magnitudeAttr = (CReal) dvQuantity.getAttribute("magnitude").getChildren().get(0);
+        assertEquals(50.0d, magnitudeAttr.getConstraints().get(0).getLower(), 0.0001d);
+        assertEquals(true, magnitudeAttr.getConstraints().get(0).isUpperUnbounded());
+
+        assertEquals(1, dvQuantity.getAttribute("units").getChildren().size());
+        CString unitsAttribute = (CString) dvQuantity.getAttribute("units").getChildren().get(0);
+        assertEquals("mm[Hg]", unitsAttribute.getConstraint().get(0));
+
+    }
+
+
+    @Test
+    public void addTuple() throws Exception {
+        Archetype parent = parse("openEHR-EHR-ELEMENT.type_refinement_parent.v1.0.0.adls");
+        repository.addArchetype(parent);
+        Archetype specialized = parse("openEHR-EHR-ELEMENT.add_tuple.v1.0.0.adls");
+        Archetype flat = new Flattener(repository).flatten(specialized);
+        //the tuple should be completely replaced with the new tuple
+        //the attributes should be correct
+        CComplexObject dvQuantity = flat.itemAtPath("/value[1]");
+        assertEquals(1, dvQuantity.getAttributeTuples().size());
+        CAttributeTuple tuple = dvQuantity.getAttributeTuples().get(0);
+        assertEquals(1, tuple.getTuples().size());//only the mm[Hg] should be left
+        assertEquals(Lists.newArrayList("magnitude", "units"), tuple.getMemberNames());
+        assertEquals("socParent should have been added for units", tuple, dvQuantity.getAttribute("units").getSocParent());
+        assertEquals("socParent should have been added for magnitude", tuple, dvQuantity.getAttribute("magnitude").getSocParent());
+
+        assertEquals(1, dvQuantity.getAttribute("magnitude").getChildren().size());
+        CReal magnitudeAttr = (CReal) dvQuantity.getAttribute("magnitude").getChildren().get(0);
+        assertEquals(4.0d, magnitudeAttr.getConstraints().get(0).getLower(), 0.0001d);
+        assertEquals(8.0d, magnitudeAttr.getConstraints().get(0).getUpper(), 0.0001d);
+        assertEquals(false, magnitudeAttr.getConstraints().get(0).isUpperUnbounded());
+
+        assertEquals(1, dvQuantity.getAttribute("units").getChildren().size());
+        CString unitsAttribute = (CString) dvQuantity.getAttribute("units").getChildren().get(0);
+        assertEquals("mmol/ml", unitsAttribute.getConstraint().get(0));
+
     }
 
 

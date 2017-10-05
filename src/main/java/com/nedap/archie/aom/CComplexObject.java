@@ -116,4 +116,25 @@ public class CComplexObject extends CDefinedObject<ArchetypeModelObject> {
     public void addAttributeTuple(CAttributeTuple tuple) {
         this.attributeTuples.add(tuple);
     }
+
+
+    /**
+     * Replace the existing attribute with the same name as newAttribute with the newAttribute
+     * useful in flattening
+     * If no attribute with the given name exists, add the new attribute 
+     *
+     * @param newAttribute the attribute to replace the old attribute with.
+     */
+    public void replaceAttribute(CAttribute newAttribute) {
+        CAttribute oldAttribute = getAttribute(newAttribute.getRmAttributeName());
+        if(oldAttribute != null) {
+            int index = attributes.indexOf(oldAttribute);
+            attributes.set(index, newAttribute);
+            newAttribute.setParent(this);
+        } else {
+            ///...
+            addAttribute(newAttribute);
+        }
+
+    }
 }

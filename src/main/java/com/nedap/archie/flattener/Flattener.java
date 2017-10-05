@@ -498,6 +498,35 @@ public class Flattener {
         for(CAttribute attribute:specialized.getAttributes()) {
             flattenSingleAttribute(newObject, attribute);
         }
+        for(CAttributeTuple tuple:specialized.getAttributeTuples()) {
+            flattenTuple(newObject, tuple);
+        }
+    }
+
+    private void flattenTuple(CComplexObject newObject, CAttributeTuple tuple) {
+        CAttributeTuple matchingTuple = findMatchingTuple(newObject.getAttributeTuples(), tuple);
+
+
+        CAttributeTuple tupleClone = (CAttributeTuple) tuple.clone();
+        if(matchingTuple == null) {
+            //add
+            newObject.addAttributeTuple(tupleClone);
+        } else {
+            //replace
+            newObject.getAttributeTuples().remove(matchingTuple);
+            newObject.addAttributeTuple(tupleClone);
+        }
+        for(CAttribute attribute:tupleClone.getMembers()){
+            //replace the entire attribute with the attribute from the new tuple
+            //this should be all there is to do.
+            newObject.replaceAttribute(attribute);
+        }
+    }
+
+    private CAttributeTuple findMatchingTuple(List<CAttributeTuple> attributeTuples, CAttributeTuple specializedTuple) {
+        return attributeTuples.stream()
+                .filter((existingTuple) -> existingTuple.getMemberNames().equals(specializedTuple.getMemberNames()))
+                .findAny().orElse(null);
     }
 
     private void flattenSingleAttribute(CComplexObject newObject, CAttribute attribute) {
