@@ -1,9 +1,7 @@
 package com.nedap.archie.flattener.specexamples;
 
 import com.google.common.collect.Lists;
-import com.nedap.archie.adlparser.ADLParser;
 import com.nedap.archie.aom.Archetype;
-import com.nedap.archie.aom.ArchetypeModelObject;
 import com.nedap.archie.aom.CAttribute;
 import com.nedap.archie.aom.CAttributeTuple;
 import com.nedap.archie.aom.CComplexObject;
@@ -15,34 +13,29 @@ import com.nedap.archie.aom.primitives.CString;
 import com.nedap.archie.aom.primitives.CTerminologyCode;
 import com.nedap.archie.base.MultiplicityInterval;
 import com.nedap.archie.flattener.Flattener;
-import com.nedap.archie.flattener.FlattenerTest;
 import com.nedap.archie.flattener.SimpleArchetypeRepository;
-import com.nedap.archie.rm.datavalues.DvText;
-import com.nedap.archie.serializer.adl.ADLArchetypeSerializer;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
+import static com.nedap.archie.flattener.specexamples.FlattenerTestUtil.*;
 import static org.junit.Assert.*;
 
 public class FlattenerExamplesFromSpecTest {
 
-    private static Archetype labTest;
+
     private static SimpleArchetypeRepository repository;
 
     @Before
     public void setup() throws Exception {
-        labTest = parse("openEHR-EHR-OBSERVATION.lab-test.v1.0.0.adls");
         repository = new SimpleArchetypeRepository();
-        repository.addArchetype(labTest);
     }
 
     @Test
     public void specializationPaths() throws Exception {
+        Archetype labTest = parse("openEHR-EHR-OBSERVATION.lab-test.v1.0.0.adls");
+        repository.addArchetype(labTest);
         Archetype specializationPaths = parse("specialization_paths.adls");
         Archetype flattened = new Flattener(repository).flatten(specializationPaths);
 
@@ -315,19 +308,6 @@ public class FlattenerExamplesFromSpecTest {
         CString unitsAttribute = (CString) dvQuantity.getAttribute("units").getChildren().get(0);
         assertEquals("mmol/ml", unitsAttribute.getConstraint().get(0));
 
-    }
-
-
-
-    private Archetype parse(String filename) throws IOException {
-        ADLParser parser = ADLParser.withRMConstraintsImposer();
-        InputStream stream = FlattenerExamplesFromSpecTest.class.getResourceAsStream(filename);
-        if(stream == null) {
-            fail("cannot find file: " + filename);
-        }
-        Archetype result = parser.parse(stream);
-        assertTrue("there should be no errors parsing " + filename + ", but was: " + parser.getErrors(), parser.getErrors().hasNoMessages());
-        return result;
     }
 
 }

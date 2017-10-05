@@ -521,6 +521,15 @@ public class Flattener {
             //this should be all there is to do.
             newObject.replaceAttribute(attribute);
         }
+        //update all parent references
+        for(CPrimitiveTuple primitiveTuple:tupleClone.getTuples()) {
+            int i = 0;
+            for(CPrimitiveObject object:primitiveTuple.getMembers()) {
+                object.setSocParent(primitiveTuple);
+                object.setParent((tupleClone.getMembers().get(i)));
+                i++;
+            }
+        }
     }
 
     private CAttributeTuple findMatchingTuple(List<CAttributeTuple> attributeTuples, CAttributeTuple specializedTuple) {
