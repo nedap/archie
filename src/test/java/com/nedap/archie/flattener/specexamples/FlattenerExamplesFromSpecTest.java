@@ -5,6 +5,7 @@ import com.nedap.archie.adlparser.ADLParser;
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.ArchetypeModelObject;
 import com.nedap.archie.aom.CAttribute;
+import com.nedap.archie.aom.CAttributeTuple;
 import com.nedap.archie.aom.CComplexObject;
 import com.nedap.archie.aom.CComplexObjectProxy;
 import com.nedap.archie.aom.CObject;
@@ -138,7 +139,8 @@ public class FlattenerExamplesFromSpecTest {
         assertEquals(1, mandatoryProtocol.getChildren().size());
 
         CAttribute prohibitedProtocol = exclusionFlat.getDefinition().getAttribute("protocol");
-        assertNull(prohibitedProtocol); //according to spec, prohibited existence should be removed. That also means you can override them in a further specialization to exist again, which could be a problem..
+        assertNotNull(prohibitedProtocol); //according to spec, prohibited existence should be logically removed (meaning not actually removed)
+        assertTrue(prohibitedProtocol.getChildren().isEmpty());
 
     }
 
@@ -257,6 +259,20 @@ public class FlattenerExamplesFromSpecTest {
         CString units = flat.itemAtPath("/value[id3]/units[1]");
         assertNotNull(units);
         assertEquals(Lists.newArrayList("mmol/ml"), units.getConstraint());
+    }
+
+    @Test
+    public void tupleRedefinition() throws Exception {
+        Archetype parent = parse("openEHR-EHR-ELEMENT.tuple_parent.v1.0.0.adls");
+        repository.addArchetype(parent);
+        Archetype specialized = parse("openEHR-EHR-ELEMENT.tuple_specialized.v1.0.0.adls");
+        Archetype flat = new Flattener(repository).flatten(specialized);
+        //the tuple should be completely replaced with the new tuple
+        //the attributes should be correct
+        CComplexObject dvQuantity = flat.itemAtPath("/value[1]");
+        assertEquals(1, dvQuantity.getAttributeTuples().size());
+        CAttributeTuple tuple = dvQuantity.getAttributeTuples().get(0);
+        assertEquals(1, tuple.getTuples().size());//only the mm[Hg] should be left
     }
 
 

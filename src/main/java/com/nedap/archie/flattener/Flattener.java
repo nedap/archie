@@ -119,7 +119,11 @@ public class Flattener {
         //1. redefine structure
         //2. fill archetype slots if we are creating an operational template
         flattenDefinition(result, child);
-        removeZeroOccurrencesConstraints(result);
+        if(createOperationalTemplate) {
+            removeZeroOccurrencesConstraints(result);
+        } else {
+            prohibitZeroOccurrencesConstraints(result);
+        }
 
         rulesFlattener.combineRules(child, result, "prefix", "", "", true /* override statements with same tag */);//TODO: actually set a unique prefix
         if(createOperationalTemplate) {
@@ -143,6 +147,7 @@ public class Flattener {
 
     }
 
+    /** Zero occurrences and existence constraint processing when creating OPT templates. Removes attributes */
     private void removeZeroOccurrencesConstraints(Archetype archetype) {
         Stack<CObject> workList = new Stack<>();
         workList.push(archetype.getDefinition());
@@ -165,6 +170,32 @@ public class Flattener {
 
             }
             object.getAttributes().removeAll(attributesToRemove);
+        }
+    }
+
+    /** Zero occurrences and existence constraint processing when flattening. Does not remove attributes*/
+    private void prohibitZeroOccurrencesConstraints(Archetype archetype) {
+        Stack<CObject> workList = new Stack<>();
+        workList.push(archetype.getDefinition());
+        while(!workList.isEmpty()) {
+            CObject object = workList.pop();
+            for(CAttribute attribute:object.getAttributes()) {
+                if(attribute.getExistence() != null && attribute.getExistence().getUpper() == 0 && !attribute.getExistence().isUpperUnbounded()) {
+                    //remove children, but do not remove attribute itself to make sure it stays prohibited
+                    attribute.setChildren(new ArrayList<>());
+                } else {
+                    List<CObject> objectsToRemove = new ArrayList<>();
+                    for (CObject child : attribute.getChildren()) {
+                        if (!child.isAllowed()) {
+                            objectsToRemove.add(child);
+                        }
+                        workList.push(child);
+                    }
+                    attribute.getChildren().removeAll(objectsToRemove);
+                }
+
+            }
+
         }
     }
 
