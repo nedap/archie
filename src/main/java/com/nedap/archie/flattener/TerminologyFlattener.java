@@ -44,7 +44,6 @@ public class TerminologyFlattener {
         if(term == null) {
             for(Map.Entry<String, ArchetypeTerm> entry: translations.entrySet()) {
                 if(nodeId.startsWith(entry.getKey() + ".")) {
-                    NodeId.parse(nodeId);
                     return entry.getValue();
                 }
             }
