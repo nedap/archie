@@ -8,6 +8,9 @@ import com.nedap.archie.aom.terminology.ArchetypeTerminology;
 import com.nedap.archie.aom.terminology.ValueSet;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -41,12 +44,17 @@ public class TerminologyFlattener {
     protected static ArchetypeTerm getTerm(Map<String, Map<String, ArchetypeTerm>> termDefinitions, String language, String nodeId) {
         Map<String, ArchetypeTerm> translations = termDefinitions.get(language);
         ArchetypeTerm term = translations.get(nodeId);
+        Map<String, ArchetypeTerm> foundTerms = new LinkedHashMap<>();
         if(term == null) {
             for(Map.Entry<String, ArchetypeTerm> entry: translations.entrySet()) {
                 if(nodeId.startsWith(entry.getKey() + ".")) {
-                    return entry.getValue();
+                    foundTerms.put(nodeId, entry.getValue());
                 }
             }
+            //get the longest matching node id
+            List<String> foundNodeIds = new ArrayList(foundTerms.keySet());
+            Collections.sort(foundNodeIds, Comparator.comparingInt((id) -> id.length()));
+            return foundTerms.get(foundNodeIds.get(foundNodeIds.size()-1));
 
         }
         return term;
