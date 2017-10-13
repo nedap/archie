@@ -324,16 +324,12 @@ public class Flattener {
 
             //The node id will be replaced from "id1" to something like "openEHR-EHR-COMPOSITION.template_overlay.v1.0.0
             //so store it in the terminology as well
-            //TODO: value sets, term bindings, etc.
             Map<String, Map<String, ArchetypeTerm>> termDefinitions = terminology.getTermDefinitions();
 
             for(String language: termDefinitions.keySet()) {
                 Map<String, ArchetypeTerm> translations = termDefinitions.get(language);
                 translations.put(newNodeId, TerminologyFlattener.getTerm(terminology.getTermDefinitions(), language, archetype.getDefinition().getNodeId()));
             }
-
-
-            //TODO: if someone adds for example id1.1, but does not translate it, should we automatically add it to the terminology?
 
             //rootToFill.setNodeId(newNodeId);
             if(!useComplexObjectForArchetypeSlotReplacement) {

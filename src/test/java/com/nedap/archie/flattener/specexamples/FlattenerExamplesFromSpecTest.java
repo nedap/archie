@@ -219,7 +219,6 @@ public class FlattenerExamplesFromSpecTest {
         assertNull(flat.itemAtPath("/data[id2]/items[id0.1]"));
         CObject id3 = flat.itemAtPath("/data[id3]");
         assertEquals("the complex object proxy should have been replaced with a regular complex object", CComplexObject.class, id3.getClass());
-        //TODO: test case where it should not be replaced as well?
     }
 
     @Test
@@ -233,8 +232,7 @@ public class FlattenerExamplesFromSpecTest {
         assertNull(flat.itemAtPath("/data[id3]/items[id0.1]"));
         assertNotNull(flat.itemAtPath("/data[id2]/items[id0.1]"));
         CObject id3 = flat.itemAtPath("/data[id3]");
-        assertEquals("the complex object proxy should have been replaced with a regular complex object", CComplexObjectProxy.class, id3.getClass());
-        //TODO: test case where it should not be replaced as well?
+        assertEquals("the complex object proxy should not have been replaced with a regular complex object", CComplexObjectProxy.class, id3.getClass());
     }
 
 
