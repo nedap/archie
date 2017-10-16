@@ -136,6 +136,7 @@ public class Flattener {
             TerminologyFlattener.filterLanguages((OperationalTemplate) result, removeLanguagesFromMetaData, languagesToKeep);
         }
         result.getDefinition().setArchetype(result);
+        result.setDifferential(false);//note this archetype as being flat
         return result;
     }
 
