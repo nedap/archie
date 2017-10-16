@@ -118,7 +118,20 @@ public class CAttribute extends ArchetypeConstraint {
     }
 
     public void addChild(CObject child) {
-        children.add(child);
+        if(child.getSiblingOrder() != null && child.getSiblingOrder().getSiblingNodeId() != null) {
+            CObject sibling = getChild(child.getSiblingOrder().getSiblingNodeId());
+            int siblingIndex = children.indexOf(sibling);
+            if(siblingIndex > -1) {
+                if (!child.getSiblingOrder().isBefore()) {
+                    siblingIndex++;
+                }
+                children.add(siblingIndex, child);
+            } else{
+                children.add(child);
+            }
+        } else {
+            children.add(child);
+        }
         child.setParent(this);
     }
 

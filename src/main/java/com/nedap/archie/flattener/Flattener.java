@@ -1,11 +1,9 @@
 package com.nedap.archie.flattener;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import com.nedap.archie.aom.*;
 import com.nedap.archie.aom.terminology.ArchetypeTerm;
 import com.nedap.archie.aom.terminology.ArchetypeTerminology;
-import com.nedap.archie.aom.terminology.ValueSet;
 import com.nedap.archie.query.APathQuery;
 import com.nedap.archie.rules.Assertion;
 
@@ -33,7 +31,7 @@ public class Flattener {
     private Archetype child;
 
     private Archetype result;
-    private boolean createOperationalTemplate;
+    private boolean createOperationalTemplate = false;
     private boolean removeLanguagesFromMetaData = false;
     private boolean useComplexObjectForArchetypeSlotReplacement = false;
 
@@ -79,7 +77,7 @@ public class Flattener {
                 result = template;
                 //make an operational template by just filling complex object proxies and archetype slots
                 fillSlots(template);
-                filterLanguages(template);
+                TerminologyFlattener.filterLanguages(template, removeLanguagesFromMetaData, languagesToKeep);
                 result = template;
             } else {
                 result = toFlatten.clone();
@@ -120,79 +118,36 @@ public class Flattener {
 
         //1. redefine structure
         //2. fill archetype slots if we are creating an operational template
-        flatten(result, child);//TODO: this way around, or the other one? :)
+        flattenDefinition(result, child);
+        if(createOperationalTemplate) {
+            removeZeroOccurrencesConstraints(result);
+        } else {
+            prohibitZeroOccurrencesConstraints(result);
+        }
 
         rulesFlattener.combineRules(child, result, "prefix", "", "", true /* override statements with same tag */);//TODO: actually set a unique prefix
         if(createOperationalTemplate) {
             fillSlots(result);
 
         }
-        flattenTerminology();
+        TerminologyFlattener.flattenTerminology(result, child);
 
         if(createOperationalTemplate) {
-            filterLanguages((OperationalTemplate) result);
+            TerminologyFlattener.filterLanguages((OperationalTemplate) result, removeLanguagesFromMetaData, languagesToKeep);
         }
         result.getDefinition().setArchetype(result);
         return result;
     }
 
-    /**
-     * Remove all languages from an archetype terminology unless listed in languages to keep.
-     * @param result
-     */
-    private void filterLanguages(OperationalTemplate result) {
-        if(languagesToKeep != null) {
-
-            Set<String> languagesSet = Sets.newHashSet(languagesToKeep);
-
-            filterLanguages(languagesSet, result.getTerminology());
-            for(ArchetypeTerminology terminology: result.getComponentTerminologies().values()) {
-                filterLanguages(languagesSet, terminology);
-            }
-            for(ArchetypeTerminology terminology: result.getTerminologyExtracts().values()) {
-                filterLanguages(languagesSet, terminology);
-            }
-
-            if(removeLanguagesFromMetaData) {
-                if(result.getDescription() != null) {
-                    filterLanguages(languagesSet, result.getDescription().getDetails());
-                }
-                if(result.getTranslations() != null) {
-                    filterLanguages(languagesSet, result.getTranslations());
-                }
-            }
-        }
-    }
-
-    private void filterLanguages(Set<String> languagesSet, ArchetypeTerminology terminology) {
-
-        filterLanguages(languagesSet, terminology.getTermDefinitions());
-        filterLanguages(languagesSet, terminology.getTerminologyExtracts());
-    }
-
-    private void filterLanguages(Set<String> languagesSet, Map<String, ?> termDefinitions) {
-        if(termDefinitions == null) {
-            return;
-        }
-        List<String> toRemove = new ArrayList<>();
-        for(String key: termDefinitions.keySet()) {
-            if(!languagesSet.contains(key)) {
-                toRemove.add(key);
-            }
-        }
-        for(String key:toRemove) {
-            termDefinitions.remove(key);
-        }
-    }
 
     public void fillSlots(Archetype archetype) { //should this be OperationalTemplate?
         fillComplexObjectProxies(archetype);
         closeArchetypeSlots(archetype);
         fillArchetypeRoots(archetype);
-        removeZeroOccurrencesConstraints(archetype);
 
     }
 
+    /** Zero occurrences and existence constraint processing when creating OPT templates. Removes attributes */
     private void removeZeroOccurrencesConstraints(Archetype archetype) {
         Stack<CObject> workList = new Stack<>();
         workList.push(archetype.getDefinition());
@@ -215,6 +170,32 @@ public class Flattener {
 
             }
             object.getAttributes().removeAll(attributesToRemove);
+        }
+    }
+
+    /** Zero occurrences and existence constraint processing when flattening. Does not remove attributes*/
+    private void prohibitZeroOccurrencesConstraints(Archetype archetype) {
+        Stack<CObject> workList = new Stack<>();
+        workList.push(archetype.getDefinition());
+        while(!workList.isEmpty()) {
+            CObject object = workList.pop();
+            for(CAttribute attribute:object.getAttributes()) {
+                if(attribute.getExistence() != null && attribute.getExistence().getUpper() == 0 && !attribute.getExistence().isUpperUnbounded()) {
+                    //remove children, but do not remove attribute itself to make sure it stays prohibited
+                    attribute.setChildren(new ArrayList<>());
+                } else {
+                    List<CObject> objectsToRemove = new ArrayList<>();
+                    for (CObject child : attribute.getChildren()) {
+                        if (!child.isAllowed()) {
+                            objectsToRemove.add(child);
+                        }
+                        workList.push(child);
+                    }
+                    attribute.getChildren().removeAll(objectsToRemove);
+                }
+
+            }
+
         }
     }
 
@@ -281,18 +262,15 @@ public class Flattener {
     }
 
     private ComplexObjectProxyReplacement getComplexObjectProxyReplacement(CComplexObjectProxy proxy) {
-        if(createOperationalTemplate) {
-            CObject newObject = new APathQuery(proxy.getTargetPath()).find(proxy.getArchetype().getDefinition());
-            if(newObject == null) {
-                throw new RuntimeException("cannot find target in CComplexObjectProxy");
-            } else {
-                CComplexObject clone = (CComplexObject) newObject.clone();
-                clone.setNodeId(proxy.getNodeId());
-                return new ComplexObjectProxyReplacement(proxy, clone);
+        CObject newObject = new APathQuery(proxy.getTargetPath()).find(proxy.getArchetype().getDefinition());
+        if(newObject == null) {
+            throw new RuntimeException("cannot find target in CComplexObjectProxy");
+        } else {
+            CComplexObject clone = (CComplexObject) newObject.clone();
+            clone.setNodeId(proxy.getNodeId());
+            return new ComplexObjectProxyReplacement(proxy, clone);
 
-            }
         }
-        return null;
     }
 
     /**
@@ -346,13 +324,11 @@ public class Flattener {
 
             //The node id will be replaced from "id1" to something like "openEHR-EHR-COMPOSITION.template_overlay.v1.0.0
             //so store it in the terminology as well
-            //TODO: value sets, term bindings, etc.
             Map<String, Map<String, ArchetypeTerm>> termDefinitions = terminology.getTermDefinitions();
+
             for(String language: termDefinitions.keySet()) {
                 Map<String, ArchetypeTerm> translations = termDefinitions.get(language);
-                ArchetypeTerm term = translations.get(archetype.getDefinition().getNodeId());
-                translations.put(newNodeId, term);
-                //translations.put(root.getNodeId(), term);
+                translations.put(newNodeId, TerminologyFlattener.getTerm(terminology.getTermDefinitions(), language, archetype.getDefinition().getNodeId()));
             }
 
             //rootToFill.setNodeId(newNodeId);
@@ -381,48 +357,8 @@ public class Flattener {
     }
 
 
-    private void flattenTerminology() {
 
-        ArchetypeTerminology resultTerminology = result.getTerminology();
-        ArchetypeTerminology childTerminology = child.getTerminology();
 
-        flattenTerminologyDefinitions(resultTerminology.getTermDefinitions(), childTerminology.getTermDefinitions());
-        flattenTerminologyDefinitions(resultTerminology.getTerminologyExtracts(), childTerminology.getTerminologyExtracts());
-        flattenTerminologyDefinitions(resultTerminology.getTermBindings(), childTerminology.getTermBindings());
-        resultTerminology.setDifferential(false);//TODO: correct?
-
-        Map<String, ValueSet> childValueSets = childTerminology.getValueSets();
-        Map<String, ValueSet> resultValueSets = resultTerminology.getValueSets();
-
-        flattenValueSets(childValueSets, resultValueSets);
-    }
-
-    private void flattenValueSets(Map<String, ValueSet> childValueSets, Map<String, ValueSet> resultValueSets) {
-        for(String key:childValueSets.keySet()) {
-            ValueSet childValueSet = childValueSets.get(key);
-            if(!resultValueSets.containsKey(key)) {
-                resultValueSets.put(key, childValueSet);
-            } else {
-                ValueSet resultValueSet = resultValueSets.get(key);
-                for(String member:childValueSet.getMembers()) {
-                    resultValueSet.addMember(member);
-                }
-            }
-        }
-    }
-
-    private <T> void flattenTerminologyDefinitions(Map<String, Map<String, T>> resultTermDefinitions, Map<String, Map<String, T>> childTermDefinitions) {
-        for(String language:childTermDefinitions.keySet()) {
-            if(!resultTermDefinitions.containsKey(language)) {
-                resultTermDefinitions.put(language, childTermDefinitions.get(language));
-            } else {
-                for(String nodeId:childTermDefinitions.get(language).keySet()) {
-                    resultTermDefinitions.get(language)
-                            .put(nodeId, childTermDefinitions.get(language).get(nodeId));
-                }
-            }
-        }
-    }
 
     private static OperationalTemplate createOperationalTemplate(Archetype archetype) {
         Archetype toClone = archetype.clone(); //clone so we do not overwrite the parent archetype. never
@@ -450,69 +386,88 @@ public class Flattener {
         result.setParentArchetypeId(override.getParentArchetypeId());
     }
 
-    private void flatten(Archetype parent, Archetype specialized) {
+    private void flattenDefinition(Archetype parent, Archetype specialized) {
         parent.setArchetypeId(specialized.getArchetypeId()); //TODO: override all metadata?
         flattenCObject(null, parent.getDefinition(), Lists.newArrayList(specialized.getDefinition()));
 
     }
 
     private void flattenCObject(CAttribute attribute, CObject parent, List<CObject> specializedList) {
-        List<CObject> toReplaceParentWith = new ArrayList<CObject>();
+        List<CObject> newNodes = new ArrayList<>();
         for(CObject specialized:specializedList) {
-            CObject newObject;
-            if(attribute == null) {
-                //root of archetype. don't clone anything.. alternative: make a mock attribute at the root
-                newObject = parent;
-            } else {
-                newObject = (CObject) parent.clone();
-            }
-            if(newObject instanceof ArchetypeSlot && specialized instanceof CArchetypeRoot) {
-                newObject = (CObject) specialized.clone();
-            }
-            newObject.setOccurrences(getPossiblyOverridenValue(newObject.getOccurrences(), specialized.getOccurrences()));
+            CObject newObject = cloneSpecializedObject(attribute, parent, specialized);
+
+            specializeOccurrences(specialized, newObject);
             newObject.setSiblingOrder(getPossiblyOverridenValue(newObject.getSiblingOrder(), specialized.getSiblingOrder()));
 
             newObject.setNodeId(getPossiblyOverridenValue(newObject.getNodeId(), specialized.getNodeId()));
             newObject.setRmTypeName(getPossiblyOverridenValue(newObject.getRmTypeName(), specialized.getRmTypeName()));
-            //        if(specialized != null && specialized instanceof CArchetypeRoot) {
-            //            fillArchetypeRoot(parent, (CArchetypeRoot) specialized);
-            //        }
-            if (parent instanceof CComplexObject) {
-                flattenCComplexObject((CComplexObject) newObject, (CComplexObject) specialized);
-            }
-            else if (newObject instanceof ArchetypeSlot) {//archetypeslot is NOT a complex object. It's replacement can be
-                if(specialized instanceof ArchetypeSlot) {
-                    flattenArchetypeSlot((ArchetypeSlot) newObject, (ArchetypeSlot) specialized);
-                } else if(specialized instanceof CArchetypeRoot) {
-                    //TODO: handle as if this is a template overlay, but inline. Probably needed in the fillArchetypeRoot method, not here?
-                } else {
-                    throw new IllegalArgumentException("Can only replace an archetype slot with an archetype root or another archetype slot, not with a " + newObject.getClass());
-                }
-            }
-            toReplaceParentWith.add(newObject);
+
+            //now specialize the structure under the specialized node
+            specializeContent(parent, specialized, newObject);
+
+            newNodes.add(newObject);
         }
 
-        if(attribute != null && !toReplaceParentWith.isEmpty()) {
-            boolean shouldReplaceParent = shouldReplaceParent(parent, toReplaceParentWith);
-            attribute.replaceChildren(parent.getNodeId(), toReplaceParentWith, !shouldReplaceParent /* remove original */);
+        if(attribute != null && !newNodes.isEmpty()) {
+            boolean shouldReplaceParent = shouldReplaceParent(parent, newNodes);
+            attribute.replaceChildren(parent.getNodeId(), newNodes, !shouldReplaceParent /* remove original */);
         }
-
     }
 
-    private boolean shouldReplaceParent(CObject parent, List<CObject> toReplaceParentWith) {
-        boolean shouldReplaceParent = true;
-        if (parent instanceof ArchetypeSlot) {
-            //only replace the parent if a new archetype slot is present.
-            //closing is an explicit operation
-            //TODO: double check specs on this for other objects
-            shouldReplaceParent = false;
-            for (CObject object : toReplaceParentWith) {
-                if (object instanceof ArchetypeSlot) {
-                    shouldReplaceParent = true;
-                }
+    private void specializeContent(CObject parent, CObject specialized, CObject newObject) {
+        if (parent instanceof CComplexObject) {
+            flattenCComplexObject((CComplexObject) newObject, (CComplexObject) specialized);
+        }
+        else if (newObject instanceof ArchetypeSlot) {//archetypeslot is NOT a complex object. It's replacement can be
+            if(specialized instanceof ArchetypeSlot) {
+                flattenArchetypeSlot((ArchetypeSlot) newObject, (ArchetypeSlot) specialized);
+            } else if(specialized instanceof CArchetypeRoot) {
+                //TODO: handle as if this is a template overlay, but inline. Probably needed in the fillArchetypeRoot method, not here?
+            } else {
+                throw new IllegalArgumentException("Can only replace an archetype slot with an archetype root or another archetype slot, not with a " + newObject.getClass());
             }
         }
-        return shouldReplaceParent;
+    }
+
+    private void specializeOccurrences(CObject specialized, CObject newObject) {
+        //TODO: check if overriding occurrences is allowed
+        newObject.setOccurrences(getPossiblyOverridenValue(newObject.getOccurrences(), specialized.getOccurrences()));
+    }
+
+    private CObject cloneSpecializedObject(CAttribute attribute, CObject parent, CObject specialized) {
+        CObject newObject;
+        if(attribute == null) {
+            //root of archetype. don't clone anything.. alternative: make a mock attribute at the root
+            newObject = parent;
+        } else {
+            newObject = (CObject) parent.clone();
+        }
+        if(newObject instanceof ArchetypeSlot && specialized instanceof CArchetypeRoot) {
+            newObject = (CObject) specialized.clone();
+        }
+        return newObject;
+    }
+
+    private boolean shouldReplaceParent(CObject parent, List<CObject> differentialNodes) {
+        for(CObject differentialNode: differentialNodes) {
+            if(differentialNode.getNodeId().equals(parent.getNodeId())) {
+                //same node id, so no specialization
+                return true;
+            }
+        }
+        if(parent.getParent().isSingle()) {
+            return true;
+        } else if(parent.getOccurrences() != null && parent.getOccurrences().upperIsOne()) {
+            //REFINE the parent node case 1, the parent has occurrences upper == 1
+            return true;
+        } else if (differentialNodes.size() == 1
+                && differentialNodes.get(0).getOccurrences() != null
+                && differentialNodes.get(0).getOccurrences().upperIsOne()) {
+            //REFINE the parent node case 2, only one child with occurrences upper == 1
+            return true;
+        }
+        return false;
     }
 
     private void flattenArchetypeSlot(ArchetypeSlot parent, ArchetypeSlot specialized) {
@@ -525,23 +480,90 @@ public class Flattener {
         //TODO: includes/excludes?
     }
 
-    private void flattenCComplexObject(CComplexObject parent, CComplexObject specialized) {
+    /**
+     * Flatten a CComplexObject. newObject must be a clone of the original parent, specialized the original unmodified
+     * specialized node.
+     *
+     * The attributes of newObject will be changed in place, so newObject will be altered in this operation
+     *
+     * @param newObject
+     * @param specialized
+     */
+    private void flattenCComplexObject(CComplexObject newObject, CComplexObject specialized) {
 
         for(CAttribute attribute:specialized.getAttributes()) {
-            if(attribute.getDifferentialPath() != null) {
-                //this overrides a specific path
-                ArchetypeModelObject object = new APathQuery(attribute.getDifferentialPath()).find(parent);
-                if(object instanceof CAttribute) {
-                    CAttribute realAttribute = (CAttribute) object;
-                    flattenAttribute(parent, realAttribute, attribute);
-                } else if (object instanceof CObject) {
-                    //TODO: what does this mean?
-                }
+            flattenSingleAttribute(newObject, attribute);
+        }
+        for(CAttributeTuple tuple:specialized.getAttributeTuples()) {
+            flattenTuple(newObject, tuple);
+        }
+    }
 
-            } else {
-                //this overrides the same path
-                flattenAttribute(parent, parent.getAttribute(attribute.getRmAttributeName()), attribute);
+    private void flattenTuple(CComplexObject newObject, CAttributeTuple tuple) {
+        CAttributeTuple matchingTuple = findMatchingTuple(newObject.getAttributeTuples(), tuple);
+
+
+        CAttributeTuple tupleClone = (CAttributeTuple) tuple.clone();
+        if(matchingTuple == null) {
+            //add
+            newObject.addAttributeTuple(tupleClone);
+        } else {
+            //replace
+            newObject.getAttributeTuples().remove(matchingTuple);
+            newObject.addAttributeTuple(tupleClone);
+        }
+        for(CAttribute attribute:tupleClone.getMembers()){
+            //replace the entire attribute with the attribute from the new tuple
+            //this should be all there is to do.
+            newObject.replaceAttribute(attribute);
+        }
+        //update all parent references
+        for(CPrimitiveTuple primitiveTuple:tupleClone.getTuples()) {
+            int i = 0;
+            for(CPrimitiveObject object:primitiveTuple.getMembers()) {
+                object.setSocParent(primitiveTuple);
+                object.setParent((tupleClone.getMembers().get(i)));
+                i++;
             }
+        }
+    }
+
+    private CAttributeTuple findMatchingTuple(List<CAttributeTuple> attributeTuples, CAttributeTuple specializedTuple) {
+        return attributeTuples.stream()
+                .filter((existingTuple) -> existingTuple.getMemberNames().equals(specializedTuple.getMemberNames()))
+                .findAny().orElse(null);
+    }
+
+    private void flattenSingleAttribute(CComplexObject newObject, CAttribute attribute) {
+        if(attribute.getDifferentialPath() != null) {
+            //this overrides a specific path
+            ArchetypeModelObject object = new APathQuery(attribute.getDifferentialPath()).find(newObject);
+            if(object == null) {
+                //it is possible that the object points to a reference, in which case we need to clone the referenced node, then try again
+                //AOM spec paragraph 7.2: 'proxy reference targets are expanded inline if the child archetype overrides them.'
+                //also examples in ADL2 spec about internal references
+                //so find the internal references here!
+                CComplexObjectProxy internalReference = new APathQuery(attribute.getDifferentialPath()).findAnyInternalReference(newObject);
+                if(internalReference != null) {
+                    //in theory this can be a use node within a use node.
+                    ComplexObjectProxyReplacement complexObjectProxyReplacement = getComplexObjectProxyReplacement(internalReference);
+                    if(complexObjectProxyReplacement != null) {
+                        complexObjectProxyReplacement.replace();
+                        //and again!
+                        flattenSingleAttribute(newObject, attribute);
+                    }
+                }
+            }
+            else if(object instanceof CAttribute) {
+                CAttribute realAttribute = (CAttribute) object;
+                flattenAttribute(newObject, realAttribute, attribute);
+            } else if (object instanceof CObject) {
+                //TODO: what does this mean?
+            }
+
+        } else {
+            //this overrides the same path
+            flattenAttribute(newObject, newObject.getAttribute(attribute.getRmAttributeName()), attribute);
         }
     }
 
@@ -560,9 +582,10 @@ public class Flattener {
             CAttribute childCloned = specialized.clone();
             root.addAttribute(childCloned);
         } else {
-            parent.setMultiple(getPossiblyOverridenValue(parent.isMultiple(), specialized.isMultiple()));
+
             parent.setExistence(getPossiblyOverridenValue(parent.getExistence(), specialized.getExistence()));
             parent.setCardinality(getPossiblyOverridenValue(parent.getCardinality(), specialized.getCardinality()));
+
             if (specialized.getChildren().size() > 0 && specialized.getChildren().get(0) instanceof CPrimitiveObject) {
                 //TODO: is this correct? replace all specialized nodes
                 parent.setChildren(specialized.getChildren());
@@ -573,7 +596,7 @@ public class Flattener {
                     List<CObject> matchingChildren = new ArrayList<>();
                     for (CObject specializedChildCObject : specialized.getChildren()) {
 
-                        if (isOverridenCObject(specializedChildCObject, parentCObject)) { //TODO: we now replace the node. but it's possible to replace one node by multiple ones in the archetype
+                        if (isOverridenCObject(specializedChildCObject, parentCObject)) {
                             matchingChildren.add(specializedChildCObject);
                             newChildObjects.remove(specializedChildCObject);
                         }
@@ -581,7 +604,9 @@ public class Flattener {
                     }
                     flattenCObject(parent, parentCObject, matchingChildren);
                 }
+
                 for(CObject newChild:newChildObjects) {
+                    //TODO: check that newChildObjects start with id0. at the correct specialization level
                     parent.addChild(newChild);
                 }
             }
@@ -589,12 +614,17 @@ public class Flattener {
 
     }
 
-    private boolean isOverridenCObject(CObject childObject, CObject possibleMatch) {
-        String childNode = childObject.getNodeId();
-        if(childObject.getNodeId().lastIndexOf('.') > 0) {
-            childNode = childObject.getNodeId().substring(0, childObject.getNodeId().lastIndexOf('.'));//-1?
+    private boolean isOverridenCObject(CObject specialized, CObject parent) {
+        String specializedNodeId = specialized.getNodeId();
+        String parentNodeId = parent.getNodeId();
+        return isOverriddenIdCode(specializedNodeId, parentNodeId);
+    }
+
+    public static boolean isOverriddenIdCode(String specializedNodeId, String parentNodeId) {
+        if(specializedNodeId.lastIndexOf('.') > 0) {
+            specializedNodeId = specializedNodeId.substring(0, specializedNodeId.lastIndexOf('.'));//-1?
         }
-        return childNode.startsWith(possibleMatch.getNodeId());
+        return specializedNodeId.equals(parentNodeId) || specializedNodeId.startsWith(parentNodeId + ".");
     }
 
     private List<Assertion> getPossiblyOverridenListValue(List<Assertion> parent, List<Assertion> child) {

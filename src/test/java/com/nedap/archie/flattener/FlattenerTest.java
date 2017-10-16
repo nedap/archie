@@ -25,9 +25,8 @@ import java.util.Stack;
 import static org.junit.Assert.*;
 
 /**
- * TODO: all this tests is that the flattener runs, with some diagnostic JSON-output. Implement way more tests.
- *
- *
+ * High level tests of the flattener on a relatively large set of archetypes with many features.
+ * Tests basics like object consistency.
  * Created by pieter.bos on 21/10/15.
  */
 public class FlattenerTest {

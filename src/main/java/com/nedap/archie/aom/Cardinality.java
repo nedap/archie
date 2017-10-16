@@ -1,12 +1,17 @@
 package com.nedap.archie.aom;
 
+import com.google.common.base.Joiner;
 import com.nedap.archie.base.MultiplicityInterval;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+
+import static com.nedap.archie.serializer.adl.ArchetypeSerializeUtils.buildOccurrences;
 
 /**
  * Created by pieter.bos on 18/10/15.
@@ -74,5 +79,23 @@ public class Cardinality extends ArchetypeModelObject {
                     Objects.equals(interval, otherCardinality.interval);
         }
         return false;
+    }
+
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("cardinality matches {");
+        builder.append(interval.toString());
+        builder.append("}");
+        List<String> tags = new ArrayList<>();
+        if (!isOrdered()) {
+            tags.add("unordered");
+        }
+        if (isUnique()) {
+            tags.add("unique");
+        }
+        if (!tags.isEmpty()) {
+            builder.append("; ").append(Joiner.on("; ").join(tags));
+        }
+        return builder.toString();
     }
 }

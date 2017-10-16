@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import com.nedap.archie.aom.ArchetypeModelObject;
 import com.nedap.archie.aom.CAttribute;
 import com.nedap.archie.aom.CComplexObject;
+import com.nedap.archie.aom.CComplexObjectProxy;
 import com.nedap.archie.aom.CObject;
 import com.nedap.archie.aom.CPrimitiveObject;
 import com.nedap.archie.paths.PathSegment;
@@ -124,14 +125,16 @@ public class APathQuery {
             if(object instanceof CObject) {
                 CObject cobject = (CObject) object;
                 CAttribute attribute = cobject.getAttribute(pathSegment.getNodeName());
-                if(pathSegment.hasIdCode() || pathSegment.hasArchetypeRef()) {
-                    result.add(attribute.getChild(pathSegment.getNodeId()));
-                } else if(pathSegment.hasNumberIndex()) {
-                    result.add(attribute.getChildren().get(pathSegment.getIndex()-1));//APath path numbers start at 1 instead of 0
-                } else if(pathSegment.getNodeId() != null) {
-                    result.add(attribute.getChildByMeaning(pathSegment.getNodeId()));//TODO: the ANTLR grammar removes all whitespace. what to do here?
-                } else {
-                    result.add(attribute);
+                if(attribute != null) {
+                    if (pathSegment.hasIdCode() || pathSegment.hasArchetypeRef()) {
+                        result.add(attribute.getChild(pathSegment.getNodeId()));
+                    } else if (pathSegment.hasNumberIndex()) {
+                        result.add(attribute.getChildren().get(pathSegment.getIndex() - 1));//APath path numbers start at 1 instead of 0
+                    } else if (pathSegment.getNodeId() != null) {
+                        result.add(attribute.getChildByMeaning(pathSegment.getNodeId()));//TODO: the ANTLR grammar removes all whitespace. what to do here?
+                    } else {
+                        result.add(attribute);
+                    }
                 }
             }
         }
@@ -513,5 +516,26 @@ public class APathQuery {
 
     public List<PathSegment> getPathSegments() {
         return pathSegments;
+    }
+
+
+    /**
+     * Find any CComplexObjectProxy anywhere inside the APath query. Can be at the end of the full query, at the first matching CComplexObjectProxy or anywhere in between
+     * Useful mainly when flattening, probably does not have many other uses
+     */
+    public CComplexObjectProxy findAnyInternalReference(CComplexObject root) {
+        List<ArchetypeModelObject> result = new ArrayList<>();
+        result.add(root);
+        for(PathSegment segment:this.pathSegments) {
+            if (result.size() == 0) {
+                return null;
+            }
+            result = findOneSegment(segment, result);
+            if(result.size() == 1 && result.get(0) instanceof CComplexObjectProxy) {
+                return (CComplexObjectProxy) result.get(0);
+            }
+        }
+        return null;
+
     }
 }
