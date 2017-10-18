@@ -7,7 +7,7 @@ import com.nedap.archie.base.Interval;
 /**
  * Created by pieter.bos on 06/07/16.
  */
-public class ArchieAOMInfoLookup extends ModelInfoLookup {
+public class ArchieAOMInfoLookup extends ReflectionModelInfoLookup {
 
     private static ArchieAOMInfoLookup instance;
 

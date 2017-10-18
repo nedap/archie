@@ -1,16 +1,10 @@
 package com.nedap.archie.adlparser.modelconstraints;
 
 import com.nedap.archie.aom.CAttribute;
-import com.nedap.archie.aom.CComplexObject;
 import com.nedap.archie.aom.Cardinality;
 import com.nedap.archie.base.MultiplicityInterval;
-import com.nedap.archie.rminfo.ModelInfoLookup;
+import com.nedap.archie.rminfo.ReflectionModelInfoLookup;
 import com.nedap.archie.rminfo.RMAttributeInfo;
-import com.nedap.archie.rminfo.RMTypeInfo;
-
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * ModelConstraintImposer that checks the constraint with java-reflection. javax.annotation.NonNull is implemented
@@ -24,9 +18,9 @@ public class ReflectionConstraintImposer implements ModelConstraintImposer {
 
     /** Contains complex object structure of the specified model. Attributes NEVER will have children. Sorry bout that :)*/
 
-    private ModelInfoLookup lookup;
+    private ReflectionModelInfoLookup lookup;
 
-    public ReflectionConstraintImposer(ModelInfoLookup classLookup) {
+    public ReflectionConstraintImposer(ReflectionModelInfoLookup classLookup) {
         this.lookup = classLookup;
     }
 

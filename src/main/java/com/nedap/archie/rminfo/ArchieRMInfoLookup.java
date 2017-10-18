@@ -12,7 +12,7 @@ import com.nedap.archie.rm.datavalues.DvCodedText;
 /**
  * Created by pieter.bos on 02/02/16.
  */
-public class ArchieRMInfoLookup extends ModelInfoLookup {
+public class ArchieRMInfoLookup extends ReflectionModelInfoLookup {
 
     private static ArchieRMInfoLookup instance;
 

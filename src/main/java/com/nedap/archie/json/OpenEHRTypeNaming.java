@@ -8,10 +8,8 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.nedap.archie.base.OpenEHRBase;
 import com.nedap.archie.rminfo.ArchieAOMInfoLookup;
 import com.nedap.archie.rminfo.ArchieRMInfoLookup;
-import com.nedap.archie.rminfo.ModelInfoLookup;
+import com.nedap.archie.rminfo.ReflectionModelInfoLookup;
 import com.nedap.archie.rminfo.RMTypeInfo;
-
-import java.io.IOException;
 
 /**
  * Class that handles naming of Archie RM and AOM objects for use in Jackson.
@@ -21,8 +19,8 @@ import java.io.IOException;
  */
 public class OpenEHRTypeNaming extends ClassNameIdResolver {
 
-    private ModelInfoLookup rmInfoLookup = ArchieRMInfoLookup.getInstance();
-    private ModelInfoLookup aomInfoLookup = ArchieAOMInfoLookup.getInstance();
+    private ReflectionModelInfoLookup rmInfoLookup = ArchieRMInfoLookup.getInstance();
+    private ReflectionModelInfoLookup aomInfoLookup = ArchieAOMInfoLookup.getInstance();
 
     protected OpenEHRTypeNaming() {
         super(TypeFactory.defaultInstance().constructType(OpenEHRBase.class), TypeFactory.defaultInstance());

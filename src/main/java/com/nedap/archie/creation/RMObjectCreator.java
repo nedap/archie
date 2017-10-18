@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import com.nedap.archie.aom.CObject;
 import com.nedap.archie.rm.archetyped.Locatable;
 import com.nedap.archie.rminfo.ArchieRMInfoLookup;
-import com.nedap.archie.rminfo.ModelInfoLookup;
+import com.nedap.archie.rminfo.ReflectionModelInfoLookup;
 import com.nedap.archie.rminfo.RMAttributeInfo;
 
 import java.lang.reflect.InvocationTargetException;
@@ -23,13 +23,13 @@ import java.util.Set;
  */
 public class RMObjectCreator {
 
-    private final ModelInfoLookup classLookup;
+    private final ReflectionModelInfoLookup classLookup;
 
     public RMObjectCreator(){
         this(ArchieRMInfoLookup.getInstance());
     }
 
-    public RMObjectCreator(ModelInfoLookup lookup) {
+    public RMObjectCreator(ReflectionModelInfoLookup lookup) {
         this.classLookup = lookup;
     }
 
