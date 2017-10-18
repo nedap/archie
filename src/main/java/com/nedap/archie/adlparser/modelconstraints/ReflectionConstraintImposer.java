@@ -3,6 +3,7 @@ package com.nedap.archie.adlparser.modelconstraints;
 import com.nedap.archie.aom.CAttribute;
 import com.nedap.archie.aom.Cardinality;
 import com.nedap.archie.base.MultiplicityInterval;
+import com.nedap.archie.rminfo.ModelInfoLookup;
 import com.nedap.archie.rminfo.ReflectionModelInfoLookup;
 import com.nedap.archie.rminfo.RMAttributeInfo;
 
@@ -18,9 +19,9 @@ public class ReflectionConstraintImposer implements ModelConstraintImposer {
 
     /** Contains complex object structure of the specified model. Attributes NEVER will have children. Sorry bout that :)*/
 
-    private ReflectionModelInfoLookup lookup;
+    private ModelInfoLookup lookup;
 
-    public ReflectionConstraintImposer(ReflectionModelInfoLookup classLookup) {
+    public ReflectionConstraintImposer(ModelInfoLookup classLookup) {
         this.lookup = classLookup;
     }
 

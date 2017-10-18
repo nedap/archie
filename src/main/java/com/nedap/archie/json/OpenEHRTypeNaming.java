@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.nedap.archie.base.OpenEHRBase;
 import com.nedap.archie.rminfo.ArchieAOMInfoLookup;
 import com.nedap.archie.rminfo.ArchieRMInfoLookup;
+import com.nedap.archie.rminfo.ModelInfoLookup;
 import com.nedap.archie.rminfo.ReflectionModelInfoLookup;
 import com.nedap.archie.rminfo.RMTypeInfo;
 
@@ -19,8 +20,8 @@ import com.nedap.archie.rminfo.RMTypeInfo;
  */
 public class OpenEHRTypeNaming extends ClassNameIdResolver {
 
-    private ReflectionModelInfoLookup rmInfoLookup = ArchieRMInfoLookup.getInstance();
-    private ReflectionModelInfoLookup aomInfoLookup = ArchieAOMInfoLookup.getInstance();
+    private ModelInfoLookup rmInfoLookup = ArchieRMInfoLookup.getInstance();
+    private ModelInfoLookup aomInfoLookup = ArchieAOMInfoLookup.getInstance();
 
     protected OpenEHRTypeNaming() {
         super(TypeFactory.defaultInstance().constructType(OpenEHRBase.class), TypeFactory.defaultInstance());

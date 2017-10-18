@@ -19,12 +19,6 @@ import java.util.List;
  */
 public abstract class ValidatingVisitor implements ArchetypeValidation {
 
-    protected ReflectionModelInfoLookup lookup;
-
-    public ValidatingVisitor(ReflectionModelInfoLookup lookup) {
-        this.lookup = lookup;
-    }
-
     public ValidatingVisitor() {
 
     }

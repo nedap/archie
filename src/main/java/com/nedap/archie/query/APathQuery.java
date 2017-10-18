@@ -10,6 +10,7 @@ import com.nedap.archie.aom.CObject;
 import com.nedap.archie.aom.CPrimitiveObject;
 import com.nedap.archie.paths.PathSegment;
 import com.nedap.archie.rm.archetyped.Locatable;
+import com.nedap.archie.rminfo.ModelInfoLookup;
 import com.nedap.archie.rminfo.ReflectionModelInfoLookup;
 import com.nedap.archie.rminfo.RMAttributeInfo;
 import com.nedap.archie.util.NamingUtil;
@@ -222,7 +223,7 @@ public class APathQuery {
      * For querying CObjects there is no other solution yet.
      */
     @Deprecated
-    public <T> T find(ReflectionModelInfoLookup lookup, Object root) {
+    public <T> T find(ModelInfoLookup lookup, Object root) {
         Object currentObject = root;
         try {
             for (PathSegment segment : pathSegments) {
@@ -290,7 +291,7 @@ public class APathQuery {
     /**
      * You will want to use RMQueryContext in many cases. For perforamnce reasons, this could still be useful
      */
-    public <T> List<RMObjectWithPath> findList(ReflectionModelInfoLookup lookup, Object root) {
+    public <T> List<RMObjectWithPath> findList(ModelInfoLookup lookup, Object root) {
         List<RMObjectWithPath> currentObjects = Lists.newArrayList(new RMObjectWithPath(root, "/"));
         try {
             for (PathSegment segment : pathSegments) {

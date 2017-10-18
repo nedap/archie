@@ -1,5 +1,6 @@
 package com.nedap.archie.aom;
 
+import com.nedap.archie.rminfo.ModelInfoLookup;
 import com.nedap.archie.rminfo.ReflectionModelInfoLookup;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -80,7 +81,7 @@ public abstract class CPrimitiveObject<Constraint, ValueType> extends CDefinedOb
      * @param value
      * @return
      */
-    public boolean isValidValue(ReflectionModelInfoLookup lookup, Object value) {
+    public boolean isValidValue(ModelInfoLookup lookup, Object value) {
         Object convertedValue = lookup.convertToConstraintObject(value, this);
         return isValidValue((ValueType) convertedValue);
     }

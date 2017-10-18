@@ -29,7 +29,7 @@ import static org.junit.Assert.*;
  */
 public class ArchieRMInfoLookupTest {
 
-    private ReflectionModelInfoLookup modelInfoLookup = ArchieRMInfoLookup.getInstance();
+    private ModelInfoLookup modelInfoLookup = ArchieRMInfoLookup.getInstance();
 
     @Test
     public void classForRMType() {

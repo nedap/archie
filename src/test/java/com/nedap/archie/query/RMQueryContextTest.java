@@ -9,6 +9,7 @@ import com.nedap.archie.rm.archetyped.Pathable;
 import com.nedap.archie.rm.composition.Composition;
 import com.nedap.archie.rm.datavalues.DvText;
 import com.nedap.archie.rminfo.ArchieRMInfoLookup;
+import com.nedap.archie.rminfo.ModelInfoLookup;
 import com.nedap.archie.rminfo.ReflectionModelInfoLookup;
 import com.nedap.archie.testutil.TestUtil;
 import org.junit.Before;
@@ -71,7 +72,7 @@ public class RMQueryContextTest {
 
         RMQueryContext queryContext = new RMQueryContext(root);
 
-        ReflectionModelInfoLookup modelInfoLookup = ArchieRMInfoLookup.getInstance();
+        ModelInfoLookup modelInfoLookup = ArchieRMInfoLookup.getInstance();
 
         List<RMObjectWithPath> context = new APathQuery("/context")
                 .findList(modelInfoLookup, composition);
@@ -101,7 +102,7 @@ public class RMQueryContextTest {
 
         RMQueryContext queryContext = new RMQueryContext(root);
 
-        ReflectionModelInfoLookup modelInfoLookup = ArchieRMInfoLookup.getInstance();
+        ModelInfoLookup modelInfoLookup = ArchieRMInfoLookup.getInstance();
 
         List<RMObjectWithPath> context = new APathQuery("/context")
                 .findList(modelInfoLookup, composition);

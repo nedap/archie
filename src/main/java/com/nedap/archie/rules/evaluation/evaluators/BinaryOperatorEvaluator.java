@@ -2,6 +2,7 @@ package com.nedap.archie.rules.evaluation.evaluators;
 
 import com.google.common.collect.Lists;
 import com.nedap.archie.rminfo.ArchieRMInfoLookup;
+import com.nedap.archie.rminfo.ModelInfoLookup;
 import com.nedap.archie.rminfo.ReflectionModelInfoLookup;
 import com.nedap.archie.rules.BinaryOperator;
 import com.nedap.archie.rules.Constraint;
@@ -28,7 +29,7 @@ public class BinaryOperatorEvaluator implements Evaluator<BinaryOperator> {
     private BinaryBooleanOperandEvaluator booleanOperandEvaluator = new BinaryBooleanOperandEvaluator(this);
     private BinaryStringOperandEvaluator stringOperandEvaluator = new BinaryStringOperandEvaluator(this);
 
-    private ReflectionModelInfoLookup lookup = ArchieRMInfoLookup.getInstance(); //for now only the archie rm model for rule evaluation
+    private ModelInfoLookup lookup = ArchieRMInfoLookup.getInstance(); //for now only the archie rm model for rule evaluation
 
     @Override
     public ValueList evaluate(RuleEvaluation evaluation, BinaryOperator statement) {

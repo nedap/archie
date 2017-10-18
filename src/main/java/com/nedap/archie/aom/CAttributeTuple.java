@@ -1,6 +1,7 @@
 package com.nedap.archie.aom;
 
 import com.nedap.archie.rminfo.ArchieRMInfoLookup;
+import com.nedap.archie.rminfo.ModelInfoLookup;
 import com.nedap.archie.rminfo.ReflectionModelInfoLookup;
 import com.nedap.archie.rminfo.RMAttributeInfo;
 
@@ -53,7 +54,7 @@ public class CAttributeTuple extends CSecondOrder<CAttribute> {
      * Given a hashmap of attribute names mapping to its values, check the validity of this set of values
      * return true if and only if the given values are valid.
      */
-    public boolean isValid(ReflectionModelInfoLookup lookup, HashMap<String, Object> values) {
+    public boolean isValid(ModelInfoLookup lookup, HashMap<String, Object> values) {
         for(CAttribute attribute:getMembers()) {
             if(!values.containsKey(attribute.getRmAttributeName())) {
                 return false;
@@ -69,7 +70,7 @@ public class CAttributeTuple extends CSecondOrder<CAttribute> {
     }
 
 
-    private boolean isValid(ReflectionModelInfoLookup lookup, CPrimitiveTuple tuple, HashMap<String, Object> values) {
+    private boolean isValid(ModelInfoLookup lookup, CPrimitiveTuple tuple, HashMap<String, Object> values) {
 
         int index = 0;
         for(CAttribute attribute:getMembers()) {
@@ -94,7 +95,7 @@ public class CAttributeTuple extends CSecondOrder<CAttribute> {
      * Given a reference model object, check if it is valid
      * return true if and only if the given values are valid.
      */
-    public boolean isValid(ReflectionModelInfoLookup lookup, Object value) {
+    public boolean isValid(ModelInfoLookup lookup, Object value) {
 
         HashMap<String, Object> members = new HashMap();
         for(CAttribute attribute:getMembers()) {
