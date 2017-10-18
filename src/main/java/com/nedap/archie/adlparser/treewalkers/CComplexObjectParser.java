@@ -200,7 +200,9 @@ public class CComplexObjectParser extends BaseTreeWalker {
 
         root.setRmTypeName(archetypeRootContext.type_id().getText());
         root.setNodeId(archetypeRootContext.ID_CODE().getText());
-        root.setArchetypeRef(archetypeRootContext.archetype_ref().getText());
+        if(archetypeRootContext.archetype_ref() != null) {
+            root.setArchetypeRef(archetypeRootContext.archetype_ref().getText());
+        }
 
         root.setOccurrences(this.parseMultiplicityInterval(archetypeRootContext.c_occurrences()));
         for (C_attribute_defContext attributeContext : archetypeRootContext.c_attribute_def()) {

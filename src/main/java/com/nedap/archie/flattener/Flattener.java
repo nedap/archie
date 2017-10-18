@@ -141,10 +141,9 @@ public class Flattener {
 
 
     public void fillSlots(Archetype archetype) { //should this be OperationalTemplate?
-        fillComplexObjectProxies(archetype);
         closeArchetypeSlots(archetype);
         fillArchetypeRoots(archetype);
-
+        fillComplexObjectProxies(archetype);
     }
 
     /** Zero occurrences and existence constraint processing when creating OPT templates. Removes attributes */
@@ -261,8 +260,30 @@ public class Flattener {
         }
     }
 
+    /**
+     * Get the archetype root that is the most near parent. Either returns a C_ARCHETYPE_ROOT or the complex_object at archetype.getDefinition()
+     * @return
+     */
+    private CComplexObject getNearestArchetypeRoot(CObject object) {
+        //find a C_ARCHETYPE_ROOT
+        CAttribute parentAttribute = object.getParent();
+        while(parentAttribute != null) {
+            CObject parentObject = parentAttribute.getParent();
+            if(parentObject == null) {
+                break;
+            }
+            if(parentObject instanceof CArchetypeRoot) {
+                return (CArchetypeRoot) parentObject;
+            }
+            parentAttribute = parentObject.getParent();
+        }
+        //C_ARCHETYPE_ROOT not found, return the archetype definition
+        return object.getArchetype().getDefinition();
+
+    }
+
     private ComplexObjectProxyReplacement getComplexObjectProxyReplacement(CComplexObjectProxy proxy) {
-        CObject newObject = new APathQuery(proxy.getTargetPath()).find(proxy.getArchetype().getDefinition());
+        CObject newObject = new APathQuery(proxy.getTargetPath()).find(getNearestArchetypeRoot(proxy));
         if(newObject == null) {
             throw new RuntimeException("cannot find target in CComplexObjectProxy");
         } else {
@@ -416,7 +437,12 @@ public class Flattener {
     }
 
     private void specializeContent(CObject parent, CObject specialized, CObject newObject) {
-        if (parent instanceof CComplexObject) {
+
+      if (parent instanceof CComplexObject) {
+            if(!(specialized instanceof CComplexObject)) {
+                //this is the specs. The ADL workbench allows an ARCHETYPE_SLOT to override a C_ARCHETYPE_ROOT without errors. Filed as https://openehr.atlassian.net/projects/AWBPR/issues/AWBPR-72
+                throw new IllegalArgumentException(String.format("cannot override complex object %s (%s) with non-complex object %s (%s)", parent.path(), parent.getClass().getSimpleName(), specialized.path(), specialized.getClass().getSimpleName()));
+            }
             flattenCComplexObject((CComplexObject) newObject, (CComplexObject) specialized);
         }
         else if (newObject instanceof ArchetypeSlot) {//archetypeslot is NOT a complex object. It's replacement can be
@@ -490,6 +516,17 @@ public class Flattener {
      * @param specialized
      */
     private void flattenCComplexObject(CComplexObject newObject, CComplexObject specialized) {
+
+        if(specialized instanceof CArchetypeRoot && newObject instanceof CArchetypeRoot) {
+            //cloneSpecializedObject() will already have handled the case where the parent is an ARCHETYPE_SLOT
+            //and the child is a C_ARCHETYPE_ROOT by cloning the child instead of the parent
+            //handle redefinition of CArchetypeRoots here.
+            CArchetypeRoot specializedArchetypeRoot = (CArchetypeRoot) specialized;
+            if(specializedArchetypeRoot.getArchetypeRef() != null) {
+                CArchetypeRoot newArchetypeRoot = (CArchetypeRoot) newObject;
+                newArchetypeRoot.setArchetypeRef(specializedArchetypeRoot.getArchetypeRef());
+            }
+        }
 
         for(CAttribute attribute:specialized.getAttributes()) {
             flattenSingleAttribute(newObject, attribute);
@@ -568,7 +605,9 @@ public class Flattener {
     }
 
     private Flattener getNewFlattener() {
-        return new Flattener(repository).createOperationalTemplate(createOperationalTemplate).useComplexObjectForArchetypeSlotReplacement(useComplexObjectForArchetypeSlotReplacement);
+        return new Flattener(repository)
+                .createOperationalTemplate(false) //do not create operational template except at the end.
+                .useComplexObjectForArchetypeSlotReplacement(useComplexObjectForArchetypeSlotReplacement);
     }
 
     private Flattener useComplexObjectForArchetypeSlotReplacement(boolean useComplexObjectForArchetypeSlotReplacement) {
