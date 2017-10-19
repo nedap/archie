@@ -2,7 +2,6 @@ package com.nedap.archie.base.terminology;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.nedap.archie.rm.support.identification.TerminologyId;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -20,7 +19,7 @@ import java.util.regex.Pattern;
 public class TerminologyCode {
 
     @XmlElement(name="terminology_id")
-    private TerminologyId terminologyId;
+    private String terminologyId;
     @XmlElement(name="terminology_version")
     private String terminologyVersion;
     @XmlElement(name="code_string")
@@ -49,7 +48,7 @@ public class TerminologyCode {
     }
 
     @JsonCreator
-    public static TerminologyCode createFromString(@JsonProperty("terminology_id") TerminologyId terminologyId,
+    public static TerminologyCode createFromString(@JsonProperty("terminology_id") String terminologyId,
                                                    @JsonProperty("terminology_version") String terminologyVersion,
                                                    @JsonProperty("code_string") String codeString) {
         TerminologyCode result = new TerminologyCode();
@@ -57,12 +56,6 @@ public class TerminologyCode {
         result.terminologyVersion = terminologyVersion;
         result.codeString = codeString;
         return result;
-    }
-
-    public void setTerminologyId(String terminologyIdString) {
-        TerminologyId terminologyId = new TerminologyId();
-        terminologyId.setValue(terminologyIdString);
-        setTerminologyId(terminologyId);
     }
 
     public String getTerminologyVersion() {
@@ -74,8 +67,7 @@ public class TerminologyCode {
     }
 
     public String getTerminologyIdString() {
-        TerminologyId terminologyId = getTerminologyId();
-        return terminologyId == null ? null : terminologyId.getValue();
+        return getTerminologyId();
     }
 
     public String toString() {
@@ -84,11 +76,11 @@ public class TerminologyCode {
                 "[" + getTerminologyId() + "(" + terminologyVersion + ")::" + getCodeString() + "]";
     }
 
-    public TerminologyId getTerminologyId() {
+    public String getTerminologyId() {
         return terminologyId;
     }
 
-    public void setTerminologyId(TerminologyId terminologyId) {
+    public void setTerminologyId(String terminologyId) {
         this.terminologyId = terminologyId;
     }
 

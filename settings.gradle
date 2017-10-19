@@ -1,1 +1,3 @@
 rootProject.name = 'archie'
+
+include 'base', 'adl-grammar', 'old'

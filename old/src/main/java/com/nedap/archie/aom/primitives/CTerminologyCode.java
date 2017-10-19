@@ -64,7 +64,7 @@ public class CTerminologyCode extends CPrimitiveObject<String, TerminologyCode> 
                     return true;
                 }
             } else if (constraint.startsWith("ac")) {
-                if(value.getTerminologyId() != null && value.getTerminologyId().getValue().equals(constraint)) {
+                if(value.getTerminologyId() != null && value.getTerminologyId().equals(constraint)) {
                     return true;
                 }
             }

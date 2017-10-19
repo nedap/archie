@@ -1,6 +1,7 @@
 package com.nedap.archie.paths;
 
-import com.nedap.archie.aom.CPrimitiveObject;
+
+import com.nedap.archie.adl.AdlCodeDefinitions;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ public class PathUtil {
         for(PathSegment segment: pathSegments) {
             result.append("/");
             result.append(segment.getNodeName());
-            if(segment.getNodeId() != null && !segment.getNodeId().equals(CPrimitiveObject.PRIMITIVE_NODE_ID_VALUE)) {
+            if(segment.getNodeId() != null && !segment.getNodeId().equals(AdlCodeDefinitions.PRIMITIVE_NODE_ID)) {
                 result.append("[");
                 result.append(segment.getNodeId());
                 if(segment.hasNumberIndex()) {

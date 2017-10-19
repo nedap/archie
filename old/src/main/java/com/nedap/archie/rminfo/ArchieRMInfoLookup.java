@@ -4,6 +4,7 @@ import com.nedap.archie.aom.CPrimitiveObject;
 import com.nedap.archie.aom.primitives.CTerminologyCode;
 import com.nedap.archie.base.Interval;
 import com.nedap.archie.base.terminology.TerminologyCode;
+import com.nedap.archie.rm.support.identification.TerminologyId;
 import com.nedap.archie.rm.RMObject;
 import com.nedap.archie.rm.datastructures.PointEvent;
 import com.nedap.archie.rm.datatypes.CodePhrase;
@@ -52,7 +53,7 @@ public class ArchieRMInfoLookup extends ReflectionModelInfoLookup {
     private TerminologyCode convertCodePhrase(CodePhrase codePhrase) {
         TerminologyCode result = new TerminologyCode();
         result.setCodeString(codePhrase.getCodeString());
-        result.setTerminologyId(codePhrase.getTerminologyId());
+        result.setTerminologyId(codePhrase.getTerminologyId() == null ? null : codePhrase.getTerminologyId().getValue());
         return result;
     }
 
@@ -66,7 +67,7 @@ public class ArchieRMInfoLookup extends ReflectionModelInfoLookup {
     private CodePhrase convertTerminologyCode(TerminologyCode terminologyCode) {
         CodePhrase result = new CodePhrase();
         result.setCodeString(terminologyCode.getCodeString());
-        result.setTerminologyId(terminologyCode.getTerminologyId());
+        result.setTerminologyId(terminologyCode == null ? null : new TerminologyId(terminologyCode.getTerminologyId()));
         return result;
     }
 }
