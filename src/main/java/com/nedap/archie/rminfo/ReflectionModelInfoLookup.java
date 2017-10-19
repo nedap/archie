@@ -161,10 +161,15 @@ public class ReflectionModelInfoLookup implements ModelInfoLookup {
         Class rawFieldType = fieldType.getRawType();
         Class typeInCollection = getTypeInCollection(fieldType);
         if (setMethod != null) {
+            String typeName = this.getNamingStrategy().getTypeName(rawFieldType);
+            if(!typeInCollection.equals(rawFieldType)) {
+                typeName = getNamingStrategy().getTypeName(rawFieldType) + "<" + getNamingStrategy().getTypeName(typeInCollection) + ">";
+            }
             RMAttributeInfo attributeInfo = new RMAttributeInfo(
                     attributeName,
                     field,
                     rawFieldType,
+                    typeName,
                     typeInCollection,
                     field.getAnnotation(Nullable.class) != null,
                     getMethod,

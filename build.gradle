@@ -49,6 +49,7 @@ ext.antlrVersion = '4.5.3'
 
 repositories {
     mavenCentral()
+    mavenLocal()
 }
 
 ext.reflectionsVersion = '0.9.10'
@@ -63,6 +64,9 @@ dependencies {
     compile "com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}"
     compile "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
     compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}"
+
+    compile "org.openehr:openehr-odin:1.0-SNAPSHOT"
+    compile "org.openehr:openehr-bmm:1.0-SNAPSHOT"
 
 	compile 'com.google.guava:guava:19.0'
 

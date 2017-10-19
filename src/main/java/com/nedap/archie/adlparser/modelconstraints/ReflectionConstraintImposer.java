@@ -21,8 +21,8 @@ public class ReflectionConstraintImposer implements ModelConstraintImposer {
 
     private ModelInfoLookup lookup;
 
-    public ReflectionConstraintImposer(ModelInfoLookup classLookup) {
-        this.lookup = classLookup;
+    public ReflectionConstraintImposer(ModelInfoLookup modelInfoLookup) {
+        this.lookup = modelInfoLookup;
     }
 
     private CAttribute createCAttribute(RMAttributeInfo attributeInfo) {

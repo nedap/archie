@@ -10,6 +10,7 @@ import java.util.Collection;
 public class RMAttributeInfo {
     private final String name;
     private final Field field;
+    private final String typeName;
     private final Class type;
     private final Class typeInCollection;
     private final boolean isMultipleValued;
@@ -18,16 +19,30 @@ public class RMAttributeInfo {
     private final Method addMethod;
     private final boolean nullable;
 
-    public RMAttributeInfo(String name, Field field, Class type, Class typeInCollection, boolean nullable, Method getMethod, Method setMethod, Method addMethod) {
+    public RMAttributeInfo(String name, Field field, Class type, String typeName, Class typeInCollection, boolean nullable, Method getMethod, Method setMethod, Method addMethod) {
         this.name = name;
         this.field = field;
         this.type = type;
+        this.typeName = typeName;
         this.nullable = nullable;
         this.getMethod = getMethod;
         this.setMethod = setMethod;
         this.addMethod = addMethod;
         this.isMultipleValued = type instanceof Class && Collection.class.isAssignableFrom(type);
         this.typeInCollection = typeInCollection;
+    }
+
+    public RMAttributeInfo(String name, String typeName, boolean nullable, boolean isMultipleValued) {
+        this.name = name;
+        this.typeName = typeName;
+        this.nullable = nullable;
+        this.isMultipleValued = isMultipleValued;
+        field = null;
+        type = null;
+        typeInCollection = null;
+        getMethod = null;
+        setMethod = null;
+        addMethod = null;
     }
 
     public String getRmName() {
