@@ -4,7 +4,8 @@ import com.google.common.collect.Lists;
 import com.nedap.archie.aom.*;
 import com.nedap.archie.aom.terminology.ArchetypeTerm;
 import com.nedap.archie.aom.terminology.ArchetypeTerminology;
-import com.nedap.archie.query.APathQuery;
+import com.nedap.archie.query.AOMPathQuery;
+
 import com.nedap.archie.rules.Assertion;
 
 import java.util.ArrayList;
@@ -283,7 +284,7 @@ public class Flattener {
     }
 
     private ComplexObjectProxyReplacement getComplexObjectProxyReplacement(CComplexObjectProxy proxy) {
-        CObject newObject = new APathQuery(proxy.getTargetPath()).find(getNearestArchetypeRoot(proxy));
+        CObject newObject = new AOMPathQuery(proxy.getTargetPath()).find(getNearestArchetypeRoot(proxy));
         if(newObject == null) {
             throw new RuntimeException("cannot find target in CComplexObjectProxy");
         } else {
@@ -574,13 +575,13 @@ public class Flattener {
     private void flattenSingleAttribute(CComplexObject newObject, CAttribute attribute) {
         if(attribute.getDifferentialPath() != null) {
             //this overrides a specific path
-            ArchetypeModelObject object = new APathQuery(attribute.getDifferentialPath()).find(newObject);
+            ArchetypeModelObject object = new AOMPathQuery(attribute.getDifferentialPath()).find(newObject);
             if(object == null) {
                 //it is possible that the object points to a reference, in which case we need to clone the referenced node, then try again
                 //AOM spec paragraph 7.2: 'proxy reference targets are expanded inline if the child archetype overrides them.'
                 //also examples in ADL2 spec about internal references
                 //so find the internal references here!
-                CComplexObjectProxy internalReference = new APathQuery(attribute.getDifferentialPath()).findAnyInternalReference(newObject);
+                CComplexObjectProxy internalReference = new AOMPathQuery(attribute.getDifferentialPath()).findAnyInternalReference(newObject);
                 if(internalReference != null) {
                     //in theory this can be a use node within a use node.
                     ComplexObjectProxyReplacement complexObjectProxyReplacement = getComplexObjectProxyReplacement(internalReference);

@@ -2,6 +2,7 @@ package com.nedap.archie.aom;
 
 import com.nedap.archie.aom.terminology.ArchetypeTerm;
 import com.nedap.archie.aom.terminology.ArchetypeTerminology;
+import com.nedap.archie.query.AOMPathQuery;
 import com.nedap.archie.query.APathQuery;
 import com.nedap.archie.xml.adapters.ArchetypeTerminologyAdapter;
 
@@ -194,11 +195,11 @@ public class Archetype extends AuthoredResource {
 
     /** TODO: should this only be on complex objects? */
     public <T extends ArchetypeModelObject> T itemAtPath(String path) {
-        return new APathQuery(path).find(getDefinition());
+        return new AOMPathQuery(path).find(getDefinition());
     }
 
     public List<ArchetypeModelObject> itemsAtPath(String path) {
-        return new APathQuery(path).findList(getDefinition());
+        return new AOMPathQuery(path).findList(getDefinition());
     }
 
     @Override

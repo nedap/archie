@@ -64,7 +64,7 @@ public class RulesFlattenerTest {
     @Test
     public void flattenedRules() throws Exception {
         Archetype flattened = flattener.flatten(containingRules);
-        CObject systolicCObject = new APathQuery("/content[id5]/data/events/data/items[id5]").find(flattened.getDefinition());
+        CObject systolicCObject = flattened.itemAtPath("/content[id5]/data/events/data/items[id5]");
         assertEquals("systolic", systolicCObject.getTerm().getText());
         System.out.println(ADLArchetypeSerializer.serialize(flattened));
         assertEquals(4, flattened.getRules().getRules().size());//specialized rules, prefixed with the content[id5] path

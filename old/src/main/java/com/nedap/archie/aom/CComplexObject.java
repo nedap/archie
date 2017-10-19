@@ -2,6 +2,7 @@ package com.nedap.archie.aom;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.nedap.archie.query.AOMPathQuery;
 import com.nedap.archie.query.APathQuery;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -67,7 +68,7 @@ public class CComplexObject extends CDefinedObject<ArchetypeModelObject> {
 
     /** TODO: should this only be on complex objects? */
     public <T extends ArchetypeModelObject> T itemAtPath(String path) {
-        return new APathQuery(path).find(this);
+        return new AOMPathQuery(path).find(this);
     }
 
     /**

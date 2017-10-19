@@ -1,0 +1,4 @@
+dependencies {
+	//only for the xpath grammar. perhaps include it here?
+	compile project(':adl-grammar')
+}

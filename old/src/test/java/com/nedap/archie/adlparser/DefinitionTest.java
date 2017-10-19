@@ -66,10 +66,7 @@ public class DefinitionTest {
          */
         Archetype archetype = new ADLParser().parse(getClass().getResourceAsStream("/basic.adl"));
 
-        APathQuery query =
-                new APathQuery("/context[id11]/other_context[id2]/items[id3]/items[id4]/value");
-
-        ArchetypeModelObject archetypeModelObject = query.find(archetype.getDefinition());
+        ArchetypeModelObject archetypeModelObject = archetype.itemAtPath("/context[id11]/other_context[id2]/items[id3]/items[id4]/value");
 
         assertTrue(archetypeModelObject instanceof CAttribute);
         CAttribute attribute = (CAttribute) archetypeModelObject;
@@ -88,10 +85,7 @@ public class DefinitionTest {
     public void stringConstraint() throws Exception {
         Archetype archetype = new ADLParser().parse(getClass().getResourceAsStream("/basic.adl"));
 
-        APathQuery query =
-                new APathQuery("/context[id11]/other_context[id2]/items[id3]/items[id5]/value[id14]/value");
-
-        ArchetypeModelObject archetypeModelObject = query.find(archetype.getDefinition());
+        ArchetypeModelObject archetypeModelObject = archetype.itemAtPath("/context[id11]/other_context[id2]/items[id3]/items[id5]/value[id14]/value");
 
         assertEquals(CAttribute.class, archetypeModelObject.getClass());
         CAttribute stringAttribute = (CAttribute) archetypeModelObject;
@@ -109,10 +103,7 @@ public class DefinitionTest {
     public void tupleConstraint() throws Exception {
         Archetype archetype = new ADLParser().parse(getClass().getResourceAsStream("/basic.adl"));
 
-        APathQuery query =
-                new APathQuery("/context[id11]/other_context[id2]/items[id3]/items[id7]/value[id16]");
-
-        ArchetypeModelObject archetypeModelObject = query.find(archetype.getDefinition());
+        ArchetypeModelObject archetypeModelObject = archetype.itemAtPath("/context[id11]/other_context[id2]/items[id3]/items[id7]/value[id16]");
 
         assertEquals(CComplexObject.class, archetypeModelObject.getClass());
         CComplexObject rootObject = (CComplexObject) archetypeModelObject;

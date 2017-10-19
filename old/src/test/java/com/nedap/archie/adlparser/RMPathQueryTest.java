@@ -1,7 +1,7 @@
 package com.nedap.archie.adlparser;
 
 import com.nedap.archie.aom.Archetype;
-import com.nedap.archie.query.APathQuery;
+import com.nedap.archie.query.RMPathQuery;
 import com.nedap.archie.query.RMObjectWithPath;
 import com.nedap.archie.rm.archetyped.Pathable;
 import com.nedap.archie.rm.composition.Composition;
@@ -22,7 +22,7 @@ import static org.junit.Assert.assertNotNull;
  * Test APath query with RM Objects
  * Created by pieter.bos on 06/04/16.
  */
-public class APathQueryRMTest {
+public class RMPathQueryTest {
 
 
     private TestUtil testUtil;
@@ -40,7 +40,7 @@ public class APathQueryRMTest {
         root = (Pathable) testUtil.constructEmptyRMObject(archetype.getDefinition());
         Composition composition = (Composition) root;
 
-        assertEquals(composition.getContext(), new APathQuery("/context")
+        assertEquals(composition.getContext(), new RMPathQuery("/context")
                 .find(ArchieRMInfoLookup.getInstance(), composition));
 //        EVENT_CONTEXT[id11] matches {
 //            other_context matches {
@@ -50,11 +50,11 @@ public class APathQueryRMTest {
 //                            items matches {
 //                                ELEMENT[id4] occurrences matches {0..1} matches {	-- OrderID
         assertEquals(composition.getContext().getOtherContext().getItems(),
-                new APathQuery("/context[id11]/other_context[id2]/items")
+                new RMPathQuery("/context[id11]/other_context[id2]/items")
                         .find(ArchieRMInfoLookup.getInstance(), composition));
                 //"/context[id2]/items[id3]/items[id4]"//should be one item
 
-        DvText text = new APathQuery("/context[id11]/other_context[id2]/items[id3]/items[id5]/value")
+        DvText text = new RMPathQuery("/context[id11]/other_context[id2]/items[id3]/items[id5]/value")
                 .find(ArchieRMInfoLookup.getInstance(), composition);
         assertNotNull(text);
     }
@@ -72,28 +72,28 @@ public class APathQueryRMTest {
 
         ModelInfoLookup modelInfoLookup = ArchieRMInfoLookup.getInstance();
 
-        List<RMObjectWithPath> context = new APathQuery("/context")
+        List<RMObjectWithPath> context = new RMPathQuery("/context")
                 .findList(modelInfoLookup, composition);
         assertEquals(1, context.size());
         assertEquals("/context", context.get(0).getPath());
 
         //now check that retrieving this retrieves more than one, even with the same ID.
-        List<RMObjectWithPath> items = new APathQuery("/context[id11]/other_context[id2]/items").findList(modelInfoLookup, composition);
+        List<RMObjectWithPath> items = new RMPathQuery("/context[id11]/other_context[id2]/items").findList(modelInfoLookup, composition);
         assertEquals(2, items.size());
         assertEquals("/context/other_context[id2]/items[id3, 1]", items.get(0).getPath());
         assertEquals("/context/other_context[id2]/items[id3, 2]", items.get(1).getPath());
         for(RMObjectWithPath value:items) {
-            assertEquals(value.getObject(), new APathQuery(value.getPath()).findList(modelInfoLookup, composition).get(0).getObject());
+            assertEquals(value.getObject(), new RMPathQuery(value.getPath()).findList(modelInfoLookup, composition).get(0).getObject());
         }
 
 
         //and check that retrieving a sub-element also retrieves more than one element
-        List<RMObjectWithPath> values = new APathQuery("/context[id11]/other_context[id2]/items[id3]/items[id5]/value").findList(modelInfoLookup, composition);
+        List<RMObjectWithPath> values = new RMPathQuery("/context[id11]/other_context[id2]/items[id3]/items[id5]/value").findList(modelInfoLookup, composition);
         assertEquals(2, values.size());
         assertEquals("/context/other_context[id2]/items[id3, 1]/items[id5, 2]/value", values.get(0).getPath());
         assertEquals("/context/other_context[id2]/items[id3, 2]/items[id5, 2]/value", values.get(1).getPath());
         for(RMObjectWithPath value:values) {
-            assertEquals(value.getObject(), new APathQuery(value.getPath()).findList(modelInfoLookup, composition).get(0).getObject());
+            assertEquals(value.getObject(), new RMPathQuery(value.getPath()).findList(modelInfoLookup, composition).get(0).getObject());
         }
     }
 

@@ -11,7 +11,6 @@ import com.nedap.archie.aom.CPrimitiveObject;
 import com.nedap.archie.paths.PathSegment;
 import com.nedap.archie.rm.archetyped.Locatable;
 import com.nedap.archie.rminfo.ModelInfoLookup;
-import com.nedap.archie.rminfo.ReflectionModelInfoLookup;
 import com.nedap.archie.rminfo.RMAttributeInfo;
 import com.nedap.archie.util.NamingUtil;
 import com.nedap.archie.adlparser.antlr.XPathLexer;
@@ -38,109 +37,15 @@ import java.util.regex.Pattern;
  *
  * Created by pieter.bos on 19/10/15.
  */
-public class APathQuery {
+public class RMPathQuery {
 
     private List<PathSegment> pathSegments = new ArrayList<>();
 
-    public APathQuery(String query) {
-        XPathLexer lexer = new XPathLexer(new ANTLRInputStream(query));
-        XPathParser parser = new XPathParser(new CommonTokenStream(lexer));
-        LocationPathContext locationPathContext = parser.locationPath();
-        AbsoluteLocationPathNorootContext absoluteLocationPathNorootContext = locationPathContext.absoluteLocationPathNoroot();
-        if(absoluteLocationPathNorootContext == null) {
-            throw new UnsupportedOperationException("relative xpath expressions not yet supported: " + query);
-        }
-        if(!absoluteLocationPathNorootContext.getTokens(XPathLexer.ABRPATH).isEmpty()) {
-            throw new UnsupportedOperationException("absolute path starting with // not yet supported");
-        }
-        RelativeLocationPathContext relativeLocationPathContext = absoluteLocationPathNorootContext.relativeLocationPath();
+    public RMPathQuery(String query) {
+        pathSegments = new APathQuery(query).getPathSegments();
 
-        if(!relativeLocationPathContext.getTokens(XPathLexer.ABRPATH).isEmpty()) {
-            throw new UnsupportedOperationException("relative path with // between steps not yet supported");
-        }
-        Pattern isDigit = Pattern.compile("\\d+");
-
-        List<StepContext> stepContexts = relativeLocationPathContext.step();
-        for(StepContext stepContext:stepContexts) {
-            String nodeName = stepContext.nodeTest().getText();
-            List<PredicateContext> predicateContexts = stepContext.predicate();
-            PathSegment pathSegment = new PathSegment(nodeName);
-            for(PredicateContext predicateContext:predicateContexts) {
-                //TODO: this is not a full parser. We really need one. Find one because writing an XPath parser seems like a thing that's been done before.
-
-                AndExprContext andExpressionContext = predicateContext.expr().orExpr().andExpr(0);
-                for(EqualityExprContext equalityExprContext: andExpressionContext.equalityExpr()) {
-                    if(equalityExprContext.relationalExpr().size() == 1) { //do not yet support equals or not equals operator, ignore for now
-                        String expression = equalityExprContext.getText();
-                        if(isDigit.matcher(expression).matches()) {
-                            pathSegment.setIndex(Integer.parseInt(expression));
-                        } else {
-                            pathSegment.setNodeId(expression);
-                        }
-                    }
-
-                }
-            }
-            pathSegments.add(pathSegment);
-        }
     }
 
-    public <T extends ArchetypeModelObject> T find(CComplexObject root) {
-       List<T> list = findList(root);
-        if(list.isEmpty()) {
-            return null;
-        } else if (list.size() == 1) {
-            return list.get(0);
-        } else {
-            throw new UnsupportedOperationException("cannot find without list with more than 1 element");
-        }
-    }
-
-    public <T extends ArchetypeModelObject> List<T> findList(CComplexObject root) {
-        List<ArchetypeModelObject> result = new ArrayList<>();
-        result.add(root);
-        for(PathSegment segment:this.pathSegments) {
-            if (result.size() == 0) {
-                return Collections.emptyList();
-            }
-            result = findOneSegment(segment, result);
-        }
-        return (List<T>) result;
-    }
-
-    private List<ArchetypeModelObject> findOneSegment(PathSegment pathSegment, List<ArchetypeModelObject> objects) {
-        List<ArchetypeModelObject> result = new ArrayList<>();
-
-        List<ArchetypeModelObject> preProcessedObjects = new ArrayList<>();
-
-        for(ArchetypeModelObject object:objects) {
-            if (object instanceof CAttribute) {
-                CAttribute cAttribute = (CAttribute) object;
-                preProcessedObjects.addAll(cAttribute.getChildren());
-            } else {
-                preProcessedObjects.add(object);
-            }
-
-        }
-        for(ArchetypeModelObject object:preProcessedObjects) {
-            if(object instanceof CObject) {
-                CObject cobject = (CObject) object;
-                CAttribute attribute = cobject.getAttribute(pathSegment.getNodeName());
-                if(attribute != null) {
-                    if (pathSegment.hasIdCode() || pathSegment.hasArchetypeRef()) {
-                        result.add(attribute.getChild(pathSegment.getNodeId()));
-                    } else if (pathSegment.hasNumberIndex()) {
-                        result.add(attribute.getChildren().get(pathSegment.getIndex() - 1));//APath path numbers start at 1 instead of 0
-                    } else if (pathSegment.getNodeId() != null) {
-                        result.add(attribute.getChildByMeaning(pathSegment.getNodeId()));//TODO: the ANTLR grammar removes all whitespace. what to do here?
-                    } else {
-                        result.add(attribute);
-                    }
-                }
-            }
-        }
-        return result;
-    }
 
     //TODO: get diagnostic information about where the finder stopped in the path - could be very useful!
 
@@ -519,24 +424,4 @@ public class APathQuery {
         return pathSegments;
     }
 
-
-    /**
-     * Find any CComplexObjectProxy anywhere inside the APath query. Can be at the end of the full query, at the first matching CComplexObjectProxy or anywhere in between
-     * Useful mainly when flattening, probably does not have many other uses
-     */
-    public CComplexObjectProxy findAnyInternalReference(CComplexObject root) {
-        List<ArchetypeModelObject> result = new ArrayList<>();
-        result.add(root);
-        for(PathSegment segment:this.pathSegments) {
-            if (result.size() == 0) {
-                return null;
-            }
-            result = findOneSegment(segment, result);
-            if(result.size() == 1 && result.get(0) instanceof CComplexObjectProxy) {
-                return (CComplexObjectProxy) result.get(0);
-            }
-        }
-        return null;
-
-    }
 }

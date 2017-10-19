@@ -204,7 +204,7 @@ public class ADLDefinitionSerializerTest {
     @Test
     public void serializeTupleOrdinal() throws Exception {
         Archetype archetype = loadRoot("adl2-tests/features/aom_structures/tuples/CIMI-CORE-ITEM_GROUP.real_ordinal.v1.0.0.adls");
-        CComplexObject ordinal = new APathQuery("/item[id2]/value[id3]").find(archetype.getDefinition());
+        CComplexObject ordinal = archetype.itemAtPath("/item[id2]/value[id3]");
         String serialized = serializeConstraint(ordinal);
         assertThat(serialized, equalTo("\n" +
                 "    ORDINAL[id3] matches {\n" +
@@ -219,7 +219,7 @@ public class ADLDefinitionSerializerTest {
     @Test
     public void serializeTupleDvQuantity() throws Exception {
         Archetype archetype = loadRoot("adl2-tests/features/aom_structures/tuples/openehr-test_pkg-SOME_TYPE.dv_quantity_tuple.v1.adls");
-        CComplexObject ordinal = new APathQuery("/clinical_quantity_attr_1[id2]").find(archetype.getDefinition());
+        CComplexObject ordinal = archetype.itemAtPath("/clinical_quantity_attr_1[id2]");
 
         String serialized = serializeConstraint(ordinal);
         assertThat(serialized, equalTo("\n" +

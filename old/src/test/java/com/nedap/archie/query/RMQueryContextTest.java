@@ -74,8 +74,7 @@ public class RMQueryContextTest {
 
         ModelInfoLookup modelInfoLookup = ArchieRMInfoLookup.getInstance();
 
-        List<RMObjectWithPath> context = new APathQuery("/context")
-                .findList(modelInfoLookup, composition);
+        List<RMObjectWithPath> context = new RMPathQuery("/context").findList(modelInfoLookup, composition);
         assertEquals(1, context.size());
         assertEquals("/context", context.get(0).getPath());
 
@@ -104,8 +103,7 @@ public class RMQueryContextTest {
 
         ModelInfoLookup modelInfoLookup = ArchieRMInfoLookup.getInstance();
 
-        List<RMObjectWithPath> context = new APathQuery("/context")
-                .findList(modelInfoLookup, composition);
+        List<RMObjectWithPath> context = new RMPathQuery("/context").findList(modelInfoLookup, composition);
         assertEquals(1, context.size());
         assertEquals("/context", context.get(0).getPath());
 

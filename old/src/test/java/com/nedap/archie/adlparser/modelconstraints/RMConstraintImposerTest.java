@@ -71,7 +71,7 @@ public class RMConstraintImposerTest {
 
     @Test
     public void singleValuedOptional() {
-        CAttribute attribute = new APathQuery("/data[id2]/items[id3]/items[id4]/value").find(archetype.getDefinition());
+        CAttribute attribute = archetype.itemAtPath("/data[id2]/items[id3]/items[id4]/value");
         Cardinality cardinality = attribute.getCardinality();
         assertNull(cardinality);
         MultiplicityInterval existence = attribute.getExistence();

@@ -176,8 +176,7 @@ public class FlattenerTest {
         CComplexObject definition = flattened.getDefinition();
         //you definately need component terminologies to translate this :)
         CObject object = (CObject)
-                new APathQuery("/content[openEHR-EHR-OBSERVATION.ovl-blood_pressure-blood_pressure-001.v1.0.0]/protocol[id12]/items[id1011]")
-                        .find(definition);
+                flattened.itemAtPath("/content[openEHR-EHR-OBSERVATION.ovl-blood_pressure-blood_pressure-001.v1.0.0]/protocol[id12]/items[id1011]");
         assertNull(flattened.getTerminology().getTermDefinition("en", "id1011"));
         assertEquals("Diastolic endpoint", flattened.getTerm(object, "en").getText());
     }
@@ -186,7 +185,7 @@ public class FlattenerTest {
     public void height() throws Exception {
         Archetype flattened = flattener.flatten(heightTemplate);
 
-        CObject object = (CObject) new APathQuery("/content[openEHR-EHR-OBSERVATION.ovl-length-height-001.v1.0.0]").find(flattened.getDefinition());
+        CObject object = (CObject) flattened.itemAtPath("/content[openEHR-EHR-OBSERVATION.ovl-length-height-001.v1.0.0]");
         assertNotNull(object);
         assertNotNull(flattened.getTerm(object, "nl"));
         assertEquals("Lengte", flattened.getTerm(object, "nl").getText());
@@ -202,7 +201,7 @@ data matches {
 										value matches {
 											DV_QUANTITY[id21] matches {
  */
-        CObject quantity = (CObject) new APathQuery("/content[openEHR-EHR-OBSERVATION.ovl-length-height-001.v1.0.0]/data[id2]/events[id3]/data[id4]/items[id5]/value[id21]").find(flattened.getDefinition());
+        CObject quantity = flattened.itemAtPath("/content[openEHR-EHR-OBSERVATION.ovl-length-height-001.v1.0.0]/data[id2]/events[id3]/data[id4]/items[id5]/value[id21]");
         assertEquals("DV_QUANTITY", quantity.getRmTypeName());
 
     }

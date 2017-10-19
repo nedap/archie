@@ -24,7 +24,7 @@ public class ADLArchetypeSerializerParserRoundtripTest {
         Archetype basic = loadRoot("basic.adl");
         Archetype archetype = roundtrip(basic);
 
-        CAttribute defining_code = new APathQuery("/category[id10]/defining_code").find(archetype.getDefinition());
+        CAttribute defining_code = archetype.itemAtPath("/category[id10]/defining_code");
         CTerminologyCode termCode = (CTerminologyCode) defining_code.getChildren().get(0);
 
         assertThat(termCode.getConstraint(), hasItem("at1"));
@@ -42,7 +42,7 @@ public class ADLArchetypeSerializerParserRoundtripTest {
     public void device() throws Exception {
         Archetype archetype = roundtrip(load("openEHR-EHR-CLUSTER.device.v1.adls"));
 
-        CComplexObject dvDeviceId = new APathQuery("/items[id22]/value[id32]").find(archetype.getDefinition());
+        CComplexObject dvDeviceId = archetype.itemAtPath("/items[id22]/value[id32]");
         assertThat(dvDeviceId.getRmTypeName(), equalTo("DV_IDENTIFIER"));
 
         assertThat(archetype.getDescription().getOriginalAuthor().get("name"), equalTo("Heather Leslie"));

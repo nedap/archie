@@ -3,8 +3,9 @@ package com.nedap.archie.rm.archetyped;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nedap.archie.paths.PathSegment;
 import com.nedap.archie.paths.PathUtil;
-import com.nedap.archie.query.APathQuery;
+
 import com.nedap.archie.query.RMObjectWithPath;
+import com.nedap.archie.query.RMPathQuery;
 import com.nedap.archie.rm.RMObject;
 import com.nedap.archie.rminfo.ArchieRMInfoLookup;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -33,11 +34,11 @@ public abstract class Pathable extends RMObject {
     private String parentAttributeName;
 
     public Object itemAtPath(String s) {
-        return new APathQuery(s).find(ArchieRMInfoLookup.getInstance(), this);
+        return new RMPathQuery(s).find(ArchieRMInfoLookup.getInstance(), this);
     }
 
     public List<Object> itemsAtPath(String s) {
-        List<RMObjectWithPath> objects = new APathQuery(s).findList(ArchieRMInfoLookup.getInstance(), this);
+        List<RMObjectWithPath> objects = new RMPathQuery(s).findList(ArchieRMInfoLookup.getInstance(), this);
         List<Object> result = new ArrayList<>();
         for(RMObjectWithPath object:objects) {
             result.add(object.getObject());
