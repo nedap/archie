@@ -1,7 +1,7 @@
 package com.nedap.archie.aom;
 
 import com.nedap.archie.rminfo.ModelInfoLookup;
-import com.nedap.archie.rminfo.ReflectionModelInfoLookup;
+
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

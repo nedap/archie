@@ -1,6 +1,7 @@
 package com.nedap.archie.rules.evaluation;
 
 import com.nedap.archie.adlparser.ADLParser;
+import com.nedap.archie.adlparser.modelconstraints.RMConstraintImposer;
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.rm.archetyped.Locatable;
 import com.nedap.archie.rm.composition.Observation;
@@ -22,7 +23,7 @@ public class FunctionsTest {
 
     @Before
     public void setup() {
-        parser = ADLParser.withRMConstraintsImposer();
+        parser = new ADLParser(new RMConstraintImposer());
     }
 
     @Test

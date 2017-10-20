@@ -1,5 +1,5 @@
 dependencies {
   compile project(':adl-grammar')
   compile project(':base')
-  compile project(':aom')
+  compile project(':odin')
 }

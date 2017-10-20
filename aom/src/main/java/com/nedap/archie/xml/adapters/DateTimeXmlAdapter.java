@@ -1,7 +1,7 @@
 package com.nedap.archie.xml.adapters;
 
 import com.nedap.archie.adlparser.treewalkers.TemporalConstraintParser;
-import com.nedap.archie.json.DateTimeSerializer;
+import com.nedap.archie.datetime.DateTimeFormatters;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 import java.time.LocalDateTime;
@@ -26,9 +26,9 @@ public class DateTimeXmlAdapter extends XmlAdapter<String, TemporalAccessor> {
             return value.toString();
         }
         if(value.isSupported(ChronoField.MICRO_OF_SECOND) && value.get(ChronoField.MICRO_OF_SECOND) != 0l) {
-            return DateTimeSerializer.ISO_8601_DATE_TIME.format(value);
+            return DateTimeFormatters.ISO_8601_DATE_TIME.format(value);
         } else {
-            return DateTimeSerializer.ISO_8601_DATE_TIME_WITHOUT_MICROS.format(value);
+            return DateTimeFormatters.ISO_8601_DATE_TIME_WITHOUT_MICROS.format(value);
         }
     }
 

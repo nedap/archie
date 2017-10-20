@@ -1,6 +1,7 @@
 package com.nedap.archie.json;
 
 import com.nedap.archie.adlparser.ADLParser;
+import com.nedap.archie.adlparser.modelconstraints.RMConstraintImposer;
 import com.nedap.archie.aom.Archetype;
 
 import com.nedap.archie.query.RMQueryContext;
@@ -40,7 +41,7 @@ public class JacksonRMRoundTripTest {
     @Before
     public void setup() {
         testUtil = new TestUtil();
-        parser = ADLParser.withRMConstraintsImposer();
+        parser = new ADLParser(new RMConstraintImposer());
     }
 
     @Test

@@ -1,5 +1,6 @@
 package com.nedap.archie.adlparser;
 
+import com.nedap.archie.adlparser.modelconstraints.RMConstraintImposer;
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.ArchetypeModelObject;
 import com.nedap.archie.aom.CAttribute;
@@ -22,7 +23,7 @@ public class AOMPathQueryTest {
 
     @Before
     public void setup() throws Exception {
-        archetype = ADLParser.withRMConstraintsImposer().parse(getClass().getResourceAsStream("/basic.adl"));
+        archetype = new ADLParser(new RMConstraintImposer()).parse(getClass().getResourceAsStream("/basic.adl"));
     }
 
 

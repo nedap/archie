@@ -9,10 +9,7 @@ import com.nedap.archie.aom.CComplexObjectProxy;
 import com.nedap.archie.aom.CObject;
 import com.nedap.archie.aom.CPrimitiveObject;
 import com.nedap.archie.paths.PathSegment;
-import com.nedap.archie.rm.archetyped.Locatable;
-import com.nedap.archie.rminfo.ModelInfoLookup;
-import com.nedap.archie.rminfo.ReflectionModelInfoLookup;
-import com.nedap.archie.rminfo.RMAttributeInfo;
+
 import com.nedap.archie.util.NamingUtil;
 import com.nedap.archie.adlparser.antlr.XPathLexer;
 import com.nedap.archie.adlparser.antlr.XPathParser;

@@ -1,6 +1,7 @@
 package com.nedap.archie.flattener.specexamples;
 
 import com.nedap.archie.adlparser.ADLParser;
+import com.nedap.archie.adlparser.modelconstraints.RMConstraintImposer;
 import com.nedap.archie.aom.Archetype;
 
 import java.io.IOException;
@@ -12,7 +13,7 @@ import static org.junit.Assert.fail;
 class FlattenerTestUtil {
 
     protected static Archetype parse(String filename) throws IOException {
-        ADLParser parser = ADLParser.withRMConstraintsImposer();
+        ADLParser parser = new ADLParser(new RMConstraintImposer());
         InputStream stream = FlattenerExamplesFromSpecTest.class.getResourceAsStream(filename);
         if(stream == null) {
             fail("cannot find file: " + filename);

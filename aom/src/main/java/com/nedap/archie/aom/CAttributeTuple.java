@@ -1,8 +1,7 @@
 package com.nedap.archie.aom;
 
-import com.nedap.archie.rminfo.ArchieRMInfoLookup;
+
 import com.nedap.archie.rminfo.ModelInfoLookup;
-import com.nedap.archie.rminfo.ReflectionModelInfoLookup;
 import com.nedap.archie.rminfo.RMAttributeInfo;
 
 import javax.xml.bind.annotation.XmlType;
@@ -40,14 +39,6 @@ public class CAttributeTuple extends CSecondOrder<CAttribute> {
 
     public void addTuple(CPrimitiveTuple tuple) {
         this.tuples.add(tuple);
-    }
-
-    public boolean isValid(HashMap<String, Object> values) {
-        return isValid(ArchieRMInfoLookup.getInstance(), values);
-    }
-
-    public boolean isValid(Object rmObjectValue) {
-        return isValid(ArchieRMInfoLookup.getInstance(), rmObjectValue);
     }
 
     /**

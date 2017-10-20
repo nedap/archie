@@ -1,6 +1,7 @@
 package com.nedap.archie.rules.evaluation;
 
 import com.nedap.archie.adlparser.ADLParser;
+import com.nedap.archie.adlparser.modelconstraints.RMConstraintImposer;
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.rm.archetyped.Pathable;
 import com.nedap.archie.testutil.TestUtil;
@@ -25,7 +26,7 @@ public class FixableAssertionsCheckerTest {
     public void setup() {
         testUtil = new TestUtil();
         emptyRMObjectConstructor = new EmptyRMObjectConstructor();
-        parser = ADLParser.withRMConstraintsImposer();
+        parser = new ADLParser(new RMConstraintImposer());
     }
 
     @Test
