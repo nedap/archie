@@ -21,9 +21,12 @@ import java.util.*;
  *
  * Use it to obtain java classes for RM Type Names, and java fields, getters, setters and types for RM Attribute Names
  *
+ * This class is never directly created, but subclasses must be created that setup the correct model. Create a subclass
+ * per model you want to use with Archie, for example one for an OpenEHR RM implementation, or the CIMI RM implementation
+ *
  * Created by pieter.bos on 02/02/16.
  */
-public class ReflectionModelInfoLookup implements ModelInfoLookup {
+public abstract class ReflectionModelInfoLookup implements ModelInfoLookup {
 
     private static final Logger logger = LoggerFactory.getLogger(ReflectionModelInfoLookup.class);
 

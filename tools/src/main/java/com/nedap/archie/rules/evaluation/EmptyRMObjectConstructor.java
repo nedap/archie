@@ -6,16 +6,23 @@ import com.nedap.archie.aom.CComplexObject;
 import com.nedap.archie.aom.CObject;
 import com.nedap.archie.creation.RMObjectCreator;
 import com.nedap.archie.rm.RMObject;
+import com.nedap.archie.rminfo.ModelInfoLookup;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * This class is deprecated since the RMObjectCreator can do the same plus more
  * Created by pieter.bos on 04/04/2017.
  */
+@Deprecated
 class EmptyRMObjectConstructor {
 
-    private RMObjectCreator creator = new RMObjectCreator();
+    private RMObjectCreator creator;
+
+    public EmptyRMObjectConstructor(ModelInfoLookup lookup) {
+        creator = new RMObjectCreator(lookup);
+    }
     /**
      * Creates an empty RM Object, fully nested, one object per CObject found.
      * For those familiar to the old java libs: this is a simple skeleton generator.

@@ -38,11 +38,12 @@ public class AssertionsFixer {
 
     private final RMObjectCreator creator;
     private final RuleEvaluation ruleEvaluation;
-    private final EmptyRMObjectConstructor emptyRMObjectConstructor = new EmptyRMObjectConstructor();
+    private final EmptyRMObjectConstructor emptyRMObjectConstructor;
 
     public AssertionsFixer(RuleEvaluation evaluation, RMObjectCreator creator) {
         this.creator = creator;
         this.ruleEvaluation = evaluation;
+        emptyRMObjectConstructor = new EmptyRMObjectConstructor(evaluation.getModelInfoLookup());
     }
     
     public void fixAssertions(Archetype archetype, AssertionResult assertionResult) {

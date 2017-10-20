@@ -3,7 +3,9 @@ package com.nedap.archie.rules.evaluation;
 import com.nedap.archie.adlparser.ADLParser;
 import com.nedap.archie.adlparser.modelconstraints.RMConstraintImposer;
 import com.nedap.archie.aom.Archetype;
+import com.nedap.archie.rm.archetyped.Locatable;
 import com.nedap.archie.rm.archetyped.Pathable;
+import com.nedap.archie.rminfo.ArchieRMInfoLookup;
 import com.nedap.archie.testutil.TestUtil;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,16 +27,16 @@ public class FixableAssertionsCheckerTest {
     @Before
     public void setup() {
         testUtil = new TestUtil();
-        emptyRMObjectConstructor = new EmptyRMObjectConstructor();
+        emptyRMObjectConstructor = new EmptyRMObjectConstructor(ArchieRMInfoLookup.getInstance());
         parser = new ADLParser(new RMConstraintImposer());
     }
 
     @Test
     public void fixableMatches() throws Exception {
         archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("fixable_matches.adls"));
-        RuleEvaluation ruleEvaluation = new RuleEvaluation(archetype);
+        RuleEvaluation<Locatable> ruleEvaluation = new RuleEvaluation(ArchieRMInfoLookup.getInstance(), archetype);
 
-        Pathable root = (Pathable) testUtil.constructEmptyRMObject(archetype.getDefinition());
+        Locatable root = (Locatable) testUtil.constructEmptyRMObject(archetype.getDefinition());
         EvaluationResult evaluate = ruleEvaluation.evaluate(root, archetype.getRules().getRules());
         assertEquals("there must be three values that must be set", 3, evaluate.getSetPathValues().size());
 
@@ -63,9 +65,9 @@ public class FixableAssertionsCheckerTest {
     @Test
     public void andExpression() throws Exception {
         archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("and.adls"));
-        RuleEvaluation ruleEvaluation = new RuleEvaluation(archetype);
+        RuleEvaluation<Locatable> ruleEvaluation = new RuleEvaluation(ArchieRMInfoLookup.getInstance(), archetype);
 
-        Pathable root = (Pathable) testUtil.constructEmptyRMObject(archetype.getDefinition());
+        Locatable root = (Locatable) testUtil.constructEmptyRMObject(archetype.getDefinition());
         EvaluationResult evaluate = ruleEvaluation.evaluate(root, archetype.getRules().getRules());
         assertEquals("there must be three values that must be set", 3, evaluate.getSetPathValues().size());
 
@@ -94,9 +96,9 @@ public class FixableAssertionsCheckerTest {
     @Test
     public void constructOnlyNecessaryStructure() throws Exception {
         archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("construct_only_necessary_structure.adls"));
-        RuleEvaluation ruleEvaluation = new RuleEvaluation(archetype);
+        RuleEvaluation<Locatable> ruleEvaluation = new RuleEvaluation(ArchieRMInfoLookup.getInstance(), archetype);
 
-        Pathable root = (Pathable) emptyRMObjectConstructor.constructEmptyRMObject(archetype.getDefinition());
+        Locatable root = (Locatable) emptyRMObjectConstructor.constructEmptyRMObject(archetype.getDefinition());
         EvaluationResult evaluate = ruleEvaluation.evaluate(root, archetype.getRules().getRules());
         assertEquals("there must be three values that must be set", 1, evaluate.getSetPathValues().size());
 

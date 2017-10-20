@@ -5,8 +5,8 @@ import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.creation.RMObjectCreator;
 import com.nedap.archie.query.RMQueryContext;
 import com.nedap.archie.rm.RMObject;
-import com.nedap.archie.rm.archetyped.Pathable;
 import com.nedap.archie.rminfo.ArchieRMInfoLookup;
+import com.nedap.archie.rminfo.ModelInfoLookup;
 import com.nedap.archie.rules.Expression;
 import com.nedap.archie.rules.RuleElement;
 import com.nedap.archie.rules.RuleStatement;
@@ -29,7 +29,7 @@ import java.util.List;
 /**
  * Created by pieter.bos on 31/03/16.
  */
-public class RuleEvaluation {
+public class RuleEvaluation<T> {
 
     private static Logger logger = LoggerFactory.getLogger(RuleEvaluation.class);
 
@@ -38,7 +38,7 @@ public class RuleEvaluation {
     private HashMap<Class, Evaluator> classToEvaluator = new HashMap<>();
 
     //evaluation state
-    private Pathable root;
+    private T root;
     private VariableMap variables;
     EvaluationResult evaluationResult;
     private List<AssertionResult> assertionResults;
@@ -48,12 +48,16 @@ public class RuleEvaluation {
     private ArrayListMultimap<RuleElement, ValueList> ruleElementValues = ArrayListMultimap.create();
     private FixableAssertionsChecker fixableAssertionsChecker;
 
+    private ModelInfoLookup modelInfoLookup;
 
-    private RMObjectCreator creator = new RMObjectCreator();
+    private RMObjectCreator creator;
 
-    private final AssertionsFixer assertionsFixer = new AssertionsFixer(this, creator);
+    private final AssertionsFixer assertionsFixer;
 
-    public RuleEvaluation(Archetype archetype) {
+    public RuleEvaluation(ModelInfoLookup modelInfoLookup, Archetype archetype) {
+        this.modelInfoLookup = modelInfoLookup;
+        this.creator = new RMObjectCreator(modelInfoLookup);
+        assertionsFixer = new AssertionsFixer(this, creator);
         this.archetype = archetype;
         add(new VariableDeclarationEvaluator());
         add(new ConstantEvaluator());
@@ -73,8 +77,8 @@ public class RuleEvaluation {
         }
     }
 
-    public EvaluationResult evaluate(Pathable root, List<RuleStatement> rules) {
-        this.root = (Pathable) root.clone();
+    public EvaluationResult evaluate(T root, List<RuleStatement> rules) {
+        this.root = (T) modelInfoLookup.clone(root);
 
         ruleElementValues = ArrayListMultimap.create();
         variables = new VariableMap();
@@ -102,7 +106,7 @@ public class RuleEvaluation {
         throw new UnsupportedOperationException("no evaluator present for rule type " + rule.getClass().getSimpleName());
     }
 
-    public Pathable getRMRoot() {
+    public T getRMRoot() {
         return root;
     }
 
@@ -151,5 +155,9 @@ public class RuleEvaluation {
 
     public EvaluationResult getEvaluationResult() {
         return evaluationResult;
+    }
+
+    public ModelInfoLookup getModelInfoLookup() {
+        return modelInfoLookup;
     }
 }

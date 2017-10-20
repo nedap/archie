@@ -7,6 +7,7 @@ import com.nedap.archie.aom.CObject;
 import com.nedap.archie.aom.CPrimitiveObject;
 import com.nedap.archie.creation.RMObjectCreator;
 import com.nedap.archie.rm.RMObject;
+import com.nedap.archie.rminfo.ArchieRMInfoLookup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,7 @@ import static org.junit.Assert.*;
  */
 public class TestUtil {
 
-    private RMObjectCreator creator = new RMObjectCreator();
+    private RMObjectCreator creator = new RMObjectCreator(ArchieRMInfoLookup.getInstance());
     /**
      * Creates an empty RM Object, fully nested, one object per CObject found.
      * For those familiar to the old java libs: this is a simple skeleton generator.

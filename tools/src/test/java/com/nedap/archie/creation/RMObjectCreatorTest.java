@@ -9,6 +9,7 @@ import com.nedap.archie.aom.terminology.ArchetypeTerminology;
 import com.nedap.archie.rm.datastructures.Cluster;
 import com.nedap.archie.rm.datastructures.Element;
 import com.nedap.archie.rm.datavalues.DvBoolean;
+import com.nedap.archie.rminfo.ArchieRMInfoLookup;
 import org.junit.Test;
 
 import java.util.LinkedHashMap;
@@ -20,7 +21,7 @@ import static org.junit.Assert.assertEquals;
  */
 public class RMObjectCreatorTest {
 
-    RMObjectCreator creator = new RMObjectCreator();
+    RMObjectCreator creator = new RMObjectCreator(ArchieRMInfoLookup.getInstance());
 
     @Test
     public void createElement() {

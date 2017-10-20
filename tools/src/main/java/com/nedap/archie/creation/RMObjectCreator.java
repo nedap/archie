@@ -2,8 +2,6 @@ package com.nedap.archie.creation;
 
 import com.google.common.collect.Lists;
 import com.nedap.archie.aom.CObject;
-import com.nedap.archie.rm.archetyped.Locatable;
-import com.nedap.archie.rminfo.ArchieRMInfoLookup;
 import com.nedap.archie.rminfo.ModelInfoLookup;
 import com.nedap.archie.rminfo.RMAttributeInfo;
 
@@ -23,28 +21,21 @@ import java.util.Set;
  */
 public class RMObjectCreator {
 
-    private final ModelInfoLookup classLookup;
-
-    public RMObjectCreator(){
-        this(ArchieRMInfoLookup.getInstance());
-    }
+    private final ModelInfoLookup modelInfoLookup;
 
     public RMObjectCreator(ModelInfoLookup lookup) {
-        this.classLookup = lookup;
+        this.modelInfoLookup = lookup;
     }
 
     public <T> T create(CObject constraint) {
-        Class clazz = classLookup.getClassToBeCreated(constraint.getRmTypeName());
+        Class clazz = modelInfoLookup.getClassToBeCreated(constraint.getRmTypeName());
         if(clazz == null) {
             throw new IllegalArgumentException("cannot construct RMObject because of unknown constraint name " + constraint.getRmTypeName() + " full constraint " + constraint);
         }
         try {
             Object result = clazz.newInstance();
-            if(result instanceof Locatable) { //and most often, it will be
-                Locatable locatable = (Locatable) result;
-                locatable.setArchetypeNodeId(constraint.getNodeId());
-                locatable.setNameAsString(constraint.getMeaning());
-            }
+
+            modelInfoLookup.processCreatedObject(result, constraint);
             return (T) result;
         } catch (InstantiationException | IllegalAccessException e) {
             throw new RuntimeException("error creating class " + constraint.getRmTypeName(), e);
@@ -53,7 +44,7 @@ public class RMObjectCreator {
 
     public void set(Object object, String rmAttributeName, List<Object> values) {
         try {
-            RMAttributeInfo attributeInfo = classLookup.getAttributeInfo(object.getClass(), rmAttributeName);
+            RMAttributeInfo attributeInfo = modelInfoLookup.getAttributeInfo(object.getClass(), rmAttributeName);
             if(attributeInfo == null) {
                 throw new IllegalArgumentException(String.format("Attribute %s not known for object %s", rmAttributeName, object.getClass().getSimpleName()));
             }
@@ -137,7 +128,7 @@ public class RMObjectCreator {
     }
 
     public void addElementToListOrSetSingleValues(Object object, String attribute, Object element) {
-        RMAttributeInfo attributeInfo = this.classLookup.getAttributeInfo(object.getClass(), attribute);
+        RMAttributeInfo attributeInfo = this.modelInfoLookup.getAttributeInfo(object.getClass(), attribute);
         if(!attributeInfo.isMultipleValued()) {
             if(element instanceof Collection) {
                 set(object, attribute, new ArrayList((Collection) element));

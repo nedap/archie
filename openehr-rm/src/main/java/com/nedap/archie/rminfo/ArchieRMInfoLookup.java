@@ -1,9 +1,11 @@
 package com.nedap.archie.rminfo;
 
+import com.nedap.archie.aom.CObject;
 import com.nedap.archie.aom.CPrimitiveObject;
 import com.nedap.archie.aom.primitives.CTerminologyCode;
 import com.nedap.archie.base.Interval;
 import com.nedap.archie.base.terminology.TerminologyCode;
+import com.nedap.archie.rm.archetyped.Locatable;
 import com.nedap.archie.rm.support.identification.TerminologyId;
 import com.nedap.archie.rm.RMObject;
 import com.nedap.archie.rm.datastructures.PointEvent;
@@ -69,6 +71,47 @@ public class ArchieRMInfoLookup extends ReflectionModelInfoLookup {
         result.setCodeString(terminologyCode.getCodeString());
         result.setTerminologyId(terminologyCode == null ? null : new TerminologyId(terminologyCode.getTerminologyId()));
         return result;
+    }
+
+    @Override
+    public void processCreatedObject(Object createdObject, CObject constraint) {
+        if (createdObject instanceof Locatable) { //and most often, it will be
+            Locatable locatable = (Locatable) createdObject;
+            locatable.setArchetypeNodeId(constraint.getNodeId());
+            locatable.setNameAsString(constraint.getMeaning());
+        }
+    }
+
+    @Override
+    public String getArchetypeNodeIdFromRMObject(Object rmObject) {
+        if(rmObject == null) {
+            return null;
+        }
+        if(rmObject instanceof Locatable) {
+            Locatable locatable = (Locatable) rmObject;
+            return locatable.getArchetypeNodeId();
+        }
+        return null;
+    }
+
+    @Override
+    public String getNameFromRMObject(Object rmObject) {
+        if(rmObject == null) {
+            return null;
+        }
+        if(rmObject instanceof Locatable) {
+            Locatable locatable = (Locatable) rmObject;
+            return locatable.getNameAsString();
+        }
+        return null;
+    }
+
+    @Override
+    public Object clone(Object rmObject) {
+        if(rmObject instanceof RMObject) {
+            return ((RMObject) rmObject).clone();
+        }
+        throw new IllegalArgumentException("The ArchieRMInfoLookup can only clone openehr reference model objects");
     }
 }
 
