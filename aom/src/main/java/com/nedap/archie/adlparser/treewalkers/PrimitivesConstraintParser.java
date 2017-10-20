@@ -9,7 +9,7 @@ import com.nedap.archie.adlparser.antlr.AdlParser.Boolean_list_valueContext;
 import com.nedap.archie.adlparser.antlr.AdlParser.Boolean_valueContext;
 import com.nedap.archie.adlparser.antlr.AdlParser.String_list_valueContext;
 import com.nedap.archie.adlparser.antlr.AdlParser.String_valueContext;
-import com.nedap.archie.adlparser.odin.OdinValueParser;
+import com.nedap.archie.serializer.odin.OdinValueParser;
 import com.nedap.archie.aom.CPrimitiveObject;
 import com.nedap.archie.aom.primitives.CBoolean;
 import com.nedap.archie.aom.primitives.CDate;

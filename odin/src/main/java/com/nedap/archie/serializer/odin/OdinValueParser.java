@@ -1,4 +1,4 @@
-package com.nedap.archie.adlparser.odin;
+package com.nedap.archie.serializer.odin;
 
 import com.nedap.archie.adlparser.antlr.AdlParser;
 

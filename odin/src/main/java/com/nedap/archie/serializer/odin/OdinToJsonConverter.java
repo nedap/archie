@@ -1,4 +1,4 @@
-package com.nedap.archie.adlparser.odin;
+package com.nedap.archie.serializer.odin;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;

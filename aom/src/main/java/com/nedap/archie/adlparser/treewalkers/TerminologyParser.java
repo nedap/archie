@@ -2,7 +2,7 @@ package com.nedap.archie.adlparser.treewalkers;
 
 import com.nedap.archie.adlparser.ADLParserErrors;
 import com.nedap.archie.adlparser.antlr.AdlParser.*;
-import com.nedap.archie.adlparser.odin.OdinObjectParser;
+import com.nedap.archie.serializer.odin.OdinObjectParser;
 import com.nedap.archie.aom.terminology.ArchetypeTerm;
 import com.nedap.archie.aom.terminology.ArchetypeTerminology;
 
