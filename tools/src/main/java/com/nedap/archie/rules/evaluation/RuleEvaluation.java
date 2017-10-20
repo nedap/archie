@@ -20,6 +20,7 @@ import com.nedap.archie.rules.evaluation.evaluators.VariableReferenceEvaluator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.xml.bind.JAXBContext;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,6 +31,7 @@ import java.util.List;
 public class RuleEvaluation<T> {
 
     private static Logger logger = LoggerFactory.getLogger(RuleEvaluation.class);
+    private final JAXBContext jaxbContext;
 
     private Archetype archetype;
     private List<Evaluator> evaluators = new ArrayList<>();
@@ -52,9 +54,10 @@ public class RuleEvaluation<T> {
 
     private final AssertionsFixer assertionsFixer;
 
-    public RuleEvaluation(ModelInfoLookup modelInfoLookup, Archetype archetype) {
+    public RuleEvaluation(ModelInfoLookup modelInfoLookup, JAXBContext jaxbContext, Archetype archetype) {
         this.modelInfoLookup = modelInfoLookup;
         this.creator = new RMObjectCreator(modelInfoLookup);
+        this.jaxbContext = jaxbContext;
         assertionsFixer = new AssertionsFixer(this, creator);
         this.archetype = archetype;
         add(new VariableDeclarationEvaluator());
@@ -82,7 +85,7 @@ public class RuleEvaluation<T> {
         variables = new VariableMap();
         assertionResults = new ArrayList<>();
         evaluationResult = new EvaluationResult();
-        queryContext = new RMQueryContext(modelInfoLookup, this.root);
+        queryContext = new RMQueryContext(modelInfoLookup, this.root, jaxbContext);
 
         fixableAssertionsChecker = new FixableAssertionsChecker(ruleElementValues);
 
@@ -123,7 +126,7 @@ public class RuleEvaluation<T> {
     public void refreshQueryContext() {
         //updating a single node does not seem to work with the default JAXB-implementation, so just reload the entire query
         //context
-        queryContext = new RMQueryContext(modelInfoLookup, root);
+        queryContext = new RMQueryContext(modelInfoLookup, root, jaxbContext);
     }
 
     /**

@@ -5,7 +5,6 @@ import com.nedap.archie.aom.*;
 import com.nedap.archie.aom.terminology.ArchetypeTerm;
 import com.nedap.archie.aom.terminology.ArchetypeTerminology;
 import com.nedap.archie.query.AOMPathQuery;
-
 import com.nedap.archie.rules.Assertion;
 
 import java.util.ArrayList;

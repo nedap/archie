@@ -14,6 +14,7 @@ import com.nedap.archie.rules.ExpressionVariable;
 import com.nedap.archie.rules.RuleStatement;
 import com.nedap.archie.rules.VariableDeclaration;
 import com.nedap.archie.testutil.TestUtil;
+import com.nedap.archie.xml.JAXBUtil;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -62,7 +63,7 @@ public class ParsedRulesEvaluationTest {
     public void simpleArithmetic() throws Exception {
         archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("simplearithmetic.adls"));
         assertTrue(parser.getErrors().hasNoErrors());
-        RuleEvaluation ruleEvaluation = new RuleEvaluation(ArchieRMInfoLookup.getInstance(), archetype);
+        RuleEvaluation ruleEvaluation = getRuleEvaluation();
         Observation root = new Observation();
         ruleEvaluation.evaluate(root, archetype.getRules().getRules());
         VariableMap variables = ruleEvaluation.getVariableMap();
@@ -114,7 +115,7 @@ public class ParsedRulesEvaluationTest {
     @Test
     public void modelReferences() throws Exception {
         archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("modelreferences.adls"));
-        RuleEvaluation ruleEvaluation = new RuleEvaluation(ArchieRMInfoLookup.getInstance(), archetype);
+        RuleEvaluation ruleEvaluation = getRuleEvaluation();
 
         Pathable root = (Pathable) testUtil.constructEmptyRMObject(archetype.getDefinition());
 
@@ -140,7 +141,7 @@ public class ParsedRulesEvaluationTest {
     public void booleanConstraint() throws Exception {
         archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("matches.adls"));
 
-        RuleEvaluation ruleEvaluation = new RuleEvaluation(ArchieRMInfoLookup.getInstance(), archetype);
+        RuleEvaluation ruleEvaluation = getRuleEvaluation();
 
         Pathable root = (Pathable) testUtil.constructEmptyRMObject(archetype.getDefinition());
 
@@ -163,7 +164,7 @@ public class ParsedRulesEvaluationTest {
     @Test
     public void multiValuedExpressions() throws Exception {
         archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("multiplicity.adls"));
-        RuleEvaluation ruleEvaluation = new RuleEvaluation(ArchieRMInfoLookup.getInstance(), archetype);
+        RuleEvaluation ruleEvaluation = getRuleEvaluation();
 
         Pathable root = constructTwoBloodPressureObservations();
 
@@ -180,7 +181,7 @@ public class ParsedRulesEvaluationTest {
     @Test
     public void forAllExpression() throws Exception {
         archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("for_all.adls"));
-        RuleEvaluation ruleEvaluation = new RuleEvaluation(ArchieRMInfoLookup.getInstance(), archetype);
+        RuleEvaluation ruleEvaluation = getRuleEvaluation();
 
         Pathable root = constructTwoBloodPressureObservations();
 
@@ -274,7 +275,7 @@ public class ParsedRulesEvaluationTest {
     @Test
     public void alreadyCorrectCalculatedPathValues() throws Exception {
         archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("calculated_path_values.adls"));
-        RuleEvaluation ruleEvaluation = new RuleEvaluation(ArchieRMInfoLookup.getInstance(), archetype);
+        RuleEvaluation ruleEvaluation = getRuleEvaluation();
 
         Pathable root = (Pathable) testUtil.constructEmptyRMObject(archetype.getDefinition());
         DvQuantity systolic = (DvQuantity) root.itemAtPath("/data[id2]/events[id3]/data[id4]/items[id5]/value[id13]");
@@ -296,7 +297,7 @@ public class ParsedRulesEvaluationTest {
     @Test
     public void calculatedPathValues() throws Exception {
         archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("calculated_path_values.adls"));
-        RuleEvaluation ruleEvaluation = new RuleEvaluation(ArchieRMInfoLookup.getInstance(), archetype);
+        RuleEvaluation ruleEvaluation = getRuleEvaluation();
 
         Pathable root = (Pathable) testUtil.constructEmptyRMObject(archetype.getDefinition());
         DvQuantity systolic = (DvQuantity) root.itemAtPath("/data[id2]/events[id3]/data[id4]/items[id5]/value[id13]");
@@ -314,7 +315,7 @@ public class ParsedRulesEvaluationTest {
     @Test
     public void calculatedPathValuesWithNulls1() throws Exception {
         archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("calculated_path_values.adls"));
-        RuleEvaluation ruleEvaluation = new RuleEvaluation(ArchieRMInfoLookup.getInstance(), archetype);
+        RuleEvaluation ruleEvaluation = getRuleEvaluation();
 
         Pathable root = (Pathable) testUtil.constructEmptyRMObject(archetype.getDefinition());
         DvQuantity systolic = (DvQuantity) root.itemAtPath("/data[id2]/events[id3]/data[id4]/items[id5]/value[id13]");
@@ -332,7 +333,7 @@ public class ParsedRulesEvaluationTest {
     @Test
     public void calculatedPathValuesWithNulls2() throws Exception {
         archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("calculated_path_values.adls"));
-        RuleEvaluation ruleEvaluation = new RuleEvaluation(ArchieRMInfoLookup.getInstance(), archetype);
+        RuleEvaluation ruleEvaluation = getRuleEvaluation();
 
         Pathable root = (Pathable) testUtil.constructEmptyRMObject(archetype.getDefinition());
         DvQuantity systolic = (DvQuantity) root.itemAtPath("/data[id2]/events[id3]/data[id4]/items[id5]/value[id13]");
@@ -350,7 +351,7 @@ public class ParsedRulesEvaluationTest {
     @Test
     public void calculatedPathValuesWithNulls3() throws Exception {
         archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("extended_calculated_path_values.adls"));
-        RuleEvaluation ruleEvaluation = new RuleEvaluation(ArchieRMInfoLookup.getInstance(), archetype);
+        RuleEvaluation ruleEvaluation = getRuleEvaluation();
 
         Pathable root = (Pathable) testUtil.constructEmptyRMObject(archetype.getDefinition());
         Element systolic = (Element) root.itemAtPath("/data[id2]/events[id3]/data[id4]/items[id5]");
@@ -375,7 +376,7 @@ public class ParsedRulesEvaluationTest {
     @Test
     public void calculatedPathValues2() throws Exception {
         archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("calculated_path_values_2.adls"));
-        RuleEvaluation ruleEvaluation = new RuleEvaluation(ArchieRMInfoLookup.getInstance(), archetype);
+        RuleEvaluation ruleEvaluation = getRuleEvaluation();
 
         Pathable root = (Pathable) testUtil.constructEmptyRMObject(archetype.getDefinition());
         DvQuantity systolic = (DvQuantity) root.itemAtPath("/data[id2]/events[id3]/data[id4]/items[id5]/value[id13]");
@@ -397,7 +398,7 @@ public class ParsedRulesEvaluationTest {
     @Test
     public void forAllCalculatedValues() throws Exception {
         archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("for_all_calculated_path_values.adls"));
-        RuleEvaluation ruleEvaluation = new RuleEvaluation(ArchieRMInfoLookup.getInstance(), archetype);
+        RuleEvaluation ruleEvaluation = getRuleEvaluation();
 
         Pathable root = constructTwoBloodPressureObservations();
 
@@ -415,7 +416,7 @@ public class ParsedRulesEvaluationTest {
     @Test
     public void existsSucceeded() throws Exception {
         archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("exists.adls"));
-        RuleEvaluation ruleEvaluation = new RuleEvaluation(ArchieRMInfoLookup.getInstance(), archetype);
+        RuleEvaluation ruleEvaluation = getRuleEvaluation();
 
         Pathable root = constructTwoBloodPressureObservations();
 
@@ -435,7 +436,7 @@ public class ParsedRulesEvaluationTest {
     @Test
     public void existsFailed() throws Exception {
         archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("exists.adls"));
-        RuleEvaluation ruleEvaluation = new RuleEvaluation(ArchieRMInfoLookup.getInstance(), archetype);
+        RuleEvaluation ruleEvaluation = getRuleEvaluation();
 
         Pathable root = (Pathable) testUtil.constructEmptyRMObject(archetype.getDefinition());
 
@@ -457,7 +458,7 @@ public class ParsedRulesEvaluationTest {
     @Test
     public void notExistsSucceeded() throws Exception {
         archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("not_exists.adls"));
-        RuleEvaluation ruleEvaluation = new RuleEvaluation(ArchieRMInfoLookup.getInstance(), archetype);
+        RuleEvaluation ruleEvaluation = getRuleEvaluation();
 
         Pathable root = (Pathable) testUtil.constructEmptyRMObject(archetype.getDefinition());
 
@@ -477,7 +478,7 @@ public class ParsedRulesEvaluationTest {
     @Test
     public void notExistsFailed() throws Exception {
         archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("not_exists.adls"));
-        RuleEvaluation ruleEvaluation = new RuleEvaluation(ArchieRMInfoLookup.getInstance(), archetype);
+        RuleEvaluation ruleEvaluation = getRuleEvaluation();
 
         Pathable root = constructTwoBloodPressureObservations();
 
@@ -496,7 +497,7 @@ public class ParsedRulesEvaluationTest {
     @Test
     public void existsMixed() throws Exception {
         archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("exists.adls"));
-        RuleEvaluation ruleEvaluation = new RuleEvaluation(ArchieRMInfoLookup.getInstance(), archetype);
+        RuleEvaluation ruleEvaluation = getRuleEvaluation();
 
         Pathable root = constructTwoBloodPressureObservationsOneEmptySystolic();
 
@@ -523,7 +524,7 @@ public class ParsedRulesEvaluationTest {
     @Test
     public void notExistsMixed() throws Exception {
         archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("not_exists.adls"));
-        RuleEvaluation ruleEvaluation = new RuleEvaluation(ArchieRMInfoLookup.getInstance(), archetype);
+        RuleEvaluation ruleEvaluation = getRuleEvaluation();
 
         Pathable root = constructTwoBloodPressureObservationsOneEmptySystolic();
 
@@ -544,7 +545,7 @@ public class ParsedRulesEvaluationTest {
     @Test
     public void implies() throws Exception {
         archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("implies.adls"));
-        RuleEvaluation ruleEvaluation = new RuleEvaluation(ArchieRMInfoLookup.getInstance(), archetype);
+        RuleEvaluation ruleEvaluation = getRuleEvaluation();
 
         Pathable root = constructTwoBloodPressureObservationsOneEmptySystolicNoDiastolic();
 
@@ -564,7 +565,7 @@ public class ParsedRulesEvaluationTest {
     @Test
     public void impliesEvaluatesToNull() throws Exception {
         archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("implies.adls"));
-        RuleEvaluation ruleEvaluation = new RuleEvaluation(ArchieRMInfoLookup.getInstance(), archetype);
+        RuleEvaluation ruleEvaluation = getRuleEvaluation();
 
         Pathable root = (Pathable) testUtil.constructEmptyRMObject(archetype.getDefinition());
 
@@ -585,7 +586,7 @@ public class ParsedRulesEvaluationTest {
     public void booleanOperandRelOps() throws Exception {
         archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("boolean_operand_relops.adls"));
         assertTrue(parser.getErrors().hasNoErrors());
-        RuleEvaluation ruleEvaluation = new RuleEvaluation(ArchieRMInfoLookup.getInstance(), archetype);
+        RuleEvaluation ruleEvaluation = getRuleEvaluation();
         Observation root = new Observation();
         ruleEvaluation.evaluate(root, archetype.getRules().getRules());
         VariableMap variables = ruleEvaluation.getVariableMap();
@@ -596,11 +597,15 @@ public class ParsedRulesEvaluationTest {
         assertEquals(false, variables.get("arithmetic_boolean_operands_false").getObject(0));
     }
 
+    private RuleEvaluation getRuleEvaluation() {
+        return new RuleEvaluation(ArchieRMInfoLookup.getInstance(), JAXBUtil.getArchieJAXBContext(), archetype);
+    }
+
     @Test
     public void stringLiterals() throws Exception {
         archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("string_literals.adls"));
         assertTrue(parser.getErrors().hasNoErrors());
-        RuleEvaluation ruleEvaluation = new RuleEvaluation(ArchieRMInfoLookup.getInstance(), archetype);
+        RuleEvaluation ruleEvaluation = getRuleEvaluation();
         Observation root = new Observation();
         ruleEvaluation.evaluate(root, archetype.getRules().getRules());
         VariableMap variables = ruleEvaluation.getVariableMap();

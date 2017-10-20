@@ -12,6 +12,7 @@ import com.nedap.archie.rm.datavalues.DvText;
 import com.nedap.archie.rminfo.ArchieRMInfoLookup;
 import com.nedap.archie.rminfo.ModelInfoLookup;
 import com.nedap.archie.testutil.TestUtil;
+import com.nedap.archie.xml.JAXBUtil;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -41,10 +42,14 @@ public class RMQueryContextTest {
         root = (Pathable) testUtil.constructEmptyRMObject(archetype.getDefinition());
         Composition composition = (Composition) root;
 
-        RMQueryContext queryContext = new RMQueryContext(ArchieRMInfoLookup.getInstance(), root);
+        RMQueryContext queryContext = getQueryContext();
         assertEquals(Lists.newArrayList(composition.getContext()), queryContext.findList("/context"));
         DvText text = (DvText) queryContext.findList("/context/other_context/items[name/value = 'Qualification']/items[id5]/value").get(0);
         assertNotNull(text);
+    }
+
+    private RMQueryContext getQueryContext() {
+        return new RMQueryContext(ArchieRMInfoLookup.getInstance(), root, JAXBUtil.getArchieJAXBContext());
     }
 
     @Test
@@ -53,7 +58,7 @@ public class RMQueryContextTest {
         Composition composition = (Composition) root;
 
         ((Locatable) ((Composition) root).getContext().getOtherContext().getItems().get(0)).setArchetypeNodeId("id3.1");
-        RMQueryContext queryContext = new RMQueryContext(ArchieRMInfoLookup.getInstance(), root);
+        RMQueryContext queryContext = getQueryContext();
         assertEquals(Lists.newArrayList(composition.getContext()), queryContext.findList("/context"));
         DvText text = (DvText) queryContext.findList("/context/other_context/items[id3.1]/items[id5]/value").get(0);
         assertNotNull(text);
@@ -70,7 +75,7 @@ public class RMQueryContextTest {
             composition.getContext().getOtherContext().getItems().addAll(composition2.getContext().getOtherContext().getItems());
         }
 
-        RMQueryContext queryContext = new RMQueryContext(ArchieRMInfoLookup.getInstance(), root);
+        RMQueryContext queryContext = getQueryContext();
 
         ModelInfoLookup modelInfoLookup = ArchieRMInfoLookup.getInstance();
 
@@ -99,7 +104,7 @@ public class RMQueryContextTest {
             composition.getContext().getOtherContext().getItems().addAll(composition2.getContext().getOtherContext().getItems());
         }
 
-        RMQueryContext queryContext = new RMQueryContext(ArchieRMInfoLookup.getInstance(), root);
+        RMQueryContext queryContext = getQueryContext();
 
         ModelInfoLookup modelInfoLookup = ArchieRMInfoLookup.getInstance();
 

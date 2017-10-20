@@ -10,15 +10,11 @@ import com.nedap.archie.aom.CComplexObject;
 import com.nedap.archie.aom.CComplexObjectProxy;
 import com.nedap.archie.aom.CObject;
 import com.nedap.archie.aom.OperationalTemplate;
-import com.nedap.archie.query.APathQuery;
 import com.nedap.archie.xml.JAXBUtil;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-import java.io.StringWriter;
 import java.util.List;
 import java.util.Stack;
 

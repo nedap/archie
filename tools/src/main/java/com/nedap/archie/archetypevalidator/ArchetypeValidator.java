@@ -8,7 +8,6 @@ import com.nedap.archie.archetypevalidator.validations.ModelConformanceValidatio
 import com.nedap.archie.archetypevalidator.validations.NodeIdValidation;
 import com.nedap.archie.archetypevalidator.validations.TerminologyValidation;
 import com.nedap.archie.archetypevalidator.validations.ValueSetValidation;
-import com.nedap.archie.rminfo.ArchieRMInfoLookup;
 import com.nedap.archie.rminfo.ModelInfoLookup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,10 +23,6 @@ public class ArchetypeValidator {
 
     private List<ArchetypeValidation> validations;
     private ModelInfoLookup modelInfoLookup;
-
-    public ArchetypeValidator() {
-        this(ArchieRMInfoLookup.getInstance());
-    }
 
     public ArchetypeValidator(ModelInfoLookup lookup) {
         modelInfoLookup = lookup;

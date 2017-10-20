@@ -8,7 +8,6 @@ import com.nedap.archie.archetypevalidator.ErrorType;
 import com.nedap.archie.archetypevalidator.ValidatingVisitor;
 import com.nedap.archie.archetypevalidator.ValidationMessage;
 import com.nedap.archie.rminfo.ModelInfoLookup;
-import com.nedap.archie.rminfo.ReflectionModelInfoLookup;
 import com.nedap.archie.rminfo.RMAttributeInfo;
 import com.nedap.archie.rminfo.RMTypeInfo;
 

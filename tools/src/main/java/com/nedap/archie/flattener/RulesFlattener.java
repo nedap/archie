@@ -3,8 +3,15 @@ package com.nedap.archie.flattener;
 import com.google.common.base.Strings;
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.RulesSection;
-import com.nedap.archie.rules.*;
-import com.nedap.archie.serializer.adl.rules.ExpressionVariableDeclarationSerializer;
+import com.nedap.archie.rules.Assertion;
+import com.nedap.archie.rules.BinaryOperator;
+import com.nedap.archie.rules.Expression;
+import com.nedap.archie.rules.ExpressionVariable;
+import com.nedap.archie.rules.ForAllStatement;
+import com.nedap.archie.rules.ModelReference;
+import com.nedap.archie.rules.RuleStatement;
+import com.nedap.archie.rules.UnaryOperator;
+import com.nedap.archie.rules.VariableReference;
 
 import java.util.Objects;
 

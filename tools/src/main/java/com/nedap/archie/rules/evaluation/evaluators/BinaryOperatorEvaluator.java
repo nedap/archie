@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
-import static com.nedap.archie.rules.evaluation.evaluators.FunctionUtil.*;
+import static com.nedap.archie.rules.evaluation.evaluators.FunctionUtil.checkAndHandleNull;
 
 
 /**

@@ -7,6 +7,7 @@ import com.nedap.archie.rm.archetyped.Locatable;
 import com.nedap.archie.rm.archetyped.Pathable;
 import com.nedap.archie.rminfo.ArchieRMInfoLookup;
 import com.nedap.archie.testutil.TestUtil;
+import com.nedap.archie.xml.JAXBUtil;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -34,7 +35,7 @@ public class FixableAssertionsCheckerTest {
     @Test
     public void fixableMatches() throws Exception {
         archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("fixable_matches.adls"));
-        RuleEvaluation<Locatable> ruleEvaluation = new RuleEvaluation(ArchieRMInfoLookup.getInstance(), archetype);
+        RuleEvaluation<Locatable> ruleEvaluation = getRuleEvaluation();
 
         Locatable root = (Locatable) testUtil.constructEmptyRMObject(archetype.getDefinition());
         EvaluationResult evaluate = ruleEvaluation.evaluate(root, archetype.getRules().getRules());
@@ -65,7 +66,7 @@ public class FixableAssertionsCheckerTest {
     @Test
     public void andExpression() throws Exception {
         archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("and.adls"));
-        RuleEvaluation<Locatable> ruleEvaluation = new RuleEvaluation(ArchieRMInfoLookup.getInstance(), archetype);
+        RuleEvaluation<Locatable> ruleEvaluation = getRuleEvaluation();
 
         Locatable root = (Locatable) testUtil.constructEmptyRMObject(archetype.getDefinition());
         EvaluationResult evaluate = ruleEvaluation.evaluate(root, archetype.getRules().getRules());
@@ -96,7 +97,7 @@ public class FixableAssertionsCheckerTest {
     @Test
     public void constructOnlyNecessaryStructure() throws Exception {
         archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("construct_only_necessary_structure.adls"));
-        RuleEvaluation<Locatable> ruleEvaluation = new RuleEvaluation(ArchieRMInfoLookup.getInstance(), archetype);
+        RuleEvaluation<Locatable> ruleEvaluation = getRuleEvaluation();
 
         Locatable root = (Locatable) emptyRMObjectConstructor.constructEmptyRMObject(archetype.getDefinition());
         EvaluationResult evaluate = ruleEvaluation.evaluate(root, archetype.getRules().getRules());
@@ -115,6 +116,10 @@ public class FixableAssertionsCheckerTest {
             assertTrue(result.getResult());
         }
 
+    }
+
+    private RuleEvaluation getRuleEvaluation() {
+        return new RuleEvaluation(ArchieRMInfoLookup.getInstance(),  JAXBUtil.getArchieJAXBContext(), archetype);
     }
 
 }

@@ -2,6 +2,7 @@ package com.nedap.archie.archetypevalidator;
 
 import com.nedap.archie.adlparser.ADLParser;
 import com.nedap.archie.aom.Archetype;
+import com.nedap.archie.rminfo.ArchieRMInfoLookup;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -27,14 +28,14 @@ public class ArchetypeValidatorTest {
     @Test
     public void validArchetype() throws Exception {
         archetype = parse("/basic.adl");
-        List<ValidationMessage> messages = new ArchetypeValidator().validate(archetype);
+        List<ValidationMessage> messages = new ArchetypeValidator(ArchieRMInfoLookup.getInstance()).validate(archetype);
         assertEquals(0, messages.size());
     }
 
     @Test
     public void VCARMNonExistantType() throws Exception {
         archetype = parse("/adl2-tests/validity/rm_checking/openEHR-EHR-EVALUATION.VCARM_rm_non_existent_attribute.v1.adls");
-        List<ValidationMessage> messages = new ArchetypeValidator().validate(archetype);
+        List<ValidationMessage> messages = new ArchetypeValidator(ArchieRMInfoLookup.getInstance()).validate(archetype);
         System.out.println(messages);
         assertEquals(1, messages.size());
         assertEquals(ErrorType.VCARM, messages.get(0).getType());
@@ -43,7 +44,7 @@ public class ArchetypeValidatorTest {
     @Test
     public void VCORMTNonConformingType2() throws Exception {
         archetype = parse("/adl2-tests/validity/rm_checking/openEHR-EHR-OBSERVATION.VCORMT_rm_non_conforming_type2.v1.adls");
-        List<ValidationMessage> messages = new ArchetypeValidator().validate(archetype);
+        List<ValidationMessage> messages = new ArchetypeValidator(ArchieRMInfoLookup.getInstance()).validate(archetype);
         System.out.println(messages);
         assertEquals(1, messages.size());
         assertEquals(ErrorType.VCORMT, messages.get(0).getType());
@@ -52,7 +53,7 @@ public class ArchetypeValidatorTest {
     @Test
     public void VTVSIDidCodeNotPresent() throws Exception {
         archetype = parse("/adl2-tests/validity/consistency/openEHR-TEST_PKG-ENTRY.VACDF_ac_code_in_definition_not_in_terminology.v1.adls");
-        List<ValidationMessage> messages = new ArchetypeValidator().validate(archetype);
+        List<ValidationMessage> messages = new ArchetypeValidator(ArchieRMInfoLookup.getInstance()).validate(archetype);
         System.out.println(messages);
         assertEquals(2, messages.size());
         assertEquals(ErrorType.VCARM, messages.get(0).getType());
@@ -62,7 +63,7 @@ public class ArchetypeValidatorTest {
     @Test
     public void VTVSIDatCodeNotPresent() throws Exception {
         archetype = parse("/adl2-tests/validity/consistency/openEHR-TEST_PKG-ENTRY.VATDF_at_code_in_ordinal_not_in_terminology.v1.adls");
-        List<ValidationMessage> messages = new ArchetypeValidator().validate(archetype);
+        List<ValidationMessage> messages = new ArchetypeValidator(ArchieRMInfoLookup.getInstance()).validate(archetype);
         System.out.println(messages);
         assertEquals(2, messages.size());
         assertEquals(ErrorType.VCARM, messages.get(0).getType());

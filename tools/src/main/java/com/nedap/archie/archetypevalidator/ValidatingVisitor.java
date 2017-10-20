@@ -7,7 +7,6 @@ import com.nedap.archie.aom.CComplexObject;
 import com.nedap.archie.aom.CComplexObjectProxy;
 import com.nedap.archie.aom.CObject;
 import com.nedap.archie.aom.CPrimitiveObject;
-import com.nedap.archie.rminfo.ReflectionModelInfoLookup;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;

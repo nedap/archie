@@ -1,15 +1,9 @@
 package com.nedap.archie.rules.evaluation;
 
-import com.google.common.collect.Lists;
-import com.nedap.archie.aom.CAttribute;
-import com.nedap.archie.aom.CComplexObject;
 import com.nedap.archie.aom.CObject;
 import com.nedap.archie.creation.RMObjectCreator;
 import com.nedap.archie.rm.RMObject;
 import com.nedap.archie.rminfo.ModelInfoLookup;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This class is deprecated since the RMObjectCreator can do the same plus more
@@ -34,7 +28,7 @@ class EmptyRMObjectConstructor {
      * @param object
      * @return
      */
-    RMObject constructEmptyRMObject(CObject object) {
+    Object constructEmptyRMObject(CObject object) {
         return creator.create(object);
     }
 }

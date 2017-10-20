@@ -9,9 +9,7 @@ import com.nedap.archie.rules.evaluation.ValueList;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.nedap.archie.rules.evaluation.evaluators.FunctionUtil.castToDouble;
-import static com.nedap.archie.rules.evaluation.evaluators.FunctionUtil.checkAndHandleNull;
-import static com.nedap.archie.rules.evaluation.evaluators.FunctionUtil.checkEqualLength;
+import static com.nedap.archie.rules.evaluation.evaluators.FunctionUtil.*;
 
 /**
  * Created by pieter.bos on 07/04/2017.

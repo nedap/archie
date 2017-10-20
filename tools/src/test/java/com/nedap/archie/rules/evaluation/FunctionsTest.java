@@ -8,9 +8,10 @@ import com.nedap.archie.rm.composition.Observation;
 import com.nedap.archie.rm.datavalues.quantity.DvQuantity;
 import com.nedap.archie.rminfo.ArchieRMInfoLookup;
 import com.nedap.archie.testutil.TestUtil;
+import com.nedap.archie.xml.JAXBUtil;
+
 import org.junit.Before;
 import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -32,7 +33,7 @@ public class FunctionsTest {
         archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("functions.adls"));
         assertTrue(parser.getErrors().hasNoErrors());
         System.out.println(archetype);
-        RuleEvaluation ruleEvaluation = new RuleEvaluation(ArchieRMInfoLookup.getInstance(), archetype);
+        RuleEvaluation ruleEvaluation = getRuleEvaluation();
         Observation root = new Observation();
         ruleEvaluation.evaluate(root, archetype.getRules().getRules());
         ValueList min = ruleEvaluation.getVariableMap().get("min");
@@ -44,11 +45,15 @@ public class FunctionsTest {
         archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("functions.adls"));
         assertTrue(parser.getErrors().hasNoErrors());
         System.out.println(archetype);
-        RuleEvaluation ruleEvaluation = new RuleEvaluation(ArchieRMInfoLookup.getInstance(),archetype);
+        RuleEvaluation ruleEvaluation = getRuleEvaluation();
         Observation root = new Observation();
         ruleEvaluation.evaluate(root, archetype.getRules().getRules());
         ValueList min = ruleEvaluation.getVariableMap().get("max");
         assertEquals("max should work", 2.0, (double) min.getValues().get(0).getValue(), 0.001);
+    }
+
+    private RuleEvaluation getRuleEvaluation() {
+        return new RuleEvaluation(ArchieRMInfoLookup.getInstance(), JAXBUtil.getArchieJAXBContext(), archetype);
     }
 
     @Test
@@ -56,7 +61,7 @@ public class FunctionsTest {
         archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("functions.adls"));
         assertTrue(parser.getErrors().hasNoErrors());
 
-        RuleEvaluation ruleEvaluation = new RuleEvaluation(ArchieRMInfoLookup.getInstance(),archetype);
+        RuleEvaluation ruleEvaluation = getRuleEvaluation();
         Observation root = new Observation();
         ruleEvaluation.evaluate(root, archetype.getRules().getRules());
         ValueList valueWhenUndefined = ruleEvaluation.getVariableMap().get("value_when_undefined");
@@ -68,7 +73,7 @@ public class FunctionsTest {
         archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("functions.adls"));
         assertTrue(parser.getErrors().hasNoErrors());
 
-        RuleEvaluation ruleEvaluation = new RuleEvaluation(ArchieRMInfoLookup.getInstance(),archetype);
+        RuleEvaluation ruleEvaluation = getRuleEvaluation();
         Locatable rmObject = (Locatable) new TestUtil().constructEmptyRMObject(archetype.getDefinition());
         DvQuantity quantity = (DvQuantity) rmObject.itemAtPath("/data[id2]/events[id3]/data[id4]/items[id5]/value");
         quantity.setMagnitude(65d);

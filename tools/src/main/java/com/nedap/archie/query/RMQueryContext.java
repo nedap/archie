@@ -1,9 +1,7 @@
 package com.nedap.archie.query;
 
-import com.nedap.archie.rminfo.ArchieRMInfoLookup;
 import com.nedap.archie.rminfo.ModelInfoLookup;
 import com.nedap.archie.rminfo.RMAttributeInfo;
-import com.nedap.archie.xml.JAXBUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -48,17 +46,10 @@ public class RMQueryContext {
     private String firstXPathNode;
     private static Logger logger = LoggerFactory.getLogger(RMQueryContext.class);
 
-    /**
-     * Construct a query object for a given root node. You can later query subnodes of this rootnode if you desire.
-     * @param rootNode
-     */
-    public RMQueryContext(ModelInfoLookup modelInfoLookup, Object rootNode) {
-        this(modelInfoLookup, rootNode, JAXBUtil.getArchieJAXBContext());
-    }
+
 
     /**
-     * Construct a query object for a given root node with a different RM implementation than the Archie one.
-     * please construct your own JAXBContext, see JAXBUtil for how to do this
+     * Construct a query object for a given root node with a given RM implementation. Requires a JaxbContext.
      * @param rootNode
      */
     public RMQueryContext(ModelInfoLookup lookup, Object rootNode, JAXBContext jaxbContext) {

@@ -5,6 +5,7 @@ import com.nedap.archie.rules.BinaryOperator;
 import com.nedap.archie.rules.Constant;
 import com.nedap.archie.rules.ExpressionType;
 import com.nedap.archie.rules.OperatorKind;
+import com.nedap.archie.xml.JAXBUtil;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -98,7 +99,7 @@ public class BinaryOperatorTest {
         Constant rightConstant = new Constant(type, right);
         operator.addOperand(leftConstant);
         operator.addOperand(rightConstant);
-        RuleEvaluation eval = new RuleEvaluation(ArchieRMInfoLookup.getInstance(), null);//should be archetype, not very relevant here
+        RuleEvaluation eval = new RuleEvaluation(ArchieRMInfoLookup.getInstance(), JAXBUtil.getArchieJAXBContext(), null);//should be archetype, not very relevant here
         assertEquals(expected, eval.evaluate(operator).getValueObjects().get(0));
     }
 
