@@ -16,6 +16,7 @@ import java.time.temporal.ChronoField;
 import java.time.temporal.Temporal;
 import java.time.temporal.TemporalAccessor;
 import java.time.temporal.TemporalAmount;
+import static com.nedap.archie.datetime.DateTimeParsers.*;
 
 /**
  * Created by pieter.bos on 29/10/15.
@@ -26,73 +27,6 @@ public class TemporalConstraintParser extends BaseTreeWalker {
         super(errors);
     }
 
-    public static final DateTimeFormatter ISO_8601_DATE;
-    static {
-        ISO_8601_DATE = new DateTimeFormatterBuilder()
-                .parseCaseInsensitive()
-                .appendValue(ChronoField.YEAR)
-                .optionalStart()
-                    .appendLiteral('-')
-                    .appendValue(ChronoField.MONTH_OF_YEAR)
-                    .optionalStart()
-                        .appendLiteral('-')
-                        .appendValue(ChronoField.DAY_OF_MONTH)
-                    .optionalEnd()
-                .optionalEnd()
-                .toFormatter();
-    }
-
-    public static final DateTimeFormatter ISO_8601_DATE_TIME;
-    static {
-        ISO_8601_DATE_TIME = new DateTimeFormatterBuilder()
-                .parseCaseInsensitive()
-                .appendValue(ChronoField.YEAR)
-                .appendLiteral('-')
-                .appendValue(ChronoField.MONTH_OF_YEAR)
-                .appendLiteral('-')
-                .appendValue(ChronoField.DAY_OF_MONTH)
-                .appendLiteral('T')
-                .appendValue(ChronoField.HOUR_OF_DAY, 2)
-                .optionalStart()
-                    .appendLiteral(':')
-                    .appendValue(ChronoField.MINUTE_OF_HOUR, 2)
-                    .optionalStart()
-                        .appendLiteral(':')
-                        .appendValue(ChronoField.SECOND_OF_MINUTE, 2)
-                        .optionalStart()
-                            .appendLiteral(',')
-                            .appendFraction(ChronoField.MICRO_OF_SECOND, 0, 6, false)
-                        .optionalEnd()
-                    .optionalEnd()
-                .optionalEnd()
-                .optionalStart()
-                    .appendOffset("+HHmm", "Z")
-                .optionalEnd()
-                .toFormatter();
-    }
-
-    public static final DateTimeFormatter ISO_8601_TIME;
-    static {
-        ISO_8601_TIME = new DateTimeFormatterBuilder()
-                .parseCaseInsensitive()
-                .appendValue(ChronoField.HOUR_OF_DAY)
-                .optionalStart()
-                    .appendLiteral(':')
-                    .appendValue(ChronoField.MINUTE_OF_HOUR, 2)
-                    .optionalStart()
-                        .appendLiteral(':')
-                        .appendValue(ChronoField.SECOND_OF_MINUTE, 2)
-                        .optionalStart()
-                            .appendLiteral(',')
-                            .appendFraction(ChronoField.MICRO_OF_SECOND, 0, 6, false)
-                        .optionalEnd()
-                    .optionalEnd()
-                .optionalEnd()
-                .optionalStart()
-                    .appendOffset("+HHmm", "Z")
-                .optionalEnd()
-                .toFormatter();
-    }
 
     public CDuration parseCDuration(C_durationContext context) {
         //TODO: surround with try catch, do a nice error reporting with line numbers and other nice messages here :)
@@ -197,17 +131,6 @@ public class TemporalConstraintParser extends BaseTreeWalker {
         result.addConstraint(constraint);
     }
 
-    public static TemporalAmount parseDurationValue(String text) {
-        try {
-            if(text.startsWith("PT")) {
-                return Duration.parse(text);
-            } else {
-                return Period.parse(text);
-            }
-        } catch (DateTimeParseException e) {
-            throw new IllegalArgumentException(e.getMessage() + ":" + text);
-        }
-    }
 
     public CDateTime parseCDateTime(C_date_timeContext context) {
         //TODO: surround with try catch, do a nice error reporting with line numbers and other nice messages here :)
@@ -491,41 +414,5 @@ public class TemporalConstraintParser extends BaseTreeWalker {
         result.addConstraint(constraint);
     }
 
-    public static TemporalAccessor parseDateTimeValue(String text) {
-        try {
-            return ISO_8601_DATE_TIME.parseBest(text, OffsetDateTime::from, LocalDateTime::from);
-        } catch (DateTimeParseException e) {
-            try {
-                //Not parseable as a standard public object from datetime. We do not implement our own yet (we could!)
-                //so fallback to the Parsed object. The Parsed object is package-private, so cannot be added as a reference
-                //to the parseBest query, unfortunately.
-                return ISO_8601_DATE_TIME.parse(text);
-            } catch (DateTimeParseException e1) {
-                throw new IllegalArgumentException(e1.getMessage() + ":" + text);
-            }
-        }
-    }
 
-    public static TemporalAccessor parseTimeValue(String text) {
-        try {
-            return ISO_8601_TIME.parseBest(text, OffsetTime::from, LocalTime::from);
-        } catch (DateTimeParseException e) {
-            try {
-                //Not parseable as a standard public object from datetime. We do not implement our own yet (we could!)
-                //so fallback to the Parsed object. The Parsed object is package-private, so cannot be added as a reference
-                //to the parseBest query, unfortunately.
-                return ISO_8601_TIME.parse(text);
-            } catch (DateTimeParseException e1) {
-                throw new IllegalArgumentException(e1.getMessage() + ":" + text);
-            }
-        }
-    }
-
-    public static Temporal parseDateValue(String text) {
-        try {
-            return (Temporal) ISO_8601_DATE.parseBest(text, LocalDate::from, YearMonth::from, Year::from);
-        } catch (DateTimeParseException e) {
-            throw new IllegalArgumentException(e.getMessage() + ":" + text);
-        }
-    }
 }

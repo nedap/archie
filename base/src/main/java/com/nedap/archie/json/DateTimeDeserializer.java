@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.nedap.archie.adlparser.treewalkers.TemporalConstraintParser;
+import com.nedap.archie.datetime.DateTimeParsers;
 
 import java.io.IOException;
 import java.time.temporal.TemporalAccessor;
@@ -19,7 +19,7 @@ public class DateTimeDeserializer extends JsonDeserializer<TemporalAccessor>{
         if(valueAsString == null) {
             return null;
         }
-        return TemporalConstraintParser.parseDateTimeValue(valueAsString);
+        return DateTimeParsers.parseDateTimeValue(valueAsString);
     }
 
 }

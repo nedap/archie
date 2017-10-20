@@ -1,6 +1,7 @@
 package com.nedap.archie.xml.adapters;
 
-import com.nedap.archie.adlparser.treewalkers.TemporalConstraintParser;
+import com.nedap.archie.datetime.DateTimeFormatters;
+import com.nedap.archie.datetime.DateTimeParsers;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 import java.time.LocalDate;
@@ -14,7 +15,7 @@ public class DateXmlAdapter extends XmlAdapter<String, Temporal> {
 
     @Override
     public Temporal unmarshal(String stringValue) {
-        return stringValue != null? TemporalConstraintParser.parseDateValue(stringValue):null;
+        return stringValue != null? DateTimeParsers.parseDateValue(stringValue):null;
     }
 
     @Override
@@ -22,6 +23,6 @@ public class DateXmlAdapter extends XmlAdapter<String, Temporal> {
         if(value instanceof LocalDate || value instanceof YearMonth) {
             return value.toString();
         }
-        return value != null?TemporalConstraintParser.ISO_8601_DATE.format(value):null;
+        return value != null ? DateTimeFormatters.ISO_8601_DATE.format(value):null;
     }
 }

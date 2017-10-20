@@ -1,4 +1,4 @@
 dependencies {
-  compile project(':adl-grammar')
+  compile project(':grammars')
   compile project(':base')
 }

@@ -1,6 +1,7 @@
 package com.nedap.archie.xml.adapters;
 
 import com.nedap.archie.adlparser.treewalkers.TemporalConstraintParser;
+import com.nedap.archie.datetime.DateTimeParsers;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 import java.time.temporal.TemporalAccessor;
@@ -13,7 +14,7 @@ public class TimeXmlAdapter extends XmlAdapter<String, TemporalAccessor> {
 
     @Override
     public TemporalAccessor unmarshal(String stringValue) {
-        return stringValue != null? TemporalConstraintParser.parseTimeValue(stringValue):null;
+        return stringValue != null? DateTimeParsers.parseTimeValue(stringValue):null;
     }
 
     @Override

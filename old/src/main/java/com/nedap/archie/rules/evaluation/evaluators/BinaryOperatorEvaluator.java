@@ -3,7 +3,6 @@ package com.nedap.archie.rules.evaluation.evaluators;
 import com.google.common.collect.Lists;
 import com.nedap.archie.rminfo.ArchieRMInfoLookup;
 import com.nedap.archie.rminfo.ModelInfoLookup;
-import com.nedap.archie.rminfo.ReflectionModelInfoLookup;
 import com.nedap.archie.rules.BinaryOperator;
 import com.nedap.archie.rules.Constraint;
 import com.nedap.archie.rules.OperatorKind;

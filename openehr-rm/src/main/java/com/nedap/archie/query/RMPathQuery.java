@@ -2,12 +2,7 @@ package com.nedap.archie.query;
 
 
 import com.google.common.collect.Lists;
-import com.nedap.archie.aom.ArchetypeModelObject;
-import com.nedap.archie.aom.CAttribute;
-import com.nedap.archie.aom.CComplexObject;
-import com.nedap.archie.aom.CComplexObjectProxy;
-import com.nedap.archie.aom.CObject;
-import com.nedap.archie.aom.CPrimitiveObject;
+import com.nedap.archie.adl.AdlCodeDefinitions;
 import com.nedap.archie.paths.PathSegment;
 import com.nedap.archie.rm.archetyped.Locatable;
 import com.nedap.archie.rminfo.ModelInfoLookup;
@@ -333,7 +328,7 @@ public class RMPathQuery {
     }
 
     private boolean archetypeNodeIdPresent(String archetypeNodeId) {
-        return archetypeNodeId != null && !archetypeNodeId.equals(CPrimitiveObject.PRIMITIVE_NODE_ID_VALUE);
+        return archetypeNodeId != null && !archetypeNodeId.equals(AdlCodeDefinitions.PRIMITIVE_NODE_ID);
     }
 
     private Collection<RMObjectWithPath> findRMObjectsWithPathCollection(PathSegment segment, Collection<Object> collection, String path) {
