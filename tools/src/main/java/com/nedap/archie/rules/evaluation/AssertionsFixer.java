@@ -20,7 +20,6 @@ import com.nedap.archie.rm.datatypes.CodePhrase;
 import com.nedap.archie.rm.datavalues.DvCodedText;
 import com.nedap.archie.rm.datavalues.quantity.DvOrdinal;
 import com.nedap.archie.rm.support.identification.TerminologyId;
-import com.nedap.archie.rminfo.ArchieRMInfoLookup;
 import com.nedap.archie.rminfo.RMAttributeInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,7 +65,7 @@ public class AssertionsFixer {
                 }
 
                 for(Object parent:parents) {
-                    RMAttributeInfo attributeInfo = ArchieRMInfoLookup.getInstance().getAttributeInfo(parent.getClass(), lastPathSegment);
+                    RMAttributeInfo attributeInfo = ruleEvaluation.getModelInfoLookup().getAttributeInfo(parent.getClass(), lastPathSegment);
                     if(attributeInfo == null) {
                         throw new IllegalStateException("attribute " + lastPathSegment + " does not exist on type " + parent.getClass());
                     }
@@ -254,7 +253,7 @@ public class AssertionsFixer {
     }
 
     private Object constructEmptySimpleObject(String newLastPathSegment, Object object, Object newEmptyObject) {
-        RMAttributeInfo attributeInfo = ArchieRMInfoLookup.getInstance().getAttributeInfo(object.getClass(), newLastPathSegment);
+        RMAttributeInfo attributeInfo = ruleEvaluation.getModelInfoLookup().getAttributeInfo(object.getClass(), newLastPathSegment);
         try {
             newEmptyObject = attributeInfo.getTypeInCollection().newInstance();
         } catch (InstantiationException e) {

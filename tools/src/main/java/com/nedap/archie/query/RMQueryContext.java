@@ -1,6 +1,7 @@
 package com.nedap.archie.query;
 
 import com.nedap.archie.rminfo.ArchieRMInfoLookup;
+import com.nedap.archie.rminfo.ModelInfoLookup;
 import com.nedap.archie.rminfo.RMAttributeInfo;
 import com.nedap.archie.xml.JAXBUtil;
 import org.slf4j.Logger;
@@ -35,6 +36,7 @@ import java.util.List;
 public class RMQueryContext {
 
     private final XPathFactory xPathFactory;
+    private final ModelInfoLookup modelInfoLooup;
     private Binder<Node> binder;
     private Document domForQueries;
     private Object rootNode;
@@ -50,8 +52,8 @@ public class RMQueryContext {
      * Construct a query object for a given root node. You can later query subnodes of this rootnode if you desire.
      * @param rootNode
      */
-    public RMQueryContext(Object rootNode) {
-        this(rootNode, JAXBUtil.getArchieJAXBContext());
+    public RMQueryContext(ModelInfoLookup modelInfoLookup, Object rootNode) {
+        this(modelInfoLookup, rootNode, JAXBUtil.getArchieJAXBContext());
     }
 
     /**
@@ -59,9 +61,10 @@ public class RMQueryContext {
      * please construct your own JAXBContext, see JAXBUtil for how to do this
      * @param rootNode
      */
-    public RMQueryContext(Object rootNode, JAXBContext jaxbContext) {
+    public RMQueryContext(ModelInfoLookup lookup, Object rootNode, JAXBContext jaxbContext) {
         try {
             this.rootNode = rootNode;
+            this.modelInfoLooup = lookup;
             this.binder = jaxbContext.createBinder();
             domForQueries = createBlankDOMDocument(true);
 
@@ -135,7 +138,7 @@ public class RMQueryContext {
                 logger.error("trying to get a node without a parent");
                 return null;
             }
-            RMAttributeInfo attributeInfo = ArchieRMInfoLookup.getInstance().getAttributeInfo(parent.getClass(), nodeName);
+            RMAttributeInfo attributeInfo = modelInfoLooup.getAttributeInfo(parent.getClass(), nodeName);
             try {
                 return (T) attributeInfo.getGetMethod().invoke(parent);
             } catch (IllegalAccessException e) {

@@ -11,6 +11,7 @@ import com.nedap.archie.rm.datavalues.quantity.DvQuantity;
 import com.nedap.archie.rm.datavalues.quantity.datetime.DvDate;
 import com.nedap.archie.rm.datavalues.quantity.datetime.DvDateTime;
 import com.nedap.archie.rm.datavalues.quantity.datetime.DvTime;
+import com.nedap.archie.rminfo.ArchieRMInfoLookup;
 import com.nedap.archie.testutil.TestUtil;
 import org.junit.Before;
 import org.junit.Test;
@@ -46,7 +47,7 @@ public class JAXBRMRoundTripTest {
     public void dataValues() throws Exception {
         archetype = parser.parse(JAXBRMRoundTripTest.class.getResourceAsStream("/com/nedap/archie/json/openEHR-EHR-CLUSTER.datavalues.v1.adls"));
         Cluster cluster =  (Cluster) testUtil.constructEmptyRMObject(archetype.getDefinition());
-        RMQueryContext queryContext = new RMQueryContext(cluster);
+        RMQueryContext queryContext = new RMQueryContext(ArchieRMInfoLookup.getInstance(), cluster);
         DvText text = queryContext.find("/items['Text']/value");
         text.setValue("test-text");
         DvQuantity quantity = queryContext.find("/items['Quantity']/value");
@@ -73,7 +74,7 @@ public class JAXBRMRoundTripTest {
 
         //now parse again
         Cluster parsedCluster = (Cluster) JAXBUtil.getArchieJAXBContext().createUnmarshaller().unmarshal(new StringReader(writer.toString()));
-        RMQueryContext parsedQueryContext = new RMQueryContext(parsedCluster);
+        RMQueryContext parsedQueryContext = new RMQueryContext(ArchieRMInfoLookup.getInstance(), parsedCluster);
         
         assertThat(parsedQueryContext.<DvText>find("/items['Text']/value").getValue(), is("test-text"));
         assertThat(parsedQueryContext.<DvDate>find("/items['Date']/value").getValue(), is(LocalDate.of(2016, 1, 1)));

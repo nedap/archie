@@ -13,6 +13,7 @@ import com.nedap.archie.rm.datavalues.quantity.DvQuantity;
 import com.nedap.archie.rm.datavalues.quantity.datetime.DvDate;
 import com.nedap.archie.rm.datavalues.quantity.datetime.DvDateTime;
 import com.nedap.archie.rm.datavalues.quantity.datetime.DvTime;
+import com.nedap.archie.rminfo.ArchieRMInfoLookup;
 import com.nedap.archie.testutil.TestUtil;
 import org.junit.Before;
 import org.junit.Test;
@@ -48,7 +49,7 @@ public class JacksonRMRoundTripTest {
     public void dataValues() throws Exception {
         archetype = parser.parse(JacksonRMRoundTripTest.class.getResourceAsStream("openEHR-EHR-CLUSTER.datavalues.v1.adls"));
         Cluster cluster =  (Cluster) testUtil.constructEmptyRMObject(archetype.getDefinition());
-        RMQueryContext queryContext = new RMQueryContext(cluster);
+        RMQueryContext queryContext = new RMQueryContext(ArchieRMInfoLookup.getInstance(), cluster);
         DvText text = queryContext.find("/items['Text']/value");
         text.setValue("test-text");
         DvQuantity quantity = queryContext.find("/items['Quantity']/value");
@@ -65,7 +66,7 @@ public class JacksonRMRoundTripTest {
         String json = JacksonUtil.getObjectMapper().writeValueAsString(cluster);
         System.out.println(json);
         Cluster parsedCluster = (Cluster) JacksonUtil.getObjectMapper().readValue(json, RMObject.class);
-        RMQueryContext parsedQueryContext = new RMQueryContext(parsedCluster);
+        RMQueryContext parsedQueryContext = new RMQueryContext(ArchieRMInfoLookup.getInstance(), parsedCluster);
 
         assertThat(parsedQueryContext.<DvText>find("/items['Text']/value").getValue(), is("test-text"));
         assertThat(parsedQueryContext.<DvQuantity>find("/items['Quantity']/value").getMagnitude(), is(23d));

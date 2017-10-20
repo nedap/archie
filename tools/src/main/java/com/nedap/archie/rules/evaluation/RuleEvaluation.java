@@ -4,8 +4,6 @@ import com.google.common.collect.ArrayListMultimap;
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.creation.RMObjectCreator;
 import com.nedap.archie.query.RMQueryContext;
-import com.nedap.archie.rm.RMObject;
-import com.nedap.archie.rminfo.ArchieRMInfoLookup;
 import com.nedap.archie.rminfo.ModelInfoLookup;
 import com.nedap.archie.rules.Expression;
 import com.nedap.archie.rules.RuleElement;
@@ -62,7 +60,7 @@ public class RuleEvaluation<T> {
         add(new VariableDeclarationEvaluator());
         add(new ConstantEvaluator());
         add(new AssertionEvaluator());
-        add(new BinaryOperatorEvaluator());
+        add(new BinaryOperatorEvaluator(modelInfoLookup));
         add(new UnaryOperatorEvaluator());
         add(new VariableReferenceEvaluator());
         add(new ModelReferenceEvaluator());
@@ -84,7 +82,7 @@ public class RuleEvaluation<T> {
         variables = new VariableMap();
         assertionResults = new ArrayList<>();
         evaluationResult = new EvaluationResult();
-        queryContext = new RMQueryContext(this.root);
+        queryContext = new RMQueryContext(modelInfoLookup, this.root);
 
         fixableAssertionsChecker = new FixableAssertionsChecker(ruleElementValues);
 
@@ -125,7 +123,7 @@ public class RuleEvaluation<T> {
     public void refreshQueryContext() {
         //updating a single node does not seem to work with the default JAXB-implementation, so just reload the entire query
         //context
-        queryContext = new RMQueryContext(root);
+        queryContext = new RMQueryContext(modelInfoLookup, root);
     }
 
     /**
