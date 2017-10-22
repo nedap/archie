@@ -2,7 +2,6 @@ package com.nedap.archie.rules.evaluation;
 
 import com.nedap.archie.aom.CObject;
 import com.nedap.archie.creation.RMObjectCreator;
-import com.nedap.archie.rm.RMObject;
 import com.nedap.archie.rminfo.ModelInfoLookup;
 
 /**

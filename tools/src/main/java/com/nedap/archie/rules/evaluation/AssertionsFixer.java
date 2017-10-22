@@ -1,25 +1,13 @@
 package com.nedap.archie.rules.evaluation;
 
 import com.google.common.collect.Lists;
-import com.nedap.archie.ArchieLanguageConfiguration;
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.ArchetypeModelObject;
 import com.nedap.archie.aom.CAttribute;
-import com.nedap.archie.aom.CAttributeTuple;
 import com.nedap.archie.aom.CComplexObject;
 import com.nedap.archie.aom.CObject;
-import com.nedap.archie.aom.CPrimitiveTuple;
-import com.nedap.archie.aom.OperationalTemplate;
-import com.nedap.archie.aom.primitives.CTerminologyCode;
-import com.nedap.archie.aom.terminology.ArchetypeTerm;
-import com.nedap.archie.aom.terminology.ArchetypeTerminology;
-import com.nedap.archie.base.Interval;
 import com.nedap.archie.creation.RMObjectCreator;
-import com.nedap.archie.rm.archetyped.Archetyped;
-import com.nedap.archie.rm.datatypes.CodePhrase;
-import com.nedap.archie.rm.datavalues.DvCodedText;
-import com.nedap.archie.rm.datavalues.quantity.DvOrdinal;
-import com.nedap.archie.rm.support.identification.TerminologyId;
+import com.nedap.archie.rminfo.ModelInfoLookup;
 import com.nedap.archie.rminfo.RMAttributeInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,9 +27,12 @@ public class AssertionsFixer {
     private final RuleEvaluation ruleEvaluation;
     private final EmptyRMObjectConstructor emptyRMObjectConstructor;
 
+    private ModelInfoLookup modelInfoLookup;
+
     public AssertionsFixer(RuleEvaluation evaluation, RMObjectCreator creator) {
         this.creator = creator;
         this.ruleEvaluation = evaluation;
+        this.modelInfoLookup = ruleEvaluation.getModelInfoLookup();
         emptyRMObjectConstructor = new EmptyRMObjectConstructor(evaluation.getModelInfoLookup());
     }
     
@@ -80,9 +71,7 @@ public class AssertionsFixer {
                     } else {
                         creator.set(parent, lastPathSegment, Lists.newArrayList(value.getValue()));
                     }
-                    if(parent instanceof CodePhrase) {
-                        fixCodePhrase(archetype, pathOfParent, parent);
-                    }
+                    modelInfoLookup.pathHasBeenUpdated(ruleEvaluation.getRMRoot(), archetype, pathOfParent, parent);
                     ruleEvaluation.refreshQueryContext();
                 }
             }
@@ -91,103 +80,7 @@ public class AssertionsFixer {
         }
     }
 
-    private void fixCodePhrase(Archetype archetype, String pathOfParent, Object parent) {
-        try {
-            //special case: if at-code has been set, we need to do more!
-            if (pathOfParent.endsWith("value/defining_code")) {
-                fixDvCodedText(archetype, pathOfParent);
-            } else if (pathOfParent.endsWith("symbol/defining_code")) {
-                fixDvOrdinal(archetype, pathOfParent);
-            } else {
-            }
-        } catch (Exception e) {
-            logger.warn("cannot fix codephrase", e);
-        }
-    }
 
-    private void fixDvOrdinal(Archetype archetype, String pathOfParent) throws XPathExpressionException {
-        DvOrdinal ordinal = ruleEvaluation.getQueryContext().find(pathOfParent.replace("/symbol/defining_code", ""));
-        CAttribute symbolAttribute = archetype.itemAtPath(pathOfParent.replace("/symbol/defining_code", "/symbol"));//TODO: remove all numeric indices from path!
-        if (symbolAttribute != null) {
-            CAttributeTuple socParent = (CAttributeTuple) symbolAttribute.getSocParent();
-            if (socParent != null) {
-                int valueIndex = socParent.getMemberIndex("value");
-                int symbolIndex = socParent.getMemberIndex("symbol");
-                if (valueIndex != -1 && symbolIndex != -1) {
-                    for (CPrimitiveTuple tuple : socParent.getTuples()) {
-                        if (tuple.getMembers().get(symbolIndex).getConstraint().get(0).equals(ordinal.getSymbol().getDefiningCode().getCodeString())) {
-                            List<Interval> valueConstraint = tuple.getMembers().get(valueIndex).getConstraint();
-                            if(valueConstraint.size() == 1) {
-                                Interval<Long> interval  = valueConstraint.get(0);
-                                if(interval.getLower().equals(interval.getUpper()) && !interval.isLowerUnbounded() && !interval.isUpperUnbounded()) {
-                                    ordinal.setValue(interval.getLower());
-                                }
-
-                            }
-                        }
-                    }
-
-                }
-            }
-        }
-    }
-
-    private void fixDvCodedText(Archetype archetype, String pathOfParent) throws XPathExpressionException {
-        DvCodedText codedText = ruleEvaluation.getQueryContext().find(pathOfParent.replace("/defining_code", ""));
-        Archetyped details = RuleEvaluationUtil.findLastArchetypeDetails(ruleEvaluation, pathOfParent);
-        if(details == null) {
-            setDefaultTermDefinitionInCodedText(archetype, codedText);
-        } else if(archetype instanceof OperationalTemplate) {
-
-            OperationalTemplate template = (OperationalTemplate) archetype;
-
-            String archetypePath = RuleEvaluationUtil.convertRMObjectPathToArchetypePath(pathOfParent);
-            setTerminologyFromArchetype(archetype, codedText, archetypePath);
-
-            setValueFromTermDefinition(codedText, details, template);
-        } else {
-            setDefaultTermDefinitionInCodedText(archetype, codedText);
-        }
-    }
-
-    private ArchetypeTerm getTermDefinition(OperationalTemplate template, Archetyped details, DvCodedText codedText) {
-        ArchetypeTerminology archetypeTerminology = template.getComponentTerminologies().get(details.getArchetypeId().toString());
-        if(archetypeTerminology != null) {
-            ArchetypeTerm termDefinition = archetypeTerminology.getTermDefinition(ArchieLanguageConfiguration.getMeaningAndDescriptionLanguage(), codedText.getDefiningCode().getCodeString());
-            if(termDefinition != null) {
-                return termDefinition;
-            }
-        }
-        return template.getTerminology().getTermDefinition(ArchieLanguageConfiguration.getMeaningAndDescriptionLanguage(), codedText.getDefiningCode().getCodeString());
-    }
-
-    private void setValueFromTermDefinition(DvCodedText codedText, Archetyped details, OperationalTemplate template) {
-        ArchetypeTerm termDefinition = getTermDefinition(template, details, codedText);
-        if(termDefinition != null) {
-            codedText.setValue(termDefinition.getText());
-        }
-    }
-
-    private void setDefaultTermDefinitionInCodedText(Archetype archetype, DvCodedText codedText) {
-        ArchetypeTerm termDefinition = archetype.getTerminology().getTermDefinition(ArchieLanguageConfiguration.getMeaningAndDescriptionLanguage(), codedText.getDefiningCode().getCodeString());
-        if(termDefinition != null) {
-            codedText.setValue(termDefinition.getText());
-        }
-    }
-
-    private void setTerminologyFromArchetype(Archetype archetype, DvCodedText codedText, String s) {
-        ArchetypeModelObject archetypeModelObject = archetype.itemAtPath(s);
-        if(archetypeModelObject instanceof CAttribute) {
-            CAttribute definingCodeConstraint = (CAttribute) archetypeModelObject;
-            for(CObject child:definingCodeConstraint.getChildren()) {
-                if(child instanceof CTerminologyCode) {
-                    if(((CTerminologyCode) child).getConstraint().get(0).startsWith("ac")) {
-                        codedText.getDefiningCode().setTerminologyId(new TerminologyId(((CTerminologyCode) child).getConstraint().get(0)));
-                    }
-                }
-            }
-        }
-    }
 
     private void constructMissingStructure(Archetype archetype, String pathOfParent, String lastPathSegment, List<Object> parents) throws XPathExpressionException {
         //TODO: this is great but not enough. Fix it by hardcoding support for DV_CODED_TEXT and DV_ORDINAL, here or in the FixableAssertionsChecker.

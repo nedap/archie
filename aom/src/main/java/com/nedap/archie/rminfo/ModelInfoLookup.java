@@ -1,5 +1,6 @@
 package com.nedap.archie.rminfo;
 
+import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.CObject;
 import com.nedap.archie.aom.CPrimitiveObject;
 
@@ -62,4 +63,20 @@ public interface ModelInfoLookup {
      * @return
      */
     Object clone(Object rmObject);
+
+    /**
+     * Perform any actions necessary if the value at the given path has just been updated
+     * For example, if an ordinal value has been set, this method should also set the symbol.
+     *
+     * This can be the most complex operation of this entire class to implement. If you just throw an exception instead of implementing it
+     * everything will work fine except for the rule evaluation.
+     *
+     * For now this is only needed in the rule evaluation to automatically fix assertions
+     *
+     * @param rmObject
+     * @param archetype
+     * @param pathOfParent
+     * @param parent
+     */
+    void pathHasBeenUpdated(Object rmObject, Archetype archetype, String pathOfParent, Object parent);
 }

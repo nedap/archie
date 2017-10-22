@@ -1,6 +1,8 @@
 package com.nedap.archie.rminfo;
 
+import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.ArchetypeModelObject;
+import com.nedap.archie.aom.CAttribute;
 import com.nedap.archie.aom.CObject;
 import com.nedap.archie.aom.CPrimitiveObject;
 import com.nedap.archie.base.Interval;
@@ -38,12 +40,18 @@ public class ArchieAOMInfoLookup extends ReflectionModelInfoLookup {
     @Override
     public String getArchetypeNodeIdFromRMObject(Object rmObject) {
         //technically we could implement this :)
+        if(rmObject instanceof CObject) {
+            return ((CObject) rmObject).getNodeId();
+        }
         throw new UnsupportedOperationException("not supported");//TODO: split this to different classes
     }
 
     @Override
     public String getNameFromRMObject(Object rmObject) {
-        //technically we could implement this :)
+        if(rmObject instanceof CObject) {
+            return ((CObject) rmObject).getMeaning();
+        }
+        //This is a bit of a strange operation for the aom model.
         throw new UnsupportedOperationException("not supported");//TODO: split this to different classes
     }
 
@@ -53,6 +61,11 @@ public class ArchieAOMInfoLookup extends ReflectionModelInfoLookup {
             return ((ArchetypeModelObject) rmObject).clone();
         }
         throw new IllegalArgumentException("The ArchieAOMInfoLookup can only clone archetype model objects");
+    }
+
+    @Override
+    public void pathHasBeenUpdated(Object rmObject, Archetype archetype, String pathOfParent, Object parent) {
+        throw new UnsupportedOperationException("not supported");//TODO: split this to different classes
     }
 
 }

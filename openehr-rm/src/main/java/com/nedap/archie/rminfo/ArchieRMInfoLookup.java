@@ -1,5 +1,6 @@
 package com.nedap.archie.rminfo;
 
+import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.CObject;
 import com.nedap.archie.aom.CPrimitiveObject;
 import com.nedap.archie.aom.primitives.CTerminologyCode;
@@ -112,6 +113,19 @@ public class ArchieRMInfoLookup extends ReflectionModelInfoLookup {
             return ((RMObject) rmObject).clone();
         }
         throw new IllegalArgumentException("The ArchieRMInfoLookup can only clone openehr reference model objects");
+    }
+
+    /**
+     * Notification that a value at a given path has been updated in the given archetype. Perform tasks here to make sure
+     * every other paths are updated as well.
+     * @param rmObject
+     * @param archetype
+     * @param pathOfParent
+     * @param parent
+     */
+    @Override
+    public void pathHasBeenUpdated(Object rmObject, Archetype archetype, String pathOfParent, Object parent) {
+        UpdatedValueHandler.pathHasBeenUpdated(rmObject, archetype, pathOfParent, parent);
     }
 }
 
