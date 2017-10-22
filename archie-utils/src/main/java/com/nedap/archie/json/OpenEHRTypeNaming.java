@@ -11,6 +11,8 @@ import com.nedap.archie.rminfo.ArchieRMInfoLookup;
 import com.nedap.archie.rminfo.ModelInfoLookup;
 import com.nedap.archie.rminfo.RMTypeInfo;
 
+import java.io.IOException;
+
 /**
  * Class that handles naming of Archie RM and AOM objects for use in Jackson.
  *
@@ -47,20 +49,13 @@ public class OpenEHRTypeNaming extends ClassNameIdResolver {
 //        }
     }
 
-
-    @Deprecated // since 2.3
     @Override
-    public JavaType typeFromId(String id) {
-        return _typeFromId(id, null);
-    }
-
-    @Override
-    public JavaType typeFromId(DatabindContext context, String id) {
+    public JavaType typeFromId(DatabindContext context, String id) throws IOException {
         return _typeFromId(id, context);
     }
 
     @Override
-    protected JavaType _typeFromId(String typeName, DatabindContext ctxt) {
+    protected JavaType _typeFromId(String typeName, DatabindContext ctxt) throws IOException {
         Class result = rmInfoLookup.getClass(typeName);
         if(result == null) {
             //AOM class?
