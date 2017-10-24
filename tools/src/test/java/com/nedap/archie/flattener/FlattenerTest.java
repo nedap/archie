@@ -179,9 +179,11 @@ public class FlattenerTest {
 
     @Test
     public void height() throws Exception {
+        assertTrue(heightTemplate.isDifferential());
         Archetype flattened = flattener.flatten(heightTemplate);
-
+        assertFalse(flattened.isDifferential());
         CObject object = (CObject) flattened.itemAtPath("/content[openEHR-EHR-OBSERVATION.ovl-length-height-001.v1.0.0]");
+
         assertNotNull(object);
         assertNotNull(flattened.getTerm(object, "nl"));
         assertEquals("Lengte", flattened.getTerm(object, "nl").getText());

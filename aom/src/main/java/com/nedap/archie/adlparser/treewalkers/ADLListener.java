@@ -40,18 +40,25 @@ public class ADLListener extends AdlBaseListener {
     @Override
     public void enterArchetype(ArchetypeContext ctx) {
         rootArchetype = new AuthoredArchetype();
-        rootArchetype.setDifferential(true);
         archetype = rootArchetype;
         parseArchetypeHRID(ctx.ARCHETYPE_HRID());
     }
 
     @Override
+    public void exitArchetype(ArchetypeContext ctx) {
+        rootArchetype.setDifferential(archetype.getParentArchetypeId() != null);
+    }
+
+    @Override
     public void enterTemplate(TemplateContext ctx) {
         rootArchetype = new Template();
-        rootArchetype.setDifferential(false);
         archetype = rootArchetype;
         parseArchetypeHRID(ctx.ARCHETYPE_HRID());
+    }
 
+    @Override
+    public void exitTemplate(TemplateContext ctx) {
+        rootArchetype.setDifferential(archetype.getParentArchetypeId() != null);
     }
 
     @Override
@@ -74,7 +81,7 @@ public class ADLListener extends AdlBaseListener {
     @Override
     public void enterOperational_template(Operational_templateContext ctx) {
         rootArchetype = new OperationalTemplate();
-        rootArchetype.setDifferential(false);
+        rootArchetype.setDifferential(false);//operational templates are flat by definition
         archetype = rootArchetype;
         parseArchetypeHRID(ctx.ARCHETYPE_HRID());
     }

@@ -56,4 +56,5 @@ public class Value<Type> {
     public static Value createNull(List<String> paths) {
         return new Value(null, paths);
     }
+
 }
