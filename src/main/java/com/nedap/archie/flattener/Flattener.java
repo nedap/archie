@@ -290,6 +290,12 @@ public class Flattener {
         } else {
             CComplexObject clone = (CComplexObject) newObject.clone();
             clone.setNodeId(proxy.getNodeId());
+            if(proxy.getOccurrences() != null) {
+                clone.setOccurrences(proxy.getOccurrences());
+            }
+            if(proxy.getSiblingOrder() != null) {
+                clone.setSiblingOrder(proxy.getSiblingOrder());
+            }
             return new ComplexObjectProxyReplacement(proxy, clone);
 
         }
