@@ -40,7 +40,7 @@ public class ReferenceModelAccessTest {
     @Before
     public void setup() {
         schemaDirectories = new ArrayList<>();
-        String path = ReferenceModelAccessTest.class.getResource("/CIMI-RM-3.0.5.bmm").getFile();
+        String path = ReferenceModelAccessTest.class.getResource("/cimi/CIMI-RM-3.0.5.bmm").getFile();
         path = path.substring(0, path.lastIndexOf('/'));
         schemaDirectories.add(path);
     }
