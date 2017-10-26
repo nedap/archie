@@ -1,4 +1,4 @@
-package org.openehr.utils.validation;
+package org.openehr.utils.message;
 
 /*
  * #%L
@@ -27,21 +27,29 @@ public class MessageDatabaseManager {
 
     private static final MessageDatabaseManager instance = new MessageDatabaseManager();
 
-    private MessageDatabase messageDb = new MessageDatabase();
+    private MessageDatabase messageDatabase = new MessageDatabase();
 
     public static MessageDatabaseManager getInstance() {
         return instance;
     }
 
     public String getMessageLine(String anId, List<String> args) {
-        return messageDb.createMessageLine(anId, args);
+        return messageDatabase.createMessageLine(anId, args);
     }
 
     public String getMessage(String anId, List<String> args) {
-        return messageDb.createMessageContent(anId, args);
+        return messageDatabase.createMessageContent(anId, args);
     }
 
     public String getText(String anId) {
-        return messageDb.createMessageText(anId);
+        return messageDatabase.returnMessageTemplateText(anId);
+    }
+
+    public MessageDatabase getMessageDatabase() {
+        return messageDatabase;
+    }
+
+    public void setMessageDatabase(MessageDatabase messageDatabase) {
+        this.messageDatabase = messageDatabase;
     }
 }

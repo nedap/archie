@@ -18,7 +18,7 @@
  * #L%
  * Author: Claude Nanjo
  */
-package org.openehr.utils.error;
+package org.openehr.utils.message;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -28,7 +28,7 @@ import java.util.Map;
 /**
  * Static class for error code management
  */
-public class ErrorSeverityTypes {
+public class MessageSeverityTypes {
     //Definitions
     public static final Integer ERROR_TYPE_DEBUG = 9000;
     public static final Integer ERROR_TYPE_INFO = 9001;

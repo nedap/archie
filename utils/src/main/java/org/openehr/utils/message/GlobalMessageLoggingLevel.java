@@ -18,25 +18,23 @@
  * #L%
  * Author: Claude Nanjo
  */
-package org.openehr.utils.validation;
+package org.openehr.utils.message;
 
-import org.openehr.utils.error.ErrorSeverityTypes;
-
-public class GlobalErrorReportingLevel {
+public class GlobalMessageLoggingLevel {
     /**
      * At this level and above, list entries are included in `as_string' and any other output function
      */
-    private static Integer globalErrorReportingLevel = ErrorSeverityTypes.ERROR_TYPE_WARNING;
+    private static Integer globalLoggingLevel = MessageSeverityTypes.ERROR_TYPE_WARNING;
 
-    public static Integer getGlobalErrorReportingLevel() {
-        return globalErrorReportingLevel;
+    public static Integer getGlobalLoggingLevel() {
+        return globalLoggingLevel;
     }
 
-    public static void setGlobalErrorReportingLevel(Integer globalErrorReportingLevel) {
-        if(ErrorSeverityTypes.isValidErrorType(globalErrorReportingLevel)) {
-            GlobalErrorReportingLevel.globalErrorReportingLevel = globalErrorReportingLevel;
+    public static void setGlobalLoggingLevel(Integer globalLoggingLevel) {
+        if(MessageSeverityTypes.isValidErrorType(globalLoggingLevel)) {
+            GlobalMessageLoggingLevel.globalLoggingLevel = globalLoggingLevel;
         } else {
-            throw new IllegalArgumentException("Invalid global error reporting level " + globalErrorReportingLevel);
+            throw new IllegalArgumentException("Invalid global error reporting level " + globalLoggingLevel);
         }
     }
 }

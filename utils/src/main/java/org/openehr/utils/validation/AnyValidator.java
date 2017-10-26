@@ -20,10 +20,8 @@
  */
 package org.openehr.utils.validation;
 
-import org.openehr.utils.error.ErrorAccumulator;
-import org.openehr.utils.error.ErrorDescriptor;
+import org.openehr.utils.message.MessageLogger;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,7 +36,7 @@ public abstract class AnyValidator {
     /**
      * Error output of validator - things that must be corrected
      */
-    private ErrorAccumulator errorCache = new ErrorAccumulator();
+    private MessageLogger messageLogger = new MessageLogger();
 
     /**
      * Flag indicating that all validation passed. This flag is set to true in two cases:
@@ -61,25 +59,25 @@ public abstract class AnyValidator {
     }
 
     /**
-     * Returns the ErrorAccumulator for this validator
+     * Returns the MessageLogger for this validator
      *
      * @return
      */
-    public ErrorAccumulator getErrorCache() {
-        if(errorCache != null) {
-            return errorCache;
+    public MessageLogger getMessageLogger() {
+        if(messageLogger != null) {
+            return messageLogger;
         } else {
-            errorCache = new ErrorAccumulator();
-            return errorCache;
+            messageLogger = new MessageLogger();
+            return messageLogger;
         }
     }
 
     public int getMessageCount() {
-        return errorCache.size();
+        return messageLogger.size();
     }
 
     public String getErrorStrings() {
-        return errorCache.toString();
+        return messageLogger.toString();
     }
 
     /**
@@ -87,7 +85,7 @@ public abstract class AnyValidator {
      */
     public void reset() {
         passed = true;
-        errorCache = new ErrorAccumulator();
+        messageLogger = new MessageLogger();
     }
 
     /**
@@ -96,7 +94,7 @@ public abstract class AnyValidator {
      * @return
      */
     public boolean hasErrors() {
-        return errorCache.hasErrors();
+        return messageLogger.hasErrors();
     }
 
     /**
@@ -104,7 +102,7 @@ public abstract class AnyValidator {
      * @return
      */
     public boolean hasNoErrors() {
-        return !errorCache.hasErrors();
+        return !messageLogger.hasErrors();
     }
 
     /**
@@ -114,7 +112,7 @@ public abstract class AnyValidator {
      * @return
      */
     public boolean hasError(String aCode) {
-        return errorCache.hasError(aCode);
+        return messageLogger.hasError(aCode);
     }
 
     /**
@@ -123,7 +121,7 @@ public abstract class AnyValidator {
      * @return
      */
     public boolean hasWarning(String aCode) {
-        return errorCache.hasWarning(aCode);
+        return messageLogger.hasWarning(aCode);
     }
 
     /**
@@ -132,7 +130,7 @@ public abstract class AnyValidator {
      * @return
      */
     public boolean hasInfo(String aCode) {
-        return errorCache.hasInfo(aCode);
+        return messageLogger.hasInfo(aCode);
     }
 
     /**
@@ -141,8 +139,8 @@ public abstract class AnyValidator {
      *
      * @param other
      */
-    public void mergeErrors(ErrorAccumulator other) {
-        errorCache.append(other);
+    public void mergeErrors(MessageLogger other) {
+        messageLogger.append(other);
         passed = passed && !(other.hasErrors());
     }
 
@@ -180,7 +178,7 @@ public abstract class AnyValidator {
      * @param aLocation
      */
     public void addErrorWithLocation(String aKey, List<String> args, String aLocation) {
-        errorCache.addError(aKey, args, aLocation);
+        messageLogger.addError(aKey, args, aLocation);
     }
 
     /**
@@ -190,7 +188,7 @@ public abstract class AnyValidator {
      * @param aLocation
      */
     public void addWarningWithLocation(String aKey, List<String> args, String aLocation) {
-        errorCache.addWarning(aKey, args, aLocation);
+        messageLogger.addWarning(aKey, args, aLocation);
     }
 
     /**
@@ -200,7 +198,7 @@ public abstract class AnyValidator {
      * @param aLocation
      */
     public void addInfoWithLocation(String aKey, List<String> args, String aLocation) {
-        errorCache.addInfo(aKey, args, aLocation);
+        messageLogger.addInfo(aKey, args, aLocation);
     }
 
     public boolean readyToValidate() {
@@ -213,7 +211,7 @@ public abstract class AnyValidator {
     public void validate() {
         if(readyToValidate()) {
             doValidation();
-            if(errorCache.hasErrorsOrWarnings()) {
+            if(messageLogger.hasErrorsOrWarnings()) {
                 passed = false;
             }
         } else {

@@ -18,9 +18,9 @@
  * #L%
  * Author: Claude Nanjo
  */
-package org.openehr.utils.error;
+package org.openehr.utils.message;
 
-public class ErrorDescriptor {
+public class MessageDescriptor {
 
     private String code;
     private Integer severity;
@@ -59,35 +59,35 @@ public class ErrorDescriptor {
         this.location = location;
     }
 
-    public ErrorDescriptor() {
+    public MessageDescriptor() {
     }
 
-    public ErrorDescriptor(String aCode, Integer aSeverity, String aMessage, String aLoc) {
+    public MessageDescriptor(String aCode, Integer aSeverity, String aMessage, String aLoc) {
         code = aCode;
         severity = aSeverity;
         message = aMessage;
         location = aLoc;
     }
 
-    public static ErrorDescriptor createError(String aCode, String aMessage, String aLoc) {
-        return create(aCode, ErrorSeverityTypes.ERROR_TYPE_ERROR, aMessage, aLoc);
+    public static MessageDescriptor createError(String aCode, String aMessage, String aLoc) {
+        return create(aCode, MessageSeverityTypes.ERROR_TYPE_ERROR, aMessage, aLoc);
     }
 
-    public static ErrorDescriptor createWarning(String aCode, String aMessage, String aLoc) {
-        return create(aCode, ErrorSeverityTypes.ERROR_TYPE_WARNING, aMessage, aLoc);
+    public static MessageDescriptor createWarning(String aCode, String aMessage, String aLoc) {
+        return create(aCode, MessageSeverityTypes.ERROR_TYPE_WARNING, aMessage, aLoc);
     }
 
-    public static ErrorDescriptor createInfo(String aCode, String aMessage, String aLoc) {
-        return create(aCode, ErrorSeverityTypes.ERROR_TYPE_INFO, aMessage, aLoc);
+    public static MessageDescriptor createInfo(String aCode, String aMessage, String aLoc) {
+        return create(aCode, MessageSeverityTypes.ERROR_TYPE_INFO, aMessage, aLoc);
     }
 
-    public static ErrorDescriptor createDebug(String aCode, String aMessage, String aLoc) {
-        return create(aCode, ErrorSeverityTypes.ERROR_TYPE_DEBUG, aMessage, aLoc);
+    public static MessageDescriptor createDebug(String aCode, String aMessage, String aLoc) {
+        return create(aCode, MessageSeverityTypes.ERROR_TYPE_DEBUG, aMessage, aLoc);
     }
 
-    public static ErrorDescriptor create(String aCode, Integer aSeverity, String aMessage, String aLoc) {
-        if (ErrorSeverityTypes.isValidErrorType(aSeverity)) {
-            return new ErrorDescriptor(aCode, aSeverity, aMessage, aLoc);
+    public static MessageDescriptor create(String aCode, Integer aSeverity, String aMessage, String aLoc) {
+        if (MessageSeverityTypes.isValidErrorType(aSeverity)) {
+            return new MessageDescriptor(aCode, aSeverity, aMessage, aLoc);
         } else {
             throw new IllegalArgumentException("Invalid severity code " + aSeverity);
         }
@@ -95,7 +95,7 @@ public class ErrorDescriptor {
 
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append(ErrorSeverityTypes.errorTypeName(severity))
+        builder.append(MessageSeverityTypes.errorTypeName(severity))
                 .append(" ");
         if (location != null && location.trim().length() > 0) {
             builder.append(location).append(": ");

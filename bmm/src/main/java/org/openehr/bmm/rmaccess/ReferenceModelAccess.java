@@ -29,9 +29,7 @@ import org.openehr.bmm.persistence.PersistedBmmSchema;
 import org.openehr.bmm.persistence.PersistedBmmSchemaState;
 import org.openehr.bmm.persistence.validation.BmmDefinitions;
 import org.openehr.bmm.persistence.validation.BmmMessageIds;
-import org.openehr.utils.datatype.DataType;
-import org.openehr.utils.error.ErrorAccumulator;
-import org.openehr.utils.file.FileAndDirUtils;
+import org.openehr.utils.message.MessageLogger;
 import org.openehr.utils.validation.BasicValidator;
 
 import java.io.File;
@@ -447,7 +445,7 @@ public class ReferenceModelAccess {
             allSchemas.forEach((aSchemaId, aSchemaDescriptor) -> {
                 if (aSchemaDescriptor.getSchemaValidator().hasPassed()) {
                     loadSchemaIncludeClosure(aSchemaId);
-                    if (aSchemaDescriptor.getSchemaValidator().getErrorCache().hasWarnings()) {
+                    if (aSchemaDescriptor.getSchemaValidator().getMessageLogger().hasWarnings()) {
                         validator.addWarning(BmmMessageIds.ec_bmm_schema_passed_with_warnings, new ArrayList<String>() {{
                             add(aSchemaId);
                             add(aSchemaDescriptor.getSchemaValidator().getErrorStrings());
@@ -545,7 +543,7 @@ public class ReferenceModelAccess {
                                 topLevelSchema = aSchemaDescriptor.getSchema();
                             }
                             validModels.put(aSchemaDescriptor.getSchemaId(), topLevelSchema);
-                            if(aSchemaDescriptor.getSchemaValidator().getErrorCache().hasWarnings()) {
+                            if(aSchemaDescriptor.getSchemaValidator().getMessageLogger().hasWarnings()) {
                                 validator.addWarning(BmmMessageIds.ec_bmm_schema_passed_with_warnings, new ArrayList<String>() {{
                                     add(aSchemaDescriptor.getSchemaId());
                                     add(aSchemaDescriptor.getSchemaValidator().getErrorStrings());
@@ -671,7 +669,7 @@ public class ReferenceModelAccess {
      * @param aSchemaDescriptor
      */
     public void mergeValidationErrors(SchemaDescriptor aSchemaDescriptor) {
-        Map<String, ErrorAccumulator> errorTable = null;
+        Map<String, MessageLogger> errorTable = null;
         Boolean errorsToPropagate = true;
         //SchemaDescriptor targetSchemaDescriptor, clientSchemaDescriptor = null;
         if(aSchemaDescriptor.getPersistentSchema() != null) {
@@ -716,10 +714,10 @@ public class ReferenceModelAccess {
                             add(includedSchemaId);
                         }});
                     }
-                } else if(!includedSchemaDescriptor.getSchemaValidator().hasPassed() || includedSchemaDescriptor.getSchemaValidator().getErrorCache().hasWarnings()) {
+                } else if(!includedSchemaDescriptor.getSchemaValidator().hasPassed() || includedSchemaDescriptor.getSchemaValidator().getMessageLogger().hasWarnings()) {
                     for(String include:includingSchemaIds) {
                         SchemaDescriptor clientSchemaDescriptor = allSchemas.get(include);
-                        if(!clientSchemaDescriptor.getSchemaValidator().hasPassed() && clientSchemaDescriptor.getSchemaValidator().getErrorCache().hasWarnings()) {
+                        if(!clientSchemaDescriptor.getSchemaValidator().hasPassed() && clientSchemaDescriptor.getSchemaValidator().getMessageLogger().hasWarnings()) {
                             if(!includedSchemaDescriptor.getSchemaValidator().hasPassed()) {
                                 clientSchemaDescriptor.getSchemaValidator().addError(BmmMessageIds.ec_BMM_INCERR, new ArrayList<String>() {{
                                     add(include);

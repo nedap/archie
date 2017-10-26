@@ -31,7 +31,7 @@ import org.openehr.bmm.persistence.serializer.BmmSchemaSerializer;
 import org.openehr.odin.CompositeOdinObject;
 import org.openehr.odin.antlr.OdinVisitorImpl;
 import org.openehr.odin.loader.OdinLoaderImpl;
-import org.openehr.utils.error.ErrorAccumulator;
+import org.openehr.utils.message.MessageLogger;
 
 import java.util.Map;
 
@@ -51,7 +51,7 @@ public class BmmSchemaDeserializerTest1 {
         persistedBmmSchema = deserializer.deserialize(root);
         persistedBmmSchema.loadFinalize();
         persistedBmmSchema.validate();
-        ErrorAccumulator errorCache = persistedBmmSchema.getBmmSchemaValidator().getErrorCache();
+        MessageLogger errorCache = persistedBmmSchema.getBmmSchemaValidator().getMessageLogger();
         System.out.println(errorCache);
     }
 

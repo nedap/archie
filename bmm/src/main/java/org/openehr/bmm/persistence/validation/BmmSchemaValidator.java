@@ -2,7 +2,7 @@ package org.openehr.bmm.persistence.validation;
 
 import org.apache.commons.lang.StringUtils;
 import org.openehr.bmm.persistence.*;
-import org.openehr.utils.error.ErrorAccumulator;
+import org.openehr.utils.message.MessageLogger;
 import org.openehr.utils.validation.AnyValidator;
 
 import java.util.*;
@@ -11,7 +11,7 @@ public class BmmSchemaValidator extends AnyValidator {
 
     private PersistedBmmSchema schema;
     private Map<String, List<String>> ancestorsIndex = new LinkedHashMap<>();
-    private Map<String, ErrorAccumulator> schemaErrorTableCache = new LinkedHashMap<>();
+    private Map<String, MessageLogger> schemaErrorTableCache = new LinkedHashMap<>();
 
     public BmmSchemaValidator() { }
 
@@ -32,7 +32,7 @@ public class BmmSchemaValidator extends AnyValidator {
      *
      * @return
      */
-    public Map<String, ErrorAccumulator> getSchemaErrorTableCache() {
+    public Map<String, MessageLogger> getSchemaErrorTableCache() {
         if(schemaErrorTableCache == null) {
             schemaErrorTableCache = new LinkedHashMap<>();
         }
@@ -44,7 +44,7 @@ public class BmmSchemaValidator extends AnyValidator {
      *
      * @param schemaErrorTableCache
      */
-    public void setSchemaErrorTableCache(Map<String, ErrorAccumulator> schemaErrorTableCache) {
+    public void setSchemaErrorTableCache(Map<String, MessageLogger> schemaErrorTableCache) {
         this.schemaErrorTableCache = schemaErrorTableCache;
     }
 
@@ -381,7 +381,7 @@ public class BmmSchemaValidator extends AnyValidator {
             addError(aKey, arguments);
         } else {
             if(!schemaErrorTableCache.containsKey(sourceSchemaId)) {
-                schemaErrorTableCache.put(sourceSchemaId, new ErrorAccumulator());
+                schemaErrorTableCache.put(sourceSchemaId, new MessageLogger());
             }
             schemaErrorTableCache.get(sourceSchemaId).addError(aKey, arguments, "");
             addError(BmmMessageIds.ec_BMM_INCERR, new ArrayList<String>() {
@@ -405,7 +405,7 @@ public class BmmSchemaValidator extends AnyValidator {
             addWarning(aKey, arguments);
         } else {
             if(!schemaErrorTableCache.containsKey(sourceSchemaId)) {
-                schemaErrorTableCache.put(sourceSchemaId, new ErrorAccumulator());
+                schemaErrorTableCache.put(sourceSchemaId, new MessageLogger());
             }
             schemaErrorTableCache.get(sourceSchemaId).addWarning(aKey, arguments, "");
         }
@@ -423,7 +423,7 @@ public class BmmSchemaValidator extends AnyValidator {
             addInfo(aKey, arguments);
         } else {
             if(!schemaErrorTableCache.containsKey(sourceSchemaId)) {
-                schemaErrorTableCache.put(sourceSchemaId, new ErrorAccumulator());
+                schemaErrorTableCache.put(sourceSchemaId, new MessageLogger());
             }
             schemaErrorTableCache.get(sourceSchemaId).addInfo(aKey, arguments, "");
         }

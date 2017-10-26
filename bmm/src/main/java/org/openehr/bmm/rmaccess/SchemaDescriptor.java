@@ -25,6 +25,7 @@ import org.openehr.bmm.persistence.PersistedBmmSchema;
 import org.openehr.bmm.core.BmmModel;
 import org.openehr.bmm.persistence.deserializer.BmmSchemaDeserializer;
 import org.openehr.bmm.persistence.validation.BmmDefinitions;
+import org.openehr.bmm.persistence.validation.BmmMessageDatabase;
 import org.openehr.bmm.persistence.validation.BmmMessageIds;
 import org.openehr.bmm.persistence.validation.BmmSchemaValidator;
 import org.openehr.odin.CompositeOdinObject;
