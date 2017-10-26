@@ -56,7 +56,7 @@ public class FileAndDirUtilsTest {
 
     @Test
     public void filterFilesFromDirectoriesTest1() throws Exception {
-        File containerDir = new File("src/main/resources/");
+        File containerDir = new File("src/test/resources/");
         List<String> directories = new ArrayList<>();
         directories.add(containerDir.getAbsolutePath());
         System.out.println(containerDir.getAbsolutePath());
@@ -82,7 +82,7 @@ public class FileAndDirUtilsTest {
 
     @Test
     public void filterFilesFromDirectoriesTest2() throws Exception {
-        File containerDir = new File("src/main/resources/");
+        File containerDir = new File("src/test/resources/");
         List<String> directories = new ArrayList<>();
         directories.add(containerDir.getAbsolutePath());
         System.out.println(containerDir.getAbsolutePath());
@@ -108,7 +108,7 @@ public class FileAndDirUtilsTest {
 
     @Test
     public void loadFilesWithExtensionFromDirectoryPathsTest() throws Exception {
-        File containerDir = new File("src/main/resources/");
+        File containerDir = new File("src/test/resources/");
         List<String> directories = new ArrayList<>();
         directories.add(containerDir.getAbsolutePath());
         List<OperationOutcome<File>> loadedDirectories = FileAndDirUtils.loadDirectories(directories);
@@ -122,7 +122,7 @@ public class FileAndDirUtilsTest {
 
     @Test
     public void loadFilesWithExtensionFromDirectories() throws Exception {
-        File containerDir = new File("src/main/resources/");
+        File containerDir = new File("src/test/resources/");
         List<String> directories = new ArrayList<>();
         directories.add(containerDir.getAbsolutePath());
         List<File> filteredFiles = FileAndDirUtils.loadFilesWithExtensionFromDirectories(directories, "baz", false);
