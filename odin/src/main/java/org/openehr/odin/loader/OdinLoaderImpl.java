@@ -21,6 +21,7 @@ package org.openehr.odin.loader;
  * Author: Claude Nanjo
  */
 
+import org.apache.commons.io.IOUtils;
 import org.openehr.odin.antlr.OdinVisitorImpl;
 import org.openehr.odin.antlr.odinLexer;
 import org.openehr.odin.antlr.odinParser;
@@ -71,15 +72,19 @@ public class OdinLoaderImpl {
 
     public OdinVisitorImpl loadOdinFromString(String odinContent) {
         OdinVisitorImpl visitor = new OdinVisitorImpl<>();
-
-        ANTLRInputStream input = new ANTLRInputStream(odinContent);
-        odinLexer lexer = new odinLexer(input);
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-        odinParser parser = new odinParser(tokens);
-        ParseTree tree = parser.odin_text();
-        visitor.visit(tree);
-
+        try {
+            InputStream is = IOUtils.toInputStream(odinContent, "UTF-8");
+            ANTLRInputStream input = new ANTLRInputStream(is);
+            odinLexer lexer = new odinLexer(input);
+            CommonTokenStream tokens = new CommonTokenStream(lexer);
+            odinParser parser = new odinParser(tokens);
+            ParseTree tree = parser.odin_text();
+            visitor.visit(tree);
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+            log.error("Error loading odin file", ioe);
+            throw new RuntimeException("Error loading odin file", ioe);
+        }
         return visitor;
     }
 }
-
