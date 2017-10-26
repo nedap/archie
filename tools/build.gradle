@@ -3,6 +3,7 @@ dependencies {
   compile project(':base')
   compile project(':aom')
   compile project(':path-queries')
+  compile project(':utils')
   testCompile project(':openehr-rm')//TODO: this is temporary, this module should not depend on openehr-rm
   testCompile project(':archie-utils')
 }

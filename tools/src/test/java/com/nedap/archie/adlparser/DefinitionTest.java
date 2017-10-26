@@ -8,7 +8,6 @@ import com.nedap.archie.aom.CComplexObject;
 import com.nedap.archie.aom.CObject;
 import com.nedap.archie.aom.primitives.CString;
 import com.nedap.archie.aom.primitives.CTerminologyCode;
-import com.nedap.archie.query.APathQuery;
 import org.junit.Test;
 
 import java.util.ArrayList;

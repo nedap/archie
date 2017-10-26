@@ -5,7 +5,6 @@ import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.ArchetypeSlot;
 import com.nedap.archie.aom.CComplexObject;
 import com.nedap.archie.aom.CObject;
-import com.nedap.archie.query.APathQuery;
 import org.junit.BeforeClass;
 import org.junit.Test;
 

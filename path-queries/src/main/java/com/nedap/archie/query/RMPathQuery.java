@@ -6,7 +6,6 @@ import com.nedap.archie.adl.AdlCodeDefinitions;
 import com.nedap.archie.paths.PathSegment;
 import com.nedap.archie.rminfo.ModelInfoLookup;
 import com.nedap.archie.rminfo.RMAttributeInfo;
-import com.nedap.archie.util.NamingUtil;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

@@ -1,29 +1,16 @@
 package com.nedap.archie.query;
 
 
-import com.google.common.collect.Lists;
 import com.nedap.archie.aom.ArchetypeModelObject;
 import com.nedap.archie.aom.CAttribute;
 import com.nedap.archie.aom.CComplexObject;
 import com.nedap.archie.aom.CComplexObjectProxy;
 import com.nedap.archie.aom.CObject;
-import com.nedap.archie.aom.CPrimitiveObject;
 import com.nedap.archie.paths.PathSegment;
 
-import com.nedap.archie.util.NamingUtil;
-import com.nedap.archie.adlparser.antlr.XPathLexer;
-import com.nedap.archie.adlparser.antlr.XPathParser;
-import com.nedap.archie.adlparser.antlr.XPathParser.*;
-import org.antlr.v4.runtime.ANTLRInputStream;
-import org.antlr.v4.runtime.CommonTokenStream;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.regex.Pattern;
 
 /**
  * For now only accepts rather simple xpath-like expressions.

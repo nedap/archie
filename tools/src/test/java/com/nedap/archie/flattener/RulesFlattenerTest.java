@@ -3,14 +3,11 @@ package com.nedap.archie.flattener;
 import com.nedap.archie.adlparser.ADLParser;
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.CObject;
-import com.nedap.archie.query.APathQuery;
 import com.nedap.archie.rules.Assertion;
 import com.nedap.archie.rules.BinaryOperator;
 import com.nedap.archie.rules.ExpressionVariable;
 import com.nedap.archie.rules.ModelReference;
-import com.nedap.archie.rules.RuleStatement;
 import com.nedap.archie.serializer.adl.ADLArchetypeSerializer;
-import com.nedap.archie.serializer.adl.ADLArchetypeSerializerParserRoundtripTest;
 import org.junit.Before;
 import org.junit.Test;
 

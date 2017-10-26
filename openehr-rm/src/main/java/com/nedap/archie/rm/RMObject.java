@@ -1,7 +1,6 @@
 package com.nedap.archie.rm;
 
 import com.esotericsoftware.kryo.Kryo;
-import com.nedap.archie.aom.ArchetypeModelObject;
 import com.nedap.archie.base.OpenEHRBase;
 import com.nedap.archie.util.KryoUtil;
 

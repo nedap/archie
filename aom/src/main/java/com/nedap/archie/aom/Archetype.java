@@ -3,7 +3,6 @@ package com.nedap.archie.aom;
 import com.nedap.archie.aom.terminology.ArchetypeTerm;
 import com.nedap.archie.aom.terminology.ArchetypeTerminology;
 import com.nedap.archie.query.AOMPathQuery;
-import com.nedap.archie.query.APathQuery;
 import com.nedap.archie.xml.adapters.ArchetypeTerminologyAdapter;
 
 import javax.xml.bind.annotation.XmlAccessType;

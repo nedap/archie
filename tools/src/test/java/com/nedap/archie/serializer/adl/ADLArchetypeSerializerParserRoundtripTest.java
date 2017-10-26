@@ -5,7 +5,6 @@ import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.CAttribute;
 import com.nedap.archie.aom.CComplexObject;
 import com.nedap.archie.aom.primitives.CTerminologyCode;
-import com.nedap.archie.query.APathQuery;
 import com.nedap.archie.testutil.TestUtil;
 import org.junit.Test;
 

@@ -5,7 +5,6 @@ import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.CAttribute;
 import com.nedap.archie.aom.Cardinality;
 import com.nedap.archie.base.MultiplicityInterval;
-import com.nedap.archie.query.APathQuery;
 import org.junit.Before;
 import org.junit.Test;
 
