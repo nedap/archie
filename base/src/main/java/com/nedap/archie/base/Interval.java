@@ -11,22 +11,42 @@ import java.time.temporal.TemporalAmount;
 import java.util.Objects;
 
 /**
+ * Interval abstraction, featuring upper and lower limits that may be open or closed, included or not included. Interval of ordered items.
+ *
  * Created by pieter.bos on 15/10/15.
  */
 @XmlType(name="INTERVAL")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Interval<T>  extends OpenEHRBase {
 
+    /**
+     * lower bound.
+     */
     @Nullable
     private T lower;
+    /**
+     * Upper bound.
+     */
     @Nullable
     private T upper;
+    /**
+     * lower boundary open (i.e. = -infinity)
+     */
     @XmlAttribute(name="lower_unbounded")
     private boolean lowerUnbounded = false;
+    /**
+     * upper boundary open (i.e. = +infinity)
+     */
     @XmlAttribute(name="upper_unbounded")
     private boolean upperUnbounded = false;
+    /**
+     * lower boundary value included in range if not lower_unbounded.
+     */
     @XmlAttribute(name="lower_included")
     private boolean lowerIncluded = true;
+    /**
+     * upper boundary value included in range if not upper_unbounded.
+     */
     @XmlAttribute(name="upper_included")
     private boolean upperIncluded = true;
 
@@ -154,12 +174,67 @@ public class Interval<T>  extends OpenEHRBase {
         return true;
     }
 
+    private int compareTo(T intervalValue, T value) {
+        Comparable comparableIntervalValue;
+        Comparable comparableValue;
+        if (value instanceof TemporalAmount && !(value instanceof Comparable) && isNonComparableTemporalAmount(intervalValue)) {
+            //TemporalAmount is not comparable, but can always be converted to a duration that is comparable.
+            comparableValue = value == null ? null : Duration.from((TemporalAmount) value);
+            comparableIntervalValue = intervalValue == null ? null : Duration.from((TemporalAmount) intervalValue);
+        } else if (!(isComparable(intervalValue) && isComparable(value))) {
+            throw new UnsupportedOperationException("subclasses of interval not implementing comparable should implement their own has method");
+        } else {
+            comparableValue = (Comparable) value;
+            comparableIntervalValue = (Comparable) intervalValue;
+        }
+        return comparableValue.compareTo(comparableIntervalValue);
+    }
+
     private boolean isNonComparableTemporalAmount(T value) {
         return value == null || (!(value instanceof Comparable) && value instanceof TemporalAmount);
     }
 
     private boolean isComparable(T upper) {
         return upper == null || upper instanceof Comparable;
+    }
+
+
+
+    /**
+     * True if there is any overlap between intervals represented by Current and
+     * `other'. True if at least one limit of other is strictly inside the limits
+     * of this interval.
+     *
+     * @param other
+     * @return
+     */
+    public Boolean intersects(Interval<T> other) {
+        return (lowerUnbounded && other.lowerUnbounded) ||
+                (upperUnbounded && other.upperUnbounded) ||
+                (compareTo(lower, other.lower) < 0 && compareTo(upper, other.upper) < 0 && compareTo(other.lower, upper) < 0) ||
+                (compareTo(other.lower, lower) < 0 && compareTo(other.upper, upper) < 0 && compareTo(lower, other.upper) < 0) ||
+                other.contains(this) || this.contains(other);
+    }
+
+    /**
+     * True if current interval properly contains `other'? True if all points of
+     * `other' are inside the current interval.
+     *
+     * @param other
+     * @return
+     */
+    public Boolean contains(Interval<T> other) {
+        return has(other.lower) && has(other.upper);
+    }
+
+    /**
+     * Returns true if both sets subsume each other.
+     *
+     * @param other
+     * @return
+     */
+    public Boolean setsAreEqual(Interval<T> other) {
+        return this.contains(other) && other.contains(this);
     }
 
     @Override

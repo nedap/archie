@@ -37,10 +37,13 @@ public class OpenEHRTypeNaming extends ClassNameIdResolver {
 
         RMTypeInfo typeInfo = rmInfoLookup.getTypeInfo(value.getClass());
         if(typeInfo == null) {
-            return rmInfoLookup.getNamingStrategy().getTypeName(value.getClass());
-        } else {
-            //this case is faster and should always work. If for some reason it does not, the above case works fine instead.
+            typeInfo = aomInfoLookup.getTypeInfo(value.getClass());
+        }
+        if(typeInfo != null) {
+            //this case is faster and should always work. If for some reason it does not, the case below works fine instead.
             return typeInfo.getRmName();
+        } else {
+            return rmInfoLookup.getNamingStrategy().getTypeName(value.getClass());
         }
 // This should work in all cases for openEHR-classes and this should not be used for other classes
 // Additional code for making this work on non-ehr-types:

@@ -1,7 +1,7 @@
 package com.nedap.archie.adlparser.modelconstraints;
 
 import com.nedap.archie.aom.CAttribute;
-import com.nedap.archie.aom.Cardinality;
+import com.nedap.archie.base.Cardinality;
 import com.nedap.archie.base.MultiplicityInterval;
 import com.nedap.archie.rminfo.ModelInfoLookup;
 import com.nedap.archie.rminfo.RMAttributeInfo;

@@ -2,6 +2,7 @@ package com.nedap.archie.aom;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.nedap.archie.base.Cardinality;
 import com.nedap.archie.base.MultiplicityInterval;
 import com.nedap.archie.paths.PathSegment;
 

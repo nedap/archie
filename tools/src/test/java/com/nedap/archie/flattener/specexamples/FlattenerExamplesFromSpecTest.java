@@ -7,7 +7,7 @@ import com.nedap.archie.aom.CAttributeTuple;
 import com.nedap.archie.aom.CComplexObject;
 import com.nedap.archie.aom.CComplexObjectProxy;
 import com.nedap.archie.aom.CObject;
-import com.nedap.archie.aom.Cardinality;
+import com.nedap.archie.base.Cardinality;
 import com.nedap.archie.aom.primitives.CReal;
 import com.nedap.archie.aom.primitives.CString;
 import com.nedap.archie.aom.primitives.CTerminologyCode;
@@ -115,7 +115,7 @@ public class FlattenerExamplesFromSpecTest {
 
     }
 
-    //9.4.1 in adl specs
+    //9.4.1 in definitions specs
     @Test
     public void existenceRedefinition() throws Exception {
         Archetype emptyObservation = parse("openEHR-EHR-OBSERVATION.empty_observation.v1.0.0.adls");

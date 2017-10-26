@@ -2,6 +2,8 @@ package com.nedap.archie.base.terminology;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.nedap.archie.base.OpenEHRBase;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -16,7 +18,8 @@ import java.util.regex.Pattern;
  */
 @XmlType(name="TERMINOLOGY_CODE")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class TerminologyCode {
+@JsonTypeInfo(use=JsonTypeInfo.Id.NAME, defaultImpl=TerminologyCode.class)
+public class TerminologyCode extends OpenEHRBase {
 
     @XmlElement(name="terminology_id")
     private String terminologyId;

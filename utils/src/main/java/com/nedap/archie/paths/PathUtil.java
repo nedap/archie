@@ -1,7 +1,7 @@
 package com.nedap.archie.paths;
 
 
-import com.nedap.archie.adl.AdlCodeDefinitions;
+import com.nedap.archie.definitions.AdlCodeDefinitions;
 
 import java.util.List;
 

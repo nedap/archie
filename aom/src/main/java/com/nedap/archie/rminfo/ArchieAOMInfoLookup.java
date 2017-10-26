@@ -4,7 +4,9 @@ import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.ArchetypeModelObject;
 import com.nedap.archie.aom.CObject;
 import com.nedap.archie.aom.CPrimitiveObject;
+import com.nedap.archie.base.Cardinality;
 import com.nedap.archie.base.Interval;
+import com.nedap.archie.base.terminology.TerminologyCode;
 
 /**
  * Created by pieter.bos on 06/07/16.
@@ -16,6 +18,8 @@ public class ArchieAOMInfoLookup extends ReflectionModelInfoLookup {
     public ArchieAOMInfoLookup() {
         super(new ArchieModelNamingStrategy(), ArchetypeModelObject.class);
         addSubtypesOf(Interval.class); //extra class from the base package. No RMObject because it is also used in the AOM
+        addSubtypesOf(Cardinality.class); //extra class from the base package. No RMObject because it is also used in the AOM
+        addSubtypesOf(TerminologyCode.class); //extra class from the base package. No RMObject because it is also used in the AOM
 
     }
 

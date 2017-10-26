@@ -2,7 +2,7 @@ package com.nedap.archie.query;
 
 
 import com.google.common.collect.Lists;
-import com.nedap.archie.adl.AdlCodeDefinitions;
+import com.nedap.archie.definitions.AdlCodeDefinitions;
 import com.nedap.archie.paths.PathSegment;
 import com.nedap.archie.rminfo.ModelInfoLookup;
 import com.nedap.archie.rminfo.RMAttributeInfo;

@@ -113,6 +113,7 @@ public abstract class ReflectionModelInfoLookup implements ModelInfoLookup {
 
         System.out.println("type names size: " + classes.size());
         classes.forEach(this::addClass);
+        addClass(baseClass);
     }
 
     protected void addClass(Class clazz) {

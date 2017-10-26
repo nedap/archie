@@ -1,7 +1,6 @@
-package com.nedap.archie.aom;
+package com.nedap.archie.base;
 
 import com.google.common.base.Joiner;
-import com.nedap.archie.base.MultiplicityInterval;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -11,33 +10,31 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static com.nedap.archie.serializer.adl.ArchetypeSerializeUtils.buildOccurrences;
-
 /**
  * Created by pieter.bos on 18/10/15.
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name="CARDINALITY", propOrder = {
-        "ordered",
-        "unique",
+        "isOrdered",
+        "isUnique",
         "interval"
 })
-public class Cardinality extends ArchetypeModelObject {
+public class Cardinality extends OpenEHRBase {
 
     private MultiplicityInterval interval;
 
     @XmlElement(name="is_ordered")
-    private boolean ordered = false;
+    private boolean isOrdered = false;
     @XmlElement(name="is_unique")
-    private boolean unique = false;
+    private boolean isUnique = false;
 
     public Cardinality() {
 
     }
 
     public Cardinality(int lower, int higher) {
-        ordered = false;
-        unique = lower == 1 && higher == 1;
+        isOrdered = false;
+        isUnique = lower == 1 && higher == 1;
         interval = new MultiplicityInterval(lower, higher);
     }
 
@@ -50,19 +47,19 @@ public class Cardinality extends ArchetypeModelObject {
     }
 
     public boolean isOrdered() {
-        return ordered;
+        return isOrdered;
     }
 
     public void setOrdered(boolean ordered) {
-        this.ordered = ordered;
+        this.isOrdered = ordered;
     }
 
     public boolean isUnique() {
-        return unique;
+        return isUnique;
     }
 
     public void setUnique(boolean unique) {
-        this.unique = unique;
+        this.isUnique = unique;
     }
 
     public static Cardinality unbounded() {
@@ -71,11 +68,49 @@ public class Cardinality extends ArchetypeModelObject {
         return result;
     }
 
+    /**
+     * True if the semantics of this cardinality represent a bag, i.e. unordered, non-unique membership.
+     *
+     * @return
+     */
+    public Boolean isBag() {
+        return !isOrdered && !isUnique;
+    }
+
+    /**
+     * True if the semantics of this cardinality represent a list, i.e. ordered, non-unique membership.
+     *
+     * @return
+     */
+    public Boolean isList() {
+        return isOrdered && !isUnique;
+    }
+
+    /**
+     * True if the semantics of this cardinality represent a set, i.e. unordered, unique membership.
+     *
+     * @return
+     */
+    public Boolean isSet() {
+        return !isOrdered && isUnique;
+    }
+
+
+    /**
+     * Checks whether the cardinality interval of 'other' is subsumed by the interval for this cardinality
+     *
+     * @param other
+     * @return
+     */
+    public Boolean contains(Cardinality other) {
+        return getInterval().contains(other.getInterval());
+    }
+
     public boolean equals(Object other) {
         if(other instanceof Cardinality) {
             Cardinality otherCardinality = (Cardinality) other;
-            return ordered == otherCardinality.ordered &&
-                    unique == otherCardinality.unique &&
+            return isOrdered == otherCardinality.isOrdered &&
+                    isUnique == otherCardinality.isUnique &&
                     Objects.equals(interval, otherCardinality.interval);
         }
         return false;
@@ -91,7 +126,7 @@ public class Cardinality extends ArchetypeModelObject {
             tags.add("unordered");
         }
         if (isUnique()) {
-            tags.add("unique");
+            tags.add("isUnique");
         }
         if (!tags.isEmpty()) {
             builder.append("; ").append(Joiner.on("; ").join(tags));

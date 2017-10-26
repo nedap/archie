@@ -3,6 +3,7 @@ package com.nedap.archie.adlparser.treewalkers;
 import com.nedap.archie.adlparser.ADLParserErrors;
 import com.nedap.archie.adlparser.antlr.AdlParser.*;
 import com.nedap.archie.aom.*;
+import com.nedap.archie.base.Cardinality;
 import com.nedap.archie.base.MultiplicityInterval;
 import com.nedap.archie.rules.Assertion;
 import org.antlr.v4.runtime.tree.TerminalNode;
