@@ -72,6 +72,11 @@ subprojects {
     compile "org.reflections:reflections:${reflectionsVersion}"
     compile 'com.esotericsoftware:kryo:4.0.1' //for easy and relatively fast object cloning
 
+    compile('commons-io:commons-io:2.4'){
+      exclude group: 'commons-logging', module: 'commons-logging'
+    }
+    compile('commons-lang:commons-lang:2.6')
+
     testCompile 'junit:junit:4.12'
     testCompile 'org.slf4j:slf4j-simple:1.7.25'
   }
