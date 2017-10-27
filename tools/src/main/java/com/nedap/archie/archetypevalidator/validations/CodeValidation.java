@@ -10,13 +10,11 @@ import com.nedap.archie.archetypevalidator.ValidationMessage;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by pieter.bos on 03/04/2017.
- */
-public class CTerminologyCodeValidation extends ValidatingVisitor {
+public class CodeValidation extends ValidatingVisitor {
 
     @Override
     public List<ValidationMessage> validate(CPrimitiveObject cObject) {
+        //validate CTerminology codes
         List<ValidationMessage> result = new ArrayList<>();
         if(cObject instanceof CTerminologyCode) {
             CTerminologyCode terminologyCode = (CTerminologyCode) cObject;
@@ -41,5 +39,4 @@ public class CTerminologyCodeValidation extends ValidatingVisitor {
         }
         return result;
     }
-
 }

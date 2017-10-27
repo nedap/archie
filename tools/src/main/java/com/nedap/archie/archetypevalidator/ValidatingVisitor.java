@@ -26,7 +26,7 @@ public abstract class ValidatingVisitor implements ArchetypeValidation {
     @Override
     public List<ValidationMessage> validate(Archetype archetype, Archetype flatParent, ArchetypeRepository repository) {
         List<ValidationMessage> result = new ArrayList<>();
-        beginValidation(archetype, repository);
+        beginValidation(archetype, flatParent, repository);
         ArrayDeque<CObject> workList = new ArrayDeque<>();
         workList.add(archetype.getDefinition());
         while(!workList.isEmpty()) {
@@ -45,8 +45,9 @@ public abstract class ValidatingVisitor implements ArchetypeValidation {
     /**
      * Override to get a callback when validation begins
      * @param archetype the archetype that is currently being validated
+     * @param flatParent
      */
-    protected void beginValidation(Archetype archetype, ArchetypeRepository repository) {
+    protected void beginValidation(Archetype archetype, Archetype flatParent, ArchetypeRepository repository) {
 
     }
 

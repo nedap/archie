@@ -19,22 +19,30 @@ import java.util.List;
 public class ArchetypeValidator {
     private static final Logger logger = LoggerFactory.getLogger(ArchetypeValidator.class);
 
-    private List<ArchetypeValidation> validations;
+    private List<ArchetypeValidation> validationsPhase1;
+
+    private List<ArchetypeValidation> validationsPhase2;
     private ModelInfoLookup modelInfoLookup;
 
     public ArchetypeValidator(ModelInfoLookup lookup) {
         modelInfoLookup = lookup;
 
-        validations = new ArrayList<>();
-        validations.add(new BasicChecks());
-        validations.add(new AuthoredArchetypeMetadataChecks());
-        validations.add(new DefinitionStructureValidation());
-        validations.add(new BasicTerminologyValidation());
-        validations.add(new NodeIdValidation());
-        validations.add(new ModelConformanceValidation(lookup));
-        validations.add(new AttributeUniquenessValidation());
-        validations.add(new ValueSetValidation());
-        validations.add(new CTerminologyCodeValidation());
+        validationsPhase1 = new ArrayList<>();
+        //conforms to spec
+        validationsPhase1.add(new BasicChecks());
+        validationsPhase1.add(new AuthoredArchetypeMetadataChecks());
+        validationsPhase1.add(new DefinitionStructureValidation());
+        validationsPhase1.add(new BasicTerminologyValidation());
+        validationsPhase1.add(new CodeValidation());
+        validationsPhase1.add(new VariousStructureValidation(lookup));
+
+        validationsPhase2 = new ArrayList<>();
+
+        //probably does not conform to spec
+        validationsPhase2.add(new NodeIdValidation());
+        validationsPhase2.add(new ModelConformanceValidation(lookup));
+        validationsPhase2.add(new AttributeUniquenessValidation());
+
 
     }
 
@@ -42,6 +50,15 @@ public class ArchetypeValidator {
         return validate(archetype, null);
     }
 
+
+    /**
+     * Validate an archetype, plus a repository of other archetypes.
+     *
+     * If the archetype is specialized, it MUST be in its differential form.
+     * @param archetype
+     * @param repository
+     * @return
+     */
     public List<ValidationMessage> validate(Archetype archetype, ArchetypeRepository repository) {
         Archetype flatParent = null;
         if(archetype.isSpecialized()) {
@@ -51,9 +68,14 @@ public class ArchetypeValidator {
             repository = new SimpleArchetypeRepository();
         }
 
-        List<ValidationMessage> messages = new ArrayList<>();
+        List<ValidationMessage> messages = runValidations(archetype, repository, flatParent, validationsPhase1);
+        messages.addAll(runValidations(archetype, repository, flatParent, validationsPhase2));
+        return messages;
+    }
 
-        for(ArchetypeValidation validation:validations) {
+    private List<ValidationMessage> runValidations(Archetype archetype, ArchetypeRepository repository, Archetype flatParent, List<ArchetypeValidation> validations) {
+        List<ValidationMessage> messages = new ArrayList<>();
+        for(ArchetypeValidation validation: validations) {
             try {
                 messages.addAll(validation.validate(archetype, flatParent, repository));
             } catch (Exception e) {
@@ -64,4 +86,4 @@ public class ArchetypeValidator {
         return messages;
     }
 
- }
+}

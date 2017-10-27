@@ -10,7 +10,6 @@ import com.nedap.archie.archetypevalidator.ValidationMessage;
 import com.nedap.archie.flattener.ArchetypeRepository;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class DefinitionStructureValidation extends ValidatingVisitor {
@@ -19,7 +18,7 @@ public class DefinitionStructureValidation extends ValidatingVisitor {
     private ArchetypeRepository repository;
 
     @Override
-    protected void beginValidation(Archetype archetype, ArchetypeRepository repository) {
+    protected void beginValidation(Archetype archetype, Archetype flatParent, ArchetypeRepository repository) {
         this.archetype = archetype;
         this.repository = repository;
     }

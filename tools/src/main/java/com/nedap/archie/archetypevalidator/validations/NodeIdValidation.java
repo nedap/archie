@@ -23,7 +23,7 @@ public class NodeIdValidation extends ValidatingVisitor {
     private HashMap<String, String> nodeIds = new HashMap<>();
 
     @Override
-    protected void beginValidation(Archetype archetype, ArchetypeRepository repository) {
+    protected void beginValidation(Archetype archetype, Archetype flatParent, ArchetypeRepository repository) {
         nodeIds.clear();
     }
 

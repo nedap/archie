@@ -3,6 +3,7 @@ package com.nedap.archie.archetypevalidator.validations;
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.terminology.ArchetypeTerm;
 import com.nedap.archie.aom.terminology.ArchetypeTerminology;
+import com.nedap.archie.aom.terminology.ValueSet;
 import com.nedap.archie.aom.utils.AOMUtils;
 import com.nedap.archie.archetypevalidator.ArchetypeValidation;
 import com.nedap.archie.archetypevalidator.ErrorType;
@@ -24,6 +25,7 @@ public class BasicTerminologyValidation implements ArchetypeValidation {
         validateFormatAndSpecializationLevelOfCodes(archetype, result);
         validateLanguageConsistency(archetype, result);
         validateTerminologyBindings(archetype, flatParent, result);
+        validateValueSets(archetype, flatParent, result);
         return result;
     }
 
@@ -83,6 +85,22 @@ public class BasicTerminologyValidation implements ArchetypeValidation {
                 }
                 //TODO: two warnings
             }
+        }
+    }
+
+    private void validateValueSets(Archetype archetype, Archetype flatParent, List<ValidationMessage> result) {
+        ArchetypeTerminology terminology = archetype.getTerminology();
+        for(ValueSet valueSet:terminology.getValueSets().values()){
+            if(!terminology.hasValueSetCode(valueSet.getId())) {
+                result.add(new ValidationMessage(ErrorType.VTVSID, String.format("value set code %s is not present in terminology", valueSet.getId())));
+            }
+            for(String value:valueSet.getMembers()) {
+                if(!terminology.hasValueCode(value)) {
+                    result.add(new ValidationMessage(ErrorType.VTVSMD, String.format("value set code %s is not present in terminology", valueSet.getId())));
+                }
+            }
+            //TODO: we should check for uniqueness, but valueset is a java.util.Set, so there can be no duplicates by definition
+
         }
     }
 

@@ -51,23 +51,25 @@ public class ArchetypeValidatorTest {
     }
 
     @Test
-    public void VTVSIDidCodeNotPresent() throws Exception {
+    public void VACDFidCodeNotPresent() throws Exception {
         archetype = parse("/adl2-tests/validity/consistency/openEHR-TEST_PKG-ENTRY.VACDF_ac_code_in_definition_not_in_terminology.v1.adls");
         List<ValidationMessage> messages = new ArchetypeValidator(ArchieRMInfoLookup.getInstance()).validate(archetype);
         System.out.println(messages);
         assertEquals(2, messages.size());
-        assertEquals(ErrorType.VCARM, messages.get(0).getType());
-        assertEquals(ErrorType.VTVSID, messages.get(1).getType());
+        assertEquals(ErrorType.VACDF, messages.get(0).getType());
+        assertEquals(ErrorType.VCARM, messages.get(1).getType());
+
     }
 
     @Test
-    public void VTVSIDatCodeNotPresent() throws Exception {
+    public void VATDFatCodeNotPresent() throws Exception {
         archetype = parse("/adl2-tests/validity/consistency/openEHR-TEST_PKG-ENTRY.VATDF_at_code_in_ordinal_not_in_terminology.v1.adls");
         List<ValidationMessage> messages = new ArchetypeValidator(ArchieRMInfoLookup.getInstance()).validate(archetype);
         System.out.println(messages);
         assertEquals(2, messages.size());
-        assertEquals(ErrorType.VCARM, messages.get(0).getType());
-        assertEquals(ErrorType.VTVSMD, messages.get(1).getType());
+        assertEquals(ErrorType.VATDF, messages.get(0).getType());
+        assertEquals(ErrorType.VCARM, messages.get(1).getType());
+
     }
 
 
