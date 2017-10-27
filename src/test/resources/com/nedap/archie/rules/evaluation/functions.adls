@@ -77,7 +77,11 @@ rules
 	    value_when_undefined(10.0, /data[id2]/events[id3]/data[id4]/items[id5]/value/magnitude) +
 	    max(1.0, 2.0)
 
-
+    $count_defined_elements:Integer ::= count_defined_elements(
+        /data[id2]/events[id3]/data[id4]/items[id5]/value/magnitude,
+        /data[id2]/events[id3]/data[id4]/items[id6]/value/magnitude,
+        /data[id2]/events[id3]/data[id4]/items[id7]/value/magnitude
+    )
 
 terminology
 	term_definitions = <
