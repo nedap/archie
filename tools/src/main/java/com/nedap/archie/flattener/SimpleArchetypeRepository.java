@@ -3,6 +3,8 @@ package com.nedap.archie.flattener;
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.ArchetypeHRID;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -21,5 +23,9 @@ public class SimpleArchetypeRepository implements ArchetypeRepository {
 
     public void addArchetype(Archetype archetype) {
         archetypes.put(archetype.getArchetypeId().getSemanticId(), archetype);
+    }
+
+    public List<Archetype> getAllArchetypes() {
+        return new ArrayList<>(archetypes.values());
     }
 }

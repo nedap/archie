@@ -33,7 +33,7 @@ public class DefinitionStructureValidation extends ValidatingVisitor {
                 Archetype parent = repository.getArchetype(archetype.getParentArchetypeId());
                 if (parent != null) {
                     //adl workbench deviates from spec by only allowing differential paths at root, we allow them everywhere, according to spec
-                    ArchetypeModelObject parentAttributeObject = parent.itemAtPath(cAttribute.path());
+                    ArchetypeModelObject parentAttributeObject = parent.itemAtPath(cAttribute.getDifferentialPath());
                     if (parentAttributeObject != null && parentAttributeObject instanceof CAttribute) {
                         CAttribute parentAttribute = (CAttribute) parentAttributeObject;
                         if (parentAttribute.getParent() instanceof CComplexObject) {
@@ -55,6 +55,6 @@ public class DefinitionStructureValidation extends ValidatingVisitor {
     }
 
     private void addPathNotFoundInParentError(CAttribute cAttribute, List<ValidationMessage> result) {
-        result.add(new ValidationMessage(ErrorType.VDIFP, cAttribute.path()));
+        result.add(new ValidationMessage(ErrorType.VDIFP, cAttribute.getDifferentialPath()));
     }
 }

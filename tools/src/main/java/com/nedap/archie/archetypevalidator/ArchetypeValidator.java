@@ -62,7 +62,11 @@ public class ArchetypeValidator {
     public List<ValidationMessage> validate(Archetype archetype, ArchetypeRepository repository) {
         Archetype flatParent = null;
         if(archetype.isSpecialized()) {
-            flatParent = new Flattener(repository).flatten(archetype);
+            try {
+                flatParent = new Flattener(repository).flatten(archetype);
+            } catch (Exception e) {
+                //...
+            }
         }
         if(repository == null) {
             repository = new SimpleArchetypeRepository();
