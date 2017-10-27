@@ -8,23 +8,12 @@ import javax.xml.bind.annotation.XmlType;
  * Created by pieter.bos on 15/10/15.
  */
 @XmlType(name="C_DEFINED_OBJECT", propOrder= {
-        "frozen",
         "defaultValue"
 })
-public class CDefinedObject<T> extends CObject {
+public abstract class CDefinedObject<T> extends CObject {
 
-    @XmlElement(name="is_frozen")
-    private Boolean frozen;
     @XmlElement(name="default_value") //TODO: this will not deserialize, it needs possible classes
     private T defaultValue;
-
-    public Boolean getFrozen() {
-        return frozen;
-    }
-
-    public void setFrozen(Boolean frozen) {
-        this.frozen = frozen;
-    }
 
     public T getDefaultValue() {
         return defaultValue;

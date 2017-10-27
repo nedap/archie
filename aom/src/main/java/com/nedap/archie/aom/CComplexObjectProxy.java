@@ -20,4 +20,9 @@ public class CComplexObjectProxy extends CObject {
     public void setTargetPath(String targetPath) {
         this.targetPath = targetPath;
     }
+
+    @Override
+    public boolean isLeaf() {
+        return true;
+    }
 }

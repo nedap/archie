@@ -45,4 +45,9 @@ public class ArchetypeSlot extends CObject {
     public void setClosed(boolean closed) {
         this.closed = closed;
     }
+
+    @Override
+    public boolean isLeaf() {
+        return true;
+    }
 }

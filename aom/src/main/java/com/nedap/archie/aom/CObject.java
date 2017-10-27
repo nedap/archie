@@ -30,7 +30,7 @@ import java.util.List;
         "occurrences",
         "siblingOrder"
 })
-public class CObject extends ArchetypeConstraint {
+public abstract class CObject extends ArchetypeConstraint {
 
     @XmlAttribute(name="rm_type_name")
     private String rmTypeName;

@@ -108,5 +108,10 @@ public abstract class CPrimitiveObject<Constraint, ValueType> extends CDefinedOb
         return result.toString();
     }
 
+    @Override
+    public boolean isLeaf() {
+        return true; //primitive nodes are leafs.
+    }
+
 }
 

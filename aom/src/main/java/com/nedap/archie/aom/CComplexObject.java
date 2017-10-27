@@ -136,4 +136,9 @@ public class CComplexObject extends CDefinedObject<ArchetypeModelObject> {
         }
 
     }
+
+    @Override
+    public boolean isLeaf() {
+        return (attributes == null || attributes.isEmpty()) && (attributeTuples == null || attributeTuples.isEmpty());
+    }
 }

@@ -257,4 +257,10 @@ public class CAttribute extends ArchetypeConstraint {
 
     //TODO: congruent and conforms to?
 
+
+    @Override
+    public boolean isLeaf() {
+        return children != null && children.size() > 0;
+    }
+
 }

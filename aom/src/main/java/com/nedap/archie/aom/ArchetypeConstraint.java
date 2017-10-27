@@ -61,6 +61,16 @@ public abstract class ArchetypeConstraint extends ArchetypeModelObject {
     }
 
 
+    /**
+     * True if this node is the root of the tree.
+     */
+    public boolean isRoot() {
+        return parent == null;
+    }
+
+    public abstract boolean isLeaf();
+
+
     @JsonIgnore
     @XmlTransient
     public Archetype getArchetype() {
