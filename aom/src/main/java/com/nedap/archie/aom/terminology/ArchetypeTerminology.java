@@ -1,5 +1,6 @@
 package com.nedap.archie.aom.terminology;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.ArchetypeModelObject;
 
@@ -36,7 +37,8 @@ public class ArchetypeTerminology extends ArchetypeModelObject {
     @XmlElement(name="value_sets")
     private Map<String, ValueSet> valueSets = new ConcurrentHashMap<>();
 
-    private transient Archetype parent;
+    @JsonIgnore
+    private transient Archetype ownerArchetype;
 
     public Boolean getDifferential() {
         return differential;
@@ -86,12 +88,12 @@ public class ArchetypeTerminology extends ArchetypeModelObject {
         this.terminologyExtracts = terminologyExtracts;
     }
 
-    public Archetype getParent() {
-        return parent;
+    public Archetype getOwnerArchetype() {
+        return ownerArchetype;
     }
 
-    public void setParent(Archetype parent) {
-        this.parent = parent;
+    public void setOwnerArchetype(Archetype ownerArchetype) {
+        this.ownerArchetype = ownerArchetype;
     }
 
     public Map<String, ValueSet> getValueSets() {

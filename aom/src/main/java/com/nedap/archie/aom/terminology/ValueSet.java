@@ -14,27 +14,6 @@ import java.util.Set;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name="VALUE_SET")
-public class ValueSet extends ArchetypeModelObject {
-    private String id;
-    private Set<String> members = new LinkedHashSet<>();
+public class ValueSet extends TerminologyRelation {
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public Set<String> getMembers() {
-        return members;
-    }
-
-    public void setMembers(Collection<String> members) {
-        this.members = new LinkedHashSet<>(members);
-    }
-
-    public void addMember(String member) {
-        this.members.add(member);
-    }
 }
