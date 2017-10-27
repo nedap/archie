@@ -10,6 +10,10 @@ public class ValidationMessage {
     private String pathInArchetype;
     private String message;
 
+    public ValidationMessage(ErrorType type) {
+        this.type = type;
+    }
+
     public ValidationMessage(ErrorType type, String pathInArchetype) {
         this.type = type;
         this.pathInArchetype = pathInArchetype;

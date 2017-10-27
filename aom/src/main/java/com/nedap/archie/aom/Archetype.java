@@ -201,9 +201,16 @@ public class Archetype extends AuthoredResource {
         return new AOMPathQuery(path).findList(getDefinition());
     }
 
+    public boolean hasPath(String path) {
+        return !itemsAtPath(path).isEmpty();
+    }
+
     @Override
     public String toString() {
         return"archetype: " + getArchetypeId();
     }
 
+    public boolean isSpecialized() {
+        return parentArchetypeId != null;
     }
+}

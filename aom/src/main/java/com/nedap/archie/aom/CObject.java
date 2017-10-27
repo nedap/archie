@@ -3,6 +3,7 @@ package com.nedap.archie.aom;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nedap.archie.ArchieLanguageConfiguration;
 import com.nedap.archie.aom.terminology.ArchetypeTerm;
+import com.nedap.archie.aom.utils.AOMUtils;
 import com.nedap.archie.base.MultiplicityInterval;
 import com.nedap.archie.definitions.AdlCodeDefinitions;
 import com.nedap.archie.paths.PathSegment;
@@ -228,7 +229,7 @@ public abstract class CObject extends ArchetypeConstraint {
     }
 
     /**
-     * Return true if and only if this is a root node.
+     * Return true if and only if this is a root node. Implemented in CComplexObject
      * @return
      */
     @JsonIgnore
@@ -245,13 +246,7 @@ public abstract class CObject extends ArchetypeConstraint {
      * @return
      */
     public Integer specialisationDepth() {
-        if(nodeId == null) {
-            return -1;
-        } else if(nodeId.indexOf(AdlCodeDefinitions.SPECIALIZATION_SEPARATOR) < 0) {
-            return 0;
-        } else {
-            return StringUtils.countMatches(nodeId, String.valueOf(AdlCodeDefinitions.SPECIALIZATION_SEPARATOR));
-        }
+        return AOMUtils.getSpecializationDepthFromCode(nodeId);
     }
 
     @Override

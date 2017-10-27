@@ -61,6 +61,8 @@ public class ADLParser {
         walker= new ParseTreeWalker();
         walker.walk(listener, tree);
         Archetype result = listener.getArchetype();
+        result.getTerminology().setConceptCode(result.getDefinition().getNodeId());
+        result.getTerminology().setOriginalLanguage(result.getOriginalLanguage() == null ? null : result.getOriginalLanguage().getCodeString());
         if(modelConstraintImposer != null && result.getDefinition() != null) {
             modelConstraintImposer.imposeConstraints(result.getDefinition());
         }

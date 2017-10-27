@@ -7,6 +7,7 @@ import com.nedap.archie.aom.CComplexObject;
 import com.nedap.archie.aom.CComplexObjectProxy;
 import com.nedap.archie.aom.CObject;
 import com.nedap.archie.aom.CPrimitiveObject;
+import com.nedap.archie.flattener.ArchetypeRepository;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -23,9 +24,9 @@ public abstract class ValidatingVisitor implements ArchetypeValidation {
     }
 
     @Override
-    public List<ValidationMessage> validate(Archetype archetype) {
+    public List<ValidationMessage> validate(Archetype archetype, Archetype flatParent, ArchetypeRepository repository) {
         List<ValidationMessage> result = new ArrayList<>();
-        beginValidation(archetype);
+        beginValidation(archetype, repository);
         ArrayDeque<CObject> workList = new ArrayDeque<>();
         workList.add(archetype.getDefinition());
         while(!workList.isEmpty()) {
@@ -45,7 +46,7 @@ public abstract class ValidatingVisitor implements ArchetypeValidation {
      * Override to get a callback when validation begins
      * @param archetype the archetype that is currently being validated
      */
-    protected void beginValidation(Archetype archetype) {
+    protected void beginValidation(Archetype archetype, ArchetypeRepository repository) {
 
     }
 

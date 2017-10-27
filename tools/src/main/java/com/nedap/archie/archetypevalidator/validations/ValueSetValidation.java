@@ -6,6 +6,7 @@ import com.nedap.archie.aom.terminology.ArchetypeTerminology;
 import com.nedap.archie.archetypevalidator.ArchetypeValidation;
 import com.nedap.archie.archetypevalidator.ErrorType;
 import com.nedap.archie.archetypevalidator.ValidationMessage;
+import com.nedap.archie.flattener.ArchetypeRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.Map;
  */
 public class ValueSetValidation implements ArchetypeValidation {
     @Override
-    public List<ValidationMessage> validate(Archetype archetype) {
+    public List<ValidationMessage> validate(Archetype archetype, Archetype flatParent, ArchetypeRepository repository) {
         List<ValidationMessage> result = new ArrayList<>();
 
         ArchetypeTerminology terminology = archetype.getTerminology();

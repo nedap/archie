@@ -3,6 +3,8 @@ package com.nedap.archie.aom.terminology;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.ArchetypeModelObject;
+import com.nedap.archie.aom.utils.AOMUtils;
+
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -10,8 +12,11 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.List;
 
 /**
  * Created by pieter.bos on 15/10/15.
@@ -119,4 +124,63 @@ public class ArchetypeTerminology extends ArchetypeModelObject {
         }
         return translated.get(code);
     }
+
+    public Integer specialisationDepth() {
+        return AOMUtils.getSpecializationDepthFromCode(conceptCode);
+    }
+
+    public List<String> idCodes() {
+        HashSet<String> codes = new HashSet<>();
+        for(String language:getTermDefinitions().keySet()) {
+            for(String code:getTermDefinitions().get(language).keySet()) {
+                if(AOMUtils.isIdCode(code)) {
+                    codes.add(code);
+                }
+            }
+        }
+        return new ArrayList<String>(codes);
+    }
+
+    public List<String> valueCodes() {
+        HashSet<String> codes = new HashSet<>();
+        for(String language:getTermDefinitions().keySet()) {
+            for(String code:getTermDefinitions().get(language).keySet()) {
+                if(AOMUtils.isValueCode(code)) {
+                    codes.add(code);
+                }
+            }
+        }
+        return new ArrayList<>(codes);
+    }
+
+    public List<String> valueSetCodes() {
+        HashSet<String> codes = new HashSet<>();
+        for(String language:getTermDefinitions().keySet()) {
+            for(String code:getTermDefinitions().get(language).keySet()) {
+                if(AOMUtils.isValueSetCode(code)) {
+                    codes.add(code);
+                }
+            }
+        }
+        return new ArrayList<>(codes);
+    }
+
+    public List<String> allCodes() {
+        HashSet<String> codes = new HashSet<>();
+        for(String language:getTermDefinitions().keySet()) {
+            for(String code:getTermDefinitions().get(language).keySet()) {
+                codes.add(code);
+            }
+        }
+        return new ArrayList<>(codes);
+    }
+
+    public boolean hasCode(String code) {
+        if(termDefinitions == null) {
+            return false;
+        }
+        return getTermDefinitions().get(originalLanguage).containsKey(code);
+    }
 }
+
+

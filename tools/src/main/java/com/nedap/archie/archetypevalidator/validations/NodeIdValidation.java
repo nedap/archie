@@ -6,6 +6,7 @@ import com.nedap.archie.aom.CPrimitiveObject;
 import com.nedap.archie.archetypevalidator.ErrorType;
 import com.nedap.archie.archetypevalidator.ValidatingVisitor;
 import com.nedap.archie.archetypevalidator.ValidationMessage;
+import com.nedap.archie.flattener.ArchetypeRepository;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,7 +23,7 @@ public class NodeIdValidation extends ValidatingVisitor {
     private HashMap<String, String> nodeIds = new HashMap<>();
 
     @Override
-    protected void beginValidation(Archetype archetype) {
+    protected void beginValidation(Archetype archetype, ArchetypeRepository repository) {
         nodeIds.clear();
     }
 
