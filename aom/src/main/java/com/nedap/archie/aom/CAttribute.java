@@ -263,4 +263,68 @@ public class CAttribute extends ArchetypeConstraint {
         return children != null && children.size() > 0;
     }
 
+    /**
+     * True if constraints represented by this node contain no further redefinitions
+     * with respect to the node other, with the exception of node_id redefnition in
+     * C_OBJECT nodes. Typically used to test if an inherited node locally contains
+     * any constraints.
+     *
+     * @param other
+     * @return
+     */
+    //@Override
+    public Boolean cCongruentTo(CAttribute other) {
+        //True if this node on its own (ignoring any subparts) expresses no additional constraints than `other'.
+        if(other == null) {
+            return false;
+        }
+
+        return existence == null && ((isSingle() && other.isSingle()) || (isMultiple() && other.isMultiple() && cardinality == null));
+    }
+
+    /**
+     * True if constraints represented by this node, ignoring any sub-parts,
+     * are narrower or the same as other. Typically used during validation of
+     * specialised archetype nodes.
+     *
+     * @param other
+     * @return
+     */
+   // @Override
+    public Boolean cConformsTo(CAttribute other) {
+        //True if this node on its own (ignoring any subparts) expresses the same or narrower constraints as `other'.
+        // Returns False if any of the following is incompatible:
+        //	 * cardinality
+        //   * existence
+        if(other == null) {
+            return false;
+        }
+
+        return existenceConformsTo(other) && ((isSingle() && other.isSingle()) || (isMultiple() && cardinalityConformsTo(other)));
+    }
+
+    protected Boolean existenceConformsTo(CAttribute other) {
+        //True if the existence of this node conforms to other.existence
+        if(other == null) {
+            return false;
+        }
+        if(existence != null && other.existence != null) {
+            return other.existence.contains(existence);
+        } else {
+            return true;
+        }
+    }
+
+    protected Boolean cardinalityConformsTo(CAttribute other) {
+        //True if the cardinality of this node conforms to other.cardinality, if it exists
+        if(other == null) {
+            return false;
+        }
+        if(cardinality != null && other.cardinality != null) {
+            return other.cardinality.contains(cardinality);
+        } else {
+            return true;
+        }
+    }
+
 }

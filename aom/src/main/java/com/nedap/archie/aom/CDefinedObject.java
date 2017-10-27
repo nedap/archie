@@ -22,4 +22,13 @@ public abstract class CDefinedObject<T> extends CObject {
     public void setDefaultValue(T defaultValue) {
         this.defaultValue = defaultValue;
     }
+
+    /**
+     * True if there is an assumed value.
+     *
+     * @return
+     */
+    public Boolean hasDefaultValue() {
+        return defaultValue != null;
+    }
 }

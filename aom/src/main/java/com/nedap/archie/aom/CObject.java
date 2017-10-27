@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nedap.archie.ArchieLanguageConfiguration;
 import com.nedap.archie.aom.terminology.ArchetypeTerm;
 import com.nedap.archie.base.MultiplicityInterval;
+import com.nedap.archie.definitions.AdlCodeDefinitions;
 import com.nedap.archie.paths.PathSegment;
+import org.apache.commons.lang.StringUtils;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -232,6 +234,24 @@ public abstract class CObject extends ArchetypeConstraint {
     @JsonIgnore
     public boolean isRootNode() {
         return false;
+    }
+
+    /**
+     * Level of specialisation of this archetype node, based on its node_id. The value 0 corresponds to non-specialised,
+     * 1 to first-level specialisation and so on. The level is the same as the number of ‘.’ characters in the node_id
+     * code. If node_id is not set, the return value is -1, signifying that the specialisation level should be determined
+     * from the nearest parent C_OBJECT node having a node_id.
+     *
+     * @return
+     */
+    public Integer specialisationDepth() {
+        if(nodeId == null) {
+            return -1;
+        } else if(nodeId.indexOf(AdlCodeDefinitions.SPECIALIZATION_SEPARATOR) < 0) {
+            return 0;
+        } else {
+            return StringUtils.countMatches(nodeId, String.valueOf(AdlCodeDefinitions.SPECIALIZATION_SEPARATOR));
+        }
     }
 
     @Override
