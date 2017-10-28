@@ -65,12 +65,14 @@ public class ModelConformanceValidation extends ValidatingVisitor {
         List<ValidationMessage> result = new ArrayList<>();
         CObject owningObject = cAttribute.getParent();
         if(owningObject != null) {
-            RMAttributeInfo attributeInfo = lookup.getAttributeInfo(owningObject.getRmTypeName(), cAttribute.getRmAttributeName());
-            if(attributeInfo == null) {
-                result.add(new ValidationMessage(ErrorType.VCARM, cAttribute.getPath(), cAttribute.getRmAttributeName() + " is not a known attribute of " + owningObject.getRmTypeName() + " or it is has not been implemented in Archie"));
-            } else {
-                //TODO: VCAEX and VCAM, multiplicity and existence
-            }
+            if(cAttribute.getDifferentialPath() == null) {
+                RMAttributeInfo attributeInfo = lookup.getAttributeInfo(owningObject.getRmTypeName(), cAttribute.getRmAttributeName());
+                if (attributeInfo == null) {
+                    result.add(new ValidationMessage(ErrorType.VCARM, cAttribute.getPath(), cAttribute.getRmAttributeName() + " is not a known attribute of " + owningObject.getRmTypeName() + " or it is has not been implemented in Archie"));
+                } else {
+                    //TODO: VCAEX and VCAM, multiplicity and existence
+                }
+            } //todo: flat parent.
         }
         return result;
     }

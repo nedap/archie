@@ -44,6 +44,9 @@ public class BigArchetypeValidatorTest {
             if(file.contains("legacy_adl_1.4")){
                 continue;
             }
+         /*   if(!file.contains("redefine_local_code_list")) {
+                continue;
+            }*/
             Archetype archetype = null;
             Exception exception = null;
             ADLParserErrors errors = null;
@@ -71,14 +74,14 @@ public class BigArchetypeValidatorTest {
                 } else {
                     boolean found = false;
                     for(ValidationMessage message:validation) {
-                        if(message.getType().name().equals(regression)) {
+                        if(regression.startsWith(message.getType().name())) {
                             found = true;
                             correctCount++;
                         }
                     }
                     if(!found) {
                         log.error("validation failed: archetype {} invalid but with wrong message", archetype.getArchetypeId());
-                        log.error(validation.toString());
+                        printErrors(validation);
                         errorCount++;
                     }
 
@@ -86,7 +89,7 @@ public class BigArchetypeValidatorTest {
             } else {
                 if(!validation.isEmpty()) {
                     log.error("should validate but failed: {}, {}", archetype.getArchetypeId(), regression);
-                    log.error(validation.toString());
+                    printErrors(validation);
                     shouldBeFineButWasinvalid++;
                 } else {
                     correctCount++;
@@ -98,5 +101,11 @@ public class BigArchetypeValidatorTest {
         }
 
 
+    }
+
+    private void printErrors(List<ValidationMessage> messages) {
+        for(ValidationMessage message:messages) {
+            log.error(message.toString());
+        }
     }
 }
