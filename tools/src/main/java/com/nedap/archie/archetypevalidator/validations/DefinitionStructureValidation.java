@@ -9,29 +9,24 @@ import com.nedap.archie.archetypevalidator.ValidatingVisitor;
 import com.nedap.archie.archetypevalidator.ValidationMessage;
 import com.nedap.archie.flattener.ArchetypeRepository;
 import com.nedap.archie.query.AOMPathQuery;
+import com.nedap.archie.rminfo.ModelInfoLookup;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class DefinitionStructureValidation extends ValidatingVisitor {
 
-    private Archetype archetype;
-    private Archetype flatParent;
-    private ArchetypeRepository repository;
 
-    @Override
-    protected void beginValidation(Archetype archetype, Archetype flatParent, ArchetypeRepository repository) {
-        this.archetype = archetype;
-        this.flatParent = flatParent;
-        this.repository = repository;
+    public DefinitionStructureValidation(ModelInfoLookup lookup) {
+        super(lookup);
     }
 
-    protected List<ValidationMessage> validate(CAttribute cAttribute) {
-        List<ValidationMessage> result = new ArrayList<>();
+    protected void validate(CAttribute cAttribute) {
+
         if (cAttribute.getDifferentialPath() != null) {
             if (archetype.getParentArchetypeId() == null) {
                 //differential paths can only occur in specialized archetypes, so not in this one
-                result.add(new ValidationMessage(ErrorType.VDIFV, cAttribute.path()));
+                addMessage(ErrorType.VDIFV, cAttribute.path());
             } else if (repository != null) {
                 if (flatParent != null) {
                     //adl workbench deviates from spec by only allowing differential paths at root, we allow them everywhere, according to spec
@@ -40,19 +35,18 @@ public class DefinitionStructureValidation extends ValidatingVisitor {
                         CComplexObject parentObject = (CComplexObject) parentAOMObject;
                         ArchetypeModelObject pathInParent =parentObject.itemAtPath(cAttribute.getDifferentialPath());
                         if (pathInParent == null) {
-                            addPathNotFoundInParentError(cAttribute, result);
+                            addPathNotFoundInParentError(cAttribute);
                         }
                     } else {
-                        addPathNotFoundInParentError(cAttribute, result);
+                        addPathNotFoundInParentError(cAttribute);
                     }
                 }
             }
         }
         //TODO: check if ADL workbench checks more than this
-        return result;
     }
 
-    private void addPathNotFoundInParentError(CAttribute cAttribute, List<ValidationMessage> result) {
-        result.add(new ValidationMessage(ErrorType.VDIFP, cAttribute.getDifferentialPath()));
+    private void addPathNotFoundInParentError(CAttribute cAttribute) {
+        addMessageWithPath(ErrorType.VDIFP, cAttribute.getDifferentialPath());
     }
 }

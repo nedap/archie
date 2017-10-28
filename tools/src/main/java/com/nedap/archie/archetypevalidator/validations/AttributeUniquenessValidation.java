@@ -5,6 +5,7 @@ import com.nedap.archie.aom.CComplexObject;
 import com.nedap.archie.archetypevalidator.ErrorType;
 import com.nedap.archie.archetypevalidator.ValidatingVisitor;
 import com.nedap.archie.archetypevalidator.ValidationMessage;
+import com.nedap.archie.rminfo.ModelInfoLookup;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -15,17 +16,19 @@ import java.util.List;
  */
 public class AttributeUniquenessValidation extends ValidatingVisitor {
 
+    public AttributeUniquenessValidation(ModelInfoLookup lookup) {
+        super(lookup);
+    }
+
     @Override
-    public List<ValidationMessage> validate(CComplexObject cObject) {
-        List<ValidationMessage> result = new ArrayList<>();
+    public void validate(CComplexObject cObject) {
         HashSet<String> attributeNames = new HashSet<>();
         for(CAttribute attribute:cObject.getAttributes()) {
             if (attributeNames.contains(attribute.getRmAttributeName())) {
-                result.add(new ValidationMessage(ErrorType.VCATU, attribute.getPath()));
+                addMessageWithPath(ErrorType.VCATU, attribute.getPath());
             }
             attributeNames.add(attribute.getRmAttributeName());
         }
-        return result;
     }
 
 

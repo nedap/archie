@@ -8,6 +8,7 @@ import com.nedap.archie.aom.CComplexObjectProxy;
 import com.nedap.archie.aom.CObject;
 import com.nedap.archie.aom.CPrimitiveObject;
 import com.nedap.archie.flattener.ArchetypeRepository;
+import com.nedap.archie.rminfo.ModelInfoLookup;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -17,28 +18,28 @@ import java.util.List;
 /**
  * Created by pieter.bos on 31/03/2017.
  */
-public abstract class ValidatingVisitor implements ArchetypeValidation {
+public abstract class ValidatingVisitor extends ArchetypeValidationBase {
 
-    public ValidatingVisitor() {
 
+    public ValidatingVisitor(ModelInfoLookup lookup) {
+        super(lookup);
     }
 
     @Override
-    public List<ValidationMessage> validate(Archetype archetype, Archetype flatParent, ArchetypeRepository repository) {
-        List<ValidationMessage> result = new ArrayList<>();
-        beginValidation(archetype, flatParent, repository);
+    public void validate() {
+        beginValidation();
         ArrayDeque<CObject> workList = new ArrayDeque<>();
         workList.add(archetype.getDefinition());
         while(!workList.isEmpty()) {
             CObject cObject = workList.pop();
-            result.addAll(validate(cObject));
+            validate(cObject);
             for(CAttribute attribute: cObject.getAttributes()) {
-                result.addAll(validate(attribute));
+                validate(attribute);
                 workList.addAll(attribute.getChildren());
             }
         }
-        result.addAll(endValidation(archetype));
-        return result;
+        endValidation();
+
     }
 
 
@@ -47,7 +48,7 @@ public abstract class ValidatingVisitor implements ArchetypeValidation {
      * @param archetype the archetype that is currently being validated
      * @param flatParent
      */
-    protected void beginValidation(Archetype archetype, Archetype flatParent, ArchetypeRepository repository) {
+    protected void beginValidation() {
 
     }
 
@@ -56,21 +57,20 @@ public abstract class ValidatingVisitor implements ArchetypeValidation {
      * @param archetype the archetype that is currently being validated
      * @return
      */
-    protected List<ValidationMessage> endValidation(Archetype archetype) {
-        return Collections.emptyList();
+    protected void endValidation() {
+
     }
 
-    protected List<ValidationMessage> validate(CObject cObject) {
+    protected void validate(CObject cObject) {
         if(cObject instanceof  CComplexObject) {
-            return validate((CComplexObject) cObject);
+            validate((CComplexObject) cObject);
         } else if (cObject instanceof  CPrimitiveObject) {
-            return validate((CPrimitiveObject) cObject);
+            validate((CPrimitiveObject) cObject);
         } else if(cObject instanceof ArchetypeSlot){
-            return validate((ArchetypeSlot) cObject);
+            validate((ArchetypeSlot) cObject);
         } else if(cObject instanceof CComplexObjectProxy){
-            return validate((CComplexObjectProxy) cObject);
+            validate((CComplexObjectProxy) cObject);
         }
-        throw new IllegalStateException("this code should be unreachable");
     }
 
     /**
@@ -78,8 +78,7 @@ public abstract class ValidatingVisitor implements ArchetypeValidation {
      * @param cObject
      * @return
      */
-    protected List<ValidationMessage> validate(ArchetypeSlot cObject) {
-        return Collections.emptyList();
+    protected void validate(ArchetypeSlot cObject) {
     }
 
     /**
@@ -87,8 +86,7 @@ public abstract class ValidatingVisitor implements ArchetypeValidation {
      * @param cObject
      * @return
      */
-    protected List<ValidationMessage> validate(CComplexObjectProxy cObject) {
-        return Collections.emptyList();
+    protected void validate(CComplexObjectProxy cObject) {
     }
 
     /**
@@ -96,16 +94,13 @@ public abstract class ValidatingVisitor implements ArchetypeValidation {
      * @param cObject
      * @return
      */
-    protected List<ValidationMessage> validate(CComplexObject cObject) {
-        return Collections.emptyList();
+    protected void validate(CComplexObject cObject) {
     }
 
-    protected List<ValidationMessage> validate(CPrimitiveObject cObject) {
-        return Collections.emptyList();
+    protected void validate(CPrimitiveObject cObject) {
     }
 
-    protected List<ValidationMessage> validate(CAttribute cAttribute) {
-        return Collections.emptyList();
+    protected void validate(CAttribute cAttribute) {
     }
 
 }

@@ -29,19 +29,19 @@ public class ArchetypeValidator {
 
         validationsPhase1 = new ArrayList<>();
         //conforms to spec
-        validationsPhase1.add(new BasicChecks());
-        validationsPhase1.add(new AuthoredArchetypeMetadataChecks());
-        validationsPhase1.add(new DefinitionStructureValidation());
-        validationsPhase1.add(new BasicTerminologyValidation());
-        validationsPhase1.add(new CodeValidation());
+        validationsPhase1.add(new BasicChecks(lookup));
+        validationsPhase1.add(new AuthoredArchetypeMetadataChecks(lookup));
+        validationsPhase1.add(new DefinitionStructureValidation(lookup));
+        validationsPhase1.add(new BasicTerminologyValidation(lookup));
+        validationsPhase1.add(new CodeValidation(lookup));
         validationsPhase1.add(new VariousStructureValidation(lookup));
 
         validationsPhase2 = new ArrayList<>();
 
         //probably does not conform to spec
-        validationsPhase2.add(new NodeIdValidation());
+        validationsPhase2.add(new NodeIdValidation(lookup));
         validationsPhase2.add(new ModelConformanceValidation(lookup));
-        validationsPhase2.add(new AttributeUniquenessValidation());
+        validationsPhase2.add(new AttributeUniquenessValidation(lookup));
 
 
     }

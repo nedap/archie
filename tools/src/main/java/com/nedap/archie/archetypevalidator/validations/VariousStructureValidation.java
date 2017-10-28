@@ -18,13 +18,8 @@ import java.util.List;
 
 public class VariousStructureValidation extends ValidatingVisitor {
 
-    private final ModelInfoLookup lookup;
-    private Archetype archetype;
-    private Archetype flatParent;
-    private ArchetypeRepository repository;
-
     public VariousStructureValidation(ModelInfoLookup lookup) {
-        this.lookup = lookup;
+        super(lookup);
     }
     
     protected void beginValidation(Archetype archetype, Archetype flatParent, ArchetypeRepository repository) {
@@ -34,7 +29,7 @@ public class VariousStructureValidation extends ValidatingVisitor {
     }
 
     @Override
-    protected List<ValidationMessage> validate(ArchetypeSlot slot) {
+    protected void validate(ArchetypeSlot slot) {
         //TODO: implement this construct, but first we need something that checks if
         //the assertions match something like 'archetype_id matches {*}', eg, assertion.matches_any() from eiffel
 
@@ -47,17 +42,15 @@ public class VariousStructureValidation extends ValidatingVisitor {
             elseif excludes not empty and /= any then
                 not (includes empty or = any) ==> VDSIV Error
             end*/
-        return Collections.emptyList();
 
     }
 
     @Override
-    protected List<ValidationMessage> validate(CComplexObject cComplexObject) {
-        List<ValidationMessage> result = new ArrayList<>();
+    protected void validate(CComplexObject cComplexObject) {
         if(cComplexObject instanceof CArchetypeRoot) {
             CArchetypeRoot archetypeRoot = (CArchetypeRoot) cComplexObject;
             if(repository.getArchetype(archetypeRoot.getArchetypeRef()) == null) {
-                result.add(new ValidationMessage(ErrorType.VARXRA, cComplexObject.path(), String.format("archetype with id %s not found", archetypeRoot.getArchetypeRef())));
+                addMessageWithPath(ErrorType.VARXRA, cComplexObject.path(), String.format("archetype with id %s not found", archetypeRoot.getArchetypeRef()));
             }
             ArchetypeHRID hrId = new ArchetypeHRID(archetypeRoot.getArchetypeRef());
             String archetypeRootTypeName = cComplexObject.getRmTypeName();
@@ -68,13 +61,12 @@ public class VariousStructureValidation extends ValidatingVisitor {
             if(parentTypeInfo != null) {
                 //if parent type info not found will be checked later in phase 2
                 if(specializedTypeInfo == null) {
-                    result.add(new ValidationMessage(ErrorType.VCORM, cComplexObject.getPath(), cComplexObject.getRmTypeName()));
+                    addMessageWithPath(ErrorType.VCORM, cComplexObject.getPath(), cComplexObject.getRmTypeName());
                 } else if(!parentTypeInfo.isDescendantOrEqual(specializedTypeInfo)){
-                    result.add(new ValidationMessage(ErrorType.VARXTV, cComplexObject.getPath(), cComplexObject.getRmTypeName()));
+                    addMessageWithPath(ErrorType.VARXTV, cComplexObject.getPath(), cComplexObject.getRmTypeName());
                 }
             }
         }
-        return result;
     }
 
 

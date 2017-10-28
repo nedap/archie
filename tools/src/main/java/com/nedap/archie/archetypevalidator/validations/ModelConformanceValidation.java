@@ -20,60 +20,56 @@ import java.util.List;
  */
 public class ModelConformanceValidation extends ValidatingVisitor {
 
-    protected ModelInfoLookup lookup;
 
     public ModelConformanceValidation(ModelInfoLookup lookup) {
-        this.lookup = lookup;
+        super(lookup);
     }
     
     @Override
-    protected List<ValidationMessage> validate(CComplexObject cObject) {
-        List<ValidationMessage> result = new ArrayList<>();
+    protected void validate(CComplexObject cObject) {
+
         RMTypeInfo typeInfo = lookup.getTypeInfo(cObject.getRmTypeName());
         if (typeInfo == null) {
-            result.add(new ValidationMessage(ErrorType.VCORM, cObject.getPath(), cObject.getRmTypeName()));
-            return result;
-        }
-        CAttribute owningAttribute = cObject.getParent();
-        if (owningAttribute != null) { //at path "/" there will be no owning attribute
-            CObject owningObject = owningAttribute.getParent();
+            addMessageWithPath(ErrorType.VCORM, cObject.getPath(), cObject.getRmTypeName());
+        } else {
+            CAttribute owningAttribute = cObject.getParent();
+            if (owningAttribute != null) { //at path "/" there will be no owning attribute
+                CObject owningObject = owningAttribute.getParent();
 
-            if (owningObject != null) {
-                RMAttributeInfo owningAttributeInfo = lookup.getAttributeInfo(owningObject.getRmTypeName(), owningAttribute.getRmAttributeName());
-                if (owningAttributeInfo != null) {//this case is another validation, see the validate(cattribute) method of this class
-                    Class typeInCollection = owningAttributeInfo.getTypeInCollection();
-                    if (!typeInCollection.isAssignableFrom(typeInfo.getJavaClass())) {
-                        result.add(new ValidationMessage(ErrorType.VCORMT, cObject.getPath(),
-                                owningAttributeInfo.getTypeInCollection() + " is not assignable from " + typeInfo.getRmName() +
-                                        ", at type.attributeName: " + owningObject.getRmTypeName() + "." + owningAttribute.getRmAttributeName()));
+                if (owningObject != null) {
+                    RMAttributeInfo owningAttributeInfo = lookup.getAttributeInfo(owningObject.getRmTypeName(), owningAttribute.getRmAttributeName());
+                    if (owningAttributeInfo != null) {//this case is another validation, see the validate(cattribute) method of this class
+                        Class typeInCollection = owningAttributeInfo.getTypeInCollection();
+                        if (!typeInCollection.isAssignableFrom(typeInfo.getJavaClass())) {
+                            addMessageWithPath(ErrorType.VCORMT, cObject.getPath(),
+                                    owningAttributeInfo.getTypeInCollection() + " is not assignable from " + typeInfo.getRmName() +
+                                            ", at type.attributeName: " + owningObject.getRmTypeName() + "." + owningAttribute.getRmAttributeName());
+                        }
                     }
                 }
             }
         }
-        return result;
     }
 
     // TODO: check the type of a CPrimitiveObject with respect to CAttribute, as pat of VCORMT.
     @Override
-    protected List<ValidationMessage> validate(CPrimitiveObject cObject) {
-        return Collections.emptyList();
+    protected void validate(CPrimitiveObject cObject) {
+
     }
 
 
     @Override
-    public List<ValidationMessage> validate(CAttribute cAttribute) {
-        List<ValidationMessage> result = new ArrayList<>();
+    public void validate(CAttribute cAttribute) {
         CObject owningObject = cAttribute.getParent();
         if(owningObject != null) {
             if(cAttribute.getDifferentialPath() == null) {
                 RMAttributeInfo attributeInfo = lookup.getAttributeInfo(owningObject.getRmTypeName(), cAttribute.getRmAttributeName());
                 if (attributeInfo == null) {
-                    result.add(new ValidationMessage(ErrorType.VCARM, cAttribute.getPath(), cAttribute.getRmAttributeName() + " is not a known attribute of " + owningObject.getRmTypeName() + " or it is has not been implemented in Archie"));
+                    addMessageWithPath(ErrorType.VCARM, cAttribute.getPath(), cAttribute.getRmAttributeName() + " is not a known attribute of " + owningObject.getRmTypeName() + " or it is has not been implemented in Archie");
                 } else {
                     //TODO: VCAEX and VCAM, multiplicity and existence
                 }
             } //todo: flat parent.
         }
-        return result;
     }
 }
