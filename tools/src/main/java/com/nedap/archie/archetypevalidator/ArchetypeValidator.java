@@ -40,7 +40,7 @@ public class ArchetypeValidator {
 
         //probably does not conform to spec
         validationsPhase2.add(new NodeIdValidation(lookup));
-        validationsPhase2.add(new ModelConformanceValidation(lookup));
+        validationsPhase2.add(new ValidateAgainstReferenceModel(lookup));
         validationsPhase2.add(new AttributeUniquenessValidation(lookup));
 
 
