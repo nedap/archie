@@ -1,5 +1,5 @@
-archetype (adl_version=1.5.1; rm_release=1.0.2)
-	openEHR-TEST_PKG-ENTRY.VACSD_concept_code_wrong_specialisation_level.v1
+archetype (adl_version=2.0.5; rm_release=1.0.2)
+	openEHR-TEST_PKG-ENTRY.VACSD_concept_code_wrong_specialisation_level.v1.0.0
 
 language
 	original_language = <[ISO_639-1::en]>
@@ -17,21 +17,19 @@ description
 		>
 	>
 	other_details = <
-		["regression"] = <"VACSD">
+		["regression"] = <"VARCN">
 	>
 	lifecycle_state = <"draft">
 
 definition
-	ENTRY[id1.1] matches {*}
+	ENTRY[id1.1]
 
 terminology
 	term_definitions = <
 		["en"] = <
-			items = <
-				["id1.1"] = <
-					text = <"">
-					description = <"">
-				>
-			>
+            ["id1.1"] = <
+                text = <" ">
+                description = <" ">
+            >
 		>
 	>

@@ -1,5 +1,3 @@
-concept
-	[at0000]
 language
 	original_language = <[ISO_639-1::en]>
 description
@@ -22,7 +20,7 @@ description
 definition
 	ENTRY[at0000] matches {*}
 
-ontology
+terminology
 	term_definitions = <
 		["en"] = <
 			items = <

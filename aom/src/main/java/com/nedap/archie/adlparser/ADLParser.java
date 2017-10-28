@@ -8,6 +8,7 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.apache.commons.io.input.BOMInputStream;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -43,10 +44,11 @@ public class ADLParser {
     }
 
     public Archetype parse(InputStream stream) throws IOException {
-        return parse(new ANTLRInputStream(stream));
+        return parse(new ANTLRInputStream(new BOMInputStream(stream)));
     }
 
     public Archetype parse(CharStream stream) {
+
         errors = new ADLParserErrors();
         errorListener = new ADLErrorListener(errors);
 
