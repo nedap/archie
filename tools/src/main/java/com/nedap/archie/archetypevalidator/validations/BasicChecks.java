@@ -23,6 +23,7 @@ public class BasicChecks implements ArchetypeValidation {
 
     private void checkSpecializationDepth(Archetype archetype, ArchetypeRepository repository, List<ValidationMessage> result) {
         if(archetype.getParentArchetypeId() != null) {
+            //parent does NOT need to be flat
             Archetype parent = repository.getArchetype(archetype.getParentArchetypeId());
             if(parent != null) {
                 int parentNodeIdSpecialisationDepth = parent.getDefinition().specialisationDepth();

@@ -1,5 +1,5 @@
 archetype (adl_version=2.0.5; rm_release=1.0.2)
-	openEHR-TEST_PKG-ENTRY.attribute_occurrences_too_small.v1.0.0
+	openEHR-TEST_PKG-ADMIN_ENTRY.attribute_occurrences_too_small.v1.0.0
 
 language
 	original_language = <[ISO_639-1::en]>
@@ -22,9 +22,13 @@ description
 	copyright = <"copyright (c) 2008 The openEHR Foundation">
 
 definition
-	ENTRY[id1] matches {	-- 
-		element_attr_2 cardinality matches {2..3; ordered} matches {
-			ELEMENT[id2] occurrences matches {1..2} 	-- 
+	ADMIN_ENTRY[id1] matches {	--
+		data matches {
+		    ITEM_LIST[id3] matches {
+		        items cardinality matches {2..3; ordered} matches {
+		            ELEMENT[id2] occurrences matches {1..2} 	--
+                }
+		    }
 		}
 	}
 
@@ -36,6 +40,10 @@ terminology
 				description = <"">
 			>
 			["id2"] = <
+				text = <"">
+				description = <"">
+			>
+			["id3"] = <
 				text = <"">
 				description = <"">
 			>

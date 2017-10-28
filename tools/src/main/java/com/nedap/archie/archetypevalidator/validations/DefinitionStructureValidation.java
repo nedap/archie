@@ -8,6 +8,7 @@ import com.nedap.archie.archetypevalidator.ErrorType;
 import com.nedap.archie.archetypevalidator.ValidatingVisitor;
 import com.nedap.archie.archetypevalidator.ValidationMessage;
 import com.nedap.archie.flattener.ArchetypeRepository;
+import com.nedap.archie.query.AOMPathQuery;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,11 +16,13 @@ import java.util.List;
 public class DefinitionStructureValidation extends ValidatingVisitor {
 
     private Archetype archetype;
+    private Archetype flatParent;
     private ArchetypeRepository repository;
 
     @Override
     protected void beginValidation(Archetype archetype, Archetype flatParent, ArchetypeRepository repository) {
         this.archetype = archetype;
+        this.flatParent = flatParent;
         this.repository = repository;
     }
 
@@ -30,18 +33,13 @@ public class DefinitionStructureValidation extends ValidatingVisitor {
                 //differential paths can only occur in specialized archetypes, so not in this one
                 result.add(new ValidationMessage(ErrorType.VDIFV, cAttribute.path()));
             } else if (repository != null) {
-                Archetype parent = repository.getArchetype(archetype.getParentArchetypeId());
-                if (parent != null) {
+                if (flatParent != null) {
                     //adl workbench deviates from spec by only allowing differential paths at root, we allow them everywhere, according to spec
-                    ArchetypeModelObject parentAttributeObject = parent.itemAtPath(cAttribute.getDifferentialPath());
-                    if (parentAttributeObject != null && parentAttributeObject instanceof CAttribute) {
-                        CAttribute parentAttribute = (CAttribute) parentAttributeObject;
-                        if (parentAttribute.getParent() instanceof CComplexObject) {
-                            ArchetypeModelObject pathInParent = ((CComplexObject) parentAttribute.getParent()).itemAtPath(cAttribute.getDifferentialPath());
-                            if (pathInParent == null) {
-                                addPathNotFoundInParentError(cAttribute, result);
-                            }
-                        } else {
+                    ArchetypeModelObject parentAOMObject = flatParent.itemAtPath(cAttribute.getParent().getPath());
+                    if (parentAOMObject != null && parentAOMObject instanceof CComplexObject) {
+                        CComplexObject parentObject = (CComplexObject) parentAOMObject;
+                        ArchetypeModelObject pathInParent =parentObject.itemAtPath(cAttribute.getDifferentialPath());
+                        if (pathInParent == null) {
                             addPathNotFoundInParentError(cAttribute, result);
                         }
                     } else {

@@ -1,5 +1,5 @@
 archetype (adl_version=2.0.5; rm_release=1.0.2)
-	openEHR-TEST_PKG-ENTRY.VCOV_value_duplicated_in_ordinal.v1.0.0
+	openEHR-TEST_PKG-ADMIN_ENTRY.VCOV_value_duplicated_in_ordinal.v1.0.0
 
 language
 	original_language = <[ISO_639-1::en]>
@@ -22,16 +22,24 @@ description
 	copyright = <"copyright (c) 2008 The openEHR Foundation">
 
 definition
-	ENTRY[id1] matches {	-- 
-		ordinal_attr_1 matches {
-			DV_ORDINAL[id2] matches {
-				[value, symbol] matches {
-					[{0}, {[at2]}],
-					[{1}, {[at3]}],
-					[{1}, {[at4]}],
-					[{2}, {[at5]}]
-				}
-			}
+    ADMIN_ENTRY[id1] matches {	--
+		data matches {
+		    ITEM_LIST[id5] matches {
+		        items matches {
+		            ELEMENT[id4] matches {
+		                value matches {
+                            DV_ORDINAL[id2] matches {
+                                [value, symbol] matches {
+                                    [{0}, {[at2]}],
+                                    [{1}, {[at3]}],
+                                    [{1}, {[at4]}],
+                                    [{2}, {[at5]}]
+                                }
+                            }
+                        }
+		            }
+                }
+		    }
 		}
 	}
 
@@ -42,6 +50,14 @@ terminology
 				text = <"">
 				description = <"">
 			>
+			["id3"] = <
+                text = <"">
+                description = <"">
+            >
+            ["id4"] = <
+                text = <"">
+                description = <"">
+            >
 			["at2"] = <
 				text = <"">
 				description = <"">
