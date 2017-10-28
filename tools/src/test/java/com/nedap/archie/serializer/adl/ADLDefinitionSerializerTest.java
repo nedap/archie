@@ -217,7 +217,7 @@ public class ADLDefinitionSerializerTest {
 
     @Test
     public void serializeTupleDvQuantity() throws Exception {
-        Archetype archetype = loadRoot("adl2-tests/features/aom_structures/tuples/openehr-test_pkg-SOME_TYPE.dv_quantity_tuple.v1.adls");
+        Archetype archetype = loadRoot("adl2-tests/features/aom_structures/tuples/openehr-test_pkg-SOME_TYPE.dv_quantity_tuple.v1.0.0.adls");
         CComplexObject ordinal = archetype.itemAtPath("/clinical_quantity_attr_1[id2]");
 
         String serialized = serializeConstraint(ordinal);
@@ -235,7 +235,7 @@ public class ADLDefinitionSerializerTest {
 
     @Test
     public void serializeArchetypeSlot() throws Exception {
-        Archetype archetype = loadRoot("adl2-tests/features/aom_structures/slots/openEHR-EHR-SECTION.slot_include_any_exclude_empty.v1.adls");
+        Archetype archetype = loadRoot("adl2-tests/features/aom_structures/slots/openEHR-EHR-SECTION.slot_include_any_exclude_empty.v1.0.0.adls");
         ArchetypeSlot slot = archetype.itemAtPath("/items[id2]");
         String serialized = serializeConstraint(slot);
         assertThat(serialized, equalTo("\n    allow_archetype OBSERVATION[id2] occurrences matches {0..1} matches {     -- Vital signs\n" +
@@ -253,7 +253,7 @@ public class ADLDefinitionSerializerTest {
                 "    }"));
 
 
-        archetype = loadRoot("adl2-tests/features/aom_structures/slots/openEHR-EHR-SECTION.slot_include_empty_exclude_non_any.v1.adls");
+        archetype = loadRoot("adl2-tests/features/aom_structures/slots/openEHR-EHR-SECTION.slot_include_empty_exclude_non_any.v1.0.0.adls");
         slot = archetype.itemAtPath("/items[id2]");
         serialized = serializeConstraint(slot);
         assertThat(serialized, equalTo("\n    allow_archetype OBSERVATION[id2] occurrences matches {0..1} matches {     -- Vital signs\n" +
@@ -264,7 +264,7 @@ public class ADLDefinitionSerializerTest {
 
     @Test
     public void serializeCArchetypeRoot() throws IOException {
-        Archetype archetype = loadRoot("adl2-tests/features/aom_structures/use_archetype/openEHR-EHR-COMPOSITION.ext_ref.v1.adls");
+        Archetype archetype = loadRoot("adl2-tests/features/aom_structures/use_archetype/openEHR-EHR-COMPOSITION.ext_ref.v1.0.0.adls");
 
         List<CObject> archetypeRoots = archetype.getDefinition().getAttribute("content").getChildren();
 
@@ -276,7 +276,7 @@ public class ADLDefinitionSerializerTest {
 
     @Test
     public void serializeCComplexObjectProxy() throws IOException {
-        Archetype archetype = loadRoot("adl2-tests/features/aom_structures/use_node/openEHR-DEMOGRAPHIC-PERSON.use_node_occurrences.v1.adls");
+        Archetype archetype = loadRoot("adl2-tests/features/aom_structures/use_node/openEHR-DEMOGRAPHIC-PERSON.use_node_occurrences.v1.0.0.adls");
 
         CObject parentCObj = archetype.getDefinition().itemAtPath("/contacts[id10]");
         List<CObject> ccobjProxies = parentCObj.getAttribute("addresses").getChildren();

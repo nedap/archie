@@ -279,6 +279,10 @@ public abstract class ReflectionModelInfoLookup implements ModelInfoLookup {
 
     @Override
     public RMTypeInfo getTypeInfo(String rmTypeName) {
+        if(rmTypeName.indexOf('<') > 0) {
+            //strip generic types, cannot handle them yet
+            rmTypeName = rmTypeName.substring(0, rmTypeName.indexOf('<'));
+        }
         return this.rmTypeNamesToRmTypeInfo.get(rmTypeName);
     }
 
