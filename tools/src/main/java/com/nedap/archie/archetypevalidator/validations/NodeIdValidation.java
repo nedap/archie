@@ -35,9 +35,11 @@ public class NodeIdValidation extends ValidatingVisitor {
     @Override
     public void validate(CObject cObject) {
         if(cObject.getNodeId() == null) {
+            //every object must have a node id
             addMessageWithPath(ErrorType.VCOID, cObject.getPath());
         }
         else if(!CPrimitiveObject.PRIMITIVE_NODE_ID_VALUE.equals(cObject.getNodeId()) && nodeIds.containsKey(cObject.getNodeId())) {
+            //every node id in a single archetype must be unique or a primitive object
             addMessageWithPath(ErrorType.VCOSU, cObject.getPath(), "node ID " + cObject.getNodeId() + " already used in " + nodeIds.get(cObject.getNodeId()));
         }
         nodeIds.put(cObject.getNodeId(), cObject.getPath());

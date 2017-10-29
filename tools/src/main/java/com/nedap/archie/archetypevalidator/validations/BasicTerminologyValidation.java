@@ -37,7 +37,7 @@ public class BasicTerminologyValidation extends ArchetypeValidationBase {
         int terminologySpecialisationDepth = archetype.getTerminology().specialisationDepth();
         for(Map<String, ArchetypeTerm> languageSpecificTerminology:archetype.getTerminology().getTermDefinitions().values()) {
             for(ArchetypeTerm term:languageSpecificTerminology.values()) {
-                if(!ValidationUtils.isValidIdCode(term.getCode())) {
+                if(!AOMUtils.isValidIdCode(term.getCode())) {
                     addMessage(ErrorType.VATCV, String.format("id code %s in terminology is not valid", term.getCode()));
                 }
                 if(archetype.isDifferential()) {
@@ -76,12 +76,12 @@ public class BasicTerminologyValidation extends ArchetypeValidationBase {
                 } catch (Exception e) {
                     //if not a valid path, fine
                 }
-                if(!(ValidationUtils.isValidIdCode(constraintCodeOrPath) || archetypeHasPath
+                if(!(AOMUtils.isValidIdCode(constraintCodeOrPath) || archetypeHasPath
                                 //TODO: || referenceMOdel.hasPath(path)
                     )) {
                     addMessage(ErrorType.VTTBK, String.format("Term binding key %s in path format is not present in archetype", constraintCodeOrPath));
                 }
-                if(ValidationUtils.isValidIdCode(constraintCodeOrPath) &&
+                if(AOMUtils.isValidIdCode(constraintCodeOrPath) &&
                         !(terminology.hasCode(constraintCodeOrPath))
                         || (archetype.isSpecialized() && flatParent != null && !flatParent.getTerminology().hasCode(constraintCodeOrPath)))
                     {

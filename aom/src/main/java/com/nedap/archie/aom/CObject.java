@@ -253,4 +253,8 @@ public abstract class CObject extends ArchetypeConstraint {
     public String toString() {
         return "CObject: " + getRmTypeName() + "[" + getNodeId() + "]";
     }
+
+    public boolean isProhibited() {
+        return occurrences != null && occurrences.isProhibited();
+    }
 }

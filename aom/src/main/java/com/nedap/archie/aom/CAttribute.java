@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.nedap.archie.base.Cardinality;
 import com.nedap.archie.base.MultiplicityInterval;
 import com.nedap.archie.paths.PathSegment;
+import com.nedap.archie.query.APathQuery;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -120,6 +121,7 @@ public class CAttribute extends ArchetypeConstraint {
 
     public void addChild(CObject child) {
         if(child.getSiblingOrder() != null && child.getSiblingOrder().getSiblingNodeId() != null) {
+            //TODO: this can be a specialized sibling node id as well!
             CObject sibling = getChild(child.getSiblingOrder().getSiblingNodeId());
             int siblingIndex = children.indexOf(sibling);
             if(siblingIndex > -1) {
@@ -203,7 +205,11 @@ public class CAttribute extends ArchetypeConstraint {
             return new ArrayList<>();
         }
         List<PathSegment> segments = parent.getPathSegments();
-        segments.add(new PathSegment(getRmAttributeName()));
+        if(differentialPath == null) {
+            segments.add(new PathSegment(getRmAttributeName()));
+        } else {
+            segments.addAll(new APathQuery(differentialPath).getPathSegments());
+        }
         return segments;
     }
 
@@ -325,6 +331,10 @@ public class CAttribute extends ArchetypeConstraint {
         } else {
             return true;
         }
+    }
+
+    public boolean isSecondOrderConstrained() {
+        return getSocParent() != null || (getParent() != null && getParent().getSocParent() != null);
     }
 
 }

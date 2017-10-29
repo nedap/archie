@@ -19,6 +19,9 @@ import java.util.List;
 public class ArchetypeValidator {
     private static final Logger logger = LoggerFactory.getLogger(ArchetypeValidator.class);
 
+    //see comment on why there is a phase 0
+    private List<ArchetypeValidation> validationsPhase0;
+
     private List<ArchetypeValidation> validationsPhase1;
 
     private List<ArchetypeValidation> validationsPhase2;
@@ -26,6 +29,14 @@ public class ArchetypeValidator {
 
     public ArchetypeValidator(ModelInfoLookup lookup) {
         modelInfoLookup = lookup;
+
+        validationsPhase0 = new ArrayList<>();
+        //defined in spec, but not in three phase validator and not in grammar
+        //eiffel checks these in the parser
+        //but there's no reason this cannot be parsed, so check them here
+        validationsPhase0.add(new AttributeUniquenessValidation(lookup));
+        validationsPhase0.add(new NodeIdValidation(lookup));
+
 
         validationsPhase1 = new ArrayList<>();
         //conforms to spec
@@ -39,9 +50,10 @@ public class ArchetypeValidator {
         validationsPhase2 = new ArrayList<>();
 
         //probably does not conform to spec
-        validationsPhase2.add(new NodeIdValidation(lookup));
+
         validationsPhase2.add(new ValidateAgainstReferenceModel(lookup));
-        validationsPhase2.add(new AttributeUniquenessValidation(lookup));
+        validationsPhase2.add(new SpecializedDefinitionValidation(lookup));
+
 
 
     }
@@ -63,16 +75,20 @@ public class ArchetypeValidator {
         Archetype flatParent = null;
         if(archetype.isSpecialized()) {
             try {
-                flatParent = new Flattener(repository).flatten(archetype);
+                Archetype parent = repository.getArchetype(archetype.getParentArchetypeId());
+                if(parent != null) {
+                    flatParent = new Flattener(repository).flatten(parent);
+                }
             } catch (Exception e) {
-                //...
+                //...all the validators can handle flatParent being null
             }
         }
         if(repository == null) {
             repository = new SimpleArchetypeRepository();
         }
 
-        List<ValidationMessage> messages = runValidations(archetype, repository, flatParent, validationsPhase1);
+        List<ValidationMessage> messages = runValidations(archetype, repository, flatParent, validationsPhase0);
+        messages.addAll(runValidations(archetype, repository, flatParent, validationsPhase1));
         messages.addAll(runValidations(archetype, repository, flatParent, validationsPhase2));
         return messages;
     }

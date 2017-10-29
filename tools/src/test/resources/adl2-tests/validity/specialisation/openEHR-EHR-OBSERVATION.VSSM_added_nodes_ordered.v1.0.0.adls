@@ -1,4 +1,4 @@
-archetype (adl_version=1.5.1; rm_release=1.0.2)
+archetype (adl_version=2.0.5; rm_release=1.0.2)
 	openEHR-EHR-OBSERVATION.VSSM_added_nodes_ordered.v1.0.0
 
 specialize
@@ -30,18 +30,18 @@ definition
 			after [id1000]
 			ELEMENT[id0.1] matches {	-- Text field 2
 				value matches {
-					DV_TEXT[id0.1] 	-- Text field 2
+					DV_TEXT[id0.4] 	-- Text field 2
 				}
 			}
 			ELEMENT[id0.2] matches {	-- Quantity 2
 				value matches {
-					DV_QUANTITY[id0.2] 	-- Quantity 2
+					DV_QUANTITY[id0.5] 	-- Quantity 2
 				}
 			}
 			before [id8]
 			ELEMENT[id0.3] matches {	-- Text field 3
 				value matches {
-					DV_TEXT[id0.3] 	-- Text field 3
+					DV_TEXT[id0.6] 	-- Text field 3
 				}
 			}
 		}

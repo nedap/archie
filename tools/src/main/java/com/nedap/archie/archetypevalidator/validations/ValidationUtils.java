@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 
 public class ValidationUtils {
 
-    private static Pattern idCodePAttern = Pattern.compile("(id|at|ac)(0|[1-9][0-9]*)(\\.(0|[1-9][0-9]*))*");
+
 
     public static int getSpecializationDepth(Archetype archetype, ArchetypeRepository repository) {
         int depth = 0;
@@ -19,7 +19,5 @@ public class ValidationUtils {
         return depth;
     }
 
-    public static boolean isValidIdCode(String code) {
-        return idCodePAttern.matcher(code).matches();
-    }
+
 }

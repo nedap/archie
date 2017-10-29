@@ -78,13 +78,16 @@ public class ValidateAgainstReferenceModel extends ValidatingVisitor {
 
     @Override
     public void validate(CAttribute cAttribute) {
+        if(flatParent == null && cAttribute.getDifferentialPath() != null) {
+            return;
+        }
         CObject owningObject = cAttribute.getParent();
         if(cAttribute.getDifferentialPath() != null) {
             ArchetypeModelObject parentAOMObject = flatParent.itemAtPath(cAttribute.getParent().getPath());
             if (parentAOMObject != null && parentAOMObject instanceof CComplexObject) {
                 CComplexObject parentObject = (CComplexObject) parentAOMObject;
                 CAttribute attribute = parentObject.itemAtPath(cAttribute.getDifferentialPath());
-                owningObject =  attribute.getParent();
+                owningObject =  attribute == null ? null : attribute.getParent();
             }
         }
         if(owningObject != null) {
