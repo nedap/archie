@@ -3,15 +3,27 @@ package com.nedap.archie.rminfo;
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.CObject;
 import com.nedap.archie.aom.CPrimitiveObject;
+import com.nedap.archie.aom.primitives.CBoolean;
+import com.nedap.archie.aom.primitives.CDate;
+import com.nedap.archie.aom.primitives.CDateTime;
+import com.nedap.archie.aom.primitives.CDuration;
+import com.nedap.archie.aom.primitives.CInteger;
+import com.nedap.archie.aom.primitives.CReal;
+import com.nedap.archie.aom.primitives.CString;
 import com.nedap.archie.aom.primitives.CTerminologyCode;
+import com.nedap.archie.aom.primitives.CTime;
 import com.nedap.archie.base.Interval;
 import com.nedap.archie.base.terminology.TerminologyCode;
 import com.nedap.archie.rm.archetyped.Locatable;
+import com.nedap.archie.rm.datavalues.DvBoolean;
 import com.nedap.archie.rm.support.identification.TerminologyId;
 import com.nedap.archie.rm.RMObject;
 import com.nedap.archie.rm.datastructures.PointEvent;
 import com.nedap.archie.rm.datatypes.CodePhrase;
 import com.nedap.archie.rm.datavalues.DvCodedText;
+
+import java.time.temporal.Temporal;
+import java.time.temporal.TemporalAccessor;
 
 /**
  * Created by pieter.bos on 02/02/16.
@@ -126,6 +138,40 @@ public class ArchieRMInfoLookup extends ReflectionModelInfoLookup {
     @Override
     public void pathHasBeenUpdated(Object rmObject, Archetype archetype, String pathOfParent, Object parent) {
         UpdatedValueHandler.pathHasBeenUpdated(rmObject, archetype, pathOfParent, parent);
+    }
+
+    @Override
+    public boolean validatePrimitiveType(String rmTypeName, String rmAttributeName, CPrimitiveObject cObject) {
+        RMAttributeInfo attributeInfo = this.getAttributeInfo(rmTypeName, rmAttributeName);
+        if(attributeInfo == null) {
+            return true;//cannot validate
+        }
+        if(cObject instanceof CInteger) {
+            return attributeInfo.getTypeInCollection().equals(Long.class);
+        } else if(cObject instanceof CReal) {
+            return attributeInfo.getTypeInCollection().equals(Double.class);
+        } else if(cObject instanceof CString) {
+            return attributeInfo.getTypeInCollection().equals(String.class);
+        } else if(cObject instanceof CDate) {
+            return attributeInfo.getTypeInCollection().equals(String.class) ||
+                    attributeInfo.getTypeInCollection().isAssignableFrom(Temporal.class);
+        } else if(cObject instanceof CDateTime) {
+            return attributeInfo.getTypeInCollection().equals(String.class) ||
+                    attributeInfo.getTypeInCollection().isAssignableFrom(Temporal.class);
+        } else if(cObject instanceof CDuration) {
+            return attributeInfo.getTypeInCollection().equals(String.class) ||
+                    attributeInfo.getTypeInCollection().isAssignableFrom(TemporalAccessor.class);
+        } else if(cObject instanceof CTime) {
+            return attributeInfo.getTypeInCollection().equals(String.class) ||
+                    attributeInfo.getTypeInCollection().isAssignableFrom(TemporalAccessor.class);
+        } else if(cObject instanceof CTerminologyCode) {
+            return attributeInfo.getTypeInCollection().equals(CodePhrase.class) ||
+                    attributeInfo.getTypeInCollection().equals(DvCodedText.class);
+        } else if(cObject instanceof CBoolean) {
+            return attributeInfo.getTypeInCollection().equals(Boolean.class);
+        }
+        return false;
+
     }
 }
 

@@ -1,6 +1,7 @@
 package com.nedap.archie.rm.datavalues.quantity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.nedap.archie.rm.datavalues.DvCodedText;
 
 import javax.annotation.Nullable;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -32,9 +33,8 @@ public class DvQuantity extends DvAmount<Double> {
      * don't even serialize
      */
     @Deprecated
-    @XmlTransient
     @JsonIgnore
-    private String property;
+    private transient DvCodedText property;
 
     @Nullable
     public Long getPrecision() {
@@ -63,12 +63,12 @@ public class DvQuantity extends DvAmount<Double> {
     }
 
     @Deprecated
-    public String getProperty() {
+    public DvCodedText getProperty() {
         return property;
     }
 
     @Deprecated
-    public void setProperty(String property) {
+    public void setProperty(DvCodedText property) {
         this.property = property;
     }
 }

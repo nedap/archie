@@ -64,9 +64,10 @@ public class ValidateAgainstReferenceModel extends ValidatingVisitor {
         if(attribute.getDifferentialPath() == null) {
             CObject parentConstraint = attribute.getParent();
             RMAttributeInfo attributeInfo = lookup.getAttributeInfo(parentConstraint.getRmTypeName(), attribute.getRmAttributeName());
-            if(attributeInfo != null) {
-                RMTypeInfo typeInfo = lookup.getTypeInfo(attributeInfo.getTypeInCollection());
+            if(!lookup.validatePrimitiveType(parentConstraint.getRmTypeName(), attribute.getRmAttributeName(), cObject)) {
+                addMessage(ErrorType.VCORMT, cObject.path());
             }
+
             //TODO: we need AOM_PROFILE here
         } else {
             //TODO: get type from flat parent

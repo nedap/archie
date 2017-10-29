@@ -71,4 +71,9 @@ public class ArchieAOMInfoLookup extends ReflectionModelInfoLookup {
         throw new UnsupportedOperationException("not supported");//TODO: split this to different classes
     }
 
+    @Override
+    public boolean validatePrimitiveType(String rmTypeName, String rmAttributeName, CPrimitiveObject cObject) {
+        return true;
+    }
+
 }

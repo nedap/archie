@@ -148,4 +148,14 @@ public interface ModelInfoLookup {
      * @param parent
      */
     void pathHasBeenUpdated(Object rmObject, Archetype archetype, String pathOfParent, Object parent);
+
+    /**
+     * True if the given attribute at given type is ok for given CPrimitiveObject, false otherwise
+     * TODO: this should be solved with AOM_PROFILE
+     * @param rmTypeName
+     * @param rmAttributeName
+     * @param cObject
+     * @return
+     */
+    boolean validatePrimitiveType(String rmTypeName, String rmAttributeName, CPrimitiveObject cObject);
 }
