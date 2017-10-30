@@ -75,20 +75,4 @@ public class FunctionsTest {
         ValueList valueWhenUndefined = ruleEvaluation.getVariableMap().get("value_when_undefined");
         assertEquals("value when undefined should be set to original value", 65d, (double) valueWhenUndefined.getObject(0), 0.00001d);
     }
-
-    @Test
-    public void countDefinedElements() throws Exception {
-        archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("functions.adls"));
-        assertTrue(parser.getErrors().hasNoErrors());
-
-        // Define values for two of the archetype's paths
-        Locatable rmObject = (Locatable) new TestUtil().constructEmptyRMObject(archetype.getDefinition());
-        ((DvQuantity) rmObject.itemAtPath("/data[id2]/events[id3]/data[id4]/items[id5]/value")).setMagnitude(65d);
-        ((DvQuantity) rmObject.itemAtPath("/data[id2]/events[id3]/data[id4]/items[id6]/value")).setMagnitude(65d);
-
-        RuleEvaluation ruleEvaluation = new RuleEvaluation(archetype);
-        ruleEvaluation.evaluate(rmObject, archetype.getRules().getRules());
-        ValueList countDefinedElements = ruleEvaluation.getVariableMap().get("count_defined_elements");
-        assertEquals("should count all defined elements in given paths", 2, countDefinedElements.getObject(0));
-    }
 }
