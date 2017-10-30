@@ -33,6 +33,8 @@ import java.util.regex.Pattern;
 import static org.junit.Assert.assertTrue;
 
 /**
+ * //TODO: add list of errortypes NOT tested by the testset, so we can add files for that
+ *
  * Runs through the full test files of the validity directory of the archetype validator. Every archetype should either
  * fail to parse or fail to validate, unless it has regression = "PASS"
  *

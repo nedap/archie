@@ -114,4 +114,29 @@ public class AOMUtils {
         }
         return true;
     }
+
+    //check if the last node id in the path has a bigger specialization level than the specialization level of the parent
+    //but it does a little loop to check if it happens somewhere else as well. ok...
+    public static boolean isPhantomPathAtLevel(List<PathSegment> pathSegments, int specializationDepth) {
+        for(int i = pathSegments.size()-1; i >=0; i--) {
+            String nodeId = pathSegments.get(i).getNodeId();
+            if(nodeId != null && AOMUtils.isValidIdCode(nodeId) && specializationDepth < AOMUtils.getSpecializationDepthFromCode(nodeId)) {
+                return codeExistsAtLevel(nodeId, specializationDepth);
+            }
+        }
+        return false;
+    }
+
+    public static boolean codeExistsAtLevel(String nodeId, int specializationDepth) {
+        NodeIdUtil nodeIdUtil = new NodeIdUtil(nodeId);
+        int specializationDepthOfCode = AOMUtils.getSpecializationDepthFromCode(nodeId);
+        if(specializationDepth > specializationDepthOfCode) {
+            String code = "";
+            for(int i = 0; i <= specializationDepth; i++) {
+                code += nodeIdUtil.getCodes().get(i);
+            }
+            return Integer.parseInt(code) > 0;
+        }
+        return false;
+    }
 }

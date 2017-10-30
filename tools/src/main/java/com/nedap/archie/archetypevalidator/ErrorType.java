@@ -47,7 +47,8 @@ public enum ErrorType {
     VRANP("annotation path valid. Each path mentioned in an annotation within the annotations section must either be a valid archetype path, or a 'reference model' path, i.e. a path that is valid for the root class of the archetype."),
     VDEOL("original language specified. An original_language section containing the meta-data of the original authoring language must exist."),
     VRDLA("resource detail key does not match resource detail item language"),
-    VTRLA("translations key does not match translations item language");
+    VTRLA("translations key does not match translations item language"),
+    VSONT("specialised archetype object node meta-type conformance: the meta-type of a redefined object node (i.e. the AOM node type such as C_COMPLEX_OBJECT etc) in a specialised archetype must be the same as that of the corresponding node in the flat parent, with the following exceptions: a C_COMPLEX_OBJECT with no child attributes may be redefined by a node of any AOM type except C_PRIMITIVE_OBJECT; a C_COMPLEX_OBJECT_PROXY, may be redefined by a C_COMPLEX_OBJECT; an ARCHTEYPE_SLOT may be redefined by C_ARCHETYPE_ROOT (i.e. 'slot-filling'). See also validity rules VDSSID and VARXID.");
 
 
 

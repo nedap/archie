@@ -1,7 +1,11 @@
 package com.nedap.archie.archetypevalidator.validations;
 
 import com.nedap.archie.aom.ArchetypeModelObject;
+import com.nedap.archie.aom.ArchetypeSlot;
+import com.nedap.archie.aom.CArchetypeRoot;
 import com.nedap.archie.aom.CAttribute;
+import com.nedap.archie.aom.CComplexObject;
+import com.nedap.archie.aom.CComplexObjectProxy;
 import com.nedap.archie.aom.CObject;
 import com.nedap.archie.aom.CPrimitiveObject;
 import com.nedap.archie.aom.utils.AOMUtils;
@@ -9,9 +13,7 @@ import com.nedap.archie.aom.utils.NodeIdUtil;
 import com.nedap.archie.aom.utils.RedefinitionStatus;
 import com.nedap.archie.archetypevalidator.ErrorType;
 import com.nedap.archie.archetypevalidator.ValidatingVisitor;
-import com.nedap.archie.paths.PathSegment;
 import com.nedap.archie.rminfo.ModelInfoLookup;
-import java.util.List;
 
 public class SpecializedDefinitionValidation extends ValidatingVisitor {
     public SpecializedDefinitionValidation(ModelInfoLookup lookup) {
@@ -30,16 +32,49 @@ public class SpecializedDefinitionValidation extends ValidatingVisitor {
 
     @Override
     public void validate(CObject cObject) {
-        boolean nodeOk = checkSpecializedNode(cObject);
+        boolean nodeOk = checkSpecializedNodeHasMatchingPathInParent(cObject);
+        if(nodeOk) {
+            checkSpecializedNode(cObject);
+        }
+
     }
 
-    private boolean checkSpecializedNode(CObject cObject) {
+    private void checkSpecializedNode(CObject cObject) {
+        String flatPath = AOMUtils.pathAtSpecializationLevel(cObject.getPathSegments(), flatParent.specializationDepth());
+        CObject parentCObject = getCObject(flatParent.itemAtPath(flatPath));
+
+        if(parentCObject == null) {
+            System.err.println("KAPOT!");
+        }
+        else if(cObject instanceof CArchetypeRoot && parentCObject instanceof ArchetypeSlot) {
+
+        } else if (cObject instanceof ArchetypeSlot && parentCObject instanceof ArchetypeSlot) {
+
+        } else if(cObject instanceof CArchetypeRoot && parentCObject instanceof  CArchetypeRoot) {
+
+        } else if (cObject instanceof CComplexObject && parentCObject instanceof CComplexObjectProxy) {
+
+        } else if (parentCObject instanceof  CComplexObject && ((CComplexObject) parentCObject).isAnyAllowed()) {
+            //any allowed in parent, so fine here!
+        } else if (!cObject.getClass().equals(parentCObject.getClass())) {
+            addMessageWithPath(ErrorType.VSONT, cObject.path());
+        }
+    }
+
+    /**
+     * Complicated method - does validations and returns true if the given node has a matching path in the parent
+     * @param cObject
+     * @return
+     */
+    private boolean checkSpecializedNodeHasMatchingPathInParent(CObject cObject) {
+        boolean result = false;
         if(cObject.isRootNode() || !cObject.getParent().isSecondOrderConstrained()) {
             if(AOMUtils.getSpecializationDepthFromCode(cObject.getNodeId()) <= flatParent.specializationDepth()
                     || new NodeIdUtil(cObject.getNodeId()).isRedefined()) {
-                if(!phantomPath(cObject.getPathSegments(), flatParent.specializationDepth())) {
+                if(!AOMUtils.isPhantomPathAtLevel(cObject.getPathSegments(), flatParent.specializationDepth())) {
                     String flatPath = AOMUtils.pathAtSpecializationLevel(cObject.getPathSegments(), flatParent.specializationDepth());
                     CObject parentCObject = getCObject(flatParent.itemAtPath(flatPath));
+                    result = parentCObject != null;
                     if(parentCObject != null) {
                         if(cObject.isProhibited()) {
                             if(!cObject.getClass().equals(parentCObject.getClass())) {
@@ -48,12 +83,8 @@ public class SpecializedDefinitionValidation extends ValidatingVisitor {
                                 addMessage(ErrorType.VSONPI, cObject.path());
                             }
                         }
-                        return true;
                     } else if(!(cObject instanceof CPrimitiveObject)) {
                         addMessage(ErrorType.VSONIN, cObject.path());
-                        return false;
-                    } else {
-                        return true;//i think?
                     }
                 } else if(AOMUtils.getSpecialisationStatusFromCode(cObject.getNodeId(), cObject.specialisationDepth()) == RedefinitionStatus.REDEFINED) {
                     //TODO method in if not yet implemented
@@ -79,8 +110,8 @@ public class SpecializedDefinitionValidation extends ValidatingVisitor {
                     addMessage(ErrorType.VSONPO, cObject.path());
                 }
             }
-        }//else in eiffel code is cattribute method below
-        return true;
+        }//else in eiffel code is separate cattribute method here
+        return result;
     }
 
     private CObject getCObject(ArchetypeModelObject archetypeModelObject) {
@@ -88,7 +119,7 @@ public class SpecializedDefinitionValidation extends ValidatingVisitor {
             CAttribute attribute = (CAttribute) archetypeModelObject;
             if(attribute.getChildren().size() == 1) {
                 return attribute.getChildren().get(0);
-            }
+            }//TODO: add a numeric identifier to the getPath() method in CObject so this can be deleted and actually works in all cases!
         } else if(archetypeModelObject instanceof CObject) {
             return (CObject) archetypeModelObject;
         }
@@ -101,28 +132,5 @@ public class SpecializedDefinitionValidation extends ValidatingVisitor {
 
     }
 
-    //check if the last node id in the path has a bigger specialization level than the specialization level of the parent
-    //but it does a little loop to check if it happens somewhere else as well. ok...
-    private boolean phantomPath(List<PathSegment> pathSegments, int specializationDepth) {
-        for(int i = pathSegments.size()-1; i >=0; i--) {
-            String nodeId = pathSegments.get(i).getNodeId();
-            if(nodeId != null && AOMUtils.isValidIdCode(nodeId) && specializationDepth < AOMUtils.getSpecializationDepthFromCode(nodeId)) {
-                return codeExistsAtLevel(nodeId, specializationDepth);
-            }
-        }
-        return false;
-    }
 
-    private boolean codeExistsAtLevel(String nodeId, int specializationDepth) {
-        NodeIdUtil nodeIdUtil = new NodeIdUtil(nodeId);
-        int specializationDepthOfCode = AOMUtils.getSpecializationDepthFromCode(nodeId);
-        if(specializationDepth > specializationDepthOfCode) {
-            return true; //TODO: IMPLEMENT ME and check if code is valid
-        }
-        return false;
-    }
-
-    //1. is_phantom_path_at_level(path, level)
-    //2.level = get the node id with the maximum specialization depth level from the path
-    //
 }

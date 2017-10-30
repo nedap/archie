@@ -91,7 +91,14 @@ public class ArchetypeValidator {
 
         List<ValidationMessage> messages = runValidations(archetype, repository, flatParent, validationsPhase0);
         messages.addAll(runValidations(archetype, repository, flatParent, validationsPhase1));
+
+        //the separate validations will check if the archtype is specialized and if they need this in phase 2
+        //because the RM validations are technically phase 2 and required to run
+        //also the separate validations are implemented so that they can run with errors in phase 1 without exceptions
+        //plus exceptions will nicely be logged as an OTHER error type - we can safely run it and you will get
+        //more errors in one go - could be useful
         messages.addAll(runValidations(archetype, repository, flatParent, validationsPhase2));
+
         return messages;
     }
 
