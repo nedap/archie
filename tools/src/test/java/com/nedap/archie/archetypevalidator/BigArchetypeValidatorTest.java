@@ -199,6 +199,7 @@ public class BigArchetypeValidatorTest {
         if(errorCount > 0) {
             Assert.fail(String.format("%s validated but should not, %s correct, %s did not validate but should, %s not yet implemented, %s unexpected parser errors", errorCount, correctCount, shouldBeFineButWasinvalid, notImplemented, unexpectedParseErrors));
         }
+        log.info("{} not implemented yet", notImplemented);
 
 
     }

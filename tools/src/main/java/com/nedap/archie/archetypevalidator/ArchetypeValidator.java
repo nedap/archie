@@ -44,8 +44,10 @@ public class ArchetypeValidator {
         validationsPhase1.add(new AuthoredArchetypeMetadataChecks(lookup));
         validationsPhase1.add(new DefinitionStructureValidation(lookup));
         validationsPhase1.add(new BasicTerminologyValidation(lookup));
-        validationsPhase1.add(new CodeValidation(lookup));
         validationsPhase1.add(new VariousStructureValidation(lookup));
+        validationsPhase1.add(new CodeValidation(lookup));
+        validationsPhase1.add(new AnnotationsValidation(lookup));
+        //TODO: validation annotations
 
         validationsPhase2 = new ArrayList<>();
 

@@ -179,7 +179,21 @@ public class ArchetypeTerminology extends ArchetypeModelObject {
         if(termDefinitions == null) {
             return false;
         }
-        return getTermDefinitions().get(originalLanguage).containsKey(code);
+        if(originalLanguage == null) {
+            for(String language:getTermDefinitions().keySet()) {
+                if(getTermDefinitions().get(language).containsKey(code)) {
+                    return true;
+                }
+            }
+            return false;
+        } else {
+            Map<String, ArchetypeTerm> termDefinintionsForLanguage = getTermDefinitions().get(originalLanguage);
+            return termDefinintionsForLanguage != null && termDefinintionsForLanguage.containsKey(code);
+        }
+    }
+
+    public boolean hasIdCode(String code) {
+        return AOMUtils.isIdCode(code) && hasCode(code);
     }
 
     public boolean hasValueSetCode(String code) {

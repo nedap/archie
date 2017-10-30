@@ -137,6 +137,9 @@ public class ValidateAgainstReferenceModel extends ValidatingVisitor {
                             }
                         }
                     } else {
+                        if(defaultAttribute.getCardinality() != null) {
+                            addMessageWithPath(ErrorType.VCAM, defaultAttribute.path(), "single valued attributes can not have a cardinality");
+                        }
                         //TODO: single/multiple validation. but this is not set in parsing and not in archetype, so only useful during editing
                         //this is VCAMm and VCAMs in eiffel code
                         //will result in errors with current AOM implementation unless we do constraint imposing first, which would cause trouble with validations. SO let's not now.
