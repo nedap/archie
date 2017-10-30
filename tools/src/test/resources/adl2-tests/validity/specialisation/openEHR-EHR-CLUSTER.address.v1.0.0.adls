@@ -1,4 +1,4 @@
-﻿archetype (adl_version=2.0.5; rm_release=1.0.2)
+﻿archetype (adl_version=2.0.7; rm_release=1.0.2)
 	openEHR-EHR-CLUSTER.address.v1.0.0
 
 language

@@ -4,6 +4,7 @@ import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.ArchetypeModelObject;
 import com.nedap.archie.aom.CAttribute;
 import com.nedap.archie.aom.CComplexObject;
+import com.nedap.archie.aom.utils.AOMUtils;
 import com.nedap.archie.archetypevalidator.ErrorType;
 import com.nedap.archie.archetypevalidator.ValidatingVisitor;
 import com.nedap.archie.archetypevalidator.ValidationMessage;
@@ -30,15 +31,11 @@ public class DefinitionStructureValidation extends ValidatingVisitor {
             } else if (repository != null) {
                 if (flatParent != null) {
                     //adl workbench deviates from spec by only allowing differential paths at root, we allow them everywhere, according to spec
-                    ArchetypeModelObject parentAOMObject = flatParent.itemAtPath(cAttribute.getParent().getPath());
-                    if (parentAOMObject != null && parentAOMObject instanceof CComplexObject) {
-                        CComplexObject parentObject = (CComplexObject) parentAOMObject;
-                        ArchetypeModelObject pathInParent =parentObject.itemAtPath(cAttribute.getDifferentialPath());
-                        if (pathInParent == null) {
-                            addPathNotFoundInParentError(cAttribute);
-                        }
-                    } else {
+                    ArchetypeModelObject differentialPathFromParent = AOMUtils.getDifferentialPathFromParent(flatParent, cAttribute);
+                    if(differentialPathFromParent == null) {
                         addPathNotFoundInParentError(cAttribute);
+                    } else if (!(differentialPathFromParent instanceof CAttribute)) {
+                        addMessageWithPath(ErrorType.VDIFP, cAttribute.getDifferentialPath(), "differential path must point to an attribute in the flat parent, but it pointed instead to a " + differentialPathFromParent.getClass());
                     }
                 }
             }

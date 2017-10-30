@@ -41,7 +41,7 @@ definition
 			HISTORY[id2] matches {	-- history
 				events cardinality matches {1..*; unordered} matches {
 					EVENT[id7] occurrences matches {0..*} matches {	-- any event
-						data matches {*}
+						data
 					}
 				}
 			}

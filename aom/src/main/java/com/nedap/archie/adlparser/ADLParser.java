@@ -30,6 +30,11 @@ public class ADLParser {
     private AdlParser.AdlContext tree;
     public ADLErrorListener errorListener;
 
+    /**
+     * If true, write errors to the console, if false, do not
+     */
+    private boolean logEnabled = true;
+
     public ADLParser() {
 
     }
@@ -51,13 +56,13 @@ public class ADLParser {
 
         errors = new ADLParserErrors();
         errorListener = new ADLErrorListener(errors);
+        errorListener.setLogEnabled(logEnabled);
 
         lexer = new AdlLexer(stream);
         lexer.addErrorListener(errorListener);
         parser = new AdlParser(new CommonTokenStream(lexer));
         parser.addErrorListener(errorListener);
         tree = parser.adl(); // parse
-        //System.out.println(tree.toStringTree(parser));
 
         ADLListener listener = new ADLListener(errors);
         walker= new ParseTreeWalker();
@@ -120,5 +125,13 @@ public class ADLParser {
 
     public void setTree(AdlParser.AdlContext tree) {
         this.tree = tree;
+    }
+
+    public boolean isLogEnabled() {
+        return logEnabled;
+    }
+
+    public void setLogEnabled(boolean logEnabled) {
+        this.logEnabled = logEnabled;
     }
 }

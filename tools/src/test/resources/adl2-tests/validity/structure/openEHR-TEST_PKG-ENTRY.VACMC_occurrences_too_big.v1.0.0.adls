@@ -1,5 +1,5 @@
-archetype (adl_version=1.5.1; rm_release=1.0.2)
-	openEHR-TEST_PKG-ENTRY.VACMC_occurrences_too_big.v1
+archetype (adl_version=2.0.7; rm_release=1.0.2)
+	openEHR-TEST_PKG-ENTRY.VACMC_occurrences_too_big.v1.0.0
 
 language
 	original_language = <[ISO_639-1::en]>
@@ -23,7 +23,7 @@ description
 definition
 	ENTRY[id1] matches {
 		element_attr_2 cardinality matches {0..1} matches {
-			ELEMENT[id2] occurrences matches {1..2} matches {*}
+			ELEMENT[id2] occurrences matches {1..2}
 		}
 	}
 
@@ -31,7 +31,7 @@ terminology
 	term_definitions = <
 		["en"] = <
 			["id1"] = <
-				text = <"">
+				text = <" ">
 				description = <"">
 			>
 			["id2"] = <

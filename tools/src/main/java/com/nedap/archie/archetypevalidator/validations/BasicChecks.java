@@ -54,6 +54,9 @@ public class BasicChecks extends ArchetypeValidationBase {
         if(depth != archetype.getDefinition().specialisationDepth()) {
             addMessage(ErrorType.VARCN);
         }
+        if(!archetype.getDefinition().getNodeId().matches("id1(.1)*")) {
+            addMessage(ErrorType.VARCN, archetype.getDefinition().getNodeId());
+        }
     }
 
 

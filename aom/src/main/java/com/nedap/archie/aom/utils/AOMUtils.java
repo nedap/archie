@@ -1,10 +1,13 @@
 package com.nedap.archie.aom.utils;
 
 import com.google.common.base.Joiner;
+import com.nedap.archie.aom.Archetype;
+import com.nedap.archie.aom.ArchetypeModelObject;
+import com.nedap.archie.aom.CAttribute;
+import com.nedap.archie.aom.CComplexObject;
 import com.nedap.archie.definitions.AdlCodeDefinitions;
 import com.nedap.archie.paths.PathSegment;
 import com.nedap.archie.paths.PathUtil;
-import com.sun.org.apache.regexp.internal.RE;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
@@ -63,5 +66,16 @@ public class AOMUtils {
 
     public static RedefinitionStatus getSpecialisationStatusFromCode(String nodeId, int integer) {
         return RedefinitionStatus.UNDEFINED;//TODO
+    }
+
+    public static ArchetypeModelObject getDifferentialPathFromParent(Archetype flatParent, CAttribute attributeWithDifferentialPath) {
+        //adl workbench deviates from spec by only allowing differential paths at root, we allow them everywhere, according to spec
+        ArchetypeModelObject parentAOMObject = flatParent.itemAtPath(pathAtSpecializationLevel(attributeWithDifferentialPath.getParent().getPathSegments(), flatParent.specializationDepth()));
+        if (parentAOMObject != null && parentAOMObject instanceof CComplexObject) {
+            CComplexObject parentObject = (CComplexObject) parentAOMObject;
+            ArchetypeModelObject attributeInParent = parentObject.itemAtPath(attributeWithDifferentialPath.getDifferentialPath());
+            return attributeInParent;
+        }
+        return null;
     }
 }

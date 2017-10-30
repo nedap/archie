@@ -17,6 +17,7 @@ public enum ErrorType {
     VTVSMD("value-set members defined. The member codes of a value set must be defined in the term definitions of the terminology of the flattened form of the current archetype"),
     VTLC("language consistency. Languages consistent: all term codes and constraint codes exist in all languages"),
     OTHER("an error occurred that has no standard codes"),
+    VASID("archetype specialisation parent identifier validity. The archetype identifier stated in the specialise clause must be the identifier of the immediate specialisation parent archetype."),
     VARDT("archetype definition typename validity. The typename mentioned in the outer block of the archetype definition section must match the type mentioned in the first segment of the archetype id"),
     STCNT("Syntax error: terminology not specified"),
     VOLT("Original language not defined in terminology"),

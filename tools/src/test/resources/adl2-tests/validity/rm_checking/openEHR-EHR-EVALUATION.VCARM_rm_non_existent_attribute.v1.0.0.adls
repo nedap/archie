@@ -1,4 +1,4 @@
-archetype (adl_version=1.5.1; rm_release=1.0.2)
+archetype (adl_version=2.0.7; rm_release=1.0.2)
 	openEHR-EHR-EVALUATION.VCARM_rm_non_existent_attribute.v1.0.0
 
 language

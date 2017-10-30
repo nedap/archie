@@ -6,6 +6,7 @@ import com.nedap.archie.aom.CAttribute;
 import com.nedap.archie.aom.CComplexObject;
 import com.nedap.archie.aom.CObject;
 import com.nedap.archie.aom.CPrimitiveObject;
+import com.nedap.archie.aom.utils.AOMUtils;
 import com.nedap.archie.archetypevalidator.ErrorType;
 import com.nedap.archie.archetypevalidator.ValidatingVisitor;
 import com.nedap.archie.archetypevalidator.ValidationMessage;
@@ -41,10 +42,14 @@ public class ValidateAgainstReferenceModel extends ValidatingVisitor {
             CAttribute owningAttribute = cObject.getParent();
             if (owningAttribute != null) { //at path "/" there will be no owning attribute
                 CObject owningObject = owningAttribute.getParent();
-
+                if(owningAttribute.getDifferentialPath() != null && flatParent != null) {
+                    CAttribute differentialPathFromParent = (CAttribute) AOMUtils.getDifferentialPathFromParent(flatParent, owningAttribute);
+                    owningObject =  differentialPathFromParent == null ? null : differentialPathFromParent.getParent();
+                }
                 if (owningObject != null) {
                     RMAttributeInfo owningAttributeInfo = lookup.getAttributeInfo(owningObject.getRmTypeName(), owningAttribute.getRmAttributeName());
                     if (owningAttributeInfo != null) {//this case is another validation, see the validate(cattribute) method of this class
+                        //TODO: make this work with metadata, not directly with classes
                         Class typeInCollection = owningAttributeInfo.getTypeInCollection();
                         if (!typeInCollection.isAssignableFrom(typeInfo.getJavaClass())) {
                             addMessageWithPath(ErrorType.VCORMT, cObject.getPath(),
@@ -53,24 +58,32 @@ public class ValidateAgainstReferenceModel extends ValidatingVisitor {
                         }
                     }
                 }
+
             }
         }
     }
 
-    // TODO: check the type of a CPrimitiveObject with respect to CAttribute, as pat of VCORMT.
     @Override
     protected void validate(CPrimitiveObject cObject) {
         CAttribute attribute = cObject.getParent();
         if(attribute.getDifferentialPath() == null) {
             CObject parentConstraint = attribute.getParent();
-            RMAttributeInfo attributeInfo = lookup.getAttributeInfo(parentConstraint.getRmTypeName(), attribute.getRmAttributeName());
             if(!lookup.validatePrimitiveType(parentConstraint.getRmTypeName(), attribute.getRmAttributeName(), cObject)) {
                 addMessage(ErrorType.VCORMT, cObject.path());
             }
 
-            //TODO: we need AOM_PROFILE here
+            //TODO: we need AOM_PROFILE here instead
         } else {
-            //TODO: get type from flat parent
+            if (flatParent != null) {
+                ArchetypeModelObject differentialPathFromParent = AOMUtils.getDifferentialPathFromParent(flatParent, attribute);
+                if(differentialPathFromParent instanceof CAttribute) {
+                    CAttribute parentAttribute = (CAttribute) differentialPathFromParent;
+                    CObject parentConstraint = parentAttribute.getParent();
+                    if(!lookup.validatePrimitiveType(parentConstraint.getRmTypeName(), parentAttribute.getRmAttributeName(), cObject)) {
+                        addMessage(ErrorType.VCORMT, cObject.path());
+                    }
+                }
+            }
         }
 
 
@@ -84,12 +97,8 @@ public class ValidateAgainstReferenceModel extends ValidatingVisitor {
         }
         CObject owningObject = cAttribute.getParent();
         if(cAttribute.getDifferentialPath() != null) {
-            ArchetypeModelObject parentAOMObject = flatParent.itemAtPath(cAttribute.getParent().getPath());
-            if (parentAOMObject != null && parentAOMObject instanceof CComplexObject) {
-                CComplexObject parentObject = (CComplexObject) parentAOMObject;
-                CAttribute attribute = parentObject.itemAtPath(cAttribute.getDifferentialPath());
-                owningObject =  attribute == null ? null : attribute.getParent();
-            }
+            CAttribute differentialPathFromParent = (CAttribute) AOMUtils.getDifferentialPathFromParent(flatParent, cAttribute);
+            owningObject =  differentialPathFromParent == null ? null : differentialPathFromParent.getParent();
         }
         if(owningObject != null) {
             RMAttributeInfo attributeInfo = lookup.getAttributeInfo(owningObject.getRmTypeName(), cAttribute.getRmAttributeName());

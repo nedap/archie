@@ -1,5 +1,5 @@
-archetype (adl_version=1.5.1; rm_release=1.0.2)
-	openEHR-EHR-OBSERVATION.VTBK_term_bindings_paths.v1
+archetype (adl_version=2.0.7; rm_release=1.0.2)
+	openEHR-EHR-OBSERVATION.VTTBK_term_bindings_paths.v1.0.0
 
 language
 	original_language = <[ISO_639-1::en]>
@@ -11,7 +11,7 @@ description
 	details = <
 		["en"] = <
 			language = <[ISO_639-1::en]>
-			purpose = <"Test VTBK validity check for paths mentioned in term_bindings.">
+			purpose = <"Test VTTBK validity check for paths mentioned in term_bindings.">
 		>
 	>
 	other_details = <
@@ -27,7 +27,7 @@ definition
 						data matches {
 							ITEM_LIST[id2] matches {
 								items cardinality matches {1..6; ordered} matches {
-									ELEMENT[id5] occurrences matches {0..1} matches {*}
+									ELEMENT[id5] occurrences matches {0..1}
 								}
 							}
 						}
@@ -65,10 +65,8 @@ terminology
 	>
 	term_bindings = <
 		["LNC205"] = <
-			items = <
-				["/data[id3]/events[id4]/data[id2]/items[id5]"] = <http://LNC205.org/id/9272-6>
-				["/data[id3]/events[id7]/data/items[id5]"] = <http://LNC205.org/id/9271-8>
-				["junk_garbage"] = <http://LNC205.org/id/9271-8>
-			>
+            ["/data[id3]/events[id4]/data[id2]/items[id5]"] = <http://LNC205.org/id/9272-6>
+            ["/data[id3]/events[id7]/data/items[id5]"] = <http://LNC205.org/id/9271-8>
+            ["junk_garbage"] = <http://LNC205.org/id/9271-8>
 		>
 	>

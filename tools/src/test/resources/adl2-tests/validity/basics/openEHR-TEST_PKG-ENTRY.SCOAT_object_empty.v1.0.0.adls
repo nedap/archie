@@ -1,4 +1,4 @@
-archetype (adl_version=1.5.1; rm_release=1.0.2)
+archetype (adl_version=2.0.7; rm_release=1.0.2)
 	openEHR-TEST_PKG-ENTRY.SCOAT_object_empty.v1.0.0
 
 language
@@ -11,7 +11,7 @@ description
 	details = <
 		["en"] = <
 			language = <[ISO_639-1::en]>
-			purpose = <"Test SCOAT syntax validity check, triggered by object constraint that is empty (should be either '*' or something specific)">
+			purpose = <"Test SCOAT syntax validity check, triggered by object constraint that is empty (should be something specific or left out)">
 			copyright = <"copyright (c) 2008 The openEHR Foundation">
 		>
 	>
@@ -31,8 +31,8 @@ terminology
 	term_definitions = <
 		["en"] = <
 			["id1"] = <
-				text = <"">
-				description = <"">
+				text = <" ">
+				description = <" ">
 			>
 		>
 	>

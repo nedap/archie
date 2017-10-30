@@ -18,16 +18,14 @@ description
 	lifecycle_state = <"draft">
 
 definition
-	ENTRY[at0000] matches {*}
+	ENTRY[id1]
 
 terminology
 	term_definitions = <
 		["en"] = <
-			items = <
-				["at0000"] = <
-					text = <"">
-					description = <"">
-				>
-			>
+            ["id1"] = <
+                text = <"">
+                description = <"">
+            >
 		>
 	>

@@ -1,4 +1,4 @@
-archetype (adl_version=2.0.5; rm_release=1.0.2)
+archetype (adl_version=2.0.7; rm_release=1.0.2)
 	openEHR-TEST_PKG-ENTRY.FAIL_missing_parent_term.v1.0.0
 
 specialize
@@ -19,7 +19,7 @@ description
 		>
 	>
 	other_details = <
-		["regression"] = <"FAIL">
+		["regression"] = <"VASID"> -- pieterbos: parent archetype is missing. Should probably do something else
 	>
 	lifecycle_state = <"draft">
 
@@ -33,15 +33,13 @@ definition
 terminology
 	term_definitions = <
 		["en"] = <
-			items = <
-				["id1.1"] = <
-					text = <"">
-					description = <"">
-				>
-				["id2.1"] = <
-					text = <"">
-					description = <"">
-				>
-			>
+            ["id1.1"] = <
+                text = <"">
+                description = <"">
+            >
+            ["id2.1"] = <
+                text = <"">
+                description = <"">
+            >
 		>
 	>

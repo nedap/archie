@@ -1,4 +1,4 @@
-archetype (adl_version=1.5.1; rm_release=1.0.2)
+archetype (adl_version=2.0.7; rm_release=1.0.2)
 	openEHR-TEST_PKG-ENTRY.VTLC_ac_code_not_in_all_languages.v1.0.0
 
 language

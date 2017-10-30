@@ -60,7 +60,6 @@ public abstract class ReflectionModelInfoLookup implements ModelInfoLookup {
         Reflections reflections = new Reflections(packageName, new SubTypesScanner(false));
         Set<String> typeNames = reflections.getAllTypes();
 
-        System.out.println("type names size: " + typeNames.size());
         typeNames.forEach(typeName -> {
             try {
                 addClass(classLoader.loadClass(typeName));
@@ -111,7 +110,6 @@ public abstract class ReflectionModelInfoLookup implements ModelInfoLookup {
         Reflections reflections = new Reflections(ClasspathHelper.forClass(baseClass), new SubTypesScanner(false));
         Set<Class<?>> classes = reflections.getSubTypesOf(baseClass);
 
-        System.out.println("type names size: " + classes.size());
         classes.forEach(this::addClass);
         addClass(baseClass);
     }
@@ -246,8 +244,9 @@ public abstract class ReflectionModelInfoLookup implements ModelInfoLookup {
     }
 
     @Override
-    public Class getClass(String rmTypename) {
-        RMTypeInfo rmTypeInfo = rmTypeNamesToRmTypeInfo.get(rmTypename);
+    public Class getClass(String rmTypeName) {
+        String strippedRmTypeName = getTypeWithoutGenericType(rmTypeName);
+        RMTypeInfo rmTypeInfo = rmTypeNamesToRmTypeInfo.get(strippedRmTypeName);
         return rmTypeInfo == null ? null : rmTypeInfo.getJavaClass();
     }
 
@@ -279,11 +278,16 @@ public abstract class ReflectionModelInfoLookup implements ModelInfoLookup {
 
     @Override
     public RMTypeInfo getTypeInfo(String rmTypeName) {
+        String strippedRmTypeName = getTypeWithoutGenericType(rmTypeName);
+        return this.rmTypeNamesToRmTypeInfo.get(strippedRmTypeName);
+    }
+
+    private String getTypeWithoutGenericType(String rmTypeName) {
         if(rmTypeName.indexOf('<') > 0) {
             //strip generic types, cannot handle them yet
             rmTypeName = rmTypeName.substring(0, rmTypeName.indexOf('<'));
         }
-        return this.rmTypeNamesToRmTypeInfo.get(rmTypeName);
+        return rmTypeName;
     }
 
     @Override
@@ -294,7 +298,8 @@ public abstract class ReflectionModelInfoLookup implements ModelInfoLookup {
 
     @Override
     public RMAttributeInfo getAttributeInfo(String rmTypeName, String attributeName) {
-        RMTypeInfo typeInfo = this.rmTypeNamesToRmTypeInfo.get(rmTypeName);
+        String strippedRmTypeName = getTypeWithoutGenericType(rmTypeName);
+        RMTypeInfo typeInfo = this.rmTypeNamesToRmTypeInfo.get(strippedRmTypeName);
         return typeInfo == null ? null : typeInfo.getAttribute(attributeName);
     }
 

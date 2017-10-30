@@ -23,6 +23,8 @@ public class SpecializedDefinitionValidation extends ValidatingVisitor {
         //only run these if the archetype is specialized and the parent has been found and flattened
         if(archetype.isSpecialized() && flatParent != null) {
             super.validate();
+        } else if (archetype.isSpecialized() && flatParent == null) {
+            addMessage(ErrorType.VASID, "parent archetype not found or can not be flattened");
         }
     }
 

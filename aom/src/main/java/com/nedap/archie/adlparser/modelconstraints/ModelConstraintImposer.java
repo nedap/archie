@@ -42,7 +42,7 @@ public interface ModelConstraintImposer {
             CObject object = workList.pop();
             for(CAttribute attribute:object.getAttributes()) {
                 //if a differential path is present, we cannot set any default values because we do not know what kind of
-                // object this is. This is only known after flattening, and it will be handled correclty by the Flattener
+                // object this is. This is only known after flattening, and it will be handled correctly by the Flattener and ArchetypeValidator
                 if(attribute.getDifferentialPath() == null) {
 
                     CAttribute defaultAttribute = getDefaultAttribute(object.getRmTypeName(), attribute.getRmAttributeName());

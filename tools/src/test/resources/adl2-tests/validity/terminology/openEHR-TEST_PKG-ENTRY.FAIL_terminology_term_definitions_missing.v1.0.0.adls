@@ -1,4 +1,4 @@
-archetype (adl_version=1.5.1; rm_release=1.0.2)
+archetype (adl_version=2.0.6; rm_release=1.0.2)
 	openEHR-TEST_PKG-ENTRY.FAIL_terminology_term_definitions_missing.v1.0.0
 
 language
@@ -22,6 +22,6 @@ description
 	lifecycle_state = <"draft">
 
 definition
-	ENTRY[id1] matches {*}
+	ENTRY[id1]
 
 terminology
