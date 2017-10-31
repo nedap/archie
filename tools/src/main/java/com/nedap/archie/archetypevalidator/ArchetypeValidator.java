@@ -1,6 +1,7 @@
 package com.nedap.archie.archetypevalidator;
 
 import com.google.common.base.Joiner;
+import com.nedap.archie.adlparser.modelconstraints.ReflectionConstraintImposer;
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.archetypevalidator.validations.*;
 import com.nedap.archie.flattener.ArchetypeRepository;
@@ -74,6 +75,7 @@ public class ArchetypeValidator {
      * @return
      */
     public List<ValidationMessage> validate(Archetype archetype, ArchetypeRepository repository) {
+        archetype = preprocess(archetype);
         Archetype flatParent = null;
         if(archetype.isSpecialized()) {
             try {
@@ -102,6 +104,12 @@ public class ArchetypeValidator {
         return messages;
     }
 
+    private Archetype preprocess(Archetype archetype) {
+        Archetype preprocessed = archetype.clone();
+        new ReflectionConstraintImposer(modelInfoLookup).setSingleOrMultiple(preprocessed.getDefinition());
+        return preprocessed;
+    }
+
     private List<ValidationMessage> runValidations(Archetype archetype, ArchetypeRepository repository, Archetype flatParent, List<ArchetypeValidation> validations) {
         List<ValidationMessage> messages = new ArrayList<>();
         for(ArchetypeValidation validation: validations) {
@@ -109,6 +117,7 @@ public class ArchetypeValidator {
                 messages.addAll(validation.validate(archetype, flatParent, repository));
             } catch (Exception e) {
                 logger.error("error running validation processor", e);
+                e.printStackTrace();
                 messages.add(new ValidationMessage(ErrorType.OTHER, "unknown path", "error running validator : " + Joiner.on("\n").join(e.getStackTrace())));
             }
         }

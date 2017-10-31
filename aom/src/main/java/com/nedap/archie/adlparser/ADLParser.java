@@ -4,6 +4,7 @@ import com.nedap.archie.adlparser.antlr.*;
 import com.nedap.archie.adlparser.modelconstraints.ModelConstraintImposer;
 import com.nedap.archie.adlparser.treewalkers.ADLListener;
 import com.nedap.archie.aom.Archetype;
+import com.nedap.archie.aom.utils.ArchetypeParsePostProcesser;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.*;
@@ -68,14 +69,9 @@ public class ADLParser {
         walker= new ParseTreeWalker();
         walker.walk(listener, tree);
         Archetype result = listener.getArchetype();
-        if(result.getTerminology() != null) {
-            result.getTerminology().setConceptCode(result.getDefinition().getNodeId());
-            String originalLanguage = null;
-            if (result.getOriginalLanguage() != null) {
-                originalLanguage = result.getOriginalLanguage().getCodeString();
-            }
-            result.getTerminology().setOriginalLanguage(originalLanguage);
-        }
+        //set some values that are not directly in ODIN or ADL
+        ArchetypeParsePostProcesser.fixArchetype(result);
+
         if(modelConstraintImposer != null && result.getDefinition() != null) {
             modelConstraintImposer.imposeConstraints(result.getDefinition());
         }

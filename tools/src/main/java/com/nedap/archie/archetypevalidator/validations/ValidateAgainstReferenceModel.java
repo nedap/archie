@@ -137,7 +137,7 @@ public class ValidateAgainstReferenceModel extends ValidatingVisitor {
                             }
                         }
                     } else {
-                        if(defaultAttribute.getCardinality() != null) {
+                        if(cAttribute.getCardinality() != null) {
                             addMessageWithPath(ErrorType.VCAM, defaultAttribute.path(), "single valued attributes can not have a cardinality");
                         }
                         //TODO: single/multiple validation. but this is not set in parsing and not in archetype, so only useful during editing

@@ -1,6 +1,7 @@
 package com.nedap.archie.archetypevalidator;
 
-import com.google.common.io.Files;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import com.google.common.io.Resources;
 import com.nedap.archie.adlparser.ADLParser;
 import com.nedap.archie.adlparser.ADLParserErrors;
@@ -16,17 +17,14 @@ import org.reflections.scanners.ResourcesScanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
 
-import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -43,6 +41,12 @@ import static org.junit.Assert.assertTrue;
 public class BigArchetypeValidatorTest {
 
     private static final Logger log = LoggerFactory.getLogger(BigArchetypeValidatorTest.class);
+
+    //if regression with hash key occures, any of the given values are also acceptable as valid results
+    private static final Multimap<String, ErrorType> replaceableErrorTypes = HashMultimap.create();
+    static {
+        replaceableErrorTypes.put(ErrorType.VARXR.name(), ErrorType.VARXRA);
+    }
 
     //all archetypes in the validity package that have errors that do not match the grammar go here
     private static final Set<String> archetypeIdsThatShouldHaveParserErrors = new HashSet<>();
@@ -141,7 +145,7 @@ public class BigArchetypeValidatorTest {
                         }
                         unexpectedParseErrors++;
                         errorCount++;
-                    } else if (isInOkToHaveErrorsList(file)) {
+                    } else if (isInOkToHaveParseErrorsList(file)) {
                         log.info("{} has parse errors, so that's fine", file);
                         correctCount++;
                     } else {
@@ -175,7 +179,7 @@ public class BigArchetypeValidatorTest {
                     } else {
                         boolean found = false;
                         for (ValidationMessage message : validation) {
-                            if (regression.startsWith(message.getType().name())) {
+                            if (errorMatches(message.getType(), regression)) {
                                 found = true;
                                 correctCount++;
                             }
@@ -206,7 +210,18 @@ public class BigArchetypeValidatorTest {
 
     }
 
-    private boolean isInOkToHaveErrorsList(String filename) {
+    private boolean errorMatches(ErrorType type, String regression) {
+        if(regression.startsWith(type.name())) {
+            return true;
+        }
+        Collection<ErrorType> alsoMatchingErrorTypes = this.replaceableErrorTypes.get(regression);
+        if(alsoMatchingErrorTypes != null && alsoMatchingErrorTypes.contains(type)) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isInOkToHaveParseErrorsList(String filename) {
         return archetypeIdsThatShouldHaveParserErrors.contains(FilenameUtils.getBaseName(filename));
     }
 

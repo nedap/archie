@@ -15,4 +15,23 @@ public interface ArchetypeRepository {
      * @return
      */
     Archetype getArchetype(String archetypeId);
+
+
+    /**
+     * Return true if an only if the child archetype has parent as its parent somewhere in the tree
+     * @param parent
+     * @param child
+     * @return
+     */
+    default boolean isChildOf(Archetype parent, Archetype child) {
+        if(child.getArchetypeId().equals(parent.getArchetypeId()) || child.getArchetypeId().toString().equals(parent.getArchetypeId().getSemanticId())) {
+            return true;
+        }
+        Archetype nextChild = getArchetype(child.getParentArchetypeId());
+        if(nextChild != null) {
+            return isChildOf(parent, nextChild);
+        }
+        return false;
+
+    }
 }

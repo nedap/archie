@@ -1,19 +1,16 @@
 package com.nedap.archie.archetypevalidator.validations;
 
-import com.nedap.archie.aom.ArchetypeModelObject;
-import com.nedap.archie.aom.ArchetypeSlot;
-import com.nedap.archie.aom.CArchetypeRoot;
-import com.nedap.archie.aom.CAttribute;
-import com.nedap.archie.aom.CComplexObject;
-import com.nedap.archie.aom.CComplexObjectProxy;
-import com.nedap.archie.aom.CObject;
-import com.nedap.archie.aom.CPrimitiveObject;
+import com.nedap.archie.aom.*;
 import com.nedap.archie.aom.utils.AOMUtils;
 import com.nedap.archie.aom.utils.NodeIdUtil;
 import com.nedap.archie.aom.utils.RedefinitionStatus;
 import com.nedap.archie.archetypevalidator.ErrorType;
 import com.nedap.archie.archetypevalidator.ValidatingVisitor;
 import com.nedap.archie.rminfo.ModelInfoLookup;
+import com.nedap.archie.rminfo.RMTypeInfo;
+import com.nedap.archie.rules.Assertion;
+
+import java.util.List;
 
 public class SpecializedDefinitionValidation extends ValidatingVisitor {
     public SpecializedDefinitionValidation(ModelInfoLookup lookup) {
@@ -42,23 +39,125 @@ public class SpecializedDefinitionValidation extends ValidatingVisitor {
     private void checkSpecializedNode(CObject cObject) {
         String flatPath = AOMUtils.pathAtSpecializationLevel(cObject.getPathSegments(), flatParent.specializationDepth());
         CObject parentCObject = getCObject(flatParent.itemAtPath(flatPath));
-
+        boolean passed = true;
         if(parentCObject == null) {
-            System.err.println("KAPOT!");
+            //shouldn't happen
+            addMessageWithPath(ErrorType.OTHER, cObject.path(), String.format("Could not find parent object for %s but it should have been prechecked. Could you report this as a bug?", flatPath));
+            //stop validating if we don't have a parent
+            return;
         }
-        else if(cObject instanceof CArchetypeRoot && parentCObject instanceof ArchetypeSlot) {
 
+
+        if(parentCObject instanceof ArchetypeSlot) {
+            if(((ArchetypeSlot) parentCObject).isClosed()) {
+                //not in the eiffel code, but is in the spec and makes sense: cannot redefined a closed parent slot
+                addMessageWithPath(ErrorType.VDSSP, cObject.path());
+                passed = false;
+            }
+        }
+        if(cObject instanceof ArchetypeSlot) {
+            ArchetypeSlot slot = (ArchetypeSlot) cObject;
+            if(slot.isClosed() && (hasAssertions(slot.getExcludes()) || hasAssertions(slot.getIncludes()))) {
+                //not in eiffel code, but slot cannot be both closed and narrowed at the same time.
+                //we could make this phase 1, but makes sense here
+                addMessageWithPath(ErrorType.VDSSC, cObject.path());
+                passed = false;
+            }
+        }
+
+
+        if(cObject instanceof CArchetypeRoot && parentCObject instanceof ArchetypeSlot) {
+            passed = validateSlotSpecializedWithRoot((ArchetypeSlot) parentCObject, (CArchetypeRoot) cObject);
         } else if (cObject instanceof ArchetypeSlot && parentCObject instanceof ArchetypeSlot) {
-
+            passed = validateSlotSpecializedWithSlot((ArchetypeSlot) parentCObject, (ArchetypeSlot) cObject);
         } else if(cObject instanceof CArchetypeRoot && parentCObject instanceof  CArchetypeRoot) {
-
+            passed = validateRootSpecializedWithRoot((CArchetypeRoot) parentCObject, (CArchetypeRoot) cObject);
         } else if (cObject instanceof CComplexObject && parentCObject instanceof CComplexObjectProxy) {
-
+            CObject usedNodeInParent = flatParent.itemAtPath(((CComplexObjectProxy) parentCObject).getTargetPath());
+            if(usedNodeInParent != null) {
+                parentCObject = usedNodeInParent;
+            } else {
+                addMessageWithPath(ErrorType.VSUNT, cObject.path());//TODO: check that our flattener actually supports this
+                passed = false;
+            }
         } else if (parentCObject instanceof  CComplexObject && ((CComplexObject) parentCObject).isAnyAllowed()) {
             //any allowed in parent, so fine here!
+            passed = true;
         } else if (!cObject.getClass().equals(parentCObject.getClass())) {
             addMessageWithPath(ErrorType.VSONT, cObject.path());
+            passed = false;
         }
+
+        if(passed) {
+            validateConformsTo(cObject, parentCObject);
+        }
+    }
+
+    private boolean hasAssertions(List<Assertion> assertions) {
+        return assertions != null && !assertions.isEmpty();
+    }
+
+    private void validateConformsTo(CObject cObject, CObject parentCObject) {
+        //TODO: implement me
+    }
+
+    private boolean validateRootSpecializedWithRoot(CArchetypeRoot parentCObject, CArchetypeRoot cObject) {
+        Archetype usedArchetype = repository.getArchetype(cObject.getArchetypeRef());
+        if(usedArchetype != null) {
+            if(!repository.isChildOf(repository.getArchetype(parentCObject.getArchetypeRef()), usedArchetype)) {
+                addMessage(ErrorType.VARXAV, cObject.path());
+                return false;
+            }
+        } else {
+            addMessageWithPath(ErrorType.VARXRA, cObject.path());
+            return false;
+        }
+        return true;
+    }
+
+    private boolean validateSlotSpecializedWithSlot(ArchetypeSlot parentCObject, ArchetypeSlot cObject) {
+        if(!parentCObject.getNodeId().equals(cObject.getNodeId())) {
+            addMessageWithPath(ErrorType.VDSSID, cObject.path());
+            return false;
+        }
+        return true;
+    }
+
+    private boolean validateSlotSpecializedWithRoot(ArchetypeSlot slot, CArchetypeRoot root) {
+        if(!rootMatchesSlotType(slot, root)) {
+            addMessageWithPath(ErrorType.VARXS, root.path());
+            return false;
+        }
+        if(repository.getArchetype(root.getArchetypeRef()) == null) {
+            addMessageWithPath(ErrorType.VARXR, root.path());
+            return false;
+        } else if (AOMUtils.getSpecializationDepthFromCode(root.getNodeId()) != archetype.specializationDepth()) {
+            addMessageWithPath(ErrorType.VARXID, root.getPath());
+            return false;
+        } else if (!AOMUtils.archetypeIdMatchesSlotExpression(root.getArchetypeRef(), slot)) {
+            addMessageWithPath(ErrorType.VARXS, root.path());
+            return false;
+        }
+        return true;
+
+    }
+
+    private boolean rootMatchesSlotType(ArchetypeSlot slot, CArchetypeRoot root) {
+        String slotRmTypeName = slot.getRmTypeName();
+        String rootRmTypeName = root.getRmTypeName();
+        String rootReferenceRmTypeName = new ArchetypeHRID(root.getArchetypeRef()).getRmClass();
+        RMTypeInfo typeInfo = lookup.getTypeInfo(slotRmTypeName);
+        RMTypeInfo rootTypeInfo = lookup.getTypeInfo(rootRmTypeName);
+        RMTypeInfo rootReferenceTypeInfo = lookup.getTypeInfo(rootReferenceRmTypeName);
+        if(rootTypeInfo == null || rootReferenceTypeInfo == null) {
+            return false;
+        }
+        else if(!typeInfo.isDescendantOrEqual(rootTypeInfo)) {
+            return false;
+        } else if (!typeInfo.isDescendantOrEqual(rootReferenceTypeInfo)) {
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -129,6 +228,11 @@ public class SpecializedDefinitionValidation extends ValidatingVisitor {
 
     @Override
     public void validate(CAttribute attribute) {
+        SpecializedAttributeValidation specializedAttributeValidation = new SpecializedAttributeValidation();
+        if(specializedAttributeValidation.validateTest(attribute, this)) {
+            specializedAttributeValidation.validate(attribute, this);
+        }
+
 
     }
 

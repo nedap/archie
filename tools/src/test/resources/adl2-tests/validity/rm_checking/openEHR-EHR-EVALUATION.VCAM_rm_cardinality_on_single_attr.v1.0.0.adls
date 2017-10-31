@@ -19,7 +19,7 @@ description
 		>
 	>
 	other_details = <
-		["regression"] = <"VSAM">
+		["regression"] = <"VCAM">
 	>
 	lifecycle_state = <"unmanaged">
 

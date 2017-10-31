@@ -3,6 +3,7 @@ package com.nedap.archie.aom;
 import com.nedap.archie.aom.terminology.ArchetypeTerm;
 import com.nedap.archie.aom.terminology.ArchetypeTerminology;
 import com.nedap.archie.aom.utils.AOMUtils;
+import com.nedap.archie.aom.utils.ArchetypeParsePostProcesser;
 import com.nedap.archie.query.AOMPathQuery;
 import com.nedap.archie.xml.adapters.ArchetypeTerminologyAdapter;
 
@@ -190,7 +191,12 @@ public class Archetype extends AuthoredResource {
     }
 
     public Archetype clone() {
-        return (Archetype) super.clone();
+
+        Archetype result = (Archetype) super.clone();
+        //fix some things that are not handled automatically
+        ArchetypeParsePostProcesser.fixArchetype(result);
+        return result;
+
     }
 
     /** TODO: should this only be on complex objects? */
@@ -218,4 +224,6 @@ public class Archetype extends AuthoredResource {
     public int specializationDepth() {
         return AOMUtils.getSpecializationDepthFromCode(definition.getNodeId());
     }
+
+
 }

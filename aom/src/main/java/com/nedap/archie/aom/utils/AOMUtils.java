@@ -2,9 +2,12 @@ package com.nedap.archie.aom.utils;
 
 import com.google.common.base.Joiner;
 import com.nedap.archie.aom.Archetype;
+import com.nedap.archie.aom.ArchetypeHRID;
 import com.nedap.archie.aom.ArchetypeModelObject;
+import com.nedap.archie.aom.ArchetypeSlot;
 import com.nedap.archie.aom.CAttribute;
 import com.nedap.archie.aom.CComplexObject;
+import com.nedap.archie.aom.primitives.CString;
 import com.nedap.archie.definitions.AdlCodeDefinitions;
 import com.nedap.archie.paths.PathSegment;
 import com.nedap.archie.paths.PathUtil;
@@ -12,6 +15,11 @@ import com.nedap.archie.query.APathQuery;
 import com.nedap.archie.rminfo.ModelInfoLookup;
 import com.nedap.archie.rminfo.RMAttributeInfo;
 import com.nedap.archie.rminfo.RMTypeInfo;
+import com.nedap.archie.rules.Assertion;
+import com.nedap.archie.rules.BinaryOperator;
+import com.nedap.archie.rules.Constraint;
+import com.nedap.archie.rules.Expression;
+import com.nedap.archie.rules.OperatorKind;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
@@ -45,6 +53,9 @@ public class AOMUtils {
     }
 
     public static boolean isValidIdCode(String code) {
+        if(code == null) {
+            return false;
+        }
         return idCodePAttern.matcher(code).matches();
     }
 
@@ -138,5 +149,69 @@ public class AOMUtils {
             return Integer.parseInt(code) > 0;
         }
         return false;
+    }
+
+    public static boolean archetypeIdMatchesSlotExpression(String archetypeRef, ArchetypeSlot slot) {
+        boolean includePasses = false;
+
+        if(slot.getIncludes() != null && !slot.getIncludes().isEmpty()) {
+            for (Assertion include : slot.getIncludes()) {
+                if (filterInclude(include.getExpression(), archetypeRef)) {
+                    includePasses = true;
+                }
+            }
+        } else {
+            includePasses = true;
+        }
+        if(includePasses) {
+            if (slot.getExcludes() != null && !slot.getExcludes().isEmpty()) {
+                for (Assertion exclude : slot.getExcludes()) {
+                    if (filterExclude(exclude.getExpression(), archetypeRef)) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return includePasses;
+
+    }
+
+    private static boolean filterInclude(Expression expression, String archetypeRef) {
+        Boolean result = matchesExpression(expression, archetypeRef);
+        return result == null ? true : result;
+    }
+
+    private static boolean filterExclude(Expression expression, String archetypeRef) {
+        Boolean result = matchesExpression(expression, archetypeRef);
+        return result == null ? true : !result;
+    }
+
+    //TODO: because of the split in modules we cannot use the full RuleEvaluation here, which is a pity. So for now only the minor subset.
+    private static Boolean matchesExpression(Expression expression, String archetypeRef) {
+        if (expression instanceof BinaryOperator) {
+            BinaryOperator binary = (BinaryOperator) expression;
+            if (binary.getOperator() == OperatorKind.matches) {
+                Expression rightOperand = binary.getRightOperand();
+                if (rightOperand instanceof Constraint) {
+                    Constraint constraint = (Constraint) rightOperand;
+                    if(constraint.getItem() != null && constraint.getItem().getConstraint() != null && constraint.getItem().getConstraint().size() > 0 &&
+                            constraint.getItem().getConstraint().get(0) instanceof CString) {
+                        String pattern = ((CString) constraint.getItem()).getConstraint().get(0);
+                        if (pattern.startsWith("^") || pattern.startsWith("/")) {
+                            //regexp
+                            pattern = pattern.substring(1, pattern.length() - 1);
+                            return new ArchetypeHRID(archetypeRef).getSemanticId().matches(pattern) ||
+                                    archetypeRef.matches(pattern);
+
+                        } else {
+                            //string
+                            return archetypeRef.equals(pattern);
+                        }
+                    }
+                }
+            }
+            //archetypeStream.filter(
+        }
+        return null;// unsupported expression type
     }
 }
