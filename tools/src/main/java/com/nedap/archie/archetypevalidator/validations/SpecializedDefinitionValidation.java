@@ -105,7 +105,11 @@ public class SpecializedDefinitionValidation extends ValidatingVisitor {
             } else if (!cObject.occurrencesConformsTo(parentCObject)) {
                 addMessageWithPath(ErrorType.VSONCO, cObject.path());
             } else if (!cObject.nodeIdConformsTo(parentCObject)) {
-                    addMessageWithPath(ErrorType.VSONI, cObject.path());
+                addMessageWithPath(ErrorType.VSONI, cObject.path());
+            } else if (cObject instanceof CPrimitiveObject && parentCObject instanceof CPrimitiveObject) {
+                addMessageWithPath(ErrorType.VPOV, cObject.path());
+            } else {
+                addMessageWithPath(ErrorType.VUNK, cObject.path());
             }
 
         }

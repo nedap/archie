@@ -10,7 +10,7 @@ import java.lang.reflect.Field;
  */
 public class ArchieModelNamingStrategy implements ModelNamingStrategy {
 
-    protected PropertyNamingStrategy.SnakeCaseStrategy snakeCaseStrategy = new PropertyNamingStrategy.SnakeCaseStrategy();
+    public static final PropertyNamingStrategy.SnakeCaseStrategy snakeCaseStrategy = new PropertyNamingStrategy.SnakeCaseStrategy();
 
     @Override
     public String getTypeName(Class clazz) {
