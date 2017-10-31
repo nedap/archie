@@ -309,7 +309,7 @@ public class CAttribute extends ArchetypeConstraint {
         return existenceConformsTo(other) && ((isSingle() && other.isSingle()) || (isMultiple() && cardinalityConformsTo(other)));
     }
 
-    protected Boolean existenceConformsTo(CAttribute other) {
+    public Boolean existenceConformsTo(CAttribute other) {
         //True if the existence of this node conforms to other.existence
         if(other == null) {
             return false;
@@ -321,7 +321,7 @@ public class CAttribute extends ArchetypeConstraint {
         }
     }
 
-    protected Boolean cardinalityConformsTo(CAttribute other) {
+    public Boolean cardinalityConformsTo(CAttribute other) {
         //True if the cardinality of this node conforms to other.cardinality, if it exists
         if(other == null) {
             return false;

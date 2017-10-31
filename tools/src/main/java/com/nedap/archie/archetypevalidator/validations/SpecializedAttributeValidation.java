@@ -27,7 +27,12 @@ public class SpecializedAttributeValidation {
         if(!attribute.cConformsTo(parentAttribute)) {
 
           if(attribute.isMultiple() != parentAttribute.isMultiple()) {
-              validation.addMessageWithPath(ErrorType.VSAM, attribute.path());
+              validation.addMessageWithPath(ErrorType.VSAM, attribute.path());//cannot think of a case how this happens
+          }
+          else if(!attribute.existenceConformsTo(parentAttribute)) {
+                validation.addMessageWithPath(ErrorType.VSANCE, attribute.path());
+          } else if (!attribute.cardinalityConformsTo(parentAttribute)) {
+              validation.addMessageWithPath(ErrorType.VSANCC, attribute.path());
           }
         }
     }

@@ -1,19 +1,14 @@
 package com.nedap.archie.archetypevalidator.validations;
 
-import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.terminology.ArchetypeTerm;
 import com.nedap.archie.aom.terminology.ArchetypeTerminology;
 import com.nedap.archie.aom.terminology.ValueSet;
 import com.nedap.archie.aom.utils.AOMUtils;
-import com.nedap.archie.archetypevalidator.ArchetypeValidation;
 import com.nedap.archie.archetypevalidator.ArchetypeValidationBase;
 import com.nedap.archie.archetypevalidator.ErrorType;
-import com.nedap.archie.archetypevalidator.ValidationMessage;
-import com.nedap.archie.flattener.ArchetypeRepository;
 import com.nedap.archie.rminfo.ModelInfoLookup;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -37,7 +32,7 @@ public class BasicTerminologyValidation extends ArchetypeValidationBase {
         int terminologySpecialisationDepth = archetype.getTerminology().specialisationDepth();
         for(Map<String, ArchetypeTerm> languageSpecificTerminology:archetype.getTerminology().getTermDefinitions().values()) {
             for(ArchetypeTerm term:languageSpecificTerminology.values()) {
-                if(!AOMUtils.isValidIdCode(term.getCode())) {
+                if(!AOMUtils.isValidCode(term.getCode())) {
                     addMessage(ErrorType.VATCV, String.format("id code %s in terminology is not valid", term.getCode()));
                 }
                 if(archetype.isDifferential()) {
@@ -76,12 +71,12 @@ public class BasicTerminologyValidation extends ArchetypeValidationBase {
                 } catch (Exception e) {
                     //if not a valid path, fine
                 }
-                if(!(AOMUtils.isValidIdCode(constraintCodeOrPath) || archetypeHasPath
+                if(!(AOMUtils.isValidCode(constraintCodeOrPath) || archetypeHasPath
                                 //TODO: || referenceMOdel.hasPath(path)
                     )) {
                     addMessage(ErrorType.VTTBK, String.format("Term binding key %s in path format is not present in archetype", constraintCodeOrPath));
                 }
-                if(AOMUtils.isValidIdCode(constraintCodeOrPath) &&
+                if(AOMUtils.isValidCode(constraintCodeOrPath) &&
                         !(terminology.hasCode(constraintCodeOrPath))
                         || (archetype.isSpecialized() && flatParent != null && !flatParent.getTerminology().hasCode(constraintCodeOrPath)))
                     {

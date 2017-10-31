@@ -99,6 +99,16 @@ public class SpecializedDefinitionValidation extends ValidatingVisitor {
 
     private void validateConformsTo(CObject cObject, CObject parentCObject) {
         //TODO: implement me
+        if(!cObject.cConformsTo(parentCObject, lookup)) {
+            if(!cObject.typeNameConformsTo(parentCObject, lookup)) {
+                addMessageWithPath(ErrorType.VSONCT, cObject.path());
+            } else if (!cObject.occurrencesConformsTo(parentCObject)) {
+                addMessageWithPath(ErrorType.VSONCO, cObject.path());
+            } else if (!cObject.nodeIdConformsTo(parentCObject)) {
+                    addMessageWithPath(ErrorType.VSONI, cObject.path());
+            }
+
+        }
     }
 
     private boolean validateRootSpecializedWithRoot(CArchetypeRoot parentCObject, CArchetypeRoot cObject) {

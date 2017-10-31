@@ -52,7 +52,7 @@ public class AOMUtils {
         return code.startsWith(AdlCodeDefinitions.VALUE_SET_CODE_LEADER);
     }
 
-    public static boolean isValidIdCode(String code) {
+    public static boolean isValidCode(String code) {
         if(code == null) {
             return false;
         }
@@ -62,7 +62,7 @@ public class AOMUtils {
     public static String pathAtSpecializationLevel(List<PathSegment> pathSegments, int level) {
         //todo: this doesn't clone the original
         for(PathSegment segment:pathSegments) {
-            if(segment.getNodeId() != null && AOMUtils.isValidIdCode(segment.getNodeId()) && AOMUtils.getSpecializationDepthFromCode(segment.getNodeId()) > level) {
+            if(segment.getNodeId() != null && AOMUtils.isValidCode(segment.getNodeId()) && AOMUtils.getSpecializationDepthFromCode(segment.getNodeId()) > level) {
                 segment.setNodeId(codeAtLevel(segment.getNodeId(), level));
             }
         }
@@ -131,7 +131,7 @@ public class AOMUtils {
     public static boolean isPhantomPathAtLevel(List<PathSegment> pathSegments, int specializationDepth) {
         for(int i = pathSegments.size()-1; i >=0; i--) {
             String nodeId = pathSegments.get(i).getNodeId();
-            if(nodeId != null && AOMUtils.isValidIdCode(nodeId) && specializationDepth < AOMUtils.getSpecializationDepthFromCode(nodeId)) {
+            if(nodeId != null && AOMUtils.isValidCode(nodeId) && specializationDepth < AOMUtils.getSpecializationDepthFromCode(nodeId)) {
                 return codeExistsAtLevel(nodeId, specializationDepth);
             }
         }
@@ -213,5 +213,20 @@ public class AOMUtils {
             //archetypeStream.filter(
         }
         return null;// unsupported expression type
+    }
+
+    public static boolean codesConformant(String childNodeId, String parentNodeId) {
+        return isValidCode(childNodeId) && childNodeId.startsWith(parentNodeId) &&
+                (childNodeId.length() == parentNodeId.length() || (childNodeId.length() > parentNodeId.length() && childNodeId.charAt(parentNodeId.length()) == AdlCodeDefinitions.SPECIALIZATION_SEPARATOR));
+
+    }
+
+    public static boolean typeNamesConformant(String childType, String parentType, ModelInfoLookup lookup) {
+        RMTypeInfo parentTypeInfo = lookup.getTypeInfo(parentType);
+        RMTypeInfo childTypeInfo = lookup.getTypeInfo(childType);
+        if(childTypeInfo == null || parentTypeInfo == null) {
+            return true;//cannot check with RM types, will validate elsewhere
+        }
+        return childTypeInfo.isDescendantOrEqual(parentTypeInfo);
     }
 }

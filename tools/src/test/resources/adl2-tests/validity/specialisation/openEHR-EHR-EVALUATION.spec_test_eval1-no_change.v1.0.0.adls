@@ -27,7 +27,7 @@ description
 definition
 	EVALUATION[id1.1] matches {	-- Observation
 		data matches {
-			ITEM_TREE[id2] occurrences matches {1}
+			ITEM_TREE[id2] occurrences matches {1..2}
 		}
 	}
 

@@ -7,6 +7,7 @@ import com.nedap.archie.aom.utils.AOMUtils;
 import com.nedap.archie.base.MultiplicityInterval;
 import com.nedap.archie.definitions.AdlCodeDefinitions;
 import com.nedap.archie.paths.PathSegment;
+import com.nedap.archie.rminfo.ModelInfoLookup;
 import org.apache.commons.lang.StringUtils;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -257,4 +258,46 @@ public abstract class CObject extends ArchetypeConstraint {
     public boolean isProhibited() {
         return occurrences != null && occurrences.isProhibited();
     }
+
+    /**
+     * True if constraints represented by this node, ignoring any sub-parts, are narrower or the same as other. Typically used during validation of special-ised archetype nodes.
+     * @param other
+     * @param lookup
+     * @return
+     */
+    public boolean cConformsTo(CObject other, ModelInfoLookup lookup) {
+        return nodeIdConformsTo(other) &&
+                occurrencesConformsTo(other)
+                && typeNameConformsTo(other, lookup);
+
+    }
+
+    public boolean typeNameConformsTo(CObject other, ModelInfoLookup lookup) {
+        if(other.getRmTypeName() == null || getRmTypeName() == null) {
+            return true;//these are not nullable, but we're not throwing exceptions here
+        }
+        if(other.rmTypeName.equalsIgnoreCase(rmTypeName)) {
+            return true;
+        }
+        return AOMUtils.typeNamesConformant(rmTypeName, other.rmTypeName, lookup);
+
+    }
+
+    /**
+     * True if this node id conforms to other.node_id, which includes the ids being identical; other is assumed to be in a flat archetype.
+     * @param other
+     * @return
+     */
+    public boolean nodeIdConformsTo(CObject other) {
+        return AOMUtils.codesConformant(this.nodeId, other.nodeId);
+    }
+
+    public boolean occurrencesConformsTo(CObject other) {
+        if(occurrences != null && other.occurrences != null) {
+            return other.occurrences.contains(occurrences);
+        } else {
+            return true;
+        }
+    }
+
 }

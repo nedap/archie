@@ -5,8 +5,6 @@ import com.nedap.archie.definitions.AdlCodeDefinitions;
 import java.util.List;
 
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class NodeIdUtil {
 
@@ -15,7 +13,7 @@ public class NodeIdUtil {
     private List<Integer> codes = new ArrayList<>();;
 
     public NodeIdUtil(String nodeId) {
-        if(AOMUtils.isValidIdCode(nodeId)) {
+        if(AOMUtils.isValidCode(nodeId)) {
             String[] split = nodeId.substring(2).split("\\" + AdlCodeDefinitions.SPECIALIZATION_SEPARATOR);
             prefix = nodeId.substring(0, 2);
             for (int i = 0; i < split.length; i++) {
