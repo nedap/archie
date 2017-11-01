@@ -26,7 +26,8 @@ public class SpecializedAttributeValidation {
         CAttribute parentAttribute = flatParent.itemAtPath(AOMUtils.pathAtSpecializationLevel(attribute.getPathSegments(), flatParent.specializationDepth()));
         if(!attribute.cConformsTo(parentAttribute)) {
 
-          if(attribute.isMultiple() != parentAttribute.isMultiple()) {
+        //TODO: this should also be with differentialPath != null, but NO idea how that would work
+          if(attribute.getDifferentialPath() == null && attribute.isMultiple() != parentAttribute.isMultiple()) {
               validation.addMessageWithPath(ErrorType.VSAM, attribute.path());//cannot think of a case how this happens
           }
           else if(!attribute.existenceConformsTo(parentAttribute)) {

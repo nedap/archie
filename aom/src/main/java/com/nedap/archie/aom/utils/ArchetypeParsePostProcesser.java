@@ -5,6 +5,8 @@ import com.nedap.archie.aom.CAttribute;
 import com.nedap.archie.aom.CAttributeTuple;
 import com.nedap.archie.aom.CComplexObject;
 import com.nedap.archie.aom.CObject;
+import com.nedap.archie.aom.CPrimitiveObject;
+import com.nedap.archie.aom.CPrimitiveTuple;
 import com.nedap.archie.aom.terminology.ArchetypeTerm;
 import com.nedap.archie.aom.terminology.ArchetypeTerminology;
 
@@ -37,7 +39,9 @@ public class ArchetypeParsePostProcesser {
         workList.add(archetype.getDefinition());
         while(!workList.empty()) {
             CObject cObject = workList.pop();
-
+            if(cObject instanceof CPrimitiveObject) {
+                cObject.setNodeId("id9999");//also in the implementation, but check to be sure
+            }
             for(CAttribute attribute:cObject.getAttributes()) {
 
                 attribute.setParent(cObject);

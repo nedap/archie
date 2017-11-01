@@ -52,6 +52,10 @@ public class AOMUtils {
         return code.startsWith(AdlCodeDefinitions.VALUE_SET_CODE_LEADER);
     }
 
+    public static boolean isValidValueSetCode(String code) {
+        return isValueSetCode(code) && isValidCode(code);
+    }
+
     public static boolean isValidCode(String code) {
         if(code == null) {
             return false;
@@ -229,4 +233,6 @@ public class AOMUtils {
         }
         return childTypeInfo.isDescendantOrEqual(parentTypeInfo);
     }
+
+
 }

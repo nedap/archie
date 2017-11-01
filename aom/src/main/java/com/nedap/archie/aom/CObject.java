@@ -276,10 +276,10 @@ public abstract class CObject extends ArchetypeConstraint {
         if(other.getRmTypeName() == null || getRmTypeName() == null) {
             return true;//these are not nullable, but we're not throwing exceptions here
         }
-        if(other.rmTypeName.equalsIgnoreCase(rmTypeName)) {
+        if(other.getRmTypeName().equalsIgnoreCase(getRmTypeName())) {
             return true;
         }
-        return AOMUtils.typeNamesConformant(rmTypeName, other.rmTypeName, lookup);
+        return AOMUtils.typeNamesConformant(getRmTypeName(), other.getRmTypeName(), lookup);
 
     }
 
@@ -289,7 +289,7 @@ public abstract class CObject extends ArchetypeConstraint {
      * @return
      */
     public boolean nodeIdConformsTo(CObject other) {
-        return AOMUtils.codesConformant(this.nodeId, other.nodeId);
+        return AOMUtils.codesConformant(this.getNodeId(), other.getNodeId());
     }
 
     public boolean occurrencesConformsTo(CObject other) {

@@ -187,8 +187,8 @@ public class ArchetypeTerminology extends ArchetypeModelObject {
             }
             return false;
         } else {
-            Map<String, ArchetypeTerm> termDefinintionsForLanguage = getTermDefinitions().get(originalLanguage);
-            return termDefinintionsForLanguage != null && termDefinintionsForLanguage.containsKey(code);
+            Map<String, ArchetypeTerm> termDefinitionsForLanguage = getTermDefinitions().get(originalLanguage);
+            return termDefinitionsForLanguage != null && termDefinitionsForLanguage.containsKey(code);
         }
     }
 

@@ -37,6 +37,7 @@ public class ArchetypeValidator {
         //but there's no reason this cannot be parsed, so check them here
         validationsPhase0.add(new AttributeUniquenessValidation(lookup));
         validationsPhase0.add(new NodeIdValidation(lookup));
+        validationsPhase0.add(new ExistenceValidation(lookup));
 
 
         validationsPhase1 = new ArrayList<>();

@@ -94,12 +94,17 @@ public class BasicTerminologyValidation extends ArchetypeValidationBase {
                 addMessage(ErrorType.VTVSID, String.format("value set code %s is not present in terminology", valueSet.getId()));
             }
             for(String value:valueSet.getMembers()) {
-                if(!terminology.hasValueCode(value)) {
-                    addMessage(ErrorType.VTVSMD, String.format("value set code %s is not present in terminology", valueSet.getId()));
+                if(flatParent == null) {
+                    if(!terminology.hasValueCode(value)) {
+                        addMessage(ErrorType.VTVSMD, String.format("value code %s is not present in terminology", value));
+                    }
+                } else {
+                    if(!(terminology.hasValueCode(value) || flatParent.getTerminology().hasValueCode(value))) {
+                        addMessage(ErrorType.VTVSMD, String.format("value code %s is not present in terminology", value));
+                    }
                 }
             }
             //TODO: we should check for uniqueness, but valueset is a java.util.Set, so there can be no duplicates by definition
-
         }
     }
 

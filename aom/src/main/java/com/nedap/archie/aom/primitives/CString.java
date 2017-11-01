@@ -1,6 +1,8 @@
 package com.nedap.archie.aom.primitives;
 
+import com.nedap.archie.aom.CObject;
 import com.nedap.archie.aom.CPrimitiveObject;
+import com.nedap.archie.rminfo.ModelInfoLookup;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -68,5 +70,29 @@ public class CString extends CPrimitiveObject<String, String> {
             }
         }
         return false;
+    }
+
+    @Override
+    public boolean cConformsTo(CObject other, ModelInfoLookup lookup) {
+        if(!super.cConformsTo(other, lookup)) {
+            return false;
+        }
+        //now guaranteed to be the same class
+
+        CString otherString = (CString) other;
+        if(otherString.constraint.isEmpty()) {
+            return true;
+        }
+
+        if(!(constraint.size() < otherString.constraint.size())) {
+            return false;
+        }
+
+        for(String constraint:constraint) {
+            if(!otherString.constraint.contains(constraint)) {
+                return false;
+            }
+        }
+        return true;
     }
 }

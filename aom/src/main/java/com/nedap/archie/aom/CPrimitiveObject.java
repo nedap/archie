@@ -111,7 +111,7 @@ public abstract class CPrimitiveObject<Constraint, ValueType> extends CDefinedOb
 
     @Override
     public boolean cConformsTo(CObject other, ModelInfoLookup lookup) {
-        if(other instanceof CPrimitiveObject) {
+        if(other instanceof CPrimitiveObject && other.getClass().equals(getClass())) {
             if(other == null) {
                 return false;
             }

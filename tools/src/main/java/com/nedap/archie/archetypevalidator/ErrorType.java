@@ -65,7 +65,10 @@ public enum ErrorType {
     @Deprecated//TODO: not in spec why this is deprecated
     VSONI("specialised archetype redefined object node identifier validity: if an object node in a specialised archetype is a redefinition of a node in the flat parent according to VSONIR, and the parent node carries a node identifier, it must carry a node identifier specalised at the level of the child archetype. Otherwise it must carry the same node identifier (or none) as the corresponding parent node."),
     VPOV("TODO: something with leaf nodes"),
-    VUNK("TODO: something with leaf nodes");
+    VUNK("TODO: something with leaf nodes"),
+    SEXLU("Syntax error: existence must be one of 0..0, 0..1, or 1..1"),
+    SEXLMG("Syntax error: existence must be one of 0..0, 0..1, or 1..1"),
+    VTVSUQ("value-set members unique. The member codes of a value set must be unique within the value set");
 
 
 

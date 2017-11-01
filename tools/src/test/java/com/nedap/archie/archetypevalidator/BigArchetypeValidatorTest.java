@@ -72,7 +72,17 @@ public class BigArchetypeValidatorTest {
 
     private static final Set<String> archetypesTestingNotImplementedFeatures = new HashSet<>();
     static {
+        //TODO: we do not check generic types yet
         archetypesTestingNotImplementedFeatures.add("openEHR-EHR-OBSERVATION.VCORMT_rm_non_conforming_type1.v1.0.0");//no support for generic type validation yet
+        //TODO: waiting for an answer to check what is the correct implementation https://openehr.atlassian.net/browse/SPECPR-243 :
+        archetypesTestingNotImplementedFeatures.add("openEHR-EHR-OBSERVATION.VPOV_redef_ac_code_node_to_local_codes.v1.0.0");
+        //TODO: value set with multiple elements cannot be checked, as they are added as a set. Requires changes in AOM?
+        //even in the parser hard to check, we need jackson to do it instead of us.
+        //or switch to different SET semantics?
+        archetypesTestingNotImplementedFeatures.add("openEHR-TEST_PKG-ENTRY.VTVSUQ_at_code_duplicated_in_ordinal.v1.0.0");
+        archetypesTestingNotImplementedFeatures.add("openEHR-TEST_PKG-ENTRY.VTVSUQ_at_code_duplicated_in_internal_codes.v1.0.0");
+
+
     }
 
     private ArchetypeRepository parseAll() {
