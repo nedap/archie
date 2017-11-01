@@ -36,6 +36,7 @@ public class RuleEvaluation<T> {
     private Archetype archetype;
     private List<Evaluator> evaluators = new ArrayList<>();
     private HashMap<Class, Evaluator> classToEvaluator = new HashMap<>();
+    private FunctionEvaluator functionEvaluator;
 
     //evaluation state
     private T root;
@@ -60,6 +61,7 @@ public class RuleEvaluation<T> {
         this.jaxbContext = jaxbContext;
         assertionsFixer = new AssertionsFixer(this, creator);
         this.archetype = archetype;
+        this.functionEvaluator = new FunctionEvaluator();
         add(new VariableDeclarationEvaluator());
         add(new ConstantEvaluator());
         add(new AssertionEvaluator());
@@ -68,7 +70,7 @@ public class RuleEvaluation<T> {
         add(new VariableReferenceEvaluator());
         add(new ModelReferenceEvaluator());
         add(new ForAllEvaluator());
-        add(new FunctionEvaluator());
+        add(functionEvaluator);
     }
 
     private void add(Evaluator evaluator) {
@@ -107,8 +109,13 @@ public class RuleEvaluation<T> {
         throw new UnsupportedOperationException("no evaluator present for rule type " + rule.getClass().getSimpleName());
     }
 
+
     public T getRMRoot() {
         return root;
+    }
+
+    public void registerFunction(FunctionImplementation function) {
+        functionEvaluator.registerFunction(function);
     }
 
     public VariableMap getVariableMap() {
