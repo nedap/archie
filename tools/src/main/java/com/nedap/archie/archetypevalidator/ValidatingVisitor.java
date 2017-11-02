@@ -21,8 +21,8 @@ import java.util.List;
 public abstract class ValidatingVisitor extends ArchetypeValidationBase {
 
 
-    public ValidatingVisitor(ModelInfoLookup lookup) {
-        super(lookup);
+    public ValidatingVisitor() {
+        super();
     }
 
     @Override

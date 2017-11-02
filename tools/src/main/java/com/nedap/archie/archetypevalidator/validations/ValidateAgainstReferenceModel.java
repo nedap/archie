@@ -28,8 +28,8 @@ public class ValidateAgainstReferenceModel extends ValidatingVisitor {
     //TODO: what is this?
     boolean strictValidation = true;
 
-    public ValidateAgainstReferenceModel(ModelInfoLookup lookup) {
-        super(lookup);
+    public ValidateAgainstReferenceModel() {
+        super();
     }
     
     @Override

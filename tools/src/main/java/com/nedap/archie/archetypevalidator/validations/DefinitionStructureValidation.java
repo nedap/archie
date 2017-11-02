@@ -18,8 +18,8 @@ import java.util.List;
 public class DefinitionStructureValidation extends ValidatingVisitor {
 
 
-    public DefinitionStructureValidation(ModelInfoLookup lookup) {
-        super(lookup);
+    public DefinitionStructureValidation() {
+        super();
     }
 
     protected void validate(CAttribute cAttribute) {

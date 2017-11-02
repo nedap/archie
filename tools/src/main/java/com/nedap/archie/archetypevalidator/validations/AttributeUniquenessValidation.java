@@ -16,8 +16,8 @@ import java.util.List;
  */
 public class AttributeUniquenessValidation extends ValidatingVisitor {
 
-    public AttributeUniquenessValidation(ModelInfoLookup lookup) {
-        super(lookup);
+    public AttributeUniquenessValidation() {
+        super();
     }
 
     @Override

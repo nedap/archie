@@ -14,8 +14,8 @@ import java.util.Objects;
 
 public class BasicChecks extends ArchetypeValidationBase {
 
-    public BasicChecks(ModelInfoLookup lookup) {
-        super(lookup);
+    public BasicChecks() {
+        super();
     }
 
     @Override

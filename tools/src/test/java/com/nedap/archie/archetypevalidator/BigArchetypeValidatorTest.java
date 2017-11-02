@@ -7,8 +7,11 @@ import com.nedap.archie.adlparser.ADLParser;
 import com.nedap.archie.adlparser.ADLParserErrors;
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.flattener.ArchetypeRepository;
+import com.nedap.archie.flattener.FullArchetypeRepository;
+import com.nedap.archie.flattener.InMemoryFullArchetypeRepository;
 import com.nedap.archie.flattener.SimpleArchetypeRepository;
 import com.nedap.archie.rminfo.ArchieRMInfoLookup;
+import com.nedap.archie.rminfo.ReferenceModels;
 import org.apache.commons.io.FilenameUtils;
 import org.junit.Assert;
 import org.junit.Test;
@@ -85,8 +88,10 @@ public class BigArchetypeValidatorTest {
 
     }
 
-    private ArchetypeRepository parseAll() {
-        SimpleArchetypeRepository result = new SimpleArchetypeRepository();
+    private ReferenceModels models;
+
+    private FullArchetypeRepository parseAll() {
+        InMemoryFullArchetypeRepository result = new InMemoryFullArchetypeRepository();
         Reflections reflections = new Reflections("adl2-tests", new ResourcesScanner());
         List<String> adlFiles = new ArrayList(reflections.getResources(Pattern.compile(".*\\.adls")));
         for(String file:adlFiles) {
@@ -114,6 +119,11 @@ public class BigArchetypeValidatorTest {
 
     @Test
     public void testFullValidityPackage() {
+
+        models = new ReferenceModels();
+        models.registerModel(ArchieRMInfoLookup.getInstance());
+        models.registerModel(com.nedap.archie.openehrtestrm.TestRMInfoLookup.getInstance());
+
         Reflections reflections = new Reflections("adl2-tests.validity", new ResourcesScanner());
         List<String> adlFiles = new ArrayList(reflections.getResources(Pattern.compile(".*\\.adls")));
 
@@ -123,7 +133,7 @@ public class BigArchetypeValidatorTest {
         int shouldBeFineButWasinvalid = 0;
         int notImplemented = 0;
         int unexpectedParseErrors = 0;
-        ArchetypeValidator validator = new ArchetypeValidator(ArchieRMInfoLookup.getInstance());
+        ArchetypeValidator validator = new ArchetypeValidator(models);
         SimpleArchetypeRepository repository = new SimpleArchetypeRepository();
         for(String file:adlFiles) {
             if(file.contains("legacy_adl_1.4")){
@@ -174,21 +184,22 @@ public class BigArchetypeValidatorTest {
             }
         }
 
-        ArchetypeRepository all = parseAll();
+        FullArchetypeRepository all = parseAll();
         for(Archetype archetype:repository.getAllArchetypes()) {
-            List<ValidationMessage> validation = validator.validate(archetype, all);
+            ValidationResult validation = validator.validate(archetype, all);
             String regression = archetype.getDescription().getOtherDetails().get("regression");
             if(regression != null && !regression.equalsIgnoreCase("PASS")) {
                 if(!errorTypeImplemented(archetype, regression)) {
                     log.info("regression {} not implemented yet, so not yet tested", regression);
                     notImplemented++;
                 } else {
-                    if (validation.isEmpty()) {
-                        log.error("validation failed: archetype {} valid, it should not", archetype.getArchetypeId());
+                    if (validation.passes()) {
+                        log.error("test failed: archetype {} considered valid, it should not", archetype.getArchetypeId());
                         errorCount++;
                     } else {
                         boolean found = false;
-                        for (ValidationMessage message : validation) {
+                        List<ValidationMessage> errors = validation.getErrors();
+                        for (ValidationMessage message : errors) {
                             if (errorMatches(message.getType(), regression)) {
                                 found = true;
                                 correctCount++;
@@ -203,8 +214,8 @@ public class BigArchetypeValidatorTest {
                     }
                 }
             } else {
-                if(!validation.isEmpty()) {
-                    log.error("should validate but failed: {}, {}", archetype.getArchetypeId(), regression);
+                if(!validation.passes()) {
+                    log.error("Validation should pass, but it failed for archetype {}, {}", archetype.getArchetypeId(), regression);
                     printErrors(validation);
                     shouldBeFineButWasinvalid++;
                 } else {
@@ -250,8 +261,8 @@ public class BigArchetypeValidatorTest {
         return false;
     }
 
-    private void printErrors(List<ValidationMessage> messages) {
-        for(ValidationMessage message:messages) {
+    private void printErrors(ValidationResult result) {
+        for(ValidationMessage message:result.getErrors()) {
             log.error(message.toString());
         }
     }

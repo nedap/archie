@@ -10,8 +10,8 @@ import com.nedap.archie.rminfo.ModelInfoLookup;
  * Phase 0 validator on existence
  */
 public class ExistenceValidation extends ValidatingVisitor {
-    public ExistenceValidation(ModelInfoLookup lookup) {
-        super(lookup);
+    public ExistenceValidation() {
+        super();
     }
 
     @Override

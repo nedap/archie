@@ -13,8 +13,8 @@ import com.nedap.archie.rules.Assertion;
 import java.util.List;
 
 public class SpecializedDefinitionValidation extends ValidatingVisitor {
-    public SpecializedDefinitionValidation(ModelInfoLookup lookup) {
-        super(lookup);
+    public SpecializedDefinitionValidation() {
+        super();
     }
 
     @Override

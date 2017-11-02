@@ -17,8 +17,8 @@ import java.util.List;
 
 public class CodeValidation extends ValidatingVisitor {
 
-    public CodeValidation(ModelInfoLookup lookup) {
-        super(lookup);
+    public CodeValidation() {
+        super();
     }
 
     @Override
@@ -44,7 +44,7 @@ public class CodeValidation extends ValidatingVisitor {
 
             CAttribute parent = cObject.getParent();
             CObject owningObject = parent.getParent();
-            if (parent.getDifferentialPath() != null) {
+            if (parent.getDifferentialPath() != null && flatParent != null) {
                 CAttribute attributeFromParent = (CAttribute) AOMUtils.getDifferentialPathFromParent(flatParent, parent);
                 if(attributeFromParent != null) {
                     owningObject = attributeFromParent.getParent();

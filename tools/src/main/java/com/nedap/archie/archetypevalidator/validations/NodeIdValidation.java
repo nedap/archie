@@ -23,8 +23,8 @@ public class NodeIdValidation extends ValidatingVisitor {
     //for every id code, it's path
     private HashMap<String, String> nodeIds = new HashMap<>();
 
-    public NodeIdValidation(ModelInfoLookup lookup) {
-        super(lookup);
+    public NodeIdValidation() {
+        super();
     }
 
     @Override

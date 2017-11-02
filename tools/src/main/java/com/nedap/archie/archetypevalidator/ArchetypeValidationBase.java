@@ -9,21 +9,21 @@ import java.util.List;
 
 public abstract class ArchetypeValidationBase implements ArchetypeValidation {
 
-    protected final ModelInfoLookup lookup;
     protected Archetype archetype;
     protected Archetype flatParent;
     protected ArchetypeRepository repository;
     protected List<ValidationMessage> messages;
+    protected ModelInfoLookup lookup;
 
-    public ArchetypeValidationBase(ModelInfoLookup lookup) {
-        this.lookup = lookup;
+    public ArchetypeValidationBase() {
     }
 
     @Override
-    public List<ValidationMessage> validate(Archetype archetype, Archetype flatParent, ArchetypeRepository repository) {
+    public List<ValidationMessage> validate(ModelInfoLookup lookup, Archetype archetype, Archetype flatParent, ArchetypeRepository repository) {
         this.archetype = archetype;
         this.flatParent = flatParent;
         this.repository = repository;
+        this.lookup = lookup;
         messages = new ArrayList<>();
         validate();
         return messages;

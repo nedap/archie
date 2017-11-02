@@ -2,6 +2,7 @@ package com.nedap.archie.archetypevalidator;
 
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.flattener.ArchetypeRepository;
+import com.nedap.archie.rminfo.ModelInfoLookup;
 
 import java.util.List;
 
@@ -10,6 +11,6 @@ import java.util.List;
  */
 public interface ArchetypeValidation {
 
-    public List<ValidationMessage> validate(Archetype archetype, Archetype flatParent, ArchetypeRepository repository);
+    public List<ValidationMessage> validate(ModelInfoLookup lookup, Archetype archetype, Archetype flatParent, ArchetypeRepository repository);
 
 }

@@ -12,8 +12,8 @@ import java.util.Map;
 
 public class AnnotationsValidation extends ArchetypeValidationBase {
 
-    public AnnotationsValidation(ModelInfoLookup lookup) {
-        super(lookup);
+    public AnnotationsValidation() {
+        super();
     }
 
     @Override

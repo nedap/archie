@@ -1,4 +1,10 @@
-package com.nedap.archie.rminfo;
+package com.nedap.archie.openehrtestrm;
+
+import com.nedap.archie.rm.datavalues.DataValue;
+import com.nedap.archie.rminfo.ArchieModelNamingStrategy;
+import com.nedap.archie.rminfo.RMAttributeInfo;
+import com.nedap.archie.rminfo.RMPackageId;
+import com.nedap.archie.rminfo.ReflectionModelInfoLookup;
 
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.CObject;
@@ -31,82 +37,47 @@ import java.util.List;
 /**
  * Created by pieter.bos on 02/02/16.
  */
-public class ArchieRMInfoLookup extends ReflectionModelInfoLookup {
+public class TestRMInfoLookup extends ReflectionModelInfoLookup {
 
-    private static ArchieRMInfoLookup instance;
+    private static TestRMInfoLookup instance;
 
-    private ArchieRMInfoLookup() {
-        super(new ArchieModelNamingStrategy(), RMObject.class);
-        addSubtypesOf(Interval.class); //extra class from the base package. No RMObject because it is also used in the AOM
+    private TestRMInfoLookup() {
+        super(new ArchieModelNamingStrategy(), TestRMBase.class);
+        addSubtypesOf(DataValue.class); //extra class from the base package. No RMObject because it is also used in the AOM
+        addSubtypesOf(CodePhrase.class);
     }
 
-    public static ArchieRMInfoLookup getInstance() {
+    public static TestRMInfoLookup getInstance() {
         if(instance == null) {
-            instance = new ArchieRMInfoLookup();
+            instance = new TestRMInfoLookup();
         }
         return instance;
     }
 
     @Override
     public Class getClassToBeCreated(String rmTypename) {
-        if(rmTypename.equals("EVENT")) {
-            //this is an abstract class and cannot be created. Create point event instead
-            return PointEvent.class;
-        }
         return getClass(rmTypename);
     }
 
     @Override
     public Object convertToConstraintObject(Object object, CPrimitiveObject cPrimitiveObject) {
-        if(cPrimitiveObject instanceof CTerminologyCode) {
-            if(object instanceof DvCodedText) {
-                return convertCodePhrase(((DvCodedText) object).getDefiningCode());
-            } else if (object instanceof CodePhrase) {
-                return convertCodePhrase((CodePhrase) object);
-            }
-        }
         return object;
     }
 
-    private TerminologyCode convertCodePhrase(CodePhrase codePhrase) {
-        TerminologyCode result = new TerminologyCode();
-        result.setCodeString(codePhrase.getCodeString());
-        result.setTerminologyId(codePhrase.getTerminologyId() == null ? null : codePhrase.getTerminologyId().getValue());
-        return result;
-    }
+
 
     public Object convertConstrainedPrimitiveToRMObject(Object object) {
-        if(object instanceof TerminologyCode) {
-            return convertTerminologyCode((TerminologyCode) object);
-        }
         return object;
     }
 
-    private CodePhrase convertTerminologyCode(TerminologyCode terminologyCode) {
-        CodePhrase result = new CodePhrase();
-        result.setCodeString(terminologyCode.getCodeString());
-        result.setTerminologyId(terminologyCode == null ? null : new TerminologyId(terminologyCode.getTerminologyId()));
-        return result;
-    }
 
     @Override
     public void processCreatedObject(Object createdObject, CObject constraint) {
-        if (createdObject instanceof Locatable) { //and most often, it will be
-            Locatable locatable = (Locatable) createdObject;
-            locatable.setArchetypeNodeId(constraint.getNodeId());
-            locatable.setNameAsString(constraint.getMeaning());
-        }
+
     }
 
     @Override
     public String getArchetypeNodeIdFromRMObject(Object rmObject) {
-        if(rmObject == null) {
-            return null;
-        }
-        if(rmObject instanceof Locatable) {
-            Locatable locatable = (Locatable) rmObject;
-            return locatable.getArchetypeNodeId();
-        }
         return null;
     }
 
@@ -115,19 +86,15 @@ public class ArchieRMInfoLookup extends ReflectionModelInfoLookup {
         if(rmObject == null) {
             return null;
         }
-        if(rmObject instanceof Locatable) {
-            Locatable locatable = (Locatable) rmObject;
-            return locatable.getNameAsString();
-        }
         return null;
     }
 
     @Override
     public Object clone(Object rmObject) {
-        if(rmObject instanceof RMObject) {
-            return ((RMObject) rmObject).clone();
-        }
-        throw new IllegalArgumentException("The ArchieRMInfoLookup can only clone openehr reference model objects");
+        //if(rmObject instanceof TestRMBase) {
+         //   return ((TestRMBase) rmObject).clone();
+       // }
+        throw new IllegalArgumentException("The TestRMInfoLookup can not yet clone");
     }
 
     /**
@@ -140,7 +107,7 @@ public class ArchieRMInfoLookup extends ReflectionModelInfoLookup {
      */
     @Override
     public void pathHasBeenUpdated(Object rmObject, Archetype archetype, String pathOfParent, Object parent) {
-        UpdatedValueHandler.pathHasBeenUpdated(rmObject, archetype, pathOfParent, parent);
+
     }
 
     @Override
@@ -180,8 +147,7 @@ public class ArchieRMInfoLookup extends ReflectionModelInfoLookup {
     @Override
     public Collection<RMPackageId> getId() {
         List<RMPackageId> result = new ArrayList<>();
-        result.add(new RMPackageId("openEHR", "EHR"));
-        result.add(new RMPackageId("openEHR", "DEMOGRAPHIC"));
+        result.add(new RMPackageId("openEHR", "TEST_PKG"));
         return result;
     }
 

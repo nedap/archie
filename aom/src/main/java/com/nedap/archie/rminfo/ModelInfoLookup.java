@@ -5,6 +5,7 @@ import com.nedap.archie.aom.CObject;
 import com.nedap.archie.aom.CPrimitiveObject;
 
 import java.lang.reflect.Field;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -158,4 +159,6 @@ public interface ModelInfoLookup {
      * @return
      */
     boolean validatePrimitiveType(String rmTypeName, String rmAttributeName, CPrimitiveObject cObject);
+
+    Collection<RMPackageId> getId();
 }

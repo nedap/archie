@@ -17,8 +17,8 @@ import java.util.Objects;
 
 public class AuthoredArchetypeMetadataChecks extends ArchetypeValidationBase {
 
-    public AuthoredArchetypeMetadataChecks(ModelInfoLookup lookup) {
-        super(lookup);
+    public AuthoredArchetypeMetadataChecks() {
+        super();
     }
     @Override
     public void validate() {

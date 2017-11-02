@@ -8,6 +8,10 @@ import com.nedap.archie.base.Cardinality;
 import com.nedap.archie.base.Interval;
 import com.nedap.archie.base.terminology.TerminologyCode;
 
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Collection;
+
 /**
  * Created by pieter.bos on 06/07/16.
  */
@@ -74,6 +78,13 @@ public class ArchieAOMInfoLookup extends ReflectionModelInfoLookup {
     @Override
     public boolean validatePrimitiveType(String rmTypeName, String rmAttributeName, CPrimitiveObject cObject) {
         return true;
+    }
+
+    @Override
+    public Collection<RMPackageId> getId() {
+        List<RMPackageId> result = new ArrayList<>();
+        result.add(new RMPackageId("OpenEHR", "AOM"));
+        return result;
     }
 
 }

@@ -18,8 +18,8 @@ import java.util.List;
 
 public class VariousStructureValidation extends ValidatingVisitor {
 
-    public VariousStructureValidation(ModelInfoLookup lookup) {
-        super(lookup);
+    public VariousStructureValidation() {
+        super();
     }
     
     protected void beginValidation(Archetype archetype, Archetype flatParent, ArchetypeRepository repository) {

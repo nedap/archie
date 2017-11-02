@@ -14,8 +14,8 @@ import java.util.Map;
 
 public class BasicTerminologyValidation extends ArchetypeValidationBase {
 
-    public BasicTerminologyValidation(ModelInfoLookup lookup) {
-        super(lookup);
+    public BasicTerminologyValidation() {
+        super();
     }
 
     @Override

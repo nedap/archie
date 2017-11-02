@@ -1,6 +1,7 @@
 package com.nedap.archie.flattener;
 
 import com.nedap.archie.aom.Archetype;
+import java.util.List;
 
 /**
  * Created by pieter.bos on 21/10/15.
@@ -15,6 +16,8 @@ public interface ArchetypeRepository {
      * @return
      */
     Archetype getArchetype(String archetypeId);
+
+    public List<Archetype> getAllArchetypes();
 
 
     /**
