@@ -71,19 +71,25 @@ public class BigArchetypeValidatorTest {
         archetypeIdsThatShouldHaveParserErrors.add("openEHR-TEST_PKG-ENTRY.FAIL_terminology_term_definitions_missing.v1.0.0");
         archetypeIdsThatShouldHaveParserErrors.add("openEHR-TEST_PKG-ENTRY.SADF_definition_after_terminology.v1.0.0");
         archetypeIdsThatShouldHaveParserErrors.add("openEHR-TEST_PKG-ENTRY.VCOID_missing_ids_on_alternative_children.v1.0.0");
+        //VOKU, being adl attribute uniqueness, is being handled by setting the jackson parser to STRICT_DUPLICATE_CHECKS very well indeed
+        archetypeIdsThatShouldHaveParserErrors.add("openEHR-TEST_PKG-ENTRY.VOKU_ac_code_duplicated_in_terminology.v1.0.0");
+        archetypeIdsThatShouldHaveParserErrors.add("openEHR-TEST_PKG-ENTRY.VOKU_at_code_duplicated_in_terminology.v1.0.0");
     }
 
     private static final Set<String> archetypesTestingNotImplementedFeatures = new HashSet<>();
     static {
         //TODO: we do not check generic types yet
         archetypesTestingNotImplementedFeatures.add("openEHR-EHR-OBSERVATION.VCORMT_rm_non_conforming_type1.v1.0.0");//no support for generic type validation yet
-        //TODO: waiting for an answer to check what is the correct implementation https://openehr.atlassian.net/browse/SPECPR-243 :
+        //TODO: this archetype is incorrect, see https://openehr.atlassian.net/browse/SPECPR-243. Waiting on a fix
         archetypesTestingNotImplementedFeatures.add("openEHR-EHR-OBSERVATION.VPOV_redef_ac_code_node_to_local_codes.v1.0.0");
-        //TODO: value set with multiple elements cannot be checked, as they are added as a set. Requires changes in AOM?
-        //even in the parser hard to check, we need jackson to do it instead of us.
-        //or switch to different SET semantics?
+        //TODO: value set with multiple elements cannot be checked, as they are added as a set.
+        //if we replace the valueSet set implementation with a guava MultiSet we have an occurrences attribute we can use
+        //but we probably need a custom deserializer
+        //jackson strict duplicates doesn't fix this for sets, only hashes
         archetypesTestingNotImplementedFeatures.add("openEHR-TEST_PKG-ENTRY.VTVSUQ_at_code_duplicated_in_ordinal.v1.0.0");
         archetypesTestingNotImplementedFeatures.add("openEHR-TEST_PKG-ENTRY.VTVSUQ_at_code_duplicated_in_internal_codes.v1.0.0");
+        //no external terminology binding yet, so cannot implement
+        archetypesTestingNotImplementedFeatures.add("openehr-TEST_PKG-SOME_TYPE.VETDF_wrong_property_code.v1.0.0");
 
 
     }

@@ -1,20 +1,20 @@
 package com.nedap.archie.openehrtestrm;
 
-import java.lang.Integer;
+import java.lang.Long;
 import java.lang.String;
 import javax.annotation.Nullable;
 
 public class Rim extends TestRMBase {
   @Nullable
-  private Integer nuts;
+  private Long nuts;
 
   @Nullable
   private String hubcap;
 
-  public Integer getNuts() {
+  public Long getNuts() {
     return nuts;}
 
-  public void setNuts(Integer value) {
+  public void setNuts(Long value) {
     this.nuts = value;
   }
 

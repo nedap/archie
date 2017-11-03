@@ -1,5 +1,6 @@
 package com.nedap.archie.aom.primitives;
 
+import com.google.common.collect.Lists;
 import com.nedap.archie.aom.CObject;
 import com.nedap.archie.aom.CPrimitiveObject;
 import com.nedap.archie.rminfo.ModelInfoLookup;
@@ -22,6 +23,14 @@ public class CString extends CPrimitiveObject<String, String> {
     @XmlElement(name="assumed_value")
     private String assumedValue;
     private List<String> constraint = new ArrayList<>();
+
+    public CString() {
+
+    }
+
+    public CString(String constraint) {
+        this.constraint = Lists.newArrayList(constraint);
+    }
 
     @Override
     public String getAssumedValue() {
@@ -94,5 +103,19 @@ public class CString extends CPrimitiveObject<String, String> {
             }
         }
         return true;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CString cString = (CString) o;
+        return Objects.equals(assumedValue, cString.assumedValue) &&
+                Objects.equals(constraint, cString.constraint);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(assumedValue, constraint);
     }
 }

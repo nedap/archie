@@ -11,6 +11,7 @@ import com.nedap.archie.rminfo.ModelInfoLookup;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class BasicTerminologyValidation extends ArchetypeValidationBase {
 
@@ -25,6 +26,7 @@ public class BasicTerminologyValidation extends ArchetypeValidationBase {
         validateLanguageConsistency();
         validateTerminologyBindings();
         validateValueSets();
+        warnAboutUnusedValues();
 
     }
 
@@ -105,6 +107,19 @@ public class BasicTerminologyValidation extends ArchetypeValidationBase {
                 }
             }
             //TODO: we should check for uniqueness, but valueset is a java.util.Set, so there can be no duplicates by definition
+        }
+    }
+
+    private void warnAboutUnusedValues() {
+        Set<String> usedCodes = archetype.getAllUsedCodes();
+        ArchetypeTerminology terminology = archetype.getTerminology();
+        for(String language:terminology.getTermDefinitions().keySet()) {
+            Map<String, ArchetypeTerm> archetypeTerms = terminology.getTermDefinitions().get(language);
+            for(String key:archetypeTerms.keySet()) {
+                if(!usedCodes.contains(key)) {
+                    addWarning(ErrorType.WOUC, key);
+                }
+            }
         }
     }
 

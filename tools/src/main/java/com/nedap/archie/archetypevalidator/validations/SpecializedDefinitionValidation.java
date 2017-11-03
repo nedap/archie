@@ -98,7 +98,7 @@ public class SpecializedDefinitionValidation extends ValidatingVisitor {
     }
 
     private void validateConformsTo(CObject cObject, CObject parentCObject) {
-        //TODO: implement me
+
         if(!cObject.cConformsTo(parentCObject, lookup)) {
             if(!cObject.typeNameConformsTo(parentCObject, lookup)) {
                 addMessageWithPath(ErrorType.VSONCT, cObject.path());
@@ -111,8 +111,29 @@ public class SpecializedDefinitionValidation extends ValidatingVisitor {
             } else {
                 addMessageWithPath(ErrorType.VUNK, cObject.path());
             }
-
+        } else {
+            if (cObject instanceof CComplexObject && parentCObject instanceof  CComplexObject) {
+                CComplexObject cComplexObject = (CComplexObject) cObject;
+                CComplexObject parentCComplexObject = (CComplexObject) parentCObject;
+                if(cComplexObject.getAttributeTuples() != null && parentCComplexObject.getAttributeTuples() != null) {
+                    for(CAttributeTuple tuple:cComplexObject.getAttributeTuples()) {
+                        CAttributeTuple matchingTuple = AOMUtils.findMatchingTuple(parentCComplexObject.getAttributeTuples(), tuple);
+                        if(matchingTuple != null && ! tuple.cConformsTo(matchingTuple, lookup)) {
+                            addMessageWithPath(ErrorType.VTPNC, cObject.path());
+                        } else {
+                            for(CAttribute attribute:tuple.getMembers()) {
+                                CAttribute parentAttribute = parentCComplexObject.getAttribute(attribute.getRmAttributeName());
+                                if(parentAttribute != null  && parentAttribute.getSocParent() == null) {
+                                    addMessageWithPath(ErrorType.VTPIN, attribute.getPath());
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
+
+
     }
 
     private boolean validateRootSpecializedWithRoot(CArchetypeRoot parentCObject, CArchetypeRoot cObject) {

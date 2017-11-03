@@ -11,6 +11,7 @@ import com.nedap.archie.archetypevalidator.ValidationMessage;
 import com.nedap.archie.flattener.ArchetypeRepository;
 import com.nedap.archie.rminfo.ModelInfoLookup;
 import com.nedap.archie.rminfo.RMTypeInfo;
+import com.nedap.archie.rules.Assertion;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,19 +31,20 @@ public class VariousStructureValidation extends ValidatingVisitor {
 
     @Override
     protected void validate(ArchetypeSlot slot) {
-        //TODO: implement this construct, but first we need something that checks if
-        //the assertions match something like 'archetype_id matches {*}', eg, assertion.matches_any() from eiffel
 
-        /*if includes not empty and = any then
-                not (excludes empty or /= any) ==> VDSEV Error
-            elseif includes not empty and /= any then
-                not (excludes empty or = any) ==> VDSEV Error
-            elseif excludes not empty and = any then
-                not (includes empty or /= any) ==> VDSIV Error
-            elseif excludes not empty and /= any then
-                not (includes empty or = any) ==> VDSIV Error
-            end*/
-
+        List<Assertion> includes = slot.getIncludes();
+        List<Assertion> excludes = slot.getExcludes();
+        if(!includes.isEmpty()) {
+            if(includes.get(0).matchesAny()) {
+                if(!(excludes.isEmpty() || !excludes.get(0).matchesAny())) {
+                    addMessageWithPath(ErrorType.VDSEV, slot.path());
+                }
+            } else {
+                if(!(excludes.isEmpty() || excludes.get(0).matchesAny())) {
+                    addMessageWithPath(ErrorType.VDSEV, slot.path());
+                }
+            }
+        }
     }
 
     @Override

@@ -68,7 +68,17 @@ public enum ErrorType {
     VUNK("TODO: something with leaf nodes"),
     SEXLU("Syntax error: existence must be one of 0..0, 0..1, or 1..1"),
     SEXLMG("Syntax error: existence must be one of 0..0, 0..1, or 1..1"),
-    VTVSUQ("value-set members unique. The member codes of a value set must be unique within the value set");
+    VTVSUQ("value-set members unique. The member codes of a value set must be unique within the value set"),
+    VTPNC("an attribute tuple must conform to the matching parent attribute tuple"),
+    VTPIN("an tuple member cannot specialize an attribute that is a non-tuple attribute in its parent"),
+    VUNP("use_node path validity: the path mentioned in a use_node statement must refer to an object node defined elsewhere in the same archetype or any of its specialisation parent archetypes, that is not itself an internal reference node, and which carries a node identifier if one is needed at the reference point."),
+    VUNT("use_node reference model type validity: the reference model type mentioned in an C_COMPLEX_OBJECT_PROXY node must be the same as or a super-type (according to the reference model) of the reference model type of the node referred to."),
+    VACMCO("cardinality/occurrences orphans: it must be possible for at least one instance of one optional child object (i.e. an object for which the occurrences lower bound is 0) and one instance of every mandatory child object (i.e. object constraints for which the occurrences lower bound is >= 1) to be included within the cardinality range."),
+    WACMCL("cardinality/occurrences lower bound validity: where a cardinality with a finite upper bound is stated on an attribute, for all immediate child objects for which an occurrences constraint is stated, the sum of occurrences lower bounds should be lower than the cardinality upper limit."),
+    VDSEV("archetype slot 'exclude' constraint validity. The 'exclude' constraint in an archetype slot must conform to the slot constraint validity rules."),
+    VACSO("single-valued attribute child object occurrences validity: the occurrences of a child object of a single-valued attribute cannot have an upper limit greater than 1."),
+    VACMCU(" cardinality/occurrences upper bound validity: where a cardinality with a finite upper bound is stated on an attribute, for all immediate child objects for which an occurrences constraint is stated, the occurrences must either have an open upper bound (i.e. n..*) which is interpreted as the maximum value allowed within the cardinality, or else a finite upper bound which is ⇐ the cardinality upper bound."),
+    WOUC("codein terminology not used in archetype definition");
 
 
 

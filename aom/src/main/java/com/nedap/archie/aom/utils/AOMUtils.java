@@ -6,6 +6,7 @@ import com.nedap.archie.aom.ArchetypeHRID;
 import com.nedap.archie.aom.ArchetypeModelObject;
 import com.nedap.archie.aom.ArchetypeSlot;
 import com.nedap.archie.aom.CAttribute;
+import com.nedap.archie.aom.CAttributeTuple;
 import com.nedap.archie.aom.CComplexObject;
 import com.nedap.archie.aom.primitives.CString;
 import com.nedap.archie.definitions.AdlCodeDefinitions;
@@ -232,6 +233,12 @@ public class AOMUtils {
             return true;//cannot check with RM types, will validate elsewhere
         }
         return childTypeInfo.isDescendantOrEqual(parentTypeInfo);
+    }
+
+    public static CAttributeTuple findMatchingTuple(List<CAttributeTuple> attributeTuples, CAttributeTuple specializedTuple) {
+        return attributeTuples.stream()
+                .filter((existingTuple) -> existingTuple.getMemberNames().equals(specializedTuple.getMemberNames()))
+                .findAny().orElse(null);
     }
 
 

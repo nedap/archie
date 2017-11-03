@@ -2,7 +2,7 @@ package com.nedap.archie.openehrtestrm;
 
 import java.lang.Boolean;
 import java.lang.Double;
-import java.lang.Integer;
+import java.lang.Long;
 import java.lang.String;
 import java.time.temporal.Temporal;
 import javax.annotation.Nullable;
@@ -36,43 +36,43 @@ public class Whole extends TestRMBase {
   private Boolean booleanAttr_4;
 
   @Nullable
-  private Integer integerAttr_1;
+  private Long integerAttr_1;
 
   @Nullable
-  private Integer integerAttr_2;
+  private Long integerAttr_2;
 
   @Nullable
-  private Integer integerAttr_3;
+  private Long integerAttr_3;
 
   @Nullable
-  private Integer integerAttr_4;
+  private Long integerAttr_4;
 
   @Nullable
-  private Integer integerAttr_5;
+  private Long integerAttr_5;
 
   @Nullable
-  private Integer integerAttr_6;
+  private Long integerAttr_6;
 
   @Nullable
-  private Integer integerAttr_7;
+  private Long integerAttr_7;
 
   @Nullable
-  private Integer integerAttr_8;
+  private Long integerAttr_8;
 
   @Nullable
-  private Integer integerAttr_9;
+  private Long integerAttr_9;
 
   @Nullable
-  private Integer integerAttr_10;
+  private Long integerAttr_10;
 
   @Nullable
-  private Integer integerAttr_11;
+  private Long integerAttr_11;
 
   @Nullable
-  private Integer integerAttr_12;
+  private Long integerAttr_12;
 
   @Nullable
-  private Integer integerAttr_13;
+  private Long integerAttr_13;
 
   @Nullable
   private Double realAttr_1;
@@ -401,94 +401,94 @@ public class Whole extends TestRMBase {
     this.booleanAttr_4 = value;
   }
 
-  public Integer getIntegerAttr_1() {
+  public Long getLongAttr_1() {
     return integerAttr_1;}
 
-  public void setIntegerAttr_1(Integer value) {
+  public void setLongAttr_1(Long value) {
     this.integerAttr_1 = value;
   }
 
-  public Integer getIntegerAttr_2() {
+  public Long getLongAttr_2() {
     return integerAttr_2;}
 
-  public void setIntegerAttr_2(Integer value) {
+  public void setLongAttr_2(Long value) {
     this.integerAttr_2 = value;
   }
 
-  public Integer getIntegerAttr_3() {
+  public Long getLongAttr_3() {
     return integerAttr_3;}
 
-  public void setIntegerAttr_3(Integer value) {
+  public void setLongAttr_3(Long value) {
     this.integerAttr_3 = value;
   }
 
-  public Integer getIntegerAttr_4() {
+  public Long getLongAttr_4() {
     return integerAttr_4;}
 
-  public void setIntegerAttr_4(Integer value) {
+  public void setLongAttr_4(Long value) {
     this.integerAttr_4 = value;
   }
 
-  public Integer getIntegerAttr_5() {
+  public Long getLongAttr_5() {
     return integerAttr_5;}
 
-  public void setIntegerAttr_5(Integer value) {
+  public void setLongAttr_5(Long value) {
     this.integerAttr_5 = value;
   }
 
-  public Integer getIntegerAttr_6() {
+  public Long getLongAttr_6() {
     return integerAttr_6;}
 
-  public void setIntegerAttr_6(Integer value) {
+  public void setLongAttr_6(Long value) {
     this.integerAttr_6 = value;
   }
 
-  public Integer getIntegerAttr_7() {
+  public Long getLongAttr_7() {
     return integerAttr_7;}
 
-  public void setIntegerAttr_7(Integer value) {
+  public void setLongAttr_7(Long value) {
     this.integerAttr_7 = value;
   }
 
-  public Integer getIntegerAttr_8() {
+  public Long getLongAttr_8() {
     return integerAttr_8;}
 
-  public void setIntegerAttr_8(Integer value) {
+  public void setLongAttr_8(Long value) {
     this.integerAttr_8 = value;
   }
 
-  public Integer getIntegerAttr_9() {
+  public Long getLongAttr_9() {
     return integerAttr_9;}
 
-  public void setIntegerAttr_9(Integer value) {
+  public void setLongAttr_9(Long value) {
     this.integerAttr_9 = value;
   }
 
-  public Integer getIntegerAttr_10() {
+  public Long getLongAttr_10() {
     return integerAttr_10;}
 
-  public void setIntegerAttr_10(Integer value) {
+  public void setLongAttr_10(Long value) {
     this.integerAttr_10 = value;
   }
 
-  public Integer getIntegerAttr_11() {
+  public Long getLongAttr_11() {
     return integerAttr_11;}
 
-  public void setIntegerAttr_11(Integer value) {
+  public void setLongAttr_11(Long value) {
     this.integerAttr_11 = value;
   }
 
-  public Integer getIntegerAttr_12() {
+  public Long getLongAttr_12() {
     return integerAttr_12;}
 
-  public void setIntegerAttr_12(Integer value) {
+  public void setLongAttr_12(Long value) {
     this.integerAttr_12 = value;
   }
 
-  public Integer getIntegerAttr_13() {
+  public Long getLongAttr_13() {
     return integerAttr_13;}
 
-  public void setIntegerAttr_13(Integer value) {
+  public void setLongAttr_13(Long value) {
     this.integerAttr_13 = value;
   }
 

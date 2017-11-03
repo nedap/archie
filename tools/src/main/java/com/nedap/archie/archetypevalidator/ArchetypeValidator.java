@@ -42,7 +42,7 @@ public class ArchetypeValidator {
         //but there's no reason this cannot be parsed, so check them here
         validationsPhase0.add(new AttributeUniquenessValidation());
         validationsPhase0.add(new NodeIdValidation());
-        validationsPhase0.add(new ExistenceValidation());
+        validationsPhase0.add(new MultiplicitiesValidation());
 
 
         validationsPhase1 = new ArrayList<>();
@@ -62,6 +62,7 @@ public class ArchetypeValidator {
         validationsPhase2.add(new SpecializedDefinitionValidation());
 
         validationsPhase3 = new ArrayList<>();
+        validationsPhase3.add(new FlatFormValidation());
 
 
 

@@ -1,9 +1,11 @@
 package com.nedap.archie.aom;
 
+import com.nedap.archie.aom.primitives.CTerminologyCode;
 import com.nedap.archie.aom.terminology.ArchetypeTerm;
 import com.nedap.archie.aom.terminology.ArchetypeTerminology;
 import com.nedap.archie.aom.utils.AOMUtils;
 import com.nedap.archie.aom.utils.ArchetypeParsePostProcesser;
+import com.nedap.archie.definitions.AdlCodeDefinitions;
 import com.nedap.archie.query.AOMPathQuery;
 import com.nedap.archie.xml.adapters.ArchetypeTerminologyAdapter;
 
@@ -15,8 +17,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.Stack;
 
 /**
  * Note: this Archetype does not conform to the UML model completely:
@@ -223,6 +229,49 @@ public class Archetype extends AuthoredResource {
 
     public int specializationDepth() {
         return AOMUtils.getSpecializationDepthFromCode(definition.getNodeId());
+    }
+
+    /**
+     * Return a set of all the used id, at and ac codes in the definition of this archetype - includes at codes used in
+     * ac codes references in C_TERMINOLOGY_CODE objects and ac codes from value sets keys
+     * @return
+     */
+    public Set<String> getAllUsedCodes() {
+        Stack<CObject> workList = new Stack();
+        Set<String> result = new LinkedHashSet<>();
+        workList.add(definition);
+        while(!workList.isEmpty()) {
+            CObject cObject = workList.pop();
+            if(!Objects.equals(cObject.getNodeId(), AdlCodeDefinitions.PRIMITIVE_NODE_ID)){
+                result.add(cObject.getNodeId());
+            }
+            if(cObject instanceof CTerminologyCode) {
+                CTerminologyCode terminologyCode = (CTerminologyCode) cObject;
+                result.addAll(terminologyCode.getValueSetExpanded());
+                result.add(terminologyCode.getConstraint().get(0));
+            }
+            for(CAttribute attribute:cObject.getAttributes()) {
+                workList.addAll(attribute.getChildren());
+            }
+        }
+        result.addAll(terminology.getValueSets().keySet());
+        return result;
+    }
+
+    public Set<String> getUsedAtCodes() {
+        Stack<CObject> workList = new Stack();
+        Set<String> result = new LinkedHashSet<>();
+        workList.add(definition);
+        while(!workList.isEmpty()) {
+            CObject cObject = workList.pop();
+            if(!Objects.equals(cObject.getNodeId(), AdlCodeDefinitions.PRIMITIVE_NODE_ID)){
+                result.add(cObject.getNodeId());
+            }
+            for(CAttribute attribute:cObject.getAttributes()) {
+                workList.addAll(attribute.getChildren());
+            }
+        }
+        return result;
     }
 
 

@@ -1,11 +1,5 @@
 package com.nedap.archie.openehrtestrm;
 
-import com.nedap.archie.rm.datavalues.DataValue;
-import com.nedap.archie.rminfo.ArchieModelNamingStrategy;
-import com.nedap.archie.rminfo.RMAttributeInfo;
-import com.nedap.archie.rminfo.RMPackageId;
-import com.nedap.archie.rminfo.ReflectionModelInfoLookup;
-
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.CObject;
 import com.nedap.archie.aom.CPrimitiveObject;
@@ -18,15 +12,13 @@ import com.nedap.archie.aom.primitives.CReal;
 import com.nedap.archie.aom.primitives.CString;
 import com.nedap.archie.aom.primitives.CTerminologyCode;
 import com.nedap.archie.aom.primitives.CTime;
-import com.nedap.archie.base.Interval;
-import com.nedap.archie.base.terminology.TerminologyCode;
-import com.nedap.archie.rm.archetyped.Locatable;
-import com.nedap.archie.rm.datavalues.DvBoolean;
-import com.nedap.archie.rm.support.identification.TerminologyId;
-import com.nedap.archie.rm.RMObject;
-import com.nedap.archie.rm.datastructures.PointEvent;
 import com.nedap.archie.rm.datatypes.CodePhrase;
+import com.nedap.archie.rm.datavalues.DataValue;
 import com.nedap.archie.rm.datavalues.DvCodedText;
+import com.nedap.archie.rminfo.ArchieModelNamingStrategy;
+import com.nedap.archie.rminfo.RMAttributeInfo;
+import com.nedap.archie.rminfo.RMPackageId;
+import com.nedap.archie.rminfo.ReflectionModelInfoLookup;
 
 import java.time.temporal.Temporal;
 import java.time.temporal.TemporalAccessor;

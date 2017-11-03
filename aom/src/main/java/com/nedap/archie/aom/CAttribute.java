@@ -337,4 +337,40 @@ public class CAttribute extends ArchetypeConstraint {
         return getSocParent() != null || (getParent() != null && getParent().getSocParent() != null);
     }
 
+
+    /**
+     * Get the sum of all occurrences of all direct children of this c_attribute
+     * calculates sum of all occurrences lower bounds; where no occurrences are stated, 0 is assumed
+     * @return
+     */
+    public int getAggregateOccurrencesLowerSum() {
+        int sum = 0;
+        for(CObject cObject:getChildren()) {
+            if(cObject.getOccurrences() != null) {
+                sum+= cObject.getOccurrences().getLower();
+            }
+        }
+        return sum;
+    }
+
+    /**
+     *  calculate minimum number of child objects that must occur in data; count 1 for every mandatory
+     *  object, and 1 for all optional objects
+     * @return
+     */
+    public int getMinimumChildCount() {
+        int result = 0;
+        boolean foundOptional = false;
+        for(CObject cObject:getChildren()) {
+            if(cObject.isRequired()) {
+                result++;
+            } else if(cObject.isAllowed()) {
+                foundOptional = true;
+            }
+        }
+        if(foundOptional) {
+            result++;
+        }
+        return result;
+    }
 }

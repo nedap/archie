@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.nedap.archie.aom.*;
 import com.nedap.archie.aom.terminology.ArchetypeTerm;
 import com.nedap.archie.aom.terminology.ArchetypeTerminology;
+import com.nedap.archie.aom.utils.AOMUtils;
 import com.nedap.archie.query.AOMPathQuery;
 import com.nedap.archie.rules.Assertion;
 
@@ -246,9 +247,12 @@ public class Flattener {
             for(CAttribute attribute:object.getAttributes()) {
                 for(CObject child:attribute.getChildren()) {
                     if(child instanceof CComplexObjectProxy) { //use_node
-                        ComplexObjectProxyReplacement possibleReplacement = getComplexObjectProxyReplacement((CComplexObjectProxy) child);
+                        ComplexObjectProxyReplacement possibleReplacement =
+                                ComplexObjectProxyReplacement.getComplexObjectProxyReplacement((CComplexObjectProxy) child);
                         if(possibleReplacement != null) {
                             replacements.add(possibleReplacement);
+                        } else {
+                            throw new RuntimeException("cannot find target in CComplexObjectProxy");
                         }
 
                     }
@@ -258,64 +262,6 @@ public class Flattener {
         }
         for(ComplexObjectProxyReplacement replacement:replacements) {
             replacement.replace();
-        }
-    }
-
-    /**
-     * Get the archetype root that is the most near parent. Either returns a C_ARCHETYPE_ROOT or the complex_object at archetype.getDefinition()
-     * @return
-     */
-    private CComplexObject getNearestArchetypeRoot(CObject object) {
-        //find a C_ARCHETYPE_ROOT
-        CAttribute parentAttribute = object.getParent();
-        while(parentAttribute != null) {
-            CObject parentObject = parentAttribute.getParent();
-            if(parentObject == null) {
-                break;
-            }
-            if(parentObject instanceof CArchetypeRoot) {
-                return (CArchetypeRoot) parentObject;
-            }
-            parentAttribute = parentObject.getParent();
-        }
-        //C_ARCHETYPE_ROOT not found, return the archetype definition
-        return object.getArchetype().getDefinition();
-
-    }
-
-    private ComplexObjectProxyReplacement getComplexObjectProxyReplacement(CComplexObjectProxy proxy) {
-        CObject newObject = new AOMPathQuery(proxy.getTargetPath()).find(getNearestArchetypeRoot(proxy));
-        if(newObject == null) {
-            throw new RuntimeException("cannot find target in CComplexObjectProxy");
-        } else {
-            CComplexObject clone = (CComplexObject) newObject.clone();
-            clone.setNodeId(proxy.getNodeId());
-            if(proxy.getOccurrences() != null) {
-                clone.setOccurrences(proxy.getOccurrences());
-            }
-            if(proxy.getSiblingOrder() != null) {
-                clone.setSiblingOrder(proxy.getSiblingOrder());
-            }
-            return new ComplexObjectProxyReplacement(proxy, clone);
-
-        }
-    }
-
-    /**
-     * little class used for a CompelxObjectProxyReplacement because we cannot replace in a collection
-     * that we iterate at the same time
-     */
-    private static class ComplexObjectProxyReplacement {
-        private final CComplexObject object;
-        private final CComplexObjectProxy proxy;
-
-        public ComplexObjectProxyReplacement(CComplexObjectProxy proxy, CComplexObject object) {
-            this.proxy = proxy;
-            this.object = object;
-        }
-
-        public void replace() {
-            proxy.getParent().replaceChild(proxy.getNodeId(), object);
         }
     }
 
@@ -544,7 +490,7 @@ public class Flattener {
     }
 
     private void flattenTuple(CComplexObject newObject, CAttributeTuple tuple) {
-        CAttributeTuple matchingTuple = findMatchingTuple(newObject.getAttributeTuples(), tuple);
+        CAttributeTuple matchingTuple = AOMUtils.findMatchingTuple(newObject.getAttributeTuples(), tuple);
 
 
         CAttributeTuple tupleClone = (CAttributeTuple) tuple.clone();
@@ -572,11 +518,6 @@ public class Flattener {
         }
     }
 
-    private CAttributeTuple findMatchingTuple(List<CAttributeTuple> attributeTuples, CAttributeTuple specializedTuple) {
-        return attributeTuples.stream()
-                .filter((existingTuple) -> existingTuple.getMemberNames().equals(specializedTuple.getMemberNames()))
-                .findAny().orElse(null);
-    }
 
     private void flattenSingleAttribute(CComplexObject newObject, CAttribute attribute) {
         if(attribute.getDifferentialPath() != null) {
@@ -590,11 +531,14 @@ public class Flattener {
                 CComplexObjectProxy internalReference = new AOMPathQuery(attribute.getDifferentialPath()).findAnyInternalReference(newObject);
                 if(internalReference != null) {
                     //in theory this can be a use node within a use node.
-                    ComplexObjectProxyReplacement complexObjectProxyReplacement = getComplexObjectProxyReplacement(internalReference);
+                    ComplexObjectProxyReplacement complexObjectProxyReplacement =
+                            ComplexObjectProxyReplacement.getComplexObjectProxyReplacement(internalReference);
                     if(complexObjectProxyReplacement != null) {
                         complexObjectProxyReplacement.replace();
                         //and again!
                         flattenSingleAttribute(newObject, attribute);
+                    } else {
+                        throw new RuntimeException("cannot find target in CComplexObjectProxy");
                     }
                 }
             }

@@ -1,21 +1,21 @@
 package com.nedap.archie.openehrtestrm;
 
-import java.lang.Integer;
+import java.lang.Long;
 import java.lang.String;
 import java.util.List;
 import javax.annotation.Nullable;
 
 public class MultiplicityObject extends TestRMBase {
   @Nullable
-  private List<Integer> integerList;
+  private List<Long> integerList;
 
   @Nullable
   private List<String> stringList;
 
-  public List<Integer> getIntegerList() {
+  public List<Long> getLongList() {
     return integerList;}
 
-  public void setIntegerList(List<Integer> value) {
+  public void setLongList(List<Long> value) {
     this.integerList = value;
   }
 

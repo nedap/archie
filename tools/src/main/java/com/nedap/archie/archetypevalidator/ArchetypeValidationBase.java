@@ -47,6 +47,31 @@ public abstract class ArchetypeValidationBase implements ArchetypeValidation {
         messages.add(new ValidationMessage(errorType, null, customMessage));
     }
 
+    public void addWarning(ErrorType errorType) {
+        ValidationMessage message = new ValidationMessage(errorType);
+        message.setWarning(true);
+        messages.add(message);
+
+    }
+
+    public void addWarning(ErrorType errorType, String customMessage) {
+        ValidationMessage message = new ValidationMessage(errorType, null, customMessage);
+        message.setWarning(true);
+        messages.add(message);
+    }
+
+    public void addWarningWithPath(ErrorType errorType, String location) {
+        ValidationMessage message = new ValidationMessage(errorType, location);
+        message.setWarning(true);
+        messages.add(message);
+    }
+
+    public void addWarningWithPath(ErrorType errorType, String location, String customMessage) {
+        ValidationMessage message = new ValidationMessage(errorType, location, customMessage);
+        message.setWarning(true);
+        messages.add(message);
+    }
+
     public boolean hasPassed() {
         return messages.isEmpty();
     }

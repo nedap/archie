@@ -1,5 +1,6 @@
 package com.nedap.archie.serializer.odin;
 
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,6 +28,7 @@ public class OdinToJsonConverter {
         objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
         //keywords = <"value"> is indistinguishable from keywords = <"value1", "value2">
         objectMapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
+        objectMapper.enable(JsonParser.Feature.STRICT_DUPLICATE_DETECTION);
     }
 
 
