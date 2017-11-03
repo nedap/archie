@@ -304,7 +304,7 @@ public class BmmSchemaValidator extends AnyValidator {
             if(!schemaErrorTableCache.containsKey(sourceSchemaId)) {
                 schemaErrorTableCache.put(sourceSchemaId, new MessageLogger());
             }
-            schemaErrorTableCache.get(sourceSchemaId).addErrorWithLocation(aKey, Lists.newArrayList(arguments), "");
+            schemaErrorTableCache.get(sourceSchemaId).addErrorWithLocation(aKey, "", Lists.newArrayList(arguments));
             addError(BmmMessageIds.ec_BMM_INCERR, schema.getSchemaId(), sourceSchemaId);
         }
     }
@@ -323,7 +323,7 @@ public class BmmSchemaValidator extends AnyValidator {
             if(!schemaErrorTableCache.containsKey(sourceSchemaId)) {
                 schemaErrorTableCache.put(sourceSchemaId, new MessageLogger());
             }
-            schemaErrorTableCache.get(sourceSchemaId).addWarningWithLocation(aKey, Lists.newArrayList(arguments), "");
+            schemaErrorTableCache.get(sourceSchemaId).addWarningWithLocation(aKey, "", Lists.newArrayList(arguments));
         }
     }
 
@@ -341,7 +341,7 @@ public class BmmSchemaValidator extends AnyValidator {
             if(!schemaErrorTableCache.containsKey(sourceSchemaId)) {
                 schemaErrorTableCache.put(sourceSchemaId, new MessageLogger());
             }
-            schemaErrorTableCache.get(sourceSchemaId).addInfoWithLocation(aKey, Lists.newArrayList(arguments), "");
+            schemaErrorTableCache.get(sourceSchemaId).addInfoWithLocation(aKey, "", Lists.newArrayList(arguments));
         }
     }
 

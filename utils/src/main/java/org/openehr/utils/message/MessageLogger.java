@@ -191,44 +191,41 @@ public class MessageLogger {
 
     /**
      * Adds an error to this error cache and sets the error flag to true.
-     *
-     * @param aCode
-     * @param args
+     *  @param aCode
      * @param aLocation
+     * @param args
      */
-    public void addErrorWithLocation(MessageCode aCode, List<String> args, String aLocation) {
+    public void addErrorWithLocation(MessageCode aCode, String aLocation, List<String> args) {
         add(new MessageDescriptor(aCode, MessageSeverity.ERROR, messageDatabaseManager.getMessage(aCode.getCode(), args), aLocation));
     }
 
     /**
      * Adds a warning to this error cache and sets the hasWarning flag to true.
-     *
-     * @param aCode
-     * @param args
+     *  @param aCode
      * @param aLocation
+     * @param args
      */
-    public void addWarningWithLocation(MessageCode aCode, List<String> args, String aLocation) {
+    public void addWarningWithLocation(MessageCode aCode, String aLocation, List<String> args) {
         add(new MessageDescriptor(aCode, MessageSeverity.WARNING, messageDatabaseManager.getMessage(aCode.getCode(), args), aLocation));
     }
 
     /**
      * Adds a warning to this error cache and sets the hasInfo flag to true.
-     *
-     * @param aCode
-     * @param args
+     *  @param aCode
      * @param aLocation
+     * @param args
      */
-    public void addInfoWithLocation(MessageCode aCode, List<String> args, String aLocation) {
+    public void addInfoWithLocation(MessageCode aCode, String aLocation, List<String> args) {
         add(new MessageDescriptor(aCode, MessageSeverity.INFO, messageDatabaseManager.getMessage(aCode.getCode(), args), aLocation));
     }
 
     /**
      * Adds a debug message to cache.
      *
-     * @param aMessage
      * @param aLocation
+     * @param aMessage
      */
-    public void addDebugWithLocation(String aMessage, String aLocation) {
+    public void addDebugWithLocation(String aLocation, String aMessage) {
         add(new MessageDescriptor(new UnknownMessageCode(), MessageSeverity.DEBUG, aMessage, aLocation));
     }
 

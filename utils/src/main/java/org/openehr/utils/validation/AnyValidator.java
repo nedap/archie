@@ -180,7 +180,7 @@ public abstract class AnyValidator {
      * @param aLocation
      */
     public void addErrorWithLocation(MessageCode aKey, List<String> args, String aLocation) {
-        messageLogger.addErrorWithLocation(aKey, args, aLocation);
+        messageLogger.addErrorWithLocation(aKey, aLocation, args);
     }
 
     /**
@@ -190,7 +190,7 @@ public abstract class AnyValidator {
      * @param aLocation
      */
     public void addWarningWithLocation(MessageCode aKey, List<String> args, String aLocation) {
-        messageLogger.addWarningWithLocation(aKey, args, aLocation);
+        messageLogger.addWarningWithLocation(aKey, aLocation, args);
     }
 
     /**
@@ -200,7 +200,7 @@ public abstract class AnyValidator {
      * @param aLocation
      */
     public void addInfoWithLocation(MessageCode aKey, List<String> args, String aLocation) {
-        messageLogger.addInfoWithLocation(aKey, args, aLocation);
+        messageLogger.addInfoWithLocation(aKey, aLocation, args);
     }
 
     public boolean readyToValidate() {

@@ -34,7 +34,7 @@ public class ErrorAccumulatorTest {
         errorAccumulator.addErrorWithLocation(TestErrorCode.code1, null, null);
         errorAccumulator.addWarningWithLocation(TestErrorCode.code2, null, null);
         errorAccumulator.addInfoWithLocation(TestErrorCode.code3, null, null);
-        errorAccumulator.addDebugWithLocation(TestErrorCode.code4.getMessage(), null);//debug does not accept codes, for some reason!
+        errorAccumulator.addDebugWithLocation(null, TestErrorCode.code4.getMessage());//debug does not accept codes, for some reason!
         List<MessageCode> codes = errorAccumulator.getErrorCodes();
         assertEquals(codes.size(), 1);
         assertEquals(codes.get(0), TestErrorCode.code1);
@@ -45,7 +45,7 @@ public class ErrorAccumulatorTest {
         errorAccumulator.addErrorWithLocation(TestErrorCode.code1, null, null);
         errorAccumulator.addWarningWithLocation(TestErrorCode.code2, null, null);
         errorAccumulator.addInfoWithLocation(TestErrorCode.code3, null, null);
-        errorAccumulator.addDebugWithLocation(TestErrorCode.code4.getCode(), null);
+        errorAccumulator.addDebugWithLocation(null, TestErrorCode.code4.getCode());
         List<MessageCode> codes = errorAccumulator.getWarningCodes();
         assertEquals(codes.size(), 1);
         assertEquals(codes.get(0), TestErrorCode.code2);
@@ -165,7 +165,7 @@ public class ErrorAccumulatorTest {
 
     @Test
     public void addDebug() throws Exception {
-        errorAccumulator.addDebugWithLocation(TestErrorCode.code0.getCode(), null);//debug does not use a code?!
+        errorAccumulator.addDebugWithLocation(null, TestErrorCode.code0.getCode());//debug does not use a code?!
         assertEquals(1, errorAccumulator.getMessageList().size());
     }
 

@@ -124,7 +124,7 @@ public class AnyValidatorTest {
         validator.addError(TestErrorCode.ErrorKey, "argument 1");
         
         MessageLogger other = new MessageLogger();
-        other.addErrorWithLocation(TestErrorCode.ErrorKey, Lists.newArrayList("argument 1"), null);
+        other.addErrorWithLocation(TestErrorCode.ErrorKey, null, Lists.newArrayList("argument 1"));
         validator.mergeErrors(other);
         assertEquals(2, validator.getMessageCount());
     }
