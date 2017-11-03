@@ -31,11 +31,15 @@ import org.openehr.bmm.persistence.validation.BmmDefinitions;
 import org.openehr.bmm.persistence.validation.BmmMessageIds;
 import org.openehr.utils.message.MessageLogger;
 import org.openehr.utils.validation.BasicValidator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.*;
 
 public class ReferenceModelAccess {
+
+    private static final Logger log = LoggerFactory.getLogger(ReferenceModelAccess.class);
 
     /**
      * Maximum number of levels of schema inclusion
@@ -358,22 +362,16 @@ public class ReferenceModelAccess {
                 schemaDirectories.forEach(directory -> {
                     File directoryFile = new File(directory);
                     if (!directoryFile.exists() || !directoryFile.isDirectory() || !directoryFile.canRead()) {
-                        validator.addError(BmmMessageIds.ec_bmm_schema_dir_not_valid, new ArrayList<String>() {{
-                            add(directory);
-                        }});
+                        validator.addError(BmmMessageIds.ec_bmm_schema_dir_not_valid, directory);
                     } else if (!(directoryFile.listFiles().length > 0)) {
-                        validator.addError(BmmMessageIds.ec_bmm_schema_dir_contains_no_schemas, new ArrayList<String>() {{
-                            add(directory);
-                        }});
+                        validator.addError(BmmMessageIds.ec_bmm_schema_dir_contains_no_schemas, directory);
                     } else {
                         Collection<File> bmmFiles = FileUtils.listFiles(directoryFile, bmmFileFilter, null);
                         bmmFiles.forEach(bmmFile -> {
                             processSchemaFile(bmmFile);
                         });
                         if (allSchemas.isEmpty()) {
-                            validator.addError(BmmMessageIds.ec_bmm_schema_dir_contains_no_schemas, new ArrayList<String>() {{
-                                add(directory);
-                            }});
+                            validator.addError(BmmMessageIds.ec_bmm_schema_dir_contains_no_schemas, directory);
                         }
                     }
                 });
@@ -381,7 +379,7 @@ public class ReferenceModelAccess {
         } catch (Exception e) {
             exceptionEncountered = true;
             validator.addError(BmmMessageIds.ec_bmm_schema_unknown_exception, null);
-            e.printStackTrace();//TODO Handle with logging
+            log.error("unknown exception loading schema descriptors", e);//TODO Handle with logging
         }
     }
 
@@ -390,15 +388,11 @@ public class ReferenceModelAccess {
         schemaDescriptor.initialize();
         //check for two schema files purporting to be the exact same schema (including release)
         if (schemaDescriptor.getSchemaValidator().hasErrors()) {
-            validator.addError(BmmMessageIds.ec_bmm_schema_load_failure, new ArrayList<String>() {{
-                add(schemaDescriptor.getSchemaId());
-                add(schemaDescriptor.getSchemaValidator().getErrorStrings());
-            }});
+            validator.addError(BmmMessageIds.ec_bmm_schema_load_failure,
+                    schemaDescriptor.getSchemaId(),
+                    schemaDescriptor.getSchemaValidator().getErrorStrings());
         } else if (allSchemas.containsKey(schemaDescriptor.getSchemaId())) {
-            validator.addWarning(BmmMessageIds.ec_bmm_schema_duplicate_schema_found, new ArrayList<String>() {{
-                add(schemaDescriptor.getSchemaId());
-                add(schemaDescriptor.getSchemaPath());
-            }});
+            validator.addWarning(BmmMessageIds.ec_bmm_schema_duplicate_schema_found, schemaDescriptor.getSchemaId(), schemaDescriptor.getSchemaPath());
         } else {
             allSchemas.put(schemaDescriptor.getSchemaId(), schemaDescriptor);
         }
@@ -428,9 +422,7 @@ public class ReferenceModelAccess {
             if (!schemaLoadList.isEmpty()) {
                 for (String listItem : schemaLoadList) {
                     if (!allSchemas.containsKey(listItem)) {
-                        validator.addWarning(BmmMessageIds.ec_bmm_schema_invalid_load_list, new ArrayList<String>() {{
-                            add(listItem);
-                        }});
+                        validator.addWarning(BmmMessageIds.ec_bmm_schema_invalid_load_list, listItem);
                         itemsToRemove.add(listItem);
                     }
                 }
@@ -446,22 +438,16 @@ public class ReferenceModelAccess {
                 if (aSchemaDescriptor.getSchemaValidator().hasPassed()) {
                     loadSchemaIncludeClosure(aSchemaId);
                     if (aSchemaDescriptor.getSchemaValidator().getMessageLogger().hasWarnings()) {
-                        validator.addWarning(BmmMessageIds.ec_bmm_schema_passed_with_warnings, new ArrayList<String>() {{
-                            add(aSchemaId);
-                            add(aSchemaDescriptor.getSchemaValidator().getErrorStrings());
-                        }});
+                        validator.addWarning(BmmMessageIds.ec_bmm_schema_passed_with_warnings, aSchemaDescriptor.getSchemaValidator().getErrorStrings());
                     }
 
                 } else {
-                    validator.addError(BmmMessageIds.ec_bmm_schema_basic_validation_failed, new ArrayList<String>() {{
-                        add(aSchemaId);
-                        add(aSchemaDescriptor.getSchemaValidator().getErrorStrings());
-                    }});
+                    validator.addError(BmmMessageIds.ec_bmm_schema_basic_validation_failed, aSchemaId, aSchemaDescriptor.getSchemaValidator().getErrorStrings());
+
                     if (!aSchemaDescriptor.isBmmCompatible()) {
-                        validator.addError(BmmMessageIds.ec_bmm_schema_version_incompatible_with_tool, new ArrayList<String>() {{
-                            add(aSchemaId);
-                            add(BmmDefinitions.BMM_INTERNAL_VERSION);
-                        }});
+                        validator.addError(BmmMessageIds.ec_bmm_schema_version_incompatible_with_tool,
+                            aSchemaId,
+                            BmmDefinitions.BMM_INTERNAL_VERSION);
                     }
                 }
             });
@@ -504,23 +490,18 @@ public class ReferenceModelAccess {
                                     PersistedBmmSchema includingSchema = candidateSchemas.get(includeItem).getPersistentSchema();
                                     if(includedSchema.getState() == PersistedBmmSchemaState.STATE_INCLUDES_PENDING) {
                                         includingSchema.merge(includedSchema);
-                                        validator.addInfo(BmmMessageIds.ec_bmm_schema_merged_schema, new ArrayList<String>() {{
-                                            add(includedSchema.getSchemaId());
-                                            add(candidateSchemas.get(includeItem).getSchemaId());
-                                        }});
+                                        validator.addInfo(BmmMessageIds.ec_bmm_schema_merged_schema,
+                                            includedSchema.getSchemaId(),
+                                            candidateSchemas.get(includeItem).getSchemaId());
                                         finished = false;
                                     }
                                 } else {
-                                    validator.addError(BmmMessageIds.ec_bmm_schema_including_schema_not_valid, new ArrayList<String>() {{
-                                        add(includeItem);
-                                    }});
+                                    validator.addError(BmmMessageIds.ec_bmm_schema_including_schema_not_valid, includeItem);
                                 }
                             }
                         }
                     } else {
-                        validator.addError(BmmMessageIds.ec_bmm_schema_included_schema_not_found, new ArrayList<String>() {{
-                            add(key);
-                        }});
+                        validator.addError(BmmMessageIds.ec_bmm_schema_included_schema_not_found, key);
                     }
                 }
             }
@@ -544,16 +525,14 @@ public class ReferenceModelAccess {
                             }
                             validModels.put(aSchemaDescriptor.getSchemaId(), topLevelSchema);
                             if(aSchemaDescriptor.getSchemaValidator().getMessageLogger().hasWarnings()) {
-                                validator.addWarning(BmmMessageIds.ec_bmm_schema_passed_with_warnings, new ArrayList<String>() {{
-                                    add(aSchemaDescriptor.getSchemaId());
-                                    add(aSchemaDescriptor.getSchemaValidator().getErrorStrings());
-                                }});
+                                validator.addWarning(BmmMessageIds.ec_bmm_schema_passed_with_warnings,
+                                        aSchemaDescriptor.getSchemaId(),
+                                        aSchemaDescriptor.getSchemaValidator().getErrorStrings());
                             }
                         } else {
-                            validator.addError(BmmMessageIds.ec_bmm_schema_post_merge_validate_fail, new ArrayList<String>() {{
-                                add(aSchemaDescriptor.getSchemaId());
-                                add(aSchemaDescriptor.getSchemaValidator().getErrorStrings());
-                            }});
+                            validator.addError(BmmMessageIds.ec_bmm_schema_post_merge_validate_fail,
+                                aSchemaDescriptor.getSchemaId(),
+                                aSchemaDescriptor.getSchemaValidator().getErrorStrings());
                         }
                     }
                 }
@@ -572,11 +551,10 @@ public class ReferenceModelAccess {
                     String qualifiedRmClosureName = BmmDefinitions.publisherQualifiedRmClosureName(modelPublisher, rmClosure);
                     if(modelsByClosure.containsKey(qualifiedRmClosureName)) {
                         BmmModel schema = modelsByClosure.get(qualifiedRmClosureName);
-                        validator.addInfo(BmmMessageIds.ec_bmm_schema_duplicate_found, new ArrayList<String>() {{
-                            add(qualifiedRmClosureName);
-                            add(schema.getSchemaId());
-                            add(aSchemaId);
-                        }});
+                        validator.addInfo(BmmMessageIds.ec_bmm_schema_duplicate_found,
+                            qualifiedRmClosureName,
+                            schema.getSchemaId(),
+                            aSchemaId);
                     } else {
                         modelsByClosure.put(qualifiedRmClosureName.toLowerCase(), model);
                     }
@@ -602,9 +580,8 @@ public class ReferenceModelAccess {
             loadCount += 1;
         } catch(Exception e) {
             exceptionEncountered = true;
-            validator.addError(BmmMessageIds.ec_bmm_schema_assertion_violation, new ArrayList<String>() {{
-                add(e.getMessage());
-            }});
+            validator.addError(BmmMessageIds.ec_bmm_schema_assertion_violation, e.getMessage());
+
             e.printStackTrace();
         }
     }
@@ -619,20 +596,17 @@ public class ReferenceModelAccess {
         List<String> includers;
         SchemaDescriptor targetSchema = allSchemas.get(aSchemaId);
         if(targetSchema == null) {
-            validator.addError(BmmMessageIds.ec_bmm_schema_load_failure, new ArrayList<String>() {{
-                add(aSchemaId);
-            }});
+            validator.addError(BmmMessageIds.ec_bmm_schema_load_failure, aSchemaId);
         } else {
             targetSchema.load();
             if (targetSchema.getSchemaValidator().hasPassed()) {
                 targetSchema.validateIncludes(new ArrayList(allSchemas.keySet()));
                 if (targetSchema.getSchemaValidator().hasPassed() && targetSchema.getPersistentSchema() != null) {
                     PersistedBmmSchema schema = targetSchema.getPersistentSchema();
-                    validator.addInfo(BmmMessageIds.ec_bmm_schema_info_loaded, new ArrayList<String>() {{
-                        add(aSchemaId);
-                        add("" + schema.getPrimitives().size());
-                        add("" + schema.getClassDefinitions().size());
-                    }});
+                    validator.addInfo(BmmMessageIds.ec_bmm_schema_info_loaded,
+                        aSchemaId,
+                        "" + schema.getPrimitives().size(),
+                        "" + schema.getClassDefinitions().size());
                     includes = schema.getIncludes();
                     if (!includes.isEmpty()) {
                         for (String key : includes.keySet()) {
@@ -647,16 +621,14 @@ public class ReferenceModelAccess {
                         }
                     }
                 } else {
-                    validator.addError(BmmMessageIds.ec_bmm_schema_includes_valiidation_failed, new ArrayList<String>() {{
-                        add(aSchemaId);
-                        add(targetSchema.getSchemaValidator().getErrorStrings());
-                    }});
+                    validator.addError(BmmMessageIds.ec_bmm_schema_includes_valiidation_failed,
+                        aSchemaId,
+                        targetSchema.getSchemaValidator().getErrorStrings());
                 }
             } else {
-                validator.addError(BmmMessageIds.ec_bmm_schema_load_failure, new ArrayList<String>() {{
-                    add(aSchemaId);
-                    add(targetSchema.getSchemaValidator().getErrorStrings());
-                }});
+                validator.addError(BmmMessageIds.ec_bmm_schema_load_failure,
+                    aSchemaId,
+                    targetSchema.getSchemaValidator().getErrorStrings());
             }
         }
     }
@@ -684,15 +656,13 @@ public class ReferenceModelAccess {
                     //TODO Verify logic works
                     for(String include : includes) {
                         if(anErrorAccumulator.hasErrors()) {
-                            allSchemas.get(aSchemaId).getSchemaValidator().addError(BmmMessageIds.ec_BMM_INCERR, new ArrayList<String>() {{
-                                add(include);
-                                add(aSchemaId);
-                            }});
+                            allSchemas.get(aSchemaId).getSchemaValidator().addError(BmmMessageIds.ec_BMM_INCERR,
+                                include,
+                                aSchemaId);
                         } else {
-                            allSchemas.get(aSchemaId).getSchemaValidator().addWarning(BmmMessageIds.ec_BMM_INCWARN, new ArrayList<String>() {{
-                                add(include);
-                                add(aSchemaId);
-                            }});
+                            allSchemas.get(aSchemaId).getSchemaValidator().addWarning(BmmMessageIds.ec_BMM_INCWARN,
+                                include,
+                                aSchemaId);
                         }
                     }
                 }
@@ -709,25 +679,22 @@ public class ReferenceModelAccess {
                     //Include does not exist
                     for(String includingSchemaId:includingSchemaIds) {
                         SchemaDescriptor includingSchemaDescriptor = allSchemas.get(includingSchemaId);
-                        includingSchemaDescriptor.getSchemaValidator().addError(BmmMessageIds.ec_bmm_schema_included_schema_not_found, new ArrayList<String>() {{
-                            add(includingSchemaId);
-                            add(includedSchemaId);
-                        }});
+                        includingSchemaDescriptor.getSchemaValidator().addError(BmmMessageIds.ec_bmm_schema_included_schema_not_found,
+                            includingSchemaId,
+                            includedSchemaId);
                     }
                 } else if(!includedSchemaDescriptor.getSchemaValidator().hasPassed() || includedSchemaDescriptor.getSchemaValidator().getMessageLogger().hasWarnings()) {
                     for(String include:includingSchemaIds) {
                         SchemaDescriptor clientSchemaDescriptor = allSchemas.get(include);
                         if(!clientSchemaDescriptor.getSchemaValidator().hasPassed() && clientSchemaDescriptor.getSchemaValidator().getMessageLogger().hasWarnings()) {
                             if(!includedSchemaDescriptor.getSchemaValidator().hasPassed()) {
-                                clientSchemaDescriptor.getSchemaValidator().addError(BmmMessageIds.ec_BMM_INCERR, new ArrayList<String>() {{
-                                    add(include);
-                                    add(includedSchemaId);
-                                }});
+                                clientSchemaDescriptor.getSchemaValidator().addError(BmmMessageIds.ec_BMM_INCERR,
+                                    include,
+                                    includedSchemaId);
                             } else {
-                                clientSchemaDescriptor.getSchemaValidator().addWarning(BmmMessageIds.ec_BMM_INCWARN, new ArrayList<String>() {{
-                                    add(include);
-                                    add(includedSchemaId);
-                                }});
+                                clientSchemaDescriptor.getSchemaValidator().addWarning(BmmMessageIds.ec_BMM_INCWARN,
+                                    include,
+                                    includedSchemaId);
                             }
                             errorsToPropagate = true;
                         }

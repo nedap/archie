@@ -1,8 +1,11 @@
 package org.openehr.bmm.persistence.validation;
 
+import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
 import org.openehr.bmm.persistence.*;
+import org.openehr.utils.message.MessageCode;
 import org.openehr.utils.message.MessageLogger;
+import org.openehr.utils.message.UnknownMessageCode;
 import org.openehr.utils.validation.AnyValidator;
 
 import java.util.*;
@@ -76,32 +79,17 @@ public class BmmSchemaValidator extends AnyValidator {
         });
         //Check that RM shema release is valid
         if(!BmmDefinitions.isValidStandardVersion(schema.getRmRelease())) {
-            addError(BmmMessageIds.ec_BMM_RMREL, new ArrayList<String>() {
-                {
-                    add(schema.getSchemaId());
-                    add(schema.getRmRelease());
-                }
-            });
+            addError(BmmMessageIds.ec_BMM_RMREL, schema.getSchemaId(), schema.getRmRelease());
         }
         //check archetype parent class in list of class names
         if(schema.getArchetypeParentClass() != null && schema.getClassDefinition(schema.getArchetypeParentClass()) ==  null) {
-            addError(BmmMessageIds.ec_BMM_ARPAR, new ArrayList<String>() {
-                {
-                    add(schema.getSchemaId());
-                    add(schema.getArchetypeParentClass());
-                }
-            });
+            addError(BmmMessageIds.ec_BMM_ARPAR, schema.getSchemaId(), schema.getArchetypeParentClass());
         }
 
         //check that all models refer to declared packages
         schema.getArchetypeRmClosurePackages().forEach(closurePackage -> {
             if(!schema.hasCanonicalPackagePath(closurePackage)) {
-                addError(BmmMessageIds.ec_BMM_MDLPK, new ArrayList<String>() {
-                    {
-                        add(schema.getSchemaId());
-                        add(closurePackage);
-                    }
-                });
+                addError(BmmMessageIds.ec_BMM_MDLPK, schema.getSchemaId(), closurePackage);
             }
         });
 
@@ -113,14 +101,7 @@ public class BmmSchemaValidator extends AnyValidator {
             canonicalPackage.doRecursiveClasses((persistedBmmPackage, className) -> {
                 String classNameStr = className.toLowerCase();
                 if(packageClassList.containsKey(classNameStr)) {
-                    addError(BmmMessageIds.ec_BMM_CLPKDP, new ArrayList<String>() {
-                        {
-                            add(schema.getSchemaId());
-                            add(className);
-                            add(persistedBmmPackage.getName());
-                            add(classNameStr);
-                        }
-                    });
+                    addError(BmmMessageIds.ec_BMM_CLPKDP, schema.getSchemaId(), className, persistedBmmPackage.getName(), classNameStr);
                 } else {
                     packageClassList.put(classNameStr, persistedBmmPackage.getName());
                 }
@@ -132,19 +113,10 @@ public class BmmSchemaValidator extends AnyValidator {
         schema.doAllClasses( persistedBmmClass -> {
             String className = persistedBmmClass.getName().toLowerCase();
             if(!packageClassList.containsKey(className)) {
-                addError(BmmMessageIds.ec_BMM_PKGID, new ArrayList<String>() {
-                    {
-                        add(schema.getSchemaId());
-                        add(persistedBmmClass.getName());
-                    }
-                });
+                addError(BmmMessageIds.ec_BMM_PKGID, schema.getSchemaId(), persistedBmmClass.getName());
+
             } else if(classNameList.contains(className)) {
-                addError(BmmMessageIds.ec_BMM_CLDUP, new ArrayList<String>() {
-                    {
-                        add(schema.getSchemaId());
-                        add(persistedBmmClass.getName());
-                    }
-                });
+                addError(BmmMessageIds.ec_BMM_CLDUP, schema.getSchemaId(), persistedBmmClass.getName());
             } else {
                 classNameList.add(className);
             }
@@ -159,12 +131,7 @@ public class BmmSchemaValidator extends AnyValidator {
         //check that all ancestors exist
         persistedBmmClass.getAncestors().forEach(ancestorClassName -> {
             if(StringUtils.isEmpty(ancestorClassName)) {
-                addValidityError(persistedBmmClass.getSourceSchemaId(), "BMM_ANCE", new ArrayList<String>() {
-                    {
-                        add(persistedBmmClass.getSourceSchemaId());
-                        add(persistedBmmClass.getName());
-                    }
-                });
+                addValidityError(persistedBmmClass.getSourceSchemaId(), BmmMessageIds.ec_BMM_ANCE, persistedBmmClass.getSourceSchemaId(), persistedBmmClass.getName());
             }
         });
         //check that all generic parameter.conforms_to_type exist exists
@@ -174,14 +141,12 @@ public class BmmSchemaValidator extends AnyValidator {
                 genericParameterDefinitions.forEach((name, persistedBmmGenericParameter) -> {
                     String conformsToType = persistedBmmGenericParameter.getConformsToType();
                     if(!schema.hasClassOrPrimitiveDefinition(conformsToType)) {
-                        addValidityError(persistedBmmClass.getSourceSchemaId(), "BMM_GPCT", new ArrayList<String>() {
-                            {
-                                add(persistedBmmClass.getSourceSchemaId());
-                                add(persistedBmmClass.getName());
-                                add(persistedBmmGenericParameter.getName());
-                                add(conformsToType);
-                            }
-                        });
+                        addValidityError(persistedBmmClass.getSourceSchemaId(), BmmMessageIds.ec_BMM_GPCT,
+                                persistedBmmClass.getSourceSchemaId(),
+                                persistedBmmClass.getName(),
+                                persistedBmmGenericParameter.getName(),
+                                conformsToType);
+
                     }
                 });
             }
@@ -198,14 +163,7 @@ public class BmmSchemaValidator extends AnyValidator {
             PersistedBmmClass ancestor = schema.findClassOrPrimitiveDefinition(ancestorName);
             PersistedBmmProperty ancestorProperty = ancestor.getPropertyByName(persistedBmmProperty.getName());
             if(ancestor != null && ancestorProperty != null && !propertyConformsTo(persistedBmmProperty, ancestorProperty)){
-                addValidityError(persistedBmmClass.getSourceSchemaId(), "BMM_PRNCF", new ArrayList<String>() {
-                    {
-                        add(persistedBmmClass.getSourceSchemaId());
-                        add(persistedBmmClass.getName());
-                        add(persistedBmmProperty.getName());
-                        add(ancestorName);
-                    }
-                });
+                addValidityError(persistedBmmClass.getSourceSchemaId(), BmmMessageIds.ec_BMM_PRNCF, persistedBmmClass.getSourceSchemaId(), persistedBmmClass.getName(), persistedBmmProperty.getName(), ancestorName);
             }
         });
 
@@ -214,14 +172,11 @@ public class BmmSchemaValidator extends AnyValidator {
             PersistedBmmSingleProperty singlePropertyDefinition = (PersistedBmmSingleProperty)persistedBmmProperty;
             PersistedBmmSimpleType attributeTypeDefinition = singlePropertyDefinition.getTypeDefinition();
             if(StringUtils.isEmpty(attributeTypeDefinition.getType()) || !schema.hasClassOrPrimitiveDefinition(attributeTypeDefinition.getType())) {
-                addValidityError(persistedBmmClass.getSourceSchemaId(), "BMM_SPT", new ArrayList<String>() {
-                    {
-                        add(persistedBmmClass.getSourceSchemaId());
-                        add(persistedBmmClass.getName());
-                        add(persistedBmmProperty.getName());
-                        add(attributeTypeDefinition.getType());
-                    }
-                });
+                addValidityError(persistedBmmClass.getSourceSchemaId(), BmmMessageIds.ec_BMM_SPT,
+                        persistedBmmClass.getSourceSchemaId(),
+                        persistedBmmClass.getName(),
+                        persistedBmmProperty.getName(),
+                        attributeTypeDefinition.getType());
             } else {
                 //Should this be logged?
             }
@@ -232,14 +187,7 @@ public class BmmSchemaValidator extends AnyValidator {
             PersistedBmmSinglePropertyOpen singlePropertyOpenDefinition = (PersistedBmmSinglePropertyOpen)persistedBmmProperty;
             PersistedBmmOpenType attributeTypeDefinition = singlePropertyOpenDefinition.getTypeDefinition();
             if(!persistedBmmClass.isGeneric() || !persistedBmmClass.getGenericParameterDefinitions().containsKey(attributeTypeDefinition.getType())) {
-                addValidityError(persistedBmmClass.getSourceSchemaId(), "BMM_SPOT", new ArrayList<String>() {
-                    {
-                        add(persistedBmmClass.getSourceSchemaId());
-                        add(persistedBmmClass.getName());
-                        add(persistedBmmProperty.getName());
-                        add(attributeTypeDefinition.getType());
-                    }
-                });
+                addValidityError(persistedBmmClass.getSourceSchemaId(), BmmMessageIds.ec_BMM_SPOT, persistedBmmClass.getSourceSchemaId(), persistedBmmClass.getName(), persistedBmmProperty.getName(), attributeTypeDefinition.getType());
             } else {
                 //Should this be logged?
             }
@@ -250,14 +198,11 @@ public class BmmSchemaValidator extends AnyValidator {
             PersistedBmmContainerType attributeTypeDefinition = containerPropertyDefinition.getTypeDefinition();
             PersistedBmmType attributeTypeReference = attributeTypeDefinition.getTypeReference();
             if(!schema.hasClassOrPrimitiveDefinition(attributeTypeDefinition.getContainerType())) {
-                addValidityError(persistedBmmClass.getSourceSchemaId(), "BMM_CPCT", new ArrayList<String>() {
-                    {
-                        add(persistedBmmClass.getSourceSchemaId());
-                        add(persistedBmmClass.getName());
-                        add(persistedBmmProperty.getName());
-                        add(attributeTypeDefinition.getType());
-                    }
-                });
+                addValidityError(persistedBmmClass.getSourceSchemaId(), BmmMessageIds.ec_BMM_CPCT,
+                        persistedBmmClass.getSourceSchemaId(),
+                        persistedBmmClass.getName(),
+                        persistedBmmProperty.getName(),
+                        attributeTypeDefinition.getType());
             } else if(attributeTypeReference != null){
                 //Loop through types inside container type
                 List<String> typeReferences = attributeTypeReference.flattenedTypeList();
@@ -267,26 +212,20 @@ public class BmmSchemaValidator extends AnyValidator {
                             if (persistedBmmClass.isGeneric()) {  //it might be a formal parameter, to be matched against those of enclosing class
                                 Map<String, PersistedBmmGenericParameter> genericParameters = persistedBmmClass.getGenericParameterDefinitions();
                                 if (!genericParameters.containsKey(typeReference)) {
-                                    addValidityError(persistedBmmClass.getSourceSchemaId(), "BMM_GPGPU", new ArrayList<String>() {
-                                        {
-                                            add(persistedBmmClass.getSourceSchemaId());
-                                            add(persistedBmmClass.getName());
-                                            add(persistedBmmProperty.getName());
-                                            add(attributeTypeDefinition.getType());
-                                        }
-                                    });
+                                    addValidityError(persistedBmmClass.getSourceSchemaId(), BmmMessageIds.ec_BMM_GPGPU,
+                                        persistedBmmClass.getSourceSchemaId(),
+                                        persistedBmmClass.getName(),
+                                        persistedBmmProperty.getName(),
+                                        attributeTypeDefinition.getType());
                                 } else {
                                     //Should this be logged?
                                 }
                             } else {
-                                addValidityError(persistedBmmClass.getSourceSchemaId(), "BMM_CPTV", new ArrayList<String>() {
-                                    {
-                                        add(persistedBmmClass.getSourceSchemaId());
-                                        add(persistedBmmClass.getName());
-                                        add(persistedBmmProperty.getName());
-                                        add(attributeTypeDefinition.getType());
-                                    }
-                                });
+                                addValidityError(persistedBmmClass.getSourceSchemaId(), BmmMessageIds.ec_BMM_CPTV,
+                                        persistedBmmClass.getSourceSchemaId(),
+                                        persistedBmmClass.getName(),
+                                        persistedBmmProperty.getName(),
+                                        attributeTypeDefinition.getType());
                             }
                         }
                     });
@@ -294,76 +233,58 @@ public class BmmSchemaValidator extends AnyValidator {
                     //Should this be logged?
                 }
             } else {
-                addValidityError(persistedBmmClass.getSourceSchemaId(), "BMM_CPT", new ArrayList<String>() {
-                    {
-                        add(persistedBmmClass.getSourceSchemaId());
-                        add(persistedBmmClass.getName());
-                        add(persistedBmmProperty.getName());
-                    }
-                });
+                addValidityError(persistedBmmClass.getSourceSchemaId(), BmmMessageIds.ec_BMM_CPT,
+                        persistedBmmClass.getSourceSchemaId(),
+                        persistedBmmClass.getName(),
+                        persistedBmmProperty.getName());
             }
             if(containerPropertyDefinition.getCardinality() == null) {
-                addValidityInfo(persistedBmmClass.getSourceSchemaId(), "BMM_CPTNC", new ArrayList<String>() {
-                    {
-                        add(persistedBmmClass.getSourceSchemaId());
-                        add(persistedBmmClass.getName());
-                        add(persistedBmmProperty.getName());
-                    }
-                });
+                addValidityInfo(persistedBmmClass.getSourceSchemaId(), BmmMessageIds.ec_BMM_CPTNC,
+                        persistedBmmClass.getSourceSchemaId(),
+                        persistedBmmClass.getName(),
+                        persistedBmmProperty.getName());
             }
         } else if (persistedBmmProperty instanceof PersistedBmmGenericProperty){
             PersistedBmmGenericProperty genericPropertyDefinition = (PersistedBmmGenericProperty)persistedBmmProperty;
             PersistedBmmGenericType attributeTypeDefinition = genericPropertyDefinition.getTypeDefinition();
             if(attributeTypeDefinition != null) {
                 if(!schema.hasClassOrPrimitiveDefinition(attributeTypeDefinition.getRootType())) {
-                    addValidityError(persistedBmmClass.getSourceSchemaId(), "BMM_GPRT", new ArrayList<String>() {
-                        {
-                            add(persistedBmmClass.getSourceSchemaId());
-                            add(persistedBmmClass.getName());
-                            add(persistedBmmProperty.getName());
-                            add(attributeTypeDefinition.getRootType());
-                        }
-                    });
+                    addValidityError(persistedBmmClass.getSourceSchemaId(), BmmMessageIds.ec_BMM_GPRT, persistedBmmClass.getSourceSchemaId(),
+                            persistedBmmClass.getName(),
+                            persistedBmmProperty.getName(),
+                            attributeTypeDefinition.getRootType());
                 }
-                attributeTypeDefinition.getGenericParameterReferences().forEach((genericParameter) -> {
+
+                for(PersistedBmmType genericParameter:attributeTypeDefinition.getGenericParameterReferences()) {
                     List<String> typeReferences = genericParameter.flattenedTypeList();
-                    typeReferences.forEach(typeReference -> {
+                    for(String typeReference:typeReferences) {
                         if(!schema.hasClassOrPrimitiveDefinition(typeReference)) {
                             if (persistedBmmClass.isGeneric()) {  //it might be a formal parameter, to be matched against those of enclosing class
                                 Map<String, PersistedBmmGenericParameter> genericParameters = persistedBmmClass.getGenericParameterDefinitions();
                                 if (!genericParameters.containsKey(typeReference)) {
-                                    addValidityError(persistedBmmClass.getSourceSchemaId(), "BMM_GPGPU", new ArrayList<String>() {
-                                        {
-                                            add(persistedBmmClass.getSourceSchemaId());
-                                            add(persistedBmmClass.getName());
-                                            add(persistedBmmProperty.getName());
-                                            add(attributeTypeDefinition.getRootType());
-                                        }
-                                    });
+                                    addValidityError(persistedBmmClass.getSourceSchemaId(), BmmMessageIds.ec_BMM_GPGPU,
+                                            persistedBmmClass.getSourceSchemaId(),
+                                            persistedBmmClass.getName(),
+                                            persistedBmmProperty.getName(),
+                                            attributeTypeDefinition.getRootType());
                                 } else {
                                     //Should this be logged?
                                 }
                             } else {
-                                addValidityError(persistedBmmClass.getSourceSchemaId(), "BMM_GPGPT", new ArrayList<String>() {
-                                    {
-                                        add(persistedBmmClass.getSourceSchemaId());
-                                        add(persistedBmmClass.getName());
-                                        add(persistedBmmProperty.getName());
-                                        add(typeReference);
-                                    }
-                                });
+                                addValidityError(persistedBmmClass.getSourceSchemaId(), BmmMessageIds.ec_BMM_GPGPT,
+                                        persistedBmmClass.getSourceSchemaId(),
+                                        persistedBmmClass.getName(),
+                                        persistedBmmProperty.getName(),
+                                        typeReference);
                             }
                         }
-                    });
-                });
-            } else {
-                addValidityError(persistedBmmClass.getSourceSchemaId(), "BMM_GPT", new ArrayList<String>() {
-                    {
-                        add(persistedBmmClass.getSourceSchemaId());
-                        add(persistedBmmClass.getName());
-                        add(persistedBmmProperty.getName());
                     }
-                });
+                }
+            } else {
+                addValidityError(persistedBmmClass.getSourceSchemaId(), BmmMessageIds.ec_BMM_GPT,
+                        persistedBmmClass.getSourceSchemaId(),
+                        persistedBmmClass.getName(),
+                        persistedBmmProperty.getName());
             }
         }
     }
@@ -376,20 +297,15 @@ public class BmmSchemaValidator extends AnyValidator {
      * @param aKey
      * @param arguments
      */
-    protected void addValidityError(String sourceSchemaId, String aKey, List<String> arguments) {
+    protected void addValidityError(String sourceSchemaId, MessageCode aKey, String... arguments) {
         if(sourceSchemaId.equals(schema.getSchemaId())) {
             addError(aKey, arguments);
         } else {
             if(!schemaErrorTableCache.containsKey(sourceSchemaId)) {
                 schemaErrorTableCache.put(sourceSchemaId, new MessageLogger());
             }
-            schemaErrorTableCache.get(sourceSchemaId).addError(aKey, arguments, "");
-            addError(BmmMessageIds.ec_BMM_INCERR, new ArrayList<String>() {
-                {
-                    add(schema.getSchemaId());
-                    add(sourceSchemaId);
-                }
-            });
+            schemaErrorTableCache.get(sourceSchemaId).addErrorWithLocation(aKey, Lists.newArrayList(arguments), "");
+            addError(BmmMessageIds.ec_BMM_INCERR, schema.getSchemaId(), sourceSchemaId);
         }
     }
 
@@ -400,14 +316,14 @@ public class BmmSchemaValidator extends AnyValidator {
      * @param aKey
      * @param arguments
      */
-    protected void addValidityWarning(String sourceSchemaId, String aKey, List<String> arguments) {
+    protected void addValidityWarning(String sourceSchemaId, MessageCode aKey, String... arguments) {
         if(sourceSchemaId.equals(schema.getSchemaId())) {
             addWarning(aKey, arguments);
         } else {
             if(!schemaErrorTableCache.containsKey(sourceSchemaId)) {
                 schemaErrorTableCache.put(sourceSchemaId, new MessageLogger());
             }
-            schemaErrorTableCache.get(sourceSchemaId).addWarning(aKey, arguments, "");
+            schemaErrorTableCache.get(sourceSchemaId).addWarningWithLocation(aKey, Lists.newArrayList(arguments), "");
         }
     }
 
@@ -418,14 +334,14 @@ public class BmmSchemaValidator extends AnyValidator {
      * @param aKey
      * @param arguments
      */
-    protected void addValidityInfo(String sourceSchemaId, String aKey, List<String> arguments) {
+    protected void addValidityInfo(String sourceSchemaId, MessageCode aKey, String... arguments) {
         if(sourceSchemaId.equals(schema.getSchemaId())) {
             addInfo(aKey, arguments);
         } else {
             if(!schemaErrorTableCache.containsKey(sourceSchemaId)) {
                 schemaErrorTableCache.put(sourceSchemaId, new MessageLogger());
             }
-            schemaErrorTableCache.get(sourceSchemaId).addInfo(aKey, arguments, "");
+            schemaErrorTableCache.get(sourceSchemaId).addInfoWithLocation(aKey, Lists.newArrayList(arguments), "");
         }
     }
 
@@ -538,9 +454,7 @@ public class BmmSchemaValidator extends AnyValidator {
                     (!name1.equalsIgnoreCase(name2)) && (name1.startsWith(name2) || name2.startsWith(name1))
                 ).count() > 0;
                 if(invalidSiblings) {
-                    addError("ec_BMM_PKGTL", new ArrayList<String>() {{
-                        add(schema.getSchemaId());
-                    }});
+                    addError(BmmMessageIds.ec_BMM_PKGTL, schema.getSchemaId());
                 }
             });
 
@@ -549,11 +463,10 @@ public class BmmSchemaValidator extends AnyValidator {
                 List<String> propertyList = new ArrayList<>();
                 bmmClassSource.getProperties().keySet().forEach(property -> {
                     if(propertyList.contains(property)) { //Maps eliminate duplicates so this should never occur unless Eiffel maps have different behaviors(??)
-                        addError("ec_BMM_PRDUP", new ArrayList<String>() {{
-                            add(schema.getSchemaId());
-                            add(bmmClassSource.getName());
-                            add(property);
-                        }});
+                        addError(BmmMessageIds.ec_BMM_PRDUP,
+                            schema.getSchemaId(),
+                            bmmClassSource.getName(),
+                            property);
                     } else {
                         propertyList.add(property);
                     }
@@ -564,33 +477,28 @@ public class BmmSchemaValidator extends AnyValidator {
             schema.doRecursivePackages(persistedBmmPackage -> {
                 //check for lower-down qualified names
                 if((!schema.getPackages().containsKey(persistedBmmPackage.getName().toUpperCase())) && persistedBmmPackage.getName().indexOf(BmmDefinitions.PACKAGE_NAME_DELIMITER) >=0) {
-                    addError("ec_BMM_PKGQN", new ArrayList<String>(){{
-                        add(schema.getSchemaId());
-                        add(persistedBmmPackage.getName());
-                    }});
+                    addError(BmmMessageIds.ec_BMM_PKGQN,
+                        schema.getSchemaId(),
+                        persistedBmmPackage.getName());
                 }
                 persistedBmmPackage.getClasses().forEach(persistedBmmClass -> {
                     if(StringUtils.isEmpty(persistedBmmClass)) {
-                        addError("", new ArrayList<String>() {{
-                            add(schema.getSchemaId());
-                            add(persistedBmmPackage.getName());
-                        }});
+                        addError(new UnknownMessageCode(),
+                            schema.getSchemaId(),
+                            persistedBmmPackage.getName());
                     } else if(!schema.hasClassOrPrimitiveDefinition(persistedBmmClass)) {
-                        addError("", new ArrayList<String>() {{
-                            add(schema.getSchemaId());
-                            add(persistedBmmClass);
-                            add(persistedBmmPackage.getName());
-                        }});
+                        addError(new UnknownMessageCode(),
+                            schema.getSchemaId(),
+                            persistedBmmClass,
+                            persistedBmmPackage.getName());
                     }
                 });
             });
 
             if(passed) {
-                addInfo("", new ArrayList<String>() {{
-                    add(schema.getSchemaId());
-                    add(""+schema.getPrimitives().size());
-                    add(""+schema.getClassDefinitions().size());
-                }});
+                addInfo(new UnknownMessageCode(),schema.getSchemaId(),
+                    ""+schema.getPrimitives().size(),
+                    ""+schema.getClassDefinitions().size());
                 schema.setState(PersistedBmmSchemaState.STATE_VALIDATED_CREATED);
             }
         } else {

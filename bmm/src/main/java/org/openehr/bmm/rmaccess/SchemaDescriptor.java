@@ -183,11 +183,10 @@ public class SchemaDescriptor {
     private void validateBmmVersionCompatibility() {
         isBmmCompatible = BmmDefinitions.isBmmVersionCompatible(bmmVersion);
         if (!isBmmCompatible) {
-            schemaValidator.addError("ec_BMM_VER", new ArrayList<String>() {{
-                add(schemaId);
-                add(bmmVersion);
-                add(BmmDefinitions.BMM_INTERNAL_VERSION);
-            }});
+            schemaValidator.addError(BmmMessageIds.ec_BMM_VER,
+                schemaId,
+                bmmVersion,
+                BmmDefinitions.BMM_INTERNAL_VERSION);
         }
     }
 
@@ -393,9 +392,7 @@ public class SchemaDescriptor {
      *
      */
     public void signalLoadIncludeError() {
-        schemaValidator.addError(BmmMessageIds.ec_bmm_schema_include_failed_to_load, new ArrayList<String>() {{
-            add(schemaId);
-        }});
+        schemaValidator.addError(BmmMessageIds.ec_bmm_schema_include_failed_to_load, schemaId);
     }
 
     /**
@@ -432,11 +429,8 @@ public class SchemaDescriptor {
         if(persistentSchema.getIncludes() != null && persistentSchema.getIncludes().size() > 0) {
             persistentSchema.getIncludes().keySet().forEach(include -> {
                 if(!allSchemas.contains(include)) {
-                    schemaValidator.addError(BmmMessageIds.ec_BMM_INC, new ArrayList<String>(){{
-                        add(schemaId);
-                        add(include);
-                    }});
-                } else {
+                    schemaValidator.addError(BmmMessageIds.ec_BMM_INC, schemaId, include);
+               } else {
                     includes.add(include);
                 }
             });
@@ -461,10 +455,9 @@ public class SchemaDescriptor {
     public PersistedBmmSchema loadPersistedSchema() {
         PersistedBmmSchema retVal = null;
         if (schemaFile == null || !schemaFile.exists()) {
-            schemaValidator.addError(BmmMessageIds.ec_object_file_not_valid, new ArrayList<String>() {{
-                add(schemaFile.getName());
-                add(schemaFile.getAbsolutePath());
-            }});
+            schemaValidator.addError(BmmMessageIds.ec_object_file_not_valid,
+                schemaFile.getName(),
+                schemaFile.getAbsolutePath());
         } else {
             try {
                 OdinLoaderImpl loader = new OdinLoaderImpl();
@@ -473,11 +466,10 @@ public class SchemaDescriptor {
                 BmmSchemaDeserializer deserializer = new BmmSchemaDeserializer();
                 retVal = deserializer.deserialize(root);
             } catch (Exception e) { //TODO May not be best way to handle this.
-                schemaValidator.addError(BmmMessageIds.ec_bmm_schema_load_error, new ArrayList<String>() {{
-                    add(schemaFile.getName());
-                    add(schemaFile.getAbsolutePath());
-                    add(e.getMessage());
-                }});
+                schemaValidator.addError(BmmMessageIds.ec_bmm_schema_load_error,
+                    schemaFile.getName(),
+                    schemaFile.getAbsolutePath(),
+                    e.getMessage());
                 e.printStackTrace();
             }
         }

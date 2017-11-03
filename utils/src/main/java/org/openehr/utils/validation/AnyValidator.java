@@ -20,6 +20,8 @@
  */
 package org.openehr.utils.validation;
 
+import com.google.common.collect.Lists;
+import org.openehr.utils.message.MessageCode;
 import org.openehr.utils.message.MessageLogger;
 
 import java.util.List;
@@ -111,7 +113,7 @@ public abstract class AnyValidator {
      * @param aCode
      * @return
      */
-    public boolean hasError(String aCode) {
+    public boolean hasError(MessageCode aCode) {
         return messageLogger.hasError(aCode);
     }
 
@@ -120,7 +122,7 @@ public abstract class AnyValidator {
      * @param aCode
      * @return
      */
-    public boolean hasWarning(String aCode) {
+    public boolean hasWarning(MessageCode aCode) {
         return messageLogger.hasWarning(aCode);
     }
 
@@ -129,7 +131,7 @@ public abstract class AnyValidator {
      * @param aCode
      * @return
      */
-    public boolean hasInfo(String aCode) {
+    public boolean hasInfo(MessageCode aCode) {
         return messageLogger.hasInfo(aCode);
     }
 
@@ -149,8 +151,8 @@ public abstract class AnyValidator {
      * @param aKey
      * @param args
      */
-    public void addError(String aKey, List<String> args) {
-        addErrorWithLocation(aKey, args, "");
+    public void addError(MessageCode aKey,String... args) {
+        addErrorWithLocation(aKey, Lists.newArrayList(args), "");
     }
 
     /**
@@ -158,8 +160,8 @@ public abstract class AnyValidator {
      * @param aKey
      * @param args
      */
-    public void addWarning(String aKey, List<String> args) {
-        addWarningWithLocation(aKey, args, "");
+    public void addWarning(MessageCode aKey, String... args) {
+        addWarningWithLocation(aKey, Lists.newArrayList(args), "");
     }
 
     /**
@@ -167,8 +169,8 @@ public abstract class AnyValidator {
      * @param aKey
      * @param args
      */
-    public void addInfo(String aKey, List<String> args) {
-        addInfoWithLocation(aKey, args, "");
+    public void addInfo(MessageCode aKey, String... args) {
+        addInfoWithLocation(aKey, Lists.newArrayList(args), "");
     }
 
     /**
@@ -177,8 +179,8 @@ public abstract class AnyValidator {
      * @param args
      * @param aLocation
      */
-    public void addErrorWithLocation(String aKey, List<String> args, String aLocation) {
-        messageLogger.addError(aKey, args, aLocation);
+    public void addErrorWithLocation(MessageCode aKey, List<String> args, String aLocation) {
+        messageLogger.addErrorWithLocation(aKey, args, aLocation);
     }
 
     /**
@@ -187,8 +189,8 @@ public abstract class AnyValidator {
      * @param args
      * @param aLocation
      */
-    public void addWarningWithLocation(String aKey, List<String> args, String aLocation) {
-        messageLogger.addWarning(aKey, args, aLocation);
+    public void addWarningWithLocation(MessageCode aKey, List<String> args, String aLocation) {
+        messageLogger.addWarningWithLocation(aKey, args, aLocation);
     }
 
     /**
@@ -197,8 +199,8 @@ public abstract class AnyValidator {
      * @param args
      * @param aLocation
      */
-    public void addInfoWithLocation(String aKey, List<String> args, String aLocation) {
-        messageLogger.addInfo(aKey, args, aLocation);
+    public void addInfoWithLocation(MessageCode aKey, List<String> args, String aLocation) {
+        messageLogger.addInfoWithLocation(aKey, args, aLocation);
     }
 
     public boolean readyToValidate() {

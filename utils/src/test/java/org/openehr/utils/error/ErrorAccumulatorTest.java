@@ -2,8 +2,11 @@ package org.openehr.utils.error;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.openehr.utils.message.MessageCode;
 import org.openehr.utils.message.MessageDescriptor;
 import org.openehr.utils.message.MessageLogger;
+import org.openehr.utils.message.MessageSeverity;
+import org.openehr.utils.validation.TestErrorCode;
 
 import java.util.List;
 
@@ -20,32 +23,32 @@ public class ErrorAccumulatorTest {
 
     @Test
     public void lastAdded() throws Exception {
-        errorAccumulator.addError("code1", null, null);
-        errorAccumulator.addError("code2", null, null);
-        errorAccumulator.addError("code3", null, null);
-        assertEquals(errorAccumulator.lastAdded().getCode(), "code3");
+        errorAccumulator.addErrorWithLocation(TestErrorCode.code1, null, null);
+        errorAccumulator.addErrorWithLocation(TestErrorCode.code2, null, null);
+        errorAccumulator.addErrorWithLocation(TestErrorCode.code3, null, null);
+        assertEquals(errorAccumulator.lastAdded().getCode(), TestErrorCode.code3);
     }
 
     @Test
     public void getErrorCodes() throws Exception {
-        errorAccumulator.addError("code1", null, null);
-        errorAccumulator.addWarning("code2", null, null);
-        errorAccumulator.addInfo("code3", null, null);
-        errorAccumulator.addDebug("code4", null);
-        List<String> codes = errorAccumulator.getErrorCodes();
+        errorAccumulator.addErrorWithLocation(TestErrorCode.code1, null, null);
+        errorAccumulator.addWarningWithLocation(TestErrorCode.code2, null, null);
+        errorAccumulator.addInfoWithLocation(TestErrorCode.code3, null, null);
+        errorAccumulator.addDebugWithLocation(TestErrorCode.code4.getMessage(), null);//debug does not accept codes, for some reason!
+        List<MessageCode> codes = errorAccumulator.getErrorCodes();
         assertEquals(codes.size(), 1);
-        assertEquals(codes.get(0), "code1");
+        assertEquals(codes.get(0), TestErrorCode.code1);
     }
 
     @Test
     public void getWarningCodes() throws Exception {
-        errorAccumulator.addError("code1", null, null);
-        errorAccumulator.addWarning("code2", null, null);
-        errorAccumulator.addInfo("code3", null, null);
-        errorAccumulator.addDebug("code4", null);
-        List<String> codes = errorAccumulator.getWarningCodes();
+        errorAccumulator.addErrorWithLocation(TestErrorCode.code1, null, null);
+        errorAccumulator.addWarningWithLocation(TestErrorCode.code2, null, null);
+        errorAccumulator.addInfoWithLocation(TestErrorCode.code3, null, null);
+        errorAccumulator.addDebugWithLocation(TestErrorCode.code4.getCode(), null);
+        List<MessageCode> codes = errorAccumulator.getWarningCodes();
         assertEquals(codes.size(), 1);
-        assertEquals(codes.get(0), "code2");
+        assertEquals(codes.get(0), TestErrorCode.code2);
     }
 
     @Test
@@ -55,13 +58,13 @@ public class ErrorAccumulatorTest {
 
     @Test
     public void isEmpty2() throws Exception {
-        errorAccumulator.addError("code", null, null);
+        errorAccumulator.addErrorWithLocation(TestErrorCode.code, null, null);
         assertFalse(errorAccumulator.isEmpty());
     }
 
     @Test
     public void hasErrors() throws Exception {
-        errorAccumulator.addError("code", null, null);
+        errorAccumulator.addErrorWithLocation(TestErrorCode.code, null, null);
         assertTrue(errorAccumulator.hasErrors());
         assertFalse(errorAccumulator.hasWarnings());
         assertFalse(errorAccumulator.hasInfo());
@@ -69,7 +72,7 @@ public class ErrorAccumulatorTest {
 
     @Test
     public void hasWarnings() throws Exception {
-        errorAccumulator.addWarning("code", null, null);
+        errorAccumulator.addWarningWithLocation(TestErrorCode.code, null, null);
         assertTrue(errorAccumulator.hasWarnings());
         assertFalse(errorAccumulator.hasErrors());
         assertFalse(errorAccumulator.hasInfo());
@@ -77,7 +80,7 @@ public class ErrorAccumulatorTest {
 
     @Test
     public void hasInfo() throws Exception {
-        errorAccumulator.addInfo("code", null, null);
+        errorAccumulator.addInfoWithLocation(TestErrorCode.code, null, null);
         assertTrue(errorAccumulator.hasInfo());
         assertFalse(errorAccumulator.hasWarnings());
         assertFalse(errorAccumulator.hasErrors());
@@ -85,20 +88,20 @@ public class ErrorAccumulatorTest {
 
     @Test
     public void hasErrorsOrWarnings1() throws Exception {
-        errorAccumulator.addError("code", null, null);
+        errorAccumulator.addErrorWithLocation(TestErrorCode.code, null, null);
         assertTrue(errorAccumulator.hasErrorsOrWarnings());
     }
 
     @Test
     public void hasErrorsOrWarnings2() throws Exception {
-        errorAccumulator.addWarning("code", null, null);
+        errorAccumulator.addWarningWithLocation(TestErrorCode.code, null, null);
         assertTrue(errorAccumulator.hasErrorsOrWarnings());
     }
 
     @Test
     public void hasErrorsOrWarnings3() throws Exception {
-        errorAccumulator.addWarning("code1", null, null);
-        errorAccumulator.addError("code2", null, null);
+        errorAccumulator.addWarningWithLocation(TestErrorCode.code1, null, null);
+        errorAccumulator.addErrorWithLocation(TestErrorCode.code2, null, null);
         assertTrue(errorAccumulator.hasErrorsOrWarnings());
     }
 
@@ -109,66 +112,66 @@ public class ErrorAccumulatorTest {
 
     @Test
     public void hasError1() throws Exception {
-        errorAccumulator.addInfo("code0", null, null);
-        errorAccumulator.addWarning("code1", null, null);
-        errorAccumulator.addError("code2", null, null);
-        assertTrue(errorAccumulator.hasError("code2"));
-        assertFalse(errorAccumulator.hasError("code3"));
-        assertFalse(errorAccumulator.hasError("code1"));
+        errorAccumulator.addInfoWithLocation(TestErrorCode.code0, null, null);
+        errorAccumulator.addWarningWithLocation(TestErrorCode.code1, null, null);
+        errorAccumulator.addErrorWithLocation(TestErrorCode.code2, null, null);
+        assertTrue(errorAccumulator.hasError(TestErrorCode.code2));
+        assertFalse(errorAccumulator.hasError(TestErrorCode.code3));
+        assertFalse(errorAccumulator.hasError(TestErrorCode.code1));
     }
 
     @Test
     public void hasError2() throws Exception {
-        assertFalse(errorAccumulator.hasError("code1"));
+        assertFalse(errorAccumulator.hasError(TestErrorCode.code1));
     }
 
     @Test
     public void hasMatchingError() throws Exception {
-        errorAccumulator.addInfo("code0", null, null);
-        errorAccumulator.addWarning("code1", null, null);
-        errorAccumulator.addError("code2", null, null);
-        assertTrue(errorAccumulator.hasMatchingError("code2"));
-        assertFalse(errorAccumulator.hasMatchingError("code0"));
-        assertFalse(errorAccumulator.hasMatchingError("code1"));
+        errorAccumulator.addInfoWithLocation(TestErrorCode.code0, null, null);
+        errorAccumulator.addWarningWithLocation(TestErrorCode.code1, null, null);
+        errorAccumulator.addErrorWithLocation(TestErrorCode.code2, null, null);
+        assertTrue(errorAccumulator.hasMatchingError(TestErrorCode.code2));
+        assertFalse(errorAccumulator.hasMatchingError(TestErrorCode.code0));
+        assertFalse(errorAccumulator.hasMatchingError(TestErrorCode.code1));
     }
 
     @Test
     public void hasMatchingWarning() throws Exception {
-        errorAccumulator.addInfo("code0", null, null);
-        errorAccumulator.addWarning("code1", null, null);
-        errorAccumulator.addError("code2", null, null);
-        assertTrue(errorAccumulator.hasMatchingWarning("code1"));
-        assertFalse(errorAccumulator.hasMatchingWarning("code2"));
-        assertFalse(errorAccumulator.hasMatchingWarning("code0"));
+        errorAccumulator.addInfoWithLocation(TestErrorCode.code0, null, null);
+        errorAccumulator.addWarningWithLocation(TestErrorCode.code1, null, null);
+        errorAccumulator.addErrorWithLocation(TestErrorCode.code2, null, null);
+        assertTrue(errorAccumulator.hasMatchingWarning(TestErrorCode.code1));
+        assertFalse(errorAccumulator.hasMatchingWarning(TestErrorCode.code2));
+        assertFalse(errorAccumulator.hasMatchingWarning(TestErrorCode.code0));
     }
 
     @Test
     public void addError() throws Exception {
-        errorAccumulator.addError("code2", null, null);
+        errorAccumulator.addErrorWithLocation(TestErrorCode.code2, null, null);
         assertEquals(1, errorAccumulator.getMessageList().size());
     }
 
     @Test
     public void addWarning() throws Exception {
-        errorAccumulator.addWarning("code1", null, null);
+        errorAccumulator.addWarningWithLocation(TestErrorCode.code1, null, null);
         assertEquals(1, errorAccumulator.getMessageList().size());
     }
 
     @Test
     public void addInfo() throws Exception {
-        errorAccumulator.addInfo("code0", null, null);
+        errorAccumulator.addInfoWithLocation(TestErrorCode.code0, null, null);
         assertEquals(1, errorAccumulator.getMessageList().size());
     }
 
     @Test
     public void addDebug() throws Exception {
-        errorAccumulator.addDebug("code0", null);
+        errorAccumulator.addDebugWithLocation(TestErrorCode.code0.getCode(), null);//debug does not use a code?!
         assertEquals(1, errorAccumulator.getMessageList().size());
     }
 
     @Test
     public void add() throws Exception {
-        errorAccumulator.add(new MessageDescriptor("code0", 0, null, null));
+        errorAccumulator.add(new MessageDescriptor(TestErrorCode.code0, MessageSeverity.DEBUG, null, null));
         assertEquals(1, errorAccumulator.getMessageList().size());
     }
 
@@ -177,13 +180,13 @@ public class ErrorAccumulatorTest {
         MessageLogger one = new MessageLogger();
         MessageLogger two = new MessageLogger();
 
-        one.addInfo("code0", null, null);
-        one.addWarning("code1", null, null);
-        one.addError("code2", null, null);
+        one.addInfoWithLocation(TestErrorCode.code0, null, null);
+        one.addWarningWithLocation(TestErrorCode.code1, null, null);
+        one.addErrorWithLocation(TestErrorCode.code2, null, null);
 
-        two.addInfo("code0", null, null);
-        two.addWarning("code1", null, null);
-        two.addError("code2", null, null);
+        two.addInfoWithLocation(TestErrorCode.code0, null, null);
+        two.addWarningWithLocation(TestErrorCode.code1, null, null);
+        two.addErrorWithLocation(TestErrorCode.code2, null, null);
 
         one.append(two);
 
@@ -198,9 +201,9 @@ public class ErrorAccumulatorTest {
     @Test
     public void clear() throws Exception {
         assertEquals(errorAccumulator.getMessageList().size(), 0);
-        errorAccumulator.addInfo("code0", null, null);
-        errorAccumulator.addWarning("code1", null, null);
-        errorAccumulator.addError("code2", null, null);
+        errorAccumulator.addInfoWithLocation(TestErrorCode.code0, null, null);
+        errorAccumulator.addWarningWithLocation(TestErrorCode.code1, null, null);
+        errorAccumulator.addErrorWithLocation(TestErrorCode.code2, null, null);
         assertEquals(errorAccumulator.getMessageList().size(), 3);
         assertTrue(errorAccumulator.hasErrors());
         assertTrue(errorAccumulator.hasWarnings());
@@ -214,18 +217,18 @@ public class ErrorAccumulatorTest {
 
     @Test
     public void getErrorList() throws Exception {
-        errorAccumulator.addInfo("code0", null, null);
-        errorAccumulator.addWarning("code1", null, null);
-        errorAccumulator.addError("code2", null, null);
+        errorAccumulator.addInfoWithLocation(TestErrorCode.code0, null, null);
+        errorAccumulator.addWarningWithLocation(TestErrorCode.code1, null, null);
+        errorAccumulator.addErrorWithLocation(TestErrorCode.code2, null, null);
 
         assertEquals(3, errorAccumulator.getMessageList().size());
     }
 
     @Test
     public void toStringFiltered() throws Exception {
-        errorAccumulator.addInfo("code0", null, null);
-        errorAccumulator.addWarning("code1", null, null);
-        errorAccumulator.addError("code2", null, null);
+        errorAccumulator.addInfoWithLocation(TestErrorCode.code0, null, null);
+        errorAccumulator.addWarningWithLocation(TestErrorCode.code1, null, null);
+        errorAccumulator.addErrorWithLocation(TestErrorCode.code2, null, null);
 
         assertEquals("ERROR (code2) (Error DB load failure); original error params %1; %2; %3; %4\n", errorAccumulator.toStringFiltered(true, false, false));
         assertEquals("WARNING (code1) (Error DB load failure); original error params %1; %2; %3; %4\n", errorAccumulator.toStringFiltered(false, true, false));
