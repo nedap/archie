@@ -21,6 +21,8 @@ package org.openehr.utils.message;
  * Author: Claude Nanjo
  */
 
+import com.google.common.collect.Lists;
+
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -95,6 +97,18 @@ public class MessageDatabase {
     public void addTable(MessageDatabase messageDb) {
         messageTable.putAll(messageDb.messageTable);
     }
+
+    /**
+     * Extract message for `an_id' from `message_table', perform substitutions from `args
+     * and return the Result. If not found, return a standard message code error message.
+     * @param aMessageTemplateId
+     * @param aMessageArguments
+     * @return
+     */
+    public String createMessageContent(String aMessageTemplateId, String... aMessageArguments) {
+        return createMessageContent(aMessageTemplateId, Lists.newArrayList(aMessageArguments));
+    }
+
 
     /**
      * Extract message for `an_id' from `message_table', perform substitutions from `args

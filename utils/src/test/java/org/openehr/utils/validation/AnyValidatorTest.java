@@ -32,7 +32,7 @@ public class AnyValidatorTest {
     public void hasPassed2() throws Exception {
         assertTrue(validator.hasPassed());
         MessageLogger other = new MessageLogger();
-        other.addErrorWithLocation(TestErrorCode.ErrorKey, null, null);
+        other.addErrorWithLocation(TestErrorCode.ErrorKey, null);
         validator.mergeErrors(other);
         assertFalse(validator.hasPassed());
     }
@@ -124,7 +124,7 @@ public class AnyValidatorTest {
         validator.addError(TestErrorCode.ErrorKey, "argument 1");
         
         MessageLogger other = new MessageLogger();
-        other.addErrorWithLocation(TestErrorCode.ErrorKey, null, Lists.newArrayList("argument 1"));
+        other.addErrorWithLocation(TestErrorCode.ErrorKey, null, "argument 1");
         validator.mergeErrors(other);
         assertEquals(2, validator.getMessageCount());
     }
@@ -158,7 +158,7 @@ public class AnyValidatorTest {
 
     @Test
     public void addErrorWithLocation() throws Exception {
-        validator.addErrorWithLocation(TestErrorCode.ErrorKey, Lists.newArrayList("argument 1"), null);
+        validator.addErrorWithLocation(TestErrorCode.ErrorKey, null, "argument 1");
         assertTrue(validator.hasError(TestErrorCode.ErrorKey));
         assertFalse(validator.hasWarning(TestErrorCode.ErrorKey));
         assertFalse(validator.hasInfo(TestErrorCode.ErrorKey));
@@ -166,7 +166,7 @@ public class AnyValidatorTest {
 
     @Test
     public void addWarningWithLocation() throws Exception {
-        validator.addWarningWithLocation(TestErrorCode.ErrorKey, Lists.newArrayList("argument 1"), null);
+        validator.addWarningWithLocation(TestErrorCode.ErrorKey, null, "argument 1");
         assertTrue(validator.hasWarning(TestErrorCode.ErrorKey));
         assertFalse(validator.hasError(TestErrorCode.ErrorKey));
         assertFalse(validator.hasInfo(TestErrorCode.ErrorKey));
@@ -174,7 +174,7 @@ public class AnyValidatorTest {
 
     @Test
     public void addInfoWithLocation() throws Exception {
-        validator.addInfoWithLocation(TestErrorCode.ErrorKey, Lists.newArrayList("argument 1"), null);
+        validator.addInfoWithLocation(TestErrorCode.ErrorKey, null, "argument 1");
 
         assertTrue(validator.hasInfo(TestErrorCode.ErrorKey));
         assertFalse(validator.hasWarning(TestErrorCode.ErrorKey));
@@ -188,14 +188,14 @@ public class AnyValidatorTest {
 
     @Test
     public void readyToValidate2() throws Exception {
-        validator.addErrorWithLocation(TestErrorCode.ErrorKey, Lists.newArrayList("argument 1"), null);
+        validator.addErrorWithLocation(TestErrorCode.ErrorKey, null, "argument 1");
         validator.validate();
         assertFalse(validator.readyToValidate());
     }
 
     @Test
     public void readyToValidate3() throws Exception {
-        validator.addErrorWithLocation(TestErrorCode.ErrorKey, Lists.newArrayList("argument 1"), null);
+        validator.addErrorWithLocation(TestErrorCode.ErrorKey, null, "argument 1");
         validator.validate();
         assertFalse(validator.readyToValidate());
         validator.reset();

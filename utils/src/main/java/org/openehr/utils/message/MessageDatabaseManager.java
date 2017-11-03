@@ -41,6 +41,10 @@ public class MessageDatabaseManager {
         return messageDatabase.createMessageContent(anId, args);
     }
 
+    public String getMessage(String anId, String... args) {
+        return messageDatabase.createMessageContent(anId, args);
+    }
+
     public String getText(String anId) {
         return messageDatabase.returnMessageTemplateText(anId);
     }

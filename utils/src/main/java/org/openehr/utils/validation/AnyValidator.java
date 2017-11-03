@@ -24,8 +24,6 @@ import com.google.common.collect.Lists;
 import org.openehr.utils.message.MessageCode;
 import org.openehr.utils.message.MessageLogger;
 
-import java.util.List;
-
 /**
  * Base class for OpenEHR model validators
  */
@@ -152,7 +150,7 @@ public abstract class AnyValidator {
      * @param args
      */
     public void addError(MessageCode aKey,String... args) {
-        addErrorWithLocation(aKey, Lists.newArrayList(args), "");
+        addErrorWithLocation(aKey, "", args);
     }
 
     /**
@@ -161,7 +159,7 @@ public abstract class AnyValidator {
      * @param args
      */
     public void addWarning(MessageCode aKey, String... args) {
-        addWarningWithLocation(aKey, Lists.newArrayList(args), "");
+        addWarningWithLocation(aKey, "", args);
     }
 
     /**
@@ -170,36 +168,36 @@ public abstract class AnyValidator {
      * @param args
      */
     public void addInfo(MessageCode aKey, String... args) {
-        addInfoWithLocation(aKey, Lists.newArrayList(args), "");
+        addInfoWithLocation(aKey, "", args);
     }
 
     /**
      * Append an error with key `a_key' and `args' array to the `errors' string
      * @param aKey
-     * @param args
      * @param aLocation
+     * @param args
      */
-    public void addErrorWithLocation(MessageCode aKey, List<String> args, String aLocation) {
+    public void addErrorWithLocation(MessageCode aKey, String aLocation, String... args) {
         messageLogger.addErrorWithLocation(aKey, aLocation, args);
     }
 
     /**
      * Append a warning with key `a_key' and `args' array to the `warnings' string
      * @param aKey
-     * @param args
      * @param aLocation
+     * @param args
      */
-    public void addWarningWithLocation(MessageCode aKey, List<String> args, String aLocation) {
+    public void addWarningWithLocation(MessageCode aKey, String aLocation, String... args) {
         messageLogger.addWarningWithLocation(aKey, aLocation, args);
     }
 
     /**
      * Append an information message with key `a_key' and `args' array to the `information' string
      * @param aKey
-     * @param args
      * @param aLocation
+     * @param args
      */
-    public void addInfoWithLocation(MessageCode aKey, List<String> args, String aLocation) {
+    public void addInfoWithLocation(MessageCode aKey, String aLocation, String... args) {
         messageLogger.addInfoWithLocation(aKey, aLocation, args);
     }
 

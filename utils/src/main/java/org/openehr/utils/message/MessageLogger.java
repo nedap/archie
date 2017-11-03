@@ -191,31 +191,31 @@ public class MessageLogger {
 
     /**
      * Adds an error to this error cache and sets the error flag to true.
-     *  @param aCode
+     * @param aCode
      * @param aLocation
      * @param args
      */
-    public void addErrorWithLocation(MessageCode aCode, String aLocation, List<String> args) {
+    public void addErrorWithLocation(MessageCode aCode, String aLocation, String... args) {
         add(new MessageDescriptor(aCode, MessageSeverity.ERROR, messageDatabaseManager.getMessage(aCode.getCode(), args), aLocation));
     }
 
     /**
      * Adds a warning to this error cache and sets the hasWarning flag to true.
-     *  @param aCode
+     * @param aCode
      * @param aLocation
      * @param args
      */
-    public void addWarningWithLocation(MessageCode aCode, String aLocation, List<String> args) {
+    public void addWarningWithLocation(MessageCode aCode, String aLocation, String... args) {
         add(new MessageDescriptor(aCode, MessageSeverity.WARNING, messageDatabaseManager.getMessage(aCode.getCode(), args), aLocation));
     }
 
     /**
      * Adds a warning to this error cache and sets the hasInfo flag to true.
-     *  @param aCode
+     * @param aCode
      * @param aLocation
      * @param args
      */
-    public void addInfoWithLocation(MessageCode aCode, String aLocation, List<String> args) {
+    public void addInfoWithLocation(MessageCode aCode, String aLocation, String... args) {
         add(new MessageDescriptor(aCode, MessageSeverity.INFO, messageDatabaseManager.getMessage(aCode.getCode(), args), aLocation));
     }
 

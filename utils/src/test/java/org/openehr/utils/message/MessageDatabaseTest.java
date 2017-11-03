@@ -56,7 +56,7 @@ public class MessageDatabaseTest {
             add("item1");
             add("item2");
         }}));
-        assertEquals("Some error message: not_in_table", database.createMessageContent("not_in_table", null));
+        assertEquals("Some error message: not_in_table", database.createMessageContent("not_in_table"));
     }
 
     @Test
