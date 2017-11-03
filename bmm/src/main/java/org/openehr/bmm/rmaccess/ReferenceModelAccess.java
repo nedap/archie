@@ -379,7 +379,7 @@ public class ReferenceModelAccess {
         } catch (Exception e) {
             exceptionEncountered = true;
             validator.addError(BmmMessageIds.ec_bmm_schema_unknown_exception);
-            log.error("unknown exception loading schema descriptors", e);//TODO Handle with logging
+            log.error("unknown exception loading schema descriptors", e);
         }
     }
 
