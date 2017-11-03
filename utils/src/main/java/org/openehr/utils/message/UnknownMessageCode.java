@@ -10,7 +10,7 @@ public class UnknownMessageCode implements MessageCode {
     }
 
     @Override
-    public String getMessage() {
+    public String getMessageTemplate() {
         return "";
     }
 }

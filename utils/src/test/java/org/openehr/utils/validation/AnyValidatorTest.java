@@ -15,7 +15,6 @@ public class AnyValidatorTest {
     @Before
     public void setup() {
         validator = new BasicValidator();
-        MessageDatabaseManager.getInstance().getMessageDatabase().getMessageTable().put(TestErrorCode.ErrorKey.getCode(), "Error is {0}");
     }
 
     @Test

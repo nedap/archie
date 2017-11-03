@@ -34,7 +34,7 @@ public class ErrorAccumulatorTest {
         errorAccumulator.addErrorWithLocation(TestErrorCode.code1, null);
         errorAccumulator.addWarningWithLocation(TestErrorCode.code2, null);
         errorAccumulator.addInfoWithLocation(TestErrorCode.code3, null);
-        errorAccumulator.addDebugWithLocation(null, TestErrorCode.code4.getMessage());//debug does not accept codes, for some reason!
+        errorAccumulator.addDebugWithLocation(null, TestErrorCode.code4.getMessageTemplate());//debug does not accept codes, for some reason!
         List<MessageCode> codes = errorAccumulator.getErrorCodes();
         assertEquals(codes.size(), 1);
         assertEquals(codes.get(0), TestErrorCode.code1);

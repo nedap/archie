@@ -196,7 +196,7 @@ public class MessageLogger {
      * @param args
      */
     public void addErrorWithLocation(MessageCode aCode, String aLocation, String... args) {
-        add(new MessageDescriptor(aCode, MessageSeverity.ERROR, messageDatabaseManager.getMessage(aCode.getCode(), args), aLocation));
+        add(new MessageDescriptor(aCode, MessageSeverity.ERROR, messageDatabaseManager.getMessage(aCode, args), aLocation));
     }
 
     /**
@@ -206,7 +206,7 @@ public class MessageLogger {
      * @param args
      */
     public void addWarningWithLocation(MessageCode aCode, String aLocation, String... args) {
-        add(new MessageDescriptor(aCode, MessageSeverity.WARNING, messageDatabaseManager.getMessage(aCode.getCode(), args), aLocation));
+        add(new MessageDescriptor(aCode, MessageSeverity.WARNING, messageDatabaseManager.getMessage(aCode, args), aLocation));
     }
 
     /**
@@ -216,7 +216,7 @@ public class MessageLogger {
      * @param args
      */
     public void addInfoWithLocation(MessageCode aCode, String aLocation, String... args) {
-        add(new MessageDescriptor(aCode, MessageSeverity.INFO, messageDatabaseManager.getMessage(aCode.getCode(), args), aLocation));
+        add(new MessageDescriptor(aCode, MessageSeverity.INFO, messageDatabaseManager.getMessage(aCode, args), aLocation));
     }
 
     /**

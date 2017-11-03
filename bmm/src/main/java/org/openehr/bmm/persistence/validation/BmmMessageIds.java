@@ -6,14 +6,14 @@ package org.openehr.bmm.persistence.validation;
  * %%
  * Copyright (C) 2016 - 2017  Cognitive Medical Systems, Inc (http://www.cognitivemedicine.com).
  * %%
- * Licensed under the Apache License, Version 2.0 (the "License");
+ * Licensed under the Apache License, Version 2.0 (the );
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
+ * distributed under the License is distributed on an  BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
@@ -24,82 +24,89 @@ package org.openehr.bmm.persistence.validation;
 import org.openehr.utils.message.MessageCode;
 
 public enum BmmMessageIds implements MessageCode {
-    ec_bmm_documentation_text("bmm_documentation_text"),
-    ec_bmm_schemas_config_not_valid("bmm_schemas_config_not_valid"),
-    ec_bmm_schema_file_not_valid("bmm_schema_file_not_valid"),
-    ec_bmm_schema_load_failure("bmm_schema_load_failure"),
-    ec_model_access_e3("model_access_e3"),
-    ec_bmm_schema_load_failure_exception("bmm_schema_load_failure_exception"),
-    ec_bmm_schema_dir_not_valid("bmm_schema_dir_not_valid"),
-    ec_bmm_schema_dir_contains_no_schemas("bmm_schema_dir_contains_no_schemas"),
-    ec_bmm_schema_dir_contains_no_valid_schemas("bmm_schema_dir_contains_no_valid_schemas"),
-    ec_model_access_e7("model_access_e7"),
-    ec_bmm_schema_post_merge_validate_fail("bmm_schema_post_merge_validate_fail"),
-    ec_bmm_schema_included_schema_not_found("bmm_schema_included_schema_not_found"),
-    ec_bmm_schema_including_schema_not_valid("bmm_schema_including_schema_not_valid"),
-    ec_bmm_schema_include_failed_to_load("bmm_schema_include_failed_to_load"),
-    ec_bmm_schema_basic_validation_failed("bmm_schema_basic_validation_failed"),
-    ec_bmm_schema_unknown_exception("bmm_schema_unknown_exception"),
-    ec_bmm_schema_assertion_violation("bmm_schema_assertion_violation"),
-    ec_bmm_schema_includes_valiidation_failed("bmm_schema_includes_valiidation_failed"),
-    ec_bmm_schema_version_incompatible_with_tool("bmm_schema_version_incompatible_with_tool"),
-    ec_bmm_schema_conv_fail_err("bmm_schema_conv_fail_err"),
-    ec_bmm_schema_info_loaded("bmm_schema_info_loaded"),
-    ec_bmm_schema_merged_schema("bmm_schema_merged_schema"),
-    ec_model_access_w1("model_access_w1"),
-    ec_bmm_schema_duplicate_schema_found("bmm_schema_duplicate_schema_found"),
-    ec_bmm_schema_duplicate_found("bmm_schema_duplicate_found"),
-    ec_bmm_schema_rm_missing("bmm_schema_rm_missing"),
-    ec_model_access_w5("model_access_w5"),
-    ec_bmm_schemas_no_load_list_found("bmm_schemas_no_load_list_found"),
-    ec_bmm_schema_invalid_load_list("bmm_schema_invalid_load_list"),
-    ec_bmm_schema_passed_with_warnings("bmm_schema_passed_with_warnings"),
-    ec_BMM_INC("BMM_INC"),
-    ec_BMM_VER("BMM_VER"),
-    ec_BMM_VERASS("BMM_VERASS"),
-    ec_BMM_PTV("BMM_PTV"),
-    ec_BMM_ANC("BMM_ANC"),
-    ec_BMM_ANCE("BMM_ANCE"),
-    ec_BMM_GPCT("BMM_GPCT"),
-    ec_BMM_CPT("BMM_CPT"),
-    ec_BMM_CPTV("BMM_CPTV"),
-    ec_BMM_CPTNC("BMM_CPTNC"),
-    ec_BMM_CPCT("BMM_CPCT"),
-    ec_BMM_GPT("BMM_GPT"),
-    ec_BMM_GPRT("BMM_GPRT"),
-    ec_BMM_GPGPT("BMM_GPGPT"),
-    ec_BMM_GPGPM("BMM_GPGPM"),
-    ec_BMM_GPGPU("BMM_GPGPU"),
-    ec_BMM_SPT("BMM_SPT"),
-    ec_BMM_SPOT("BMM_SPOT"),
-    ec_BMM_PKGCL("BMM_PKGCL"),
-    ec_BMM_PKGID("BMM_PKGID"),
-    ec_BMM_PKGTL("BMM_PKGTL"),
-    ec_BMM_PKGQN("BMM_PKGQN"),
-    ec_BMM_PKGCE("BMM_PKGCE"),
-    ec_BMM_CLPKDP("BMM_CLPKDP"),
-    ec_BMM_CLDUP("BMM_CLDUP"),
-    ec_BMM_MDLPK("BMM_MDLPK"),
-    ec_BMM_PRDUP("BMM_PRDUP"),
-    ec_BMM_PRNCF("BMM_PRNCF"),
-    ec_BMM_INCERR("BMM_INCERR"),
-    ec_BMM_INCWARN("BMM_INCWARN"),
-    ec_BMM_ARPAR("BMM_ARPAR"),
-    ec_BMM_RMREL("BMM_RMREL"),
+    ec_bmm_documentation_text("Documentation"),
+    ec_bmm_schemas_config_not_valid("Reference model schema(s) {0} specified in options not valid or not found in schema directories"),
+    ec_bmm_schema_file_not_valid("Reference Model schema file {0} does not exist or not readable"),
+    ec_bmm_schema_load_failure("Reference Model schema {0} load failure; reason: {1}"),
+    ec_model_access_e3("Reference Model schema contains unknown type {0} (object add failed)"),
+    ec_bmm_schema_load_failure_exception("Reference Model schema {0} load failure due to exception during processing"),
+    ec_bmm_schema_dir_not_valid("Reference Model schema directory {0} does not exist or not readable"),
+    ec_bmm_schema_dir_contains_no_schemas("Reference Model schema directory {0} does not contain any schemas"),
+    ec_bmm_schema_dir_contains_no_valid_schemas("Reference Model schema directory {0} does not contain any valid schemas"),
+    ec_model_access_e7("No Reference Model schema found for package '{0}'"),
+    ec_bmm_schema_post_merge_validate_fail("Reference Model schema {0} failed post-merge validation; errors:%N{1}"),
+    ec_bmm_schema_included_schema_not_found("Reference Model included schema {0} not found or failed to load"),
+    ec_bmm_schema_including_schema_not_valid("Reference Model including schema {0} not valid"),
+    ec_bmm_schema_include_failed_to_load("Reference Model schema {0} includes a schema that failed to load"),
+    ec_bmm_schema_basic_validation_failed("Reference Model schema {0} failed basic validation; errors:%N{1}"),
+    ec_bmm_schema_unknown_exception("Unknown exception processing RM schemas"),
+    ec_bmm_schema_assertion_violation("Assertion violation processing RM schemas; original recipient: {0}"),
+    ec_bmm_schema_includes_valiidation_failed("Reference Model schema {0} includes validation failed: %N{1}"),
+    ec_bmm_schema_version_incompatible_with_tool("Reference Model BMM schema {0} incompatible with current release {1} of the tool; obtain up to date schemas"),
+    ec_bmm_schema_conv_fail_err("Reference Model schema {0} load data conversion failure; reason: {1}"),
+    ec_bmm_schema_info_loaded("Reference Model schema {0} loaded: {1} primitive types, {2} class definitions"),
+    ec_bmm_schema_merged_schema("Merged schema {0} into schema {1}"),
+    ec_model_access_w1("Reference Model checking is OFF"),
+    ec_bmm_schema_duplicate_schema_found("Duplicate Reference Model schema found for model '{0}' in file {1}, ignoring latter"),
+    ec_bmm_schema_duplicate_found("Duplicate instance of Reference Model model {0} found; original schema {1}; ignoring instance from schema {2}"),
+    ec_bmm_schema_rm_missing("Reference Model for {0} meta-data missing/invalid: {1}"),
+    ec_model_access_w5("Unknown Reference Model '{0}' mentioned in 'rm_schemas_load_list' config setting (ignored)"),
+    ec_bmm_schemas_no_load_list_found("No 'rm_schemas_load_list' config setting found; attempting to load all schemas (change via Tools>Options)"),
+    ec_bmm_schema_invalid_load_list("'rm_schemas_load_list' config setting mentions non-existent schema {0}"),
+    ec_bmm_schema_passed_with_warnings("Reference Model schema {0} passed basic validation with warnings:%N{1}"),
+    ec_BMM_INC("Reference Model schema {0} includes schema {1} that does not exist"),
+    ec_BMM_VER("Schema {0} BMM version {1} incompatible with software version {2}"),
+    ec_BMM_VERASS("Schema {0} BMM version {1} (assumed) incompatible with software version {2}"),
+    ec_BMM_PTV("Schema {0} class definition {1} property {2} type {3} not defined in schema"),
+    ec_BMM_ANC("Schema {0} class definition {1} ancestor {2} does not exist in schema"),
+    ec_BMM_ANCE("Schema {0} class definition {1} includes empty ancestor class name"),
+    ec_BMM_GPCT("Schema {0} class definition {1} generic parameter {2} constraint type {3} does not exist in schema"),
+    ec_BMM_CPT("Schema {0} class definition {1} container property {2} target type not defined"),
+    ec_BMM_CPTV("Schema {0} class definition {1} container property {2} target type {3} not found in schema"),
+    ec_BMM_CPTNC("Schema {0} class definition {1} container property {2} cardinality not defined (assuming {0..*})"),
+    ec_BMM_CPCT("Schema {0} class definition {1} container property {2} container type {3} not found in schema"),
+    ec_BMM_GPT("Schema {0} class definition {1} generic property {2} not defined"),
+    ec_BMM_GPRT("Schema {0} class definition {1} generic property {2} root type {3} not found in schema"),
+    ec_BMM_GPGPT("Schema {0} class definition {1} generic property {2} generic parameter {3} not found in schema or in containing class declarations (if open)"),
+    ec_BMM_GPGPM("Schema {0} class definition {1} marked 'is_generic' but has no generic parameter declarations"),
+    ec_BMM_GPGPU("Schema {0} class definition {1} generic property {2} type {3} parameter {4} not found in class definitions or {3} formal declaration"),
+    ec_BMM_SPT("Schema {0} class definition {1} single-valued property {2} type {3} not found in schema"),
+    ec_BMM_SPOT("Schema {0} class definition {1} single-valued property {2} open generic parameter {3} not found in containing class declarations"),
+    ec_BMM_PKGCL("Schema {0} class {1} mentioned in package {2} but not in schema, or relevant child schema"),
+    ec_BMM_PKGID("Schema {0} class definition {1} not declared in any package"),
+    ec_BMM_PKGTL("Schema {0} top-level sibling package definitions cannot include a package which is the child of another"),
+    ec_BMM_PKGQN("Schema {0} packages with qualified name found in package {1} (qualified names not allowed except at top-level)"),
+    ec_BMM_PKGCE("Schema {0} package {1} contains class with empty name"),
+    ec_BMM_CLPKDP("Schema {0} has duplicate class name {1} in package {2} and also package {3}"),
+    ec_BMM_CLDUP("Schema {0} has duplicate class name {1} in class definitions"),
+    ec_BMM_MDLPK("Schema {0} archetype_closure_package {1} does not exist"),
+    ec_BMM_PRDUP("Schema {0} class {1} duplicate property within class {2}"),
+    ec_BMM_PRNCF("Schema {0} class {1} property {2} does not conform to same property in ancestor {3} (duplicate?)"),
+    ec_BMM_INCERR("Schema {0} included schema {1} validity failure"),
+    ec_BMM_INCWARN("Schema {0} included schema {1} validity warning"),
+    ec_BMM_ARPAR("Schema {0} archetype parent class {1} not defined in schema"),
+    ec_BMM_RMREL("Schema {0} RM release {1} not valid; should be 3-part numeric version"),
     //Added for java-model-stack
-    ec_object_file_not_valid("object_file_not_valid"),
-    ec_bmm_schema_load_error("bmm_schema_load_failed");
+    ec_object_file_not_valid("EC Object file not valid"),
+    ec_bmm_schema_load_error("BMM Schema load error");
 
-    BmmMessageIds(String code) {
+    private final String template;
 
+    BmmMessageIds(String template) {
+        this.template = template;
     }
 
     @Override
     public String getCode() {
-        return name();
+        String code = name();
+        if(code.startsWith("ec_")) {//it's possible to get rid of the ec_ prefix altogether
+            return code.substring(3);
+        }
+        return code;
     }
 
-    public String getMessage() {
-        return "";
+    public String getMessageTemplate() {
+        return template;
     }
+
 }

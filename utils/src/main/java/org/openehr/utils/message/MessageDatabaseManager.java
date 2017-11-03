@@ -21,39 +21,26 @@ package org.openehr.utils.message;
  * Author: Claude Nanjo
  */
 
+import java.text.MessageFormat;
 import java.util.List;
 
 public class MessageDatabaseManager {
 
-    private static final MessageDatabaseManager instance = new MessageDatabaseManager();
-
-    private MessageDatabase messageDatabase = new MessageDatabase();
-
     public static MessageDatabaseManager getInstance() {
-        return instance;
+        return new MessageDatabaseManager();
     }
 
-    public String getMessageLine(String anId, List<String> args) {
-        return messageDatabase.createMessageLine(anId, args);
+    public String getMessageLine(MessageCode code, List<String> args) {
+        return MessageFormat.format(code.getMessageTemplate(), args);
     }
 
-    public String getMessage(String anId, List<String> args) {
-        return messageDatabase.createMessageContent(anId, args);
+    public String getMessage(MessageCode  code, List<String> args) {
+        return MessageFormat.format(code.getMessageTemplate(), args);
     }
 
-    public String getMessage(String anId, String... args) {
-        return messageDatabase.createMessageContent(anId, args);
+    public String getMessage(MessageCode code, String... args) {
+        //TODO: add i18n with ResourceBundles here
+        return MessageFormat.format(code.getMessageTemplate(), args);
     }
 
-    public String getText(String anId) {
-        return messageDatabase.returnMessageTemplateText(anId);
-    }
-
-    public MessageDatabase getMessageDatabase() {
-        return messageDatabase;
-    }
-
-    public void setMessageDatabase(MessageDatabase messageDatabase) {
-        this.messageDatabase = messageDatabase;
-    }
 }

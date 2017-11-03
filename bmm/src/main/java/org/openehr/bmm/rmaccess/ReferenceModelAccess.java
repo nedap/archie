@@ -378,7 +378,7 @@ public class ReferenceModelAccess {
             }
         } catch (Exception e) {
             exceptionEncountered = true;
-            validator.addError(BmmMessageIds.ec_bmm_schema_unknown_exception, null);
+            validator.addError(BmmMessageIds.ec_bmm_schema_unknown_exception);
             log.error("unknown exception loading schema descriptors", e);//TODO Handle with logging
         }
     }
@@ -430,7 +430,7 @@ public class ReferenceModelAccess {
             } else {
                 schemaLoadList = new ArrayList<>();
                 schemaLoadList.addAll(allSchemas.keySet());
-                validator.addWarning(BmmMessageIds.ec_bmm_schemas_no_load_list_found, null);
+                validator.addWarning(BmmMessageIds.ec_bmm_schemas_no_load_list_found);
             }
 
             //initial load of all schemas, which populates `schema_inclusion_map';

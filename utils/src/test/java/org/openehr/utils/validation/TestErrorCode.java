@@ -13,7 +13,7 @@ public enum TestErrorCode implements MessageCode {
     }
 
     @Override
-    public String getMessage() {
-        return "ErrorKey";
+    public String getMessageTemplate() {
+        return "Error is {0}";
     }
 }
