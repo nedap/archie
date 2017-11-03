@@ -24,6 +24,8 @@ We are splitting Archie into separate modules. This causes a few API incompatibi
     - ... probably more
 - ADLPArser.withConstrainsImposer has been removed. You can still do new ADLPArser(new RMConstraintsImposer()) if you want, or use it manually. 
 
+This README is out of date for this branch, but will be updated soon. It is up to date for the production version.
+
 ## dependency
 
 In gradle, include this dependency in your build.gradle:
@@ -46,7 +48,7 @@ or if you use maven, in your pom.xml
 
 ## Build
 
-[![Build Status](https://travis-ci.org/openEHR/archie.svg?branch=master)](https://travis-ci.org/openehr/archie)
+[![Build Status](https://travis-ci.org/openEHR/archie.svg?branch=master)](https://travis-ci.org/openEHR/archie)
 
 
 the following is from the old repository and not up to date, but gives an impression:
