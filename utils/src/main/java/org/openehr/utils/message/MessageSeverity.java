@@ -21,9 +21,9 @@
 package org.openehr.utils.message;
 
 /**
- * Static class for error code management
+ * enum for error code management
  */
-public enum MessageSeverity implements Comparable<MessageSeverity> {
+public enum MessageSeverity {
     DEBUG(9000), INFO(9001), WARNING(9002), ERROR(9003);
 
 
@@ -47,4 +47,5 @@ public enum MessageSeverity implements Comparable<MessageSeverity> {
     public int getLevel() {
         return level;
     }
+
 }
