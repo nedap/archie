@@ -3,7 +3,6 @@ package org.openehr.utils.validation;
 import com.google.common.collect.Lists;
 import org.junit.Before;
 import org.junit.Test;
-import org.openehr.utils.message.MessageDatabaseManager;
 import org.openehr.utils.message.MessageLogger;
 
 import static org.junit.Assert.*;

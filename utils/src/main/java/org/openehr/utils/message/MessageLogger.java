@@ -38,7 +38,6 @@ public class MessageLogger {
     private boolean hasErrors;
     private boolean hasWarnings;
     private boolean hasInfo;
-    private MessageDatabaseManager messageDatabaseManager = MessageDatabaseManager.getInstance();
 
     /**
      * Returns the last message added to the error cache.
@@ -212,7 +211,7 @@ public class MessageLogger {
      * @param args
      */
     public void addErrorWithLocation(MessageCode aCode, String aLocation, Object... args) {
-        add(new MessageDescriptor(aCode, MessageSeverity.ERROR, messageDatabaseManager.getMessage(aCode, args), aLocation));
+        add(new MessageDescriptor(aCode, MessageSeverity.ERROR, aCode.getMessage(args), aLocation));
     }
 
     /**
@@ -222,7 +221,7 @@ public class MessageLogger {
      * @param args
      */
     public void addWarningWithLocation(MessageCode aCode, String aLocation, Object... args) {
-        add(new MessageDescriptor(aCode, MessageSeverity.WARNING, messageDatabaseManager.getMessage(aCode, args), aLocation));
+        add(new MessageDescriptor(aCode, MessageSeverity.WARNING, aCode.getMessage(args), aLocation));
     }
 
     /**
@@ -232,7 +231,7 @@ public class MessageLogger {
      * @param args
      */
     public void addInfoWithLocation(MessageCode aCode, String aLocation, Object... args) {
-        add(new MessageDescriptor(aCode, MessageSeverity.INFO, messageDatabaseManager.getMessage(aCode, args), aLocation));
+        add(new MessageDescriptor(aCode, MessageSeverity.INFO, aCode.getMessage(args), aLocation));
     }
 
     /**

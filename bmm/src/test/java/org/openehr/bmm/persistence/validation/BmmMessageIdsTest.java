@@ -3,7 +3,6 @@ package org.openehr.bmm.persistence.validation;
 import org.junit.After;
 import org.junit.Test;
 import org.openehr.utils.message.I18n;
-import org.openehr.utils.message.MessageDatabaseManager;
 
 import java.util.Locale;
 
