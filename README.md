@@ -46,7 +46,7 @@ or if you use maven, in your pom.xml
 
 ## Build
 
-[![Build Status](https://travis-ci.org/openehr/archie.svg?branch=master)](https://travis-ci.org/openehr/archie)
+[![Build Status](https://travis-ci.org/openEHR/archie.svg?branch=master)](https://travis-ci.org/openehr/archie)
 
 
 the following is from the old repository and not up to date, but gives an impression:
