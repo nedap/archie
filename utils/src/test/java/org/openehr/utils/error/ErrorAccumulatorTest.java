@@ -226,14 +226,17 @@ public class ErrorAccumulatorTest {
 
     @Test
     public void toStringFiltered() throws Exception {
-        errorAccumulator.addInfoWithLocation(TestErrorCode.code0, null);
-        errorAccumulator.addWarningWithLocation(TestErrorCode.code1, null);
-        errorAccumulator.addErrorWithLocation(TestErrorCode.code2, null);
+        errorAccumulator.addInfo(TestErrorCode.code0);
+        errorAccumulator.addWarning(TestErrorCode.code1);
+        errorAccumulator.addError(TestErrorCode.code2);
 
-        assertEquals("ERROR (code2) (Error DB load failure); original error params %1; %2; %3; %4\n", errorAccumulator.toStringFiltered(true, false, false));
-        assertEquals("WARNING (code1) (Error DB load failure); original error params %1; %2; %3; %4\n", errorAccumulator.toStringFiltered(false, true, false));
-        assertEquals("INFO (code0) (Error DB load failure); original error params %1; %2; %3; %4\n", errorAccumulator.toStringFiltered(false, false, true));
-        assertEquals("INFO (code0) (Error DB load failure); original error params %1; %2; %3; %4\nWARNING (code1) (Error DB load failure); original error params %1; %2; %3; %4\nERROR (code2) (Error DB load failure); original error params %1; %2; %3; %4\n", errorAccumulator.toStringFiltered(true, true, true));
+        assertEquals("ERROR (code2) Error is {0}\n", errorAccumulator.toStringFiltered(true, false, false));
+        assertEquals("WARNING (code1) Error is {0}\n", errorAccumulator.toStringFiltered(false, true, false));
+        assertEquals("INFO (code0) Error is {0}\n", errorAccumulator.toStringFiltered(false, false, true));
+        assertEquals("INFO (code0) Error is {0}\n"
+                + "WARNING (code1) Error is {0}\n"
+                + "ERROR (code2) Error is {0}\n",
+        errorAccumulator.toStringFiltered(true, true, true));
     }
 
 }

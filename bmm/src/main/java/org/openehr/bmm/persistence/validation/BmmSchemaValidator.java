@@ -297,7 +297,7 @@ public class BmmSchemaValidator extends AnyValidator {
      * @param aKey
      * @param arguments
      */
-    protected void addValidityError(String sourceSchemaId, MessageCode aKey, String... arguments) {
+    protected void addValidityError(String sourceSchemaId, MessageCode aKey, Object... arguments) {
         if(sourceSchemaId.equals(schema.getSchemaId())) {
             addError(aKey, arguments);
         } else {
@@ -316,7 +316,7 @@ public class BmmSchemaValidator extends AnyValidator {
      * @param aKey
      * @param arguments
      */
-    protected void addValidityWarning(String sourceSchemaId, MessageCode aKey, String... arguments) {
+    protected void addValidityWarning(String sourceSchemaId, MessageCode aKey, Object... arguments) {
         if(sourceSchemaId.equals(schema.getSchemaId())) {
             addWarning(aKey, arguments);
         } else {
@@ -334,7 +334,7 @@ public class BmmSchemaValidator extends AnyValidator {
      * @param aKey
      * @param arguments
      */
-    protected void addValidityInfo(String sourceSchemaId, MessageCode aKey, String... arguments) {
+    protected void addValidityInfo(String sourceSchemaId, MessageCode aKey, Object... arguments) {
         if(sourceSchemaId.equals(schema.getSchemaId())) {
             addInfo(aKey, arguments);
         } else {

@@ -149,7 +149,7 @@ public abstract class AnyValidator {
      * @param aKey
      * @param args
      */
-    public void addError(MessageCode aKey,String... args) {
+    public void addError(MessageCode aKey,Object... args) {
         addErrorWithLocation(aKey, "", args);
     }
 
@@ -158,7 +158,7 @@ public abstract class AnyValidator {
      * @param aKey
      * @param args
      */
-    public void addWarning(MessageCode aKey, String... args) {
+    public void addWarning(MessageCode aKey, Object... args) {
         addWarningWithLocation(aKey, "", args);
     }
 
@@ -167,7 +167,7 @@ public abstract class AnyValidator {
      * @param aKey
      * @param args
      */
-    public void addInfo(MessageCode aKey, String... args) {
+    public void addInfo(MessageCode aKey, Object... args) {
         addInfoWithLocation(aKey, "", args);
     }
 
@@ -177,7 +177,7 @@ public abstract class AnyValidator {
      * @param aLocation
      * @param args
      */
-    public void addErrorWithLocation(MessageCode aKey, String aLocation, String... args) {
+    public void addErrorWithLocation(MessageCode aKey, String aLocation, Object... args) {
         messageLogger.addErrorWithLocation(aKey, aLocation, args);
     }
 
@@ -187,7 +187,7 @@ public abstract class AnyValidator {
      * @param aLocation
      * @param args
      */
-    public void addWarningWithLocation(MessageCode aKey, String aLocation, String... args) {
+    public void addWarningWithLocation(MessageCode aKey, String aLocation, Object... args) {
         messageLogger.addWarningWithLocation(aKey, aLocation, args);
     }
 
@@ -197,7 +197,7 @@ public abstract class AnyValidator {
      * @param aLocation
      * @param args
      */
-    public void addInfoWithLocation(MessageCode aKey, String aLocation, String... args) {
+    public void addInfoWithLocation(MessageCode aKey, String aLocation, Object... args) {
         messageLogger.addInfoWithLocation(aKey, aLocation, args);
     }
 

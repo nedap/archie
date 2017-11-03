@@ -189,13 +189,29 @@ public class MessageLogger {
         return false;
     }
 
+    public void addError(MessageCode code, Object... args) {
+        addErrorWithLocation(code, null, args);
+    }
+
+    public void addWarning(MessageCode code, Object... args) {
+        addWarningWithLocation(code, null, args);
+    }
+
+    public void addInfo(MessageCode code, Object... args) {
+        addInfoWithLocation(code, null, args);
+    }
+
+    public void addDebug(String message) {
+        addDebugWithLocation(null, message);
+    }
+
     /**
      * Adds an error to this error cache and sets the error flag to true.
      * @param aCode
      * @param aLocation
      * @param args
      */
-    public void addErrorWithLocation(MessageCode aCode, String aLocation, String... args) {
+    public void addErrorWithLocation(MessageCode aCode, String aLocation, Object... args) {
         add(new MessageDescriptor(aCode, MessageSeverity.ERROR, messageDatabaseManager.getMessage(aCode, args), aLocation));
     }
 
@@ -205,7 +221,7 @@ public class MessageLogger {
      * @param aLocation
      * @param args
      */
-    public void addWarningWithLocation(MessageCode aCode, String aLocation, String... args) {
+    public void addWarningWithLocation(MessageCode aCode, String aLocation, Object... args) {
         add(new MessageDescriptor(aCode, MessageSeverity.WARNING, messageDatabaseManager.getMessage(aCode, args), aLocation));
     }
 
@@ -215,7 +231,7 @@ public class MessageLogger {
      * @param aLocation
      * @param args
      */
-    public void addInfoWithLocation(MessageCode aCode, String aLocation, String... args) {
+    public void addInfoWithLocation(MessageCode aCode, String aLocation, Object... args) {
         add(new MessageDescriptor(aCode, MessageSeverity.INFO, messageDatabaseManager.getMessage(aCode, args), aLocation));
     }
 

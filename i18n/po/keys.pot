@@ -1,0 +1,331 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-03 14:58+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:56
+#, java-format
+msgid "''rm_schemas_load_list'' config setting mentions non-existent schema {0}"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:44
+#, java-format
+msgid "Assertion violation processing RM schemas; original recipient: {0}"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:92
+msgid "BMM Schema load error"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:28
+msgid "Documentation"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:51
+#, java-format
+msgid "Duplicate Reference Model schema found for model ''{0}'' in file {1}, ignoring latter"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:52
+#, java-format
+msgid "Duplicate instance of Reference Model model {0} found; original schema {1}; ignoring instance from schema {2}"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:91
+msgid "EC Object file not valid"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:49
+#, java-format
+msgid "Merged schema {0} into schema {1}"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:55
+msgid "No ''rm_schemas_load_list'' config setting found; attempting to load all schemas (change via Tools>Options)"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:37
+#, java-format
+msgid "No Reference Model schema found for package ''{0}''"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:46
+#, java-format
+msgid "Reference Model BMM schema {0} incompatible with current release {1} of the tool; obtain up to date schemas"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:50
+msgid "Reference Model checking is OFF"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:53
+#, java-format
+msgid "Reference Model for {0} meta-data missing/invalid: {1}"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:39
+#, java-format
+msgid "Reference Model included schema {0} not found or failed to load"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:40
+#, java-format
+msgid "Reference Model including schema {0} not valid"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:32
+#, java-format
+msgid "Reference Model schema contains unknown type {0} (object add failed)"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:35
+#, java-format
+msgid "Reference Model schema directory {0} does not contain any schemas"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:36
+#, java-format
+msgid "Reference Model schema directory {0} does not contain any valid schemas"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:34
+#, java-format
+msgid "Reference Model schema directory {0} does not exist or not readable"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:30
+#, java-format
+msgid "Reference Model schema file {0} does not exist or not readable"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:42
+#, java-format
+msgid "Reference Model schema {0} failed basic validation; errors:%N{1}"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:38
+#, java-format
+msgid "Reference Model schema {0} failed post-merge validation; errors:%N{1}"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:41
+#, java-format
+msgid "Reference Model schema {0} includes a schema that failed to load"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:58
+#, java-format
+msgid "Reference Model schema {0} includes schema {1} that does not exist"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:45
+#, java-format
+msgid "Reference Model schema {0} includes validation failed: %N{1}"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:47
+#, java-format
+msgid "Reference Model schema {0} load data conversion failure; reason: {1}"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:33
+#, java-format
+msgid "Reference Model schema {0} load failure due to exception during processing"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:31
+#, java-format
+msgid "Reference Model schema {0} load failure; reason: {1}"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:48
+#, java-format
+msgid "Reference Model schema {0} loaded: {1} primitive types, {2} class definitions"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:57
+#, java-format
+msgid "Reference Model schema {0} passed basic validation with warnings:%N{1}"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:29
+#, java-format
+msgid "Reference model schema(s) {0} specified in options not valid or not found in schema directories"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:60
+#, java-format
+msgid "Schema {0} BMM version {1} (assumed) incompatible with software version {2}"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:59
+#, java-format
+msgid "Schema {0} BMM version {1} incompatible with software version {2}"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:89
+#, java-format
+msgid "Schema {0} RM release {1} not valid; should be 3-part numeric version"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:88
+#, java-format
+msgid "Schema {0} archetype parent class {1} not defined in schema"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:83
+#, java-format
+msgid "Schema {0} archetype_closure_package {1} does not exist"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:62
+#, java-format
+msgid "Schema {0} class definition {1} ancestor {2} does not exist in schema"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:67
+msgid "Schema {0} class definition {1} container property {2} cardinality not defined (assuming {0..*})"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:68
+#, java-format
+msgid "Schema {0} class definition {1} container property {2} container type {3} not found in schema"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:65
+#, java-format
+msgid "Schema {0} class definition {1} container property {2} target type not defined"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:66
+#, java-format
+msgid "Schema {0} class definition {1} container property {2} target type {3} not found in schema"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:64
+#, java-format
+msgid "Schema {0} class definition {1} generic parameter {2} constraint type {3} does not exist in schema"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:71
+#, java-format
+msgid "Schema {0} class definition {1} generic property {2} generic parameter {3} not found in schema or in containing class declarations (if open)"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:69
+#, java-format
+msgid "Schema {0} class definition {1} generic property {2} not defined"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:70
+#, java-format
+msgid "Schema {0} class definition {1} generic property {2} root type {3} not found in schema"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:73
+#, java-format
+msgid "Schema {0} class definition {1} generic property {2} type {3} parameter {4} not found in class definitions or {3} formal declaration"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:63
+#, java-format
+msgid "Schema {0} class definition {1} includes empty ancestor class name"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:72
+#, java-format
+msgid "Schema {0} class definition {1} marked ''is_generic'' but has no generic parameter declarations"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:77
+#, java-format
+msgid "Schema {0} class definition {1} not declared in any package"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:61
+#, java-format
+msgid "Schema {0} class definition {1} property {2} type {3} not defined in schema"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:75
+#, java-format
+msgid "Schema {0} class definition {1} single-valued property {2} open generic parameter {3} not found in containing class declarations"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:74
+#, java-format
+msgid "Schema {0} class definition {1} single-valued property {2} type {3} not found in schema"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:84
+#, java-format
+msgid "Schema {0} class {1} duplicate property within class {2}"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:76
+#, java-format
+msgid "Schema {0} class {1} mentioned in package {2} but not in schema, or relevant child schema"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:85
+#, java-format
+msgid "Schema {0} class {1} property {2} does not conform to same property in ancestor {3} (duplicate?)"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:82
+#, java-format
+msgid "Schema {0} has duplicate class name {1} in class definitions"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:81
+#, java-format
+msgid "Schema {0} has duplicate class name {1} in package {2} and also package {3}"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:86
+#, java-format
+msgid "Schema {0} included schema {1} validity failure"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:87
+#, java-format
+msgid "Schema {0} included schema {1} validity warning"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:80
+#, java-format
+msgid "Schema {0} package {1} contains class with empty name"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:79
+#, java-format
+msgid "Schema {0} packages with qualified name found in package {1} (qualified names not allowed except at top-level)"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:78
+#, java-format
+msgid "Schema {0} top-level sibling package definitions cannot include a package which is the child of another"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:54
+#, java-format
+msgid "Unknown Reference Model ''{0}'' mentioned in ''rm_schemas_load_list'' config setting (ignored)"
+msgstr ""
+
+#: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:43
+msgid "Unknown exception processing RM schemas"
+msgstr ""

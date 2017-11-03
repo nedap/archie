@@ -31,16 +31,16 @@ public class MessageDatabaseManager {
     }
 
     public String getMessageLine(MessageCode code, List<String> args) {
-        return MessageFormat.format(code.getMessageTemplate(), args);
+        return I18n.t(code.getMessageTemplate(), args);
     }
 
     public String getMessage(MessageCode  code, List<String> args) {
-        return MessageFormat.format(code.getMessageTemplate(), args);
+        return I18n.t(code.getMessageTemplate(), args);
     }
 
-    public String getMessage(MessageCode code, String... args) {
+    public String getMessage(MessageCode code, Object... args) {
         //TODO: add i18n with ResourceBundles here
-        return MessageFormat.format(code.getMessageTemplate(), args);
+        return I18n.t(code.getMessageTemplate(), args);
     }
 
 }
