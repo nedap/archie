@@ -1,0 +1,27 @@
+
+apply plugin: 'antlr'
+
+
+generateGrammarSource { //antlr4
+  outputDirectory = new File("${project.buildDir}/generated-src/antlr/main/com/nedap/archie/adlparser/antlr".toString())
+    arguments = ['-visitor', '-package', 'com.nedap.archie.adlparser.antlr'] + arguments
+}
+
+classes {
+  dependsOn generateGrammarSource
+}
+
+def generatedSources = ["**/com/nedap/archie/adlparser/antlr**"]
+
+test {
+  jacoco {
+    excludes = generatedSources
+  }
+}
+
+ext.antlrVersion = '4.5.3'
+
+dependencies {
+  antlr "org.antlr:antlr4:${antlrVersion}"
+  compile 'org.antlr:antlr4-runtime:4.5.3'
+}

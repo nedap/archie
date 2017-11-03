@@ -1,0 +1,5 @@
+dependencies {
+	compile project(':bmm')
+	compile project(':utils')
+	compile('org.freemarker:freemarker:2.3.25-incubating')
+}

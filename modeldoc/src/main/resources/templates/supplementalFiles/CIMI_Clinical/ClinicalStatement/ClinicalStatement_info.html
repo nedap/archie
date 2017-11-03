@@ -1,0 +1,52 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="en">
+<head>
+<title>Overview of the Clinical Statement Package</title>
+<meta name="date" content="2016-01-11">
+<meta name="keywords" content="CIMI_Clinical.ClinicalStatement package">
+<link rel="stylesheet" type="text/css" href="../../stylesheet.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+if (location.href.indexOf('is-external=true') == -1) {
+    parent.document.title="AbstractBorder (Java Platform SE 7 )";
+}
+//-->
+</script>
+<noscript>
+    <div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top"></a><a href="#skip-navbar_top" title="Skip navigation links"></a><a name="navbar_top_firstrow"></a>
+    <ul class="navList" title="Navigation">
+        <li class="navBarCell1Rev"><a href="../../overview-summary.html">Back to overview</a></li>
+    </ul>
+    <div class="aboutLanguage"><em><strong>HL7 CIMI Reference Model Version 0.0.2</strong></em><br>CIMI_Clinical.ClinicalStatement</div>
+</div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<div class="contentContainer">
+<h2 title="Overview">Overview of the Clinical Statement Package</h2>
+    <p>The Clinical Statement Reference Model Pattern is a core CIMI pattern. It represents a statement made about a patient typically documented as an 'entry' in the patient record (see COMPOSITION pattern).</p>
+    <p>Clinical statements may either be 'indivisible' meaning that they can exist independently but cannot be further broken down into other independent statements.
+        Examples of indivisible statements include a hematocrit measurement or a complex medication order. 'Compound' clinical statements, on the hand, are collections
+        of related indivisible or compound clinical statements. Examples of compound clinical statements are panels (which may include other nested panels) and time series.</p>
+    <p>Clinical statements are composed of following primary components:
+        <ol>
+            <li>The subject of the statement - generally the subject of the record but this may not always be the case. For instance, a clinical statement may describe a condition
+            affecting a relative of the patient as is the case in the documentation of family history.</li>
+            <li>The clinical topic of the statement - for instance, is this statement about a surgical procedure or a medication-related activity. Alternatively, the statement may
+            describe the state of the patient.</li>
+            <li>The context of the clinical statement - for instance, for procedure topics, did the procedure occur, was it planned, proposed, ordered, not performed, and so on.
+                If the statement describes a particular finding about the patient, was that finding observed or not observed in the patient? Was the patient at risk of some condition.</li>
+            <li>Attribution information relating to the statement itself such as who authored, verified, recorded, or signed the statement.</li>
+        </ol>
+    </p>
+    <img src="../../img/class__ClinicalStatement__ClinicalStatement.jpg">
+    <p>
+        The following diagram shows the clinical statement inheritance hierarchy which span the three reference model modules:
+    </p>
+    <img src="../../img/class__ClinicalStatement__ClinicalStatementOverview.jpg">
+</div>
+</body>
+</html>

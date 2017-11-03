@@ -8,6 +8,17 @@ It uses the ANTLR adl-grammar written by Thomas Beale at https://github.com/open
 
 It is licensed under the Apache license.
 
+
+# NOTE: THIS IS A DEVELOPMENT BRANCH
+
+We are splitting Archie into separate modules. This causes a few API incompatibilities:
+
+- APathQuery is now changed into AOMPathQuery and RMPathQuery. If you used itemAtPath and itemsAtPath this will not affect your code.
+- The default AOM methods no longer use ArchieRMInfoLookup by default. You need to supply it by hand. List of cases where this happens:
+    - CAttributeTuple.isValidValue()
+    - CAttributeTuple.isValid()
+- ADLPArser.withConstrainsImposer has been removed. You can still do new ADLPArser(new RMConstraintsImposer()) if you want, or use it manually. 
+
 ## dependency
 
 In gradle, include this dependency in your build.gradle:

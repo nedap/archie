@@ -1,0 +1,6 @@
+dependencies {
+  compile project(':grammars')
+  compile project(':base')
+  compile project(':odin')
+  compile project(':utils')
+}
