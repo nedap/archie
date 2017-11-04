@@ -21,6 +21,7 @@ public class SimpleArchetypeRepository implements ArchetypeRepository {
         return archetypes.get(new ArchetypeHRID(archetypeId).getSemanticId());
     }
 
+    @Override
     public void addArchetype(Archetype archetype) {
         archetypes.put(archetype.getArchetypeId().getSemanticId(), archetype);
     }

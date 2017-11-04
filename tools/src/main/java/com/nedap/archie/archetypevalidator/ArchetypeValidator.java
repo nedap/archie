@@ -3,16 +3,20 @@ package com.nedap.archie.archetypevalidator;
 import com.google.common.base.Joiner;
 import com.nedap.archie.adlparser.modelconstraints.ReflectionConstraintImposer;
 import com.nedap.archie.aom.Archetype;
+import com.nedap.archie.aom.Template;
+import com.nedap.archie.aom.TemplateOverlay;
 import com.nedap.archie.archetypevalidator.validations.*;
 import com.nedap.archie.flattener.ArchetypeRepository;
 import com.nedap.archie.flattener.Flattener;
 import com.nedap.archie.flattener.FullArchetypeRepository;
 import com.nedap.archie.flattener.InMemoryFullArchetypeRepository;
+import com.nedap.archie.flattener.OverridingInMemFullArchetypeRepository;
 import com.nedap.archie.rminfo.ModelInfoLookup;
 import com.nedap.archie.rminfo.ReferenceModels;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -90,6 +94,29 @@ public class ArchetypeValidator {
      * @return
      */
     public ValidationResult validate(Archetype archetype, FullArchetypeRepository repository) {
+        if(archetype instanceof Template) {
+            //in the case of a template, add a repository that can store the overlays separate from the rest of the archetypes
+            //later they can be retrieved and handled as extra archetypes, that are not top level archetypes usable in other
+            //archetypes that are not templates
+            //TODO: can we specialize templates? In that case we need more work to get any template overlays defined in
+            //the parent template in this repo as well
+            OverridingInMemFullArchetypeRepository extraRepository = null;
+            if(repository == null) {
+                extraRepository = new OverridingInMemFullArchetypeRepository();
+            } else {
+                extraRepository = new OverridingInMemFullArchetypeRepository(repository);
+            }
+            for(TemplateOverlay overlay:((Template) archetype).getTemplateOverlays()) {
+                extraRepository.addExtraArchetype(overlay);
+            }
+            for(TemplateOverlay overlay:((Template) archetype).getTemplateOverlays()) {
+                //validate the overlays first, but make sure to do that only once (so don't call this same method!)
+                getValidationResult(overlay.getArchetypeId().toString(), extraRepository);
+            }
+            repository = extraRepository;
+        }
+
+
         ModelInfoLookup lookup = models.getModel(archetype);
         if(lookup == null) {
             throw new UnsupportedOperationException("reference model unknown for archetype " + archetype.getArchetypeId());
@@ -129,6 +156,17 @@ public class ArchetypeValidator {
             result.setFlattened(new Flattener(repository).flatten(archetype));
             messages.addAll(runValidations(lookup, archetype, repository, flatParent, validationsPhase3));
         }
+
+        if(archetype instanceof Template) {
+            OverridingInMemFullArchetypeRepository repositoryWithOverlays =  (OverridingInMemFullArchetypeRepository) repository;
+            FullArchetypeRepository extraArchetypeRepository = repositoryWithOverlays.getExtraArchetypeRepository();
+            result.addOverlayValidations(extraArchetypeRepository.getAllValidationResults());
+            for(ValidationResult subResult:extraArchetypeRepository.getAllValidationResults()) {
+                if(!subResult.passes()) {
+                    result.getErrors().add(new ValidationMessage(ErrorType.OTHER, MessageFormat.format("template overlay {0} had validation errors", subResult.getArchetypeId())));
+                }
+            }
+        }
         if(repository != null) {
             repository.setValidationResult(result);
         }
@@ -142,17 +180,28 @@ public class ArchetypeValidator {
         if(repository == null) {
             return null;
         }
-        Archetype parent = repository.getArchetype(archetype.getParentArchetypeId());
+        return getValidationResult(archetype.getParentArchetypeId(), repository);
+    }
+
+    /**
+     * Get the validation rsult for the given archetype id from given repository. Perform validation and add to repository
+     * if not already present in the repository.
+     * @param archetypeId
+     * @param repository
+     * @return
+     */
+    private ValidationResult getValidationResult(String archetypeId, FullArchetypeRepository repository) {
+        Archetype parent = repository.getArchetype(archetypeId);
         if(parent == null) {
             return null; //this situation will trigger the correct message later
         }
 
-        ValidationResult validationResultOfParent = repository.getValidationResult(archetype.getParentArchetypeId());
-        if(validationResultOfParent == null) {
+        ValidationResult validationResult = repository.getValidationResult(archetypeId);
+        if(validationResult == null) {
             //parent not yet validated. do it now.
-            validationResultOfParent = validate(parent, repository);
+            validationResult = validate(parent, repository);
         }
-        return validationResultOfParent;
+        return validationResult;
     }
 
     private Archetype cloneAndPreprocess(ModelInfoLookup lookup, Archetype archetype) {

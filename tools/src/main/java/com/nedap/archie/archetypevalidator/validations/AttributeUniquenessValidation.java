@@ -24,6 +24,11 @@ public class AttributeUniquenessValidation extends ValidatingVisitor {
     public void validate(CComplexObject cObject) {
         HashSet<String> attributeNames = new HashSet<>();
         for(CAttribute attribute:cObject.getAttributes()) {
+            if(attribute.getDifferentialPath() != null) {
+                //with different paths we get in trouble if we do this. perhaps check for duplicate entire paths, or do
+                //something complicated?
+                continue;
+            }
             if (attributeNames.contains(attribute.getRmAttributeName())) {
                 addMessageWithPath(ErrorType.VCATU, attribute.getPath());
             }

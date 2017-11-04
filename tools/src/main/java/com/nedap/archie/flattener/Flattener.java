@@ -5,6 +5,7 @@ import com.nedap.archie.aom.*;
 import com.nedap.archie.aom.terminology.ArchetypeTerm;
 import com.nedap.archie.aom.terminology.ArchetypeTerminology;
 import com.nedap.archie.aom.utils.AOMUtils;
+import com.nedap.archie.aom.utils.ArchetypeParsePostProcesser;
 import com.nedap.archie.query.AOMPathQuery;
 import com.nedap.archie.rules.Assertion;
 
@@ -138,6 +139,17 @@ public class Flattener {
         }
         result.getDefinition().setArchetype(result);
         result.setDifferential(false);//note this archetype as being flat
+        if(!createOperationalTemplate) {
+            //set metadata to specialized archetype
+            result.setOriginalLanguage(child.getOriginalLanguage());
+            result.setDescription(child.getDescription());
+            result.setOtherMetaData(child.getOtherMetaData());
+            result.setGenerated(child.getGenerated());
+            result.setControlled(child.getControlled());
+            result.setBuildUid(child.getBuildUid());
+            result.setTranslations(child.getTranslations());
+        } //else as well, but is done elsewhere. needs refactor.
+        ArchetypeParsePostProcesser.fixArchetype(result);
         return result;
     }
 

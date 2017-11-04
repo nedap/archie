@@ -24,6 +24,7 @@ import com.nedap.archie.rm.datavalues.DvCodedText;
 
 import java.time.temporal.Temporal;
 import java.time.temporal.TemporalAccessor;
+import java.time.temporal.TemporalAmount;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -163,7 +164,8 @@ public class ArchieRMInfoLookup extends ReflectionModelInfoLookup {
                     attributeInfo.getTypeInCollection().isAssignableFrom(Temporal.class);
         } else if(cObject instanceof CDuration) {
             return attributeInfo.getTypeInCollection().equals(String.class) ||
-                    attributeInfo.getTypeInCollection().isAssignableFrom(TemporalAccessor.class);
+                    attributeInfo.getTypeInCollection().isAssignableFrom(TemporalAccessor.class) ||
+                    attributeInfo.getTypeInCollection().isAssignableFrom(TemporalAmount.class);
         } else if(cObject instanceof CTime) {
             return attributeInfo.getTypeInCollection().equals(String.class) ||
                     attributeInfo.getTypeInCollection().isAssignableFrom(TemporalAccessor.class);

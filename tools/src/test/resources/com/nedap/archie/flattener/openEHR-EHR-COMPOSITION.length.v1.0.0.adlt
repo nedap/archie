@@ -64,18 +64,20 @@ terminology
                 text = <"*Result Report(en)">
                 description = <"*Document to communicate information to others about the result of a test  or assessment.(en)">
             >
+            ["id0.0.2"] = <
+                text = <"*Result Report(en)">
+                description = <"*Document to communicate information to others about the result of a test  or assessment.(en)">
+            >
         >
         ["en"] = <
             ["id1.1.1"] = <
                 text = <"Length Report">
                 description = <"Document to record the length of a client">
             >
-        >
-        ["sl"] = <
-
-        >
-        ["es-ar"] = <
-
+            ["id0.0.2"] = <
+                text = <"*Result Report(en)">
+                description = <"*Document to communicate information to others about the result of a test  or assessment.(en)">
+            >
         >
     >
 

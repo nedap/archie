@@ -15,6 +15,7 @@ public class ValidationResult {
     private List<ValidationMessage> errors = new ArrayList<>();
     private Archetype sourceArchetype;
     private Archetype flattened;
+    private List<ValidationResult> overlayValidations;
 
     public ValidationResult(String archetypeId){
         this.archetypeId = archetypeId;
@@ -55,5 +56,17 @@ public class ValidationResult {
 
     public boolean passes() {
         return errors.isEmpty();
+    }
+
+    /**
+     * Add validation results from template overlays defined in a template
+     * @param overlayValidations
+     */
+    public void addOverlayValidations(List<ValidationResult> overlayValidations) {
+        this.overlayValidations = overlayValidations;
+    }
+
+    public List<ValidationResult> getOverlayValidations() {
+        return overlayValidations;
     }
 }

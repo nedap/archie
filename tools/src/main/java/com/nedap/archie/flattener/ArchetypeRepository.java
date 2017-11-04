@@ -19,6 +19,8 @@ public interface ArchetypeRepository {
 
     public List<Archetype> getAllArchetypes();
 
+    void addArchetype(Archetype archetype);
+
 
     /**
      * Return true if an only if the child archetype has parent as its parent somewhere in the tree
