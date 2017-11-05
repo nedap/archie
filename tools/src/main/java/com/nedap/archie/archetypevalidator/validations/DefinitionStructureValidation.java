@@ -41,6 +41,7 @@ public class DefinitionStructureValidation extends ValidatingVisitor {
             }
         }
         //TODO: check if ADL workbench checks more than this
+        //turns out it does, something with lookup in RM. We can use AOMUtils.hasReferenceModelPath()
     }
 
     private void addPathNotFoundInParentError(CAttribute cAttribute) {

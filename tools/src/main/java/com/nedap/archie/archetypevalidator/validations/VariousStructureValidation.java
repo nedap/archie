@@ -8,6 +8,7 @@ import com.nedap.archie.aom.CComplexObject;
 import com.nedap.archie.archetypevalidator.ErrorType;
 import com.nedap.archie.archetypevalidator.ValidatingVisitor;
 import com.nedap.archie.archetypevalidator.ValidationMessage;
+import com.nedap.archie.archetypevalidator.ValidationResult;
 import com.nedap.archie.flattener.ArchetypeRepository;
 import com.nedap.archie.rminfo.ModelInfoLookup;
 import com.nedap.archie.rminfo.RMTypeInfo;
@@ -54,6 +55,7 @@ public class VariousStructureValidation extends ValidatingVisitor {
             if(repository.getArchetype(archetypeRoot.getArchetypeRef()) == null) {
                 addMessageWithPath(ErrorType.VARXRA, cComplexObject.path(), String.format("archetype with id %s not found", archetypeRoot.getArchetypeRef()));
             }
+
             ArchetypeHRID hrId = new ArchetypeHRID(archetypeRoot.getArchetypeRef());
             String archetypeRootTypeName = cComplexObject.getRmTypeName();
             String archetypeReferenceTypeName = hrId.getRmClass();

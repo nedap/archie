@@ -150,30 +150,31 @@ public class ArchieRMInfoLookup extends ReflectionModelInfoLookup {
         if(attributeInfo == null) {
             return true;//cannot validate
         }
+        Class typeInCollection = attributeInfo.getTypeInCollection();
         if(cObject instanceof CInteger) {
-            return attributeInfo.getTypeInCollection().equals(Long.class);
+            return typeInCollection.equals(Long.class) || typeInCollection.getName().equals("long");
         } else if(cObject instanceof CReal) {
-            return attributeInfo.getTypeInCollection().equals(Double.class);
+            return typeInCollection.equals(Double.class) || typeInCollection.getName().equals("double");
         } else if(cObject instanceof CString) {
-            return attributeInfo.getTypeInCollection().equals(String.class);
+            return typeInCollection.equals(String.class);
         } else if(cObject instanceof CDate) {
-            return attributeInfo.getTypeInCollection().equals(String.class) ||
-                    attributeInfo.getTypeInCollection().isAssignableFrom(Temporal.class);
+            return typeInCollection.equals(String.class) ||
+                    typeInCollection.isAssignableFrom(Temporal.class);
         } else if(cObject instanceof CDateTime) {
-            return attributeInfo.getTypeInCollection().equals(String.class) ||
-                    attributeInfo.getTypeInCollection().isAssignableFrom(Temporal.class);
+            return typeInCollection.equals(String.class) ||
+                    typeInCollection.isAssignableFrom(Temporal.class);
         } else if(cObject instanceof CDuration) {
-            return attributeInfo.getTypeInCollection().equals(String.class) ||
-                    attributeInfo.getTypeInCollection().isAssignableFrom(TemporalAccessor.class) ||
-                    attributeInfo.getTypeInCollection().isAssignableFrom(TemporalAmount.class);
+            return typeInCollection.equals(String.class) ||
+                    typeInCollection.isAssignableFrom(TemporalAccessor.class) ||
+                    typeInCollection.isAssignableFrom(TemporalAmount.class);
         } else if(cObject instanceof CTime) {
-            return attributeInfo.getTypeInCollection().equals(String.class) ||
-                    attributeInfo.getTypeInCollection().isAssignableFrom(TemporalAccessor.class);
+            return typeInCollection.equals(String.class) ||
+                    typeInCollection.isAssignableFrom(TemporalAccessor.class);
         } else if(cObject instanceof CTerminologyCode) {
-            return attributeInfo.getTypeInCollection().equals(CodePhrase.class) ||
-                    attributeInfo.getTypeInCollection().equals(DvCodedText.class);
+            return typeInCollection.equals(CodePhrase.class) ||
+                    typeInCollection.equals(DvCodedText.class);
         } else if(cObject instanceof CBoolean) {
-            return attributeInfo.getTypeInCollection().equals(Boolean.class);
+            return typeInCollection.equals(Boolean.class);
         }
         return false;
 

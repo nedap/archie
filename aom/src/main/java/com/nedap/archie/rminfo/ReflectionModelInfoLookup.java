@@ -135,6 +135,46 @@ public abstract class ReflectionModelInfoLookup implements ModelInfoLookup {
         for(Field field: ReflectionUtils.getAllFields(clazz)) {
             addRMAttributeInfo(clazz, typeInfo, typeToken, field);
         }
+        Set<Method> getters = ReflectionUtils.getAllMethods(clazz, (method) -> method.getName().startsWith("get"));
+        for(Method method:getters) {
+            addRMAttributeInfo(clazz, typeInfo, typeToken, method);
+        }
+    }
+
+    private void addRMAttributeInfo(Class clazz, RMTypeInfo typeInfo, TypeToken typeToken, Method getMethod) {
+        String attributeName = namingStrategy.getAttributeName(getMethod);
+        String javaFieldName = getMethod.getName().substring(3);
+        String javaFieldNameUpperCased = upperCaseFirstChar(javaFieldName);
+        Method setMethod = null, addMethod = null;
+        if (getMethod == null) {
+            getMethod = getMethod(clazz, "is" + javaFieldNameUpperCased);
+        }
+        if (getMethod != null) {
+            setMethod = getMethod(clazz, "set" + javaFieldNameUpperCased, getMethod.getReturnType());
+            addMethod = getAddMethod(clazz, typeToken, attributeName, javaFieldNameUpperCased, getMethod);
+        } else {
+            logger.warn("No get method found for attribute {} on class {}", attributeName, clazz.getSimpleName());
+        }
+
+        TypeToken fieldType = typeToken.resolveType(getMethod.getGenericReturnType());;
+
+        Class rawFieldType = fieldType.getRawType();
+        Class typeInCollection = getTypeInCollection(fieldType);
+        if (setMethod != null) {
+            RMAttributeInfo attributeInfo = new RMAttributeInfo(
+                    attributeName,
+                    null,
+                    rawFieldType,
+                    typeInCollection,
+                    getMethod.getAnnotation(Nullable.class) != null,
+                    getMethod,
+                    setMethod,
+                    addMethod
+            );
+            typeInfo.addAttribute(attributeInfo);
+        } else {
+            logger.info("property without a set method ignored for field {} on class {}", attributeName, clazz.getSimpleName());
+        }
     }
 
     private void addRMAttributeInfo(Class clazz, RMTypeInfo typeInfo, TypeToken typeToken, Field field) {
@@ -148,7 +188,7 @@ public abstract class ReflectionModelInfoLookup implements ModelInfoLookup {
         }
         if (getMethod != null) {
             setMethod = getMethod(clazz, "set" + javaFieldNameUpperCased, getMethod.getReturnType());
-            addMethod = getAddMethod(clazz, typeToken, field, javaFieldNameUpperCased, getMethod);
+            addMethod = getAddMethod(clazz, typeToken, attributeName, javaFieldNameUpperCased, getMethod);
         } else {
             logger.warn("No get method found for field {} on class {}", field.getName(), clazz.getSimpleName());
         }
@@ -198,7 +238,7 @@ public abstract class ReflectionModelInfoLookup implements ModelInfoLookup {
         return rawFieldType;
     }
 
-    private Method getAddMethod(Class clazz, TypeToken typeToken, Field field, String javaFieldNameUpperCased, Method getMethod) {
+    private Method getAddMethod(Class clazz, TypeToken typeToken, String name, String javaFieldNameUpperCased, Method getMethod) {
         Method addMethod = null;
         if (Collection.class.isAssignableFrom(getMethod.getReturnType())) {
             Type[] typeArguments = ((ParameterizedType) getMethod.getGenericReturnType()).getActualTypeArguments();
@@ -213,7 +253,7 @@ public abstract class ReflectionModelInfoLookup implements ModelInfoLookup {
                     if (allAddMethods.size() == 1) {
                         addMethod = allAddMethods.iterator().next();
                     } else {
-                        logger.warn("strange number of add methods for field {} on class {}", field.getName(), clazz.getSimpleName());
+                        logger.warn("strange number of add methods for field {} on class {}", name, clazz.getSimpleName());
                     }
                 }
             }

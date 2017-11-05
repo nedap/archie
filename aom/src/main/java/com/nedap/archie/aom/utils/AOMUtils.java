@@ -93,7 +93,12 @@ public class AOMUtils {
         ArchetypeModelObject parentAOMObject = flatParent.itemAtPath(pathAtSpecializationLevel(attributeWithDifferentialPath.getParent().getPathSegments(), flatParent.specializationDepth()));
         if (parentAOMObject != null && parentAOMObject instanceof CComplexObject) {
             CComplexObject parentObject = (CComplexObject) parentAOMObject;
-            ArchetypeModelObject attributeInParent = parentObject.itemAtPath(attributeWithDifferentialPath.getDifferentialPath());
+            ArchetypeModelObject attributeInParent = parentObject.itemAtPath(
+                    pathAtSpecializationLevel( //TODO: the ADL workbench does this, so /items[id9.1]/value is a valid differential path even in openEHR-EHR-CLUSTER.exam-uterine_cervix.v1.0.0. Should it be?
+                            new APathQuery(attributeWithDifferentialPath.getDifferentialPath()).getPathSegments(),
+                            flatParent.specializationDepth()
+                    )
+            );
             return attributeInParent;
         }
         return null;

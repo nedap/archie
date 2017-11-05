@@ -73,18 +73,22 @@ public class BasicTerminologyValidation extends ArchetypeValidationBase {
                 } catch (Exception e) {
                     //if not a valid path, fine
                 }
-                if(!(AOMUtils.isValidCode(constraintCodeOrPath) || archetypeHasPath
-                                //TODO: || referenceMOdel.hasPath(path)
-                    )) {
+                if(!AOMUtils.isValidCode(constraintCodeOrPath) && !(
+                        archetypeHasPath ||
+                        AOMUtils.hasReferenceModelPath(lookup, archetype.getDefinition().getRmTypeName(), constraintCodeOrPath)
+                        )
+                    ) {
                     addMessage(ErrorType.VTTBK, String.format("Term binding key %s in path format is not present in archetype", constraintCodeOrPath));
                 }
-                if(AOMUtils.isValidCode(constraintCodeOrPath) &&
-                        !(terminology.hasCode(constraintCodeOrPath))
-                        || (archetype.isSpecialized() && flatParent != null && !flatParent.getTerminology().hasCode(constraintCodeOrPath)))
+                else if(AOMUtils.isValidCode(constraintCodeOrPath) &&
+                            !terminology.hasCode(constraintCodeOrPath) &&
+                            !(archetype.isSpecialized() && flatParent != null && !flatParent.getTerminology().hasCode(constraintCodeOrPath))
+                        )
                     {
                     addMessage(ErrorType.VTTBK, String.format("Term binding key %s is not present in terminology", constraintCodeOrPath));
+                } else {
+                    //TODO: two warnings
                 }
-                //TODO: two warnings
             }
         }
     }
