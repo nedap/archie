@@ -50,7 +50,7 @@ public class AdlChecker {
             parser.printUsage();
             parser.printHelp();
         } else {
-            validateArchetypes(ns.getList("path"), ns.get("--outputFlat") != null);
+            validateArchetypes(ns.getList("path"), ns.getBoolean("outputFlat"));
         }
     }
 
