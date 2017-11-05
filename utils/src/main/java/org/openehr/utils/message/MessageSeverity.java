@@ -20,21 +20,32 @@
  */
 package org.openehr.utils.message;
 
-public class GlobalMessageLoggingLevel {
+/**
+ * enum for error code management
+ */
+public enum MessageSeverity {
+    DEBUG(9000), INFO(9001), WARNING(9002), ERROR(9003);
+
+
+    private final int level;
+
+    MessageSeverity(int level) {
+        this.level = level;
+    }
+
     /**
-     * At this level and above, list entries are included in `as_string' and any other output function
+    /**
+     * Method returns true if a valid error code is passed in as a method argument.
+     *
+     * @param anErrorType
+     * @return
      */
-    private static MessageSeverity globalLoggingLevel = MessageSeverity.WARNING;
-
-    public static MessageSeverity getGlobalLoggingLevel() {
-        return globalLoggingLevel;
+    public static boolean isValidErrorType(int anErrorType) {
+        return anErrorType >= DEBUG.level && anErrorType <= ERROR.level;
     }
 
-    public static void setGlobalLoggingLevel(MessageSeverity globalLoggingLevel) {
-        GlobalMessageLoggingLevel.globalLoggingLevel = globalLoggingLevel;
+    public int getLevel() {
+        return level;
     }
 
-    public static boolean shouldLog(MessageSeverity severity) {
-        return severity.getLevel() >= globalLoggingLevel.getLevel();
-    }
 }
