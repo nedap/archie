@@ -153,10 +153,13 @@ public class ArchetypeValidator {
         ValidationResult result = new ValidationResult(archetype);
         result.setErrors(messages);
         if(messages.isEmpty()) {
-            result.setFlattened(new Flattener(repository).flatten(archetype));
-            messages.addAll(runValidations(lookup, archetype, repository, flatParent, validationsPhase3));
+            try {
+                result.setFlattened(new Flattener(repository).flatten(archetype));
+                messages.addAll(runValidations(lookup, archetype, repository, flatParent, validationsPhase3));
+            } catch (Exception e) {
+                messages.add(new ValidationMessage(ErrorType.OTHER, "flattening failed with exception " + e));
+            }
         }
-
         if(archetype instanceof Template) {
             OverridingInMemFullArchetypeRepository repositoryWithOverlays =  (OverridingInMemFullArchetypeRepository) repository;
             FullArchetypeRepository extraArchetypeRepository = repositoryWithOverlays.getExtraArchetypeRepository();
@@ -167,6 +170,7 @@ public class ArchetypeValidator {
                 }
             }
         }
+
         if(repository != null) {
             repository.setValidationResult(result);
         }

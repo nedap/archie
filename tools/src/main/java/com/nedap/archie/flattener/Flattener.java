@@ -403,12 +403,16 @@ public class Flattener {
 
     private void specializeContent(CObject parent, CObject specialized, CObject newObject) {
 
-      if (parent instanceof CComplexObject) {
-            if(!(specialized instanceof CComplexObject)) {
+        if (parent instanceof CComplexObject) {
+            if(((CComplexObject) parent).isAnyAllowed() && specialized instanceof CComplexObjectProxy) {
+                //you can replace an any allowed node with a CComplexObjectProxy. No content will need to be specialized, just merge it in
+            }
+            else if(!(specialized instanceof CComplexObject)) {
                 //this is the specs. The ADL workbench allows an ARCHETYPE_SLOT to override a C_ARCHETYPE_ROOT without errors. Filed as https://openehr.atlassian.net/projects/AWBPR/issues/AWBPR-72
                 throw new IllegalArgumentException(String.format("cannot override complex object %s (%s) with non-complex object %s (%s)", parent.path(), parent.getClass().getSimpleName(), specialized.path(), specialized.getClass().getSimpleName()));
+            } else {
+                flattenCComplexObject((CComplexObject) newObject, (CComplexObject) specialized);
             }
-            flattenCComplexObject((CComplexObject) newObject, (CComplexObject) specialized);
         }
         else if (newObject instanceof ArchetypeSlot) {//archetypeslot is NOT a complex object. It's replacement can be
             if(specialized instanceof ArchetypeSlot) {
