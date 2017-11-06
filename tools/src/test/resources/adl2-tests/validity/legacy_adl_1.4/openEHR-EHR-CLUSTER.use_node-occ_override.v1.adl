@@ -19,10 +19,13 @@ description
 		["en"] = <
 			language = <[ISO_639-1::en]>
 			purpose = <"Test use node (C_COMPLEX_OBJECT_PROXY) that overrides its target's occurrences">
-			copyright = <"">
+			copyright = <"openEHR Foundation">
 		>
 	>
 	lifecycle_state = <"Initial">
+	other_details = <
+		["regression"] = <"PASS">
+	>
 
 definition
 	CLUSTER[at0000.1] matches {	-- Laboratory test panel!

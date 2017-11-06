@@ -24,17 +24,17 @@ public class GlobalMessageLoggingLevel {
     /**
      * At this level and above, list entries are included in `as_string' and any other output function
      */
-    private static Integer globalLoggingLevel = MessageSeverityTypes.ERROR_TYPE_WARNING;
+    private static MessageSeverity globalLoggingLevel = MessageSeverity.WARNING;
 
-    public static Integer getGlobalLoggingLevel() {
+    public static MessageSeverity getGlobalLoggingLevel() {
         return globalLoggingLevel;
     }
 
-    public static void setGlobalLoggingLevel(Integer globalLoggingLevel) {
-        if(MessageSeverityTypes.isValidErrorType(globalLoggingLevel)) {
-            GlobalMessageLoggingLevel.globalLoggingLevel = globalLoggingLevel;
-        } else {
-            throw new IllegalArgumentException("Invalid global error reporting level " + globalLoggingLevel);
-        }
+    public static void setGlobalLoggingLevel(MessageSeverity globalLoggingLevel) {
+        GlobalMessageLoggingLevel.globalLoggingLevel = globalLoggingLevel;
+    }
+
+    public static boolean shouldLog(MessageSeverity severity) {
+        return severity.getLevel() >= globalLoggingLevel.getLevel();
     }
 }

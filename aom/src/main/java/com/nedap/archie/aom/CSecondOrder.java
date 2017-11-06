@@ -11,6 +11,10 @@ import java.util.List;
 public class CSecondOrder<T extends ArchetypeConstraint> extends ArchetypeModelObject {
     private List<T> members = new ArrayList<>();
 
+    public T getMember(int i) {
+        return members.get(i);
+    }
+
     public List<T> getMembers() {
         return members;
     }

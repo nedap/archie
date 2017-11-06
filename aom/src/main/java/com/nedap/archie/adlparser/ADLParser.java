@@ -4,10 +4,12 @@ import com.nedap.archie.adlparser.antlr.*;
 import com.nedap.archie.adlparser.modelconstraints.ModelConstraintImposer;
 import com.nedap.archie.adlparser.treewalkers.ADLListener;
 import com.nedap.archie.aom.Archetype;
+import com.nedap.archie.aom.utils.ArchetypeParsePostProcesser;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.apache.commons.io.input.BOMInputStream;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,6 +31,11 @@ public class ADLParser {
     private AdlParser.AdlContext tree;
     public ADLErrorListener errorListener;
 
+    /**
+     * If true, write errors to the console, if false, do not
+     */
+    private boolean logEnabled = true;
+
     public ADLParser() {
 
     }
@@ -43,24 +50,28 @@ public class ADLParser {
     }
 
     public Archetype parse(InputStream stream) throws IOException {
-        return parse(new ANTLRInputStream(stream));
+        return parse(new ANTLRInputStream(new BOMInputStream(stream)));
     }
 
     public Archetype parse(CharStream stream) {
+
         errors = new ADLParserErrors();
         errorListener = new ADLErrorListener(errors);
+        errorListener.setLogEnabled(logEnabled);
 
         lexer = new AdlLexer(stream);
         lexer.addErrorListener(errorListener);
         parser = new AdlParser(new CommonTokenStream(lexer));
         parser.addErrorListener(errorListener);
         tree = parser.adl(); // parse
-        //System.out.println(tree.toStringTree(parser));
 
         ADLListener listener = new ADLListener(errors);
         walker= new ParseTreeWalker();
         walker.walk(listener, tree);
         Archetype result = listener.getArchetype();
+        //set some values that are not directly in ODIN or ADL
+        ArchetypeParsePostProcesser.fixArchetype(result);
+
         if(modelConstraintImposer != null && result.getDefinition() != null) {
             modelConstraintImposer.imposeConstraints(result.getDefinition());
         }
@@ -110,5 +121,13 @@ public class ADLParser {
 
     public void setTree(AdlParser.AdlContext tree) {
         this.tree = tree;
+    }
+
+    public boolean isLogEnabled() {
+        return logEnabled;
+    }
+
+    public void setLogEnabled(boolean logEnabled) {
+        this.logEnabled = logEnabled;
     }
 }

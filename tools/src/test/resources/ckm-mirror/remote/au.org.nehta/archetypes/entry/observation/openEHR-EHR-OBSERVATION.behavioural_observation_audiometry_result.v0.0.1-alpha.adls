@@ -1,0 +1,446 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated; uid=52065a65-0db7-42b7-869e-ff5ab6403415)
+	openEHR-EHR-OBSERVATION.behavioural_observation_audiometry_result.v0.0.1-alpha
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Jade Frederiksen">
+		["organisation"] = <"Hearing Health Program, Northern Territory">
+		["date"] = <"2013">
+	>
+	original_namespace = <"au.org.nehta">
+	original_publisher = <"nehta, Australia">
+	custodian_namespace = <"au.org.nehta">
+	custodian_organisation = <"nehta, Australia">
+	copyright = <"© Northern Territory Department of Health, Australia">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record unconditioned responses of an infant or young child’s response to auditory stimuli. To record the interpretation of responses.">
+			use = <"Use to record child’s Minimum Response Levels (MRL’s) and reflexive responses (eg. APR) to noisemakers and speech. Recorded in the free-field measuring a binaural response. 
+
+Use to record an overall interpretation of response levels and response qualities to provide an indication of the probable hearing status. 
+BOA is generally used as a secondary testing technique in infants under 6mo to provide supporting information to objective measures of hearing levels (ABR/ SSEP). In cases where an infant cannot be conditioned to VROA, is not developmentally able to perform VROA, or if VROA equipment is unavailable, BOA may be used to obtain information about behavioural hearing. 
+
+Please note: 
+- MRL: the lowest intensity level at which a response to a stimulus is recorded. An ascending technique should be used when establishing MRL’s.
+- dBA: Decibels measured in the sound field using the A scale sound level filter. Using this filter, the sound level meter is thus less sensitive to very high and very low frequencies
+
+Details about assisted hearing devices used as aids in this test should be recorded in the EVALUATION.assisted_hearing_summary.">
+			keywords = <"hearing", "test", "audiometry", "MRL", "decibels", "observation", "infant">
+			misuse = <"Not to be used to record hearing threshold levels (HTL’s)
+
+Not to be used to record any other assessments such as;
+-VROA
+-PTA
+-Play
+-Objective Assessments.">
+		>
+	>
+	other_contributors = <"Rebecca Matthews, NT Hearing", "Amarjit Anand, NT Hearing">
+	other_details = <
+		["current_contact"] = <"Heather Leslie, Ocean Informatics<heather.leslie@oceaninformatics.com>">
+		["MD5-CAM-1.0.1"] = <"7EDC8E02147E2B80F338510107EC611B">
+		["build_uid"] = <"4ac33441-6097-4b46-91f6-d1be6af31465">
+	>
+
+definition
+	OBSERVATION[id1] matches {	-- Behavioural observation audiometry (BOA) result
+		data matches {
+			HISTORY[id2] matches {
+				events cardinality matches {1..*; unordered} matches {
+					POINT_EVENT[id3] occurrences matches {0..1} matches {	-- Any point in time event
+						data matches {
+							ITEM_TREE[id4] matches {
+								items matches {
+									CLUSTER[id12] matches {	-- Result details
+										items matches {
+											ELEMENT[id9] occurrences matches {0..1} matches {	-- Stimulus
+												value matches {
+													DV_TEXT[id56] 
+												}
+											}
+											ELEMENT[id11] occurrences matches {0..1} matches {	-- Frequency
+												value matches {
+													DV_INTERVAL<DV_QUANTITY>[id57] matches {
+														upper matches {
+															DV_QUANTITY[id58] matches {
+																property matches {[at63]}
+																units matches {"Hz", "kHz"}
+															}
+														}
+														lower matches {
+															DV_QUANTITY[id59] matches {
+																property matches {[at63]}
+																units matches {"Hz", "kHz"}
+															}
+														}
+													}
+													DV_QUANTITY[id60] matches {
+														property matches {[at63]}
+														units matches {"Hz", "kHz"}
+													}
+												}
+											}
+											ELEMENT[id13] occurrences matches {0..1} matches {	-- Latency
+												value matches {
+													DV_TEXT[id61] 
+												}
+											}
+											ELEMENT[id10] occurrences matches {0..1} matches {	-- Minimum response level
+												value matches {
+													DV_QUANTITY[id62] matches {
+														property matches {[at64]}
+														units matches {"dB"}
+													}
+												}
+											}
+											ELEMENT[id55] occurrences matches {0..1} matches {	-- Response
+												value matches {
+													DV_CODED_TEXT[id63] matches {
+														defining_code matches {[ac1]}		-- Response (synthesised)
+													}
+												}
+											}
+											ELEMENT[id17] occurrences matches {0..1} matches {	-- No test result
+												value matches {
+													DV_BOOLEAN[id64] matches {
+														value matches {True, False}
+													}
+												}
+											}
+											ELEMENT[id18] occurrences matches {0..1} matches {	-- Reason for no test result
+												value matches {
+													DV_TEXT[id65] 
+												}
+											}
+										}
+									}
+									allow_archetype CLUSTER[id22] matches {	-- Multimedia representation
+										include
+											archetype_id/value matches {/openEHR-EHR-CLUSTER\.multimedia(-[a-zA-Z0-9_]+)*\.v1/}
+									}
+									ELEMENT[id20] occurrences matches {0..1} matches {	-- Overall interpretation
+										value matches {
+											DV_TEXT[id66] 
+										}
+									}
+									allow_archetype CLUSTER[id34] matches {	-- Exam not done
+										include
+											archetype_id/value matches {/openEHR-EHR-CLUSTER\.exclusion_exam(-[a-zA-Z0-9_]+)*\.v1/}
+									}
+									ELEMENT[id21] occurrences matches {0..1} matches {	-- Comment
+										value matches {
+											DV_TEXT[id67] 
+										}
+									}
+								}
+							}
+						}
+						state matches {
+							ITEM_TREE[id23] matches {
+								items matches {
+									ELEMENT[id37] occurrences matches {0..1} matches {	-- Response state
+										value matches {
+											DV_CODED_TEXT[id68] matches {
+												defining_code matches {[ac2]}		-- Response state (synthesised)
+											}
+										}
+									}
+									ELEMENT[id33] occurrences matches {0..1} matches {	-- Confounding factors
+										value matches {
+											DV_TEXT[id69] 
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		protocol matches {
+			ITEM_TREE[id35] matches {
+				items matches {
+					allow_archetype CLUSTER[id36] matches {	-- Extension
+						include
+							archetype_id/value matches {/.*/}
+					}
+					ELEMENT[id51] occurrences matches {0..1} matches {	-- Air presentation
+						value matches {
+							DV_CODED_TEXT[id70] matches {
+								defining_code matches {[ac3]}		-- Air presentation (synthesised)
+							}
+						}
+					}
+					ELEMENT[id41] occurrences matches {0..1} matches {	-- Test environment
+						value matches {
+							DV_CODED_TEXT[id71] matches {
+								defining_code matches {[ac4]}		-- Test environment (synthesised)
+							}
+						}
+					}
+					ELEMENT[id44] occurrences matches {0..1} matches {	-- Background noise
+						value matches {
+							DV_CODED_TEXT[id72] matches {
+								defining_code matches {[ac5]}		-- Background noise (synthesised)
+							}
+						}
+					}
+					ELEMENT[id47] occurrences matches {0..1} matches {	-- Calibration reference dB
+						value matches {
+							DV_CODED_TEXT[id73] matches {
+								defining_code matches {[ac6]}		-- Calibration reference dB (synthesised)
+							}
+						}
+					}
+					ELEMENT[id15] occurrences matches {0..1} matches {	-- Reliability
+						value matches {
+							DV_TEXT[id74] 
+						}
+					}
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Behavioural observation audiometry (BOA) result">
+				description = <"Observations of an infant or young child’s unconditioned response to sound, and associated clinical interpretation.">
+			>
+			["id3"] = <
+				text = <"Any point in time event">
+				description = <"Default, unspecified point in time event which may be explicitly defined in a template or at run-time.">
+			>
+			["id9"] = <
+				text = <"Stimulus">
+				description = <"The type of stimulus used in the test.">
+			>
+			["id10"] = <
+				text = <"Minimum response level">
+				description = <"Lowest intensity at which a response to a stimulus is observed.">
+			>
+			["id11"] = <
+				text = <"Frequency">
+				description = <"The frequency or range of frequency of the identified stimulus.">
+			>
+			["id12"] = <
+				text = <"Result details">
+				description = <"The test result observations and interpretations.">
+			>
+			["id13"] = <
+				text = <"Latency">
+				description = <"*">
+			>
+			["id15"] = <
+				text = <"Reliability">
+				description = <"Narrative description of the reliability of the response, as determined by the tester.">
+			>
+			["id17"] = <
+				text = <"No test result">
+				description = <"No test result is available for the side stimulated.">
+			>
+			["id18"] = <
+				text = <"Reason for no test result">
+				description = <"Reason why no result is available for the side stimulated.">
+			>
+			["id20"] = <
+				text = <"Overall interpretation">
+				description = <"Overall clinical interpretation of the responses for both ears.">
+			>
+			["id21"] = <
+				text = <"Comment">
+				description = <"Additional narrative about the test responses, not captured in other fields.">
+			>
+			["id22"] = <
+				text = <"Multimedia representation">
+				description = <"Digital image, video or diagram representing the test results.">
+			>
+			["id33"] = <
+				text = <"Confounding factors">
+				description = <"Narrative description of factors, not recorded elsewhere, that may influence the response results.">
+			>
+			["id34"] = <
+				text = <"Exam not done">
+				description = <"Details to explicitly record that this examination was not performed.">
+			>
+			["id36"] = <
+				text = <"Extension">
+				description = <"Additional information required to capture local content or to align with other reference models/formalisms.">
+			>
+			["id37"] = <
+				text = <"Response state">
+				description = <"The response state of the child during the test.">
+			>
+			["at38"] = <
+				text = <"Light sleep">
+				description = <"The child was lightly sleeping.">
+			>
+			["at39"] = <
+				text = <"Quiet and alert">
+				description = <"The child was awake, quiet and alert.">
+			>
+			["at40"] = <
+				text = <"Crying">
+				description = <"The child was crying.">
+			>
+			["id41"] = <
+				text = <"Test environment">
+				description = <"The environment in which the test is administered.">
+			>
+			["at42"] = <
+				text = <"Audiometric booth">
+				description = <"Sound-treated test environment that meets audiometric standards for ambient noise.">
+			>
+			["at43"] = <
+				text = <"Non-sound treated room">
+				description = <"Test environment that does not meet audiometric standards for ambient noise.">
+			>
+			["id44"] = <
+				text = <"Background noise">
+				description = <"The amount and nature of noise in the environment that may influence the test results.">
+			>
+			["at45"] = <
+				text = <"Not clinically significant">
+				description = <"The background noise is not likely to compromise test results.">
+			>
+			["at46"] = <
+				text = <"Clinically significant">
+				description = <"The background noise may compromise test results.">
+			>
+			["id47"] = <
+				text = <"Calibration reference dB">
+				description = <"Scale used for acoustic calibration of the test signal.">
+			>
+			["at48"] = <
+				text = <"dB SPL">
+				description = <"The test stimuli are calibrated using the sound pressure level scale.">
+			>
+			["at49"] = <
+				text = <"dB HL">
+				description = <"The test stimuli are calibrated using the hearing level scale.">
+			>
+			["at50"] = <
+				text = <"dB A">
+				description = <"The test stimuli are calibrated using the A-weighted scale.">
+			>
+			["id51"] = <
+				text = <"Air presentation">
+				description = <"Presentation of the air conduction test stimulus indirectly to the inner ear through the atmosphere, via the auditory canal and middle ear structures.">
+			>
+			["at52"] = <
+				text = <"Soundfield">
+				description = <"The stimulus is presented via a loudspeaker located at least one metre away from the subject.">
+			>
+			["at53"] = <
+				text = <"Insert earphone">
+				description = <"The stimulus is presented via insert earphones.">
+			>
+			["at54"] = <
+				text = <"Headphone">
+				description = <"The stimulus is presented via external headphones - either circumaural or supraaural.">
+			>
+			["id55"] = <
+				text = <"Response">
+				description = <"*">
+			>
+			["at56"] = <
+				text = <"Startle reflex">
+				description = <"Moro reflex in response to stimulus.">
+			>
+			["at57"] = <
+				text = <"Auropalpebral reflex">
+				description = <"An involuntary blink of the eye caused by contraction of the orbicularis oculi muscle in response to loud sounds.">
+			>
+			["at58"] = <
+				text = <"No response">
+				description = <"*">
+			>
+			["at59"] = <
+				text = <"Arousal">
+				description = <"Baby has heightened state of arousal in response to the stimulus.">
+			>
+			["at60"] = <
+				text = <"Stilling">
+				description = <"Baby ceases current activity.">
+			>
+			["at61"] = <
+				text = <"Eye response">
+				description = <"Eye widening, eye movement or eye turn.">
+			>
+			["at62"] = <
+				text = <"Head turn">
+				description = <"Baby turns head in response to stimulus.">
+			>
+			["at63"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at64"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["ac1"] = <
+				text = <"Response (synthesised)">
+				description = <"* (synthesised)">
+			>
+			["ac2"] = <
+				text = <"Response state (synthesised)">
+				description = <"The response state of the child during the test. (synthesised)">
+			>
+			["ac3"] = <
+				text = <"Air presentation (synthesised)">
+				description = <"Presentation of the air conduction test stimulus indirectly to the inner ear through the atmosphere, via the auditory canal and middle ear structures. (synthesised)">
+			>
+			["ac4"] = <
+				text = <"Test environment (synthesised)">
+				description = <"The environment in which the test is administered. (synthesised)">
+			>
+			["ac5"] = <
+				text = <"Background noise (synthesised)">
+				description = <"The amount and nature of noise in the environment that may influence the test results. (synthesised)">
+			>
+			["ac6"] = <
+				text = <"Calibration reference dB (synthesised)">
+				description = <"Scale used for acoustic calibration of the test signal. (synthesised)">
+			>
+		>
+	>
+	term_bindings = <
+		["openehr"] = <
+			["at63"] = <http://openehr.org/id/382>
+			["at64"] = <http://openehr.org/id/123>
+		>
+	>
+	value_sets = <
+		["ac3"] = <
+			id = <"ac3">
+			members = <"at52", "at53", "at54">
+		>
+		["ac5"] = <
+			id = <"ac5">
+			members = <"at46", "at45">
+		>
+		["ac1"] = <
+			id = <"ac1">
+			members = <"at58", "at59", "at60", "at61", "at62", "at57", "at56">
+		>
+		["ac2"] = <
+			id = <"ac2">
+			members = <"at38", "at39", "at40">
+		>
+		["ac4"] = <
+			id = <"ac4">
+			members = <"at42", "at43">
+		>
+		["ac6"] = <
+			id = <"ac6">
+			members = <"at48", "at49", "at50">
+		>
+	>

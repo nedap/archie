@@ -1,0 +1,517 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated; uid=5bc6fe46-19b9-43be-b2cd-4199ad922e01)
+	openEHR-EHR-OBSERVATION.chadsvas_score.v0.0.1-alpha
+
+language
+	original_language = <[ISO_639-1::en]>
+	translations = <
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			author = <
+				["name"] = <"Hallvard Lærum">
+				["organisation"] = <"Oslo Universitetssykehus HF">
+				["email"] = <"hallar@ous-hf.no">
+			>
+		>
+		["sv"] = <
+			language = <[ISO_639-1::sv]>
+			author = <
+				["name"] = <"Konstantinos Kalliamvakos">
+				["organisation"] = <"Cambio Healthcare Systems">
+				["email"] = <"Konstantinos.Kalliamvakos@cambio.se">
+			>
+		>
+	>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Rong Chen">
+		["organisation"] = <"Cambio Healthcare Systems">
+		["email"] = <"rong.chen@cambio.se">
+		["date"] = <"08/03/2013">
+	>
+	original_namespace = <"no.nasjonalikt">
+	original_publisher = <"Nasjonal IKT">
+	custodian_namespace = <"no.nasjonalikt">
+	custodian_organisation = <"Nasjonal IKT">
+	copyright = <"© Nasjonal IKT HF">
+	licence = <"This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 International License. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/4.0/.">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record an individuals CHA2DS2VASc score parameters and total score.">
+			use = <"Use for stroke risk stratification in patients with atrial fibrillation.">
+			keywords = <"CHA2DS2-VASc", "atrial fibrillation", "stroke", "diabetes", "hypertension", "congestive heart failure", "CHF", "vascular disease", "age", "gender">
+			misuse = <"">
+		>
+		["sv"] = <
+			language = <[ISO_639-1::sv]>
+			purpose = <"*To record an individuals CHA2DS2VASc score parameters and total score.
+(en)">
+			use = <"*Use for stroke risk stratification in patients with atrial fibrillation.(en)">
+			misuse = <"*(en)">
+		>
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			purpose = <"Å registrere CHA2DS2VASc-score i form av enkeltvariabler og total sum.">
+			use = <"Brukes til å estimere risiko for hjerneslag hos pasienter med atrieflimmer.">
+			keywords = <"CHA2DS2-VASc(nb)", "atrieflimmer(nb)", "forkammerflimmer(nb)", "hjerneslag(nb)", "slag(nb)", "hjerneinfarkt(nb)", "cerebralt insult(nb)", "cerebralt infarkt(nb)", "kardiovaskulær sykdom(nb)", "vaskulær sykdom(nb)", "blodpropp(nb)", "diabetes(nb)", "sukkersyke(nb)", "hypertensjon(nb)", "høyt blodtrykk(nb)", "hjertesvikt(nb)", "alder(nb)", "kjønn(nb)">
+			misuse = <"">
+		>
+	>
+	other_contributors = <"Dr Carlos Valladares", ...>
+	references = <
+		["1"] = <"1. Lip GY, Nieuwlaat R, Pisters R, Lane DA, Crijns HJ. Refining clinical risk stratification for predicting stroke and thromboembolism in atrial fibrillation using a novel risk factor-based approach: the euro heart survey on atrial fibrillation. Chest. 2010 Feb;137(2):263-72. Epub 2009 Sep 17. PubMed PMID: 19762550.">
+		["2"] = <"2. European Heart Rhythm Association; European Association for Cardio-Thoracic Surgery, Camm AJ, Kirchhof P, Lip GY, Schotten U, Savelieva I, Ernst S, Van Gelder IC, Al-Attar N, Hindricks G, Prendergast B, Heidbuchel H, Alfieri O, Angelini A, Atar D, Colonna P, De Caterina R, De Sutter J, Goette A, Gorenek B, Heldal M, Hohloser SH, Kolh P, Le Heuzey JY, Ponikowski P, Rutten FH. Guidelines for the management of atrial fibrillation: the Task Force for the Management of Atrial Fibrillation of the European Society of Cardiology (ESC). Eur Heart J. 2010 Oct;31(19):2369-429. Epub 2010 Aug 29. Erratum in: Eur Heart J. 2011 May;32(9):1172. PubMed PMID: 20802247.">
+	>
+	other_details = <
+		["current_contact"] = <"Rong Chen, Cambio Healthcare Systems, rong.chen@cambio.se">
+		["MD5-CAM-1.0.1"] = <"195BF0B8C03D76A077C33743E2DF2977">
+		["build_uid"] = <"29571909-f4dc-4ba4-912e-6b8cf9844bd8">
+	>
+
+definition
+	OBSERVATION[id1] matches {	-- CHA2DS2VASc score
+		data matches {
+			HISTORY[id3] matches {	-- history
+				events cardinality matches {1..*; unordered} matches {
+					EVENT[id4] matches {	-- Any event
+						data matches {
+							ITEM_TREE[id2] matches {	-- Tree
+								items matches {
+									ELEMENT[id27] occurrences matches {0..1} matches {	-- Congestive Heart Failure
+										value matches {
+											DV_ORDINAL[id101] matches {
+												[value, symbol] matches {
+													[{0}, {[at28]}],
+													[{1}, {[at29]}]
+												}
+											}
+										}
+									}
+									ELEMENT[id30] occurrences matches {0..1} matches {	-- Hypertension
+										value matches {
+											DV_ORDINAL[id102] matches {
+												[value, symbol] matches {
+													[{0}, {[at28]}],
+													[{1}, {[at29]}]
+												}
+											}
+										}
+									}
+									ELEMENT[id33] occurrences matches {0..1} matches {	-- Diabetes
+										value matches {
+											DV_ORDINAL[id103] matches {
+												[value, symbol] matches {
+													[{0}, {[at28]}],
+													[{1}, {[at29]}]
+												}
+											}
+										}
+									}
+									ELEMENT[id36] occurrences matches {0..1} matches {	-- Age
+										value matches {
+											DV_ORDINAL[id104] matches {
+												[value, symbol] matches {
+													[{0}, {[at37]}],
+													[{1}, {[at38]}],
+													[{2}, {[at39]}]
+												}
+											}
+										}
+									}
+									ELEMENT[id40] occurrences matches {0..1} matches {	-- Previous stroke
+										value matches {
+											DV_ORDINAL[id105] matches {
+												[value, symbol] matches {
+													[{0}, {[at28]}],
+													[{2}, {[at29]}]
+												}
+											}
+										}
+									}
+									ELEMENT[id47] occurrences matches {0..1} matches {	-- Vascular disease
+										value matches {
+											DV_ORDINAL[id106] matches {
+												[value, symbol] matches {
+													[{0}, {[at28]}],
+													[{1}, {[at29]}]
+												}
+											}
+										}
+									}
+									ELEMENT[id43] occurrences matches {0..1} matches {	-- Gender
+										value matches {
+											DV_ORDINAL[id107] matches {
+												[value, symbol] matches {
+													[{0}, {[at44]}],
+													[{1}, {[at45]}]
+												}
+											}
+										}
+									}
+									ELEMENT[id100] occurrences matches {0..1} matches {	-- Total score
+										value matches {
+											DV_COUNT[id108] 
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"CHA2DS2VASc score">
+				description = <"Risk stratification for stroke based on the CHA2DS2VASc score defined by the European Society of Cardiology (ESC) guidelines for management of atrial fibrillation.">
+			>
+			["id2"] = <
+				text = <"Tree">
+				description = <"*">
+			>
+			["id3"] = <
+				text = <"history">
+				description = <"*">
+			>
+			["id4"] = <
+				text = <"Any event">
+				description = <"*">
+			>
+			["id27"] = <
+				text = <"Congestive Heart Failure">
+				description = <"Study criteria: Atrial Fibrillation = Present">
+			>
+			["at28"] = <
+				text = <"Absent">
+				description = <"*">
+			>
+			["at29"] = <
+				text = <"Present">
+				description = <"*">
+			>
+			["id30"] = <
+				text = <"Hypertension">
+				description = <"Study criteria: Atrial Fibrillation = Present">
+			>
+			["id33"] = <
+				text = <"Diabetes">
+				description = <"Study criteria: Atrial Fibrillation = Present">
+			>
+			["id36"] = <
+				text = <"Age">
+				description = <"Study criteria: Atrial Fibrillation = Present">
+			>
+			["at37"] = <
+				text = <"Under 65">
+				description = <"*">
+			>
+			["at38"] = <
+				text = <"Between 65-74">
+				description = <"*">
+			>
+			["at39"] = <
+				text = <"Above or equals to 75">
+				description = <"*">
+			>
+			["id40"] = <
+				text = <"Previous stroke">
+				description = <"Study criteria: Atrial Fibrillation = Present">
+			>
+			["id43"] = <
+				text = <"Gender">
+				description = <"Study criteria: Atrial Fibrillation = Present">
+			>
+			["at44"] = <
+				text = <"Male">
+				description = <"*">
+			>
+			["at45"] = <
+				text = <"Female">
+				description = <"*">
+			>
+			["id47"] = <
+				text = <"Vascular disease">
+				description = <"Study criteria: Atrial Fibrillation = Present">
+			>
+			["id100"] = <
+				text = <"Total score">
+				description = <"Study criteria: Atrial Fibrillation = Present">
+			>
+			["ac1"] = <
+				text = <"Congestive Heart Failure (synthesised)">
+				description = <"Study criteria: Atrial Fibrillation = Present (synthesised)">
+			>
+			["ac2"] = <
+				text = <"Hypertension (synthesised)">
+				description = <"Study criteria: Atrial Fibrillation = Present (synthesised)">
+			>
+			["ac3"] = <
+				text = <"Diabetes (synthesised)">
+				description = <"Study criteria: Atrial Fibrillation = Present (synthesised)">
+			>
+			["ac4"] = <
+				text = <"Age (synthesised)">
+				description = <"Study criteria: Atrial Fibrillation = Present (synthesised)">
+			>
+			["ac5"] = <
+				text = <"Previous stroke (synthesised)">
+				description = <"Study criteria: Atrial Fibrillation = Present (synthesised)">
+			>
+			["ac6"] = <
+				text = <"Vascular disease (synthesised)">
+				description = <"Study criteria: Atrial Fibrillation = Present (synthesised)">
+			>
+			["ac7"] = <
+				text = <"Gender (synthesised)">
+				description = <"Study criteria: Atrial Fibrillation = Present (synthesised)">
+			>
+		>
+		["sv"] = <
+			["id1"] = <
+				text = <"*CHA2DS2VASc score(en)">
+				description = <"*Risk stratification for stroke based on the CHA2DS2VASc score defined by the European Society of Cardiology (ESC) guidelines for management of atrial fibrillation.(en)">
+			>
+			["id2"] = <
+				text = <"Träd">
+				description = <"@ intern @">
+			>
+			["id3"] = <
+				text = <"historik">
+				description = <"@ intern @">
+			>
+			["id4"] = <
+				text = <"Alla händelser">
+				description = <"Alla händelser">
+			>
+			["id27"] = <
+				text = <"Hjärtsvikt/VK-dysfunktion">
+				description = <"**(en)">
+			>
+			["at28"] = <
+				text = <"Finns ej">
+				description = <"**(en)">
+			>
+			["at29"] = <
+				text = <"Finns">
+				description = <"**(en)">
+			>
+			["id30"] = <
+				text = <"Hypertoni">
+				description = <"**(en)">
+			>
+			["id33"] = <
+				text = <"Diabetes">
+				description = <"**(en)">
+			>
+			["id36"] = <
+				text = <"Ålder">
+				description = <"**(en)">
+			>
+			["at37"] = <
+				text = <"Under 65">
+				description = <"**(en)">
+			>
+			["at38"] = <
+				text = <"Mellan 65-74">
+				description = <"**(en)">
+			>
+			["at39"] = <
+				text = <"Över eller lika med 75">
+				description = <"**(en)">
+			>
+			["id40"] = <
+				text = <"Stroke/TIA">
+				description = <"**(en)">
+			>
+			["id43"] = <
+				text = <"Kön">
+				description = <"**(en)">
+			>
+			["at44"] = <
+				text = <"Manligt kön">
+				description = <"**(en)">
+			>
+			["at45"] = <
+				text = <"Kvinnligt kön">
+				description = <"**(en)">
+			>
+			["id47"] = <
+				text = <"Vaskulär sjukdom">
+				description = <"Tidigare hjärtinfarkt, perifer vaskulär sjukdom, atherosclerosis">
+			>
+			["id100"] = <
+				text = <"Total poäng">
+				description = <"**(en)">
+			>
+			["ac1"] = <
+				text = <"Hjärtsvikt/VK-dysfunktion (synthesised)">
+				description = <"**(en) (synthesised)">
+			>
+			["ac2"] = <
+				text = <"Hypertoni (synthesised)">
+				description = <"**(en) (synthesised)">
+			>
+			["ac3"] = <
+				text = <"Diabetes (synthesised)">
+				description = <"**(en) (synthesised)">
+			>
+			["ac4"] = <
+				text = <"Ålder (synthesised)">
+				description = <"**(en) (synthesised)">
+			>
+			["ac5"] = <
+				text = <"Stroke/TIA (synthesised)">
+				description = <"**(en) (synthesised)">
+			>
+			["ac6"] = <
+				text = <"Vaskulär sjukdom (synthesised)">
+				description = <"Tidigare hjärtinfarkt, perifer vaskulär sjukdom, atherosclerosis (synthesised)">
+			>
+			["ac7"] = <
+				text = <"Kön (synthesised)">
+				description = <"**(en) (synthesised)">
+			>
+		>
+		["nb"] = <
+			["id1"] = <
+				text = <"CHA2DS2VASc-score">
+				description = <"Angivelse av risiko for hjerneslag basert på CHA2DS2VASc-score. Denne er definert i the European Society of Cardiology (ESC) sine retningslinjer for oppfølging av atrieflimmer.">
+			>
+			["id2"] = <
+				text = <"Tree">
+				description = <"*">
+			>
+			["id3"] = <
+				text = <"history">
+				description = <"*">
+			>
+			["id4"] = <
+				text = <"Uspesfisert hendelse">
+				description = <"Standard, uspesifisert tidspunkt eller tidsintervall som kan defineres mer eksplisitt i en template eller i en applikasjon.">
+			>
+			["id27"] = <
+				text = <"Hjertesvikt">
+				description = <"Gjelder kun pasienter med atrieflimmer.">
+			>
+			["at28"] = <
+				text = <"Ikke tilstede">
+				description = <"*">
+			>
+			["at29"] = <
+				text = <"Tilstede">
+				description = <"*">
+			>
+			["id30"] = <
+				text = <"Hypertensjon">
+				description = <"Gjelder kun pasienter med atrieflimmer.">
+			>
+			["id33"] = <
+				text = <"Diabetes">
+				description = <"Gjelder kun pasienter med atrieflimmer.">
+			>
+			["id36"] = <
+				text = <"Alder">
+				description = <"Gjelder kun pasienter med atrieflimmer.">
+			>
+			["at37"] = <
+				text = <"65 år eller yngre">
+				description = <"*">
+			>
+			["at38"] = <
+				text = <"Mellom 65 og 74 år">
+				description = <"*">
+			>
+			["at39"] = <
+				text = <"75 år eller eldre">
+				description = <"*">
+			>
+			["id40"] = <
+				text = <"Tidligere tilfeller av hjerneslag">
+				description = <"Gjelder kun pasienter med atrieflimmer.">
+			>
+			["id43"] = <
+				text = <"Kjønn">
+				description = <"Gjelder kun pasienter med atrieflimmer.">
+			>
+			["at44"] = <
+				text = <"Mann">
+				description = <"*">
+			>
+			["at45"] = <
+				text = <"Kvinne">
+				description = <"*">
+			>
+			["id47"] = <
+				text = <"Vaskulær sykdom">
+				description = <"Gjelder kun pasienter med atrieflimmer.">
+			>
+			["id100"] = <
+				text = <"Totalscore">
+				description = <"Totalscore 0-9, 9 er høyeste risiko for hjerneslag.">
+			>
+			["ac1"] = <
+				text = <"Hjertesvikt (synthesised)">
+				description = <"Gjelder kun pasienter med atrieflimmer. (synthesised)">
+			>
+			["ac2"] = <
+				text = <"Hypertensjon (synthesised)">
+				description = <"Gjelder kun pasienter med atrieflimmer. (synthesised)">
+			>
+			["ac3"] = <
+				text = <"Diabetes (synthesised)">
+				description = <"Gjelder kun pasienter med atrieflimmer. (synthesised)">
+			>
+			["ac4"] = <
+				text = <"Alder (synthesised)">
+				description = <"Gjelder kun pasienter med atrieflimmer. (synthesised)">
+			>
+			["ac5"] = <
+				text = <"Tidligere tilfeller av hjerneslag (synthesised)">
+				description = <"Gjelder kun pasienter med atrieflimmer. (synthesised)">
+			>
+			["ac6"] = <
+				text = <"Vaskulær sykdom (synthesised)">
+				description = <"Gjelder kun pasienter med atrieflimmer. (synthesised)">
+			>
+			["ac7"] = <
+				text = <"Kjønn (synthesised)">
+				description = <"Gjelder kun pasienter med atrieflimmer. (synthesised)">
+			>
+		>
+	>
+	value_sets = <
+		["ac1"] = <
+			id = <"ac1">
+			members = <"at28", "at29">
+		>
+		["ac2"] = <
+			id = <"ac2">
+			members = <"at28", "at29">
+		>
+		["ac3"] = <
+			id = <"ac3">
+			members = <"at28", "at29">
+		>
+		["ac4"] = <
+			id = <"ac4">
+			members = <"at37", "at38", "at39">
+		>
+		["ac5"] = <
+			id = <"ac5">
+			members = <"at28", "at29">
+		>
+		["ac6"] = <
+			id = <"ac6">
+			members = <"at28", "at29">
+		>
+		["ac7"] = <
+			id = <"ac7">
+			members = <"at44", "at45">
+		>
+	>

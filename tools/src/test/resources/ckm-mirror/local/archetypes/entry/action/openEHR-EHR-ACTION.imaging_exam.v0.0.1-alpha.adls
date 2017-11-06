@@ -1,0 +1,562 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated; uid=6a9764e8-0424-4642-afc3-39f1d0786c28)
+	openEHR-EHR-ACTION.imaging_exam.v0.0.1-alpha
+
+language
+	original_language = <[ISO_639-1::en]>
+	translations = <
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			author = <
+				["name"] = <"Ingrid Heitmann">
+				["organisation"] = <"Oslo University Hospital">
+				["email"] = <"iheitman@ous-hf.no">
+			>
+			accreditation = <"Registered Nurse">
+		>
+	>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Sam Heard">
+		["organisation"] = <"Ocean Informatics">
+		["email"] = <"sam.heard@oceaninformatics.com">
+		["date"] = <"2006-04-10">
+	>
+	original_namespace = <"org.openehr">
+	original_publisher = <"openEHR Foundation">
+	custodian_namespace = <"org.openehr">
+	custodian_organisation = <"openEHR Foundation">
+	copyright = <"© openEHR Foundation">
+	licence = <"This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 License. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/.">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record activity regarding the performance of imaging examinations.">
+			use = <"Use to record activity regarding the performance of imaging examinations.">
+			keywords = <"Radiology", "Ultrasound", "MRI", "CT", "scan", "tomography">
+			misuse = <"">
+		>
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			purpose = <"For å registrere aktiviteter knyttet til gjennomføringen av bildediagnostikk.">
+			use = <"Brukes til å registrere aktiviteter knyttet til gjennomføringen av bildediagnostikk.">
+			keywords = <"Radiologi", "Ultralyd", "UL", "MR", "CT", "røngten", "tomografi", "røngtenfotograferingsteknikk", "billeddiagnostikk">
+			misuse = <"">
+		>
+	>
+	other_contributors = <"Heather Leslie, Ocean Informatics, Australia", ...>
+	references = <
+		["1"] = <"Derived from Imaging Examination (action) , draft archetype, National eHealth Transition Authority [Internet]. NEHTA Clinical Knowledge Manager. Authored: 08 Nov 2010. Available at: http://dcm.nehta.org.au/ckm/OKM.html#showarchetype_1013.1.999 (accessed Jan 16, 2012).">
+	>
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"72F6AD141A08A8A1A002B4C688747EC9">
+		["build_uid"] = <"74f93296-14be-4f6a-889c-7926bc8ba0a7">
+	>
+
+definition
+	ACTION[id1] matches {	-- Imaging examination
+		ism_transition matches {
+			ISM_TRANSITION[id3] matches {	-- Examination planned
+				current_state matches {
+					DV_CODED_TEXT[id24] matches {
+						defining_code matches {[at16]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id25] matches {
+						defining_code matches {[at3]}
+					}
+				}
+			}
+			ISM_TRANSITION[id4] matches {	-- Examination requested
+				current_state matches {
+					DV_CODED_TEXT[id26] matches {
+						defining_code matches {[at16]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id27] matches {
+						defining_code matches {[at4]}
+					}
+				}
+			}
+			ISM_TRANSITION[id10] matches {	-- Examination postponed
+				current_state matches {
+					DV_CODED_TEXT[id28] matches {
+						defining_code matches {[at17]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id29] matches {
+						defining_code matches {[at10]}
+					}
+				}
+			}
+			ISM_TRANSITION[id12] matches {	-- Examination cancelled
+				current_state matches {
+					DV_CODED_TEXT[id30] matches {
+						defining_code matches {[at18]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id31] matches {
+						defining_code matches {[at12]}
+					}
+				}
+			}
+			ISM_TRANSITION[id5] matches {	-- Appointment scheduled
+				current_state matches {
+					DV_CODED_TEXT[id32] matches {
+						defining_code matches {[at19]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id33] matches {
+						defining_code matches {[at5]}
+					}
+				}
+			}
+			ISM_TRANSITION[id6] matches {	-- Appointment rescheduled
+				current_state matches {
+					DV_CODED_TEXT[id34] matches {
+						defining_code matches {[at19]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id35] matches {
+						defining_code matches {[at6]}
+					}
+				}
+			}
+			ISM_TRANSITION[id9] matches {	-- Examination performed
+				current_state matches {
+					DV_CODED_TEXT[id36] matches {
+						defining_code matches {[at20]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id37] matches {
+						defining_code matches {[at9]}
+					}
+				}
+			}
+			ISM_TRANSITION[id15] matches {	-- Failed attempt
+				current_state matches {
+					DV_CODED_TEXT[id38] matches {
+						defining_code matches {[at20]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id39] matches {
+						defining_code matches {[at15]}
+					}
+				}
+			}
+			ISM_TRANSITION[id11] matches {	-- Examination suspended
+				current_state matches {
+					DV_CODED_TEXT[id40] matches {
+						defining_code matches {[at21]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id41] matches {
+						defining_code matches {[at11]}
+					}
+				}
+			}
+			ISM_TRANSITION[id13] matches {	-- Examination aborted
+				current_state matches {
+					DV_CODED_TEXT[id42] matches {
+						defining_code matches {[at22]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id43] matches {
+						defining_code matches {[at13]}
+					}
+				}
+			}
+			ISM_TRANSITION[id8] matches {	-- Examination complete
+				current_state matches {
+					DV_CODED_TEXT[id44] matches {
+						defining_code matches {[at23]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id45] matches {
+						defining_code matches {[at8]}
+					}
+				}
+			}
+		}
+		description matches {
+			ITEM_TREE[id2] matches {
+				items matches {
+					ELEMENT[id18] occurrences matches {0..1} matches {	-- Examination name
+						value matches {
+							DV_TEXT[id46] 
+						}
+					}
+					ELEMENT[id19] occurrences matches {0..1} matches {	-- Description
+						value matches {
+							DV_TEXT[id47] 
+						}
+					}
+					ELEMENT[id20] occurrences matches {0..1} matches {	-- Reason
+						value matches {
+							DV_TEXT[id48] 
+						}
+					}
+					allow_archetype CLUSTER[id23] matches {	-- Anatomical location
+						include
+							archetype_id/value matches {/openEHR-EHR-CLUSTER\.anatomical_location(-[a-zA-Z0-9_]+)*\.v1/}
+					}
+					allow_archetype CLUSTER[id22] matches {	-- Examination detail
+						include
+							archetype_id/value matches {/.*/}
+					}
+					ELEMENT[id21] occurrences matches {0..1} matches {	-- Comment
+						value matches {
+							DV_TEXT[id49] 
+						}
+					}
+				}
+			}
+		}
+		protocol matches {
+			ITEM_TREE[id16] matches {
+				items matches {
+					ELEMENT[id17] occurrences matches {0..1} matches {	-- Start date/time
+						value matches {
+							DV_DATE_TIME[id50] 
+						}
+					}
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Imaging examination">
+				description = <"Clinical activity about performing an imaging examination.">
+			>
+			["id3"] = <
+				text = <"Examination planned">
+				description = <"Imaging examination is planned.">
+			>
+			["id4"] = <
+				text = <"Examination requested">
+				description = <"Imaging examination has been requested.">
+			>
+			["id5"] = <
+				text = <"Appointment scheduled">
+				description = <"Imaging examination appointment has been made.">
+			>
+			["id6"] = <
+				text = <"Appointment rescheduled">
+				description = <"Appointment for imaging examination has been rescheduled.">
+			>
+			["id8"] = <
+				text = <"Examination complete">
+				description = <"The imaging examination has been performed and all associated activities completed.">
+			>
+			["id9"] = <
+				text = <"Examination performed">
+				description = <"The examation was performed but related activities not completed.">
+			>
+			["id10"] = <
+				text = <"Examination postponed">
+				description = <"The examination has been postponed.">
+			>
+			["id11"] = <
+				text = <"Examination suspended">
+				description = <"The examination has been suspended.">
+			>
+			["id12"] = <
+				text = <"Examination cancelled">
+				description = <"The planned examination has been cancelled prior to commencement.">
+			>
+			["id13"] = <
+				text = <"Examination aborted">
+				description = <"The examination has been aborted.">
+			>
+			["id15"] = <
+				text = <"Failed attempt">
+				description = <"The examation was commenced but not completed successfully.">
+			>
+			["id17"] = <
+				text = <"Start date/time">
+				description = <"The start date and/or time for the procedure. This will indicate the scheduled date/time when recorded against the 'Appointment scheduled' care pathway step or the actual Start date/time in the 'Examination performed' step.">
+			>
+			["id18"] = <
+				text = <"Examination name">
+				description = <"The name of the examination (to be) performed. Coding of the specific procedure with a terminology is preferred, where possible.">
+			>
+			["id19"] = <
+				text = <"Description">
+				description = <"Narrative description about the activity or care pathway step for the identified examination, for example description about the performance and findings from the the examination, the failed attempt or the cancellation of the examination.">
+			>
+			["id20"] = <
+				text = <"Reason">
+				description = <"Reason that the activity or care pathway step for the identified examination was carried out, for example, the reason for the cancellation or suspension of the examination.">
+			>
+			["id21"] = <
+				text = <"Comment">
+				description = <"Additional narrative about the activity or care pathway step not captured in other fields.">
+			>
+			["id22"] = <
+				text = <"Examination detail">
+				description = <"Structured information about the examination. Use to capture detailed, structured information about method & technique etc.">
+			>
+			["id23"] = <
+				text = <"Anatomical location">
+				description = <"Structured information about the specific anatomical location of the examination.">
+			>
+			["at3"] = <
+				text = <"Examination planned">
+				description = <"Imaging examination is planned.">
+			>
+			["at4"] = <
+				text = <"Examination requested">
+				description = <"Imaging examination has been requested.">
+			>
+			["at10"] = <
+				text = <"Examination postponed">
+				description = <"The examination has been postponed.">
+			>
+			["at12"] = <
+				text = <"Examination cancelled">
+				description = <"The planned examination has been cancelled prior to commencement.">
+			>
+			["at5"] = <
+				text = <"Appointment scheduled">
+				description = <"Imaging examination appointment has been made.">
+			>
+			["at6"] = <
+				text = <"Appointment rescheduled">
+				description = <"Appointment for imaging examination has been rescheduled.">
+			>
+			["at9"] = <
+				text = <"Examination performed">
+				description = <"The examation was performed but related activities not completed.">
+			>
+			["at15"] = <
+				text = <"Failed attempt">
+				description = <"The examation was commenced but not completed successfully.">
+			>
+			["at11"] = <
+				text = <"Examination suspended">
+				description = <"The examination has been suspended.">
+			>
+			["at13"] = <
+				text = <"Examination aborted">
+				description = <"The examination has been aborted.">
+			>
+			["at8"] = <
+				text = <"Examination complete">
+				description = <"The imaging examination has been performed and all associated activities completed.">
+			>
+			["at16"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at17"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at18"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at19"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at20"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at21"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at22"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at23"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+		>
+		["nb"] = <
+			["id1"] = <
+				text = <"Bildediagnostikk">
+				description = <"Klinisk aktivitet knyttet til gjennomføringen av bildediagnostikk.">
+			>
+			["id3"] = <
+				text = <"Undersøkelse planlagt">
+				description = <"Undersøkelsen er planlagt.">
+			>
+			["id4"] = <
+				text = <"Undersøkelsesrekvisisjon sendt">
+				description = <"Det er sendt rekvisisjon for undersøkelsen.">
+			>
+			["id5"] = <
+				text = <"Fastsatt tidspunkt for undersøkelse">
+				description = <"Tidspunkt for undersøkelsen er fastsatt.">
+			>
+			["id6"] = <
+				text = <"Undersøkelse replanlagt">
+				description = <"Tidspunkt for undersøkelsen har blitt replanlagt.">
+			>
+			["id8"] = <
+				text = <"Undersøkelse fullført">
+				description = <"Undersøkelsen er utført og alle tilknyttede kliniske handlinger er fullførte.">
+			>
+			["id9"] = <
+				text = <"Undersøkelse utført">
+				description = <"Undersøkelsen, eller en del av undersøkelsen, har blitt utført.">
+			>
+			["id10"] = <
+				text = <"Undersøkelse utsatt">
+				description = <"Undersøkelsen er utsatt.">
+			>
+			["id11"] = <
+				text = <"Undersøkelse midlertidig stanset">
+				description = <"Undersøkelsen er suspendert/ midlertidig stanset.">
+			>
+			["id12"] = <
+				text = <"Undersøkelse avlyst">
+				description = <"Den planlagte undersøkelsen har blitt avlyst før den ble igangsatt.">
+			>
+			["id13"] = <
+				text = <"Undersøkelse avbrutt">
+				description = <"Undersøkelsen har blitt avbrutt.">
+			>
+			["id15"] = <
+				text = <"Undersøkelse mislykket">
+				description = <"Undersøkelsen har blitt påstartet men ikke fullført.">
+			>
+			["id17"] = <
+				text = <"Start dato/tid">
+				description = <"Dato og/eller tidspunkt for gjennomføringen av undersøkelsen. Registreringen vil, i forbindelse med prosesstrinnet \"Fastsatt tidspunkt for undersøkelse\" indikere den planlagte dato/tid for undersøkelsen eller den faktiske dato/tid for undersøkelsen ved bruk i forbindelse med prosesstrinnet \"Undersøkelse utført\".">
+			>
+			["id18"] = <
+				text = <"Undersøkelsesnavn">
+				description = <"Navnet på undersøkelsen. Det bør om mulig benyttes terminologi for å angi undersøkelsesnavnet.">
+			>
+			["id19"] = <
+				text = <"Beskrivelse">
+				description = <"Fritekstbeskrivelse av undersøkelsen, tilpasset det aktuelle prosesstrinnet. For eksempel en beskrivelse av utførelsen og funnene fra undersøkelsen, det avbrutte forsøket eller avlysningen av undersøkelsen.">
+			>
+			["id20"] = <
+				text = <"Begrunnelse">
+				description = <"Begrunnelse for aktiviteten eller prosesstrinnet for den aktuelle undersøkelsen ble utført. For eksempel grunnen til at undersøkelsen ble avlyst eller midlertidig stanset.">
+			>
+			["id21"] = <
+				text = <"Kommentar">
+				description = <"Ytterligere fritekstbeskrivelse av aktivitet eller prosesstrinn som ikke er registrert i andre felt.">
+			>
+			["id22"] = <
+				text = <"Undersøkelsesdetaljer">
+				description = <"Strukturert informasjon om undersøkelsen. Bruk for å registrere detaljert, strukturert informasjon om metode og teknikker, utstyr som ble benyttet, funn etc.">
+			>
+			["id23"] = <
+				text = <"Anatomisk lokalisering">
+				description = <"Strukturert informasjon om den spesifikke anatomiske lokaliseringen undersøkelsen har blitt utført på.">
+			>
+			["at3"] = <
+				text = <"Undersøkelse planlagt">
+				description = <"Undersøkelsen er planlagt.">
+			>
+			["at4"] = <
+				text = <"Undersøkelsesrekvisisjon sendt">
+				description = <"Det er sendt rekvisisjon for undersøkelsen.">
+			>
+			["at10"] = <
+				text = <"Undersøkelse utsatt">
+				description = <"Undersøkelsen er utsatt.">
+			>
+			["at12"] = <
+				text = <"Undersøkelse avlyst">
+				description = <"Den planlagte undersøkelsen har blitt avlyst før den ble igangsatt.">
+			>
+			["at5"] = <
+				text = <"Fastsatt tidspunkt for undersøkelse">
+				description = <"Tidspunkt for undersøkelsen er fastsatt.">
+			>
+			["at6"] = <
+				text = <"Undersøkelse replanlagt">
+				description = <"Tidspunkt for undersøkelsen har blitt replanlagt.">
+			>
+			["at9"] = <
+				text = <"Undersøkelse utført">
+				description = <"Undersøkelsen, eller en del av undersøkelsen, har blitt utført.">
+			>
+			["at15"] = <
+				text = <"Undersøkelse mislykket">
+				description = <"Undersøkelsen har blitt påstartet men ikke fullført.">
+			>
+			["at11"] = <
+				text = <"Undersøkelse midlertidig stanset">
+				description = <"Undersøkelsen er suspendert/ midlertidig stanset.">
+			>
+			["at13"] = <
+				text = <"Undersøkelse avbrutt">
+				description = <"Undersøkelsen har blitt avbrutt.">
+			>
+			["at8"] = <
+				text = <"Undersøkelse fullført">
+				description = <"Undersøkelsen er utført og alle tilknyttede kliniske handlinger er fullførte.">
+			>
+			["at16"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at17"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at18"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at19"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at20"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at21"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at22"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at23"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+		>
+	>
+	term_bindings = <
+		["openehr"] = <
+			["at16"] = <http://openehr.org/id/526>
+			["at17"] = <http://openehr.org/id/527>
+			["at18"] = <http://openehr.org/id/528>
+			["at19"] = <http://openehr.org/id/529>
+			["at20"] = <http://openehr.org/id/245>
+			["at21"] = <http://openehr.org/id/530>
+			["at22"] = <http://openehr.org/id/531>
+			["at23"] = <http://openehr.org/id/532>
+		>
+	>

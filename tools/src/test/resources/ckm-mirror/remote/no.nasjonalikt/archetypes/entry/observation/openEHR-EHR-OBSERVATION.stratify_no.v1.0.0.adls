@@ -1,0 +1,463 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated; uid=3c48f220-460b-4aa4-9f91-7ac0beb0e3f8)
+	openEHR-EHR-OBSERVATION.stratify_no.v1.0.0
+
+language
+	original_language = <[ISO_639-1::nb]>
+	translations = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			author = <
+				["name"] = <"Micaela Thierley">
+				["organisation"] = <"Helse Bergen, Norway">
+				["email"] = <"micaela.thierley@helse-bergen.no">
+			>
+		>
+	>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Micaela Thierley">
+		["organisation"] = <"Helse Bergen HF, Seksjon for e-helse">
+		["email"] = <"micaela.thierley@helse-bergen.no">
+		["date"] = <"2014-07-04">
+	>
+	original_namespace = <"no.nasjonalikt">
+	original_publisher = <"Nasjonal IKT">
+	custodian_namespace = <"no.nasjonalikt">
+	custodian_organisation = <"Nasjonal IKT">
+	copyright = <"© Nasjonal IKT HF">
+	licence = <"This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 International License. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/4.0/.">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"For screening for falls risk in patients over 65 years of age, and other adults with neurological or cognitive conditions or significant visual impairment.
+
+Includes elements from \"Barthel ADL Index\"; \"Transfer\" and \"Mobility\", which are represented in a separate archetype.
+
+The total score can either be entered manually (ie calculated and directly entered by the clinician), or automatically (ie calculation and entry is done automatically by a software application, based on the recorded scores).">
+			use = <"Risk assessment of all patients over the age of 65 and other adults with neurological or cognitive conditions or significant visual impairment, within 24h of being admitted to a healtchare institution.
+
+The 'Combined Transfer and Mobility Score' data element is the result of adding the scores for the 'Transfer' data element and the 'Mobility' data element from the Barthel Index archetype.">
+			keywords = <"risk", "fall", "balance">
+			misuse = <"Not to be used without simultaneous use of the Barthel archetype.">
+		>
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			purpose = <"Til bruk for kartlegging av fallrisiko for pasienter over 65 år og andre voksne med nevrologiske eller kognitive sykdomstilstander eller betydelige synshemninger.">
+			use = <"Risikovurdering av alle pasienter over 65 år og andre voksne med nevrologiske eller kognitive sykdomstilstander eller betydelige synshemninger innen ett døgn i helseinstitusjon.
+
+Elementene under clusteret Forflytning + rørlighet/gangfunksjon ble i den opprinnelige STRATIFY hentet fra Barthel Index. Siden STRATIFY og Barthel gjennom valideringer og oversettelser siden har divergert, gjøres denne arketypen uavhengig av Barthel-arketypen.
+
+Den endelige summen kan registreres manuelt (det vil si regnet ut og lagt inn av klinikeren) eller automatisk (automatisk summering basert på de registrerte verdier).">
+			misuse = <"">
+		>
+	>
+	other_contributors = <"Anne Pauline Anderssen, Helse Nord RHF, Norway", "Vebjørn Arntzen, Oslo universitetssykehus HF, Norway", "Silje Ljosland Bakke, Nasjonal IKT HF, Norway (Nasjonal IKT redaktør)", "Lars Bitsch-Larsen, Haukeland University Hospital, Bergen, Norway", "Lisbeth Dahlhaug, Helse Midt - Norge IT, Norway", "Kåre Flø, DIPS ASA, Norway", "Einar Fosse, UNN HF, Norwegian Centre for Integrated Care and Telemedicine, Norway", "Bente Gjelsvik, Helse Bergen, Norway", "Nina Hauge, Helse Fonna, Norway", "Ingrid Heitmann, Oslo universitetssykehus HF, Norway", "Erling Are Hole, Helse Bergen, Norway", "Lars Morgan Karlsen, DIPS ASA, Norway", "Sabine Leh, Helse-Bergen, Norway", "Heather Leslie, Ocean Informatics, Australia", "Siv Marie Lien, DIPS ASA, Norway", "Hallvard Lærum, Oslo Universitetssykehus HF, Norway", "Lars Ivar Mehlum, Helse Bergen HF, Norway", "Hugo Nilssen, UNN HF K3K/Tromsø, Norway", "Bjørn Næss, DIPS ASA, Norway", "Rune Pedersen, Universitetssykehuset i Nord Norge, Norway", "Micaela Thierley, Helse Bergen, Norway", "John Tore Valand, Haukeland Universitetssjukehus, Norway (Nasjonal IKT redaktør)">
+	references = <
+		["1"] = <"Oliver D, Britton M, Seed P,  Martin FC , Hopper A H. Development and evaluation of evidence based risk assessment tool (STRATIFY) to predict which elderly inpatients will fall: case-control and cohort studies. BMJ 1997;315:1049">
+		["2"] = <"Sekretariatet for nasjonalt pasientsikkerhetsprogram, Helsedirektoratet. Forebygging av fall i helseinstitusjoner [Internett]; [sitert 17.06.2015]. Tilgjengelig fra: http://www.pasientsikkerhetsprogrammet.no/no/I+trygge+hender/Innsatsomr%C3%A5der/Forebygging+av+fall+i+helseinstitusjoner.453.cms">
+	>
+	other_details = <
+		["current_contact"] = <"Micaela Thierley, Helse Bergen, micaela.thierley@helse-bergen.no">
+		["MD5-CAM-1.0.1"] = <"3609391EC95BE1D4FF99C9F39CEDBEB1">
+		["build_uid"] = <"3bca645d-902f-4c5c-8d44-21bd08176a74">
+	>
+
+definition
+	OBSERVATION[id1] matches {	-- STRATIFY
+		data matches {
+			HISTORY[id2] matches {
+				events cardinality matches {1..*; unordered} matches {
+					POINT_EVENT[id3] matches {	-- Uspesifisert hendelse
+						data matches {
+							ITEM_TREE[id4] matches {
+								items matches {
+									ELEMENT[id5] occurrences matches {0..1} matches {	-- Fall de siste tre måneder
+										value matches {
+											DV_ORDINAL[id27] matches {
+												[value, symbol] matches {
+													[{0}, {[at12]}],
+													[{1}, {[at13]}]
+												}
+											}
+										}
+									}
+									ELEMENT[id7] occurrences matches {0..1} matches {	-- Synshemminger
+										value matches {
+											DV_ORDINAL[id28] matches {
+												[value, symbol] matches {
+													[{0}, {[at16]}],
+													[{1}, {[at18]}]
+												}
+											}
+										}
+									}
+									ELEMENT[id6] occurrences matches {0..1} matches {	-- Urolig atferd
+										value matches {
+											DV_ORDINAL[id29] matches {
+												[value, symbol] matches {
+													[{0}, {[at14]}],
+													[{1}, {[at15]}]
+												}
+											}
+										}
+									}
+									ELEMENT[id8] occurrences matches {0..1} matches {	-- Hyppige toalettbesøk
+										value matches {
+											DV_ORDINAL[id30] matches {
+												[value, symbol] matches {
+													[{0}, {[at19]}],
+													[{1}, {[at20]}]
+												}
+											}
+										}
+									}
+									CLUSTER[id23] occurrences matches {0..1} matches {	-- Forflytning + rørlighet/gangfunksjon
+										items matches {
+											ELEMENT[id24] occurrences matches {0..1} matches {	-- Forflytning fra seng til stol
+												value matches {
+													DV_ORDINAL[id31] matches {
+														[value, symbol] matches {
+															[{0}, {[at27]}],
+															[{1}, {[at28]}],
+															[{2}, {[at29]}],
+															[{3}, {[at30]}]
+														}
+													}
+												}
+											}
+											ELEMENT[id25] occurrences matches {0..1} matches {	-- Rørlighet/gangfunksjon
+												value matches {
+													DV_ORDINAL[id32] matches {
+														[value, symbol] matches {
+															[{0}, {[at31]}],
+															[{1}, {[at32]}],
+															[{2}, {[at33]}],
+															[{3}, {[at35]}]
+														}
+													}
+												}
+											}
+											ELEMENT[id26] occurrences matches {0..1} matches {	-- Svarpoeng
+												value matches {
+													DV_COUNT[id33] matches {
+														magnitude matches {|0..1|}
+													}
+												}
+											}
+										}
+									}
+									ELEMENT[id10] occurrences matches {0..1} matches {	-- Poeng totalt
+										value matches {
+											DV_COUNT[id34] matches {
+												magnitude matches {|0..5|}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"STRATIFY Falls Risk Assessment Tool">
+				description = <"Assessment tool for identifying falls risk in elderly patients admitted to hospital or other 24h healthcare institutions. This version of the tool is based on a modified Norwegian translation, which has been deployed by the The Norwegian Patient Safety Programme.">
+			>
+			["id3"] = <
+				text = <"Any event">
+				description = <"Default, unspecified point in time or interval event which may be explicitly defined in a template or at run-time.">
+			>
+			["id5"] = <
+				text = <"Falls during the last three months">
+				description = <"Has the patient fallen during the last 3 months?">
+			>
+			["id6"] = <
+				text = <"Agitation">
+				description = <"Does the patient show agitated, desoriented or confused behaviour?">
+			>
+			["id7"] = <
+				text = <"Visual impairments">
+				description = <"Is the patient visually impaired to the extent that everyday function is affected?">
+			>
+			["id8"] = <
+				text = <"Frequent toileting">
+				description = <"Do you think the patient is in need of especially frequent toileting?">
+			>
+			["id10"] = <
+				text = <"Total score">
+				description = <"Sum of the scores from all the elements.">
+			>
+			["at12"] = <
+				text = <"No">
+				description = <"The patient hasn't had any falls during the last 3 months.">
+			>
+			["at13"] = <
+				text = <"Yes">
+				description = <"The patient has had falls during the last 3 months.">
+			>
+			["at14"] = <
+				text = <"No">
+				description = <"The patient doesn't show agitated behaviour.">
+			>
+			["at15"] = <
+				text = <"Yes">
+				description = <"The patient shows agitated behaviour.">
+			>
+			["at16"] = <
+				text = <"No">
+				description = <"The patient doesn't have significant visual impairments.">
+			>
+			["at18"] = <
+				text = <"*Ja(nb)">
+				description = <"The patient has significant visual impairments.">
+			>
+			["at19"] = <
+				text = <"No">
+				description = <"The patient isn't in need of frequent toileting.">
+			>
+			["at20"] = <
+				text = <"Yes">
+				description = <"The patient is in need of frequent toileting.">
+			>
+			["id23"] = <
+				text = <"*New cluster(nb)">
+				description = <"**(nb)">
+			>
+			["id24"] = <
+				text = <"*New element(nb)">
+				description = <"**(nb)">
+			>
+			["id25"] = <
+				text = <"*New element(nb)">
+				description = <"**(nb)">
+			>
+			["id26"] = <
+				text = <"*New element(nb)">
+				description = <"**(nb)">
+			>
+			["at27"] = <
+				text = <"*new ordinal(nb)">
+				description = <"**(nb)">
+			>
+			["at28"] = <
+				text = <"*new ordinal(nb)">
+				description = <"**(nb)">
+			>
+			["at29"] = <
+				text = <"*new ordinal(nb)">
+				description = <"**(nb)">
+			>
+			["at30"] = <
+				text = <"*new ordinal(nb)">
+				description = <"**(nb)">
+			>
+			["at31"] = <
+				text = <"*new ordinal(nb)">
+				description = <"**(nb)">
+			>
+			["at32"] = <
+				text = <"*new ordinal(nb)">
+				description = <"**(nb)">
+			>
+			["at33"] = <
+				text = <"*new ordinal(nb)">
+				description = <"**(nb)">
+			>
+			["at35"] = <
+				text = <"*new ordinal(nb)">
+				description = <"**(nb)">
+			>
+			["ac1"] = <
+				text = <"Falls during the last three months (synthesised)">
+				description = <"Has the patient fallen during the last 3 months? (synthesised)">
+			>
+			["ac2"] = <
+				text = <"Visual impairments (synthesised)">
+				description = <"Is the patient visually impaired to the extent that everyday function is affected? (synthesised)">
+			>
+			["ac3"] = <
+				text = <"Agitation (synthesised)">
+				description = <"Does the patient show agitated, desoriented or confused behaviour? (synthesised)">
+			>
+			["ac4"] = <
+				text = <"Frequent toileting (synthesised)">
+				description = <"Do you think the patient is in need of especially frequent toileting? (synthesised)">
+			>
+			["ac5"] = <
+				text = <"*New element(nb) (synthesised)">
+				description = <"**(nb) (synthesised)">
+			>
+			["ac6"] = <
+				text = <"*New element(nb) (synthesised)">
+				description = <"**(nb) (synthesised)">
+			>
+		>
+		["nb"] = <
+			["id1"] = <
+				text = <"STRATIFY">
+				description = <"Vurderingsverktøy for identifisering av fallrisiko hos eldre pasienter på sykehus eller andre heldøgnsinstitusjoner. Denne versjonen er basert på den modifiserte norske oversettelsen som er tatt i bruk av det nasjonale pasientsikkerhetsprogrammet.">
+			>
+			["id3"] = <
+				text = <"Uspesifisert hendelse">
+				description = <"Standard, uspesifisert tidspunkt eller tidsintervall som kan defineres mer eksplisitt i en template eller i en applikasjon.">
+			>
+			["id5"] = <
+				text = <"Fall de siste tre måneder">
+				description = <"Har pasient hatt noen fall i de siste 3 månedene?">
+			>
+			["id6"] = <
+				text = <"Urolig atferd">
+				description = <"Er pasient urolig?">
+			>
+			["id7"] = <
+				text = <"Synshemminger">
+				description = <"Er pasient synsskadet/synshemmet i et slikt omfang at hverdagslig funksjoner er påvirket?">
+			>
+			["id8"] = <
+				text = <"Hyppige toalettbesøk">
+				description = <"Oppfatter du at pasient har spesielt behov av å besøke toalett ofte?">
+			>
+			["id10"] = <
+				text = <"Poeng totalt">
+				description = <"Sum av poeng fra alle elementene.">
+			>
+			["at12"] = <
+				text = <"Nei">
+				description = <"Pasienten har ikke hatt noen fall siste 3 måneder.">
+			>
+			["at13"] = <
+				text = <"Ja">
+				description = <"Pasienten har hatt fall siste 3 måneder.">
+			>
+			["at14"] = <
+				text = <"Nei">
+				description = <"Pasienten viser ikke urolig atferd.">
+			>
+			["at15"] = <
+				text = <"Ja">
+				description = <"Pasienten viser urolig atferd.">
+			>
+			["at16"] = <
+				text = <"Nei">
+				description = <"Pasienten har ikke store synshemminger.">
+			>
+			["at18"] = <
+				text = <"Ja">
+				description = <"Pasienten har store synshemminger.">
+			>
+			["at19"] = <
+				text = <"Nei">
+				description = <"Oppfatter ikke at pasient har behov for hyppige toalettbesøk.">
+			>
+			["at20"] = <
+				text = <"Ja">
+				description = <"Oppfatter at pasient har behov for hyppige toalettbesøk.">
+			>
+			["id23"] = <
+				text = <"Forflytning + rørlighet/gangfunksjon">
+				description = <"Summering av verdien fra \"Forflytning fra seng til stol\" og verdien fra \"Rørlighet/gangfunksjon\" utgjør \"Svarpoeng\", som brukes i summering av \"Poeng totalt\".">
+			>
+			["id24"] = <
+				text = <"Forflytning fra seng til stol">
+				description = <"Beskriv pasientens prestasjonsnivå for forflytning fra seng til stol.">
+			>
+			["id25"] = <
+				text = <"Rørlighet/gangfunksjon">
+				description = <"Beskriver pasientens nivå av rørlighet/gangfunksjon.">
+			>
+			["id26"] = <
+				text = <"Svarpoeng">
+				description = <"Poengene fra Forflytning fra seng til stol og Rørlighet/gangfunksjon legges sammen. Er summen 0-2 eller 5-6 gis 0 poeng. Er summen 3-4 gis 1 poeng.">
+			>
+			["at27"] = <
+				text = <"Kan ikke flytte seg">
+				description = <"*(nb)">
+			>
+			["at28"] = <
+				text = <"Trenger stor/vesentlig hjelp">
+				description = <"*(nb)">
+			>
+			["at29"] = <
+				text = <"Trenger lite hjelp">
+				description = <"*(nb)">
+			>
+			["at30"] = <
+				text = <"Selvstendig med eller uten hjelpemidler">
+				description = <"*(nb)">
+			>
+			["at31"] = <
+				text = <"Ikke mobil">
+				description = <"*(nb)">
+			>
+			["at32"] = <
+				text = <"Selvstendig med hjelp av rullestol">
+				description = <"*(nb)">
+			>
+			["at33"] = <
+				text = <"Bruker gå-hjelpemiddel eller går med hjelp av en person">
+				description = <"*(nb)">
+			>
+			["at35"] = <
+				text = <"Selvstendig">
+				description = <"*(nb)">
+			>
+			["ac1"] = <
+				text = <"Fall de siste tre måneder (synthesised)">
+				description = <"Har pasient hatt noen fall i de siste 3 månedene? (synthesised)">
+			>
+			["ac2"] = <
+				text = <"Synshemminger (synthesised)">
+				description = <"Er pasient synsskadet/synshemmet i et slikt omfang at hverdagslig funksjoner er påvirket? (synthesised)">
+			>
+			["ac3"] = <
+				text = <"Urolig atferd (synthesised)">
+				description = <"Er pasient urolig? (synthesised)">
+			>
+			["ac4"] = <
+				text = <"Hyppige toalettbesøk (synthesised)">
+				description = <"Oppfatter du at pasient har spesielt behov av å besøke toalett ofte? (synthesised)">
+			>
+			["ac5"] = <
+				text = <"Forflytning fra seng til stol (synthesised)">
+				description = <"Beskriv pasientens prestasjonsnivå for forflytning fra seng til stol. (synthesised)">
+			>
+			["ac6"] = <
+				text = <"Rørlighet/gangfunksjon (synthesised)">
+				description = <"Beskriver pasientens nivå av rørlighet/gangfunksjon. (synthesised)">
+			>
+		>
+	>
+	value_sets = <
+		["ac1"] = <
+			id = <"ac1">
+			members = <"at12", "at13">
+		>
+		["ac2"] = <
+			id = <"ac2">
+			members = <"at16", "at18">
+		>
+		["ac3"] = <
+			id = <"ac3">
+			members = <"at14", "at15">
+		>
+		["ac4"] = <
+			id = <"ac4">
+			members = <"at19", "at20">
+		>
+		["ac5"] = <
+			id = <"ac5">
+			members = <"at27", "at28", "at29", "at30">
+		>
+		["ac6"] = <
+			id = <"ac6">
+			members = <"at31", "at32", "at33", "at35">
+		>
+	>

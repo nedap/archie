@@ -57,6 +57,10 @@ public class ADLParserErrors {
         return this.getErrors().isEmpty();
     }
 
+    public boolean hasErrors() {
+        return !getErrors().isEmpty();
+    }
+
     public String toString() {
         StringBuilder result = new StringBuilder();
         append(result, "Warning", warnings);

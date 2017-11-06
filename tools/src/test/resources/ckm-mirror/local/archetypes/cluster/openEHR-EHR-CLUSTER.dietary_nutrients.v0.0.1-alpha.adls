@@ -1,0 +1,214 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated; uid=c54bda29-d9d3-4d04-adf2-3c98b9ce4a38)
+	openEHR-EHR-CLUSTER.dietary_nutrients.v0.0.1-alpha
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Priscila Maranhão; Gustavo Bacelar">
+		["organisation"] = <"MEDCIDS-FMUP; VIRTUAL CARE">
+		["email"] = <"priscilamaranhao@gmail.com; gbacelar@gmail.com">
+		["date"] = <"2016-12-14">
+	>
+	original_namespace = <"org.openehr">
+	original_publisher = <"openEHR Foundation">
+	custodian_namespace = <"org.openehr">
+	custodian_organisation = <"openEHR Foundation">
+	copyright = <"© openEHR Foundation">
+	licence = <"This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 License. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/.">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record information about the nutrients consumed by an individual for nourishment.">
+			use = <"Use to record information about the nutrients consumed by an individual for nourishment.
+
+This archetype has been designed to capture measurements about the consumption of the common groupings of nutrients. Add CLUSTER.macronutrients and CLUSTER.micronutrients into the 'Details' SLOT in a template in order to record consumption measurements for specific nutrients.">
+			keywords = <"nutrients", "diet">
+			misuse = <"No to be used to record measurements of vitamins and minerals in blood analyses - use the OBSERVATION.laboratory_test for this purpose.">
+		>
+	>
+	other_contributors = <"Silje Ljosland Bakke, Nasjonal IKT HF, Norway (openEHR Editor)", "Ricardo Correia", "Duarte Ferreira", "Heather Leslie, Ocean Health Systems, Australia (openEHR Editor)", "Pedro Marques">
+	references = <
+		["1"] = <"Franceschini, SCC; Priore, SE; Euclydes, MP et al. Necessidades e recomendações de nutrientes. In: Cuppari, L. Guias de medicina ambulatorial e hospitalar da EPM-UNIFESP, Nutricção Clínica no Adulto. Barueri, SP: Manole, 2014.">
+		["2"] = <"Institute of Medicine/ Food and nutrition Board, 2011. Dietary reference Intake. Disponível em: <https://ods.od.nih.gov/Health_Information/Dietary_Reference_Intakes.aspx>">
+		["3"] = <"FAO/WHO (Food and Agricultural/World Health Organization). Classificação dos Carboidratos - 1998. Disponível em: <http://fao.org>">
+		["4"] = <"Caruso, L. Distúrbios do trato digestório. In: Cuppari, L. Guias de medicina ambulatorial e hospitalar da EPM-UNIFESP, Nutricção Clínica no Adulto. Barueri, SP: Manole, 2014.">
+	>
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"BA460F7169F56456994D04920A7F54CF">
+		["build_uid"] = <"d105d2be-46fd-4e8a-972b-ce8d288c0d24">
+	>
+
+definition
+	CLUSTER[id1] matches {	-- Dietary nutrients
+		items matches {
+			ELEMENT[id5] occurrences matches {0..1} matches {	-- Total energy
+				value matches {
+					DV_QUANTITY[id16] matches {
+						property matches {[at1]}
+						[magnitude, units] matches {
+							[{|>=0.0|}, {"kcal"}],
+							[{|>=0.0|}, {"J"}]
+						}
+					}
+				}
+			}
+			ELEMENT[id6] occurrences matches {0..1} matches {	-- Total fat
+				value matches {
+					DV_QUANTITY[id17] matches {
+						property matches {[at2]}
+						magnitude matches {|>=0.0|}
+						units matches {"g"}
+					}
+				}
+			}
+			ELEMENT[id7] occurrences matches {0..1} matches {	-- Total saturated fatty acids
+				value matches {
+					DV_QUANTITY[id18] matches {
+						property matches {[at2]}
+						magnitude matches {|>=0.0|}
+						units matches {"g"}
+					}
+				}
+			}
+			ELEMENT[id8] occurrences matches {0..1} matches {	-- Total monousaturated fatty acids
+				value matches {
+					DV_QUANTITY[id19] matches {
+						property matches {[at2]}
+						magnitude matches {|>=0.0|}
+						units matches {"g"}
+					}
+				}
+			}
+			ELEMENT[id9] occurrences matches {0..1} matches {	-- Total polyunsaturated fatty acids
+				value matches {
+					DV_QUANTITY[id20] matches {
+						property matches {[at2]}
+						magnitude matches {|>=0.0|}
+						units matches {"mg"}
+					}
+				}
+			}
+			ELEMENT[id10] occurrences matches {0..1} matches {	-- Total cholesterol
+				value matches {
+					DV_QUANTITY[id21] matches {
+						property matches {[at2]}
+						[magnitude, units] matches {
+							[{|>=0.0|}, {"mg"}],
+							[{|>=0.0|}, {"g"}]
+						}
+					}
+				}
+			}
+			ELEMENT[id11] occurrences matches {0..1} matches {	-- Total carbohydrate
+				value matches {
+					DV_QUANTITY[id22] matches {
+						property matches {[at2]}
+						magnitude matches {|>=0.0|}
+						units matches {"g"}
+					}
+				}
+			}
+			ELEMENT[id12] occurrences matches {0..1} matches {	-- Total sugars
+				value matches {
+					DV_QUANTITY[id23] matches {
+						property matches {[at2]}
+						magnitude matches {|>=0.0|}
+						units matches {"g"}
+					}
+				}
+			}
+			ELEMENT[id13] occurrences matches {0..1} matches {	-- Total fiber
+				value matches {
+					DV_QUANTITY[id24] matches {
+						property matches {[at2]}
+						magnitude matches {|>=0.0|}
+						units matches {"g"}
+					}
+				}
+			}
+			ELEMENT[id14] occurrences matches {0..1} matches {	-- Total proteins
+				value matches {
+					DV_QUANTITY[id25] matches {
+						property matches {[at2]}
+						magnitude matches {|>=0.0|}
+						units matches {"g"}
+					}
+				}
+			}
+			allow_archetype CLUSTER[id15] matches {	-- Details
+				include
+					archetype_id/value matches {/openEHR-EHR-CLUSTER\.micronutrients(-[a-zA-Z0-9_]+)*\.v0|openEHR-EHR-CLUSTER\.macronutrients(-[a-zA-Z0-9_]+)*\.v0/}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Dietary nutrients">
+				description = <"Nutrients consumed by an individual for nourishment.">
+			>
+			["id5"] = <
+				text = <"Total energy">
+				description = <"Measurement of energy intake. It is the amount of food  intake (sum of macronutrients) by the individual.">
+			>
+			["id6"] = <
+				text = <"Total fat">
+				description = <"Measurement of dietary lipids.">
+			>
+			["id7"] = <
+				text = <"Total saturated fatty acids">
+				description = <"Assessment of dietary saturated fat acids.">
+			>
+			["id8"] = <
+				text = <"Total monousaturated fatty acids">
+				description = <"Assessment of dietary monounsaturated fatty acids (n-9).">
+			>
+			["id9"] = <
+				text = <"Total polyunsaturated fatty acids">
+				description = <"Assessment of polyunsaturated acids  of an individual.">
+			>
+			["id10"] = <
+				text = <"Total cholesterol">
+				description = <"Measurement of dietary cholesterol.">
+			>
+			["id11"] = <
+				text = <"Total carbohydrate">
+				description = <"Assessment of carbohydrate.">
+			>
+			["id12"] = <
+				text = <"Total sugars">
+				description = <"Measurement of dietary sugars.">
+			>
+			["id13"] = <
+				text = <"Total fiber">
+				description = <"Assessment of dietary fiber, which is the portion of food which is derived from cellular walls of plants which is digested very poorly by human beings.">
+			>
+			["id14"] = <
+				text = <"Total proteins">
+				description = <"Assessment of protein.">
+			>
+			["id15"] = <
+				text = <"Details">
+				description = <"Additional details about macro-and micronutrients.">
+			>
+			["at1"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at2"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+		>
+	>
+	term_bindings = <
+		["openehr"] = <
+			["at1"] = <http://openehr.org/id/121>
+			["at2"] = <http://openehr.org/id/124>
+		>
+	>

@@ -2,12 +2,15 @@ package com.nedap.archie.aom.primitives;
 
 import com.nedap.archie.ArchieLanguageConfiguration;
 import com.nedap.archie.aom.Archetype;
+import com.nedap.archie.aom.CObject;
 import com.nedap.archie.aom.CPrimitiveObject;
 import com.nedap.archie.aom.terminology.ArchetypeTerm;
 import com.nedap.archie.aom.terminology.ArchetypeTerminology;
 import com.nedap.archie.aom.terminology.TerminologyCodeWithArchetypeTerm;
 import com.nedap.archie.aom.terminology.ValueSet;
+import com.nedap.archie.aom.utils.AOMUtils;
 import com.nedap.archie.base.terminology.TerminologyCode;
+import com.nedap.archie.rminfo.ModelInfoLookup;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -120,6 +123,54 @@ public class CTerminologyCode extends CPrimitiveObject<String, TerminologyCode> 
 
     private void setTerms(List<TerminologyCodeWithArchetypeTerm> terms) {
         //hack for jackson to work
+    }
+
+    public List<String> getValueSetExpanded() {
+        List<String> result = new ArrayList<>();
+        ArchetypeTerminology terminology = getArchetype().getTerminology(this);
+        for(String constraint:getConstraint()) {
+            if(constraint.startsWith("at")) {
+                result.add(constraint);
+            } else if (constraint.startsWith("ac")) {
+                ValueSet acValueSet = terminology.getValueSets().get(constraint);
+                if(acValueSet != null) {
+                    result.addAll(acValueSet.getMembers());
+                }
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public boolean cConformsTo(CObject other, ModelInfoLookup lookup) {
+        if(!super.cConformsTo(other, lookup)) {
+            return false;
+        }
+        //now guaranteed to be the same class
+        CTerminologyCode otherCode = (CTerminologyCode) other;
+        List<String> valueSet = getValueSetExpanded();
+        List<String> otherValueSet = otherCode.getValueSetExpanded();
+        if(constraint.size() != 1 || otherCode.constraint.size() != 1) {
+            return false;//this is invalid in the RM
+        }
+        String thisConstraint = constraint.get(0);
+        String otherConstraint = otherCode.constraint.get(0);
+        if(AOMUtils.isValidValueSetCode(thisConstraint) && AOMUtils.isValidValueSetCode(otherConstraint)) {
+            if (otherValueSet.isEmpty()) {
+                return true;
+            }
+            if(!AOMUtils.codesConformant(thisConstraint, otherConstraint)) {
+                return false;
+            }
+            for (String value : valueSet) {
+                if (!otherValueSet.contains(value)) {
+                    return false;
+                }
+            }
+            return true;
+        } else {
+            return AOMUtils.codesConformant(thisConstraint, otherConstraint);
+        }
     }
 
 }

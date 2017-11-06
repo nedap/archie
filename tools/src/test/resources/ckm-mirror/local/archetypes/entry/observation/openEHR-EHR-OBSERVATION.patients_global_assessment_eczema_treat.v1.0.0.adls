@@ -1,0 +1,112 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated)
+	openEHR-EHR-OBSERVATION.patients_global_assessment_eczema_treat.v1.0.0
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Dmitri Wall">
+		["organisation"] = <"Irish Skin Foundation">
+		["email"] = <"dmitri.wall@gmail.com">
+		["date"] = <"2015-02-05">
+	>
+	copyright = <"© openEHR Foundation">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To be used by a patient to estimate the severity of their atopic dermatitis. This PGA is being utilised by the TREAT eczema group.">
+			use = <"">
+			keywords = <"Atopic Dermatitis", "Dermatology", "Disease severity score", "Effectiveness outcome parameter", "Severity scale">
+			misuse = <"">
+		>
+	>
+	other_contributors = <"Ian McNicoll", ...>
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"B6C16E472C7C4DE976A2D8572128ADBC">
+	>
+
+definition
+	OBSERVATION[id1] matches {	-- Patients global assessment (eczema - TREAT)
+		data matches {
+			HISTORY[id2] matches {
+				events cardinality matches {1..*; unordered} matches {
+					EVENT[id3] occurrences matches {0..1} matches {	-- Any event
+						data matches {
+							ITEM_TREE[id4] matches {
+								items matches {
+									ELEMENT[id5] occurrences matches {0..1} matches {	-- Patient Global Assessment score
+										value matches {
+											DV_ORDINAL[id6] matches {
+												[value, symbol] matches {
+													[{0}, {[at6]}],
+													[{1}, {[at7]}],
+													[{2}, {[at8]}],
+													[{3}, {[at9]}],
+													[{4}, {[at10]}],
+													[{5}, {[at11]}]
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Patients global assessment (eczema - TREAT)">
+				description = <"The patient's global assessment (PGA) is a 6 point scale utilised to enable a patient to describe the severity of their eczema.  This PGA is being utilised by the TREAT eczema group.">
+			>
+			["id3"] = <
+				text = <"Any event">
+				description = <"Any event.">
+			>
+			["id5"] = <
+				text = <"Patient Global Assessment score">
+				description = <"The total score.">
+			>
+			["at6"] = <
+				text = <"Clear">
+				description = <"Clear.">
+			>
+			["at7"] = <
+				text = <"Almost clear">
+				description = <"Almost clear.">
+			>
+			["at8"] = <
+				text = <"Mild disease">
+				description = <"Mild disease.">
+			>
+			["at9"] = <
+				text = <"Moderate disease">
+				description = <"Moderate disease.">
+			>
+			["at10"] = <
+				text = <"Severe disease">
+				description = <"Severe disease.">
+			>
+			["at11"] = <
+				text = <"Very severe disease">
+				description = <"Very severe disease.">
+			>
+			["ac1"] = <
+				text = <"Patient Global Assessment score (synthesised)">
+				description = <"The total score. (synthesised)">
+			>
+		>
+	>
+	value_sets = <
+		["ac1"] = <
+			id = <"ac1">
+			members = <"at6", "at7", "at8", "at9", "at10", "at11">
+		>
+	>

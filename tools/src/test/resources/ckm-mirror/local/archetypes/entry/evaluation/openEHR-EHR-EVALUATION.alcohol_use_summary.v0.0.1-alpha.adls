@@ -1,0 +1,566 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated; uid=b60b9e07-ea2b-40ff-a56c-4b520558d712)
+	openEHR-EHR-EVALUATION.alcohol_use_summary.v0.0.1-alpha
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Heather Leslie">
+		["organisation"] = <"Ocean Informatics">
+		["email"] = <"heather.leslie@oceaninformatics.com">
+		["date"] = <"2009-06-21">
+	>
+	original_namespace = <"org.openehr">
+	original_publisher = <"openEHR Foundation">
+	custodian_namespace = <"org.openehr">
+	custodian_organisation = <"openEHR Foundation">
+	copyright = <"© openEHR Foundation, Australian Digital Health Agency, Nasjonal IKT (Norway)">
+	licence = <"This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 License. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/.">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record summary information about the individual's pattern of alcohol use.">
+			use = <"Use to record summary information about the individual's pattern of alcohol consumption.
+
+This archetype is to be used to record information about both current and previous alcohol use behaviour.
+
+The specific scope of this archetype is on documentation about the use of all types of consumed alcohol because of the associated health risks.
+
+The 'Per type' cluster of data elements allows for recording of specific details and episodes about each type of alcoholic beverage used and can be repeated once per type. The list of alcoholic beverages listed in the 'Per type' run-time name constraint identifies the alcoholic beverage. This name constraint can be applied during template modelling or at run-time within a software application.
+
+In some situations the individual will only consume one type of alcoholic beverage, such as beer.  If other types of alcoholic beverages are used, the details will be recorded in another instance of the 'Per type' cluster.
+
+The history of waxing and waning of use for each type of alcoholic beverage over time can be captured using the repeatable 'Per episode' cluster. This cluster of data elements allows for a very detailed pattern of alcohol use behaviour to be recorded for each type of alcoholic beverage consumed such as daily beer drinking, alongside weekly wine drinking every Friday night and occasional liquor drinking while. 
+
+Triggers for closing one episode and commencing a new one will largely reflect local data collection preferences, including if the individual: 
+- quits for a significant period of time (which will likely be locally defined); or
+- significantly changes their amount of use or pattern of their alcohol consumption.
+
+Use to incorporate the narrative descriptions of alcohol use habits within existing or legacy clinical systems into an archetyped format, using the 'Overall description' data element.">
+			keywords = <"drinking", "drunk", "dipsomania", "alcoholic", "alcoholism">
+			misuse = <"Not to be used to record event-or period-based information about alcohol use, such as actual daily use or the average use over a specified period of time - use the OBSERVATION.alcohol_use archetype.
+
+Not to be used to record an assessment about alcohol dependence. Use specific archetypes for this purpose.">
+		>
+	>
+	other_contributors = <"Amund Aakerholt, Helse Stavanger, KORFOR, Norway", "Morten Aas, Oslo Universitetssykehus, Norway", "Tomas Alme, DIPS ASA, Norway", "Ole Andreas Bjordal, Webmed, Norway", "Rita Apelt, Department of Health,NT, Australia", "Vebjørn Arntzen, Oslo universitetssykehus HF, Norway (Nasjonal IKT editor)", "Koray Atalag, University of Auckland, New Zealand", "Gustavo Bacelar-Silva, Healthcare Designs, Brazil (openEHR Editor)", "Silje Ljosland Bakke, Nasjonal IKT HF, Norway (openEHR Editor)", "Marcus Baw, openGPSoC / BawMedical Ltd, United Kingdom", "Kristian Berg, Universitetssykehuset Nord Norge, Norway", "Lars Bitsch-Larsen, Haukeland University Hospital, Bergen, Norway", "Fredrik Borchsenius, Oslo universitetssykehus, Norway", "Chris Bullen, University of Auckland, New Zealand", "Fatemeh Chalabianloo, Helse Bergen, Norway", "Bjørn Christensen, Helse Bergen HF, Norway", "Stephen Chu, NEHTA, Australia", "Lisbeth Dahlhaug, Helse Midt - Norge IT, Norway", "Are Edvardsen, SKDE, Norway", "Einar Fosse, UNN HF, Norwegian Centre for Integrated Care and Telemedicine, Norway", "Hildegard Franke, freshEHR Clinical Informatics Ltd., United Kingdom", "Heather Grain, Llewelyn Grain Informatics, Australia", "Liv Grøtvedt, Folkehelseinstituttet, Norway", "Sam Heard, Ocean Informatics, Australia", "Kristian Heldal, Telemark Hospital Trust, Norway", "Jørn Henrik Vold, Helse Bergen, Avdeling for rusmedisin, Norway", "Anca Heyd, DIPS ASA, Norway", "Evelyn Hovenga, EJSH Consulting, Australia", "Tom Jarl Jakobsen, Helse Bergen, Norway", "Lars Morgan Karlsen, DIPS ASA, Norway", "Adriana Kitajima, CORE Consulting, Brazil", "Nils Kolstrup, Skansen Legekontor og Nasjonalt Senter for samhandling og telemedisin, Norway", "Ole Kristian Losvik, Losol AS, Norway", "Heather Leslie, Ocean Informatics, Australia (openEHR Editor)", "Rikard Lovstrom, Swedish Medical Association, Sweden", "Camilla Lund, Institute for Cancer Genetics and Informatics, Norway", "Hallvard Lærum, Direktoratet for e-helse, Norway", "Arne Løberg Sæter, DIPS ASA, Norway", "Siv Marie Lien, DIPS ASA, Norway", "Ian McNicoll, freshEHR Clinical Informatics, United Kingdom (openEHR Editor)", "Bjørn Næss, DIPS ASA, Norway", "Jeremy Oats, NT Health, Australia", "Andrej Orel, Marand d.o.o., Slovenia", "Anne Pauline Anderssen, Helse Nord RHF, Norway", "Rune Pedersen, Universitetssykehuset i Nord Norge, Norway", "Tanja Riise, Nasjonal IKT HF, Norway", "Rosalie Schultz, Anyinginyi Health Aboriginal Corporation, Australia", "Line Silsand, Universitetssykehuset i Nord-Norge, Norway", "Raymond Simkus, Brookswood Family Practice, Canada", "Lisbeth Sommervoll, Akershus Universitetssykehus, Norway", "Norwegian Review Summary, Nasjonal IKT HF, Norway", "Nyree Taylor, Ocean Informatics, Australia", "Jon Tysdahl, Furst medlab AS, Norway", "John Tore Valand, Helse Bergen, Norway (Nasjonal IKT editor)", "Ping-Cheng Wei, New Zealand">
+	references = <
+		["1"] = <"Tobacco smoking summary, Published Archetype [Internet]. openEHR Foundation, openEHR Clinical Knowledge Manager [cited: 2016-12-08]. Available from: http://openehr.org/ckm/#showArchetype_1013.1.2466">
+	>
+	other_details = <
+		["current_contact"] = <"Heather Leslie, Ocean Informatics, heather.leslie@oceaninformatics.com">
+		["MD5-CAM-1.0.1"] = <"E629756190AAC0AC71991FACBE761729">
+		["build_uid"] = <"52d28acf-3819-4065-8043-03415a3c7222">
+	>
+
+definition
+	EVALUATION[id1] matches {	-- Alcohol use summary
+		data matches {
+			ITEM_TREE[id2] matches {
+				items matches {
+					ELEMENT[id90] occurrences matches {0..1} matches {	-- Overall status
+						value matches {
+							DV_CODED_TEXT[id106] matches {
+								defining_code matches {[ac1]}		-- Overall status (synthesised)
+							}
+						}
+					}
+					ELEMENT[id44] occurrences matches {0..1} matches {	-- Overall description
+						value matches {
+							DV_TEXT[id107] 
+						}
+					}
+					ELEMENT[id16] occurrences matches {0..1} matches {	-- Regular drinking commenced
+						value matches {
+							DV_DATE[id108] 
+						}
+					}
+					ELEMENT[id81] occurrences matches {0..1} matches {	-- Daily drinking commenced
+						value matches {
+							DV_DATE[id109] 
+						}
+					}
+					ELEMENT[id98] occurrences matches {0..1} matches {	-- Binge drinking pattern
+						value matches {
+							DV_CODED_TEXT[id110] matches {
+								defining_code matches {[ac2]}		-- Binge drinking pattern (synthesised)
+							}
+						}
+					}
+					CLUSTER[id30] matches {	-- Per type
+						name matches {
+							DV_CODED_TEXT[id111] matches {
+								defining_code matches {[ac3]}		-- Per type (synthesised)
+							}
+						}
+						items matches {
+							ELEMENT[id53] occurrences matches {0..1} matches {	-- Status
+								value matches {
+									DV_CODED_TEXT[id112] matches {
+										defining_code matches {[ac4]}		-- Status (synthesised)
+									}
+								}
+							}
+							ELEMENT[id54] occurrences matches {0..1} matches {	-- Description
+								value matches {
+									DV_TEXT[id113] 
+								}
+							}
+							CLUSTER[id65] matches {	-- Per episode
+								items matches {
+									ELEMENT[id82] occurrences matches {0..1} matches {	-- Episode label
+										value matches {
+											DV_COUNT[id114] matches {
+												magnitude matches {|>=1|}
+											}
+											DV_TEXT[id115] 
+										}
+									}
+									ELEMENT[id14] occurrences matches {0..1} matches {	-- Episode start date
+										value matches {
+											DV_DATE[id116] 
+										}
+									}
+									ELEMENT[id83] occurrences matches {0..1} matches {	-- Episode end date
+										value matches {
+											DV_DATE[id117] 
+										}
+									}
+									ELEMENT[id31] occurrences matches {0..1} matches {	-- Pattern
+										value matches {
+											DV_CODED_TEXT[id118] matches {
+												defining_code matches {[ac5]}		-- Pattern (synthesised)
+											}
+											DV_TEXT[id119] 
+										}
+									}
+									ELEMENT[id24] occurrences matches {0..1} matches {	-- Typical use (alcohol units)
+										value matches {
+											DV_QUANTITY[id120] matches {
+												property matches {[at104]}
+												[magnitude, units, precision] matches {
+													[{|>=0.0|}, {"1/d"}, {0}],
+													[{|>=0.0|}, {"1/wk"}, {0}]
+												}
+											}
+										}
+									}
+									ELEMENT[id66] occurrences matches {0..1} matches {	-- Typical use (volume of beverage)
+										value matches {
+											DV_QUANTITY[id121] matches {
+												property matches {[at105]}
+												[magnitude, units] matches {
+													[{|>=0.0|}, {"ml/d"}],
+													[{|>=0.0|}, {"cl/d"}],
+													[{|>=0.0|}, {"l/d"}],
+													[{|>=0.0|}, {"[foz_us]/d"}],
+													[{|>=0.0|}, {"[pt_us]/d"}],
+													[{|>=0.0|}, {"[gal_us]/d"}],
+													[{|>=0.0|}, {"ml/wk"}],
+													[{|>=0.0|}, {"cl/wk"}],
+													[{|>=0.0|}, {"l/wk"}],
+													[{|>=0.0|}, {"[foz_us]/wk"}],
+													[{|>=0.0|}, {"[pt_us]/wk"}],
+													[{|>=0.0|}, {"[gal_us]/wk"}]
+												}
+											}
+										}
+									}
+									ELEMENT[id26] occurrences matches {0..1} matches {	-- Number of quit attempts
+										value matches {
+											DV_COUNT[id122] matches {
+												magnitude matches {|>=0|}
+											}
+										}
+									}
+									allow_archetype CLUSTER[id27] matches {	-- Episode details
+										include
+											archetype_id/value matches {/openEHR-EHR-CLUSTER\.cessation_attempts(-[a-zA-Z0-9_]+)*\.v1/}
+									}
+									ELEMENT[id88] occurrences matches {0..1} matches {	-- Episode comment
+										value matches {
+											DV_TEXT[id123] 
+										}
+									}
+								}
+							}
+							ELEMENT[id15] occurrences matches {0..1} matches {	-- Quit date
+								value matches {
+									DV_DATE[id124] 
+								}
+							}
+							allow_archetype CLUSTER[id78] matches {	-- Type details
+								include
+									archetype_id/value matches {/.*/}
+							}
+							ELEMENT[id70] occurrences matches {0..1} matches {	-- Comment
+								value matches {
+									DV_TEXT[id125] 
+								}
+							}
+						}
+					}
+					allow_archetype CLUSTER[id87] matches {	-- Overall details
+						include
+							archetype_id/value matches {/openEHR-EHR-CLUSTER\.change(-[a-zA-Z0-9_]+)*\.v1/}
+					}
+					ELEMENT[id17] occurrences matches {0..1} matches {	-- Overall quit date
+						value matches {
+							DV_DATE[id126] 
+						}
+					}
+					ELEMENT[id20] occurrences matches {0..1} matches {	-- Overall comment
+						value matches {
+							DV_TEXT[id127] 
+						}
+					}
+				}
+			}
+		}
+		protocol matches {
+			ITEM_TREE[id22] matches {
+				items matches {
+					allow_archetype CLUSTER[id74] matches {	-- Extension
+						include
+							archetype_id/value matches {/.*/}
+					}
+					ELEMENT[id72] matches {	-- Quit date definition
+						value matches {
+							DV_TEXT[id128] 
+						}
+					}
+					ELEMENT[id86] occurrences matches {0..1} matches {	-- Quit attempt definition
+						value matches {
+							DV_TEXT[id129] 
+						}
+					}
+					ELEMENT[id76] matches {	-- Current drinker definition
+						value matches {
+							DV_TEXT[id130] 
+						}
+					}
+					ELEMENT[id77] matches {	-- Former drinker definition
+						value matches {
+							DV_TEXT[id131] 
+						}
+					}
+					ELEMENT[id80] matches {	-- Lifetime non-drinker definition
+						value matches {
+							DV_TEXT[id132] 
+						}
+					}
+					ELEMENT[id104] occurrences matches {0..1} matches {	-- Alcohol unit definition (volume)
+						value matches {
+							DV_QUANTITY[id133] matches {
+								property matches {[at106]}
+								[magnitude, units] matches {
+									[{|>=0.0|}, {"ml"}],
+									[{|>=0.0|}, {"cl"}],
+									[{|>=0.0|}, {"l"}],
+									[{|>=0.0|}, {"[foz_us]"}]
+								}
+							}
+						}
+					}
+					ELEMENT[id105] occurrences matches {0..1} matches {	-- Alcohol unit definition (mass)
+						value matches {
+							DV_QUANTITY[id134] matches {
+								property matches {[at107]}
+								[magnitude, units, precision] matches {
+									[{|>=0.0|}, {"g"}, {0}],
+									[{|>=0.0|}, {"[oz_av]"}, {1}]
+								}
+							}
+						}
+					}
+					ELEMENT[id23] occurrences matches {0..1} matches {	-- Last updated
+						value matches {
+							DV_DATE_TIME[id135] 
+						}
+					}
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Alcohol use summary">
+				description = <"Summary or persistent information about the alcohol use habits of an individual.">
+			>
+			["at4"] = <
+				text = <"Current drinker">
+				description = <"Individual is a current consumer of alcohol.">
+			>
+			["at6"] = <
+				text = <"Former drinker">
+				description = <"Individual has previously consumed alcohol but is not a current drinker.">
+			>
+			["at7"] = <
+				text = <"Lifetime non-drinker">
+				description = <"Individual has never consumed alcohol.">
+			>
+			["id14"] = <
+				text = <"Episode start date">
+				description = <"Date when this episode commenced.">
+			>
+			["id15"] = <
+				text = <"Quit date">
+				description = <"Date when the individual last consumed the specified alcoholic beverage.">
+			>
+			["id16"] = <
+				text = <"Regular drinking commenced">
+				description = <"The date or partial date when the individual first started frequent or regular, but usually non-daily, alcohol consumption.">
+			>
+			["id17"] = <
+				text = <"Overall quit date">
+				description = <"The date when the individual last ceased using alcohol of any type.">
+			>
+			["id20"] = <
+				text = <"Overall comment">
+				description = <"Additional narrative about all alcohol use that has not been captured in other fields.">
+			>
+			["id23"] = <
+				text = <"Last updated">
+				description = <"The date this alcohol use summary was last updated.">
+			>
+			["id24"] = <
+				text = <"Typical use (alcohol units)">
+				description = <"Estimate of number of alcohol units of the specified type of alcoholic beverage consumed.">
+			>
+			["id26"] = <
+				text = <"Number of quit attempts">
+				description = <"Total number of times the individual has attempted to stop consuming the specified type of alcoholic beverage within this episode.">
+			>
+			["id27"] = <
+				text = <"Episode details">
+				description = <"Additional structured details about the specified episode of alcohol use.">
+			>
+			["id30"] = <
+				text = <"Per type">
+				description = <"Details about consumption of a specified type of alcoholic beverage.">
+			>
+			["id31"] = <
+				text = <"Pattern">
+				description = <"The typical pattern of consumption for the specified type of alcoholic beverage.">
+			>
+			["id44"] = <
+				text = <"Overall description">
+				description = <"Narrative summary about the individual's overall alcohol use pattern and history.">
+			>
+			["id53"] = <
+				text = <"Status">
+				description = <"Statement about current alcohol use behaviour for the specified type of alcoholic beverage.">
+			>
+			["id54"] = <
+				text = <"Description">
+				description = <"Narrative summary about alcohol use behaviour for the specified type of alcoholic beverage.">
+			>
+			["at60"] = <
+				text = <"Former drinker">
+				description = <"Individual has previously consumed the specified alcoholic beverage but is not a current user.">
+			>
+			["at62"] = <
+				text = <"Current drinker">
+				description = <"Individual is a current consumer of the specified alcoholic beverage.">
+			>
+			["id65"] = <
+				text = <"Per episode">
+				description = <"Details about a discrete period of consumption for the specified type of alcoholic beverage.">
+			>
+			["id66"] = <
+				text = <"Typical use (volume of beverage)">
+				description = <"Estimate of the volume of the specified alcoholic beverage consumed.">
+			>
+			["id70"] = <
+				text = <"Comment">
+				description = <"Additional narrative about consuming of the specified alcoholic beverage, not captured in other fields.">
+			>
+			["id72"] = <
+				text = <"Quit date definition">
+				description = <"The applied definition for the 'Quit date' data elements used in this archetype.">
+			>
+			["id74"] = <
+				text = <"Extension">
+				description = <"Additional information required to capture local content or to align with other reference models/formalisms.">
+			>
+			["id76"] = <
+				text = <"Current drinker definition">
+				description = <"The applied definition for the 'Current drinker' value in each of the 'Status' data elements used in this archetype.">
+			>
+			["id77"] = <
+				text = <"Former drinker definition">
+				description = <"The applied definition for the 'Former drinker' value in each of the 'Status' data elements used in this archetype.">
+			>
+			["id78"] = <
+				text = <"Type details">
+				description = <"Additional structured details about the consumption of the specified alcoholic beverage.">
+			>
+			["id80"] = <
+				text = <"Lifetime non-drinker definition">
+				description = <"The applied definition for the 'Lifetime non-drinker' value in each of the 'Status' data elements used in this archetype.">
+			>
+			["id81"] = <
+				text = <"Daily drinking commenced">
+				description = <"The date or partial date when the individual first started daily alcohol consumption.">
+			>
+			["id82"] = <
+				text = <"Episode label">
+				description = <"Identification of an episode of alcohol consumption - either as a number in a sequence and/or a named event.">
+			>
+			["id83"] = <
+				text = <"Episode end date">
+				description = <"Date when this episode ceased.">
+			>
+			["at84"] = <
+				text = <"Daily">
+				description = <"Consuming the specified alcoholic beverage at least once every day.">
+			>
+			["at85"] = <
+				text = <"Non-daily">
+				description = <"Not consuming the specified alcoholic beverage every day.">
+			>
+			["id86"] = <
+				text = <"Quit attempt definition">
+				description = <"The applied definition for a Quit attempt used to determine value for the 'Number of quit attempts' data element used in this archetype.">
+			>
+			["id87"] = <
+				text = <"Overall details">
+				description = <"Additional structured details about the overall alcohol use behaviour.">
+			>
+			["id88"] = <
+				text = <"Episode comment">
+				description = <"Additional narrative about alcohol use during the specified episode, not captured in other fields.">
+			>
+			["id90"] = <
+				text = <"Overall status">
+				description = <"Statement about current alcohol use behaviour for all types of alcohol.">
+			>
+			["at92"] = <
+				text = <"Lifetime non-drinker">
+				description = <"Individual has never consumed the specified alcoholic beverage.">
+			>
+			["at93"] = <
+				text = <"Beer">
+				description = <"*">
+			>
+			["at94"] = <
+				text = <"Wine">
+				description = <"*">
+			>
+			["at95"] = <
+				text = <"Liquor">
+				description = <"*">
+			>
+			["at96"] = <
+				text = <"Moonshine">
+				description = <"*">
+			>
+			["at97"] = <
+				text = <"Denatured alcohol">
+				description = <"*">
+			>
+			["id98"] = <
+				text = <"Binge drinking pattern">
+				description = <"The individual's pattern of heavy, episodic drinking.">
+			>
+			["at99"] = <
+				text = <"None">
+				description = <"The individual does not binge drink.">
+			>
+			["at100"] = <
+				text = <"Less than once per month">
+				description = <"The individual binge drinks less than once per month.">
+			>
+			["at101"] = <
+				text = <"Monthly">
+				description = <"The individual binge drinks on a monthly basis.">
+			>
+			["at102"] = <
+				text = <"Weekly">
+				description = <"The individual binge drinks on a weekly basis.">
+			>
+			["at103"] = <
+				text = <"Daily">
+				description = <"The individual binge drinks on a daily or almost daily basis.">
+			>
+			["id104"] = <
+				text = <"Alcohol unit definition (volume)">
+				description = <"Volume of alcohol defining an alcohol unit as used in the 'Typical use (alcohol units)' element in this archetype.">
+			>
+			["id105"] = <
+				text = <"Alcohol unit definition (mass)">
+				description = <"Mass of alcohol defining an alcohol unit as used in the 'Typical use (alcohol units)' element in this archetype.">
+			>
+			["at104"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at105"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at106"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at107"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["ac1"] = <
+				text = <"Overall status (synthesised)">
+				description = <"Statement about current alcohol use behaviour for all types of alcohol. (synthesised)">
+			>
+			["ac2"] = <
+				text = <"Binge drinking pattern (synthesised)">
+				description = <"The individual's pattern of heavy, episodic drinking. (synthesised)">
+			>
+			["ac3"] = <
+				text = <"Per type (synthesised)">
+				description = <"Details about consumption of a specified type of alcoholic beverage. (synthesised)">
+			>
+			["ac4"] = <
+				text = <"Status (synthesised)">
+				description = <"Statement about current alcohol use behaviour for the specified type of alcoholic beverage. (synthesised)">
+			>
+			["ac5"] = <
+				text = <"Pattern (synthesised)">
+				description = <"The typical pattern of consumption for the specified type of alcoholic beverage. (synthesised)">
+			>
+		>
+	>
+	term_bindings = <
+		["openehr"] = <
+			["at104"] = <http://openehr.org/id/382>
+			["at105"] = <http://openehr.org/id/126>
+			["at106"] = <http://openehr.org/id/129>
+			["at107"] = <http://openehr.org/id/124>
+		>
+	>
+	value_sets = <
+		["ac1"] = <
+			id = <"ac1">
+			members = <"at7", "at4", "at6">
+		>
+		["ac5"] = <
+			id = <"ac5">
+			members = <"at84", "at85">
+		>
+		["ac2"] = <
+			id = <"ac2">
+			members = <"at99", "at100", "at101", "at102", "at103">
+		>
+		["ac3"] = <
+			id = <"ac3">
+			members = <"at93", "at94", "at95", "at96", "at97">
+		>
+		["ac4"] = <
+			id = <"ac4">
+			members = <"at62", "at60", "at92">
+		>
+	>

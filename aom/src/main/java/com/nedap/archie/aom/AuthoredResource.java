@@ -69,19 +69,31 @@ public abstract class AuthoredResource extends ArchetypeModelObject {
 
     @XmlElement(name="original_language")
     public TerminologyCode getOriginalLanguage() {
+        if(content == null) {
+            return null;
+        }
         return content.getOriginalLanguage();
     }
 
     public void setOriginalLanguage(TerminologyCode originalLanguage) {
+        if(content == null) {
+            content = new LanguageSection();
+        }
         content.setOriginalLanguage(originalLanguage);
     }
 
     @XmlTransient
     public Map<String, TranslationDetails> getTranslations() {
+        if(content == null) {
+            return null;
+        }
         return content.getTranslations();
     }
 
     public void setTranslations(Map<String, TranslationDetails> translations) {
+        if(content == null) {
+            content = new LanguageSection();
+        }
         content.setTranslations(translations);
     }
 

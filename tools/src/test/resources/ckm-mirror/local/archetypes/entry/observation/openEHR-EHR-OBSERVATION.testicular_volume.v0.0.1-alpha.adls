@@ -1,0 +1,253 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated; uid=30d81225-96f0-4c66-8d1b-b7e1eab64c54)
+	openEHR-EHR-OBSERVATION.testicular_volume.v0.0.1-alpha
+
+language
+	original_language = <[ISO_639-1::en]>
+	translations = <
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			author = <
+				["name"] = <"John Tore Valand">
+				["organisation"] = <"Helse Bergen HF, Norway">
+			>
+		>
+	>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"John Tore Valand">
+		["organisation"] = <"Helse Bergen University Hospital">
+		["email"] = <"john.tore.valand@helse-bergen.no">
+		["date"] = <"2017-04-26">
+	>
+	original_namespace = <"org.openehr">
+	original_publisher = <"openEHR Foundation">
+	custodian_namespace = <"org.openehr">
+	custodian_organisation = <"openEHR Foundation">
+	copyright = <"© Nasjonal IKT HF, openEHR Foundation">
+	licence = <"This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 License. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/.">
+	details = <
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			purpose = <"For å registrere testikkelvolumet til et individ.">
+			use = <"Brukes for å registrere testikkelvolumet til et individ.
+
+Måling av testikkelvolum kan være en komponent i en overordnet undersøkelse av genitalia, arketypen er allikevel utviklet som en frittstående OBSERVATION-arketype for å støtte monitorering av testikkelvolum i vekstkurver.">
+			keywords = <"testikler", "testikkel", "orchidometer">
+			misuse = <"">
+		>
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record the volume of an individual's testicles.">
+			use = <"Use to record the volume of an individual's testicles.
+
+While the measurement of testicular volume may be one component of a full genital examination, this archetype for recording testicular volume has been developed as a standalone OBSERVATION to support the common monitoring of testicular volume by use of growth charts in childhood and puberty.">
+			keywords = <"testis", ...>
+			misuse = <"">
+		>
+	>
+	references = <
+		["1"] = <"Sotos, J. F., & Tokar, N. J. (2012). Testicular volumes revisited: A proposal for a simple clinical method that can closely match the volumes obtained by ultrasound and its clinical application. International journal of pediatric endocrinology, 2012(1), 17.">
+		["2"] = <"Lin, C. C., Huang, W. J., & Chen, K. K. (2009). Measurement of testicular volume in smaller testes: how accurate is the conventional orchidometer?. Journal of andrology, 30(6), 685-689.">
+	>
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"1010D120E4581D70CD12CD9385BFB2EA">
+		["build_uid"] = <"60615360-d49b-4ed8-9378-b39c3907f3f3">
+	>
+
+definition
+	OBSERVATION[id1] matches {	-- Testicular volume
+		data matches {
+			HISTORY[id2] matches {
+				events cardinality matches {1..*; unordered} matches {
+					EVENT[id3] matches {	-- Any event
+						data matches {
+							ITEM_TREE[id4] matches {
+								items matches {
+									ELEMENT[id11] occurrences matches {0..1} matches {	-- Testicular volume
+										value matches {
+											DV_QUANTITY[id18] matches {
+												property matches {[at20]}
+												[magnitude, units, precision] matches {
+													[{|>=0.0|}, {"ml"}, {2}],
+													[{|>=0.0|}, {"cm3"}, {2}]
+												}
+											}
+										}
+									}
+									ELEMENT[id17] occurrences matches {0..1} matches {	-- Body site
+										value matches {
+											DV_CODED_TEXT[id19] matches {
+												defining_code matches {[ac1]}		-- Body site (synthesised)
+											}
+											DV_TEXT[id20] 
+										}
+									}
+									ELEMENT[id6] occurrences matches {0..1} matches {	-- Comment
+										value matches {
+											DV_TEXT[id21] 
+										}
+									}
+								}
+							}
+						}
+						state matches {
+							ITEM_TREE[id12] matches {
+								items matches {
+									ELEMENT[id13] occurrences matches {0..1} matches {	-- Confounding factors
+										value matches {
+											DV_TEXT[id22] 
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		protocol matches {
+			ITEM_TREE[id7] matches {
+				items matches {
+					ELEMENT[id14] occurrences matches {0..1} matches {	-- Method
+						value matches {
+							DV_TEXT[id23] 
+						}
+					}
+					allow_archetype CLUSTER[id8] matches {	-- Device details
+						include
+							archetype_id/value matches {/.*/}
+					}
+					ELEMENT[id9] occurrences matches {0..1} matches {	-- Formula
+						value matches {
+							DV_TEXT[id24] 
+						}
+					}
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Testicular volume">
+				description = <"The volume of the testicles measured or calculated.">
+			>
+			["id3"] = <
+				text = <"Any event">
+				description = <"Default, unspecified point in time or interval event which may be explicitly defined in a template or at run-time.">
+			>
+			["id6"] = <
+				text = <"Comment">
+				description = <"Additional narrative not covered in other fields.">
+			>
+			["id8"] = <
+				text = <"Device details">
+				description = <"Structured details about the device used to measure the testicles.">
+			>
+			["id9"] = <
+				text = <"Formula">
+				description = <"The formula used to calculate the testicular volume.">
+			>
+			["id11"] = <
+				text = <"Testicular volume">
+				description = <"Measured or calculated volume of the testicles.">
+			>
+			["id13"] = <
+				text = <"Confounding factors">
+				description = <"Issues or factors that may impact on the measurement.">
+			>
+			["id14"] = <
+				text = <"Method">
+				description = <"Method used to measure the testicles.">
+			>
+			["id17"] = <
+				text = <"Body site">
+				description = <"Identification of the testicle that was measured.">
+			>
+			["at18"] = <
+				text = <"Left testicle">
+				description = <"Measurement of the left testicle.">
+			>
+			["at19"] = <
+				text = <"Right testicle">
+				description = <"Measurement of the right testicle.">
+			>
+			["at20"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["ac1"] = <
+				text = <"Body site (synthesised)">
+				description = <"Identification of the testicle that was measured. (synthesised)">
+			>
+		>
+		["nb"] = <
+			["id1"] = <
+				text = <"Testikkelvolum">
+				description = <"Testiklenens volum enten målt eller utregnet.">
+			>
+			["id3"] = <
+				text = <"Uspesifisert hendelse">
+				description = <"Standard, uspesifisert tidspunkt eller tidsintervall som kan defineres mer eksplisitt i en template eller i en applikasjon.">
+			>
+			["id6"] = <
+				text = <"Kommentar">
+				description = <"Ytterligere fritekst om målingen som ikke er dekket av andre felt.">
+			>
+			["id8"] = <
+				text = <"Detaljer om utstyr">
+				description = <"Strukturerte detaljer om utstyret som ble benyttet for å måle testikkelvolum.">
+			>
+			["id9"] = <
+				text = <"Formel">
+				description = <"Formelen som ble brukt for å regne ut testikkelvolum.">
+			>
+			["id11"] = <
+				text = <"Testikkelvolum">
+				description = <"Målt eller utregnet testikkelvolum.">
+			>
+			["id13"] = <
+				text = <"Konfunderende faktorer">
+				description = <"Problemer eller faktorer som kan ha innvirkning på målingen.">
+			>
+			["id14"] = <
+				text = <"Metode">
+				description = <"Metoden som ble benyttet for å måle testiklene.">
+			>
+			["id17"] = <
+				text = <"Kroppssted">
+				description = <"Testikkelen som ble målt.">
+			>
+			["at18"] = <
+				text = <"Venstre testikkel">
+				description = <"Måling av venstre testikkel.">
+			>
+			["at19"] = <
+				text = <"Høyre testikkel">
+				description = <"Måling av høyre testikkel.">
+			>
+			["at20"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["ac1"] = <
+				text = <"Kroppssted (synthesised)">
+				description = <"Testikkelen som ble målt. (synthesised)">
+			>
+		>
+	>
+	term_bindings = <
+		["openehr"] = <
+			["at20"] = <http://openehr.org/id/129>
+		>
+	>
+	value_sets = <
+		["ac1"] = <
+			id = <"ac1">
+			members = <"at18", "at19">
+		>
+	>

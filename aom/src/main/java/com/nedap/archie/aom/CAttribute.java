@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.nedap.archie.base.Cardinality;
 import com.nedap.archie.base.MultiplicityInterval;
 import com.nedap.archie.paths.PathSegment;
+import com.nedap.archie.query.APathQuery;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -41,6 +42,13 @@ public class CAttribute extends ArchetypeConstraint {
     private Cardinality cardinality;
 
     private List<CObject> children = new ArrayList<>();
+
+    public CAttribute() {
+
+    }
+    public CAttribute(String rmAttributeName) {
+        this.rmAttributeName = rmAttributeName;
+    }
 
     public String getRmAttributeName() {
         return rmAttributeName;
@@ -120,6 +128,7 @@ public class CAttribute extends ArchetypeConstraint {
 
     public void addChild(CObject child) {
         if(child.getSiblingOrder() != null && child.getSiblingOrder().getSiblingNodeId() != null) {
+            //TODO: this can be a specialized sibling node id as well!
             CObject sibling = getChild(child.getSiblingOrder().getSiblingNodeId());
             int siblingIndex = children.indexOf(sibling);
             if(siblingIndex > -1) {
@@ -203,7 +212,11 @@ public class CAttribute extends ArchetypeConstraint {
             return new ArrayList<>();
         }
         List<PathSegment> segments = parent.getPathSegments();
-        segments.add(new PathSegment(getRmAttributeName()));
+        if(differentialPath == null) {
+            segments.add(new PathSegment(getRmAttributeName()));
+        } else {
+            segments.addAll(new APathQuery(differentialPath).getPathSegments());
+        }
         return segments;
     }
 
@@ -303,7 +316,7 @@ public class CAttribute extends ArchetypeConstraint {
         return existenceConformsTo(other) && ((isSingle() && other.isSingle()) || (isMultiple() && cardinalityConformsTo(other)));
     }
 
-    protected Boolean existenceConformsTo(CAttribute other) {
+    public Boolean existenceConformsTo(CAttribute other) {
         //True if the existence of this node conforms to other.existence
         if(other == null) {
             return false;
@@ -315,7 +328,7 @@ public class CAttribute extends ArchetypeConstraint {
         }
     }
 
-    protected Boolean cardinalityConformsTo(CAttribute other) {
+    public Boolean cardinalityConformsTo(CAttribute other) {
         //True if the cardinality of this node conforms to other.cardinality, if it exists
         if(other == null) {
             return false;
@@ -327,4 +340,44 @@ public class CAttribute extends ArchetypeConstraint {
         }
     }
 
+    public boolean isSecondOrderConstrained() {
+        return getSocParent() != null || (getParent() != null && getParent().getSocParent() != null);
+    }
+
+
+    /**
+     * Get the sum of all occurrences of all direct children of this c_attribute
+     * calculates sum of all occurrences lower bounds; where no occurrences are stated, 0 is assumed
+     * @return
+     */
+    public int getAggregateOccurrencesLowerSum() {
+        int sum = 0;
+        for(CObject cObject:getChildren()) {
+            if(cObject.getOccurrences() != null) {
+                sum+= cObject.getOccurrences().getLower();
+            }
+        }
+        return sum;
+    }
+
+    /**
+     *  calculate minimum number of child objects that must occur in data; count 1 for every mandatory
+     *  object, and 1 for all optional objects
+     * @return
+     */
+    public int getMinimumChildCount() {
+        int result = 0;
+        boolean foundOptional = false;
+        for(CObject cObject:getChildren()) {
+            if(cObject.isRequired()) {
+                result++;
+            } else if(cObject.isAllowed()) {
+                foundOptional = true;
+            }
+        }
+        if(foundOptional) {
+            result++;
+        }
+        return result;
+    }
 }

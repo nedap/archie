@@ -1,0 +1,537 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated; uid=48803d0f-2ffd-446f-9c0a-7b42f8486a68)
+	openEHR-EHR-CLUSTER.specimen.v0.0.1-alpha
+
+language
+	original_language = <[ISO_639-1::en]>
+	translations = <
+		["ar-sy"] = <
+			language = <[ISO_639-1::ar-sy]>
+			author = <
+				["name"] = <"Mona Saleh">
+			>
+		>
+	>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Dr Ian McNicoll">
+		["organisation"] = <"freshEHR Clinical Informatics">
+		["email"] = <"ian.mcnicoll@oceaninformatics.com">
+		["date"] = <"2009-01-27">
+	>
+	original_namespace = <"org.openehr">
+	original_publisher = <"openEHR Foundation">
+	custodian_namespace = <"org.openehr">
+	custodian_organisation = <"openEHR Foundation">
+	copyright = <"© openEHR Foundation">
+	licence = <"This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 License. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/.">
+	details = <
+		["ar-sy"] = <
+			language = <[ISO_639-1::ar-sy]>
+			purpose = <"لتسجيل تفاصيل حول عينة بالمعمل. 
+يستخدم غالبا في سياقات مختلفة, مثلا: في داخل نموذج (تعليمات) ليصف العينة التي ينبغي أخذها, أو يصف العينة المرافقة لطلب معملي. 
+و قد يحدث ذلك في داخل نموذج (فعل), مثال: وصف العينات التي تم أخذها كجزء من إجراء طبي جراحي. 
+و سيستخدم أخيرا في داخل نموذج نتيجة اختبار المعمل ليصف العينة التي يتم تقديم عينة حولها.">
+			use = <"يستخدم عادةً في داخل نموذج (ملاحظة. معمل) و النماذج الأخرى تعليمات و فعل المتعلقة بالمعمل.">
+			keywords = <"النموذج/العينة", "المعمل/المختبر", "العينة", "التجميع">
+			misuse = <"">
+		>
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record details of a laboratory specimen. Will often be used in different contexts e.g within an Instruction archetype to describe the specimen that has to be taken, or describing the specimen which accompanies the laboratory request. It may occur within an Action archetype e.g. describing specimens taken as part of a surgical procedure.
+
+It will finally be used within a laboratory result archetype to describe the specimen being reported.">
+			use = <"Generally used within OBSERVATION. laboratory_test.v1 and other laboratory related Instruction and Action archetypes.">
+			keywords = <"specimen", "laboratory", "sample", "collection">
+			misuse = <"">
+		>
+	>
+	other_contributors = <"Sam Heard Ocean Informatics", "Heather Leslie Ocean Informatics", "Koray Atalag University of Auckland">
+	references = <
+		["1"] = <"Hl7 FHIR Specimen resource: HL7 FHIR; Available from http://www.hl7.org/implement/standards/fhir/specimen.html">
+		["2"] = <"Laboratory Technical Framework, Volume 3: Content, Revision 3.0 [Internet]. USA: IHE International; 2011 May 19; [cited 2011 Jul 11]. Available from: http://www.ihe.net/Technical_Framework/index.cfm#laboratory">
+	>
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"328C511116FD83D7F25973284D8D9F60">
+		["build_uid"] = <"74f882e9-946a-45e9-8545-31053852a89b">
+	>
+
+definition
+	CLUSTER[id1] matches {	-- Specimen
+		items matches {
+			ELEMENT[id30] occurrences matches {0..1} matches {	-- Specimen type
+				value matches {
+					DV_TEXT[id87] 
+				}
+			}
+			ELEMENT[id16] occurrences matches {0..1} matches {	-- Datetime collected
+				value matches {
+					DV_DATE_TIME[id88] 
+				}
+			}
+			ELEMENT[id9] matches {	-- Sampling conditions
+				value matches {
+					DV_TEXT[id89] 
+				}
+			}
+			allow_archetype CLUSTER[id14] matches {	-- Source site
+				include
+					archetype_id/value matches {/openEHR-EHR-CLUSTER\.anatomical_location(-[a-zA-Z0-9_]+)*\.v1/}
+			}
+			allow_archetype CLUSTER[id28] matches {	-- Physical properties
+				include
+					archetype_id/value matches {/openEHR-EHR-CLUSTER\.physical_properties(-[a-zA-Z0-9_]+)*\.v1|openEHR-EHR-CLUSTER\.inspection_body_fluid(-[a-zA-Z0-9_]+)*\.v0/}
+			}
+			ELEMENT[id8] occurrences matches {0..1} matches {	-- Collection method
+				value matches {
+					DV_TEXT[id90] 
+				}
+			}
+			ELEMENT[id80] occurrences matches {0..1} matches {	-- Collection method description
+				value matches {
+					DV_TEXT[id91] 
+				}
+			}
+			allow_archetype CLUSTER[id84] matches {	-- Additional collection details
+				include
+					archetype_id/value matches {/.*/}
+			}
+			ELEMENT[id6] occurrences matches {0..1} matches {	-- Potential risk
+				value matches {
+					DV_TEXT[id92] 
+				}
+			}
+			ELEMENT[id68] occurrences matches {0..1} matches {	-- Collection setting
+				value matches {
+					DV_TEXT[id93] 
+				}
+			}
+			ELEMENT[id71] occurrences matches {0..1} matches {	-- Specimen collector identifier
+				value matches {
+					DV_IDENTIFIER[id94] 
+				}
+			}
+			allow_archetype CLUSTER[id72] matches {	-- Specimen collector details
+				include
+					archetype_id/value matches {/.*/}
+			}
+			ELEMENT[id81] occurrences matches {0..1} matches {	-- Number of containers
+				value matches {
+					DV_COUNT[id95] matches {
+						magnitude matches {|>=0|}
+					}
+				}
+			}
+			allow_archetype CLUSTER[id86] matches {	-- Container details
+				include
+					archetype_id/value matches {/.*/}
+			}
+			CLUSTER[id40] occurrences matches {0..1} matches {	-- Specimen quality
+				items matches {
+					ELEMENT[id43] matches {	-- Specimen received issues
+						value matches {
+							DV_CODED_TEXT[id96] matches {
+								defining_code matches {[ac1]}		-- Specimen received issues (synthesised)
+							}
+							DV_TEXT[id97] 
+						}
+					}
+					ELEMENT[id45] matches {	-- Laboratory handling issues
+						value matches {
+							DV_CODED_TEXT[id98] matches {
+								defining_code matches {[ac2]}		-- Laboratory handling issues (synthesised)
+							}
+							DV_TEXT[id99] 
+						}
+					}
+					ELEMENT[id42] occurrences matches {0..1} matches {	-- Adequacy for testing
+						value matches {
+							DV_CODED_TEXT[id100] matches {
+								defining_code matches {[ac3]}		-- Adequacy for testing (synthesised)
+							}
+							DV_TEXT[id101] 
+						}
+					}
+					ELEMENT[id46] occurrences matches {0..1} matches {	-- Comment
+						value matches {
+							DV_TEXT[id102] 
+						}
+					}
+				}
+			}
+			CLUSTER[id47] occurrences matches {0..1} matches {	-- Processing
+				items matches {
+					ELEMENT[id35] occurrences matches {0..1} matches {	-- Datetime received
+						value matches {
+							DV_DATE_TIME[id103] 
+						}
+					}
+					ELEMENT[id2] occurrences matches {0..1} matches {	-- Laboratory specimen identifier
+						value matches {
+							DV_IDENTIFIER[id104] 
+						}
+					}
+					allow_archetype CLUSTER[id69] matches {	-- Processing details
+						include
+							archetype_id/value matches {/openEHR-EHR-CLUSTER\.specimen_preparation(-[a-zA-Z0-9_]+)*\.v1/}
+					}
+				}
+			}
+			CLUSTER[id82] matches {	-- Related specimen
+				items matches {
+					ELEMENT[id4] occurrences matches {0..1} matches {	-- Parent specimen identifier
+						value matches {
+							DV_IDENTIFIER[id105] 
+						}
+					}
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["ar-sy"] = <
+			["id1"] = <
+				text = <"العينة">
+				description = <"لتسجيل تفاصيل عينة المعمل">
+			>
+			["id2"] = <
+				text = <"*Laboratory Specimen Identifier(en)">
+				description = <"*Unique identifier of the specimen, normally assigned by the laboratory.(en)">
+			>
+			["id4"] = <
+				text = <"*Parent Specimen Identifier(en)">
+				description = <"*Unique identifier of the parent specimen, where the specimen is split into sub-samples.(en)">
+			>
+			["id6"] = <
+				text = <"*Potential Risk(en)">
+				description = <"*Any risk or biohazard associated with  collecting or handling the specimen.(en)">
+			>
+			["id8"] = <
+				text = <"*Collection Method(en)">
+				description = <"*The method of collection to be used eg Venepuncture, biopsy, resection.(en)">
+			>
+			["id9"] = <
+				text = <"*Sampling Conditions(en)">
+				description = <"*Any conditions to be met before the sample should be taken.(en)">
+			>
+			["id14"] = <
+				text = <"*Source Site(en)">
+				description = <"*The anatomical site(s) from where the specimen was taken.(en)">
+			>
+			["id16"] = <
+				text = <"*Datetime Collected(en)">
+				description = <"*The date and time that collection has been ordered to take place or has taken place.(en)">
+			>
+			["id28"] = <
+				text = <"*Physical properties(en)">
+				description = <"*Dimensions / weight / quantity of sample or other physical details of a bodily fluid. Set as unbounded to allow variations e.g Weight of prostatic gland with and without seminal vesicles.(en)">
+			>
+			["id30"] = <
+				text = <"*Specimen Type(en)">
+				description = <"*The type of specimen to be collected e.g venous blood, prostatic biopsy.(en)">
+			>
+			["id35"] = <
+				text = <"*Datetime Received(en)">
+				description = <"*The date and time that the sample was received at the laboratory.(en)">
+			>
+			["id40"] = <
+				text = <"جودة العينة">
+				description = <"المشكلات المتعلقة بالعينة التي تم استقبالها/استلامها">
+			>
+			["id42"] = <
+				text = <"المناسبة لإتمام التحليل">
+				description = <"هل العينة مناسبة لإجراء الاختبار">
+			>
+			["id43"] = <
+				text = <"القضايا المتعلقة بالعينة التي تم استقبالها/استلامها">
+				description = <"قضية مخصوصة متعلقة بالعينة التي تم استقبالها/استلامها.">
+			>
+			["id45"] = <
+				text = <"قضايا متعلقة بالمعاملة في المعمل/المختبر">
+				description = <"قضية تثار عند معاملة أو معالجة العينة في داخل المعمل/المختبر">
+			>
+			["id46"] = <
+				text = <"تعليق">
+				description = <"تعليق نصي إضافي حول جودة العينة التي تم استقبالها/استلامها">
+			>
+			["id47"] = <
+				text = <"*Processing(en)">
+				description = <"*Workflow of specimen processing/handling.(en)">
+			>
+			["at53"] = <
+				text = <"تم حل الدم">
+				description = <"تم حل الدم في العينة">
+			>
+			["at54"] = <
+				text = <"العينة بها فرط شحيمات">
+				description = <"العينة بها فرط شحيمات">
+			>
+			["at55"] = <
+				text = <"وسط نقل غير صحيح">
+				description = <"تم استخدام مادة حافظة غير صحيحة عند نقل العينة">
+			>
+			["at56"] = <
+				text = <"عينة غير كافية">
+				description = <"تم إعطاء عينة غير كافية لإتمام القياس">
+			>
+			["at57"] = <
+				text = <"خطأ في المعاملة">
+				description = <"تمت إثارة خطأ عند معاملة العينة">
+			>
+			["at58"] = <
+				text = <"العمر">
+				description = <"العينة قديمة جدا مما يمنع التحليل الدقيق">
+			>
+			["at59"] = <
+				text = <"حادث معملي/مختبري">
+				description = <"حصل حادث للعينة في المعمل/المختبر">
+			>
+			["at60"] = <
+				text = <"إخفاق تقني">
+				description = <"لم يُتمكن من تحليل العينة لأسباب تقنية">
+			>
+			["at63"] = <
+				text = <"مُرضِية">
+				description = <"العينة بجودة كافية بما يسمح للحصول على تقرير للاختبار">
+			>
+			["at64"] = <
+				text = <"غير مُرضية - تمت معالجتها">
+				description = <"العينة غير مُرضية و لكن تمت معالجتها">
+			>
+			["at65"] = <
+				text = <"غير مُرضية - لم تتم معالجتها">
+				description = <"العينة غير مُرضية و لم تتم معالجتها">
+			>
+			["id68"] = <
+				text = <"*Collection Setting(en)">
+				description = <"*Identification of the setting at which the specimen was collected 
+from a subject of care. The specimen is often collected by a 
+healthcare provider, but may be collected directly by the patient or carer at home.(en)">
+			>
+			["id69"] = <
+				text = <"*Additional Preparation(en)">
+				description = <"*The specimen preparation cluster allows detailed recording of a particular preparation step e.g staining or fixation.(en)">
+			>
+			["id71"] = <
+				text = <"*Specimen Collector Identifier(en)">
+				description = <"*Identifier of the person or agency responsible for collecting the specimen.(en)">
+			>
+			["id72"] = <
+				text = <"*Specimen Collector Details(en)">
+				description = <"*The person or organisation responsible for collecting the specimen.(en)">
+			>
+			["id80"] = <
+				text = <"*Collection Method Description(en)">
+				description = <"*Additional detailed description of method of sample collection.(en)">
+			>
+			["id81"] = <
+				text = <"*Number of Containers(en)">
+				description = <"*The total number of containers holding this specimen.(en)">
+			>
+			["id82"] = <
+				text = <"*Related Specimen(en)">
+				description = <"*Details of a related specimen.(en)">
+			>
+			["id84"] = <
+				text = <"*Additional Collection Details(en)">
+				description = <"*Addtional details related to specific collection methods e.g. needle biopsy.(en)">
+			>
+			["id86"] = <
+				text = <"*Container Details(en)">
+				description = <"*Details of container(s) used.(en)">
+			>
+			["ac1"] = <
+				text = <"القضايا المتعلقة بالعينة التي تم استقبالها/استلامها (synthesised)">
+				description = <"قضية مخصوصة متعلقة بالعينة التي تم استقبالها/استلامها. (synthesised)">
+			>
+			["ac2"] = <
+				text = <"قضايا متعلقة بالمعاملة في المعمل/المختبر (synthesised)">
+				description = <"قضية تثار عند معاملة أو معالجة العينة في داخل المعمل/المختبر (synthesised)">
+			>
+			["ac3"] = <
+				text = <"المناسبة لإتمام التحليل (synthesised)">
+				description = <"هل العينة مناسبة لإجراء الاختبار (synthesised)">
+			>
+		>
+		["en"] = <
+			["id1"] = <
+				text = <"Specimen">
+				description = <"To record details of a laboratory specimen.">
+			>
+			["id2"] = <
+				text = <"Laboratory specimen identifier">
+				description = <"Unique identifier of the specimen, normally assigned by the laboratory.">
+			>
+			["id4"] = <
+				text = <"Parent specimen identifier">
+				description = <"Unique identifier of the parent specimen, where the specimen is split into sub-samples.">
+			>
+			["id6"] = <
+				text = <"Potential risk">
+				description = <"Any risk or biohazard associated with collecting or handling the specimen.">
+			>
+			["id8"] = <
+				text = <"Collection method">
+				description = <"The method of collection to be used eg Venepuncture, biopsy, resection.">
+			>
+			["id9"] = <
+				text = <"Sampling conditions">
+				description = <"Any conditions to be met before the sample should be taken.">
+			>
+			["id14"] = <
+				text = <"Source site">
+				description = <"The anatomical site(s) from where the specimen was taken.">
+			>
+			["id16"] = <
+				text = <"Datetime collected">
+				description = <"The date and time that collection has been ordered to take place or has taken place.">
+			>
+			["id28"] = <
+				text = <"Physical properties">
+				description = <"Dimensions / weight / quantity of sample or other physical details of a bodily fluid. Set as unbounded to allow variations e.g Weight of prostatic gland with and without seminal vesicles.">
+			>
+			["id30"] = <
+				text = <"Specimen type">
+				description = <"The type of specimen to be collected e.g venous blood, prostatic biopsy.">
+			>
+			["id35"] = <
+				text = <"Datetime received">
+				description = <"The date and time that the sample was received at the laboratory.">
+			>
+			["id40"] = <
+				text = <"Specimen quality">
+				description = <"Problems with the received specimen.">
+			>
+			["id42"] = <
+				text = <"Adequacy for testing">
+				description = <"Is the specimen adequate for testing?">
+			>
+			["id43"] = <
+				text = <"Specimen received issues">
+				description = <"Specific issue with a received specimen.">
+			>
+			["id45"] = <
+				text = <"Laboratory handling issues">
+				description = <"Issue arising with handling or processing of the specimen within the laboratory.">
+			>
+			["id46"] = <
+				text = <"Comment">
+				description = <"An additional text comment on the quality of the received specimen.">
+			>
+			["id47"] = <
+				text = <"Processing">
+				description = <"Workflow of specimen processing/handling.">
+			>
+			["at53"] = <
+				text = <"Haemolysed">
+				description = <"The specimen was haemolysed.">
+			>
+			["at54"] = <
+				text = <"Lipaemic">
+				description = <"The specimen was lipaemic.">
+			>
+			["at55"] = <
+				text = <"Incorrect transport medium">
+				description = <"An incorrect preservative was used when transporting the specimen.">
+			>
+			["at56"] = <
+				text = <"Insufficient sample">
+				description = <"An insufficient sample was given to undertake measurement.">
+			>
+			["at57"] = <
+				text = <"Handling error">
+				description = <"An error arose when handling the specimen.">
+			>
+			["at58"] = <
+				text = <"Age">
+				description = <"The specimen was too old to analyse accurately.">
+			>
+			["at59"] = <
+				text = <"Laboratory accident">
+				description = <"An accident occurred with the sample in the laboratory.">
+			>
+			["at60"] = <
+				text = <"Technical failure">
+				description = <"The specimen could not be analysed for technical reasons.">
+			>
+			["at63"] = <
+				text = <"Satisfactory">
+				description = <"The specimen is of sufficient quality to allow reporting.">
+			>
+			["at64"] = <
+				text = <"Unsatisfactory - processed">
+				description = <"The specimen is unsatisfactory but has been processed.">
+			>
+			["at65"] = <
+				text = <"Unsatisfactory - not processed">
+				description = <"The specimen is unsatisfactory and has not been processed.">
+			>
+			["id68"] = <
+				text = <"Collection setting">
+				description = <"Identification of the setting at which the specimen was collected 
+from a subject of care. The specimen is often collected by a 
+healthcare provider, but may be collected directly by the patient or carer at home.">
+			>
+			["id69"] = <
+				text = <"Processing details">
+				description = <"The specimen preparation cluster allows detailed recording of a particular preparation step e.g staining or fixation.">
+			>
+			["id71"] = <
+				text = <"Specimen collector identifier">
+				description = <"Identifier of the person or agency responsible for collecting the specimen.">
+			>
+			["id72"] = <
+				text = <"Specimen collector details">
+				description = <"The person or organisation responsible for collecting the specimen.">
+			>
+			["id80"] = <
+				text = <"Collection method description">
+				description = <"Additional detailed description of method of sample collection.">
+			>
+			["id81"] = <
+				text = <"Number of containers">
+				description = <"The total number of containers holding this specimen.">
+			>
+			["id82"] = <
+				text = <"Related specimen">
+				description = <"Details of a related specimen.">
+			>
+			["id84"] = <
+				text = <"Additional collection details">
+				description = <"Addtional details related to specific collection methods e.g. needle biopsy.">
+			>
+			["id86"] = <
+				text = <"Container details">
+				description = <"Details of container(s) used.">
+			>
+			["ac1"] = <
+				text = <"Specimen received issues (synthesised)">
+				description = <"Specific issue with a received specimen. (synthesised)">
+			>
+			["ac2"] = <
+				text = <"Laboratory handling issues (synthesised)">
+				description = <"Issue arising with handling or processing of the specimen within the laboratory. (synthesised)">
+			>
+			["ac3"] = <
+				text = <"Adequacy for testing (synthesised)">
+				description = <"Is the specimen adequate for testing? (synthesised)">
+			>
+		>
+	>
+	value_sets = <
+		["ac3"] = <
+			id = <"ac3">
+			members = <"at63", "at64", "at65">
+		>
+		["ac1"] = <
+			id = <"ac1">
+			members = <"at53", "at54", "at55", "at56">
+		>
+		["ac2"] = <
+			id = <"ac2">
+			members = <"at57", "at58", "at59", "at60">
+		>
+	>

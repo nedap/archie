@@ -1,0 +1,111 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated; uid=049535b0-21e2-4b8d-b1c6-a4ee4e0e70b1)
+	openEHR-EHR-INSTRUCTION.care_plan.v0.0.1-alpha
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Sistine Barretto-Daniels">
+		["organisation"] = <"Ocean Informatics">
+		["email"] = <"Sistine.Barretto-Daniels@oceaninformatics.com">
+		["date"] = <"2010-07-28">
+	>
+	original_namespace = <"org.openehr">
+	original_publisher = <"openEHR Foundation">
+	custodian_namespace = <"org.openehr">
+	custodian_organisation = <"openEHR Foundation">
+	copyright = <"© Australian Digital Health Agency, openEHR Foundation">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record the order or instruction regarding the planning, initiation and carrying out of a single care plan as a whole.">
+			use = <"Use to record the order or instruction for the planning, initiation and carrying out of a single care plan as a whole.">
+			keywords = <"care", "plan">
+			misuse = <"">
+		>
+	>
+	other_contributors = <"Heather Leslie, Ocean Informatics, Australia", ...>
+	references = <
+		["1"] = <"Derived from: Care Plan, Draft Archetype [Internet]. Australian Digital Health Agency, Australian Digital Health Agency Clinical Knowledge Manager [cited: 2016-08-22]. Available from: http://dcm.nehta.org.au/ckm/#showArchetype_1013.1.1221">
+	>
+	other_details = <
+		["current_contact"] = <"Heather Leslie, Ocean Informatics, heather.leslie@oceaninformatics.com">
+		["MD5-CAM-1.0.1"] = <"1DD84A286380DFEE4A706D3288874D21">
+		["build_uid"] = <"c668a8e3-a948-42f8-b615-16d7f397e38e">
+	>
+
+definition
+	INSTRUCTION[id1] matches {	-- Care Plan
+		activities matches {
+			ACTIVITY[id2] occurrences matches {0..1} matches {	-- Activity
+				action_archetype_id matches {/openEHR-EHR-ACTION\.care_plan\.v1/}
+				description matches {
+					ITEM_TREE[id5] matches {
+						items matches {
+							ELEMENT[id18] occurrences matches {0..1} matches {	-- Care Plan Name
+								value matches {
+									DV_TEXT[id21] 
+								}
+							}
+							ELEMENT[id8] occurrences matches {0..1} matches {	-- Description
+								value matches {
+									DV_TEXT[id22] 
+								}
+							}
+							ELEMENT[id12] occurrences matches {0..1} matches {	-- Indication
+								value matches {
+									DV_TEXT[id23] 
+								}
+							}
+							ELEMENT[id19] occurrences matches {0..1} matches {	-- Date of Onset
+								value matches {
+									DV_DATE_TIME[id24] 
+								}
+							}
+							ELEMENT[id20] occurrences matches {0..1} matches {	-- Comment
+								value matches {
+									DV_TEXT[id25] 
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Care Plan">
+				description = <"Order or instruction for the creation and sequence of activities to achieve a specified management goal or treatment outcome, carried out by health professionals and/or the subject.">
+			>
+			["id2"] = <
+				text = <"Activity">
+				description = <"Current Activity.">
+			>
+			["id8"] = <
+				text = <"Description">
+				description = <"Description of the care plan scope, intent and proposed activities.">
+			>
+			["id12"] = <
+				text = <"Indication">
+				description = <"Indication for the care plan.">
+			>
+			["id18"] = <
+				text = <"Care Plan Name">
+				description = <"Identification of the care plan.">
+			>
+			["id19"] = <
+				text = <"Date of Onset">
+				description = <"Date of onset for the care plan.">
+			>
+			["id20"] = <
+				text = <"Comment">
+				description = <"Additional narrative about the care plan order not captured in other fields.">
+			>
+		>
+	>

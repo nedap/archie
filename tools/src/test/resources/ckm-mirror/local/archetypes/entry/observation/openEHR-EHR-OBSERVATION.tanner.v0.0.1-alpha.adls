@@ -1,0 +1,339 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated; uid=ae257a35-ad5b-4749-b6ad-f8942bef4195)
+	openEHR-EHR-OBSERVATION.tanner.v0.0.1-alpha
+
+language
+	original_language = <[ISO_639-1::en]>
+	translations = <
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			author = <
+				["name"] = <"John Tore Valand, Vebjørn Arntzen">
+				["organisation"] = <"Helse Bergen HF, OUS HF">
+			>
+		>
+	>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Malin Aas Berg">
+		["organisation"] = <"DIPS ASA">
+		["email"] = <"mab@dips.no">
+		["date"] = <"2017-03-17">
+	>
+	original_namespace = <"org.openehr">
+	original_publisher = <"openEHR Foundation">
+	custodian_namespace = <"org.openehr">
+	custodian_organisation = <"openEHR Foundation">
+	copyright = <"© Nasjonal IKT HF, openEHR Foundation">
+	licence = <"This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 International License. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/4.0/.">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To describe progression of pubertal changes in genitals, breasts and pubic hair.">
+			use = <"Normally used to describe progression of pubertal changes in children, but can also be used to adults, for example evaluate gynaecomasty in adult men.
+
+Boys and girls are rated on a 5 point scale. Boys are rated for genital development and
+pubic hair growth, and girls are rated for breast development and pubic hair growth.">
+			keywords = <"pubertal", "puberty", "genitals", "breasts", "breast", "pubical", "pubic hair">
+			misuse = <"">
+		>
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			purpose = <"For å skåre utvikling av genitalia, bryst og pubesbehåring.">
+			use = <"Brukes vanligvis for å beskrive et barns pubertetsutvikling, men kan også brukes hos voksne for eksempel for å vurdere grad av gynekomasti hos voksne menn.
+
+Gutter og jenter vurderes ut fra en 5 poengs skala. Gutter vurderes ut fra utvikling av genitalia og pubesbehåring, jenter vurderes ut fra utvikling av bryst og pubesbehåring.">
+			keywords = <"pubertet", "genitalia", "bryst", "bryster", "behåring", "pubes", "kjønnsmodning">
+			misuse = <"">
+		>
+	>
+	references = <
+		["1"] = <"Derived from: Tanner stadier, Draft archetype [Internet]. Nasjonal IKT, Nasjonal IKT Clinical Knowledge Manager [cited: 2017-05-05]. Available from: http://arketyper.no/ckm/#showArchetype_1078.36.1823">
+		["2"] = <"Marshall WA, Tanner JM. Variations in the Pattern of Pubertal Changes in Boys. Archives of Disease in Childhood. 1970 [cited 2017 Mar 17]; 45(239): 13-23. Available from https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2020414/">
+		["3"] = <"Marshall WA, Tanner JM. Variations in pattern of pubertal changes in girls. Archives of Disease in Childhood. 1969 [cited 2017 Mar 17]; 44(235): 291-303. Available from https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2020314/">
+		["4"] = <"Biro F M, Chan Y-M (Dec 14, 2016). Normal puberty. UpToDate [Internett].">
+		["5"] = <"Available at: https://www.uptodate.com/contents/normal-puberty?source=search_result&search=tanner&selectedTitle=1~66#H4 [Accessed 2017 Apr 25].">
+		["6"] = <"Norsk Elektronisk Legehåndbok (Nov 15.2015). Tanner Stadier. [Internett].">
+		["7"] = <"Available at: https://legehandboka.no/handboken/kliniske-kapitler/pediatri/pasientinformasjon/vekst-og-utvikling/pubertet-for-tidlig/ [Accessed 2017 Apr 25].">
+	>
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"1D7FAF885D5BBC3943DFB1B60617693D">
+		["build_uid"] = <"6173b9cf-12a3-4ca9-96bf-db7a3ed76567">
+	>
+
+definition
+	OBSERVATION[id1] matches {	-- Tanner stages
+		data matches {
+			HISTORY[id2] matches {
+				events cardinality matches {1..*; unordered} matches {
+					EVENT[id3] occurrences matches {0..1} matches {	-- Any event
+						data matches {
+							ITEM_TREE[id4] matches {
+								items matches {
+									ELEMENT[id5] occurrences matches {0..1} matches {	-- Genitals
+										value matches {
+											DV_CODED_TEXT[id29] matches {
+												defining_code matches {[ac1]}		-- Genitals (synthesised)
+											}
+										}
+									}
+									ELEMENT[id6] occurrences matches {0..1} matches {	-- Breasts
+										value matches {
+											DV_CODED_TEXT[id30] matches {
+												defining_code matches {[ac2]}		-- Breasts (synthesised)
+											}
+										}
+									}
+									ELEMENT[id7] occurrences matches {0..1} matches {	-- Pubic hair
+										value matches {
+											DV_CODED_TEXT[id31] matches {
+												defining_code matches {[ac3]}		-- Pubic hair (synthesised)
+											}
+										}
+									}
+									ELEMENT[id28] occurrences matches {0..1} matches {	-- Comment
+										value matches {
+											DV_TEXT[id32] 
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		protocol matches {
+			ITEM_TREE[id23] matches {
+				items matches {
+					allow_archetype CLUSTER[id26] matches {	-- Extension
+						include
+							archetype_id/value matches {/.*/}
+					}
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["nb"] = <
+			["id1"] = <
+				text = <"Tanner stadier">
+				description = <"En skala for å beskrive et barns pubertetsutvikling.">
+			>
+			["id3"] = <
+				text = <"Uspesifisert hendelse">
+				description = <"Standard, uspesifisert tidspunkt eller tidsintervall som kan defineres mer eksplisitt i en template eller i en applikasjon.">
+			>
+			["id5"] = <
+				text = <"Genitalia">
+				description = <"Stadier for utvikling av mannlige genitalia.">
+			>
+			["id6"] = <
+				text = <"Bryst">
+				description = <"Stadier for utvikling av bryst hos unge kvinner.">
+			>
+			["id7"] = <
+				text = <"Pubesbehåring">
+				description = <"Stadier for utvikling av pubesbehåring hos kvinner og menn.">
+			>
+			["at8"] = <
+				text = <"G1">
+				description = <"Testikler, skrotum og penis slik som i tidlig barndom.">
+			>
+			["at9"] = <
+				text = <"G2">
+				description = <"Skrotum og testikler har vokst og teksturen av skrotumhud er grovere.">
+			>
+			["at10"] = <
+				text = <"G3">
+				description = <"Penis har vokst, mest i lengden. Skrotum og testikler har vokst ytterligere.">
+			>
+			["at11"] = <
+				text = <"G4">
+				description = <"Penis har vokst i lengde og tykkelse. Begynnende utvikling av glans. Testes og skrotum vokser videre og skrotal hud er mørkere.">
+			>
+			["at12"] = <
+				text = <"G5">
+				description = <"Voksent utseende på genitalia.">
+			>
+			["at13"] = <
+				text = <"B1">
+				description = <"Ingen synlig brystutvikling.">
+			>
+			["at14"] = <
+				text = <"B2">
+				description = <"Begynnende brystutvikling, bryst og papille lett forhøyet, areolas diameter lett økt.">
+			>
+			["at15"] = <
+				text = <"B3">
+				description = <"Videre vekst av brystet men fortsatt jevn kontur.">
+			>
+			["at16"] = <
+				text = <"B4">
+				description = <"Areola og papille skilles ut som en egen kontur på brystet (hevet fra resten av brystkonturen).">
+			>
+			["at17"] = <
+				text = <"B5">
+				description = <"Voksen. Kun papillen er hevet ut fra resten av bryskonturen.">
+			>
+			["at18"] = <
+				text = <"P1">
+				description = <"Ingen pubesbehåring (på samme nivå som eventuell behåring på abdomen).">
+			>
+			["at19"] = <
+				text = <"P2">
+				description = <"Kvinner: Begynnende vekst av lyse, tynne, rette hår langs labia. Kan være lett å overse. Menn: Sparsom vekst av lett pigmentert, rett, dunaktig hår. Hovedsakelig ved basis av penis. Kan være lett å overse.">
+			>
+			["at20"] = <
+				text = <"P3">
+				description = <"Mørkere, tykkere og mer krøllete behåring. Sparsom utbredelse opp mot abdomen.">
+			>
+			["at21"] = <
+				text = <"P4">
+				description = <"Voksen type behåring, men ubredelse er mindre. Brer seg ikke over til mediale del av låret.">
+			>
+			["at22"] = <
+				text = <"P5">
+				description = <"Voksen mengde og utbredelse i form av invertert triangel og behåringen kan bre seg over til mediale del av låret.">
+			>
+			["id26"] = <
+				text = <"Tilleggsinformasjon">
+				description = <"Ytterligere informasjon som trengs for å kunne registrere lokalt definert innhold eller for å tilpasse til andre referansemodeller/formalismer.">
+			>
+			["id28"] = <
+				text = <"Kommentar">
+				description = <"Ytterligere fritekst om Tanner stadiene som ikke er registrert i andre felt.">
+			>
+			["ac1"] = <
+				text = <"Genitalia (synthesised)">
+				description = <"Stadier for utvikling av mannlige genitalia. (synthesised)">
+			>
+			["ac2"] = <
+				text = <"Bryst (synthesised)">
+				description = <"Stadier for utvikling av bryst hos unge kvinner. (synthesised)">
+			>
+			["ac3"] = <
+				text = <"Pubesbehåring (synthesised)">
+				description = <"Stadier for utvikling av pubesbehåring hos kvinner og menn. (synthesised)">
+			>
+		>
+		["en"] = <
+			["id1"] = <
+				text = <"Tanner stages">
+				description = <"A scale to describe the onset an progression of pubertal changes.">
+			>
+			["id3"] = <
+				text = <"Any event">
+				description = <"Default, unspecified point in time or interval event which may be explicitly defined in a template or at run-time.">
+			>
+			["id5"] = <
+				text = <"Genitals">
+				description = <"The stages for development in male genitals.">
+			>
+			["id6"] = <
+				text = <"Breasts">
+				description = <"The stages for breast development in young women.">
+			>
+			["id7"] = <
+				text = <"Pubic hair">
+				description = <"The stages for pubic hair development in females and males.">
+			>
+			["at8"] = <
+				text = <"G1">
+				description = <"Prepubertal.">
+			>
+			["at9"] = <
+				text = <"G2">
+				description = <"Enlargement of scrotum and testes; scrotal skin reddens and changes in texture.">
+			>
+			["at10"] = <
+				text = <"G3">
+				description = <"Enlargement of penis (length at first); further growth of testes.">
+			>
+			["at11"] = <
+				text = <"G4">
+				description = <"Increased size of penis with growth in breadth and development of glans; testes and scrotum larger, scrotal skin darker.">
+			>
+			["at12"] = <
+				text = <"G5">
+				description = <"Adult genitalia.">
+			>
+			["at13"] = <
+				text = <"B1">
+				description = <"Prepubertal.">
+			>
+			["at14"] = <
+				text = <"B2">
+				description = <"Breast bud stage with elevation of breast and papilla; enlargement of areola.">
+			>
+			["at15"] = <
+				text = <"B3">
+				description = <"Further enlargement of breast and areola; no separation of their contour.">
+			>
+			["at16"] = <
+				text = <"B4">
+				description = <"Areola and papilla form a secondary mound above level of breast.">
+			>
+			["at17"] = <
+				text = <"B5">
+				description = <"Mature stage: projection of papilla only, related to recession of areola.">
+			>
+			["at18"] = <
+				text = <"P1">
+				description = <"Prepubertal (the pubic area may have vellus hair, similar to that of forearms).">
+			>
+			["at19"] = <
+				text = <"P2">
+				description = <"Sparse growth of long, slightly pigmented hair, straight or curled, at base of penis or along labia.">
+			>
+			["at20"] = <
+				text = <"P3">
+				description = <"Darker, coarser and more curled hair, spreading sparsely over junction of pubes.">
+			>
+			["at21"] = <
+				text = <"P4">
+				description = <"Hair adult in type, but covering smaller area than in adult; no spread to medial surface of thighs.">
+			>
+			["at22"] = <
+				text = <"P5">
+				description = <"Adult in type and quantity, with horizontal upper border.">
+			>
+			["id26"] = <
+				text = <"Extension">
+				description = <"Additional information required to capture local content or to align with other reference models/formalisms.">
+			>
+			["id28"] = <
+				text = <"Comment">
+				description = <"Additional narrative about the Tanner stages not captured in other fields.">
+			>
+			["ac1"] = <
+				text = <"Genitals (synthesised)">
+				description = <"The stages for development in male genitals. (synthesised)">
+			>
+			["ac2"] = <
+				text = <"Breasts (synthesised)">
+				description = <"The stages for breast development in young women. (synthesised)">
+			>
+			["ac3"] = <
+				text = <"Pubic hair (synthesised)">
+				description = <"The stages for pubic hair development in females and males. (synthesised)">
+			>
+		>
+	>
+	value_sets = <
+		["ac1"] = <
+			id = <"ac1">
+			members = <"at8", "at9", "at10", "at11", "at12">
+		>
+		["ac2"] = <
+			id = <"ac2">
+			members = <"at13", "at14", "at15", "at16", "at17">
+		>
+		["ac3"] = <
+			id = <"ac3">
+			members = <"at18", "at19", "at20", "at21", "at22">
+		>
+	>

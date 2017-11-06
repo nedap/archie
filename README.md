@@ -11,13 +11,20 @@ It is licensed under the Apache license.
 
 # NOTE: THIS IS A DEVELOPMENT BRANCH
 
-We are splitting Archie into separate modules. This causes a few API incompatibilities:
+We are splitting Archie into separate modules. This causes a few API incompatibilities, which is not limited to the following list:
 
 - APathQuery is now changed into AOMPathQuery and RMPathQuery. If you used itemAtPath and itemsAtPath this will not affect your code.
-- The default AOM methods no longer use ArchieRMInfoLookup by default. You need to supply it by hand. List of cases where this happens:
+- The default AOM methods no longer use ArchieRMInfoLookup by default. You need to supply it by hand. List of a few cases where this happens:
     - CAttributeTuple.isValidValue()
     - CAttributeTuple.isValid()
+    - Flattener
+    - ArchetypeValidator
+    - RMQueries
+    - RuleEvaluation
+    - ... probably more
 - ADLPArser.withConstrainsImposer has been removed. You can still do new ADLPArser(new RMConstraintsImposer()) if you want, or use it manually. 
+
+This README is out of date for this branch, but will be updated soon. It is up to date for the production version.
 
 ## dependency
 
@@ -25,7 +32,7 @@ In gradle, include this dependency in your build.gradle:
 
 ```gradle
 dependencies {
-    compile 'com.nedap.healthcare:archie:0.3.13'
+    compile 'com.nedap.healthcare:archie:0.3.14'
 }
 ```
 
@@ -35,13 +42,16 @@ or if you use maven, in your pom.xml
 <dependency>
     <groupId>com.nedap.healthcare</groupId>
     <artifactId>archie</artifactId>
-    <version>0.3.13</version>
+    <version>0.3.14</version>
 </dependency>
 ```
 
 ## Build
 
-[![Build Status](https://travis-ci.org/nedap/archie.svg?branch=master)](https://travis-ci.org/nedap/archie)
+[![Build Status](https://travis-ci.org/openEHR/archie.svg?branch=master)](https://travis-ci.org/openEHR/archie)
+
+
+the following is from the old repository and not up to date, but gives an impression:
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/dda8ce2b837a40b5b50cf52dae95764d)](https://www.codacy.com/app/pieter-bos/archie?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=nedap/archie&amp;utm_campaign=Badge_Grade)
 [![Codecov Badge](https://img.shields.io/codecov/c/github/nedap/archie.svg)](https://codecov.io/gh/nedap/archie)
 

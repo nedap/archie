@@ -1,0 +1,444 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated; uid=cea90213-ddfc-4715-bd2a-b2263ff1081a)
+	openEHR-EHR-ACTION.service.v0.0.1-alpha
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Heather Leslie">
+		["organisation"] = <"Ocean Informatics">
+		["email"] = <"heather.leslie@oceaninformatics.com">
+		["date"] = <"2015-12-21">
+	>
+	original_namespace = <"au.org.nehta">
+	original_publisher = <"nehta, Australia">
+	custodian_namespace = <"au.org.nehta">
+	custodian_organisation = <"nehta, Australia">
+	copyright = <"© Northern Territory Department of Health, Australia">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record information about the execution of a request for a health-related service.">
+			use = <"Use to record information about the execution of a request for a health-related service. This is done by recording relevant data against any or all of activities specified in the 'Planned', 'Scheduled', 'Active', 'Suspended', 'Cancelled', 'Postponed', 'Aborted' pathway steps.
+
+The scope of this archetype deliberately encompasses activities for a broad range of clinical services. Examples include, but are not limited to:
+- self-referral by a patient for a check-up visit to a dentist for preventive care or a series of visits to a physiotherapist for management of a musculoskeletal strain; and
+- a referral from a requesting healthcare provider, such as a primary care clinician, to a receiving healthcare provider, such as a specialist, for the patient to receive a specific service, advice or care.
+
+Additional structured and detailed information about the service can be captured using purpose-specific archetypes inserted into the 'Service detail' slot, where required.
+
+Timings related to a procedure can be managed in one of two ways:
+- using the reference model - the time for performance of any pathway step will use the ACTION time attribute for each step; and
+- using the archetyped data - the 'Scheduled date/time' data element is intended to record the precise time when the service is planned. Note: the corresponding ACTION time attribute for the Scheduled pathway step will record the time that the service was scheduled into a system, not the intended date/time on which the service is intended to be carried out.
+
+In practice, some services (for example, in ambulatory care) will occur once and not be ordered in advance. The details about the service will be added against the pathway step, 'Service completed'. In some cases a recurring service will be ordered, and in this situation data against the 'Service delivered' step will be recorded on each occasion, leaving the instruction in the active state. When the last delivery of the service is recorded, the 'Service completed' action is recorded showing that this order is now in the completed state.
+
+In other situations, such as secondary care, there may be a formal order for a procedure using a corresponding INSTRUCTION.request archetype. This ACTION archetype can then be used to record the workflow of when and how the order has been carried out.
+
+This archetype may only be used in two ways:
+- as a full record of the service that was delivered; or
+- as a framework to record primarily the state of the requested service, with separate OBSERVATION archetypes used to record the actual test results for the delivered service - for example OBSERVATION.hearing_screening_result.
+
+Recording information using this ACTION archetype indicates that some sort of activity has actually occurred; this will usually be the service delivery itself but may be a failed attempt or another activity such as postponement of the service delivery. If there is a formal order for the procedure, the state of this order is represented by the Pathway step against which the data is recorded. For example, using this archetype the progressing state of a referral request may be recorded through separate entries in the EHR progress notes at each 'Pathway' step:
+- record the scheduled Start date/time for the referral (Service scheduled); and
+- record that the referral has been completed, potentially including information about the service delivered (Service completed).
+
+Please note that in the openEHR Reference Model there is a 'Time' attribute, which is intended to record the date and time at which each pathway step of the Action was performed. This is the attribute to use to record the start of the procedure (using the 'Service delivered' pathway step) or the time that the service was aborted (using the 'Service abandoned' pathway step).">
+			keywords = <"referral", "visit", "encounter">
+			misuse = <"Not to be used to record data about activities carried out for activities that require a purpose built ACTION archetype because they have very specific data recording or pathway step requirements. For example: ACTION.procedure or ACTION.health_education.">
+		>
+	>
+	other_details = <
+		["current_contact"] = <"Heather Leslie, Ocean Informatics<heather.leslie@oceaninformatics.com>">
+		["MD5-CAM-1.0.1"] = <"06C589DF719D7EBD5F6ED1AA617CBDB9">
+		["build_uid"] = <"6154b061-b5dd-41b1-bf3d-0e06a5f71fdd">
+	>
+
+definition
+	ACTION[id1] matches {	-- Service
+		ism_transition matches {
+			ISM_TRANSITION[id3] matches {	-- Service planned
+				current_state matches {
+					DV_CODED_TEXT[id31] matches {
+						defining_code matches {[at28]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id32] matches {
+						defining_code matches {[at3]}
+					}
+				}
+			}
+			ISM_TRANSITION[id27] matches {	-- Service request sent
+				current_state matches {
+					DV_CODED_TEXT[id33] matches {
+						defining_code matches {[at28]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id34] matches {
+						defining_code matches {[at27]}
+					}
+				}
+			}
+			ISM_TRANSITION[id9] matches {	-- Service postponed
+				current_state matches {
+					DV_CODED_TEXT[id35] matches {
+						defining_code matches {[at29]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id36] matches {
+						defining_code matches {[at9]}
+					}
+				}
+			}
+			ISM_TRANSITION[id10] matches {	-- Service cancelled
+				current_state matches {
+					DV_CODED_TEXT[id37] matches {
+						defining_code matches {[at30]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id38] matches {
+						defining_code matches {[at10]}
+					}
+				}
+			}
+			ISM_TRANSITION[id4] matches {	-- Service scheduled
+				current_state matches {
+					DV_CODED_TEXT[id39] matches {
+						defining_code matches {[at31]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id40] matches {
+						defining_code matches {[at4]}
+					}
+				}
+			}
+			ISM_TRANSITION[id5] matches {	-- Service delivered
+				current_state matches {
+					DV_CODED_TEXT[id41] matches {
+						defining_code matches {[at32]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id42] matches {
+						defining_code matches {[at5]}
+					}
+				}
+			}
+			ISM_TRANSITION[id11] matches {	-- Service suspended
+				current_state matches {
+					DV_CODED_TEXT[id43] matches {
+						defining_code matches {[at33]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id44] matches {
+						defining_code matches {[at11]}
+					}
+				}
+			}
+			ISM_TRANSITION[id7] matches {	-- Service abandoned
+				current_state matches {
+					DV_CODED_TEXT[id45] matches {
+						defining_code matches {[at34]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id46] matches {
+						defining_code matches {[at7]}
+					}
+				}
+			}
+			ISM_TRANSITION[id24] matches {	-- Service expired
+				current_state matches {
+					DV_CODED_TEXT[id47] matches {
+						defining_code matches {[at34]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id48] matches {
+						defining_code matches {[at24]}
+					}
+				}
+			}
+			ISM_TRANSITION[id6] matches {	-- Service activity complete
+				current_state matches {
+					DV_CODED_TEXT[id49] matches {
+						defining_code matches {[at35]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id50] matches {
+						defining_code matches {[at6]}
+					}
+				}
+			}
+		}
+		description matches {
+			ITEM_TREE[id2] matches {
+				items matches {
+					ELEMENT[id12] occurrences matches {0..1} matches {	-- Service name
+						value matches {
+							DV_TEXT[id51] 
+						}
+					}
+					ELEMENT[id15] occurrences matches {0..1} matches {	-- Service type
+						value matches {
+							DV_TEXT[id52] 
+						}
+					}
+					ELEMENT[id14] occurrences matches {0..1} matches {	-- Description
+						value matches {
+							DV_TEXT[id53] 
+						}
+					}
+					allow_archetype CLUSTER[id28] matches {	-- Service detail
+						include
+							archetype_id/value matches {/.*/}
+					}
+					ELEMENT[id26] occurrences matches {0..1} matches {	-- Scheduled date/time
+						value matches {
+							DV_DATE_TIME[id54] 
+						}
+					}
+					ELEMENT[id22] occurrences matches {0..1} matches {	-- Sequence
+						value matches {
+							DV_COUNT[id55] matches {
+								magnitude matches {|>=0|}
+							}
+						}
+					}
+					allow_archetype CLUSTER[id30] matches {	-- Multimedia
+						include
+							archetype_id/value matches {/openEHR-EHR-CLUSTER\.multimedia(-[a-zA-Z0-9_]+)*\.v1/}
+					}
+					ELEMENT[id13] occurrences matches {0..1} matches {	-- Reason
+						value matches {
+							DV_TEXT[id56] 
+						}
+					}
+					ELEMENT[id29] occurrences matches {0..1} matches {	-- Comment
+						value matches {
+							DV_TEXT[id57] 
+						}
+					}
+				}
+			}
+		}
+		protocol matches {
+			ITEM_TREE[id16] matches {
+				items matches {
+					ELEMENT[id17] occurrences matches {0..1} matches {	-- Requestor identifier
+						value matches {
+							DV_IDENTIFIER[id58] 
+						}
+					}
+					allow_archetype CLUSTER[id18] matches {	-- Requestor
+						include
+							archetype_id/value matches {/.*/}
+					}
+					ELEMENT[id19] occurrences matches {0..1} matches {	-- Receiver identifier
+						value matches {
+							DV_IDENTIFIER[id59] 
+						}
+					}
+					allow_archetype CLUSTER[id20] matches {	-- Receiver
+						include
+							archetype_id/value matches {/.*/}
+					}
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Service">
+				description = <"A general clinical activity carried out for the patient to receive a specified service, advice or care from an expert healthcare provider.">
+			>
+			["id3"] = <
+				text = <"Service planned">
+				description = <"Service request to healthcare provider is planned.">
+			>
+			["id4"] = <
+				text = <"Service scheduled">
+				description = <"Appointment for a healthcare provider service has been made.">
+			>
+			["id5"] = <
+				text = <"Service delivered">
+				description = <"The healthcare provider has delivered the service.">
+			>
+			["id6"] = <
+				text = <"Service activity complete">
+				description = <"All service activities have been completed.">
+			>
+			["id7"] = <
+				text = <"Service abandoned">
+				description = <"The referral has been ceased before the service has been completed.">
+			>
+			["id9"] = <
+				text = <"Service postponed">
+				description = <"The planned service has been postponed.">
+			>
+			["id10"] = <
+				text = <"Service cancelled">
+				description = <"The planned service has been cancelled prior to commencement.">
+			>
+			["id11"] = <
+				text = <"Service suspended">
+				description = <"The service has been suspended without completion.">
+			>
+			["id12"] = <
+				text = <"Service name">
+				description = <"Identification of the clinical service to be/being carried out.">
+			>
+			["id13"] = <
+				text = <"Reason">
+				description = <"Reason that the activity or care pathway step for the identified service was carried out.">
+			>
+			["id14"] = <
+				text = <"Description">
+				description = <"Narrative description about the service, as appropriate for the pathway step.">
+			>
+			["id15"] = <
+				text = <"Service type">
+				description = <"Type of service to be carried out or being carried out.">
+			>
+			["id17"] = <
+				text = <"Requestor identifier">
+				description = <"The local ID assigned to the order by the healthcare provider or organisation requesting the service. This is also referred to as Placer Order Identifier.">
+			>
+			["id18"] = <
+				text = <"Requestor">
+				description = <"Details about the healthcare provider or organisation requesting the service.">
+			>
+			["id19"] = <
+				text = <"Receiver identifier">
+				description = <"The ID assigned to the order by the healthcare provider or organisation receiving the request for referral. This is also referred to as Filler Order Identifier.">
+			>
+			["id20"] = <
+				text = <"Receiver">
+				description = <"Details about the healthcare provider or organisation receiving the request for referral.">
+			>
+			["id22"] = <
+				text = <"Sequence">
+				description = <"The sequence of the specified clinical service.">
+			>
+			["id24"] = <
+				text = <"Service expired">
+				description = <"The referral has expired before the referral episode has been completed.">
+			>
+			["id26"] = <
+				text = <"Scheduled date/time">
+				description = <"The date and/or time on which the service is intended to be performed.">
+			>
+			["id27"] = <
+				text = <"Service request sent">
+				description = <"Request for service sent.">
+			>
+			["id28"] = <
+				text = <"Service detail">
+				description = <"Structured information about the service.">
+			>
+			["id29"] = <
+				text = <"Comment">
+				description = <"Additional narrative about the activity or care pathway step not captured in other fields.">
+			>
+			["id30"] = <
+				text = <"Multimedia">
+				description = <"Mulitimedia representation of a performed service.">
+			>
+			["at3"] = <
+				text = <"Service planned">
+				description = <"Service request to healthcare provider is planned.">
+			>
+			["at27"] = <
+				text = <"Service request sent">
+				description = <"Request for service sent.">
+			>
+			["at9"] = <
+				text = <"Service postponed">
+				description = <"The planned service has been postponed.">
+			>
+			["at10"] = <
+				text = <"Service cancelled">
+				description = <"The planned service has been cancelled prior to commencement.">
+			>
+			["at4"] = <
+				text = <"Service scheduled">
+				description = <"Appointment for a healthcare provider service has been made.">
+			>
+			["at5"] = <
+				text = <"Service delivered">
+				description = <"The healthcare provider has delivered the service.">
+			>
+			["at11"] = <
+				text = <"Service suspended">
+				description = <"The service has been suspended without completion.">
+			>
+			["at7"] = <
+				text = <"Service abandoned">
+				description = <"The referral has been ceased before the service has been completed.">
+			>
+			["at24"] = <
+				text = <"Service expired">
+				description = <"The referral has expired before the referral episode has been completed.">
+			>
+			["at6"] = <
+				text = <"Service activity complete">
+				description = <"All service activities have been completed.">
+			>
+			["at28"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at29"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at30"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at31"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at32"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at33"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at34"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at35"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+		>
+	>
+	term_bindings = <
+		["openehr"] = <
+			["at28"] = <http://openehr.org/id/526>
+			["at29"] = <http://openehr.org/id/527>
+			["at30"] = <http://openehr.org/id/528>
+			["at31"] = <http://openehr.org/id/529>
+			["at32"] = <http://openehr.org/id/245>
+			["at33"] = <http://openehr.org/id/530>
+			["at34"] = <http://openehr.org/id/531>
+			["at35"] = <http://openehr.org/id/532>
+		>
+	>

@@ -1,0 +1,156 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated; uid=5265bb8e-0f44-46c5-aba7-027d1a23ae0b)
+	openEHR-EHR-CLUSTER.mallampati_classification.v1.0.1
+
+language
+	original_language = <[ISO_639-1::nb]>
+	translations = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			author = <
+				["name"] = <"John Tore Valand">
+				["organisation"] = <"Helse Bergen HF, Norway">
+			>
+		>
+	>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Anca Heyd">
+		["organisation"] = <"Dips ASA">
+		["email"] = <"ahe@dips.no">
+		["date"] = <"2015-04-29">
+	>
+	original_namespace = <"no.nasjonalikt">
+	original_publisher = <"Nasjonal IKT">
+	custodian_namespace = <"no.nasjonalikt">
+	custodian_organisation = <"Nasjonal IKT">
+	licence = <"This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 International License. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/4.0/.">
+	details = <
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			purpose = <"En del av vurderingen av vanskelighetsgrad for intubasjon i forkant av en planlagt anestesi.">
+			use = <"Brukes i forbindelse med evaluering av intubasjonens forventede vanskelighetsgrad hos et individ i forkant av en planlagt anestesi. Undersøkelsen gjøres med pasienten i sittende posisjon, oppreist med hodet i nøytral stilling, med åpen munn og tunga maksimalt utstrakt uten phonasjon.">
+			keywords = <"mallampati", "anestesi", "intubasjon", "luftvei">
+			misuse = <"">
+		>
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To be used as a part of the assesment level of intubation difficulty before a planned anesthesia.">
+			use = <"To be used as a part of the assesment level of intubation difficulty before a planned anesthesia. The examination is done while the patient is sitting, upright with the head in a neutral position, with an open mouth, tongue protuded and without phonation.">
+			keywords = <"mallampati", "anaesthetic", "intubation", "airway">
+			misuse = <"">
+		>
+	>
+	other_contributors = <"Silje Ljosland Bakke, Nasjonal IKT HF, Norway (Nasjonal IKT redaktør)", "Gunn Elin Blakkisrud, DIPS ASA, Norway", "Lisbeth Dahlhaug, Helse Midt - Norge IT, Norway", "Einar Fosse, UNN HF, Norwegian Centre for Integrated Care and Telemedicine, Norway", "Kristian Heldal, Telemark Hospital Trust, Norway", "Anca Heyd, DIPS ASA, Norway", "Lars Morgan Karlsen, DIPS ASA, Norway", "Lars Ivar Mehlum, Helse Bergen HF, Norway", "Micaela Thierley, Helse Bergen, Norway", "John Tore Valand, Haukeland Universitetssjukehus, Norway (Nasjonal IKT redaktør)", "Thomas Wilson, Finnmarkssykehuset HF Klinikk Hammerfest, Norway">
+	references = <
+		["1"] = <"Lauren C Berkow, Strategies for airway management, Best Practice & Research Clinical Anaesthesiology, Volume 18, Issue 4, December 2004, Pages 531-548, ISSN 1521-6896, http://dx.doi.org/10.1016/j.bpa.2004.05.006.">
+		["2"] = <"(http://www.sciencedirect.com/science/article/pii/S1521689604000400)">
+		["3"] = <"Berkow L, Hagberg C, Crowley M. Airway management for induction of general anesthesia.  UpToDate.com (Mallampati)  19.05.2015.">
+		["4"] = <"http://www.uptodate.com/contents/91218?search=mallampati+score&source=graphics_search&imageKey=EM/75229#graphicRef75229">
+	>
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"AE8AFF935474FD1EE93C5CCBC376AE3C">
+		["build_uid"] = <"0b2a16de-8c0f-4abc-85a2-23d83a1a34a9">
+	>
+
+definition
+	CLUSTER[id1] matches {	-- Modifisert Mallampati-klassifikasjon
+		items matches {
+			ELEMENT[id5] occurrences matches {0..1} matches {	-- Mallampati-klassifikasjon
+				value matches {
+					DV_ORDINAL[id7] matches {
+						[value, symbol] matches {
+							[{1}, {[at7]}],
+							[{2}, {[at8]}],
+							[{3}, {[at9]}],
+							[{4}, {[at10]}]
+						}
+					}
+				}
+			}
+			ELEMENT[id6] occurrences matches {0..1} matches {	-- Kommentar
+				value matches {
+					DV_TEXT[id8] 
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["nb"] = <
+			["id1"] = <
+				text = <"Modifisert Mallampati-klassifikasjon">
+				description = <"Klassifisering av grad av innsyn i munnhulen og svelget for å vurdere vanskelighetsgrad av intubasjon ved direkte laryngoskopi.">
+			>
+			["id5"] = <
+				text = <"Mallampati-klassifikasjon">
+				description = <"Mallampati-klassifikasjon.">
+			>
+			["id6"] = <
+				text = <"Kommentar">
+				description = <"Kommentar til mallampati klassifiseringen.">
+			>
+			["at7"] = <
+				text = <"Klasse 1">
+				description = <"Tonsillesøylene, uvula, hard og bløt gane er fullstendig synlige.">
+			>
+			["at8"] = <
+				text = <"Klasse 2">
+				description = <"Uvula og bløt gane er delvis synlige.">
+			>
+			["at9"] = <
+				text = <"Klasse 3">
+				description = <"Kun bløt gane er synlig.">
+			>
+			["at10"] = <
+				text = <"Klasse 4">
+				description = <"Ingen visualisering av strukturer bak tungen, kun hard gane er synlig.">
+			>
+			["ac1"] = <
+				text = <"Mallampati-klassifikasjon (synthesised)">
+				description = <"Mallampati-klassifikasjon. (synthesised)">
+			>
+		>
+		["en"] = <
+			["id1"] = <
+				text = <"Modified Mallampati classification">
+				description = <"A classification that relates to the degree of visibility in the oral cavity and pharynx to assess the difficulty of oral intubation by direct laryngoscopy.">
+			>
+			["id5"] = <
+				text = <"Mallampati classification">
+				description = <"Mallampati classification.">
+			>
+			["id6"] = <
+				text = <"Comment">
+				description = <"Narrative comment about the Mallampati Classification.">
+			>
+			["at7"] = <
+				text = <"Class 1">
+				description = <"The entire tonsillar pillars, uvula, hard and soft palates are visualised.">
+			>
+			["at8"] = <
+				text = <"Class 2">
+				description = <"Partial uvula and soft palate are visualised.">
+			>
+			["at9"] = <
+				text = <"Class 3">
+				description = <"Only the soft palate is visualised.">
+			>
+			["at10"] = <
+				text = <"Class 4">
+				description = <"No visualisation of any structures beyond the tongue, only the hard palate is visible.">
+			>
+			["ac1"] = <
+				text = <"Mallampati classification (synthesised)">
+				description = <"Mallampati classification. (synthesised)">
+			>
+		>
+	>
+	value_sets = <
+		["ac1"] = <
+			id = <"ac1">
+			members = <"at7", "at8", "at9", "at10">
+		>
+	>

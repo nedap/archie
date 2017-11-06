@@ -9,6 +9,11 @@ public class ValidationMessage {
     private ErrorType type;
     private String pathInArchetype;
     private String message;
+    private boolean warning;//TODO: migrate to severity enum once we merge them
+
+    public ValidationMessage(ErrorType type) {
+        this.type = type;
+    }
 
     public ValidationMessage(ErrorType type, String pathInArchetype) {
         this.type = type;
@@ -51,5 +56,13 @@ public class ValidationMessage {
             result += ": " + message;
         }
         return result;
+    }
+
+    public boolean isWarning() {
+        return warning;
+    }
+
+    public void setWarning(boolean warning) {
+        this.warning = warning;
     }
 }

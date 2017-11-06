@@ -1,0 +1,71 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated)
+	openEHR-EHR-OBSERVATION.progress_note.v1.0.0
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Heather Leslie">
+		["organisation"] = <"Ocean Informatics">
+		["email"] = <"heather.leslie@oceaninformatics.com">
+		["date"] = <"2013-04-11">
+	>
+	copyright = <"© National E-Health Transition Authority">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record the detail about health-related events that have occurred as part of the subject's care, and/or the subject's health status, findings, opinions and plans that are current at the time of recording.">
+			use = <"Use to record the detail about health-related events that have occurred as part of the subject's care, and/or the subject's health status, findings, opinions and plans that are current at the time of recording.
+
+Designed for, and funded by, the Hearing Health project, Northern Territory, Australia.">
+			keywords = <"progress", "note">
+			misuse = <"">
+		>
+	>
+	other_details = <
+		["current_contact"] = <"Heather Leslie, Ocean Informatics, heather.leslie@oceaninformatics.com">
+		["MD5-CAM-1.0.1"] = <"C7988DE9B322E8817DB5E595E5D7AFD0">
+	>
+
+definition
+	OBSERVATION[id1] matches {	-- Progress Note
+		data matches {
+			HISTORY[id2] matches {
+				events cardinality matches {1..*; unordered} matches {
+					POINT_EVENT[id3] occurrences matches {0..1} matches {	-- Point in Time
+						data matches {
+							ITEM_TREE[id4] matches {
+								items matches {
+									ELEMENT[id5] occurrences matches {0..1} matches {	-- Progress Note
+										value matches {
+											DV_TEXT[id6] 
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Progress Note">
+				description = <"Detail about health-related events that have occurred as part of the subject's care, and/or the subject's health status, findings, opinions and plans that are current at the time of recording.">
+			>
+			["id3"] = <
+				text = <"Point in Time">
+				description = <"A specific date and/or time which may be explicitly defined in a template or at run-time.">
+			>
+			["id5"] = <
+				text = <"Progress Note">
+				description = <"Narrative description of health-related events that have occurred as part of the subject's care, and/or the subject's health status, findings, opinions and plans at a specific point-in-time.">
+			>
+		>
+	>

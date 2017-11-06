@@ -1,0 +1,416 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated; uid=5afd5fca-ec07-4824-bb63-f9b10683e0d8)
+	openEHR-EHR-CLUSTER.anatomical_location_clock.v0.0.1-alpha
+
+language
+	original_language = <[ISO_639-1::en]>
+	translations = <
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			author = <
+				["name"] = <"Lars Bitsch-Larsen">
+				["organisation"] = <"Haukeland University Hospital of Bergen, Norway">
+			>
+			accreditation = <"MD, DEAA, MBA, spec in anesthesia, spec in tropical medicine.">
+		>
+		["ar-sy"] = <
+			language = <[ISO_639-1::ar-sy]>
+			author = <
+				["name"] = <"Mona Saleh">
+			>
+		>
+		["sl"] = <
+			language = <[ISO_639-1::sl]>
+			author = <
+				["name"] = <"Biljana Princic">
+			>
+		>
+	>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Heather Leslie">
+		["organisation"] = <"Ocean Informatics">
+		["email"] = <"heather.leslie@oceaninformatics.com">
+		["date"] = <"2008-11-10">
+	>
+	original_namespace = <"org.openehr">
+	original_publisher = <"openEHR Foundation">
+	custodian_namespace = <"org.openehr">
+	custodian_organisation = <"openEHR Foundation">
+	copyright = <"© openEHR Foundation">
+	licence = <"This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 License. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/.">
+	details = <
+		["ar-sy"] = <
+			language = <[ISO_639-1::ar-sy]>
+			purpose = <"تسجيل المكان التشريحي بالتفصيل">
+			use = <"">
+			keywords = <"الموقع", "المكان", "تشريحي">
+			misuse = <"لا يستخدم لتحديد حالات الحدوث في جانب واحد أو في الجانبين - حيث إن ذلك متعلق بتقييم قد يتضمن العديد من الأماكن">
+		>
+		["sl"] = <
+			language = <[ISO_639-1::sl]>
+			purpose = <"*To record details about anatomical location.(en)">
+			use = <"">
+			keywords = <"*location(en)", "*site(en)", "*anatomical(en)">
+			misuse = <"*Not for specifiying unilateral/bilateral occurence - this is related to an evaluation which perhaps includes multiple locations.(en)">
+		>
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To identify and record structured details about a single physical site on or within the human body that is described in terms of the position of the hour hand of a clock relative to a reference anatomical site which represents the 12 o'clock position on a clock face.">
+			use = <"Use to identify and record structured and consistent details about a single physical site on or within the human body by describing its location in terms of the position of the hour hand of a clock relative to a reference anatomical site which represents the 12 o'clock position on a clock face.
+
+In practice, some archetypes carry a single data element for carrying a simple description of body site - for example, OBSERVATION.blood_pressure and CLUSTER.symptom when describing ear pain. In this situation, where the value set is predictable and simple to define, this single data element is a very accurate and pragmatic way to record the site in the body and to query at a later date. However in the situation where the anatomical location is not well defined or needs to be determined at run-time, it may be more flexible to use this structured archetype.
+
+This archetype is specifically designed to be used within the context of any appropriate ENTRY or CLUSTER archetypes which supply the context of the identified body site, or nesting within the CLUSTER.anatomical_location archetype's 'Alternative Structure SLOT.'
+
+In the situation where the CLUSTER.anatomical_location can only be used to name a large and/or non-specific body part, the use of this archetype within the 'Alternative Structure' SLOT will support recording of a more precise location - for example, a haemorrhoid located at 7 o'clock, where the 12 o'clock referenct point is the perineum with the patient in the lithotomy position.">
+			keywords = <"location", "site", "anatomical", "relative", "approximate", "anatomic region", "topographic anatomy", "macroscopic anatomy", "macroscopic", "anatomic", "anatomy", "clock", "o'clock">
+			misuse = <"Not to be used to specify a simple location of a named physical site in the body, such as left femur or medial aspect of nose. Use the CLUSTER.anatomical_location archetype for this purpose.">
+		>
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			purpose = <"For registrering av detaljer om et anatomisk sted.">
+			use = <"">
+			keywords = <"sted", "lokasjon", "anatomisk", "site">
+			misuse = <"Anvendes ikke for spesifisering av unilateral/bilateral forekomst - dette relateres til en vurdering som kanskje omfatter flere steder.">
+		>
+	>
+	other_contributors = <"Tomas Alme, DIPS, Norway", "Vebjoern Arntzen, Oslo university hospital, Norway", "Koray Atalag, University of Auckland, New Zealand", "Silje Ljosland Bakke, Bergen Hospital Trust, Norway", "Lars Bitsch-Larsen, Haukeland University hospital, Norway", "Shahla Foozonkhah, Ocean Informatics, Australia", "Einar Fosse, National Centre for Integrated Care and Telemedicine, Norway", "Sebastian Garde, Ocean Informatics, Germany", "Heather Grain, Llewelyn Grain Informatics, Australia", "Dunmail Hodkinson, Black Pear Software Ltd, UK", "Lars Karlsen, DIPS ASA, Norway", "Shinji Kobayashi, Kyoto University, Japan", "Sabine Leh, Haukeland University Hospital, Department of Pathology, Norway", "Heather Leslie, Ocean Informatics, Australia (Editor)", "Vesna Levasic, Orthopaedic Hospital Valdoltra, Slovenia", "Hallvard Lærum, Oslo University Hospital, Norway", "Luis Marco Ruiz, Norwegian Center for Integrated Care and Telemedicine, Norway", "Ian McNicoll, freshEHR Clinical Informatics, United Kingdom (Editor)", "Rowan Thomas, St. Vincent's Hospital Melbourne, Australia", "Richard Townley-O'Neill, NEHTA, Australia", "Dmitri Wall, Irish Skin Foundation, Ireland">
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"F8FF2EA17F5BEFFE9B34D39A16833E8A">
+		["build_uid"] = <"fd0fd490-a47e-4a2d-a52c-3dbfca53b88a">
+	>
+
+definition
+	CLUSTER[id1] matches {	-- Clock face anatomical location
+		items matches {
+			ELEMENT[id62] occurrences matches {0..1} matches {	-- Clock position
+				value matches {
+					DV_CODED_TEXT[id67] matches {
+						defining_code matches {[ac1]}		-- Clock position (synthesised)
+					}
+				}
+			}
+			ELEMENT[id66] occurrences matches {0..1} matches {	-- 12 o'clock reference point
+				value matches {
+					DV_TEXT[id68] 
+				}
+			}
+			ELEMENT[id24] occurrences matches {0..1} matches {	-- Description
+				value matches {
+					DV_TEXT[id69] 
+				}
+			}
+			allow_archetype CLUSTER[id55] matches {	-- Multimedia representation
+				include
+					archetype_id/value matches {/openEHR-EHR-CLUSTER\.multimedia(-[a-zA-Z0-9_]+)*\.v1/}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["ar-sy"] = <
+			["id1"] = <
+				text = <"*Clock face anatomical location(en)">
+				description = <"*A physical site on or within the human body that is described in terms of the position of the hour hand of a clock relative to a reference anatomical site which represents the 12 o'clock position on a clock face.(en)">
+			>
+			["id24"] = <
+				text = <"*Description(en)">
+				description = <"*Narrative description that can be used to further refine and support the relative location structured data.(en)">
+			>
+			["id55"] = <
+				text = <"*Cluster(en)">
+				description = <"**(en)">
+			>
+			["id62"] = <
+				text = <"*Clock position(en)">
+				description = <"*Identification of a single body site by describing it as a position of the hour hand with respect to another body site that represents the 12 o'clock position on a clock face.(en)">
+			>
+			["id66"] = <
+				text = <"*12 o'clock reference point(en)">
+				description = <"*Identification of a single body site which represents the 12 o'clock position on a imaginary clock face superimposed over the body site.(en)">
+			>
+			["at68"] = <
+				text = <"*One o'clock(en)">
+				description = <"*The body site is located at the one o'clock position relative to the identified reference point.(en)">
+			>
+			["at69"] = <
+				text = <"*Two o'clock(en)">
+				description = <"*The body site is located at the two o'clock position relative to the identified reference point.(en)">
+			>
+			["at70"] = <
+				text = <"*Three o'clock(en)">
+				description = <"*The body site is located at the three o'clock position relative to the identified reference point.(en)">
+			>
+			["at71"] = <
+				text = <"*Four o'clock(en)">
+				description = <"*The body site is located at the four o'clock position relative to the identified reference point.(en)">
+			>
+			["at72"] = <
+				text = <"*Five o'clock(en)">
+				description = <"*The body site is located at the five o'clock position relative to the identified reference point.(en)">
+			>
+			["at73"] = <
+				text = <"*Six o'clock(en)">
+				description = <"*The body site is located at the six o'clock position relative to the identified reference point.(en)">
+			>
+			["at74"] = <
+				text = <"*Seven o'clock(en)">
+				description = <"*The body site is located at the seven o'clock position relative to the identified reference point.(en)">
+			>
+			["at75"] = <
+				text = <"*Eight o'clock(en)">
+				description = <"*The body site is located at the eight o'clock position relative to the identified reference point.(en)">
+			>
+			["at76"] = <
+				text = <"*Nine o'clock(en)">
+				description = <"*The body site is located at the nine o'clock position relative to the identified reference point.(en)">
+			>
+			["at77"] = <
+				text = <"*Ten o'clock(en)">
+				description = <"*The body site is located at the ten o'clock position relative to the identified reference point.(en)">
+			>
+			["at78"] = <
+				text = <"*Eleven o'clock(en)">
+				description = <"*The body site is located at the eleven o'clock position relative to the identified reference point.(en)">
+			>
+			["at79"] = <
+				text = <"*Twelve o'clock(en)">
+				description = <"*The body site is located at the twelve o'clock position relative to the identified reference point.(en)">
+			>
+			["ac1"] = <
+				text = <"*Clock position(en) (synthesised)">
+				description = <"*Identification of a single body site by describing it as a position of the hour hand with respect to another body site that represents the 12 o'clock position on a clock face.(en) (synthesised)">
+			>
+		>
+		["sl"] = <
+			["id1"] = <
+				text = <"*Clock face anatomical location(en)">
+				description = <"*A physical site on or within the human body that is described in terms of the position of the hour hand of a clock relative to a reference anatomical site which represents the 12 o'clock position on a clock face.(en)">
+			>
+			["id24"] = <
+				text = <"*Description(en)">
+				description = <"*Narrative description that can be used to further refine and support the relative location structured data.(en)">
+			>
+			["id55"] = <
+				text = <"*Cluster(en)">
+				description = <"**(en)">
+			>
+			["id62"] = <
+				text = <"*Clock position(en)">
+				description = <"*Identification of a single body site by describing it as a position of the hour hand with respect to another body site that represents the 12 o'clock position on a clock face.(en)">
+			>
+			["id66"] = <
+				text = <"*12 o'clock reference point(en)">
+				description = <"*Identification of a single body site which represents the 12 o'clock position on a imaginary clock face superimposed over the body site.(en)">
+			>
+			["at68"] = <
+				text = <"*One o'clock(en)">
+				description = <"*The body site is located at the one o'clock position relative to the identified reference point.(en)">
+			>
+			["at69"] = <
+				text = <"*Two o'clock(en)">
+				description = <"*The body site is located at the two o'clock position relative to the identified reference point.(en)">
+			>
+			["at70"] = <
+				text = <"*Three o'clock(en)">
+				description = <"*The body site is located at the three o'clock position relative to the identified reference point.(en)">
+			>
+			["at71"] = <
+				text = <"*Four o'clock(en)">
+				description = <"*The body site is located at the four o'clock position relative to the identified reference point.(en)">
+			>
+			["at72"] = <
+				text = <"*Five o'clock(en)">
+				description = <"*The body site is located at the five o'clock position relative to the identified reference point.(en)">
+			>
+			["at73"] = <
+				text = <"*Six o'clock(en)">
+				description = <"*The body site is located at the six o'clock position relative to the identified reference point.(en)">
+			>
+			["at74"] = <
+				text = <"*Seven o'clock(en)">
+				description = <"*The body site is located at the seven o'clock position relative to the identified reference point.(en)">
+			>
+			["at75"] = <
+				text = <"*Eight o'clock(en)">
+				description = <"*The body site is located at the eight o'clock position relative to the identified reference point.(en)">
+			>
+			["at76"] = <
+				text = <"*Nine o'clock(en)">
+				description = <"*The body site is located at the nine o'clock position relative to the identified reference point.(en)">
+			>
+			["at77"] = <
+				text = <"*Ten o'clock(en)">
+				description = <"*The body site is located at the ten o'clock position relative to the identified reference point.(en)">
+			>
+			["at78"] = <
+				text = <"*Eleven o'clock(en)">
+				description = <"*The body site is located at the eleven o'clock position relative to the identified reference point.(en)">
+			>
+			["at79"] = <
+				text = <"*Twelve o'clock(en)">
+				description = <"*The body site is located at the twelve o'clock position relative to the identified reference point.(en)">
+			>
+			["ac1"] = <
+				text = <"*Clock position(en) (synthesised)">
+				description = <"*Identification of a single body site by describing it as a position of the hour hand with respect to another body site that represents the 12 o'clock position on a clock face.(en) (synthesised)">
+			>
+		>
+		["en"] = <
+			["id1"] = <
+				text = <"Clock face anatomical location">
+				description = <"A physical site on or within the human body that is described in terms of the position of the hour hand of a clock relative to a reference anatomical site which represents the 12 o'clock position on a clock face.">
+			>
+			["id24"] = <
+				text = <"Description">
+				description = <"Narrative description that can be used to further refine and support the relative location structured data.">
+			>
+			["id55"] = <
+				text = <"Multimedia representation">
+				description = <"Image or other media used to support identification of the location on the body.">
+			>
+			["id62"] = <
+				text = <"Clock position">
+				description = <"Identification of a single body site by describing it as a position of the hour hand with respect to another body site that represents the 12 o'clock position on a clock face.">
+			>
+			["id66"] = <
+				text = <"12 o'clock reference point">
+				description = <"Identification of a single body site which represents the 12 o'clock position on a imaginary clock face superimposed over the body site.">
+			>
+			["at68"] = <
+				text = <"One o'clock">
+				description = <"The body site is located at the one o'clock position relative to the identified reference point.">
+			>
+			["at69"] = <
+				text = <"Two o'clock">
+				description = <"The body site is located at the two o'clock position relative to the identified reference point.">
+			>
+			["at70"] = <
+				text = <"Three o'clock">
+				description = <"The body site is located at the three o'clock position relative to the identified reference point.">
+			>
+			["at71"] = <
+				text = <"Four o'clock">
+				description = <"The body site is located at the four o'clock position relative to the identified reference point.">
+			>
+			["at72"] = <
+				text = <"Five o'clock">
+				description = <"The body site is located at the five o'clock position relative to the identified reference point.">
+			>
+			["at73"] = <
+				text = <"Six o'clock">
+				description = <"The body site is located at the six o'clock position relative to the identified reference point.">
+			>
+			["at74"] = <
+				text = <"Seven o'clock">
+				description = <"The body site is located at the seven o'clock position relative to the identified reference point.">
+			>
+			["at75"] = <
+				text = <"Eight o'clock">
+				description = <"The body site is located at the eight o'clock position relative to the identified reference point.">
+			>
+			["at76"] = <
+				text = <"Nine o'clock">
+				description = <"The body site is located at the nine o'clock position relative to the identified reference point.">
+			>
+			["at77"] = <
+				text = <"Ten o'clock">
+				description = <"The body site is located at the ten o'clock position relative to the identified reference point.">
+			>
+			["at78"] = <
+				text = <"Eleven o'clock">
+				description = <"The body site is located at the eleven o'clock position relative to the identified reference point.">
+			>
+			["at79"] = <
+				text = <"Twelve o'clock">
+				description = <"The body site is located at the twelve o'clock position relative to the identified reference point.">
+			>
+			["ac1"] = <
+				text = <"Clock position (synthesised)">
+				description = <"Identification of a single body site by describing it as a position of the hour hand with respect to another body site that represents the 12 o'clock position on a clock face. (synthesised)">
+			>
+		>
+		["nb"] = <
+			["id1"] = <
+				text = <"*Clock face anatomical location(en)">
+				description = <"*A physical site on or within the human body that is described in terms of the position of the hour hand of a clock relative to a reference anatomical site which represents the 12 o'clock position on a clock face.(en)">
+			>
+			["id24"] = <
+				text = <"*Description(en)">
+				description = <"*Narrative description that can be used to further refine and support the relative location structured data.(en)">
+			>
+			["id55"] = <
+				text = <"*Cluster(en)">
+				description = <"**(en)">
+			>
+			["id62"] = <
+				text = <"*Clock position(en)">
+				description = <"*Identification of a single body site by describing it as a position of the hour hand with respect to another body site that represents the 12 o'clock position on a clock face.(en)">
+			>
+			["id66"] = <
+				text = <"*12 o'clock reference point(en)">
+				description = <"*Identification of a single body site which represents the 12 o'clock position on a imaginary clock face superimposed over the body site.(en)">
+			>
+			["at68"] = <
+				text = <"*One o'clock(en)">
+				description = <"*The body site is located at the one o'clock position relative to the identified reference point.(en)">
+			>
+			["at69"] = <
+				text = <"*Two o'clock(en)">
+				description = <"*The body site is located at the two o'clock position relative to the identified reference point.(en)">
+			>
+			["at70"] = <
+				text = <"*Three o'clock(en)">
+				description = <"*The body site is located at the three o'clock position relative to the identified reference point.(en)">
+			>
+			["at71"] = <
+				text = <"*Four o'clock(en)">
+				description = <"*The body site is located at the four o'clock position relative to the identified reference point.(en)">
+			>
+			["at72"] = <
+				text = <"*Five o'clock(en)">
+				description = <"*The body site is located at the five o'clock position relative to the identified reference point.(en)">
+			>
+			["at73"] = <
+				text = <"*Six o'clock(en)">
+				description = <"*The body site is located at the six o'clock position relative to the identified reference point.(en)">
+			>
+			["at74"] = <
+				text = <"*Seven o'clock(en)">
+				description = <"*The body site is located at the seven o'clock position relative to the identified reference point.(en)">
+			>
+			["at75"] = <
+				text = <"*Eight o'clock(en)">
+				description = <"*The body site is located at the eight o'clock position relative to the identified reference point.(en)">
+			>
+			["at76"] = <
+				text = <"*Nine o'clock(en)">
+				description = <"*The body site is located at the nine o'clock position relative to the identified reference point.(en)">
+			>
+			["at77"] = <
+				text = <"*Ten o'clock(en)">
+				description = <"*The body site is located at the ten o'clock position relative to the identified reference point.(en)">
+			>
+			["at78"] = <
+				text = <"*Eleven o'clock(en)">
+				description = <"*The body site is located at the eleven o'clock position relative to the identified reference point.(en)">
+			>
+			["at79"] = <
+				text = <"*Twelve o'clock(en)">
+				description = <"*The body site is located at the twelve o'clock position relative to the identified reference point.(en)">
+			>
+			["ac1"] = <
+				text = <"*Clock position(en) (synthesised)">
+				description = <"*Identification of a single body site by describing it as a position of the hour hand with respect to another body site that represents the 12 o'clock position on a clock face.(en) (synthesised)">
+			>
+		>
+	>
+	value_sets = <
+		["ac1"] = <
+			id = <"ac1">
+			members = <"at68", "at69", "at70", "at71", "at72", "at73", "at74", "at75", "at76", "at77", "at78", "at79">
+		>
+	>

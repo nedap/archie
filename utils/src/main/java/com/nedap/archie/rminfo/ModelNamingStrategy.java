@@ -12,6 +12,7 @@ import java.lang.reflect.Method;
  */
 public interface ModelNamingStrategy {
 
+    String getAttributeName(Method method);
     String getAttributeName(Field field);
     String getTypeName(Class clazz);
 

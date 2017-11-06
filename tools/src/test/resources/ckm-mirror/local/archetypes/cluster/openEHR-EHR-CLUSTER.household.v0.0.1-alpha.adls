@@ -1,0 +1,102 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated; uid=50c6369d-8b6e-449b-83af-ea3945189904)
+	openEHR-EHR-CLUSTER.household.v0.0.1-alpha
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Heather Leslie">
+		["organisation"] = <"Ocean Informatics">
+		["email"] = <"heather.leslie@oceaninformatics.com">
+		["date"] = <"2013-03-01">
+	>
+	original_namespace = <"org.openehr">
+	original_publisher = <"openEHR Foundation">
+	custodian_namespace = <"org.openehr">
+	custodian_organisation = <"openEHR Foundation">
+	copyright = <"© National E-Health Transition Authority, openEHR Foundation">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record a summary of the immediate social supports that would be availabe as a resource to the subject, focussing on the people and pets with whom the subject lives.">
+			use = <"Use to record a summary of the immediate social supports that would be availabe as a resource to the subject, focussing on the people and pets with whom the subject lives.
+
+Specifically designed to be used within the EVALUATION.social_summary archetype, but may be used within any clinically appropriate ENTRY or CLUSTER archetype related to recording social context.">
+			keywords = <"family", "friends">
+			misuse = <"">
+		>
+	>
+	references = <
+		["1"] = <"Derived from: Household, Draft Archetype [Internet]. Australian Digital Health Agency, Australian Digital Health Agency Clinical Knowledge Manager [cited: 2017-03-13]. Available from: http://dcm.nehta.org.au/ckm/#showArchetype_1013.1.926">
+		["2"] = <"METeOR (Metadata Online Registry) [Internet]. Australia: Australian Institute of Health and Welfare. Person—living arrangement. Available from: http://meteor.aihw.gov.au/content/index.phtml/itemId/299712 (accessed 2013 Mar 01).">
+		["3"] = <"METeOR (Metadata Online Registry) [Internet]. Australia: Australian Institute of Health and Welfare. Household—household composition. Available from: http://meteor.aihw.gov.au/content/index.phtml/itemId/301755 (accessed 2013 Mar 01).">
+		["4"] = <"METeOR (Metadata Online Registry) [Internet]. Australia: Australian Institute of Health and Welfare. Household—household type. Available from: http://meteor.aihw.gov.au/content/index.phtml/itemId/351188 (accessed 2013 Mar 01).">
+	>
+	other_details = <
+		["current_contact"] = <"Heather Leslie, Ocean Informatics, heather.leslie@oceaninformatics.com">
+		["MD5-CAM-1.0.1"] = <"47BCB1DC449CC5851B6F1F439D767D94">
+		["build_uid"] = <"9fdd67dc-5171-4edd-8cb0-e336bc2ce376">
+	>
+
+definition
+	CLUSTER[id1] matches {	-- Household
+		items matches {
+			ELEMENT[id2] occurrences matches {0..1} matches {	-- Category
+				value matches {
+					DV_TEXT[id8] 
+				}
+			}
+			ELEMENT[id3] occurrences matches {0..1} matches {	-- Description
+				value matches {
+					DV_TEXT[id9] 
+				}
+			}
+			ELEMENT[id4] occurrences matches {0..1} matches {	-- All Occupants
+				value matches {
+					DV_COUNT[id10] 
+				}
+			}
+			ELEMENT[id5] occurrences matches {0..1} matches {	-- Dependents
+				value matches {
+					DV_COUNT[id11] 
+				}
+			}
+			ELEMENT[id7] occurrences matches {0..1} matches {	-- Children Under 5 years
+				value matches {
+					DV_COUNT[id12] 
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Household">
+				description = <"Summary of the people and pets with whom the subject lives.">
+			>
+			["id2"] = <
+				text = <"Category">
+				description = <"Categorisation of a household based on those residing in the same dwelling and making common provision for living.">
+			>
+			["id3"] = <
+				text = <"Description">
+				description = <"Narrative description about the household members.">
+			>
+			["id4"] = <
+				text = <"All Occupants">
+				description = <"Total number of people living in the household.">
+			>
+			["id5"] = <
+				text = <"Dependents">
+				description = <"Number of dependents of this subject in the household.">
+			>
+			["id7"] = <
+				text = <"Children Under 5 years">
+				description = <"Number of children under the age of 5 years in the household.">
+			>
+		>
+	>

@@ -161,4 +161,31 @@ public class CAttributeTuple extends CSecondOrder<CAttribute> {
     public List<String> getMemberNames() {
         return getMembers().stream().map((attr) -> attr.getRmAttributeName()).collect(Collectors.toList());
     }
+
+    public boolean cConformsTo(CAttributeTuple otherTuple, ModelInfoLookup lookup) {
+        return allTuplesConform(otherTuple, lookup) ||  isSubset(otherTuple);
+    }
+
+    /**
+     * Return true if and only if the other tuple is a subset of the exact same tuples as this.
+     * @param otherTuple
+     * @return
+     */
+
+    private boolean isSubset(CAttributeTuple otherTuple) {
+        return getTuples().size() < otherTuple.getTuples().size() &&
+                getTuples().stream().allMatch((primitiveTuple) ->
+                        otherTuple.getTuples().stream().anyMatch((otherPrimitiveTuple) -> otherPrimitiveTuple.cCongruentTo(primitiveTuple)));
+    }
+
+    /**
+     * Return true if all of the tuples of this object conform to the tuples of the other object
+     * @param otherTuple
+     * @param lookup
+     * @return
+     */
+    private boolean allTuplesConform(CAttributeTuple otherTuple, ModelInfoLookup lookup) {
+        return this.getTuples().stream().allMatch((primitiveTuple) ->
+                otherTuple.getTuples().stream().anyMatch((otherPrimitiveTuple) -> otherPrimitiveTuple.cConformsTo(primitiveTuple, lookup)));
+    }
 }

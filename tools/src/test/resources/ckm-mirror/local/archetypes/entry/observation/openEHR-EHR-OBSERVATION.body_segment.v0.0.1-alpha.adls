@@ -1,0 +1,702 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated; uid=bdd095cc-2c56-45d5-8a2c-cfc9fabc2af0)
+	openEHR-EHR-OBSERVATION.body_segment.v0.0.1-alpha
+
+language
+	original_language = <[ISO_639-1::en]>
+	translations = <
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			author = <
+				["name"] = <"Micaela Thierley, Gro-Hilde Ulriksen">
+				["organisation"] = <"Helse Bergen seksjon for e-helse, NSE">
+				["email"] = <"micaela.thierley@helse-bergen.no">
+			>
+			accreditation = <"MD, nephrologist">
+		>
+		["pt-br"] = <
+			language = <[ISO_639-1::pt-br]>
+			author = <
+				["name"] = <"Fernanda Maia; Debora Farage">
+				["organisation"] = <"Core Consulting">
+				["email"] = <"contato@coreconsulting.com.br">
+			>
+			accreditation = <"Hospital Alemão Oswaldo Cruz">
+		>
+	>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Heather Leslie">
+		["organisation"] = <"Ocean Informatics">
+		["email"] = <"heather.leslie@oceaninformatics.com">
+		["date"] = <"2014-07-30">
+	>
+	original_namespace = <"org.openehr">
+	original_publisher = <"openEHR Foundation">
+	custodian_namespace = <"org.openehr">
+	custodian_organisation = <"openEHR Foundation">
+	copyright = <"© openEHR Foundation">
+	licence = <"This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 License. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/.">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record measurements of parts or regions of the human body, including the head, limbs and torso.">
+			use = <"Use to record measurements of parts or regions of the human body, including the head, limbs and torso.
+
+Use to provide insight into the shape and proportions of an individual's body, usually for purposes of clinical or anthropometric assessment.
+
+The names of the 'Length', 'Circumference', 'Area' and 'Height' measurements have been designed to utilise run-time name constraints which allows for selection of a named body segment to be specified either in a template or at run-time. This archetype contains a number of named measurements modelled as run-time name constraints, but this is not yet a complete list and it is anticipated that the number of measurements will increase over time as additional requirements are identified.
+
+The 'Unspecified Measure' and 'Unspecified Area' data elements have been included to allow for representation of any and all body segment measures, especially where the required measurement has not been included in the run-time name constraints for 'Length', 'Circumference', 'Area' and 'Height' measurements, above. In addition, these less specified data elements allow addiitonal flexibility by enabling naming to occur in templates and at run-time, or through binding to an external terminology, if this is preferred.">
+			keywords = <"anthropometry", "measurement", "estimation", "length", "height", "area", "circumference", "girth">
+			misuse = <"Not to be used to record ubiquitous clinical measurements which have their own specific archetypes:
+- the entire height or length of person - use OBSERVATION.height for this purpose.
+- the weight of the whole body - use OBSERVATION.body_weight for this purpose.
+- the circumference of a head - use OBSERVATION.head_circumference for this purpose.
+- the circumference of the waist - use OBSERVATION.waist_circumference for this purpose.
+- the circumference of the hips - use OBSERVATION.hip_circumference for this purpose.
+- the circumference of the chest - use OBSERVATION.chest_circumference for this purpose.
+
+Not to be used to record the weight of a or a part of the body.
+Not to be used to record the dimensions of an internal body organ or a lesion.
+Not to be used to record skinfold measurements - use archetypes specific for this purpose.">
+		>
+		["pt-br"] = <
+			language = <[ISO_639-1::pt-br]>
+			purpose = <"Gravar medidas de partes ou regiões do corpo humano, incluindo a cabeça, membros e tronco.">
+			use = <"Utilizado para gravar medidas de partes ou regiões do corpo humano, incluindo a cabeça, membros e tronco.
+
+Utilizado para dar uma ideia do formato e proporções do corpo de um indivíduo, geralmente com propósitos clínicos ou antropométricos. 
+
+Os nomes das medidas \"Comprimento\", \"Circunferência\", \"Área\" e \"Altura\" foram construídos para utilização como lista restrita que permite a seleção de um determinado segmento corporal a ser especificado em um \"template\" ou na lista. Este arquétipo contém o número de medidas modeladas como uma lista restrita, mas que ainda não é uma lista completa e já é de conhecimento prévio que o número de medidas irá crescer com o tempo conforme requisitos adicionais são identificados.
+
+Os elementos de informação \"Medida não especificada\" e \"Área não especificada\" foram incluídos para permitir a representação de toda e qualquer medida de segmentos corporais, especialmente onde a medida requerida não foi incluída na lista restrita para medidas de \"Comprimento\", \"Circunferência\", \"Área\" e \"Altura\" acima. Adicionalmente, essas informações menos especificadas permitem uma flexibilidade adicional por proporcionar que a nomenclatura ocorra em \"templates\" e em lista restrita, ou através de uma conexão a uma terminologia externa, se for preferível.
+
+">
+			keywords = <"antropometria", "medição", "estimativa", "comprimento", "altura", "área", "circunferência", "perímetro">
+			misuse = <"Não é para ser utilizado para gravar medidas clínicas gerais que contém seus próprios arquétipos específicos:
+- a altura ou comprimento total do indivíduo - use \"OBSERVATION.height\" para este propósito.
+- o peso corporal total - use \"OBSERVATION.body_weight\" para este propósito.
+- o perímetro cefálico - use \"OBSERVATION.head_circumference\" para este propósito.
+Não é para ser utilizado para gravar o peso do corpo ou de uma parte do corpo.
+Não é para ser utilizado para gravar as dimensões de um órgão interno ou uma lesão.
+Não é para ser utilizado para gravar medidas de dobras cutâneas - use arquétipos específicos para este propósito.">
+		>
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			purpose = <"For å registrere målinger av deler eller områder på menneskekroppen, inkludert hodet, ekstremiteter og torso.">
+			use = <"Brukes for å registrere målinger av deler eller områder på menneskekroppen, inkludert hodet, ekstremiteter og torso. 
+
+Brukes for å gi innsikt om formen og proporsjonene av et individs kropp, vanligvis for kliniske eller antropometriske vurderinger. 
+
+Benevningene \"Lengde\", \"Omkrets\", \"Areal\" og \"Høyde\"har vært brukt for å lage begrensninger (run-time name constraints) på navnet til det spesifikke kroppssegmentet som måles, noe som tillater at et utvalg av navngitte kroppssegment spesifiseres i et templat eller i applikasjonen. Denne arketypen inneholder et ufullstending antall navngitte målevariabler modellert som begrensniger (run-time name constraints) i applikasjoner. Listen med målevariabler er forventet å øke over tid ettersom det identifiseres flere krav til målingene.
+
+Dataelementene for \"Uspesifisert måling\" og \"Uspesifisert areal\" er tatt med for å inkludere representasjon av alle mulige kroppssegmentsmålinger. Dette gjelder spesielt der den nødvendige målingen ikke er inkludert i navnebegrensingene (run-time name constraint) for \"Lengde\", \"Omkrets\", \"Areal\" og \"Høydemålinger\" over. I tillegg vil disse mindre spesifiserte dataelementene tillate ytterligere fleksibilitet ved å gjøre det mulig å endre navn på dataelementene i templater og i applikasjoner, eller gjennom knytninger til eksterne terminologier, der dette er foretrukket.">
+			keywords = <"antropometri", "måling", "estimering", "lengde", "høyde", "område", "omkrets", "omfang">
+			misuse = <"Skal ikke brukes til å registrere allment utbredte kliniske målinger, disse har sine egne spesifikke arketyper: 
+- bruk OBSERVATION.height for for å måle en persons totale høyde eller lengde.
+- bruk OBSERVATION.body_weight for å registrere kroppsvekt.
+- bruk OBSERVATION.head_circumference for å måle hodeomkrets.
+- bruk OBSERVATION.waist_circumference for å måle midjeomkrets.
+- bruk OBSERVATION.hip_circumference for å måle hofteomkrets.
+- bruk OBSERVATION.chest_circumference for å måle brystomkrets.
+
+Skal ikke brukes til å registrere vekten av hele eller en del av kroppen.
+Skal ikke brukes til å registrere dimensjonene på et indre organ eller en lesjon/skade.
+Skal ikke brukes til å registrere målinger av hudfolder - bruk arketyper spesifikke for dette formålet.">
+		>
+	>
+	other_contributors = <"Silje Ljosland Bakke, Nasjonal IKT HF, Norway (openEHR Editor)", "Heather Leslie, Ocean Health Systems, Australia (openEHR Editor)", "Ian McNicoll, freshEHR Clinical Informatics, United Kingdom (openEHR Editor)", "Micaela Thierley, Helse Bergen, Norway">
+	references = <
+		["1"] = <"National Health and Nutrition Examination Survey (NHANES) Anthropometry Procedures Manual [Internet]. Centers for Disease Control and Prevention; 2009 (cited 2014 Jul 30). Available from: http://www.cdc.gov/nchs/data/nhanes/nhanes_09_10/BodyMeasures_09.pdf.">
+		["2"] = <"Marfell-Jones, M. Kinanthropometric Assessement [Internet] (cited 2014 Jul 30). Available from: http://www.ljmu.ac.uk/ecl/ecl_docs/2.08_kinanthreometric_asses.pdf..">
+		["3"] = <"International Standards for Anthropometric Assessment [Internet]. International Society for the Advancement of Kinanthropometry; South Australia, 2001 (cited 2014 Jul 30). Available from: http://www.ceap.br/material/MAT17032011184632.pdf.">
+		["4"] = <"Man-Systems Integration Standards: Volume 1 - Standards; Section 3 - Anthropometry and Biomechanics [Internet]. National Aeronautics and Space Administration (cited 2014 Jul 30). Available from: http://msis.jsc.nasa.gov/sections/section03.htm.">
+	>
+	other_details = <
+		["current_contact"] = <"Heather Leslie, Ocean Informatics, Australia, heather.leslie@oceaninformatics.com">
+		["MD5-CAM-1.0.1"] = <"279B4F66EB1005AEEBCE740418A60B13">
+		["build_uid"] = <"4fffed48-9ef8-4b5a-98ae-6401ed2f327d">
+	>
+
+definition
+	OBSERVATION[id1] matches {	-- Measurement of Body Segment
+		data matches {
+			HISTORY[id2] matches {
+				events cardinality matches {1..*; unordered} matches {
+					EVENT[id3] occurrences matches {0..1} matches {	-- Any event
+						data matches {
+							ITEM_TREE[id4] matches {
+								items matches {
+									ELEMENT[id5] matches {	-- Length
+										name matches {
+											DV_CODED_TEXT[id30] matches {
+												defining_code matches {[ac1]}		-- Length (synthesised)
+											}
+										}
+										value matches {
+											DV_QUANTITY[id31] matches {
+												property matches {[at23]}
+												[magnitude, units, precision] matches {
+													[{|>=0.0|}, {"cm"}, {1}],
+													[{|>=0.0|}, {"mm"}, {0}],
+													[{|>=0.0|}, {"[in_i]"}, {1}]
+												}
+											}
+										}
+									}
+									ELEMENT[id17] matches {	-- Circumference
+										name matches {
+											DV_CODED_TEXT[id32] matches {
+												defining_code matches {[ac2]}		-- Circumference (synthesised)
+											}
+										}
+										value matches {
+											DV_QUANTITY[id33] matches {
+												property matches {[at23]}
+												[magnitude, units, precision] matches {
+													[{|>=0.0|}, {"cm"}, {1}],
+													[{|>=0.0|}, {"mm"}, {0}],
+													[{|>=0.0|}, {"[in_i]"}, {1}]
+												}
+											}
+										}
+									}
+									ELEMENT[id13] matches {	-- Area
+										name matches {
+											DV_CODED_TEXT[id34] matches {
+												defining_code matches {[ac3]}		-- Area (synthesised)
+											}
+										}
+										value matches {
+											DV_QUANTITY[id35] matches {
+												property matches {[at24]}
+												[magnitude, units, precision] matches {
+													[{|>=0.0|}, {"cm2"}, {1}],
+													[{|>=0.0|}, {"mm2"}, {0}],
+													[{|>=0.0|}, {"[sin_i]"}, {1}]
+												}
+											}
+										}
+									}
+									ELEMENT[id14] matches {	-- Height
+										name matches {
+											DV_CODED_TEXT[id36] matches {
+												defining_code matches {[ac4]}		-- Height (synthesised)
+											}
+										}
+										value matches {
+											DV_QUANTITY[id37] matches {
+												property matches {[at23]}
+												[magnitude, units, precision] matches {
+													[{|>=0.0|}, {"cm"}, {1}],
+													[{|>=0.0|}, {"mm"}, {0}],
+													[{|>=0.0|}, {"[in_i]"}, {1}]
+												}
+											}
+										}
+									}
+									ELEMENT[id27] matches {	-- Unspecified Measure
+										value matches {
+											DV_QUANTITY[id38] matches {
+												property matches {[at23]}
+												[magnitude, units, precision] matches {
+													[{|>=0.0|}, {"cm"}, {1}],
+													[{|>=0.0|}, {"mm"}, {0}],
+													[{|>=0.0|}, {"[in_i]"}, {1}]
+												}
+											}
+										}
+									}
+									ELEMENT[id28] matches {	-- Unspecified Area
+										value matches {
+											DV_QUANTITY[id39] matches {
+												property matches {[at24]}
+												[magnitude, units, precision] matches {
+													[{|>=0.0|}, {"cm2"}, {1}],
+													[{|>=0.0|}, {"mm2"}, {0}],
+													[{|>=0.0|}, {"[sin_i]"}, {2}]
+												}
+											}
+										}
+									}
+									ELEMENT[id26] matches {	-- Comment
+										value matches {
+											DV_TEXT[id40] 
+										}
+									}
+								}
+							}
+						}
+					}
+					INTERVAL_EVENT[id12] occurrences matches {0..1} matches {	-- Average measurement
+						math_function matches {
+							DV_CODED_TEXT[id41] matches {
+								defining_code matches {[at25]}
+							}
+						}
+						data matches {
+							use_node ITEM_TREE[id42] /data[id2]/events[id3]/data[id4]	-- /data[id2]/events[Any event]/data[id4]
+						}
+					}
+					INTERVAL_EVENT[id23] occurrences matches {0..1} matches {	-- Difference
+						math_function matches {
+							DV_CODED_TEXT[id43] matches {
+								defining_code matches {[at26]}
+							}
+						}
+						data matches {
+							use_node ITEM_TREE[id44] /data[id2]/events[id3]/data[id4]	-- /data[id2]/events[Any event]/data[id4]
+						}
+					}
+				}
+			}
+		}
+		protocol matches {
+			ITEM_TREE[id24] matches {
+				items matches {
+					allow_archetype CLUSTER[id25] matches {	-- Measuring Device
+						include
+							archetype_id/value matches {/openEHR-EHR-CLUSTER\.device(-[a-zA-Z0-9_]+)*\.v1/}
+					}
+					allow_archetype CLUSTER[id29] matches {	-- Extension
+						include
+							archetype_id/value matches {/.*/}
+					}
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Measurement of Body Segment">
+				description = <"Measurment of the length, circumference, area or height of an identified body part, using a standardised procedure.">
+			>
+			["id3"] = <
+				text = <"Any event">
+				description = <"Default, unspecified point in time or interval event which may be explicitly defined in a template or at run-time.">
+			>
+			["id5"] = <
+				text = <"Length">
+				description = <"Distance between two specified anatomical locations of an identified body part.">
+			>
+			["at6"] = <
+				text = <"Left Upper Arm Length">
+				description = <"Distance between the acromion process of the left scapula to the tip of the left olecranon, over the posterior surface of the upper arm.">
+			>
+			["at7"] = <
+				text = <"Left Upper Leg Length">
+				description = <"Distance between the left inguinal crease to the proximal border of the left patella, over the anterior surface of the left thigh, performed with the individual sitting.">
+			>
+			["at8"] = <
+				text = <"Right Upper Leg Length">
+				description = <"Distance between the right inguinal crease to the proximal border of the right patella, over the anterior surface of the right thigh, performed with the individual sitting.">
+			>
+			["at9"] = <
+				text = <"Right Upper Arm Length">
+				description = <"Distance between the acromion process of the right scapula to the tip of the right olecranon, over the posterior surface of the upper arm.">
+			>
+			["at10"] = <
+				text = <"Right Leg Length">
+				description = <"Distance between the right anterior superior iliac spine (ASIS) and the right medial malleolus.">
+			>
+			["id12"] = <
+				text = <"Average measurement">
+				description = <"Average measurement of all point in time 'Any Event' recordings. In anthropometric assessments, it is common for multiple readings to be taken and the average recorded.">
+			>
+			["id13"] = <
+				text = <"Area">
+				description = <"Calculated area of an identified region or body segment.">
+			>
+			["id14"] = <
+				text = <"Height">
+				description = <"Height of an identified body part from a fixed object.">
+			>
+			["at15"] = <
+				text = <"Sitting Height">
+				description = <"Vertical distance between the sitting surface and the vertex of the head. A measure of trunk length, performed with the individual sitting erect.">
+			>
+			["at16"] = <
+				text = <"Crown-Rump Length">
+				description = <"Distance between vertex of head to the lowest part of the trunk, usually the perineum or lowest surface of the buttock. A measure of trunk length, usually conducted on infants under 2 years of age, performed with the individual lying supine.">
+			>
+			["id17"] = <
+				text = <"Circumference">
+				description = <"Distance around the girth of an identified body part at a specified anatomical location.">
+			>
+			["at18"] = <
+				text = <"Left Upper Arm Circumference (UAC)">
+				description = <"Measurement of the girth of the left upper arm at the mid point between the acromion process of the scapula and the olecranon process of the ulna. Also referred to as Mid-Upper Arm Circumference (MUAC).">
+			>
+			["at19"] = <
+				text = <"Left Mid-Upper Arm Muscle Area (MUAMA)">
+				description = <"Estimation of the area of the left upper arm, derived from the measurement of the upper arm circumference.">
+			>
+			["at20"] = <
+				text = <"Right Mid-Upper Arm Muscle Area (MUAMA)">
+				description = <"Estimation of the area of the right upper arm, derived from the measurement of the upper arm circumference.">
+			>
+			["at21"] = <
+				text = <"Left Leg Length">
+				description = <"Distance between the left anterior superior iliac spine (ASIS) and the left medial malleolus.">
+			>
+			["at22"] = <
+				text = <"Right Upper Arm Circumference (UAC)">
+				description = <"Measurement of the girth of the right upper arm at the mid point between the acromion process of the scapula and the olecranon process of the ulna. Also referred to as Mid-Upper Arm Circumference (MUAC).">
+			>
+			["id23"] = <
+				text = <"Difference">
+				description = <"Record the difference between two measurements of body segments. For example: a leg length discrepancy between left and right sides. May be a positive or negative number.">
+			>
+			["id25"] = <
+				text = <"Measuring Device">
+				description = <"Details of the device used for measuring the body part.">
+			>
+			["id26"] = <
+				text = <"Comment">
+				description = <"Additional narrative about the measurements, not captured in the measurement data elements.">
+			>
+			["id27"] = <
+				text = <"Unspecified Measure">
+				description = <"Distance between two specified anatomical locations (length), and anotomical location and a fixed object (height), or the girth of a body part (circumference).">
+			>
+			["id28"] = <
+				text = <"Unspecified Area">
+				description = <"Calculated area of an region of the body.">
+			>
+			["id29"] = <
+				text = <"Extension">
+				description = <"Additional information required to capture local content or to align with other reference models/formalisms.">
+			>
+			["at23"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at24"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at25"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at26"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["ac1"] = <
+				text = <"Length (synthesised)">
+				description = <"Distance between two specified anatomical locations of an identified body part. (synthesised)">
+			>
+			["ac2"] = <
+				text = <"Circumference (synthesised)">
+				description = <"Distance around the girth of an identified body part at a specified anatomical location. (synthesised)">
+			>
+			["ac3"] = <
+				text = <"Area (synthesised)">
+				description = <"Calculated area of an identified region or body segment. (synthesised)">
+			>
+			["ac4"] = <
+				text = <"Height (synthesised)">
+				description = <"Height of an identified body part from a fixed object. (synthesised)">
+			>
+		>
+		["pt-br"] = <
+			["id1"] = <
+				text = <"Medição do segmento corporal">
+				description = <"Medição do comprimento, circunferência, área ou altura de uma determinada parte do corpo, utilizando um procedimento padrão.">
+			>
+			["id3"] = <
+				text = <"Um ponto em qualquer lugar no tempo">
+				description = <"Padrão, um ponto não especificado no tempo o qual pode estar explicitamente definido em um \"template\" ou em uma lista restrita.">
+			>
+			["id5"] = <
+				text = <"Comprimento">
+				description = <"Distância entre duas localizações anatômicas específicas em uma determinada parte do corpo humano.">
+			>
+			["at6"] = <
+				text = <"Comprimento do braço esquerdo">
+				description = <"Distância entre o processo acromial da escápula esquerda e a ponta do olécrano esquerdo, sobre a superfície posterior do braço.">
+			>
+			["at7"] = <
+				text = <"Comprimento da coxa esquerda">
+				description = <"Distância entre a dobra inguinal esquerda à borda proximal da patela esquerda, sobre a superfície da coxa esquerda, realizada com o indivíduo sentado.">
+			>
+			["at8"] = <
+				text = <"Comprimento da coxa direita">
+				description = <"Distância entre a dobra inguinal direita à borda proximal da patela direita, sobre a superfície da coxa direita, realizada com o indivíduo sentado.">
+			>
+			["at9"] = <
+				text = <"Comprimento do braço direito">
+				description = <"Distância entre o processo acromial da escápula direita e a ponta do olécrano direito, sobre a superfície posterior do braço.">
+			>
+			["at10"] = <
+				text = <"Comprimento da perna direita">
+				description = <"Distância entre a espinha ilíaca ântero-posterior (ASIS) e o maléolo medial direito.">
+			>
+			["id12"] = <
+				text = <"Medição média">
+				description = <"Medição média de todos os pontos nas gravações de \"qualquer evento\" no tempo. Em investigações antropométricas, é comum que múltiplas aferições sejam medidas e a média gravada.">
+			>
+			["id13"] = <
+				text = <"Àrea">
+				description = <"Cálculo da área de uma determinada região ou segmento corporal.">
+			>
+			["id14"] = <
+				text = <"Altura">
+				description = <"Altura de uma determinada parte do corpo a partir de um objeto fixo.">
+			>
+			["at15"] = <
+				text = <"Altura sentado">
+				description = <"Distância vertical entre a superfície do assento e do vértice da cabeça. Uma medida do comprimento do tronco, realizada com o indivíduo sentado ereto.">
+			>
+			["at16"] = <
+				text = <"Comprimento crânio-sacral">
+				description = <"Distância entre o vértice da cabeça à parte mais baixa do tronco, geralmente o períneo ou a superfície mais baixa dos glúteos. Uma medida do comprimento do tronco, geralmente conduzida em crianças abaixo de 2 anos de idade, realizada com o indivíduo na posição de decúbito dorsal.">
+			>
+			["id17"] = <
+				text = <"Circunferência">
+				description = <"Distância em volta do perímetro de uma localização anatômica específica de uma determinada parte do corpo humano.">
+			>
+			["at18"] = <
+				text = <"Circunferência do braço esquerdo">
+				description = <"Medição do perímetro do braço esquerdo do ponto medial entre o processo acromial da escápula e o processo do olécrano da ulna. Também referido como perímetro braquial.">
+			>
+			["at19"] = <
+				text = <"Área muscular medial do braço esquerdo">
+				description = <"Estimativa da área do braço esquerdo, derivada da medição da circunferência do braço.">
+			>
+			["at20"] = <
+				text = <"Área muscular medial do braço direito">
+				description = <"Estimativa da área do braço direito, derivada da medição da circunferência do braço.">
+			>
+			["at21"] = <
+				text = <"Comprimento da perna esquerda">
+				description = <"Distância entre a espinha ilíaca ântero-posterior (ASIS) e o maléolo medial esquerdo.">
+			>
+			["at22"] = <
+				text = <"Circunferência do braço direito">
+				description = <"Medição do perímetro do braço direito do ponto medial entre o processo acromial da escápula e o processo do olécrano da ulna. Também referido como perímetro braquial.">
+			>
+			["id23"] = <
+				text = <"Diferença">
+				description = <"Grava a diferença entre duas medições de segmentos corporais. Por exemplo: uma discrepância entre comprimento das pernas direita e esquerda. Pode ser um número positivo ou negativo.">
+			>
+			["id25"] = <
+				text = <"Dispositivo de medição">
+				description = <"Detalhes do dispositivo utilizado para medir a parte do corpo.">
+			>
+			["id26"] = <
+				text = <"Comentário">
+				description = <"Narrativa adicional sobre as medidas, não capturadas nas medidas dos elementos de informação.">
+			>
+			["id27"] = <
+				text = <"Medida não especificada">
+				description = <"Distância entre duas localizações anatômicas específicas (comprimento), e uma localização anatômica e um objeto fixo (altura), ou perímetro de uma parte do corpo (circunferência).">
+			>
+			["id28"] = <
+				text = <"Área não especificada">
+				description = <"Cálculo da área de uma região do corpo.">
+			>
+			["id29"] = <
+				text = <"*Extension(en)">
+				description = <"*Additional information required to capture local content or to align with other reference models/formalisms.(en)">
+			>
+			["at23"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at24"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at25"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at26"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["ac1"] = <
+				text = <"Comprimento (synthesised)">
+				description = <"Distância entre duas localizações anatômicas específicas em uma determinada parte do corpo humano. (synthesised)">
+			>
+			["ac2"] = <
+				text = <"Circunferência (synthesised)">
+				description = <"Distância em volta do perímetro de uma localização anatômica específica de uma determinada parte do corpo humano. (synthesised)">
+			>
+			["ac3"] = <
+				text = <"Àrea (synthesised)">
+				description = <"Cálculo da área de uma determinada região ou segmento corporal. (synthesised)">
+			>
+			["ac4"] = <
+				text = <"Altura (synthesised)">
+				description = <"Altura de uma determinada parte do corpo a partir de um objeto fixo. (synthesised)">
+			>
+		>
+		["nb"] = <
+			["id1"] = <
+				text = <"Måling av kroppssegment">
+				description = <"Bruk av en standard prosedyre for måling av lengden, omkretsen, arealet eller høyden av en definert kroppsdel.">
+			>
+			["id3"] = <
+				text = <"Uspesifisert hendelse">
+				description = <"Standard, uspesifisert tidspunkt eller tidsintervall som kan defineres mer eksplisitt i en template eller i en applikasjon.">
+			>
+			["id5"] = <
+				text = <"Lengde">
+				description = <"Avstand mellom to spesifiserte anatomiske steder på en definert kroppsdel​​.">
+			>
+			["at6"] = <
+				text = <"Lengden av venstre overarm">
+				description = <"Avstanden mellom venstre akromion (fremspring på skulderblad) til spissen av venstre olecranon (albuespiss), målt på baksiden av overarmen.">
+			>
+			["at7"] = <
+				text = <"Lengden av venstre lår">
+				description = <"Avstanden fra venstre lyskefold til den proksimale kant av venstre kneskål, måles på forsiden av venstre lår, måling gjøres mens individet sitter.">
+			>
+			["at8"] = <
+				text = <"Lengden av høyre lår">
+				description = <"Avstanden fra høyre lyskefold til den proksimale kant av høyre kneskål, måles på forsiden av høyre lår, måling gjøres mens individet sitter.">
+			>
+			["at9"] = <
+				text = <"Lengden av høyre overarm">
+				description = <"Avstanden mellom høyre akromion (fremspring på skulderblad) til spissen av høyre olecranon (albuespiss), målt på baksiden av overarmen.">
+			>
+			["at10"] = <
+				text = <"Lengden av høyre ben">
+				description = <"Avstanden mellom høyre fremre hoftespiss (spina iliaca anterior superior) og høyre mediale malleol.">
+			>
+			["id12"] = <
+				text = <"Gjennomsnittsmåling">
+				description = <"Gjennomsnitt av alle registrerte målinger ved uspesifikke hendelser. Som regel gjøres det flere målinger under antropometriske vurderinger og gjennomsnittet registreres.">
+			>
+			["id13"] = <
+				text = <"Område">
+				description = <"Beregnet areal av et definert område eller kroppssegment.">
+			>
+			["id14"] = <
+				text = <"Høyde">
+				description = <"Høyde på en kroppsdel målt ​​fra et fast punkt.">
+			>
+			["at15"] = <
+				text = <"Sittende høyde">
+				description = <"Vertikal avstand mellom sitteflaten og toppen av hodet. Måling av overkroppens lengde mens en person sitter med rak rygg.">
+			>
+			["at16"] = <
+				text = <"Isse-sete lengde">
+				description = <"Avstanden mellom toppen av hodet til den nederste delen av overkroppen, vanligvis perineum eller laveste del av rumpeballen. Isse-sete lengde måles vanligvis på spedbarn under 2 år, mens de ligger på rygg.">
+			>
+			["id17"] = <
+				text = <"Omkrets">
+				description = <"Omkrets rundt en bestemt kroppsdel på et spesifikt anatomisk sted.">
+			>
+			["at18"] = <
+				text = <"Omkrets av venstre overarm">
+				description = <"Måling av omkrets av venstre overarm ved midtpunktet mellom akromion (fremspring på skulderblad) skulderbladet og ned til olecranon (albuespissen). Benevnes også som midt overarmsomkrets (MUAC).">
+			>
+			["at19"] = <
+				text = <"Venstre midt- overarmmuskelområde">
+				description = <"Estimering av venstre overarmsområde, utledet fra måling av overarmens omkrets.">
+			>
+			["at20"] = <
+				text = <"Høyre midt- overarmmuskelområde">
+				description = <"Estimering av venstre overarmsområde, utledet fra måling av overarmens omkrets.">
+			>
+			["at21"] = <
+				text = <"Lengden av venstre ben">
+				description = <"Avstanden mellom venstre fremre hoftespiss (spina iliaca anterior superior) og venstre mediale malleol.">
+			>
+			["at22"] = <
+				text = <"Omkrets av høyre overarm">
+				description = <"Måling av omkrets av høyre overarm ved midtpunktet mellom akromion (fremspring på skulderblad) og skulderbladet og ned til olecranon (albuespiss). Også referert til som midt overarmsomkrets (MUAC).">
+			>
+			["id23"] = <
+				text = <"Differanse">
+				description = <"Registrering av differansen mellom to målinger. For eksempel avvik i lengde mellom høyre og venstre fot. Kan være et positivt eller negativt tall.">
+			>
+			["id25"] = <
+				text = <"Måleinstrument">
+				description = <"Detaljer om måleinstrumentet som ble brukt.">
+			>
+			["id26"] = <
+				text = <"Kommentar">
+				description = <"Tilleggsinformasjon om målingene som ikke fanges opp i dataelementene for måling">
+			>
+			["id27"] = <
+				text = <"Uspesifisert måling">
+				description = <"Astanden mellom to spesifiserte anatomiske steder (lengde), og anatomisk plassering i forhold til et fast objekt (høyde), eller omkrets av en kroppsdel.">
+			>
+			["id28"] = <
+				text = <"Uspesifisert areal">
+				description = <"Beregnet areal på et område av kroppen">
+			>
+			["id29"] = <
+				text = <"Tilleggsinformasjon">
+				description = <"Ytterligere informasjon som trengs for å kunne registrere lokalt definert innhold eller for å tilpasse til andre referansemodeller/formalismer.">
+			>
+			["at23"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at24"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at25"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at26"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["ac1"] = <
+				text = <"Lengde (synthesised)">
+				description = <"Avstand mellom to spesifiserte anatomiske steder på en definert kroppsdel​​. (synthesised)">
+			>
+			["ac2"] = <
+				text = <"Omkrets (synthesised)">
+				description = <"Omkrets rundt en bestemt kroppsdel på et spesifikt anatomisk sted. (synthesised)">
+			>
+			["ac3"] = <
+				text = <"Område (synthesised)">
+				description = <"Beregnet areal av et definert område eller kroppssegment. (synthesised)">
+			>
+			["ac4"] = <
+				text = <"Høyde (synthesised)">
+				description = <"Høyde på en kroppsdel målt ​​fra et fast punkt. (synthesised)">
+			>
+		>
+	>
+	term_bindings = <
+		["openehr"] = <
+			["at23"] = <http://openehr.org/id/122>
+			["at24"] = <http://openehr.org/id/335>
+			["at25"] = <http://openehr.org/id/146>
+			["at26"] = <http://openehr.org/id/147>
+		>
+	>
+	value_sets = <
+		["ac1"] = <
+			id = <"ac1">
+			members = <"at6", "at9", "at7", "at8", "at21", "at10">
+		>
+		["ac2"] = <
+			id = <"ac2">
+			members = <"at18", "at22">
+		>
+		["ac3"] = <
+			id = <"ac3">
+			members = <"at19", "at20">
+		>
+		["ac4"] = <
+			id = <"ac4">
+			members = <"at15", "at16">
+		>
+	>

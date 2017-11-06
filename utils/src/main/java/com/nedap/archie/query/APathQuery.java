@@ -33,45 +33,47 @@ public class APathQuery {
     private List<PathSegment> pathSegments = new ArrayList<>();
 
     public APathQuery(String query) {
-        XPathLexer lexer = new XPathLexer(new ANTLRInputStream(query));
-        XPathParser parser = new XPathParser(new CommonTokenStream(lexer));
-        LocationPathContext locationPathContext = parser.locationPath();
-        AbsoluteLocationPathNorootContext absoluteLocationPathNorootContext = locationPathContext.absoluteLocationPathNoroot();
-        if(absoluteLocationPathNorootContext == null) {
-            throw new UnsupportedOperationException("relative xpath expressions not yet supported: " + query);
-        }
-        if(!absoluteLocationPathNorootContext.getTokens(XPathLexer.ABRPATH).isEmpty()) {
-            throw new UnsupportedOperationException("absolute path starting with // not yet supported");
-        }
-        RelativeLocationPathContext relativeLocationPathContext = absoluteLocationPathNorootContext.relativeLocationPath();
-
-        if(!relativeLocationPathContext.getTokens(XPathLexer.ABRPATH).isEmpty()) {
-            throw new UnsupportedOperationException("relative path with // between steps not yet supported");
-        }
-        Pattern isDigit = Pattern.compile("\\d+");
-
-        List<StepContext> stepContexts = relativeLocationPathContext.step();
-        for(StepContext stepContext:stepContexts) {
-            String nodeName = stepContext.nodeTest().getText();
-            List<PredicateContext> predicateContexts = stepContext.predicate();
-            PathSegment pathSegment = new PathSegment(nodeName);
-            for(PredicateContext predicateContext:predicateContexts) {
-                //TODO: this is not a full parser. We really need one. Find one because writing an XPath parser seems like a thing that's been done before.
-
-                AndExprContext andExpressionContext = predicateContext.expr().orExpr().andExpr(0);
-                for(EqualityExprContext equalityExprContext: andExpressionContext.equalityExpr()) {
-                    if(equalityExprContext.relationalExpr().size() == 1) { //do not yet support equals or not equals operator, ignore for now
-                        String expression = equalityExprContext.getText();
-                        if(isDigit.matcher(expression).matches()) {
-                            pathSegment.setIndex(Integer.parseInt(expression));
-                        } else {
-                            pathSegment.setNodeId(expression);
-                        }
-                    }
-
-                }
+        if(!query.equals("/")) {
+            XPathLexer lexer = new XPathLexer(new ANTLRInputStream(query));
+            XPathParser parser = new XPathParser(new CommonTokenStream(lexer));
+            LocationPathContext locationPathContext = parser.locationPath();
+            AbsoluteLocationPathNorootContext absoluteLocationPathNorootContext = locationPathContext.absoluteLocationPathNoroot();
+            if (absoluteLocationPathNorootContext == null) {
+                throw new UnsupportedOperationException("relative xpath expressions not yet supported: " + query);
             }
-            pathSegments.add(pathSegment);
+            if (!absoluteLocationPathNorootContext.getTokens(XPathLexer.ABRPATH).isEmpty()) {
+                throw new UnsupportedOperationException("absolute path starting with // not yet supported");
+            }
+            RelativeLocationPathContext relativeLocationPathContext = absoluteLocationPathNorootContext.relativeLocationPath();
+
+            if (!relativeLocationPathContext.getTokens(XPathLexer.ABRPATH).isEmpty()) {
+                throw new UnsupportedOperationException("relative path with // between steps not yet supported");
+            }
+            Pattern isDigit = Pattern.compile("\\d+");
+
+            List<StepContext> stepContexts = relativeLocationPathContext.step();
+            for (StepContext stepContext : stepContexts) {
+                String nodeName = stepContext.nodeTest().getText();
+                List<PredicateContext> predicateContexts = stepContext.predicate();
+                PathSegment pathSegment = new PathSegment(nodeName);
+                for (PredicateContext predicateContext : predicateContexts) {
+                    //TODO: this is not a full parser. We really need one. Find one because writing an XPath parser seems like a thing that's been done before.
+
+                    AndExprContext andExpressionContext = predicateContext.expr().orExpr().andExpr(0);
+                    for (EqualityExprContext equalityExprContext : andExpressionContext.equalityExpr()) {
+                        if (equalityExprContext.relationalExpr().size() == 1) { //do not yet support equals or not equals operator, ignore for now
+                            String expression = equalityExprContext.getText();
+                            if (isDigit.matcher(expression).matches()) {
+                                pathSegment.setIndex(Integer.parseInt(expression));
+                            } else {
+                                pathSegment.setNodeId(expression);
+                            }
+                        }
+
+                    }
+                }
+                pathSegments.add(pathSegment);
+            }
         }
     }
 

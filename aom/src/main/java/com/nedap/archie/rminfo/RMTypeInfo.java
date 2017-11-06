@@ -114,4 +114,8 @@ public class RMTypeInfo {
     public String toString() {
         return rmName;
     }
+
+    public boolean isDescendantOrEqual(RMTypeInfo other) {
+        return other.equals(this) || getAllParentClasses().contains(other);
+    }
 }

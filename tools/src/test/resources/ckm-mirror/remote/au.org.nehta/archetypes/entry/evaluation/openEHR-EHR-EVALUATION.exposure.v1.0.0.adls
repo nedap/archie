@@ -1,0 +1,158 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated)
+	openEHR-EHR-EVALUATION.exposure.v1.0.0
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Heather Leslie">
+		["organisation"] = <"Ocean Informatics">
+		["email"] = <"heather.leslie@oceaninformatics.com">
+		["date"] = <"2013-03-08">
+	>
+	copyright = <"© National E-Health Transition Authority">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record summary details of exposure of the subject to a chemical, physical or biological agent within their environment that has caused, or may possibly cause in the future, a negative impact on health.">
+			use = <"Use to record summary details of exposure of the subject to a chemical, physical or biological agent within their environment that has caused, or may possibly cause in the future, a negative impact on health.
+
+This archetype has been designed primarily to capture a simple amount of details about exposure, fitting current requirements for NT Hearing Health exposure to passive smoking, campfire smoke and noise. However additional research should be conducted to enhance this archetype to cater for the detailed occupation exposure summaries etc.">
+			keywords = <"substance", "chemical", "smoke", "passive", "noise", "pollution", "chemical">
+			misuse = <"">
+		>
+	>
+	other_details = <
+		["current_contact"] = <"Heather Leslie, Ocean Informatics, heather.leslie@oceaninformatics.com">
+		["MD5-CAM-1.0.1"] = <"7FB94B15875E8FE55D23F3FF5BFBE06E">
+	>
+
+definition
+	EVALUATION[id1] matches {	-- Exposure
+		data matches {
+			ITEM_TREE[id2] matches {
+				items matches {
+					ELEMENT[id3] occurrences matches {0..1} matches {	-- Agent
+						value matches {
+							DV_TEXT[id15] 
+						}
+					}
+					ELEMENT[id4] occurrences matches {0..1} matches {	-- Overall Description
+						value matches {
+							DV_TEXT[id16] 
+						}
+					}
+					ELEMENT[id6] occurrences matches {0..1} matches {	-- Category
+						value matches {
+							DV_CODED_TEXT[id17] matches {
+								defining_code matches {[ac1]}		-- Category (synthesised)
+							}
+						}
+					}
+					ELEMENT[id5] occurrences matches {0..1} matches {	-- Ongoing Exposure
+						value matches {
+							DV_BOOLEAN[id18] matches {
+								value matches {True}
+							}
+						}
+					}
+					CLUSTER[id11] matches {	-- Exposure Details
+						items matches {
+							ELEMENT[id12] occurrences matches {0..1} matches {	-- Date of Onset
+								value matches {
+									DV_DATE_TIME[id19] 
+								}
+							}
+							ELEMENT[id14] occurrences matches {0..1} matches {	-- Description
+								value matches {
+									DV_TEXT[id20] 
+								}
+							}
+							ELEMENT[id13] occurrences matches {0..1} matches {	-- Date Ceased
+								value matches {
+									DV_DATE_TIME[id21] 
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		protocol matches {
+			ITEM_TREE[id9] matches {
+				items matches {
+					ELEMENT[id10] occurrences matches {0..1} matches {	-- Date Updated
+						value matches {
+							DV_DATE_TIME[id22] 
+						}
+					}
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Exposure">
+				description = <"Exposure of the subject to a chemical, physical or biological agent within their environment that has caused, or may possibly cause in the future, a negative impact on health.">
+			>
+			["id3"] = <
+				text = <"Agent">
+				description = <"Identification of the chemical, physical or biological agent to which the subject was exposed.">
+			>
+			["id4"] = <
+				text = <"Overall Description">
+				description = <"Overall description of the exposure to the identified substance.">
+			>
+			["id5"] = <
+				text = <"Ongoing Exposure">
+				description = <"Does the subject remain exposed to the substance to a degree that could be regarded as a potential risk to health?">
+			>
+			["id6"] = <
+				text = <"Category">
+				description = <"Type of exposure.">
+			>
+			["at7"] = <
+				text = <"Environmental">
+				description = <"Exposure occurred in the environment.">
+			>
+			["at8"] = <
+				text = <"Occupational">
+				description = <"Exposure occurred in the occupational environment or workplace.">
+			>
+			["ac1"] = <
+				text = <"Category (synthesised)">
+				description = <"Type of exposure. (synthesised)">
+			>
+			["id10"] = <
+				text = <"Date Updated">
+				description = <"The date this exposure summary was last updated.">
+			>
+			["id11"] = <
+				text = <"Exposure Details">
+				description = <"Detailed information about an episode of exposure to the agent.">
+			>
+			["id12"] = <
+				text = <"Date of Onset">
+				description = <"Date of onset of exposure to the agent.">
+			>
+			["id13"] = <
+				text = <"Date Ceased">
+				description = <"Date of cessation of exposure to the agent.">
+			>
+			["id14"] = <
+				text = <"Description">
+				description = <"Detailed description of an episode of exposure to the identified substance.">
+			>
+		>
+	>
+	value_sets = <
+		["ac1"] = <
+			id = <"ac1">
+			members = <"at7", "at8">
+		>
+	>

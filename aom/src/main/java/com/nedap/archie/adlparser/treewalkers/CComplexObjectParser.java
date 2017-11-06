@@ -82,6 +82,9 @@ public class CComplexObjectParser extends BaseTreeWalker {
                 attribute.addChild(primitivesConstraintParser.parseRegex(attributeContext.CONTAINED_REGEXP()));
             }
             parent.addAttribute(attribute);
+            if(attribute.getCardinality() != null) {
+                attribute.setMultiple(true); //this seems to be the only way to set single or multiple without the RM. Maybe existence as well?
+            }
         } else if (attributeDefContext.c_attribute_tuple() != null) {
             parent.addAttributeTuple(parseAttributeTuple(parent, attributeDefContext.c_attribute_tuple()));
         }

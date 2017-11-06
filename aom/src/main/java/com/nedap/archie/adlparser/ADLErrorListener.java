@@ -18,6 +18,8 @@ import org.slf4j.LoggerFactory;
  */
 public class ADLErrorListener implements ANTLRErrorListener {
 
+    private boolean logEnabled = true;
+
     private static final Logger logger = LoggerFactory.getLogger(ADLErrorListener.class);
     private final ADLParserErrors errors;
 
@@ -25,10 +27,20 @@ public class ADLErrorListener implements ANTLRErrorListener {
         this.errors = errors;
     }
 
+    public boolean isLogEnabled() {
+        return logEnabled;
+    }
+
+    public void setLogEnabled(boolean logEnabled) {
+        this.logEnabled = logEnabled;
+    }
+
     @Override
     public void syntaxError(Recognizer<?,?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) {
         String error = String.format("syntax error at %d:%d: %s. msg: %s", line, charPositionInLine, offendingSymbol, msg);
-        logger.warn(error);
+        if(logEnabled) {
+            logger.warn(error);
+        }
         errors.addError(error);
     }
 
@@ -36,19 +48,25 @@ public class ADLErrorListener implements ANTLRErrorListener {
     public void reportAmbiguity(Parser recognizer, DFA dfa, int startIndex, int stopIndex, boolean exact, BitSet ambigAlts, ATNConfigSet configs) {
         String input = recognizer.getInputStream().getText(new Interval(startIndex, stopIndex));
         String warning = String.format("FULL AMBIGUITY: %d-%d, exact: %b, input: %s", startIndex, stopIndex, exact, input);
-        logger.debug(warning);
+        if(logEnabled) {
+            logger.debug(warning);
+        }
         errors.addWarning(warning);
     }
 
     @Override
     public void reportAttemptingFullContext(Parser recognizer, DFA dfa, int startIndex, int stopIndex, BitSet conflictingAlts, ATNConfigSet configs) {
         String input = recognizer.getInputStream().getText(new Interval(startIndex, stopIndex));
-        logger.debug("FULL CONTEXT: {}-{}, alts: {}, {}", startIndex, stopIndex, conflictingAlts, input);
+        if(logEnabled) {
+            logger.debug("FULL CONTEXT: {}-{}, alts: {}, {}", startIndex, stopIndex, conflictingAlts, input);
+        }
     }
 
     @Override
     public void reportContextSensitivity(Parser recognizer, DFA dfa, int startIndex, int stopIndex, int prediction, ATNConfigSet configs) {
-        logger.debug("CONTEXT SENSITIVITY: {}-{}, prediction: {}", startIndex, stopIndex, prediction);
+        if(logEnabled) {
+            logger.debug("CONTEXT SENSITIVITY: {}-{}, prediction: {}", startIndex, stopIndex, prediction);
+        }
     }
 
     public ADLParserErrors getErrors() {

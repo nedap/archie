@@ -1,0 +1,237 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated; uid=63e75cd5-e6da-4b27-8461-f91408704d67)
+	openEHR-EHR-INSTRUCTION.transfusion.v0.0.1-alpha
+
+language
+	original_language = <[ISO_639-1::en]>
+	translations = <
+		["de"] = <
+			language = <[ISO_639-1::de]>
+			author = <
+				["name"] = <"Jasmin Buck, Sebastian Garde">
+				["organisation"] = <"University of Heidelberg, Central Queensland University">
+			>
+		>
+	>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"unknown">
+	>
+	original_namespace = <"org.openehr">
+	original_publisher = <"openEHR Foundation">
+	custodian_namespace = <"org.openehr">
+	custodian_organisation = <"openEHR Foundation">
+	copyright = <"© openEHR Foundation">
+	licence = <"This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 License. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/.">
+	details = <
+		["de"] = <
+			language = <[ISO_639-1::de]>
+			purpose = <"Zur Dokumentation von Anweisungen bezüglich einer Transfusion.">
+			use = <"">
+			keywords = <"Transfusion", "Blut">
+			misuse = <"">
+		>
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"For recording the instructions relating to transfusion">
+			use = <"To be used for recording informabion about an order for blood products (products that are ordered from a blood bank).">
+			keywords = <"transfusion", "blood">
+			misuse = <"Not to be used for ordering medications - use INSTRUCTION.medication_order for this purpose.">
+		>
+	>
+	other_contributors = <"Silje Ljosland Bakke, Nasjonal IKT HF, Norway (openEHR Editor)", "Heather Leslie, Ocean Informatics, Australia (openEHR Editor)", "Ian McNicoll, freshEHR Clinical Informatics, United Kingdom (openEHR Editor)", "Line Silsand, University Hospital of Northern Norway, Norway", "Kristian Berg, University Hospital of Northern Norway, Norway", "Gro Hilde Ulriksen, University Hospital of Northern Norway, Norway", "Ole Martin Sand, DIPS ASA, Norway", "Ingunn Skjervold, University Hospital of Northern Norway, Norway", "Merethe Appelbom, Northern Norway Regional Health Authority, Norway", "Øystein Berg Sletteng, Helse Nord IKT, Norway", "Kristian Andreassen, Helse Nord IKT, Norway", "John Tore Valand, Helse Bergen HF, Norway", "Tore Trondsen, Helse Nord IKT, Norway">
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"D3B003E33A570925141448007F0DB0FB">
+		["build_uid"] = <"b0b41a3a-19b9-4253-ac85-8e11f3427280">
+	>
+
+definition
+	INSTRUCTION[id1] matches {	-- Transfusion order
+		activities matches {
+			ACTIVITY[id2] occurrences matches {0..1} matches {	-- new activity
+				description matches {
+					ITEM_TREE[id3] matches {
+						items cardinality matches {2..*; unordered} matches {
+							ELEMENT[id4] matches {	-- Type of blood product
+								value matches {
+									DV_TEXT[id17] 
+								}
+							}
+							CLUSTER[id11] matches {	-- Amount
+								items matches {
+									ELEMENT[id5] occurrences matches {0..1} matches {	-- Number of units
+										value matches {
+											DV_COUNT[id18] matches {
+												magnitude matches {|>=0|}
+											}
+										}
+									}
+									ELEMENT[id12] occurrences matches {0..1} matches {	-- Volume
+										value matches {
+											DV_QUANTITY[id19] matches {
+												property matches {[at1]}
+												magnitude matches {|>=0.0|}
+												precision matches {0}
+												units matches {"ml"}
+											}
+										}
+									}
+								}
+							}
+							ELEMENT[id10] occurrences matches {0..1} matches {	-- Clinical indication
+								value matches {
+									DV_TEXT[id20] 
+								}
+							}
+							ELEMENT[id13] occurrences matches {0..1} matches {	-- Urgency
+								value matches {
+									DV_TEXT[id21] 
+								}
+							}
+							allow_archetype CLUSTER[id14] matches {	-- Administration pattern
+								include
+									archetype_id/value matches {/.*/}
+							}
+							CLUSTER[id8] occurrences matches {0..1} matches {	-- Special requirements
+								items matches {
+									ELEMENT[id6] matches {	-- Special requirement
+										value matches {
+											DV_TEXT[id22] 
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		protocol matches {
+			ITEM_TREE[id15] matches {
+				items matches {
+					allow_archetype CLUSTER[id16] matches {	-- Extension
+						include
+							archetype_id/value matches {/.*/}
+					}
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["de"] = <
+			["id1"] = <
+				text = <"*Transfusion order(en)">
+				description = <"*The instructions for giving a transfusion.(en)">
+			>
+			["id2"] = <
+				text = <"neue Handlung">
+				description = <"*">
+			>
+			["id4"] = <
+				text = <"*Type of blood product(en)">
+				description = <"*The blood product to be administered.(en)">
+			>
+			["id5"] = <
+				text = <"*Number of units(en)">
+				description = <"*The number of units to be transfused.(en)">
+			>
+			["id6"] = <
+				text = <"*Special requirement(en)">
+				description = <"*Special requirements for blood products.(en)">
+			>
+			["id8"] = <
+				text = <"*Special requirements(en)">
+				description = <"*A group of special requirements stipulated for the transfusion.(en)">
+			>
+			["id10"] = <
+				text = <"*Clinical indication(en)">
+				description = <"*The clinical reason for ordering the tranfusion.(en)">
+			>
+			["id11"] = <
+				text = <"*Amount(en)">
+				description = <"*The amount of blood product to be transfused.(en)">
+			>
+			["id12"] = <
+				text = <"*Volume(en)">
+				description = <"*The volume of the product to be transfused for paediatric and some specific purposes.(en)">
+			>
+			["id13"] = <
+				text = <"*Urgency(en)">
+				description = <"*The urgency of the transfusion.(en)">
+			>
+			["id14"] = <
+				text = <"*Administration pattern(en)">
+				description = <"**(en)">
+			>
+			["id16"] = <
+				text = <"*Extension(en)">
+				description = <"*Additional information required to capture local content or to align with other reference models/formalisms.(en)">
+			>
+			["at1"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+		>
+		["en"] = <
+			["id1"] = <
+				text = <"Transfusion order">
+				description = <"The instructions for giving a transfusion.">
+			>
+			["id2"] = <
+				text = <"new activity">
+				description = <"*">
+			>
+			["id4"] = <
+				text = <"Type of blood product">
+				description = <"The blood product to be administered.">
+			>
+			["id5"] = <
+				text = <"Number of units">
+				description = <"The number of units to be transfused.">
+			>
+			["id6"] = <
+				text = <"Special requirement">
+				description = <"Special requirements for blood products.">
+			>
+			["id8"] = <
+				text = <"Special requirements">
+				description = <"A group of special requirements stipulated for the transfusion.">
+			>
+			["id10"] = <
+				text = <"Clinical indication">
+				description = <"The clinical reason for ordering the tranfusion.">
+			>
+			["id11"] = <
+				text = <"Amount">
+				description = <"The amount of blood product to be transfused.">
+			>
+			["id12"] = <
+				text = <"Volume">
+				description = <"The volume of the product to be transfused for paediatric and some specific purposes.">
+			>
+			["id13"] = <
+				text = <"Urgency">
+				description = <"The urgency of the transfusion.">
+			>
+			["id14"] = <
+				text = <"Administration pattern">
+				description = <"*">
+			>
+			["id16"] = <
+				text = <"Extension">
+				description = <"Additional information required to capture local content or to align with other reference models/formalisms.">
+			>
+			["at1"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+		>
+	>
+	term_bindings = <
+		["openehr"] = <
+			["at1"] = <http://openehr.org/id/129>
+		>
+	>

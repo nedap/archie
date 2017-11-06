@@ -1,0 +1,86 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated)
+	openEHR-EHR-SECTION.problem_list.v1.0.0
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Heather Leslie">
+		["organisation"] = <"Ocean Informatics">
+		["email"] = <"heather.leslie@oceaninformatics.com">
+		["date"] = <"2010-07-03">
+	>
+	copyright = <"© openEHR Foundation">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To demonstrate a design pattern for representation of a Problem List suitable for use with both episodic and longitudinal recording of problems.">
+			use = <"This list can be utilised as a source of up-to-date problem list data for exchange or as the basis for decision support. 
+
+This list can be comprised of three types of archetype:
+- statements about the positive presence of problems, diagnoses or previous procedures are recorded using the EVALUATION.problem_diagnosis and/or ACTION.procedure archetypes; OR
+- a statement about the positive exclusion of medication use can be recorded using the specific EVALUATION.exclusion-problem_diagnosis or EVALUATION.exclusion-procedure archetypes - for example: \"No significant problems or diagnoses\" or No history of significant operations or procedures\"; OR
+- a statement about no information being available - neither a positive presence of a problem, diagnosis or procedure performed nor a positive exclusion - can be recorded using the EVALUATION.absence archetype.
+
+In order for this list to be accurate and safe to use as the basis for decision support activities and for exchange, this Problem List should ideally be curated by a clinician responsible for the health record, rather than managed automatically by the clinical system through business rules alone.">
+			keywords = <"problem", "diagnosis", "exclusion", "absence", "known", "list">
+			misuse = <"">
+		>
+	>
+	other_contributors = <"Ian McNicoll, Ocean Informatics", "Heath Frankel, Ocean Informatics">
+	references = <
+		["1"] = <"Derived from: Problem List (composition), draft archetype, National eHealth Transition Authority [Internet]. NEHTA Clinical Knowledge Manager. Authored: 19 Feb 2013. Available at: http://dcm.nehta.org.au/ckm/#showArchetype_1013.1.1235 (accessed Feb 27, 2012).">
+	>
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"649C40890E7C45F6B4E3F4DF8A00801A">
+	>
+
+definition
+	SECTION[id1] matches {	-- Problem List
+		items cardinality matches {1..*; unordered} matches {
+			allow_archetype EVALUATION[id2] matches {	-- Problems or Diagnoses
+				include
+					archetype_id/value matches {/openEHR-EHR-EVALUATION\.problem_diagnosis(-[a-zA-Z0-9_]+)*\.v1/}
+			}
+			allow_archetype ACTION[id3] matches {	-- Procedures
+				include
+					archetype_id/value matches {/openEHR-EHR-ACTION\.procedure(-[a-zA-Z0-9_]+)*\.v1/}
+			}
+			allow_archetype EVALUATION[id4] matches {	-- Exclusion Statements
+				include
+					archetype_id/value matches {/openEHR-EHR-EVALUATION\.exclusion-problem_diagnosis(-[a-zA-Z0-9_]+)*\.v1|openEHR-EHR-EVALUATION\.exclusion-procedure(-[a-zA-Z0-9_]+)*\.v1/}
+			}
+			allow_archetype EVALUATION[id5] matches {	-- Absent Information
+				include
+					archetype_id/value matches {/openEHR-EHR-EVALUATION\.absence(-[a-zA-Z0-9_]+)*\.v1/}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Problem List">
+				description = <"Suggested design pattern for including a Problem List in a template.">
+			>
+			["id2"] = <
+				text = <"Problems or Diagnoses">
+				description = <"Details about identified problems or diagnoses.">
+			>
+			["id3"] = <
+				text = <"Procedures">
+				description = <"Details about identified procedures that have been performed.">
+			>
+			["id4"] = <
+				text = <"Exclusion Statements">
+				description = <"Positive statement about the known exclusion of known problems or diagnoses and procedures performed.">
+			>
+			["id5"] = <
+				text = <"Absent Information">
+				description = <"Positive statement that no information is available about identification of problems or diagnoses, nor procedures performed.">
+			>
+		>
+	>

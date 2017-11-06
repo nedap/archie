@@ -11,6 +11,7 @@ import com.nedap.archie.paths.PathSegment;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * For now only accepts rather simple xpath-like expressions.
@@ -51,7 +52,7 @@ public class AOMPathQuery {
             }
             result = findOneSegment(segment, result);
         }
-        return (List<T>) result;
+        return (List<T>)result.stream().filter((object) -> object != null).collect(Collectors.toList());
     }
 
     private List<ArchetypeModelObject> findOneSegment(PathSegment pathSegment, List<ArchetypeModelObject> objects) {

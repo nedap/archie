@@ -4,7 +4,12 @@ import com.google.common.collect.Lists;
 import com.nedap.archie.aom.*;
 import com.nedap.archie.aom.terminology.ArchetypeTerm;
 import com.nedap.archie.aom.terminology.ArchetypeTerminology;
+import com.nedap.archie.aom.utils.AOMUtils;
+import com.nedap.archie.aom.utils.ArchetypeParsePostProcesser;
+import com.nedap.archie.paths.PathSegment;
+import com.nedap.archie.paths.PathUtil;
 import com.nedap.archie.query.AOMPathQuery;
+import com.nedap.archie.query.APathQuery;
 import com.nedap.archie.rules.Assertion;
 
 import java.util.ArrayList;
@@ -137,6 +142,17 @@ public class Flattener {
         }
         result.getDefinition().setArchetype(result);
         result.setDifferential(false);//note this archetype as being flat
+        if(!createOperationalTemplate) {
+            //set metadata to specialized archetype
+            result.setOriginalLanguage(child.getOriginalLanguage());
+            result.setDescription(child.getDescription());
+            result.setOtherMetaData(child.getOtherMetaData());
+            result.setGenerated(child.getGenerated());
+            result.setControlled(child.getControlled());
+            result.setBuildUid(child.getBuildUid());
+            result.setTranslations(child.getTranslations());
+        } //else as well, but is done elsewhere. needs refactor.
+        ArchetypeParsePostProcesser.fixArchetype(result);
         return result;
     }
 
@@ -246,9 +262,12 @@ public class Flattener {
             for(CAttribute attribute:object.getAttributes()) {
                 for(CObject child:attribute.getChildren()) {
                     if(child instanceof CComplexObjectProxy) { //use_node
-                        ComplexObjectProxyReplacement possibleReplacement = getComplexObjectProxyReplacement((CComplexObjectProxy) child);
+                        ComplexObjectProxyReplacement possibleReplacement =
+                                ComplexObjectProxyReplacement.getComplexObjectProxyReplacement((CComplexObjectProxy) child);
                         if(possibleReplacement != null) {
                             replacements.add(possibleReplacement);
+                        } else {
+                            throw new RuntimeException("cannot find target in CComplexObjectProxy");
                         }
 
                     }
@@ -258,64 +277,6 @@ public class Flattener {
         }
         for(ComplexObjectProxyReplacement replacement:replacements) {
             replacement.replace();
-        }
-    }
-
-    /**
-     * Get the archetype root that is the most near parent. Either returns a C_ARCHETYPE_ROOT or the complex_object at archetype.getDefinition()
-     * @return
-     */
-    private CComplexObject getNearestArchetypeRoot(CObject object) {
-        //find a C_ARCHETYPE_ROOT
-        CAttribute parentAttribute = object.getParent();
-        while(parentAttribute != null) {
-            CObject parentObject = parentAttribute.getParent();
-            if(parentObject == null) {
-                break;
-            }
-            if(parentObject instanceof CArchetypeRoot) {
-                return (CArchetypeRoot) parentObject;
-            }
-            parentAttribute = parentObject.getParent();
-        }
-        //C_ARCHETYPE_ROOT not found, return the archetype definition
-        return object.getArchetype().getDefinition();
-
-    }
-
-    private ComplexObjectProxyReplacement getComplexObjectProxyReplacement(CComplexObjectProxy proxy) {
-        CObject newObject = new AOMPathQuery(proxy.getTargetPath()).find(getNearestArchetypeRoot(proxy));
-        if(newObject == null) {
-            throw new RuntimeException("cannot find target in CComplexObjectProxy");
-        } else {
-            CComplexObject clone = (CComplexObject) newObject.clone();
-            clone.setNodeId(proxy.getNodeId());
-            if(proxy.getOccurrences() != null) {
-                clone.setOccurrences(proxy.getOccurrences());
-            }
-            if(proxy.getSiblingOrder() != null) {
-                clone.setSiblingOrder(proxy.getSiblingOrder());
-            }
-            return new ComplexObjectProxyReplacement(proxy, clone);
-
-        }
-    }
-
-    /**
-     * little class used for a CompelxObjectProxyReplacement because we cannot replace in a collection
-     * that we iterate at the same time
-     */
-    private static class ComplexObjectProxyReplacement {
-        private final CComplexObject object;
-        private final CComplexObjectProxy proxy;
-
-        public ComplexObjectProxyReplacement(CComplexObjectProxy proxy, CComplexObject object) {
-            this.proxy = proxy;
-            this.object = object;
-        }
-
-        public void replace() {
-            proxy.getParent().replaceChild(proxy.getNodeId(), object);
         }
     }
 
@@ -445,12 +406,16 @@ public class Flattener {
 
     private void specializeContent(CObject parent, CObject specialized, CObject newObject) {
 
-      if (parent instanceof CComplexObject) {
-            if(!(specialized instanceof CComplexObject)) {
+        if (parent instanceof CComplexObject) {
+            if(((CComplexObject) parent).isAnyAllowed() && specialized instanceof CComplexObjectProxy) {
+                //you can replace an any allowed node with a CComplexObjectProxy. No content will need to be specialized, just merge it in
+            }
+            else if(!(specialized instanceof CComplexObject)) {
                 //this is the specs. The ADL workbench allows an ARCHETYPE_SLOT to override a C_ARCHETYPE_ROOT without errors. Filed as https://openehr.atlassian.net/projects/AWBPR/issues/AWBPR-72
                 throw new IllegalArgumentException(String.format("cannot override complex object %s (%s) with non-complex object %s (%s)", parent.path(), parent.getClass().getSimpleName(), specialized.path(), specialized.getClass().getSimpleName()));
+            } else {
+                flattenCComplexObject((CComplexObject) newObject, (CComplexObject) specialized);
             }
-            flattenCComplexObject((CComplexObject) newObject, (CComplexObject) specialized);
         }
         else if (newObject instanceof ArchetypeSlot) {//archetypeslot is NOT a complex object. It's replacement can be
             if(specialized instanceof ArchetypeSlot) {
@@ -544,7 +509,7 @@ public class Flattener {
     }
 
     private void flattenTuple(CComplexObject newObject, CAttributeTuple tuple) {
-        CAttributeTuple matchingTuple = findMatchingTuple(newObject.getAttributeTuples(), tuple);
+        CAttributeTuple matchingTuple = AOMUtils.findMatchingTuple(newObject.getAttributeTuples(), tuple);
 
 
         CAttributeTuple tupleClone = (CAttributeTuple) tuple.clone();
@@ -572,30 +537,42 @@ public class Flattener {
         }
     }
 
-    private CAttributeTuple findMatchingTuple(List<CAttributeTuple> attributeTuples, CAttributeTuple specializedTuple) {
-        return attributeTuples.stream()
-                .filter((existingTuple) -> existingTuple.getMemberNames().equals(specializedTuple.getMemberNames()))
-                .findAny().orElse(null);
-    }
 
     private void flattenSingleAttribute(CComplexObject newObject, CAttribute attribute) {
         if(attribute.getDifferentialPath() != null) {
             //this overrides a specific path
-            ArchetypeModelObject object = new AOMPathQuery(attribute.getDifferentialPath()).find(newObject);
+            ArchetypeModelObject object = newObject.itemAtPath(attribute.getDifferentialPath());
             if(object == null) {
                 //it is possible that the object points to a reference, in which case we need to clone the referenced node, then try again
                 //AOM spec paragraph 7.2: 'proxy reference targets are expanded inline if the child archetype overrides them.'
                 //also examples in ADL2 spec about internal references
                 //so find the internal references here!
+                //TODO: AOMUtils.pathAtSpecializationLevel(pathSegments.subList(0, pathSegments.size()-1), flatParent.specializationDepth());
                 CComplexObjectProxy internalReference = new AOMPathQuery(attribute.getDifferentialPath()).findAnyInternalReference(newObject);
                 if(internalReference != null) {
                     //in theory this can be a use node within a use node.
-                    ComplexObjectProxyReplacement complexObjectProxyReplacement = getComplexObjectProxyReplacement(internalReference);
+                    ComplexObjectProxyReplacement complexObjectProxyReplacement =
+                            ComplexObjectProxyReplacement.getComplexObjectProxyReplacement(internalReference);
                     if(complexObjectProxyReplacement != null) {
                         complexObjectProxyReplacement.replace();
                         //and again!
                         flattenSingleAttribute(newObject, attribute);
+                    } else {
+                        throw new RuntimeException("cannot find target in CComplexObjectProxy");
                     }
+                } else {
+                    //lookup the parent and try to add the last attribute if it does not exist
+                    List<PathSegment> pathSegments = new APathQuery(attribute.getDifferentialPath()).getPathSegments();
+                    String pathMinusLastNode = PathUtil.getPath(pathSegments.subList(0, pathSegments.size()-1));
+                    CObject parentObject = newObject.itemAtPath(pathMinusLastNode);
+                    if(parentObject != null && parentObject instanceof CComplexObject) {
+                        //attribute does not exist, but does exist in RM (or it would not have passed the ArchetypeValidator, or the person using
+                        //this flattener does not care
+                        CAttribute realAttribute = new CAttribute(pathSegments.get(pathSegments.size()-1).getNodeName());
+                        ((CComplexObject) parentObject).addAttribute(realAttribute);
+                        flattenAttribute(newObject, realAttribute, attribute);
+                    }
+
                 }
             }
             else if(object instanceof CAttribute) {

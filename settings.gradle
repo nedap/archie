@@ -2,3 +2,6 @@ rootProject.name = 'archie'
 
 include 'base', 'aom', 'grammars', 'tools', 'odin', 'openehr-rm', 'archie-utils'
 include 'path-queries', 'utils', 'bmm', 'referencemodel', 'modeldoc'
+include 'i18n'
+
+include 'test-rm'

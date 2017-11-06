@@ -1,0 +1,105 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated)
+	openEHR-EHR-COMPOSITION.care_plan.v1.0.0
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Sistine Barretto-Daniels">
+		["organisation"] = <"Ocean Informatics">
+		["date"] = <"2010-04-30">
+	>
+	copyright = <"© National E-Health Transition Authority">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To provide a framework to support the recording of all aspects of a Care Plan. 
+
+This includes:
+- the INSTRUCTION for the Care Plan (as a collection of one or more activities), and the corresponding ACTION which records the status of the Care Plan as a whole;
+- the INSTRUCTIONs for each of the proposed activities; and
+- the corresponding ACTIONs for the activities which allow for the recording of the status of each INSTRUCTION.">
+			use = <"Use to provide a framework to support the recording of all aspects of a Care Plan to be carried out over a period of time. 
+
+This archetype may contain combinations of planned activities, activies that are in progress or have been carried out, goals/objectives, targets, and recommendations.">
+			keywords = <"care plan", "plan", "care management plan", "management plan">
+			misuse = <"">
+		>
+	>
+	other_contributors = <"Heather Leslie, Ocean Informatics, Australia", ...>
+	other_details = <
+		["current_contact"] = <"Heather Leslie, Ocean Informatics, heather.leslie@oceaninformatics.com">
+		["MD5-CAM-1.0.1"] = <"46640DC609733D4FF248B3AA5F447061">
+	>
+
+definition
+	COMPOSITION[id1] matches {	-- Care Plan
+		category matches {
+			DV_CODED_TEXT[id19] matches {
+				defining_code matches {[at1]}
+			}
+		}
+		content matches {
+			allow_archetype ENTRY[id15] matches {	-- Care Plan
+				include
+					archetype_id/value matches {/.*/}
+			}
+			allow_archetype EVALUATION[id18] matches {	-- Goals
+				include
+					archetype_id/value matches {/openEHR-EHR-EVALUATION\.goal(-[a-zA-Z0-9_]+)*\.v1/}
+			}
+			allow_archetype INSTRUCTION[id2] matches {	-- Proposed Activities
+				include
+					archetype_id/value matches {/.*/}
+			}
+			allow_archetype ACTION[id5] matches {	-- Activity Actions
+				include
+					archetype_id/value matches {/.*/}
+			}
+			allow_archetype ENTRY[id17] matches {	-- Other
+				include
+					archetype_id/value matches {/openEHR-EHR-EVALUATION\.goal(-[a-zA-Z0-9_]+)*\.v1/}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Care Plan">
+				description = <"A framework to support the recording of all aspects of a Care Plan.">
+			>
+			["id2"] = <
+				text = <"Proposed Activities">
+				description = <"SLOT to contain all of the INSTRUCTION archetypes required to carry out each proposed activity within the care plan.">
+			>
+			["id5"] = <
+				text = <"Activity Actions">
+				description = <"SLOT to contain all of the ACTION archetypes required to record the status of each activity INSTRUCTION within the care plan.">
+			>
+			["id15"] = <
+				text = <"Care Plan">
+				description = <"SLOT to capture the INSTRUCTION and ACTION for the overall care plan.">
+			>
+			["id17"] = <
+				text = <"Other">
+				description = <"SLOT to contain other optional and unspecified archetypes that may be required for a specific clinical scenario.">
+			>
+			["id18"] = <
+				text = <"Goals">
+				description = <"SLOT to contain all of the EVALUATION archetypes required to record the goals for the Care Plan.">
+			>
+			["at1"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+		>
+	>
+	term_bindings = <
+		["openehr"] = <
+			["at1"] = <http://openehr.org/id/431>
+		>
+	>

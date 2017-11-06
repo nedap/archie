@@ -1,0 +1,69 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated; uid=1d6fde17-c20f-4296-be5b-5bee9b805694)
+	openEHR-EHR-COMPOSITION.self_monitoring.v0.0.1-alpha
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Sam Heard">
+		["organisation"] = <"Ocean Informatics">
+		["email"] = <"sam.heard@oceaninformatics.com">
+		["date"] = <"2013-01-19">
+	>
+	original_namespace = <"org.openehr">
+	original_publisher = <"openEHR Foundation">
+	custodian_namespace = <"org.openehr">
+	custodian_organisation = <"openEHR Foundation">
+	copyright = <"© openEHR Foundation">
+	licence = <"This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 License. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/.">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To hold measurements and observations made by the person who is subject of the record, or their carers.">
+			use = <"For use by the clients of the health service to commit information they have collected to the health record.">
+			keywords = <"home monitoring", "patient entered", "self reporting">
+			misuse = <"">
+		>
+	>
+	other_details = <
+		["current_contact"] = <"Heather Leslie, Ocean Informatics<heather.leslie@oceaninformatics.com>">
+		["MD5-CAM-1.0.1"] = <"21B50C8EFDD51D3AF78C78B2B7D99F88">
+		["build_uid"] = <"da287907-e979-4c1e-b43c-7b066c2fa14f">
+	>
+
+definition
+	COMPOSITION[id1] matches {	-- Self monitoring
+		category matches {
+			DV_CODED_TEXT[id3] matches {
+				defining_code matches {[at1]}
+			}
+		}
+		context matches {
+			EVENT_CONTEXT[id4] matches {
+				other_context matches {
+					ITEM_TREE[id2] 
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Self monitoring">
+				description = <"A composition to record a person monitoring particular parameters">
+			>
+			["at1"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+		>
+	>
+	term_bindings = <
+		["openehr"] = <
+			["at1"] = <http://openehr.org/id/433>
+		>
+	>

@@ -76,7 +76,7 @@ public class TemporalConstraintParserTest extends PrimitivesConstraintParserTest
 
     @Test
     public void assumedValues() throws Exception {
-        archetype = parser.parse(TemporalConstraintParserTest.class.getResourceAsStream("/adl2-tests/features/aom_structures/basic/openEHR-TEST_PKG-WHOLE.assumed_values.v1.adls"));
+        archetype = parser.parse(TemporalConstraintParserTest.class.getResourceAsStream("/adl2-tests/features/aom_structures/basic/openEHR-TEST_PKG-WHOLE.assumed_values.v1.0.0.adls"));
         CDate dateAttr4 = getAttribute("date_attr4");
         assertEquals("yyyy-??-XX", dateAttr4.getPatternedConstraint());
         assertEquals(1995, dateAttr4.getAssumedValue().get(ChronoField.YEAR));

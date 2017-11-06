@@ -1,0 +1,425 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated; uid=73666d7d-d7d0-460d-87a3-ed2e68f87fad)
+	openEHR-EHR-EVALUATION.obstetric_summary.v0.0.1-alpha
+
+language
+	original_language = <[ISO_639-1::en]>
+	translations = <
+		["es-co"] = <
+			language = <[ISO_639-1::es-co]>
+			author = <
+				["name"] = <"Francisco Ramirez ante">
+				["organisation"] = <"SITIS SAS">
+				["email"] = <"framirez74@gmail.com">
+			>
+			accreditation = <"Ingeniero de Sistemas">
+		>
+		["pt-br"] = <
+			language = <[ISO_639-1::pt-br]>
+			author = <
+				["name"] = <"Marivan Abrahão, Gabriela Alves, Adriana Kitajima e Maria Ângela Scatena">
+				["organisation"] = <"Core Consulting">
+				["email"] = <"contato@coreconsulting.com.br">
+			>
+			accreditation = <"Hospital Alemão Oswaldo Cruz (HAOC)">
+		>
+	>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Sam Heard">
+		["organisation"] = <"Ocean Informatics">
+		["email"] = <"sam.heard@oceaninformatics.com">
+		["date"] = <"2011-02-24">
+	>
+	original_namespace = <"org.openehr">
+	original_publisher = <"openEHR Foundation">
+	custodian_namespace = <"org.openehr">
+	custodian_organisation = <"openEHR Foundation">
+	copyright = <"© openEHR Foundation">
+	licence = <"This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 License. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/.">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record an overview about the obstetric history of a woman for purposes of: providing a snapshot of her obstetric history, reporting to statutory bodies or supporting clinical decision support.">
+			use = <"Use to record an overview of the obstetric history of a woman, including a summary of all pregnancies and the associated outcomes or interventions. 
+
+Use this summary as the basis of statutory reporting regarding births.
+
+Use to record the TPAL overview of an obstetric history, if required - the numbers of Term Births (T), Preterm Births (P), Abortions (A) and Living Children (L). Some variations add Gravidity (G) and number of Multiple Births (M).
+
+Some data may be calculated or derived from individual pregnancy records if these are available.">
+			keywords = <"obstetric", "pregnancy", "parity", "gravida", "para", "terminations", "miscarriages", "abortions", "spontaneous", "live", "births", "stillbirths", "caesarean", "ectopic", "neonatal", "death", "tubal", "living", "multiple">
+			misuse = <"Not for recording summary information about a single pregnancy - use EVALUATION. pregnancy_summary for this purpose.
+
+Not for recording detailed information about each of the individual pregnancies, miscarriages, terminations, or deliveries. This information will be recorded using other specific archetypes as event-based data.">
+		>
+		["pt-br"] = <
+			language = <[ISO_639-1::pt-br]>
+			purpose = <"Para gravar uma visão geral sobre a história obstétrica de uma mulher para fins de: fornecimento de um informações de sua história obstétrica, para reportar a órgãos oficiais ou para apoio à decisão clínica.">
+			use = <"Usar para registrar o panorama da história obstétrica de uma mulher, incluindo um resumo de todas as gestações e os resultados ou intervenções associadas.
+
+Utilizar, se adequado, como a base de relatórios legais sobre nascimentos.
+
+Usar para registrar a visão geral de uma história obstétrica, se necessário - o número de nascimentos a termo, nascimento prematuro, abortos e nascidos vivos. Algumas variações adicionam o número de gestações e o número de nascimentos múltiplos.
+
+Alguns dados podem ser calculados ou derivados de registros de gravidez individuais, se disponíveis.
+">
+			keywords = <"Obstétrico", "Gravidez", "Paridade", "Gestante", "Gravida", "Abortamento induzido", "Aborto espontâneo", "Espontâneo", "Vivo", "Nascimentos", "Natimorto", "Cesariana", "Ectópica", "Neonatal", "Morte", "Tubária", "Vivo", "Múltiplo">
+			misuse = <"Não utilizar para registrar informações de resumo sobre uma única gravidez – neste caso utilize EVALUATION.pregnancy_summary.
+
+Não utilizar para registrar informações detalhadas sobre episódios individuais de gravidez, abortos ou partos. Estas informação deverão ser registradas através de arquétipos específicos, baseados nos dados do evento.
+">
+		>
+		["es-co"] = <
+			language = <[ISO_639-1::es-co]>
+			purpose = <"Sirve para registrar una visión general sobre la historia obstétrica de una mujer con fines de: proporcionar un resumen de su historia obstétrica, la presentación de informes a los órganos estatutarios o el apoyo de soporte de decisiones clínicas">
+			use = <"Sirve para registrar una visión general sobre la historia obstétrica de una mujer, incluyendo un resumen de todos los embarazos.
+
+Utilice este resmen como base para informes legales con respecto a los nacimientos .
+
+Se utiliza para registrar la información general de una historia obstétrica, si es necesario - el número de nacimientos a termino (T) , los nacimientos prematuros (P) , Abortos (A) y niños que viven (L) . Algunas variaciones añaden Gravidez (G) y el número de nacimientos múltiples (M) .
+
+Algunos datos pueden ser calculados o derivados de los registros individuales de embarazo, si están disponibles.">
+			keywords = <"Obstétrica", "Eembarazo", "Paridad", "Gesta", "Parto", "terminacion", "abortos involuntarios", "abortos", "Espontánea", "Vivo", "nacimientos", "mortinatos", "Cesárea", "Ectópico", "Neonatal", "muerte", "Múltiple">
+			misuse = <"No es para registrar la información del embarazo actual - utilice el arquetipo EVALUACIÓN. pregnancy_summary para este propósito.
+
+No es para registrar la información detallada sobre cada uno de los individuales embarazos, abortos involuntarios , Embarazos interrumpidos, o nacimientos. Esta información se registra utilizando otros arquetipos específicos como datos basados ​​en eventos .">
+		>
+	>
+	other_contributors = <"Sheryl Alexander, NT Department of Health, Australia", "Margaret Cotter, AMSANT, Australia", "Michelle Dowden, Miwatj Health Ngalkanbuy Health, Australia", "Tim Garden, NTG Department of Health, Australia", "Sam Heard, Ocean Informatics, Australia (Editor)", "Michelle Kealy, Australia", "Bernadette Lack, Deptartment of Health, NT, Australia", "Heather Leslie, Ocean Informatics, Australia (Editor)", "Ian McNicoll, Ocean Informatics UK, United Kingdom", "Jeremy Oats, NT Health, Australia", "Gary Sinclair, NT DoH, Australia", "Cherie Whitbread, Royal Darwin Hospital, Australia", "Jo Wright, NT Dept of Health, Australia">
+	references = <
+		["1"] = <"NEHTA Clinical Knowledge Manager [Internet]. Australia: National eHealth Transition Authority. [Draft EVALUATION archetype] Obstetric Summary; [authored 2011 Feb 24, cited 2011 Aug 17]. Available from http://dcm.nehta.org.au/ckm/OKM.html#showArchetype_1013.1.971_4.">
+	>
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"5E5629536630883CC4D249A870E97041">
+		["build_uid"] = <"ad221c86-22d6-4119-9148-02e3594df431">
+	>
+
+definition
+	EVALUATION[id1] matches {	-- Obstetric summary
+		data matches {
+			ITEM_TREE[id2] matches {
+				items matches {
+					ELEMENT[id15] occurrences matches {0..1} matches {	-- Ever Pregnant?
+						value matches {
+							DV_BOOLEAN[id20] matches {
+								value matches {True}
+							}
+						}
+					}
+					ELEMENT[id3] occurrences matches {0..1} matches {	-- Gravidity (G)
+						value matches {
+							DV_COUNT[id21] matches {
+								magnitude matches {|0..<100|}
+							}
+						}
+					}
+					ELEMENT[id4] occurrences matches {0..1} matches {	-- Parity
+						value matches {
+							DV_COUNT[id22] matches {
+								magnitude matches {|>=0|}
+							}
+						}
+					}
+					ELEMENT[id16] occurrences matches {0..1} matches {	-- Term Births (T)
+						value matches {
+							DV_COUNT[id23] 
+						}
+					}
+					ELEMENT[id17] occurrences matches {0..1} matches {	-- Preterm Births (P)
+						value matches {
+							DV_COUNT[id24] 
+						}
+					}
+					ELEMENT[id18] occurrences matches {0..1} matches {	-- Abortions (A)
+						value matches {
+							DV_COUNT[id25] 
+						}
+					}
+					ELEMENT[id5] occurrences matches {0..1} matches {	-- Miscarriages
+						value matches {
+							DV_COUNT[id26] matches {
+								magnitude matches {|>=0|}
+							}
+						}
+					}
+					ELEMENT[id6] occurrences matches {0..1} matches {	-- Terminations
+						value matches {
+							DV_COUNT[id27] matches {
+								magnitude matches {|>=0|}
+							}
+						}
+					}
+					ELEMENT[id12] occurrences matches {0..1} matches {	-- Ectopic Pregnancies
+						value matches {
+							DV_COUNT[id28] 
+						}
+					}
+					ELEMENT[id13] occurrences matches {0..1} matches {	-- Stillbirths
+						value matches {
+							DV_COUNT[id29] 
+						}
+					}
+					ELEMENT[id7] occurrences matches {0..1} matches {	-- Live Births
+						value matches {
+							DV_COUNT[id30] matches {
+								magnitude matches {|>=0|}
+							}
+						}
+					}
+					ELEMENT[id11] occurrences matches {0..1} matches {	-- Caesarean Sections
+						value matches {
+							DV_COUNT[id31] matches {
+								magnitude matches {|>=0|}
+							}
+						}
+					}
+					ELEMENT[id19] occurrences matches {0..1} matches {	-- Multiple Births (M)
+						value matches {
+							DV_COUNT[id32] 
+						}
+					}
+					ELEMENT[id8] occurrences matches {0..1} matches {	-- Living Children (L)
+						value matches {
+							DV_COUNT[id33] matches {
+								magnitude matches {|>=0|}
+							}
+						}
+					}
+				}
+			}
+		}
+		protocol matches {
+			ITEM_TREE[id9] matches {
+				items matches {
+					ELEMENT[id10] occurrences matches {0..1} matches {	-- Date Updated
+						value matches {
+							DV_DATE_TIME[id34] 
+						}
+					}
+					ELEMENT[id14] occurrences matches {0..1} matches {	-- Stillbirth Definition
+						value matches {
+							DV_TEXT[id35] 
+						}
+					}
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Obstetric summary">
+				description = <"An overview of the obstetric history of a woman, including a summary of all pregnancies and the associated outcomes or interventions.">
+			>
+			["id3"] = <
+				text = <"Gravidity (G)">
+				description = <"Number of times a woman has been pregnant, including the current pregnancy, if appropriate.">
+			>
+			["id4"] = <
+				text = <"Parity">
+				description = <"Number of times a woman has given birth after 20 weeks and 0 days gestation.">
+			>
+			["id5"] = <
+				text = <"Miscarriages">
+				description = <"Number of times a woman has had a miscarriage at less than 20 weeks of gestation.">
+			>
+			["id6"] = <
+				text = <"Terminations">
+				description = <"Number of times a woman has had a pregnancy terminated, regardless of gestation.">
+			>
+			["id7"] = <
+				text = <"Live Births">
+				description = <"Number of babies born alive.">
+			>
+			["id8"] = <
+				text = <"Living Children (L)">
+				description = <"Number of children who remain alive.">
+			>
+			["id10"] = <
+				text = <"Date Updated">
+				description = <"The date this summary was last updated.">
+			>
+			["id11"] = <
+				text = <"Caesarean Sections">
+				description = <"Number of Caesarean sections performed.">
+			>
+			["id12"] = <
+				text = <"Ectopic Pregnancies">
+				description = <"Number of ectopic pregnancies.">
+			>
+			["id13"] = <
+				text = <"Stillbirths">
+				description = <"Number of stillbirths.">
+			>
+			["id14"] = <
+				text = <"Stillbirth Definition">
+				description = <"Definition of stillbirth.">
+			>
+			["id15"] = <
+				text = <"Ever Pregnant?">
+				description = <"Has the woman ever been pregnant?">
+			>
+			["id16"] = <
+				text = <"Term Births (T)">
+				description = <"Number of infants born on or after 37 weeks of gestation.">
+			>
+			["id17"] = <
+				text = <"Preterm Births (P)">
+				description = <"Number of infants born at less than 37 weeks of gestation.">
+			>
+			["id18"] = <
+				text = <"Abortions (A)">
+				description = <"Number of non-viable pregnancies from all causes and at any gestation, including miscarriages, induced terminations and ectopic pregnancies.">
+			>
+			["id19"] = <
+				text = <"Multiple Births (M)">
+				description = <"Number of birth events in which more than one fetus has been born.">
+			>
+		>
+		["pt-br"] = <
+			["id1"] = <
+				text = <"Sumário obstétrico">
+				description = <"Uma visão geral da história obstétrica de uma mulher, incluindo um resumo de todas as gestações seus resultados ou as intervenções associadas.
+
+">
+			>
+			["id3"] = <
+				text = <"Gestas prévias">
+				description = <"Número de vezes que uma mulher esteve grávida, incluindo a gravidez atual, se for o caso.">
+			>
+			["id4"] = <
+				text = <"Paridade">
+				description = <"Número de vezes que uma mulher deu à luz após 20 semanas e 0 dias de gestação.">
+			>
+			["id5"] = <
+				text = <"Aborto espontâneo">
+				description = <"Número de vezes que uma mulher teve um aborto espontâneo, com menos de 20 semanas de gestação.">
+			>
+			["id6"] = <
+				text = <"Aborto induzido">
+				description = <"Número de vezes que uma mulher teve uma gravidez terminada, desconsiderando a gestação.">
+			>
+			["id7"] = <
+				text = <"Nascidos vivos">
+				description = <"Número de bebes nascidos vivos.">
+			>
+			["id8"] = <
+				text = <"Filhos vivos">
+				description = <"Número de crianças que permanecem vivas.">
+			>
+			["id10"] = <
+				text = <"Data da atualização">
+				description = <"Data da última atualização do sumário.">
+			>
+			["id11"] = <
+				text = <"Cesarianas">
+				description = <"Número de cesarianas realizadas.">
+			>
+			["id12"] = <
+				text = <"Gravidez ectópica">
+				description = <"Número de gravidezes ectópicas.">
+			>
+			["id13"] = <
+				text = <"Natimorto">
+				description = <"Número de natimortos">
+			>
+			["id14"] = <
+				text = <"Definição de natimorto">
+				description = <"Definição de natimorto.">
+			>
+			["id15"] = <
+				text = <"Já esteve grávida?">
+				description = <"A mulher já esteve grávida?">
+			>
+			["id16"] = <
+				text = <"Nascimentos a termo">
+				description = <"Número de bebês nascidos em ou após 37 semanas de gestação.">
+			>
+			["id17"] = <
+				text = <"Nascimento prematuro">
+				description = <"Número de crianças nascidas com menos de 37 semanas de gestação.">
+			>
+			["id18"] = <
+				text = <"Abortos">
+				description = <"Número de gravidezes não viáveis por todas as causas e em qualquer gestação, incluindo abortos espontâneos, abortos induzidos e gravidezes ectópicas.">
+			>
+			["id19"] = <
+				text = <"Nascimentos múltiplos">
+				description = <"Número de eventos de nascimento (partos) nos quais nasceu mais de um feto.">
+			>
+		>
+		["es-co"] = <
+			["id1"] = <
+				text = <"Antecedentes Obstétricos">
+				description = <"Una visión general de la historia obstétrica de una mujer, incluyendo un resumen de todos los embarazos.">
+			>
+			["id3"] = <
+				text = <"Gravidez">
+				description = <"Número de veces que la mujer ha estado en embarazo, incluida la gestacion actual, si es apropiado">
+			>
+			["id4"] = <
+				text = <"Paridad">
+				description = <"Número de veces que una mujer ha dado a luz después de 20 semanas y 0 días de gestación">
+			>
+			["id5"] = <
+				text = <"abortos involuntarios">
+				description = <"numero de veces que una mujer ha tenido un aborto involuntario antes de las 20 semanas de gestación">
+			>
+			["id6"] = <
+				text = <"Embarazos interrumpidos">
+				description = <"Número de veces que una mujer ha tenido un embarazo interrumpidos, independientemente de las semanas de gestación">
+			>
+			["id7"] = <
+				text = <"Nacidos Vivos">
+				description = <"Número de nacidos Vivos">
+			>
+			["id8"] = <
+				text = <"vivos">
+				description = <"Número de Nacidos que continuan vivos">
+			>
+			["id10"] = <
+				text = <"Fecha de Actualización">
+				description = <"Fecha de ultima actualización del resumen">
+			>
+			["id11"] = <
+				text = <"Cesárea">
+				description = <"Número de Cesáreas realizadas">
+			>
+			["id12"] = <
+				text = <"embarazos ectópicos">
+				description = <"Número de embarazos ectópicos">
+			>
+			["id13"] = <
+				text = <"Nacidos Nuertos">
+				description = <"Numero de Nacidos Muertos">
+			>
+			["id14"] = <
+				text = <"Definición muerte fetal">
+				description = <"Definición muerte fetal">
+			>
+			["id15"] = <
+				text = <"Nunca ha estado embarazada?">
+				description = <"ha estado alguna vez embarazada?">
+			>
+			["id16"] = <
+				text = <"Nacimientos a Termino">
+				description = <"Numero de recién nacidos de 37 o mas semanas de gestación">
+			>
+			["id17"] = <
+				text = <"Nacimientos pretermino">
+				description = <"Numero de recien nacidos antes de las 37 semanas de gestación">
+			>
+			["id18"] = <
+				text = <"Abortos">
+				description = <"Número de embarazos no viables por todas las causas y en cualquier edad gestacional , incluyendo abortos involuntarios , Embarazos interrumpidos y embarazos ectópicos">
+			>
+			["id19"] = <
+				text = <"Nacimientos Múltiples (M)">
+				description = <"Número de nacimientos en los cuales ha nacido mas de un producto vivo">
+			>
+		>
+	>

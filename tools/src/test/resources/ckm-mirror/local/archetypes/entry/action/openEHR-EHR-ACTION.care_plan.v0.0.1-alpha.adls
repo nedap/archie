@@ -1,0 +1,374 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated; uid=1a2859a8-f424-45d6-9b02-7f4578e819cd)
+	openEHR-EHR-ACTION.care_plan.v0.0.1-alpha
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Heather Leslie">
+		["organisation"] = <"Ocean Informatics">
+		["email"] = <"heather.leslie@oceaninformatics.com">
+		["date"] = <"2011-05-03">
+	>
+	original_namespace = <"org.openehr">
+	original_publisher = <"openEHR Foundation">
+	custodian_namespace = <"org.openehr">
+	custodian_organisation = <"openEHR Foundation">
+	copyright = <"© Australian Digital Health Agency, openEHR Foundation">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record activity regarding the planning and carrying out of a single care plan as a whole.">
+			use = <"Use to record activity regarding the planning and carrying out of a single care plan as a whole.">
+			keywords = <"care plan", "activity">
+			misuse = <"Not to be used to record activity of individual components of a care plan - use the specific ACTION archetype appropriate for each activity.">
+		>
+	>
+	other_contributors = <"Sistine Barretto-Daniels, Ocean Informatics, Australia", ...>
+	references = <
+		["1"] = <"Derived from: Care Plan, Draft Archetype [Internet]. Australian Digital Health Agency, Australian Digital Health Agency Clinical Knowledge Manager [cited: 2016-08-22]. Available from: http://dcm.nehta.org.au/ckm/#showArchetype_1013.1.1220">
+	>
+	other_details = <
+		["current_contact"] = <"Heather Leslie, Ocean Informatics, heather.leslie@oceaninformatics.com">
+		["MD5-CAM-1.0.1"] = <"953432F4BBFC4D09C6285563D2317D5C">
+		["build_uid"] = <"5bc62fc0-a917-4204-bc09-f62e757c4f56">
+	>
+
+definition
+	ACTION[id1] matches {	-- Care Plan
+		ism_transition matches {
+			ISM_TRANSITION[id4] matches {	-- Care plan Need Identified
+				current_state matches {
+					DV_CODED_TEXT[id37] matches {
+						defining_code matches {[at37]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id38] matches {
+						defining_code matches {[at4]}
+					}
+				}
+			}
+			ISM_TRANSITION[id9] matches {	-- Care Plan Developed
+				current_state matches {
+					DV_CODED_TEXT[id39] matches {
+						defining_code matches {[at37]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id40] matches {
+						defining_code matches {[at9]}
+					}
+				}
+			}
+			ISM_TRANSITION[id35] matches {	-- Care Plan Postponed
+				current_state matches {
+					DV_CODED_TEXT[id41] matches {
+						defining_code matches {[at38]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id42] matches {
+						defining_code matches {[at35]}
+					}
+				}
+			}
+			ISM_TRANSITION[id34] matches {	-- Care Plan Cancelled
+				current_state matches {
+					DV_CODED_TEXT[id43] matches {
+						defining_code matches {[at39]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id44] matches {
+						defining_code matches {[at34]}
+					}
+				}
+			}
+			ISM_TRANSITION[id19] matches {	-- Care Plan Scheduled
+				current_state matches {
+					DV_CODED_TEXT[id45] matches {
+						defining_code matches {[at40]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id46] matches {
+						defining_code matches {[at19]}
+					}
+				}
+			}
+			ISM_TRANSITION[id7] matches {	-- Care Plan Commenced
+				current_state matches {
+					DV_CODED_TEXT[id47] matches {
+						defining_code matches {[at41]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id48] matches {
+						defining_code matches {[at7]}
+					}
+				}
+			}
+			ISM_TRANSITION[id21] matches {	-- Care Plan Reviewed
+				current_state matches {
+					DV_CODED_TEXT[id49] matches {
+						defining_code matches {[at41]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id50] matches {
+						defining_code matches {[at21]}
+					}
+				}
+			}
+			ISM_TRANSITION[id36] matches {	-- Care Plan Suspended
+				current_state matches {
+					DV_CODED_TEXT[id51] matches {
+						defining_code matches {[at42]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id52] matches {
+						defining_code matches {[at36]}
+					}
+				}
+			}
+			ISM_TRANSITION[id33] matches {	-- Care Plan Aborted
+				current_state matches {
+					DV_CODED_TEXT[id53] matches {
+						defining_code matches {[at43]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id54] matches {
+						defining_code matches {[at33]}
+					}
+				}
+			}
+			ISM_TRANSITION[id11] matches {	-- Care Plan Expired
+				current_state matches {
+					DV_CODED_TEXT[id55] matches {
+						defining_code matches {[at43]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id56] matches {
+						defining_code matches {[at11]}
+					}
+				}
+			}
+			ISM_TRANSITION[id14] matches {	-- Care Plan Completed
+				current_state matches {
+					DV_CODED_TEXT[id57] matches {
+						defining_code matches {[at44]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id58] matches {
+						defining_code matches {[at14]}
+					}
+				}
+			}
+		}
+		description matches {
+			ITEM_TREE[id20] matches {
+				items matches {
+					ELEMENT[id3] occurrences matches {0..1} matches {	-- Care Plan Name
+						value matches {
+							DV_TEXT[id59] 
+						}
+					}
+					ELEMENT[id22] occurrences matches {0..1} matches {	-- Description
+						value matches {
+							DV_TEXT[id60] 
+						}
+					}
+					ELEMENT[id26] occurrences matches {0..1} matches {	-- Reason
+						value matches {
+							DV_TEXT[id61] 
+						}
+					}
+				}
+			}
+		}
+		protocol matches {
+			ITEM_TREE[id16] matches {
+				items matches {
+					ELEMENT[id17] occurrences matches {0..1} matches {	-- Care Plan ID
+						value matches {
+							DV_IDENTIFIER[id62] 
+						}
+					}
+					ELEMENT[id18] occurrences matches {0..1} matches {	-- Expiry Date
+						value matches {
+							DV_DATE_TIME[id63] 
+						}
+					}
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Care Plan">
+				description = <"Plan or sequence of discrete activities developed to achieve a specified management goal or treatment outcome, carried out by health professionals and/or the patient.">
+			>
+			["id3"] = <
+				text = <"Care Plan Name">
+				description = <"Name of care plan.">
+			>
+			["id4"] = <
+				text = <"Care plan Need Identified">
+				description = <"Need for a care plan has been identified.">
+			>
+			["id7"] = <
+				text = <"Care Plan Commenced">
+				description = <"Care plan activities commenced and in progress.">
+			>
+			["id9"] = <
+				text = <"Care Plan Developed">
+				description = <"Care plan components identified and documented.">
+			>
+			["id11"] = <
+				text = <"Care Plan Expired">
+				description = <"Care plan duration has passed the 'Expiry Date'.">
+			>
+			["id14"] = <
+				text = <"Care Plan Completed">
+				description = <"All activities related to the care plan have been reconciled or completed.">
+			>
+			["id17"] = <
+				text = <"Care Plan ID">
+				description = <"Identification of care plan.">
+			>
+			["id18"] = <
+				text = <"Expiry Date">
+				description = <"Anticipated date beyond which the care plan can be deemed 'expired'.">
+			>
+			["id19"] = <
+				text = <"Care Plan Scheduled">
+				description = <"Care plan has been scheduled.">
+			>
+			["id21"] = <
+				text = <"Care Plan Reviewed">
+				description = <"Care plan has been reviewed.">
+			>
+			["id22"] = <
+				text = <"Description">
+				description = <"Description of activity performed/enacted against the plan.">
+			>
+			["id26"] = <
+				text = <"Reason">
+				description = <"Reason for activity  being performed /enacted against the plan.">
+			>
+			["id33"] = <
+				text = <"Care Plan Aborted">
+				description = <"Care plan has been aborted.">
+			>
+			["id34"] = <
+				text = <"Care Plan Cancelled">
+				description = <"Care plan has been cancelled prior to commencement.">
+			>
+			["id35"] = <
+				text = <"Care Plan Postponed">
+				description = <"Commencement of care plan has been temporarily postponed to a future date.">
+			>
+			["id36"] = <
+				text = <"Care Plan Suspended">
+				description = <"Care plan is temporarily suspended but intended to resume at a later date.">
+			>
+			["at4"] = <
+				text = <"Care plan Need Identified">
+				description = <"Need for a care plan has been identified.">
+			>
+			["at9"] = <
+				text = <"Care Plan Developed">
+				description = <"Care plan components identified and documented.">
+			>
+			["at35"] = <
+				text = <"Care Plan Postponed">
+				description = <"Commencement of care plan has been temporarily postponed to a future date.">
+			>
+			["at34"] = <
+				text = <"Care Plan Cancelled">
+				description = <"Care plan has been cancelled prior to commencement.">
+			>
+			["at19"] = <
+				text = <"Care Plan Scheduled">
+				description = <"Care plan has been scheduled.">
+			>
+			["at7"] = <
+				text = <"Care Plan Commenced">
+				description = <"Care plan activities commenced and in progress.">
+			>
+			["at21"] = <
+				text = <"Care Plan Reviewed">
+				description = <"Care plan has been reviewed.">
+			>
+			["at36"] = <
+				text = <"Care Plan Suspended">
+				description = <"Care plan is temporarily suspended but intended to resume at a later date.">
+			>
+			["at33"] = <
+				text = <"Care Plan Aborted">
+				description = <"Care plan has been aborted.">
+			>
+			["at11"] = <
+				text = <"Care Plan Expired">
+				description = <"Care plan duration has passed the 'Expiry Date'.">
+			>
+			["at14"] = <
+				text = <"Care Plan Completed">
+				description = <"All activities related to the care plan have been reconciled or completed.">
+			>
+			["at37"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at38"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at39"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at40"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at41"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at42"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at43"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at44"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+		>
+	>
+	term_bindings = <
+		["openehr"] = <
+			["at37"] = <http://openehr.org/id/526>
+			["at38"] = <http://openehr.org/id/527>
+			["at39"] = <http://openehr.org/id/528>
+			["at40"] = <http://openehr.org/id/529>
+			["at41"] = <http://openehr.org/id/245>
+			["at42"] = <http://openehr.org/id/530>
+			["at43"] = <http://openehr.org/id/531>
+			["at44"] = <http://openehr.org/id/532>
+		>
+	>

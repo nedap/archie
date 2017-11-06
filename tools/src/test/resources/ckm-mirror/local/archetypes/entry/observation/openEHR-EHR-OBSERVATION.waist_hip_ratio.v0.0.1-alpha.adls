@@ -1,0 +1,83 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated; uid=52ac9af3-0713-4b60-8711-194e41e1ad76)
+	openEHR-EHR-OBSERVATION.waist_hip_ratio.v0.0.1-alpha
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Heather Leslie">
+		["organisation"] = <"Ocean Informatics, Australia">
+		["email"] = <"heather.leslie@oceaninformatics.com">
+		["date"] = <"2016-10-21">
+	>
+	original_namespace = <"org.openehr">
+	original_publisher = <"openEHR Foundation">
+	custodian_namespace = <"org.openehr">
+	custodian_organisation = <"openEHR Foundation">
+	copyright = <"© openEHR Foundation">
+	licence = <"This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 License. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/.">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record the ratio of the circumference of the waist to the circumference of the hips
+
+The waist-hip ratio is a calculated ratio used as an indicator of general health and risk of developing serious health conditions.">
+			use = <"Use to record the ratio of the circumference of the waist to the circumference of the hips as an indicator of general health and risk of developing serious health conditions.
+
+Use to enter the Waist-hip ratio either manually (ie calculated and directly entered by the clinician), or automatically (ie calculation and entry is done automatically by a software application, based on separate waist and hip circumference measurements).
+
+Formulas: Waist-hip ration is usually calculated as waist measurement divided by hip measurement (W ÷ H).">
+			keywords = <"waist", "hip", "WHR", "circumference">
+			misuse = <"Not to be used to record the actual waist or hip circumference measurements. Use the appropriate run-time name constraints for the Circumference data element within OBSERVATION.body_segment for each measurement.">
+		>
+	>
+	other_contributors = <"Heather Leslie, Ocean Informatics, Australia (Editor)", ...>
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"FEF39F9B5BE597CF861ABF7F7FCA8104">
+		["build_uid"] = <"c0d0b84d-4724-42e3-8ee8-bbf889316d17">
+	>
+
+definition
+	OBSERVATION[id1] matches {	-- Waist-hip ratio
+		data matches {
+			HISTORY[id2] matches {
+				events cardinality matches {1..*; unordered} matches {
+					EVENT[id3] occurrences matches {0..1} matches {	-- Any point in time event
+						data matches {
+							ITEM_LIST[id4] matches {
+								items matches {
+									ELEMENT[id7] occurrences matches {0..1} matches {	-- Waist-hip ratio
+										value matches {
+											DV_PROPORTION[id8] matches {
+												type matches {1}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Waist-hip ratio">
+				description = <"The ratio of the circumference of the waist to the circumference of the hips.">
+			>
+			["id3"] = <
+				text = <"Any point in time event">
+				description = <"Default, unspecified point in time which may be explicitly defined in a template or at run-time.">
+			>
+			["id7"] = <
+				text = <"Waist-hip ratio">
+				description = <"Ratio with unitary denominator">
+			>
+		>
+	>

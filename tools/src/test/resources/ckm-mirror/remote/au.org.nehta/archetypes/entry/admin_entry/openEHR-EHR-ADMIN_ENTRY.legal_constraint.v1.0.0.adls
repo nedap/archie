@@ -1,0 +1,100 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated)
+	openEHR-EHR-ADMIN_ENTRY.legal_constraint.v1.0.0
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Heather Leslie">
+		["organisation"] = <"Ocean Informatics">
+		["email"] = <"heather.leslie@oceaninformatics.com">
+		["date"] = <"17/12/2010">
+	>
+	copyright = <"© 2010 NEHTA">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record details of any legal constraint or order in effect about the individual.">
+			use = <"Use to record legal constraint or order in effect about the individual.">
+			keywords = <"legal", "guardian", "guardianship", "custody", "constraint", "order">
+			misuse = <"Not to be used to record directives about individual wishes for future healthcare.">
+		>
+	>
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"293B2E0A3CF64A2206EDA5B6AEDC9B00">
+	>
+
+definition
+	ADMIN_ENTRY[id1] matches {	-- Legal Constraint
+		data matches {
+			ITEM_TREE[id2] matches {
+				items cardinality matches {1..*; unordered} matches {
+					ELEMENT[id3] matches {	-- Type of constraint/order
+						value matches {
+							DV_TEXT[id9] 
+						}
+					}
+					ELEMENT[id6] occurrences matches {0..1} matches {	-- Description
+						value matches {
+							DV_TEXT[id10] 
+						}
+					}
+					ELEMENT[id4] occurrences matches {0..1} matches {	-- Start Date
+						value matches {
+							DV_DATE_TIME[id11] 
+						}
+					}
+					ELEMENT[id5] occurrences matches {0..1} matches {	-- Expiry Date
+						value matches {
+							DV_DATE_TIME[id12] 
+						}
+					}
+					ELEMENT[id7] occurrences matches {0..1} matches {	-- Nominated party
+						value matches {
+							DV_TEXT[id13] 
+						}
+					}
+					allow_archetype CLUSTER[id8] matches {	-- Nominated party details
+						include
+							archetype_id/value matches {/.*/}
+					}
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Legal Constraint">
+				description = <"Details about legal constraints or orders that are in place about the individual, for example, juvenile justice order, involuntary mental health patient or restraining order.">
+			>
+			["id3"] = <
+				text = <"Type of constraint/order">
+				description = <"Identification of the type of constraint or order, for example, juvenile justice order, involuntary mental health patient order or restraining order.">
+			>
+			["id4"] = <
+				text = <"Start Date">
+				description = <"Date/time of onset of validity of the constraint.">
+			>
+			["id5"] = <
+				text = <"Expiry Date">
+				description = <"Date/time of expiry or cessation of validity of the constraint.">
+			>
+			["id6"] = <
+				text = <"Description">
+				description = <"Description about the constraint.">
+			>
+			["id7"] = <
+				text = <"Nominated party">
+				description = <"Name of nominated or responsible person or organisation.">
+			>
+			["id8"] = <
+				text = <"Nominated party details">
+				description = <"Further details, including contact details for the nominated person or organisation.">
+			>
+		>
+	>
