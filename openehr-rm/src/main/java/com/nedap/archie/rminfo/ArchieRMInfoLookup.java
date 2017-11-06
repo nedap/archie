@@ -174,7 +174,7 @@ public class ArchieRMInfoLookup extends ReflectionModelInfoLookup {
             return typeInCollection.equals(CodePhrase.class) ||
                     typeInCollection.equals(DvCodedText.class);
         } else if(cObject instanceof CBoolean) {
-            return typeInCollection.equals(Boolean.class);
+            return typeInCollection.equals(Boolean.class) || typeInCollection.getName().equals("boolean");
         }
         return false;
 

@@ -55,7 +55,7 @@ public abstract class Event<Type extends ItemStructure> extends Locatable {
         setThisAsParent(data, "data");
     }
 
-    public DvDuration offset() {
+    public DvDuration getOffset() {
         DvDuration result = new DvDuration();
         Duration duration = Duration.between(OffsetDateTime.from(((History) getParent()).getOrigin().getValue()), OffsetDateTime.from(time.getValue()));
         result.setValue(duration);

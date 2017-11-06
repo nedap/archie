@@ -41,6 +41,12 @@ public class ArchieModelNamingStrategy implements ModelNamingStrategy {
                 method.getName().startsWith("set") ||
                 method.getName().startsWith("add") ) {
             return snakeCaseStrategy.translate(method.getName().substring(3)).toLowerCase();
+        } else if (method.getName().startsWith("is")) {
+            if(method.getName().equalsIgnoreCase("isIntegral")) {
+                return "is_integral";
+            } else {
+                return snakeCaseStrategy.translate(method.getName().substring(2)).toLowerCase();
+            }
         }
         return method.getName();
     }

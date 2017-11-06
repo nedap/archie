@@ -135,7 +135,7 @@ public abstract class ReflectionModelInfoLookup implements ModelInfoLookup {
         for(Field field: ReflectionUtils.getAllFields(clazz)) {
             addRMAttributeInfo(clazz, typeInfo, typeToken, field);
         }
-        Set<Method> getters = ReflectionUtils.getAllMethods(clazz, (method) -> method.getName().startsWith("get"));
+        Set<Method> getters = ReflectionUtils.getAllMethods(clazz, (method) -> method.getName().startsWith("get") || method.getName().startsWith("is"));
         for(Method method:getters) {
             addRMAttributeInfo(clazz, typeInfo, typeToken, method);
         }
@@ -143,9 +143,15 @@ public abstract class ReflectionModelInfoLookup implements ModelInfoLookup {
 
     private void addRMAttributeInfo(Class clazz, RMTypeInfo typeInfo, TypeToken typeToken, Method getMethod) {
         String attributeName = namingStrategy.getAttributeName(getMethod);
-        String javaFieldName = getMethod.getName().substring(3);
+        String javaFieldName = null;
+        if(getMethod.getName().startsWith("is")) {
+            javaFieldName = getMethod.getName().substring(2);
+        } else {
+            javaFieldName = getMethod.getName().substring(3);
+        }
         String javaFieldNameUpperCased = upperCaseFirstChar(javaFieldName);
         Method setMethod = null, addMethod = null;
+
         if (getMethod == null) {
             getMethod = getMethod(clazz, "is" + javaFieldNameUpperCased);
         }
@@ -160,7 +166,7 @@ public abstract class ReflectionModelInfoLookup implements ModelInfoLookup {
 
         Class rawFieldType = fieldType.getRawType();
         Class typeInCollection = getTypeInCollection(fieldType);
-        if (setMethod != null) {
+       // if (setMethod != null) {
             RMAttributeInfo attributeInfo = new RMAttributeInfo(
                     attributeName,
                     null,
@@ -172,9 +178,9 @@ public abstract class ReflectionModelInfoLookup implements ModelInfoLookup {
                     addMethod
             );
             typeInfo.addAttribute(attributeInfo);
-        } else {
-            logger.info("property without a set method ignored for field {} on class {}", attributeName, clazz.getSimpleName());
-        }
+        //} else {
+        //    logger.info("property without a set method ignored for field {} on class {}", attributeName, clazz.getSimpleName());
+       // }
     }
 
     private void addRMAttributeInfo(Class clazz, RMTypeInfo typeInfo, TypeToken typeToken, Field field) {
