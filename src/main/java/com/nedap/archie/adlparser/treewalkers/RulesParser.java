@@ -267,9 +267,14 @@ public class RulesParser extends BaseTreeWalker {
     }
 
     private List<Expression> parseArgumentList(ArgumentListContext argumentListContext) {
-        List<Expression> expressions = new ArrayList<>(argumentListContext.expression().size());
-        for(ExpressionContext expressionContext:argumentListContext.expression()) {
-            expressions.add(parseExpression(expressionContext));
+        List<Expression> expressions;
+        if (argumentListContext == null) {  // No arguments
+            expressions = new ArrayList<>();
+        } else {
+            expressions = new ArrayList<>(argumentListContext.expression().size());
+            for (ExpressionContext expressionContext : argumentListContext.expression()) {
+                expressions.add(parseExpression(expressionContext));
+            }
         }
         return expressions;
     }
