@@ -1,0 +1,274 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated; uid=a369e633-783e-4947-8a14-34a5cf4c24f7)
+	openEHR-EHR-CLUSTER.physical_properties.v0.0.1-alpha
+
+language
+	original_language = <[ISO_639-1::en]>
+	translations = <
+		["ar-sy"] = <
+			language = <[ISO_639-1::ar-sy]>
+			author = <
+				["name"] = <"Mona Saleh">
+			>
+		>
+	>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Dr Ian McNicoll">
+		["organisation"] = <"openEHR Archetype Editorial Group / Ocean Informatics">
+		["email"] = <"ian.mcnicoll@oceaninformatics.com">
+		["date"] = <"2009-01-27">
+	>
+	original_namespace = <"org.openehr">
+	original_publisher = <"openEHR Foundation">
+	custodian_namespace = <"org.openehr">
+	custodian_organisation = <"openEHR Foundation">
+	copyright = <"© openEHR Foundation">
+	licence = <"This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 License. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/.">
+	details = <
+		["ar-sy"] = <
+			language = <[ISO_639-1::ar-sy]>
+			purpose = <"لتسجيل الخصائص الفيزيائية لشيئ ما, مثل جزء من الجسم, عينة أو آفة.">
+			use = <"لتسجيل التفاصيل الفيزيائية لجزء من الجسم, جهيزة, آفة أو عينة.">
+			keywords = <"العينة/النموذج", "المعمل/المختبر", "العينة", "الباثولوجيا/المرضية", "شيئ", "جهيزة", "الغِرْسة">
+			misuse = <"لا يستخدم لتسجيل الوزن أو الطول الكلي للجسم سواء أكان حقيقيا أو مُصحَّحا أو تقديرات أخرى كلية لحجم الجسم, مثل قياسات الخصر/موضع الحزام ">
+		>
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record the physical properties of an object such as a body part, specimen or lesion.">
+			use = <"To record physical details of a body part, device, device, lesion or specimen.">
+			keywords = <"specimen", "laboratory", "sample", "pathology", "object", "device", "implant">
+			misuse = <"Do not use to record whole body weight / height whether actual or adjusted or other overall estimates of bidy size such as waist/ girth measurement.">
+		>
+	>
+	other_contributors = <"Sam Heard Ocean Informatics", "Heather Leslie Ocean Informatics">
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"F4DB0F6E476F695019C6DF3C8206CF36">
+		["build_uid"] = <"5ea5b88a-e7ff-4e69-938c-16fe210ad014">
+	>
+
+definition
+	CLUSTER[id1] matches {	-- Physical properties of an object
+		items matches {
+			ELEMENT[id37] occurrences matches {0..1} matches {	-- Physical object name
+				value matches {
+					DV_TEXT[id42] 
+				}
+			}
+			ELEMENT[id21] occurrences matches {0..1} matches {	-- Weight
+				value matches {
+					DV_QUANTITY[id43] matches {
+						property matches {[at1]}
+					}
+				}
+			}
+			allow_archetype CLUSTER[id41] matches {	-- Dimensions
+				include
+					archetype_id/value matches {/openEHR-EHR-CLUSTER\.dimensions(-[a-zA-Z0-9_]+)*\.v1/}
+			}
+			ELEMENT[id24] occurrences matches {0..1} matches {	-- Description
+				value matches {
+					DV_TEXT[id44] 
+				}
+			}
+			ELEMENT[id39] matches {	-- Image
+				value matches {
+					DV_MULTIMEDIA[id45] matches {
+						media_type matches {[ac1]}		-- Image (synthesised)
+					}
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["ar-sy"] = <
+			["id1"] = <
+				text = <"الخصائص الفيزيائية للشيء">
+				description = <"لتسجيل الخصائص الفيزيائية للشيئ مثل جزء من الجسم, العينة أو الآفة.">
+			>
+			["id21"] = <
+				text = <"الوزن">
+				description = <"وزن الشيئ">
+			>
+			["id24"] = <
+				text = <"الوصف">
+				description = <"وصف نصي للخصائص الفيزيائية الأخرى للشيئ. لا يستخدم لتسجيل الخصائص التي قد تؤثر على جودة تفسير نتيجة الاختبار - استخدم بدلا من ذلك (قضايا العينة عند استقبالها/استلامها) في نموذج العينة لهذا الغرض.">
+			>
+			["id37"] = <
+				text = <"اسم الشيئ ">
+				description = <"الشيئ محل الاهتمام. قد يكون جزءا من الجسم, جهيزة أو عينة.">
+			>
+			["id39"] = <
+				text = <"الصورة">
+				description = <"صورة الشخص">
+			>
+			["id41"] = <
+				text = <"*Dimensions(en)">
+				description = <"*Dimensions of the object.(en)">
+			>
+			["at1"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at2"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at3"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at4"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at5"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at6"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at7"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at8"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at9"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at10"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at11"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at12"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at13"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["ac1"] = <
+				text = <"الصورة (synthesised)">
+				description = <"صورة الشخص (synthesised)">
+			>
+		>
+		["en"] = <
+			["id1"] = <
+				text = <"Physical properties of an object">
+				description = <"To record the phycial properties of an object such as a body part, specimen or lesion.">
+			>
+			["id21"] = <
+				text = <"Weight">
+				description = <"Weight of the object.">
+			>
+			["id24"] = <
+				text = <"Description">
+				description = <"A text description of other physical characteristics of the object.  Do not use to record characteristics that might affect the quality of a test interpretation - use 'Specimen received issues' in the Specimen archetype for this purpose.">
+			>
+			["id37"] = <
+				text = <"Physical object name">
+				description = <"The object concerned. May be a body part, device or specimen.">
+			>
+			["id39"] = <
+				text = <"Image">
+				description = <"An image of the object.">
+			>
+			["id41"] = <
+				text = <"Dimensions">
+				description = <"Dimensions of the object.">
+			>
+			["at1"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at2"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at3"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at4"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at5"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at6"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at7"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at8"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at9"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at10"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at11"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at12"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at13"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["ac1"] = <
+				text = <"Image (synthesised)">
+				description = <"An image of the object. (synthesised)">
+			>
+		>
+	>
+	term_bindings = <
+		["openehr"] = <
+			["at1"] = <http://openehr.org/id/124>
+			["at2"] = <http://openehr.org/id/425>
+			["at3"] = <http://openehr.org/id/426>
+			["at4"] = <http://openehr.org/id/427>
+			["at5"] = <http://openehr.org/id/428>
+			["at6"] = <http://openehr.org/id/429>
+			["at7"] = <http://openehr.org/id/401>
+			["at8"] = <http://openehr.org/id/402>
+			["at9"] = <http://openehr.org/id/404>
+			["at10"] = <http://openehr.org/id/405>
+			["at11"] = <http://openehr.org/id/406>
+			["at12"] = <http://openehr.org/id/407>
+			["at13"] = <http://openehr.org/id/414>
+		>
+	>
+	value_sets = <
+		["ac1"] = <
+			id = <"ac1">
+			members = <"at2", "at3", "at4", "at5", "at6", "at7", "at8", "at9", "at10", "at11", "at12", "at13">
+		>
+	>

@@ -154,8 +154,9 @@ public class ArchetypeValidator {
         result.setErrors(messages);
         if(messages.isEmpty()) {
             try {
-                result.setFlattened(new Flattener(repository).flatten(archetype));
-                messages.addAll(runValidations(lookup, archetype, repository, flatParent, validationsPhase3));
+                Archetype flattened = new Flattener(repository).flatten(archetype);
+                result.setFlattened(flattened);
+                messages.addAll(runValidations(lookup, flattened, repository, flatParent, validationsPhase3));
             } catch (Exception e) {
                 messages.add(new ValidationMessage(ErrorType.OTHER, "flattening failed with exception " + e));
             }

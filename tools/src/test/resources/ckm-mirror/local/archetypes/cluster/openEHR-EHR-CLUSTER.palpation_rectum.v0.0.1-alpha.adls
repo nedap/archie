@@ -1,0 +1,253 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated; uid=8f6cfff6-4f12-4c74-83da-6174608580d1)
+	openEHR-EHR-CLUSTER.palpation_rectum.v0.0.1-alpha
+
+language
+	original_language = <[ISO_639-1::en]>
+	translations = <
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			author = <
+				["name"] = <"Vebjørn Arntzen">
+				["organisation"] = <"Oslo universitetssykehus HF">
+				["email"] = <"varntzen@ous-hf.no">
+			>
+			accreditation = <"RN, Enterprise Architect">
+		>
+	>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Silje Ljosland Bakke">
+		["organisation"] = <"National ICT Norway">
+		["email"] = <"silje.ljosland.bakke@nasjonalikt.no">
+		["date"] = <"2015-09-17">
+	>
+	original_namespace = <"org.openehr">
+	original_publisher = <"openEHR Foundation">
+	custodian_namespace = <"org.openehr">
+	custodian_organisation = <"openEHR Foundation">
+	copyright = <"© openEHR Foundation, Nasjonal IKT HF">
+	licence = <"This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 License. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/.">
+	details = <
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			purpose = <"Brukes til å registrere en fritekstbeskrivelse og klinisk tolkning av funn ved palpasjon av rektum.">
+			use = <"Brukes for å registrere en fritekstbeskrivelse av overordnede funn ved palpasjon av rektum. Denne arketypen inneholder de basale dataelementer som er identifisert, men kan bli utvidet over tid etter som man finner kliniske krav til det.
+
+Denne arketypen har blitt designet spesielt for å settes inn i SLOT'et \"Undersøkelsesdetaljer\" i arketypen OBSERVATION.exam (Norsk: Funn ved fysisk undersøkelse), men kan også bli brukt i andre OBSERVATION- eller CLUSTER-arketyper der det er klinisk hensiktsmessig.
+
+Brukes som rammeverk der andre CLUSTER-arketyper kan nøstes i SLOT'et \"Undersøkelsesdetaljer\" for å romme detaljerte strukturerte funn i tillegg, for eksempel CLUSTER.palpation_prostate.
+
+Denne arketypen kan inngå i en templat for rektaleksplorasjon (DRE) sammen med andre CLUSTER-arketyper for å registrere data knyttet til for eksempel funn ved perianalområdet eller blod på hansken.
+
+CLUSTER.exclusion_exam (Norsk: Eksklusjon av en fysisk undersøkelse) kan som en opsjon bli nøstet i SLOT'et for \"Undersøkelse ikke utført\" for å registrere detaljer om hvorfor undersøkelsen ikke ble gjennomført.
+
+Bruk dataelementet \"Klinisk beskrivelse\" for å innlemme fritekstbeskrivelser av kliniske funn fra eksisterende eller historiske kliniske IT-systemer inn i et arketypeformat.">
+			keywords = <"Palpasjon, rektum, rektal, anal, analundersøkelse, DRE, distal sigmoid, endetarm, endetarmsundersøkelse", ...>
+			misuse = <"Skal ikke brukes for å registrere data som ikke er knyttet til palpasjon av rektum.
+
+Skal ikke brukes for å registrere anamnestiske opplysninger - bruk spesifikke OBSERVATION- og CLUSTER-arketyper til dette, for eksempel OBSERVATION.story (Norsk: Anamnese) og CLUSTER.symptom_sign (Norsk: Symptom/Sykdomstegn).
+
+Skal ikke brukes for å registrere frittstående kliniske observasjoner eller målinger eller testresultater. Bruk spesifikke OBSERVATION-arketyper, for eksempel OBSERVATION.blood_pressure eller OBSERVATION.imaging_exam.">
+		>
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"For recording a narrative description and clinical interpretation of the findings observed during the palpation of the rectum.">
+			use = <"Use to record a narrative description of the overall findings observed during the palpation of the rectum. This archetype consists of core examination pattern data elements and may be expanded further over time as specific clinical requirements are identified.
+
+This archetype has been specifically designed to be used in the 'Examination detail' SLOT within the OBSERVATION.exam archetype, but can also be used within other OBSERVATION or CLUSTER archetypes, where clinically appropriate.
+
+Use to provide a framework in which CLUSTER archetypes can be nested in the 'Examination findings' SLOT to record additional structured physical examination findings - for example, a Digital Rectal Examination (DRE) can be represented by inserting CLUSTER.palpation_prostate or CLUSTER.palpation_cervix into the Examination findings SLOT in this archetype. 
+
+The CLUSTER.exclusion_exam archetype can be nested within the 'Examination not done' SLOT to optionally record explicit details about the examination not being performed.
+
+Use to incorporate the narrative descriptions of clinical findings within existing or legacy clinical systems into an archetyped format, using the 'Clinical Description' data element.">
+			keywords = <"palpation", "rectal", "anal", "DRE", "digital">
+			misuse = <"Not to be used for recording data not related to the palpation of the rectum.
+
+Not to be used for recording the clinical history - use specific OBSERVATION and CLUSTER archetypes. For example OBSERVATION.story and CLUSTER.symptom.
+
+Not to be used to record stand-alone clinical observations or measurements or test results - use specific OBSERVATION archetypes. For example OBSERVATION.blood_pressure or OBSERVATION.imaging_exam.">
+		>
+	>
+	other_contributors = <"Morten Aas, Oslo Universitetssykehus, Norway", "Vebjørn Arntzen, Oslo universitetssykehus HF, Norway (Nasjonal IKT redaktør)", "Silje Ljosland Bakke, Nasjonal IKT HF, Norway (Nasjonal IKT redaktør)", "Kristian Berg, Universitetssykehuset Nord Norge, Norway", "Ole Andreas Bjordal, Webmed, Norway", "Gunn Elin Blakkisrud, DIPS ASA, Norway", "Bjørn Christensen, Helse Bergen HF, Norway", "Hildegard Franke, freshEHR Clinical Informatics Ltd., United Kingdom (openEHR Editor)", "Ingrid Heitmann, Oslo universitetssykehus HF, Norway", "Evelyn Hovenga, EJSH Consulting, Australia", "Susanna Jönsson, Landstinget i Värmland, Sweden", "Lars Morgan Karlsen, DIPS ASA, Norway", "Nils Kolstrup, Skansen Legekontor og Nasjonalt Senter for samhandling og telemedisin, Norway", "Heather Leslie, Ocean Informatics, Australia (openEHR Editor)", "Siv Marie Lien, DIPS ASA, Norway", "Ian McNicoll, freshEHR Clinical Informatics, United Kingdom", "Harald Moi, Oslo universitetssykehus, professor emeritus, Norway", "Andrej Orel, Marand d.o.o., Slovenia", "Norwegian Review Summary, Nasjonal IKT HF, Norway", "Tanja Riise, Nasjonal IKT HF, Norway", "Anoop Shah, University College London, United Kingdom", "Line Silsand, Universitetssykehuset i Nord-Norge, Norway", "John Tore Valand, Helse Bergen, Norway (openEHR Editor)">
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"64299BF642868B6BA686BEB2AEE24DA4">
+		["build_uid"] = <"89fbb9e5-0818-4607-b84d-d30d51c11bce">
+	>
+
+definition
+	CLUSTER[id1] matches {	-- Palpation of rectum
+		items matches {
+			ELEMENT[id3] occurrences matches {0..1} matches {	-- No abnormality detected
+				value matches {
+					DV_BOOLEAN[id15] matches {
+						value matches {True}
+					}
+				}
+			}
+			ELEMENT[id4] occurrences matches {0..1} matches {	-- Clinical description
+				value matches {
+					DV_TEXT[id16] 
+				}
+			}
+			ELEMENT[id14] occurrences matches {0..1} matches {	-- Faeces description
+				value matches {
+					DV_TEXT[id17] 
+				}
+			}
+			CLUSTER[id10] matches {	-- Finding
+				items matches {
+					ELEMENT[id11] occurrences matches {0..1} matches {	-- Clinical finding
+						value matches {
+							DV_TEXT[id18] 
+						}
+					}
+					allow_archetype CLUSTER[id12] matches {	-- Site
+						include
+							archetype_id/value matches {/openEHR-EHR-CLUSTER\.anatomical_location(-[a-zA-Z0-9_]+)*\.v1|openEHR-EHR-CLUSTER\.anatomical_location_clock(-[a-zA-Z0-9_]+)*\.v0/}
+					}
+					ELEMENT[id13] occurrences matches {0..1} matches {	-- Clinical description
+						value matches {
+							DV_TEXT[id19] 
+						}
+					}
+				}
+			}
+			allow_archetype CLUSTER[id5] matches {	-- Specific findings
+				include
+					archetype_id/value matches {/.*/}
+			}
+			allow_archetype CLUSTER[id6] matches {	-- Multimedia representation
+				include
+					archetype_id/value matches {/openEHR-EHR-CLUSTER\.multimedia(-[a-zA-Z0-9_]+)*\.v1/}
+			}
+			ELEMENT[id7] matches {	-- Clinical interpretation
+				value matches {
+					DV_TEXT[id20] 
+				}
+			}
+			ELEMENT[id8] occurrences matches {0..1} matches {	-- Comment
+				value matches {
+					DV_TEXT[id21] 
+				}
+			}
+			allow_archetype CLUSTER[id9] matches {	-- Examination not done
+				include
+					archetype_id/value matches {/openEHR-EHR-CLUSTER\.exclusion_exam(-[a-zA-Z0-9_]+)*\.v1/}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Palpation of rectum">
+				description = <"Findings observed during the palpation of the rectum.">
+			>
+			["id3"] = <
+				text = <"No abnormality detected">
+				description = <"Statement that no abnormality was detected (NAD) on physical examination.">
+			>
+			["id4"] = <
+				text = <"Clinical description">
+				description = <"Narrative description of the overall findings observed during the palpation of rectum.">
+			>
+			["id5"] = <
+				text = <"Specific findings">
+				description = <"Structured details about the physical examination findings.">
+			>
+			["id6"] = <
+				text = <"Multimedia representation">
+				description = <"Digital image, video or diagram representing the physical examination findings.">
+			>
+			["id7"] = <
+				text = <"Clinical interpretation">
+				description = <"Single word, phrase or brief description that represents the clinical meaning and significance of the physical examination findings.">
+			>
+			["id8"] = <
+				text = <"Comment">
+				description = <"Additional narrative about the physical examination findings, not captured in other fields.">
+			>
+			["id9"] = <
+				text = <"Examination not done">
+				description = <"Details to explicitly record that this examination was not performed.">
+			>
+			["id10"] = <
+				text = <"Finding">
+				description = <"Description of findings on palpation of the rectum.">
+			>
+			["id11"] = <
+				text = <"Clinical finding">
+				description = <"Identification of the the finding, by name.">
+			>
+			["id12"] = <
+				text = <"Site">
+				description = <"Record of the site of the finding in the rectum.">
+			>
+			["id13"] = <
+				text = <"Clinical description">
+				description = <"Narrative description of the identified finding.">
+			>
+			["id14"] = <
+				text = <"Faeces description">
+				description = <"Narrative description of the faeces palpated in the rectum.">
+			>
+		>
+		["nb"] = <
+			["id1"] = <
+				text = <"Palpasjon av rektum">
+				description = <"Funn ved palpasjon av rektum.">
+			>
+			["id3"] = <
+				text = <"Uten anmerkning">
+				description = <"Utsagn om at ingen avvik var oppdaget ved undersøkelsen (U.a.).">
+			>
+			["id4"] = <
+				text = <"Klinisk beskrivelse">
+				description = <"Overordnet fritekstbeskrivelse av funnene ved palpasjon av rektum.">
+			>
+			["id5"] = <
+				text = <"Spesifikke funn">
+				description = <"Ytterligere strukturerte detaljer om undersøkelsesfunnene.">
+			>
+			["id6"] = <
+				text = <"Multimedia">
+				description = <"Digitale bilder, video eller diagram som representerer undersøkelsesfunnene.">
+			>
+			["id7"] = <
+				text = <"Klinisk fortolkning">
+				description = <"Enkelt ord, frase eller kortfattet tekst som uttrykker klinisk betydning og signifikans ved funnene.">
+			>
+			["id8"] = <
+				text = <"Kommentar">
+				description = <"Ytterligere fritekst om funn ved undersøkelsen ikke registrert i andre felt.">
+			>
+			["id9"] = <
+				text = <"Undersøkelse ikke utført">
+				description = <"Detaljer for å eksplisitt registrere at denne undersøkelsen ikke ble utført.">
+			>
+			["id10"] = <
+				text = <"Funn">
+				description = <"Beskrivelse av funn ved palpasjon av rektum.">
+			>
+			["id11"] = <
+				text = <"Kliniske funn">
+				description = <"Navnet på det kliniske funnet.">
+			>
+			["id12"] = <
+				text = <"Sted">
+				description = <"Stedet i rektum funnet ble gjort.">
+			>
+			["id13"] = <
+				text = <"Klinisk beskrivelse">
+				description = <"Fritekstbeskrivelse om det kliniske funnet.">
+			>
+			["id14"] = <
+				text = <"Beskrivelse av fæces">
+				description = <"Fritekstbeskrivelse om fæces som ble palpert i rektum.">
+			>
+		>
+	>

@@ -1,0 +1,283 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated; uid=8e02deb2-7500-4703-81a3-e2bfb22c4bc2)
+	openEHR-EHR-EVALUATION.precaution.v1.0.0
+
+language
+	original_language = <[ISO_639-1::en]>
+	translations = <
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			author = <
+				["name"] = <"Silje Ljosland Bakke og John Tore Valand">
+				["organisation"] = <"Nasjonal IKT HF, Helse Bergen HF">
+				["email"] = <"silje.ljosland.bakke@nasjonalikt.no, john.tore.valand@helse-bergen.no">
+			>
+		>
+	>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Silje Ljosland Bakke / John Tore Valand">
+		["organisation"] = <"Nasjonal IKT HF / Helse Bergen HF">
+		["email"] = <"silje.ljosland.bakke@nasjonalikt.no/ john.tore.valand@helse-bergen.no">
+		["date"] = <"2016-02-29">
+	>
+	original_namespace = <"org.openehr">
+	original_publisher = <"openEHR Foundation">
+	custodian_namespace = <"org.openehr">
+	custodian_organisation = <"openEHR Foundation">
+	copyright = <"© openEHR Foundation">
+	licence = <"This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 License. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/.">
+	details = <
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			purpose = <"For å registrere en klinisk vesentlig tilstand eller status som er unik eller idiosynkratisk for et individ, og som regnes som viktig informasjon i forbindelse med beslutninger om behandling.">
+			use = <"Brukes for å registrere en klinisk vesentlig tilstand eller status som er unik eller idiosynkratisk for et individ, og som regnes som viktig informasjon i forbindelse med beslutning om behandling.
+
+Denne arketypen bør regnes som en viktig arketype for beslutningsstøttesystemer i forbindelse med forordning av nye kliniske intervensjoner.
+
+Eksempler på tilstander som kan være grunnlag for å registrere forsiktighetsregler kan være:
+- Immunhemmende/-modulerende behandling - med en referanse til en ordinasjon av kjemoterapi eller steroider, eller en leukemidiagnose
+- Nyresvikt - lenket til nyrefunksjonstester eller en formell nyresviktdiagnose
+- Står i transplantasjonskø
+- Har fått implantert organ
+- Har fått implantert metall
+- Pågående utredning/oppfølging av mistenkt eller
+verifisert malign lidelse
+- Deltagelse i klinisk farmakologiske studie
+- Viktig blodfortynnende behandling">
+			keywords = <"forholdsregel", "forhindre", "unngå", "uønsket hendelse", "forebygging">
+			misuse = <"Skal ikke brukes for å registrere en klinisk intervensjon (f.eks. en undersøkelse eller behandling) som ikke må utføres på grunn av sannsynligheten eller muligheten for skade på individet. Bruk EVALUATION.contraindication (Norsk: Kontraindikasjon) for dette formålet.
+
+Skal ikke brukes for å registrere individets personlige preferanser. Bruk spesifikke arketyper for dette formålet.">
+		>
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record a condition or state of the individual that is clinically significant and unique or idiosyncratic for this individual, and is considered vital information when making treatment decisions.">
+			use = <"Use to record a condition or state of the individual that is clinically significant and unique or idiosyncratic for this individual, and which are considered vital information when making treatment decisions.
+
+This archetype should be regarded as a critical archetype by any clinical decision support system testing for any relevant therapeutic precautions as a clinician commences a new clinical intervention for an individual. 
+
+Examples of conditions that warrant creation of a precaution include, but are not limited to:
+- Immunosuppressed/on immunosuppressive therapy – linked to medication order for chemo or steroids; or diagnosis of leukaemia;
+- Renal failure – linked to renal function tests and/or a formal diagnosis of renal failure;
+- Waiting for organ transplant;
+- Undergoing a regular treatment such as radiation therapy or dialysis;
+- Transplanted organ or metal implant in situ;
+- Ongoing investigation or follow up of suspected or verified malignant disease;
+- Participation in a pharmacological trial; or
+- Using anticoagulant treatment.">
+			keywords = <"precaution", "prevent", "avoid", "adverse event", "prevention", "caution", "alert", "warning">
+			misuse = <"Not to be used to record a clinical intervention (including, but not limited to, use of a treatment or performance of a test or procedure) that should not be carried out due to the likelihood, or possibility, of harm being caused to an individual. Use the EVALUATION.contraindication for this purpose.
+
+Not to be used to record advanced directives for care or personal preferences of the individual. Use specific archetypes for this purpose.">
+		>
+	>
+	other_contributors = <"Tomas Alme, DIPS, Norway", "Vebjørn Arntzen, Oslo universitetssykehus HF, Norway", "Silje Ljosland Bakke, Nasjonal IKT HF, Norway (openEHR Editor)", "Hildegard Franke, freshEHR Clinical Informatics Ltd., United Kingdom", "Heather Grain, Llewelyn Grain Informatics, Australia", "Evelyn Hovenga, EJSH Consulting, Australia", "Lars Morgan Karlsen, DIPS ASA, Norway", "Heather Leslie, Ocean Informatics, Australia (openEHR Editor)", "Ian McNicoll, freshEHR Clinical Informatics, United Kingdom", "Andrej Orel, Marand d.o.o., Slovenia", "Vladimir Pizzo, Hospital Sírio Libanês, Brazil", "Anoop Shah, University College London, United Kingdom", "Norwegian Review Summary, Nasjonal IKT HF, Norway", "Nyree Taylor, Ocean Informatics, Australia", "John Tore Valand, Helse Bergen, Norway (openEHR Editor)">
+	other_details = <
+		["current_contact"] = <"Heather Leslie, Ocean Informatics, heather.leslie@oceaninformatics.com">
+		["MD5-CAM-1.0.1"] = <"DEF7C64AC79157D489EF8650A2B83020">
+		["build_uid"] = <"04f8151b-213f-4f43-b0d2-b8d2e7644d39">
+	>
+
+definition
+	EVALUATION[id1] matches {	-- Precaution
+		data matches {
+			ITEM_TREE[id2] matches {
+				items cardinality matches {1..*; unordered} matches {
+					ELEMENT[id3] matches {	-- Condition
+						value matches {
+							DV_TEXT[id26] 
+						}
+					}
+					ELEMENT[id15] occurrences matches {0..1} matches {	-- Status
+						value matches {
+							DV_CODED_TEXT[id27] matches {
+								defining_code matches {[ac1]}		-- Status (synthesised)
+							}
+							DV_TEXT[id28] 
+						}
+					}
+					ELEMENT[id4] matches {	-- Evidence
+						value matches {
+							DV_TEXT[id29] 
+						}
+					}
+					ELEMENT[id14] occurrences matches {0..1} matches {	-- Category
+						value matches {
+							DV_TEXT[id30] 
+						}
+					}
+					ELEMENT[id9] occurrences matches {0..1} matches {	-- Comment
+						value matches {
+							DV_TEXT[id31] 
+						}
+					}
+				}
+			}
+		}
+		protocol matches {
+			ITEM_TREE[id7] matches {
+				items matches {
+					allow_archetype CLUSTER[id21] matches {	-- Extension
+						include
+							archetype_id/value matches {/.*/}
+					}
+					ELEMENT[id23] occurrences matches {0..1} matches {	-- Valid period start
+						value matches {
+							DV_DATE_TIME[id32] 
+						}
+					}
+					ELEMENT[id25] occurrences matches {0..1} matches {	-- Valid period end
+						value matches {
+							DV_DATE_TIME[id33] 
+						}
+					}
+					ELEMENT[id10] occurrences matches {0..1} matches {	-- Review date
+						value matches {
+							DV_DATE_TIME[id34] 
+						}
+					}
+					ELEMENT[id5] occurrences matches {0..1} matches {	-- Last updated
+						value matches {
+							DV_DATE_TIME[id35] 
+						}
+					}
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Precaution">
+				description = <"A condition or state of the individual that is clinically significant and unique or idiosyncratic for this individual, and is considered vital information when making treatment decisions.">
+			>
+			["id3"] = <
+				text = <"Condition">
+				description = <"Identification, by name, of a condition or state.">
+			>
+			["id4"] = <
+				text = <"Evidence">
+				description = <"Description of the evidence identified to support the precaution.">
+			>
+			["id5"] = <
+				text = <"Last updated">
+				description = <"Date when the precaution information was last updated.">
+			>
+			["id9"] = <
+				text = <"Comment">
+				description = <"Additional narrative about the precaution, not captured in other fields.">
+			>
+			["id10"] = <
+				text = <"Review date">
+				description = <"Date when next due for review by a clinician.">
+			>
+			["id14"] = <
+				text = <"Category">
+				description = <"Type of the 'Condition' identified.">
+			>
+			["id15"] = <
+				text = <"Status">
+				description = <"Assertion about the current state of the identified 'Precaution'.">
+			>
+			["at16"] = <
+				text = <"Active">
+				description = <"The precaution is currently active.">
+			>
+			["at19"] = <
+				text = <"Resolved">
+				description = <"The previously asserted precaution has been clinically reassessed and considered no longer to be an active risk.">
+			>
+			["at20"] = <
+				text = <"Refuted">
+				description = <"The precaution has been clinically reassessed or has been disproved with a high level of clinical certainty by testing.">
+			>
+			["id21"] = <
+				text = <"Extension">
+				description = <"Additional information required to capture local content or to align with other reference models/formalisms.">
+			>
+			["id23"] = <
+				text = <"Valid period start">
+				description = <"Date/time after which the 'Condtion' is regarded as active.">
+			>
+			["id25"] = <
+				text = <"Valid period end">
+				description = <"Date/time after which the 'Condtion' is regarded as inactive.">
+			>
+			["ac1"] = <
+				text = <"Status (synthesised)">
+				description = <"Assertion about the current state of the identified 'Precaution'. (synthesised)">
+			>
+		>
+		["nb"] = <
+			["id1"] = <
+				text = <"Forsiktighetshensyn">
+				description = <"En klinisk vesentlig tilstand eller status som er unik eller idiosynkratisk for et individ, og som regnes som viktig informasjon i forbindelse med beslutninger om behandling.">
+			>
+			["id3"] = <
+				text = <"Tilstand">
+				description = <"Navnet på tilstanden eller statusen.">
+			>
+			["id4"] = <
+				text = <"*Evidence(en)">
+				description = <"*Description of the evidence identified to support the precaution.(en)">
+			>
+			["id5"] = <
+				text = <"Sist oppdatert">
+				description = <"Dato da informasjonen sist ble oppdatert.">
+			>
+			["id9"] = <
+				text = <"Kommentar">
+				description = <"Ytterligere informasjon om forsiktighetshensynet, som ikke kan registreres i andre felter.">
+			>
+			["id10"] = <
+				text = <"Evalueringsdato">
+				description = <"Dato for neste kliniske evaluering.">
+			>
+			["id14"] = <
+				text = <"*Category(en)">
+				description = <"*Type of the 'Condition' identified.(en)">
+			>
+			["id15"] = <
+				text = <"*Status(en)">
+				description = <"*Assertion about the current state of the identified 'Precaution'.(en)">
+			>
+			["at16"] = <
+				text = <"*Active(en)">
+				description = <"*The precaution is currently active.(en)">
+			>
+			["at19"] = <
+				text = <"*Resolved(en)">
+				description = <"*The previously asserted precaution has been clinically reassessed and considered no longer to be an active risk.(en)">
+			>
+			["at20"] = <
+				text = <"*Refuted(en)">
+				description = <"*The precaution has been clinically reassessed or has been disproved with a high level of clinical certainty by testing.(en)">
+			>
+			["id21"] = <
+				text = <"Tilleggsinformasjon">
+				description = <"Ytterligere informasjon som trengs for å kunne registrere lokalt definert innhold eller for å tilpasse til andre referansemodeller/formalismer.">
+			>
+			["id23"] = <
+				text = <"Start av gyldighetsperiode">
+				description = <"Forsiktighetshensynet regnes som aktivt etter denne datoen.">
+			>
+			["id25"] = <
+				text = <"Slutt av gyldighetsperiode">
+				description = <"Forsiktighetshensynet regnes som inaktivt etter denne datoen.">
+			>
+			["ac1"] = <
+				text = <"*Status(en) (synthesised)">
+				description = <"*Assertion about the current state of the identified 'Precaution'.(en) (synthesised)">
+			>
+		>
+	>
+	value_sets = <
+		["ac1"] = <
+			id = <"ac1">
+			members = <"at16", "at19", "at20">
+		>
+	>

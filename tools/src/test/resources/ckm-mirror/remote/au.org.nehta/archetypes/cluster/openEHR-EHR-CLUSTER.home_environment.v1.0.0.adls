@@ -1,0 +1,77 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated)
+	openEHR-EHR-CLUSTER.home_environment.v1.0.0
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Heather Leslie">
+		["organisation"] = <"Ocean Informatics">
+		["email"] = <"heather.leslie@oceaninformatics.com">
+		["date"] = <"2013-03-08">
+	>
+	copyright = <"© National E-Health Transition Authority">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"Use to record details about the subject's home or accomodation environment.">
+			use = <"Use to record details about the subject's home or accomodation environment, especially where it may impact healthcare provision or care management choices.
+
+This archeytpe has been designed to support NT Hearing Health requirements for recording the presence of a working refrigerator in the home in which to store medications.
+
+In the future, this archetype may be enhanced and extended for other purposes. For example: as part of an occupational therapist's assessment about suitability for a patient to return home.">
+			keywords = <"home", "equipment">
+			misuse = <"">
+		>
+	>
+	other_details = <
+		["current_contact"] = <"Heather Leslie, Ocean Informatics, heather.leslie@oceaninformatics.com">
+		["MD5-CAM-1.0.1"] = <"A35306C9CA666E434C5AE301C2497461">
+	>
+
+definition
+	CLUSTER[id1] matches {	-- Home Environment
+		items matches {
+			ELEMENT[id3] occurrences matches {0..1} matches {	-- Description
+				value matches {
+					DV_TEXT[id5] 
+				}
+			}
+			ELEMENT[id2] occurrences matches {0..1} matches {	-- Working Refrigerator
+				value matches {
+					DV_BOOLEAN[id6] matches {
+						value matches {True, False}
+					}
+				}
+			}
+			ELEMENT[id4] occurrences matches {0..1} matches {	-- Number of Bedrooms
+				value matches {
+					DV_COUNT[id7] 
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Home Environment">
+				description = <"Details about the home environment of a subject.">
+			>
+			["id2"] = <
+				text = <"Working Refrigerator">
+				description = <"Presence of a working refrigerator in the home.">
+			>
+			["id3"] = <
+				text = <"Description">
+				description = <"Description of the home environment.">
+			>
+			["id4"] = <
+				text = <"Number of Bedrooms">
+				description = <"Number of bedrooms in the home.">
+			>
+		>
+	>

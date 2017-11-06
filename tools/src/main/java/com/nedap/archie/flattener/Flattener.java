@@ -6,7 +6,10 @@ import com.nedap.archie.aom.terminology.ArchetypeTerm;
 import com.nedap.archie.aom.terminology.ArchetypeTerminology;
 import com.nedap.archie.aom.utils.AOMUtils;
 import com.nedap.archie.aom.utils.ArchetypeParsePostProcesser;
+import com.nedap.archie.paths.PathSegment;
+import com.nedap.archie.paths.PathUtil;
 import com.nedap.archie.query.AOMPathQuery;
+import com.nedap.archie.query.APathQuery;
 import com.nedap.archie.rules.Assertion;
 
 import java.util.ArrayList;
@@ -538,12 +541,13 @@ public class Flattener {
     private void flattenSingleAttribute(CComplexObject newObject, CAttribute attribute) {
         if(attribute.getDifferentialPath() != null) {
             //this overrides a specific path
-            ArchetypeModelObject object = new AOMPathQuery(attribute.getDifferentialPath()).find(newObject);
+            ArchetypeModelObject object = newObject.itemAtPath(attribute.getDifferentialPath());
             if(object == null) {
                 //it is possible that the object points to a reference, in which case we need to clone the referenced node, then try again
                 //AOM spec paragraph 7.2: 'proxy reference targets are expanded inline if the child archetype overrides them.'
                 //also examples in ADL2 spec about internal references
                 //so find the internal references here!
+                //TODO: AOMUtils.pathAtSpecializationLevel(pathSegments.subList(0, pathSegments.size()-1), flatParent.specializationDepth());
                 CComplexObjectProxy internalReference = new AOMPathQuery(attribute.getDifferentialPath()).findAnyInternalReference(newObject);
                 if(internalReference != null) {
                     //in theory this can be a use node within a use node.
@@ -556,6 +560,19 @@ public class Flattener {
                     } else {
                         throw new RuntimeException("cannot find target in CComplexObjectProxy");
                     }
+                } else {
+                    //lookup the parent and try to add the last attribute if it does not exist
+                    List<PathSegment> pathSegments = new APathQuery(attribute.getDifferentialPath()).getPathSegments();
+                    String pathMinusLastNode = PathUtil.getPath(pathSegments.subList(0, pathSegments.size()-1));
+                    CObject parentObject = newObject.itemAtPath(pathMinusLastNode);
+                    if(parentObject != null && parentObject instanceof CComplexObject) {
+                        //attribute does not exist, but does exist in RM (or it would not have passed the ArchetypeValidator, or the person using
+                        //this flattener does not care
+                        CAttribute realAttribute = new CAttribute(pathSegments.get(pathSegments.size()-1).getNodeName());
+                        ((CComplexObject) parentObject).addAttribute(realAttribute);
+                        flattenAttribute(newObject, realAttribute, attribute);
+                    }
+
                 }
             }
             else if(object instanceof CAttribute) {

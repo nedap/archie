@@ -199,7 +199,7 @@ public class BigArchetypeValidatorTest {
                     log.info("regression {} not implemented yet, so not yet tested", regression);
                     notImplemented++;
                 } else {
-                    if (validation.passes()) {
+                    if (!validation.hasWarningsOrErrors()) {
                         log.error("test failed: archetype {} considered valid, it should not", archetype.getArchetypeId());
                         errorCount++;
                     } else {
@@ -220,7 +220,7 @@ public class BigArchetypeValidatorTest {
                     }
                 }
             } else {
-                if(!validation.passes()) {
+                if(validation.hasWarningsOrErrors()) {
                     log.error("Validation should pass, but it failed for archetype {}, {}", archetype.getArchetypeId(), regression);
                     printErrors(validation);
                     shouldBeFineButWasinvalid++;

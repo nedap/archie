@@ -1,0 +1,241 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated)
+	openEHR-EHR-OBSERVATION.tobacco_use.v1.0.0
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Heather Leslie">
+		["organisation"] = <"Ocean Informatics">
+		["email"] = <"heather.leslie@oceaninformatics.com">
+		["date"] = <"6/5/2009">
+	>
+	copyright = <"© 2011 National E-Health Transition Authority">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record details about the actual use or consumption of tobacco and tobacco-containing products.">
+			use = <"Use to record details of the use of all common forms of tobacco and tobacco-containing products. This includes actual use at specific point in time and average use over intervals of time.
+
+A smoking or tobacco use diary could be built up over time by recording the use of tobacco on multiple, sequential days - recording actual consumptions using the 'Specified Day' event for each daily entry.
+
+A record of typical tobacco use during a period can be recorded by recording the amount of tobacco used using the 'Average use' event - the mean use over a specified period of time.">
+			keywords = <"tobacco", "cigarette", "cigar", "pipe", "snuff", "kretek", "beebi", "bibi", "shisha", "snuff", "snus", "hookah", "gutka", "smoking", "chewing">
+			misuse = <"Not to be used for recording persistent, summary details about tobacco use and consumption - this should be captured using the EVALUATION.tobacco_use_summary archetype.">
+		>
+	>
+	other_contributors = <"Ian McNicoll, Ocean Informatics, UK", "Sam Heard, Ocean Informatics, Australia">
+	references = <
+		["1"] = <"Tobacco Use draft archetype [Internet]. London: openEHR Clinical Knowledge Manager, openEHR Foundation; 06 May 2009 [cited 2011 Jul 15]. Available from: http://www.openehr.org/knowledge/OKM.html#showArchetype_1013.1.149_3.">
+	>
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"4EE6CE90C17D90E084D4A2C86E8D9F4A">
+	>
+
+definition
+	OBSERVATION[id1] matches {	-- Tobacco Use
+		data matches {
+			HISTORY[id2] matches {
+				events cardinality matches {1..*; unordered} matches {
+					EVENT[id3] occurrences matches {0..1} matches {	-- Any event
+						data matches {
+							ITEM_TREE[id4] matches {
+								items matches {
+									ELEMENT[id5] occurrences matches {0..1} matches {	-- Tobacco Use?
+										value matches {
+											DV_BOOLEAN[id25] matches {
+												value matches {True, False}
+											}
+										}
+									}
+									CLUSTER[id6] matches {	-- Usage Details
+										items matches {
+											ELEMENT[id7] occurrences matches {0..1} matches {	-- Form
+												value matches {
+													DV_CODED_TEXT[id26] matches {
+														defining_code matches {[ac1]}		-- Form (synthesised)
+													}
+												}
+											}
+											CLUSTER[id16] occurrences matches {0..1} matches {	-- Amount
+												items matches {
+													ELEMENT[id15] occurrences matches {0..1} matches {	-- Number Smoked
+														value matches {
+															DV_QUANTITY[id27] matches {
+																property matches {[at15]}
+																units matches {"/h", "/d", "/wk", "/mo"}
+															}
+														}
+													}
+													ELEMENT[id17] occurrences matches {0..1} matches {	-- Weight Consumed
+														value matches {
+															DV_QUANTITY[id28] matches {
+																property matches {[at16]}
+																units matches {"gm/d", "gm/wk"}
+															}
+														}
+													}
+												}
+											}
+											ELEMENT[id18] occurrences matches {0..1} matches {	-- Triggers
+												value matches {
+													DV_TEXT[id29] 
+												}
+											}
+											ELEMENT[id19] occurrences matches {0..1} matches {	-- Context
+												value matches {
+													DV_TEXT[id30] 
+												}
+											}
+										}
+									}
+									ELEMENT[id20] occurrences matches {0..1} matches {	-- Evidence of Dependence
+										value matches {
+											DV_TEXT[id31] 
+										}
+									}
+									ELEMENT[id22] occurrences matches {0..1} matches {	-- Comment
+										value matches {
+											DV_TEXT[id32] 
+										}
+									}
+								}
+							}
+						}
+					}
+					POINT_EVENT[id24] matches {	-- Specified Day
+						data matches {
+							use_node ITEM_TREE[id33] /data[id2]/events[id3]/data[id4]	-- /data[id2]/events[Any event]/data[id4]
+						}
+					}
+					INTERVAL_EVENT[id23] matches {	-- Average Use Interval
+						math_function matches {
+							DV_CODED_TEXT[id34] matches {
+								defining_code matches {[at17]}
+							}
+						}
+						data matches {
+							use_node ITEM_TREE[id35] /data[id2]/events[id3]/data[id4]	-- /data[id2]/events[Any event]/data[id4]
+						}
+					}
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Tobacco Use">
+				description = <"Details about use of all forms of tobacco and tobacco-containing products at a specified point in time or over a specified period of time.">
+			>
+			["id3"] = <
+				text = <"Any event">
+				description = <"An unspecified event.">
+			>
+			["id5"] = <
+				text = <"Tobacco Use?">
+				description = <"Is any tobacco being used or consumed?">
+			>
+			["id6"] = <
+				text = <"Usage Details">
+				description = <"Details about the use or consumption of specific forms of tobacco.">
+			>
+			["id7"] = <
+				text = <"Form">
+				description = <"Form of tobacco used or consumed.">
+			>
+			["at8"] = <
+				text = <"Cigarette">
+				description = <"Manufactured cigarettes, containing processed tobacco and rolled into a cylinder.">
+			>
+			["at9"] = <
+				text = <"Roll-Your-Own">
+				description = <"Hand-filled cigarettes using loose tobacco rolled in a cigarette paper.">
+			>
+			["at10"] = <
+				text = <"Cigar">
+				description = <"Air-cured and fermented tobaccos with a tobacco-leaf wrapper.">
+			>
+			["at11"] = <
+				text = <"Pipe">
+				description = <"Tobacco placed in a bowl and smoke inhaled through a stem.">
+			>
+			["at13"] = <
+				text = <"Waterpipe">
+				description = <"Tobacco, often flavoured, is burned then cooled through a basin of water eand consumed through a hose and mouthpiece.">
+			>
+			["at14"] = <
+				text = <"Smokeless tobacco">
+				description = <"Tobacco consumed by inhalation or ingestion - including snuff, snus, gutka, dipping tobacco and dissolvable tobacco.">
+			>
+			["id15"] = <
+				text = <"Number Smoked">
+				description = <"Number of units containing tobacco consumed.">
+			>
+			["id16"] = <
+				text = <"Amount">
+				description = <"Amount of tobacco used or consumed.">
+			>
+			["id17"] = <
+				text = <"Weight Consumed">
+				description = <"Weight of tobacco consumed.">
+			>
+			["id18"] = <
+				text = <"Triggers">
+				description = <"Identified triggers which stimulate or cause use of this form of tobacco.">
+			>
+			["id19"] = <
+				text = <"Context">
+				description = <"Context of use of this form of tobacco.">
+			>
+			["id20"] = <
+				text = <"Evidence of Dependence">
+				description = <"Description of any evidence of dependence on tobacco.">
+			>
+			["id22"] = <
+				text = <"Comment">
+				description = <"Additional narrative about the tobacco use or consumption not captured in other fields.">
+			>
+			["id23"] = <
+				text = <"Average Use Interval">
+				description = <"Average, or typical, typical use over a specified time interval. For example, allows recording of average number of cigarettes smoked per week for the previous 10 years.">
+			>
+			["id24"] = <
+				text = <"Specified Day">
+				description = <"Actual tobacco consumption on a specified day. Supports recording consumption in a Smoking Diary.">
+			>
+			["at15"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at16"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at17"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["ac1"] = <
+				text = <"Form (synthesised)">
+				description = <"Form of tobacco used or consumed. (synthesised)">
+			>
+		>
+	>
+	term_bindings = <
+		["openehr"] = <
+			["at15"] = <http://openehr.org/id/382>
+			["at16"] = <http://openehr.org/id/347>
+			["at17"] = <http://openehr.org/id/146>
+		>
+	>
+	value_sets = <
+		["ac1"] = <
+			id = <"ac1">
+			members = <"at8", "at9", "at10", "at11", "at13", "at14">
+		>
+	>

@@ -43,6 +43,13 @@ public class CAttribute extends ArchetypeConstraint {
 
     private List<CObject> children = new ArrayList<>();
 
+    public CAttribute() {
+
+    }
+    public CAttribute(String rmAttributeName) {
+        this.rmAttributeName = rmAttributeName;
+    }
+
     public String getRmAttributeName() {
         return rmAttributeName;
     }

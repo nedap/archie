@@ -1,0 +1,169 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated)
+	openEHR-EHR-CLUSTER.myringoplasty.v1.0.0
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Heather Leslie">
+		["organisation"] = <"Ocean Informatics">
+		["email"] = <"heather.leslie@oceaninformatics.com">
+		["date"] = <"2013-03-21">
+	>
+	copyright = <"© National E-Health Transition Authority">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record details about the myringplasty performed.">
+			use = <"Use to record details about the myringplasty performed.">
+			keywords = <"myringoplasty", "procedure", "operation">
+			misuse = <"">
+		>
+	>
+	references = <
+		["1"] = <"Northern Territory Government, Department of Health: Northern Territory Hearing Health Program ENT Pre-Op & Surgical Procedure Form.">
+	>
+	other_details = <
+		["current_contact"] = <"Heather Leslie, Ocean Informatics, heather.leslie@oceaninformatics.com">
+		["MD5-CAM-1.0.1"] = <"4FC066090A0C7A5E57B532BA41A49EA0">
+	>
+
+definition
+	CLUSTER[id1] matches {	-- Myringoplasty Procedure
+		items matches {
+			ELEMENT[id2] occurrences matches {0..1} matches {	-- Revision?
+				value matches {
+					DV_BOOLEAN[id14] matches {
+						value matches {True}
+					}
+				}
+			}
+			ELEMENT[id3] occurrences matches {0..1} matches {	-- Approach
+				value matches {
+					DV_CODED_TEXT[id15] matches {
+						defining_code matches {[ac1]}		-- Approach (synthesised)
+					}
+				}
+			}
+			ELEMENT[id7] occurrences matches {0..1} matches {	-- Graft Material
+				value matches {
+					DV_CODED_TEXT[id16] matches {
+						defining_code matches {[ac2]}		-- Graft Material (synthesised)
+					}
+				}
+			}
+			ELEMENT[id13] occurrences matches {0..1} matches {	-- Technique
+				value matches {
+					DV_CODED_TEXT[id17] matches {
+						defining_code matches {[ac3]}		-- Technique (synthesised)
+					}
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Myringoplasty Procedure">
+				description = <"Surgical procedure in which a performation of the pars tensa of the tympanic membrane is closed.">
+			>
+			["id2"] = <
+				text = <"Revision?">
+				description = <"Is this operation a revision of a previous myringoplasty?">
+			>
+			["id3"] = <
+				text = <"Approach">
+				description = <"The operative approach to the tympanic membrane.">
+			>
+			["at4"] = <
+				text = <"Transcanal">
+				description = <"Approach through the ear canal, without incision.">
+			>
+			["at5"] = <
+				text = <"Endaural">
+				description = <"Approach through the ear canal.">
+			>
+			["at6"] = <
+				text = <"Postaural">
+				description = <"Approach via an incision behind the ear.">
+			>
+			["id7"] = <
+				text = <"Graft Material">
+				description = <"Material used to repair the perforation.">
+			>
+			["at8"] = <
+				text = <"Temporal Fascia">
+				description = <"Fascial tissue covering the temporalis muscle was used.">
+			>
+			["at9"] = <
+				text = <"Cartilage">
+				description = <"Cartilage was used.">
+			>
+			["at10"] = <
+				text = <"Cartilage/Perichondrium">
+				description = <"Cartilage and perichondrial tissue was used.">
+			>
+			["at11"] = <
+				text = <"Fat">
+				description = <"Fat tissue was used.">
+			>
+			["at12"] = <
+				text = <"Other">
+				description = <"Other tissue was used.">
+			>
+			["id13"] = <
+				text = <"Technique">
+				description = <"The technique used to perform the repair of the perforation.">
+			>
+			["at14"] = <
+				text = <"Underlay">
+				description = <"An underlay technique was used.">
+			>
+			["at15"] = <
+				text = <"Inlay">
+				description = <"An inlay technique was used.">
+			>
+			["at16"] = <
+				text = <"Onlay">
+				description = <"An onlay technique was used.">
+			>
+			["at17"] = <
+				text = <"Butterfly">
+				description = <"A butterfly technique was used.">
+			>
+			["at18"] = <
+				text = <"Patch">
+				description = <"A patch technique was used.">
+			>
+			["ac1"] = <
+				text = <"Approach (synthesised)">
+				description = <"The operative approach to the tympanic membrane. (synthesised)">
+			>
+			["ac2"] = <
+				text = <"Graft Material (synthesised)">
+				description = <"Material used to repair the perforation. (synthesised)">
+			>
+			["ac3"] = <
+				text = <"Technique (synthesised)">
+				description = <"The technique used to perform the repair of the perforation. (synthesised)">
+			>
+		>
+	>
+	value_sets = <
+		["ac1"] = <
+			id = <"ac1">
+			members = <"at4", "at5", "at6">
+		>
+		["ac2"] = <
+			id = <"ac2">
+			members = <"at8", "at9", "at10", "at11", "at12">
+		>
+		["ac3"] = <
+			id = <"ac3">
+			members = <"at14", "at15", "at16", "at17", "at18">
+		>
+	>

@@ -1,0 +1,174 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated)
+	openEHR-EHR-OBSERVATION.rinne_weber_result.v1.0.0
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Heather Leslie">
+		["organisation"] = <"Ocean Informatics">
+		["email"] = <"heather.leslie@oceaninformatics.com">
+		["date"] = <"2013-03-26">
+	>
+	copyright = <"© National E-Health Transition Authority">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record the results of the Rinne and Weber tests as part of screening for hearing loss.">
+			use = <"Use to record the results of the Rinne and Weber tests as part of screening for hearing loss.">
+			keywords = <"rinne", "weber", "test", "result", "air", "bone", "conduction", "lateralisation", "lateralization">
+			misuse = <"Not to be used to record the results of other hearing tests. Use other OBSERVATION archetypes specific for the purpose, for example, OBSERVATION.audiometry_result and OBSERVATION.tympanogram_226hz.">
+		>
+	>
+	other_contributors = <"Ian McNicoll, Ocean Informatics, UK", ...>
+	other_details = <
+		["current_contact"] = <"Heather Leslie, Ocean Informatics, heather.leslie@oceaninformatics.com">
+		["MD5-CAM-1.0.1"] = <"E4452413C8C5DA6FAD4CA3542E145C65">
+	>
+
+definition
+	OBSERVATION[id1] matches {	-- Rinne and Weber Test Results
+		data matches {
+			HISTORY[id2] matches {
+				events cardinality matches {1..*; unordered} matches {
+					EVENT[id3] occurrences matches {0..1} matches {	-- Any event
+						data matches {
+							ITEM_TREE[id4] matches {
+								items matches {
+									ELEMENT[id5] occurrences matches {0..1} matches {	-- Weber Test Result
+										value matches {
+											DV_CODED_TEXT[id20] matches {
+												defining_code matches {[ac1]}		-- Weber Test Result (synthesised)
+											}
+										}
+									}
+									CLUSTER[id9] occurrences matches {0..2} matches {	-- Rinne Test
+										items matches {
+											ELEMENT[id11] occurrences matches {0..1} matches {	-- Ear Tested
+												value matches {
+													DV_CODED_TEXT[id21] matches {
+														defining_code matches {[ac2]}		-- Ear Tested (synthesised)
+													}
+												}
+											}
+											ELEMENT[id10] occurrences matches {0..1} matches {	-- Rinne Test Result
+												value matches {
+													DV_CODED_TEXT[id22] matches {
+														defining_code matches {[ac3]}		-- Rinne Test Result (synthesised)
+													}
+												}
+											}
+										}
+									}
+									ELEMENT[id18] matches {	-- Clinical Interpretation
+										value matches {
+											DV_TEXT[id23] 
+										}
+									}
+									ELEMENT[id19] matches {	-- Comment
+										value matches {
+											DV_TEXT[id24] 
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Rinne and Weber Test Results">
+				description = <"Two hearing screening tests, commonly recorded together to determine the presence and character of any detected hearing loss.">
+			>
+			["id3"] = <
+				text = <"Any event">
+				description = <"Default, unspecified point in time or interval event which may be explicitly defined in a template or at run-time.">
+			>
+			["id5"] = <
+				text = <"Weber Test Result">
+				description = <"A test to compare bone conduction in both ears.">
+			>
+			["at6"] = <
+				text = <"No Lateralisation">
+				description = <"The sound from vibration is heard equally in both ears.">
+			>
+			["at7"] = <
+				text = <"Lateralising Left">
+				description = <"The sound from the vibration is heard predominantly on the left.">
+			>
+			["at8"] = <
+				text = <"Lateralising Right">
+				description = <"The sound from the vibration is heard predominantly on the right.">
+			>
+			["id9"] = <
+				text = <"Rinne Test">
+				description = <"A test to compare the subject's perception of sounds transmitted by air conduction to those transmitted by bone conduction through the mastoid.">
+			>
+			["id10"] = <
+				text = <"Rinne Test Result">
+				description = <"The result of the Rinne Test.">
+			>
+			["id11"] = <
+				text = <"Ear Tested">
+				description = <"Identification of the ear being tested.">
+			>
+			["at12"] = <
+				text = <"Left">
+				description = <"The left ear was tested.">
+			>
+			["at13"] = <
+				text = <"Right">
+				description = <"The right ear was tested.">
+			>
+			["at14"] = <
+				text = <"Negative">
+				description = <"Air Conduction is less than bone conduction.">
+			>
+			["at15"] = <
+				text = <"Positive">
+				description = <"Air Conduction is greater than bone conduction.">
+			>
+			["id18"] = <
+				text = <"Clinical Interpretation">
+				description = <"Single word, phrase or brief description represents the clinical meaning and significance of the physical examination findings.">
+			>
+			["id19"] = <
+				text = <"Comment">
+				description = <"Additional narrative about the Rinne and Weber tests not captured in other fields.">
+			>
+			["ac1"] = <
+				text = <"Weber Test Result (synthesised)">
+				description = <"A test to compare bone conduction in both ears. (synthesised)">
+			>
+			["ac2"] = <
+				text = <"Ear Tested (synthesised)">
+				description = <"Identification of the ear being tested. (synthesised)">
+			>
+			["ac3"] = <
+				text = <"Rinne Test Result (synthesised)">
+				description = <"The result of the Rinne Test. (synthesised)">
+			>
+		>
+	>
+	value_sets = <
+		["ac1"] = <
+			id = <"ac1">
+			members = <"at6", "at7", "at8">
+		>
+		["ac2"] = <
+			id = <"ac2">
+			members = <"at12", "at13">
+		>
+		["ac3"] = <
+			id = <"ac3">
+			members = <"at15", "at14">
+		>
+	>

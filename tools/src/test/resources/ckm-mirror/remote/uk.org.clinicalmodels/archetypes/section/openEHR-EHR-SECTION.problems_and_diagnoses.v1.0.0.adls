@@ -1,0 +1,57 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated)
+	openEHR-EHR-SECTION.problems_and_diagnoses.v1.0.0
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Ian McNicoll">
+		["organisation"] = <"Ocean Informatics, UK">
+		["email"] = <"ian.mcnicoll@oceaninformatics.com">
+		["date"] = <"2013-10-18">
+	>
+	copyright = <"© Clinical Models UK">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"">
+			use = <"">
+			misuse = <"">
+		>
+	>
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"22F432BA9F3DB1ECC8EDED3EE4C509A9">
+	>
+
+definition
+	SECTION[id1] matches {	-- Problems and diagnoses
+		items matches {
+			SECTION[id2] occurrences matches {0..1} 	-- Primary diagnoses
+			SECTION[id3] occurrences matches {0..1} 	-- Co-morbidities
+			SECTION[id4] occurrences matches {0..1} 	-- Problems
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Problems and diagnoses">
+				description = <"unknown">
+			>
+			["id2"] = <
+				text = <"Primary diagnoses">
+				description = <"*">
+			>
+			["id3"] = <
+				text = <"Co-morbidities">
+				description = <"*">
+			>
+			["id4"] = <
+				text = <"Problems">
+				description = <"*">
+			>
+		>
+	>

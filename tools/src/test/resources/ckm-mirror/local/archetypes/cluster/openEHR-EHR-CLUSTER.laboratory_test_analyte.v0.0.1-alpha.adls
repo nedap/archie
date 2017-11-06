@@ -1,0 +1,340 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated; uid=1bee5cff-c5f5-4ee1-a8cf-8667a20dc2ca)
+	openEHR-EHR-CLUSTER.laboratory_test_analyte.v0.0.1-alpha
+
+language
+	original_language = <[ISO_639-1::en]>
+	translations = <
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			author = <
+				["name"] = <"Silje Ljosland Bakke">
+				["organisation"] = <"Nasjonal IKT HF">
+			>
+		>
+		["pt-br"] = <
+			language = <[ISO_639-1::pt-br]>
+			author = <
+				["name"] = <"Adriana Kitajima, Débora Farage, Fernanda Maia, Laíse Figueiredo, Marivan Abrahão">
+				["organisation"] = <"Core Consulting">
+				["email"] = <"contato@coreconsulting.com.br">
+			>
+			accreditation = <"Hospital Alemão Oswaldo Cruz (HAOC)">
+		>
+	>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Ian McNicoll">
+		["organisation"] = <"freshEHR Clinical Informatics, UK">
+		["email"] = <"ian@freshehr.com">
+		["date"] = <"2015-07-20">
+	>
+	original_namespace = <"org.openehr">
+	original_publisher = <"openEHR Foundation">
+	custodian_namespace = <"org.openehr">
+	custodian_organisation = <"openEHR Foundation">
+	copyright = <"© openEHR Foundation">
+	licence = <"This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 License. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/.">
+	details = <
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			purpose = <"For å registrere individuelle laboratorieanalyser som enkeltverdier, som regel innenfor klinisk biokjemi, hematologi eller immunologi.">
+			use = <"Brukes for å registrere individuelle laboratorieanalyser som enkeltverdier, som regel innenfor klinisk biokjemi, hematologi eller immunologi. Brukes normalt i arketypen OBSERVATION.laboratory_test. I noen tilfeller kan den brukes innenfor arketypen CLUSTER.laboratory_test_panel sammen med andre analyser som vanligvis rapporteres som del av et panel eller analysegruppe, men det kan også rapporteres flere analyser innenfor samme OBSERVATION.laboratory_test.
+
+Navnet på elementet Analyseresultat vil ordinært erstattes i en templat elller applikasjon med navnet på den spesifikke analysen. f.eks. \"Hemoglobin\", og ofte kodet med en terminologi som NLK, SNOMED CT eller LOINC.
+
+Denne arketypen kan brukes innenfor mer komplekse laboratorie/patologirapporter der kvantitative svar som for eksempel flowcytometri eller gentester rapporteres sammen med konvensjonelle makroskopiske og mikroskopiske undersøkelser.">
+			keywords = <"laboratorie", "analytt", "analyse", "svar", "resultat">
+			misuse = <"Skal ikke brukes til å registrere detaljerte funn ved patologiundersøkelser, annet enn for tilleggsundersøkelser som flowcytometri eller gentester.">
+		>
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record individual, single value laboratory test analyte results, as are common to clinical pathology testing for example biochemistry, haematology and immunology.">
+			use = <"To record individual, single value laboratory test analyte results, as are common to clinical pathology testing, for example biochemistry, haematology and immunology. Normally used in conjunction with a parent OBSERVATION.laboratory_test_result archetype and in some circumstances will be carried within a CLUSTER.laboratory_test_panel archetype, along with other analytes which are normally tested and/or reported as part of a battery,panel or profile, though this is not necessary i.e multiple analytes may be carried directly within the OBERVATION.laboratory_test.
+
+The name attribute of the 'Analyte result' element is normally replaced in a specialisation, template or at run-time to carry the name of the specific analyte e.g. 'Haemoglobin', often coded with a reference terminology such as LOINC, SNOMED CT or NPU.
+
+This archetype may be used within the setting of more complex laboratory/pathology reporting such as Histopathlogy/ Anatomical synoptic reports where quantitative results such as cytometric flow studies or genetic testing are often reported alongside conventional macroscopic and microscopic reporting.">
+			keywords = <"laboratory", "pathology", "analyte", "constituent", "result">
+			misuse = <"Should not be used to record detailed Anatomical pathology macroscopic/microscopic findings, other then for additional testing such as cytometric flow studies or genetic testing.">
+		>
+		["pt-br"] = <
+			language = <[ISO_639-1::pt-br]>
+			purpose = <"Para gravar valores únicos e individuais de resultados laboratoriais de analitos comuns a testes patológicos clínicos como bioquímica, hematologia e imunologia.
+">
+			use = <"Para gravar valores únicos e individuais de resultados laboratoriais de analitos comuns a testes patológicos clínicos como bioquímica, hematologia e imunologia. Normalmente usados conjuntamente com o arquétipo parental OBSERVATION.laboratory_test_result e em algumas circunstâncias será carregado dentro de um arquétipo CLUSTER.laboratory_test_panel, junto com outros analitos que são normalmente testados e/ou reportados como parte de uma bateria, painel e perfil, embora não seja necessário e.e múltiplos analitos podem ser carregados diretamente dentro do OBSERVATION.laboratory_test.
+
+O atributo do nome do elemento \"Resultado do analito\" é normalmente substituído em uma especialização, template ou em tempo de execução para carregar o nome do analito específico, p.e., \"hemoglobina\", frequentemente codificado com uma terminologia de referência como LOINC, SNOMED CT ou NPU.
+
+Este arquétipo pode ser usado dentro do contexto de relatórios laboratoriais/de patologia mais complexos como em relatórios de histopatologia/anatomia onde resultados quantitativos como de estudos de citometria de fluxo e testes genéticos são frequentemente reportados junto com relatórios macroscópicos e microscópicos convencionais.">
+			keywords = <"laboratório", "patologia", "analito", "componente", "resultado">
+			misuse = <"Não deve ser usado para gravar achados detalhados de anatomia patológica macroscópica/microscópica, exceto para testes adicionais de estudos de citometria de fluxo ou testes genéticos.">
+		>
+	>
+	other_contributors = <"Heather Leslie, Ocean Informatics, Australia", "Nasjonal IKT, Norway">
+	references = <
+		["1"] = <"Pathology Test Result, Draft Archetype [Internet]. Australian Digital Health Agency, Australian Digital Health Agency Clinical Knowledge Manager [cited: 2017-06-27]. Available from: http://dcm.nehta.org.au/ckm/#showArchetype_1013.1.839">
+		["2"] = <"Pathology (Data Specifications) Version 1.0 [Internet]. Sydney, Australia: National E-Health Transition Authority; 2007 May 29 [cited 2011 Jul 11]; Available at http://www.nehta.gov.au/component/docman/doc_download/962-pathology-v10">
+		["3"] = <"Laboratory Technical Framework, Volume 3: Content, Revision 3.0 [Internet]. USA: IHE International; 2011 May 19; [cited 2011 Jul 11]. Available from: http://www.ihe.net/Technical_Framework/index.cfm#laboratory">
+		["4"] = <"Hl7 FHIR Observation resource: HL7 [Internet]; [cited 2017 Jun 27]. Available from http://www.hl7.org/implement/standards/fhir/observation.html">
+	>
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"15015A5970361A8C4C9409257A6B2A1B">
+		["build_uid"] = <"498b707b-40cb-4b78-9393-c98fb7b81780">
+	>
+
+definition
+	CLUSTER[id1] matches {	-- Laboratory test analyte
+		items matches {
+			ELEMENT[id2] occurrences matches {0..1} 	-- Analyte result
+			ELEMENT[id4] matches {	-- Comment
+				value matches {
+					DV_TEXT[id16] 
+				}
+			}
+			ELEMENT[id5] occurrences matches {0..1} matches {	-- Reference range guidance
+				value matches {
+					DV_TEXT[id17] 
+				}
+			}
+			ELEMENT[id6] occurrences matches {0..1} matches {	-- Analyte result status
+				value matches {
+					DV_CODED_TEXT[id18] matches {
+						defining_code matches {[ac1]}		-- Analyte result status (synthesised)
+					}
+					DV_TEXT[id19] 
+				}
+			}
+			ELEMENT[id7] occurrences matches {0..1} matches {	-- Analyte result status timestamp
+				value matches {
+					DV_DATE_TIME[id20] 
+				}
+			}
+			allow_archetype CLUSTER[id15] matches {	-- Analyte result detail
+				include
+					archetype_id/value matches {/.*/}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Laboratory test analyte">
+				description = <"The result of a laboratory test for a single analyte value.">
+			>
+			["id2"] = <
+				text = <"Analyte result">
+				description = <"Actual value of the analyte result. The name of this element is normally replaced in a specialisation, in a template or at run-time to reflect the actual analyte e.g. Serum sodium and will often be coded.">
+			>
+			["id4"] = <
+				text = <"Comment">
+				description = <"Comment about the analyte result.">
+			>
+			["id5"] = <
+				text = <"Reference range guidance">
+				description = <"Additional advice on the applicability of the reference range to this result or may carry text or coded textual guidance as to whether the result is within the normal range.">
+			>
+			["id6"] = <
+				text = <"Analyte result status">
+				description = <"The status of the result value.">
+			>
+			["id7"] = <
+				text = <"Analyte result status timestamp">
+				description = <"The date and/or time that the entire result was issued for the recorded ‘Analyte result status’.">
+			>
+			["id15"] = <
+				text = <"Analyte result detail">
+				description = <"Further detail regarding an individual result.">
+			>
+			["at16"] = <
+				text = <"Registered">
+				description = <"The existence of the test is registered in the Laboratory Information System, but there is nothing yet available.">
+			>
+			["at17"] = <
+				text = <"Partial">
+				description = <"This is a partial (e.g. initial, interim or preliminary) Test Result: data in the Test Result may be incomplete or unverified.">
+			>
+			["at18"] = <
+				text = <"Preliminary">
+				description = <"Verified early results are available, but not all results are final. This is a sub-category of 'Partial'.">
+			>
+			["at19"] = <
+				text = <"Final">
+				description = <"The Test result is complete and verified by an authorised person.">
+			>
+			["at20"] = <
+				text = <"Corrected">
+				description = <"The result has been modified subsequent to being Final, and is complete and verified by the responsible pathologist.">
+			>
+			["at21"] = <
+				text = <"Amended">
+				description = <"The result has been modified subsequent to being Final, and is complete and verified by the responsible pathologist, and result data has been changed. This is a sub-category of 'Corrected'.">
+			>
+			["at22"] = <
+				text = <"Appended">
+				description = <"Subsequent to being final, the report has been modified by adding new content. The existing content is unchanged. This is a sub-category of 'Corrected'.">
+			>
+			["at23"] = <
+				text = <"Entered in error">
+				description = <"The Test Result has been withdrawn following previous Final release.">
+			>
+			["at24"] = <
+				text = <"Cancelled">
+				description = <"The result is unavailable because the test was not started or not completed (also sometimes called 'aborted').">
+			>
+			["ac1"] = <
+				text = <"Analyte result status (synthesised)">
+				description = <"The status of the result value. (synthesised)">
+			>
+		>
+		["nb"] = <
+			["id1"] = <
+				text = <"Laboratorieanalytt">
+				description = <"Resultatet av en individuell laboratorieanalyse som en enkeltverdi.">
+			>
+			["id2"] = <
+				text = <"Analysesvar">
+				description = <"Faktisk verdi av analyseresultatet. Navnet på dette elementet erstattes i en templat elller applikasjon med navnet/koden på den spesifikke analysen, for eksempel \"S-Natrium\".
+">
+			>
+			["id4"] = <
+				text = <"Kommentar">
+				description = <"Kommentar knyttet til et analyseresultat.">
+			>
+			["id5"] = <
+				text = <"Veileder for referanseområde">
+				description = <"Veileder for å finne ut om referanseverdien er relevant for dette resultatet, kan inneholde tekst eller kodet tekstlig råd for om resultatet ligger innenfor normalområdet.">
+			>
+			["id6"] = <
+				text = <"Analysesvarstatus">
+				description = <"Status for analysesvaret.">
+			>
+			["id7"] = <
+				text = <"Tidsangivelse analysesvarstatus">
+				description = <"Dato og/eller tidspunktet da hele svaret ble utstedt for den aktuelle \"Analysesvarstatus\".">
+			>
+			["id15"] = <
+				text = <"Detaljer om analysesvar">
+				description = <"Ytterligere detaljer knyttet til et enkelt analyseresultat.">
+			>
+			["at16"] = <
+				text = <"Registrert">
+				description = <"Analysen er registrert i laboratoriesystemet, men svaret er ikke tilgjengelig per nå.">
+			>
+			["at17"] = <
+				text = <"Ufullstendig">
+				description = <"Dette er et delvis (dvs initalt, foreløpig eller preliminært) svar: Data i svaret kan være ukomplett eller ubekreftet.">
+			>
+			["at18"] = <
+				text = <"Foreløpig">
+				description = <"Verifiserte tidlige svar er tilgjengelige, men ikke alle svar er endelige. Dette er en underkategori av \"Delvis\".">
+			>
+			["at19"] = <
+				text = <"Endelig">
+				description = <"Svaret er komplett og er bekreftet av ansvarlig person.">
+			>
+			["at20"] = <
+				text = <"Korrigert">
+				description = <"Svaret har blitt modifisert etter å ha vært i status \"Endelig\", og er komplett og verifisert av ansvarlig laboratorielege.">
+			>
+			["at21"] = <
+				text = <"Revidert">
+				description = <"Svaret har blitt modifisert etter å ha vært i status \"Endelig\", og er komplett og verifisert av ansvarlig laboratorielege, og svardata er endret. Dette er en underkategori av \"Korrigert\".">
+			>
+			["at22"] = <
+				text = <"Tillegg">
+				description = <"Etter å ha vært satt som status \"Endelig\", har det blitt lagt nytt innhold til rapporten. Det eksisterende innholdet er uendret. Dette er en underkategori av \"Korrigert\".">
+			>
+			["at23"] = <
+				text = <"Feilregistrert">
+				description = <"Analysesvaret har blitt trukket tilbake etter å ha vært i status Endelig.">
+			>
+			["at24"] = <
+				text = <"Kansellert">
+				description = <"Svaret er utilgjengelig fordi analysen ikke ble påbegynt eller ferdigstilt (også kalt \"avbrutt\").">
+			>
+			["ac1"] = <
+				text = <"Analysesvarstatus (synthesised)">
+				description = <"Status for analysesvaret. (synthesised)">
+			>
+		>
+		["pt-br"] = <
+			["id1"] = <
+				text = <"Analito de teste de laboratório">
+				description = <"O resultado de um teste de laboratório para um único analito.">
+			>
+			["id2"] = <
+				text = <"Resultado do analito">
+				description = <"Valor real do resultado do analito. O nome deste elemento é normalmente substituído em uma especialização, template ou em tempo de execução para refletir o analito, p.e., sódio sérico e será frequentemente codificado.">
+			>
+			["id4"] = <
+				text = <"Comentário">
+				description = <"Comentário sobre o resultado do analito.">
+			>
+			["id5"] = <
+				text = <"Orientações sobre faixa de referência">
+				description = <"Orientações adicionais sobre a aplicabilidade da faixa de referência para este resultado ou pode conter texto ou texto codificado para guiar se o resultado está dentro da faixa normal.">
+			>
+			["id6"] = <
+				text = <"Estado do resultado do analito">
+				description = <"O estado do valor do resultado.">
+			>
+			["id7"] = <
+				text = <"Marcação temporal do estado do resultado do analito">
+				description = <"A data e/ou hora que o resultado completo foi publicado para o registro em \"Estado do resultado do analito\".">
+			>
+			["id15"] = <
+				text = <"Detalhes do resultado do analito">
+				description = <"Detalhes adicionais relativos a um resultado individual.">
+			>
+			["at16"] = <
+				text = <"Registrado">
+				description = <"A existência do teste é registrada no sistema de informação do laboratório, mas não há nada disponível ainda.">
+			>
+			["at17"] = <
+				text = <"Parcial">
+				description = <"Este é um resultado de teste parcial (p.e. inicial, intermediário ou preliminar): dados no resultado do teste podem estar incompletos ou não verificados.">
+			>
+			["at18"] = <
+				text = <"Preliminar">
+				description = <"Resultados iniciais verificados estão disponíveis, mas nem todos os resultados são definitivos. Esta é uma sub-categoria de \"Parcial\".">
+			>
+			["at19"] = <
+				text = <"Final">
+				description = <"O resultado final está completo e verificado por uma pessoa autorizada.">
+			>
+			["at20"] = <
+				text = <"Corrigido">
+				description = <"O resultado foi modificado após ser finalizado, e está completo e verificado por um patologista responsável.">
+			>
+			["at21"] = <
+				text = <"Modificado">
+				description = <"O resultado foi modificado após ser finalizado, e está completo e verificado por um patologista responsável e o dado do resultado foi alterado. Esta é uma sub-categoria de \"Corrigido\".">
+			>
+			["at22"] = <
+				text = <"Anexado">
+				description = <"Após ser finalizado, o relatório foi modificado com pela adição de novo conteúdo. O conteúdo existente está inalterado. Esta é uma sub-categoria de \"Corrigido\".">
+			>
+			["at23"] = <
+				text = <"Entrada com erro">
+				description = <"O resultado do teste foi retirado após ser finalizado.">
+			>
+			["at24"] = <
+				text = <"Cancelado">
+				description = <"O resultado está indisponível porque o teste não foi iniciado ou não foi completado (algumas vezes chamado de \"abortado\").">
+			>
+			["ac1"] = <
+				text = <"Estado do resultado do analito (synthesised)">
+				description = <"O estado do valor do resultado. (synthesised)">
+			>
+		>
+	>
+	value_sets = <
+		["ac1"] = <
+			id = <"ac1">
+			members = <"at16", "at17", "at18", "at19", "at20", "at21", "at22", "at23", "at24">
+		>
+	>

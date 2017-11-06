@@ -1,0 +1,228 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated)
+	openEHR-EHR-OBSERVATION.easi_score.v1.0.0
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Ian McNicoll">
+		["organisation"] = <"HANDIHealth,UK">
+		["email"] = <"ian@handihealth.org">
+		["date"] = <"2015-02-18">
+	>
+	copyright = <"© openEHR Foundation">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record details of the Atopic dermatitis EASI score.">
+			use = <"">
+			misuse = <"">
+		>
+	>
+	other_contributors = <"Dmitri Wall, Irish Skin Foundation", ...>
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"1A70BBE81ECA8D50B44CDD7C95E429EF">
+	>
+
+definition
+	OBSERVATION[id1] matches {	-- EASI score
+		data matches {
+			HISTORY[id2] matches {
+				events cardinality matches {1..*; unordered} matches {
+					EVENT[id3] occurrences matches {0..1} matches {	-- Any event
+						data matches {
+							ITEM_TREE[id4] matches {
+								items matches {
+									CLUSTER[id5] matches {	-- Body area
+										name matches {
+											DV_CODED_TEXT[id27] matches {
+												defining_code matches {[ac1]}		-- Body area (synthesised)
+											}
+										}
+										items matches {
+											ELEMENT[id10] matches {	-- Severity index
+												name matches {
+													DV_CODED_TEXT[id28] matches {
+														defining_code matches {[ac2]}		-- Severity index (synthesised)
+													}
+												}
+												value matches {
+													DV_ORDINAL[id29] matches {
+														[value, symbol] matches {
+															[{0}, {[at15]}],
+															[{1}, {[at16]}],
+															[{2}, {[at17]}],
+															[{3}, {[at18]}]
+														}
+													}
+												}
+											}
+											ELEMENT[id19] occurrences matches {0..1} matches {	-- Affected area
+												value matches {
+													DV_ORDINAL[id30] matches {
+														[value, symbol] matches {
+															[{0}, {[at20]}],
+															[{1}, {[at21]}],
+															[{2}, {[at22]}],
+															[{3}, {[at23]}],
+															[{4}, {[at24]}],
+															[{5}, {[at25]}]
+														}
+													}
+												}
+											}
+										}
+									}
+									ELEMENT[id26] occurrences matches {0..1} matches {	-- Total EASI score
+										value matches {
+											DV_COUNT[id31] matches {
+												magnitude matches {|0..72|}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"EASI score">
+				description = <"Atopic dermatitis EASI score.">
+			>
+			["id3"] = <
+				text = <"Any event">
+				description = <"Any event.">
+			>
+			["id5"] = <
+				text = <"Body area">
+				description = <"The part of the body being assessed.">
+			>
+			["at6"] = <
+				text = <"Head and neck">
+				description = <"Head and neck skin area.">
+			>
+			["at7"] = <
+				text = <"Upper limbs">
+				description = <"Upper limb skin area.">
+			>
+			["at8"] = <
+				text = <"Trunk">
+				description = <"The trunk skin area.">
+			>
+			["at9"] = <
+				text = <"Lower limbs">
+				description = <"Lower limbs skin area.">
+			>
+			["id10"] = <
+				text = <"Severity index">
+				description = <"The level of severity of the symptom for a representative part of the body area.">
+			>
+			["at11"] = <
+				text = <"Redness">
+				description = <"The extent of redness.">
+			>
+			["at12"] = <
+				text = <"Thickness">
+				description = <"The thickness of the lesion.">
+			>
+			["at13"] = <
+				text = <"Crusting">
+				description = <"The extent of crusting.">
+			>
+			["at14"] = <
+				text = <"Lichenification">
+				description = <"The extent of lichenification.">
+			>
+			["at15"] = <
+				text = <"Absent">
+				description = <"The symptom is absent.">
+			>
+			["at16"] = <
+				text = <"Mild">
+				description = <"The symptom is mild.">
+			>
+			["at17"] = <
+				text = <"Moderate">
+				description = <"The symptom is moderate">
+			>
+			["at18"] = <
+				text = <"Severe">
+				description = <"The symptom is severe.">
+			>
+			["id19"] = <
+				text = <"Affected area">
+				description = <"The extent of the area affected.">
+			>
+			["at20"] = <
+				text = <"1% to 9%">
+				description = <"1% to 9% of the body area is affected.">
+			>
+			["at21"] = <
+				text = <"10% to 29%">
+				description = <"10% to 29% of the body area is affected.">
+			>
+			["at22"] = <
+				text = <"30% to 49%">
+				description = <"30% to 49% of the body area is affected.">
+			>
+			["at23"] = <
+				text = <"50% to 69%">
+				description = <"50% to 69% of the body area is affected.">
+			>
+			["at24"] = <
+				text = <"70% to 89%">
+				description = <"70% to 89% of the body area is affected.">
+			>
+			["at25"] = <
+				text = <"90% to 100%">
+				description = <"90% to 100% of the body area is affected.">
+			>
+			["id26"] = <
+				text = <"Total EASI score">
+				description = <"The total EASI score.">
+			>
+			["ac1"] = <
+				text = <"Body area (synthesised)">
+				description = <"The part of the body being assessed. (synthesised)">
+			>
+			["ac2"] = <
+				text = <"Severity index (synthesised)">
+				description = <"The level of severity of the symptom for a representative part of the body area. (synthesised)">
+			>
+			["ac3"] = <
+				text = <"Severity index (synthesised)">
+				description = <"The level of severity of the symptom for a representative part of the body area. (synthesised)">
+			>
+			["ac4"] = <
+				text = <"Affected area (synthesised)">
+				description = <"The extent of the area affected. (synthesised)">
+			>
+		>
+	>
+	value_sets = <
+		["ac1"] = <
+			id = <"ac1">
+			members = <"at6", "at7", "at8", "at9">
+		>
+		["ac2"] = <
+			id = <"ac2">
+			members = <"at11", "at12", "at13", "at14">
+		>
+		["ac3"] = <
+			id = <"ac3">
+			members = <"at15", "at16", "at17", "at18">
+		>
+		["ac4"] = <
+			id = <"ac4">
+			members = <"at20", "at21", "at22", "at23", "at24", "at25">
+		>
+	>

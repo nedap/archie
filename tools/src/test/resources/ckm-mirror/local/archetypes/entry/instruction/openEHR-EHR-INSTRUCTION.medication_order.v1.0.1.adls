@@ -1,0 +1,1195 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated; uid=8a708c71-9817-4042-9c31-ef8285128722)
+	openEHR-EHR-INSTRUCTION.medication_order.v1.0.1
+
+language
+	original_language = <[ISO_639-1::en]>
+	translations = <
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			author = <
+				["name"] = <"John Tore Valand/Silje Ljosland Bakke">
+				["organisation"] = <"Helse Bergen HF/Nasjonal IKT HF">
+			>
+		>
+		["pt-br"] = <
+			language = <[ISO_639-1::pt-br]>
+			author = <
+				["name"] = <"Osmeire Chamelette Sanzovo">
+				["organisation"] = <"Hospital Sírio Libanês - SP">
+				["email"] = <"osmeire.acsanzovo@hsl.org.br">
+			>
+			accreditation = <"R.N.">
+		>
+	>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Ian McNicoll">
+		["organisation"] = <"freshEHR Clinical Informatics">
+		["email"] = <"ian@freshehr.com">
+		["date"] = <"2015-10-21">
+	>
+	original_namespace = <"org.openehr">
+	original_publisher = <"openEHR Foundation">
+	custodian_namespace = <"org.openehr">
+	custodian_organisation = <"openEHR Foundation">
+	copyright = <"© openEHR Foundation">
+	licence = <"This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 License. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/4.0/.">
+	details = <
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			purpose = <"For å registrere alle aspekter av ordinering av et legemiddel, en vaksine, ernæringsprodukt eller medisinsk forbruksmateriell for et spesifikt individ.">
+			use = <"Brukes for å registrere alle aspekter av ordinering av et legemiddel, en vaksine, enæringsvare eller medisinsk forbruksmateriell for et spesifikt individ.
+
+Arketypen kan brukes i alle legemiddelrelaterte ordineringer, enten de er for reseptpliktige legemidler ordinert av en kliniker, eller for reseptfrie legemidler. Arketypen dekker også ordinering av vaksiner, parenterale væsker, eller medisinsk forbruksmateriell, som bandasjer, ernæringsprodukter eller andre varer som påføres eller administreres for å ha en terapeutisk effekt, og der dataene som skal registreres er de samme.
+
+Arketypen er designet for bruk i en rekke ulike kliniske sammenhenger, for eksempel:
+- en registrering i en klinisk konsultasjon (COMPOSITION.encounter).
+- en resept skrevet av en lege, tannlege eller annet helsepersonell, på et legemiddel eller ernæringsprosdukt som skal utdeles eller administreres (i en COMPOSITION.prescription).
+- et element i en legemiddelliste, resept eller legemiddelkurve (COMPOSITION.medication_list)
+- et element i et oppsummeringsdokument som f.eks. en epikrise (COMPOSITION.transfer_summary) eller en henvisning (COMPOSITION.request).
+
+Merk at disse bruksområdene omfatter FHIR-ressursene for både Medication Order og Medication Statement.
+
+I mange tilfeller vil legemiddelordineringen være enkel - typisk for en enkelt legemiddelvare med ukompliserte instruksjoner for utdeling og administrering. Arketypen er imidlertid også utviklet for å tillate mer komplekse ordineringer, for eksempel:
+- ved nedtrapping av en prednisolondose over flere uker.
+- ved titrering av insulin, hvor dosering er avhengig av prøveresultater.
+- flere legemidler ordinert på samme tidspunkt som en del av et samlet behandlingsregime, for eksempel trippelbehandling for magesår.
+- ved parenteral administrering av legemidler eller ernæring, inkludert parenteral ernæring.
+
+Arketypen er derfor utviklet for å tillate ulik kompleksitet, fra
+- enkle fritekstinstrukser for ordineringer som \"Furosemid 40 mg, to tabletter om morgenen og en til lunsj\" for å sikre kompatibilitet med eksisterende systemer, og
+- legemiddelmengden representeres som regel ved et tall med tilhørende måleenhet, alternativt med fritekst for å sikre kompatibilitet med eksisterende systemer og for å dekke alle kliniske scenarier
+til
+- strukturerte detaljer for dose, administreringssvei og administreringsstidspunkter for at datamaskiner skal kunne lese og gjøre beregninger med dataene.
+
+Arketypen er designet slik at en enkel legemiddelordinering kan representere:
+-komplekse sekvensielle legemiddelordineringer som bruker samme preparatstyrke i samme ordineringsstruktur.
+-flere legemiddelordineringer kan lenkes, der ulike legemidler eller blandinger må administreres sekvensielt.
+
+Arketypen er også egnet for å ordinere væsker, der det er vanlig at disse ordineres. I andre sammenhenger kan det være mer passende å bruke en egen arketype for væskeforordninger.
+
+Mengden av et legemiddel representeres vanligvis med et tall og en enhet, men det kan også dokumenteres i fritekst for å sikre kompatibilitet med eksisterende systemer og for å dekke alle scenarier.
+
+SLOTer med CLUSTER-arketyper brukes for å representere deler av innholdet av tre årsaker:
+- For å sikre en kjernearketype som kan brukes i alle de overnevnte brukscasene, men likevel være fleksibel der det trengs, f.eks. i SLOTet \"Legemiddeldetaljer\" der ytterligere strukturerte detaljer kan legges til. Det er foreslått en arketype for detaljer om legemidler, og det kan tenkes at man i fremtiden vil trenge andre CLUSTER-arketyper for andre formål, som f.eks. komplekse ordineringer av parenteral ernæring.
+- for å tillate gjenbruk av arketyper i situasjoner hvor innholdet også brukes i andre kliniske kontekster, i hovedsak i den tilhørende arketypen ACTION.medication for å registrere faktisk utdeling, administrering osv.
+- for å fjerne mindre brukt innhold fra arketypens rammeverk.
+
+Det er mulig å legge inn flere ordinasjoner som aktiviteter innenfor én instans av arketypen for å representere tett sammenbundne ordinasjoner av forskjellige legemidler, for eksempel en legemiddelpakke mot H. pylori der denne ikke ordineres som en enkelt pakning.
+
+Merk at disse bruksområdene innbefatter FHIR-ressursene for både \"Medication Order\" og \"Medication Statement\", det vil si at denne arketypen matcher begge disse FHIR-ressursene i passende brukssammenhenger.">
+			keywords = <"medikasjon", "foreskriving", "forordning", "forordne", "terapi", "substans", "stoff", "virkestoff", "medikament", "legemiddel", "terapeutisk", "medisinsk forbruksmateriell", "ordinering", "preparat", "spesialpreparat", "diagnostikum", "forskrivning", "forskriving", "resept", "legemiddelhåndtering", "farmasøytisk", "produkt", "posologi", "ordinasjon", "rekvirering", "behandling", "væske", "ernæring", "ordinere", "medisin", "medisiner", "medisinering">
+			misuse = <"Skal ikke brukes for å registrere faktisk administrering eller utdeling av legemidler, vaksiner, parenterale væsker, ernæringsprodukter eller medisinsk forbruksmateriell. Bruk arketypen ACTION.medication for dette formålet.
+
+Skal ikke brukes for å registrere ordinering av blodkomponenter, som omfatter en fundamentalt ulik klinisk prosess og sannsynligvis vil trenge ulik støtteinformasjon. Bruk arketypen INSTRUCTION.transfusion for dette formålet.
+
+Skal ikke brukes for å registrere ordinering av innlegging av implantater og medisinsk utstyr som pacemakere og defibrillatorer. Bruk arketypen INSTRUCTION.procedure for dette formålet.">
+		>
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record all aspects of an order of a medication, vaccine, nutritional product or other therapeutic item for an identified individual.">
+			use = <"Use to record all aspects of an order of a medication, vaccine, nutritional product or other therapeutic item for an identified individual.
+
+It is intended to be used for any type of medication and related order, whether prescribed by a health professional or available for purchase 'over the counter'. The scope of this medication archetype also includes orders for vaccinations, parenteral fluids or other therapeutic goods, such as bandages, nutritional products or other items that are applied or administered to have a therapeutic effect and which have a common pattern for data recording.
+
+This archetype is designed to be used in a number of clinical contexts, including but not limited to:
+- a record in a clinical consultation (COMPOSITION.encounter);
+- a written prescription by a physician, dentist, nurse practitioner, or other designated health professional for a medication or nutritional product to be dispensed and administered (within a COMPOSITION.prescription);
+- an item in a current medication list, prescription or drug chart (within COMPOSITION.medication_list); and
+- an item in a summary document such as transfer of care (COMPOSITION.transfer_summary) or a referral (COMPOSITION.request).
+
+In many cases a medication order will be simple – typically for a single medication item with uncomplicated instructions for dispensing and administration. However this archetype is also designed to allow for more complex therapeutic orders. For example:
+
+- a reducing dose of prednisolone over a period of weeks;
+- titration of insulin, with dosing dependent on test results;
+- multiple medications prescribed simultaneously as part of a single drug regimen, such as a triple therapy for peptic ulcer; and
+- intravenous administration of medications or nutrition supplements, including parenteral nutrition.
+
+The archetype has therefore been designed to allow for a range of complexity, from:
+- simple narrative instructions for orders like 'furosemide 40mg two tablets in the morning and one at lunch' to ensure compatibility with existing systems; and
+- the amount of medication is usually represented in terms of a number and corresponding dose unit, however there can alternatively be a narrative statement to ensure compatibility with existing systems and coverage of all clinical scenarios; through to
+- structured detail for dose, route and timing to represent a fully computable specification.
+
+It has also been designed so that a single medication order structure can represent:
+- complex sequential medication orders using the same preparation strength to be supported within a single order structure; and
+- multiple medication orders can be chained in circumstances where different medications or preparations need to be given sequentially.
+
+This archetype is also suitable for ordering parenteral fluids, in care settings where it is normal practice to make these 'prescribable' items. In other settings a separate 'parenteral fluid order' may be appropriate.
+
+SLOTs containing CLUSTER archetypes have been used to represent some of the content for three reasons:
+- To ensure a core archetype that can be used for all the above use cases, yet allow flexibility where it is required, for example the ‘Preparation details’ SLOT where additional structured detail can be added. A candidate archetype has been suggested for Medications. It is possible that other CLUSTER archetypes may be required in future for other purposes such as complex parenteral nutrition orders;
+- to support archetype re-use in situations where the content has been identified as being also used in other clinical contexts, in particular the paired ACTION.medication archetype for recording actual dispensing, administration etc; and
+- to remove less commonly used content from the core archetype framework.
+
+Multiple orders can be represented as separate activities within this single archetype instance to carry tightly bound orders of different medications, for example, H. pylori therapy when this is not prescribed as a single pack.
+
+It should be noted that these uses subsume both the FHIR Medication Order and Medication Statement use cases. i.e this archetype is a match for both FHIR resources, used in the appropriate context.">
+			keywords = <"medication", "order", "prescribe", "therapy", "substance", "drug", "therapeutic", "otc", "therapeutic good", "pharmaceutical", "product", "posology", "treatment", "fluid", "nutrition", "CPOE">
+			misuse = <"Not to be used to record the activities related to carrying out the order for medication, vaccine, nutritional product or therapeutic item, such as details about actual administration or dispensing. Use the ACTION.medication for this purpose.
+
+Not to be used to record the ordering of blood products, which involves a fundamentally different clinical process and is likely to require different supporting information Use the INSTRUCTION.transfusion for this purpose.
+
+Not to be used to record the order for insertion of implants or medical devices such as pacemakers and defibrillators. Use the INSTRUCTION.procedure for this purpose.">
+		>
+		["pt-br"] = <
+			language = <[ISO_639-1::pt-br]>
+			purpose = <"Registrar todos os aspectos de uma prescrição de medicamento, vacina, produtos nutricionais ou outros itens terapêuticos para um indivíduo identificado.">
+			use = <"Utilizado para registrar todos os aspectos da prescrição de medicamentos, vacinas, produtos nutricionais ou outros itens terapêuticos, para um indivíduo identificado.
+
+Destina-se a ser usado para qualquer tipo de medicamento e prescrição relacionada, quer seja prescrito por um profissional de saúde ou disponível para compra \"no balcão\"da farmácia. O escopo deste arquétipo de medicamentos também inclui prescrições de vacinas, fluidos parenterais ou outros produtos terapêuticos, como bandagens, produtos nutricionais ou outros ítens que possuem um padrão comum para o seu registro e são aplicados ou administrados com vistas a um efeito terapêutico. 
+
+Este arquétipo é projetado para ser usado em vários contextos clínicos, incluindo, entre outros:
+- um registro em uma consulta clínica (COMPOSITION.encounter);
+- uma receita escrita por um médico, dentista, ou outro profissional de saúde autorizado para prescrever uma medicamento ou produto nutricional a ser dispensado e administrado (COMPOSITION.prescription);
+- um ítem em uma lista atual de medicamento, receita ou carta de medicamentos (dentro de COMPOSITION.medication_list); e
+- um ítem em um documento de resumo, como a transferência de cuidados (COMPOSITION.transfer_summary) ou um documento de contra-referência (COMPOSITION.request).
+
+Em muitos casos, uma prescrição de medicamento será simples - tipicamente para um único item de medicamento com instruções simples para a sua dispensação e administração. No entanto, este arquétipo foi também projetado para permitir prescrições mais complexas. Por exemplo:
+
+-	uma redução de dose de prednisolona durante um período de semanas;
+-	fracionamento de insulina, com dosagem dependente dos resultados do teste;
+-	medicamentos múltiplos prescritos simultaneamente como parte de um regime de fármaco único, como uma terapia tripla para úlcera péptica; e
+-	administração intravenosa de medicamentos ou suplementos nutricionais, incluindo nutrição parenteral.
+
+O arquétipo foi, portanto, projetado para atender prescrições de maior complexidade, como, por exemplo: 
+-	instruções narrativas simples tais como \"furosemida 40mg dois comprimidos pela manhã e um no almoço\" para assegurar a compatibilidade com os sistemas existentes; 
+-	a quantidade do medicamento geralmente é representada por um número e uma unidade de dose correspondente, no entanto, pode haver uma descrição em texto livre para garantir a compatibilidade com os sistemas existentes e a cobertura de todos os cenários clínicos; através de
+-	detalhes estruturados para a dose, via e duração para representar uma especificação totalmente computável.
+
+Este arquétipo foi também projetado para que uma única estrutura de prescrição de medicamento possa representar:
+
+-	Prescrições sequencias complexas de medicamento com a mesma concentração de preparação representados em uma única estrutura de prescrição; e
+-	múltiplas prescrições de medicamentos que podem ser encadeadas em circunstâncias em que diferentes medicamentos ou preparações precisem ser administrados sequencialmente.
+
+Este arquétipo é também adequado para prescrição de soluções parenterais, em cenários de atendimento onde é normal prescrever estes itens. Em outras cenários, uma prescrição separada de soluções parenterais poderá ser mais apropriada.
+
+SLOTs contendo arquétipos do tipo CLUSTER foram utilizados ​​para representar parte do conteúdo por três razões:
+-	Para garantir que um arquétipo básico possa ser utilizado em todos os casos de uso descritos acima, oferecendo flexibilidade onde for necessário, por exemplo, o SLOT de \"Detalhes da preparação\", permite que detalhes adicionais estruturados da preparação possam ser adicionados. Existe um arquétipo sugerido para medicamentos. É possível que outros arquétipos do tipo CLUSTER sejam necessários no futuro, para outros fins, como pedidos complexos de nutrição parenteral;
+-	apoiar a reutilização do arquétipo em situações em que o conteúdo foi identificado como sendo utilizado também em outros contextos clínicos, em particular o arquétipo ACTION.medication (para deste arquéitpo) para gravação de distribuição real, administração, etc. e
+-	remover o conteúdo de menor utilização do núcleo do arquétipo. 
+
+Várias prescrições podem ser representadas como atividades separadas nesta instância de arquétipo, para, por exemplo, representar prescrições de diferentes medicamentos, conectadas entre si, como ocorre na terapia de H. pylori, quando se opta por não prescrever como um único pacote.
+
+Observar que esses casos de usos acima descritos incluem os casos de uso da Prescrição de Medicamento e Medicamentos do FHIR. Isto é, este arquétipo é uma correspondência para ambos os recursos do FHIR, desde que utilizado no contexto apropriado.">
+			keywords = <"medicamento", "prescrição", "prescrever", "terapia", "substância", "droga", "terapêutico", "Otc", "produto terapêutico", "Farmacêutico", "produtos", "Posologia", "tratamento", "Solução", "nutrição", "Prescrição Eletrônica">
+			misuse = <"Não deve ser utilizado para registrar as atividades relacionadas à realização da prescrição de medicação, vacina, produto nutricional ou item terapêutico, como detalhes sobre a administração ou a dispensação. Use o arquétipo ACTION.medication para este propósito.
+
+Não deve ser utilizado para registrar o pedido de produtos sanguíneos, o que envolve um processo clínico fundamentalmente diferente e é provável que exija informações adicionais diferentes. Use o arquétipo INSTRUCTION.transfusion para este propósito.
+
+Não deve ser utilizado para registrar a ordem de inserção de implantes ou dispositivos médicos, como marcapassos e desfibriladores. Utilize o procedimento INSTRUCTION.Para este fim.">
+		>
+	>
+	other_contributors = <"Morten Aas, Oslo Universitetssykehus, Norway", "Tomas Alme, DIPS, Norway", "Ole Andreas Bjordal, Webmed, Norway", "Erling Are Hole, Helse Bergen, Norway", "Vebjørn Arntzen, Oslo University Hospital, Norway", "Koray Atalag, University of Auckland, New Zealand", "Silje Ljosland Bakke, Nasjonal IKT HF, Norway (openEHR Editor)", "Marcus Baw, openGPSoC / BawMedical Ltd, United Kingdom", "John Bennett, NEHTA, Australia", "Kristian Berg, Universitetssykehuset Nord Norge, Norway (Nasjonal IKT redaktør)", "SumanBhusan Bhattacharyya, Sudisa Consultancy Services, India", "Sharmila Biswas, Australia", "Lars Bitsch-Larsen, Haukeland University hospital, Norway", "Laila Bruun, Oslo universitetssykehus HF, Norway", "Bjørn Christensen, Helse Bergen HF, Norway", "Stephen Chu, NEHTA, Australia (Editor)", "Matthew Cordell, NEHTA, Australia", "Lisbeth Dahlhaug, Helse Midt - Norge IT, Norway", "Inderjit Daphu, Helse Bergen, Norway", "Gail Easterbrook, Flinders Medical Centre, Australia", "Gunn Elin Blakkisrud, DIPS ASA, Norway", "Stig Erik Hegrestad, Helse Førde, Norway", "David Evans, Queensland Health, Australia", "Samuel Frade, Marand, Portugal", "Hildegard Franke, freshEHR Clinical Informatics Ltd., United Kingdom", "Sarah Gaunt, NEHTA, Australia", "Heather Grain, Llewelyn Grain Informatics, Australia", "Cecilie Graver, Oslo universitetssykehus HF, Norway", "Trina Gregory, cpc, Australia", "Bjørn Grøva, Diretoratet for e-helse, Norway", "Robert Hausam, Hausam Consulting LLC, United States", "Sam Heard, Ocean Informatics, Australia (Editor)", "Kristian Heldal, Telemark Hospital Trust, Norway", "Annette Hole Sjøborg, DIPS ASA, Norway", "Hilde Hollås, DIPS ASA, Norway", "Roar Holm, Helse Vest IKT A/S, Norway", "Evelyn Hovenga, EJSH Consulting, Australia", "Gunnar Jårvik, Nasjonal IKT HF, Norway", "Lars Morgan Karlsen, DIPS ASA, Norway", "Mary Kelaher, NEHTA, Australia", "Nils Kolstrup, Skansen Legekontor og Nasjonalt Senter for samhandling og telemedisin, Norway", "Ole Kristian Losvik, Losol AS, Norway", "Robert L'egan, NEHTA, Australia", "Russell Leftwich, Russell B Leftwich MD, United States", "Fest Legemiddelverket, Statens Legemiddelverk, Norway", "Øygunn Leite Kallevik, Helse Bergen, Norway", "Heather Leslie, Ocean Health Systems, Australia (openEHR Editor)", "Colin Macfarlane, Elsevier, United Kingdom", "Alan March, Hospital Universitario Austral, Argentina", "Siv Marie Lien, DIPS ASA, Norway", "Susan McIndoe, Royal District Nursing Service, Australia", "David McKillop, NEHTA, Australia", "Ian McNicoll, freshEHR Clinical Informatics, United Kingdom (openEHR Editor)", "Chris Mitchell, RACGP, Australia", "Stewart Morrison, NEHTA, Australia", "Bjørn Næss, DIPS ASA, Norway", "Andrej Orel, Marand d.o.o., Slovenia", "Anne Pauline Anderssen, Helse Nord RHF, Norway", "Martin Paulson, Sykehuset i Vestfold, Norway", "Chris Pearce, Melbourne East GP Network, Australia", "Kristian Pedersen, Nordlandssykehuset HF, Norway", "Rune Pedersen, Universitetssykehuset i Nord Norge, Norway", "Vladimir Pizzo, Hospital Sírio Libanês, Brazil", "Camilla Preeston, Royal Australian College of General Practitioners, Australia", "Margaret Prichard, NEHTA, Australia", "Cathy Richardson, NEHTA, Australia", "Robyn Richards, NEHTA - Clinical Terminology, Australia", "Tanja Riise, Nasjonal IKT HF, Norway", "Anoop Shah, University College London, United Kingdom", "Line Silsand, Universitetssykehuset i Nord-Norge, Norway", "Raymond Simkus, Brookswood Family Practice, Canada", "Iztok Stotl, UKCLJ, Slovenia", "John Taylor, NEHTA, Australia", "Nyree Taylor, Ocean Informatics, Australia", "Tesfay Teame, Folkehelseinstituttet, Norway", "Richard Townley-O'Neill, Australian Digital Health Agency, Australia", "John Tore Valand, Helse Bergen, Norway (openEHR Editor)", "Ines Vaz, UFN, Portugal", "Nils Widnes, Helse-Bergen, Norway", "Kylie Young, The Royal Australian College of General Practitioners, Australia">
+	references = <
+		["1"] = <"Medication instruction, Draft Archetype [Internet]. nehta, Australia, nehta Clinical Knowledge Manager [cited: 2015-12-15]. Available from: http://dcm.nehta.org.au/ckm/#showArchetype_1013.1.838">
+		["2"] = <"Intermountain Healthcare Medication order model, Personal Communication to Sam Heard by Dr Stan Huff.">
+		["3"] = <"Royal Australian College of General Practitioners. Fact Sheet: Medicines List. 2010.">
+		["4"] = <"NHS HSCIC Messaging Implementation Manual (GP2GP messages) http://www.uktcregistration.nss.cfh.nhs.uk/trud3">
+		["5"] = <"Standards for medication and medical device records – technical annex [Internet]. RCP London. [cited 2015 Dec 15]. Available from: https://www.rcplondon.ac.uk/projects/outputs/standards-medication-and-medical-device-records-technical-annex">
+	>
+	other_details = <
+		["current_contact"] = <"Ian McNicoll, freshEHR Clinical Informatics, UK <ian@freshehr.com>">
+		["MD5-CAM-1.0.1"] = <"9AA29329132486596FD39092B50285B7">
+		["build_uid"] = <"2f8adb68-5267-4c15-9ebc-6f0ffddc1a29">
+	>
+
+definition
+	INSTRUCTION[id1] matches {	-- Medication order
+		activities matches {
+			ACTIVITY[id2] matches {	-- Order
+				description matches {
+					ITEM_TREE[id3] matches {
+						items cardinality matches {1..*; ordered} matches {
+							ELEMENT[id71] occurrences matches {1..*} matches {	-- Medication item
+								value matches {
+									DV_TEXT[id179] 
+								}
+							}
+							allow_archetype CLUSTER[id144] occurrences matches {0..1} matches {	-- Preparation details
+								include
+									archetype_id/value matches {/openEHR-EHR-CLUSTER\.medication_substance(-[a-zA-Z0-9_]+)*\.v0|openEHR-EHR-CLUSTER\.medication_substance(-[a-zA-Z0-9_]+)*\.v1/}
+							}
+							ELEMENT[id92] matches {	-- Route
+								value matches {
+									DV_TEXT[id180] 
+								}
+							}
+							ELEMENT[id93] occurrences matches {0..1} matches {	-- Body site
+								value matches {
+									DV_TEXT[id181] 
+								}
+							}
+							allow_archetype CLUSTER[id94] occurrences matches {0..1} matches {	-- Structured body site
+								include
+									archetype_id/value matches {/openEHR-EHR-CLUSTER\.anatomical_location(-[a-zA-Z0-9_]+)*\.v1|openEHR-EHR-CLUSTER\.anatomical_location_clock(-[a-zA-Z0-9_]+)*\.v0|openEHR-EHR-CLUSTER\.anatomical_location_relative(-[a-zA-Z0-9_]+)*\.v1/}
+							}
+							ELEMENT[id95] matches {	-- Delivery method
+								value matches {
+									DV_TEXT[id182] 
+								}
+							}
+							allow_archetype CLUSTER[id96] matches {	-- Delivery device details
+								include
+									archetype_id/value matches {/openEHR-EHR-CLUSTER\.device(-[a-zA-Z0-9_]+)*\.v1/}
+							}
+							ELEMENT[id10] occurrences matches {0..1} matches {	-- Overall directions description
+								value matches {
+									DV_TEXT[id183] 
+								}
+							}
+							ELEMENT[id48] occurrences matches {0..1} matches {	-- Parsable directions
+								value matches {
+									DV_PARSABLE[id184] matches {
+										formalism matches {"text/html", "text/plain", "text/xml"}
+									}
+								}
+							}
+							ELEMENT[id174] matches {	-- Specific directions description
+								value matches {
+									DV_TEXT[id185] 
+								}
+							}
+							ELEMENT[id175] matches {	-- Dosage justification
+								value matches {
+									DV_TEXT[id186] 
+								}
+							}
+							allow_archetype CLUSTER[id178] matches {	-- Structured dose and timing directions
+								include
+									archetype_id/value matches {/openEHR-EHR-CLUSTER\.therapeutic_direction(-[a-zA-Z0-9_]+)*\.v0|openEHR-EHR-CLUSTER\.therapeutic_direction(-[a-zA-Z0-9_]+)*\.v1/}
+								exclude
+									archetype_id/value matches {/.*/}
+							}
+							CLUSTER[id63] occurrences matches {0..1} matches {	-- Medication safety
+								items matches {
+									CLUSTER[id52] matches {	-- Maximum dose
+										items matches {
+											ELEMENT[id131] occurrences matches {0..1} matches {	-- Maximum amount
+												value matches {
+													DV_QUANTITY[id187] matches {
+														property matches {[at171]}
+														magnitude matches {|>=0.0|}
+														units matches {"1"}
+													}
+												}
+											}
+											ELEMENT[id147] occurrences matches {0..1} matches {	-- Maximum amount unit
+												value matches {
+													DV_TEXT[id188] 
+												}
+											}
+											ELEMENT[id54] occurrences matches {0..1} matches {	-- Allowed period
+												value matches {
+													DV_DURATION[id189] matches {
+														value matches {|>=PT0S|}
+													}
+												}
+											}
+										}
+									}
+									ELEMENT[id172] matches {	-- Overriden safety advice
+										value matches {
+											DV_TEXT[id190] 
+										}
+									}
+									ELEMENT[id65] occurrences matches {0..1} matches {	-- Exceptional safety override?
+										value matches {
+											DV_BOOLEAN[id191] matches {
+												value matches {True, False}
+											}
+										}
+									}
+									ELEMENT[id163] matches {	-- Override reason
+										value matches {
+											DV_TEXT[id192] 
+										}
+									}
+									CLUSTER[id151] occurrences matches {0..1} matches {	-- Total daily effective dose
+										items matches {
+											ELEMENT[id166] occurrences matches {0..1} matches {	-- Purpose
+												value matches {
+													DV_TEXT[id193] 
+												}
+											}
+											ELEMENT[id152] occurrences matches {0..1} matches {	-- Total daily amount
+												value matches {
+													DV_QUANTITY[id194] matches {
+														property matches {[at171]}
+														magnitude matches {|>=0.0|}
+														units matches {"1"}
+													}
+												}
+											}
+											ELEMENT[id153] occurrences matches {0..1} matches {	-- Total daily amount unit
+												value matches {
+													DV_TEXT[id195] 
+												}
+											}
+										}
+									}
+								}
+							}
+							ELEMENT[id45] matches {	-- Additional instruction
+								value matches {
+									DV_TEXT[id196] 
+								}
+							}
+							ELEMENT[id106] matches {	-- Patient information
+								value matches {
+									DV_TEXT[id197] 
+								}
+							}
+							ELEMENT[id108] matches {	-- Monitoring instruction
+								value matches {
+									DV_TEXT[id198] 
+								}
+							}
+							ELEMENT[id19] matches {	-- Clinical indication
+								value matches {
+									DV_TEXT[id199] 
+								}
+							}
+							ELEMENT[id149] matches {	-- Therapeutic intent
+								value matches {
+									DV_TEXT[id200] 
+								}
+							}
+							CLUSTER[id114] occurrences matches {0..1} matches {	-- Order details
+								items matches {
+									ELEMENT[id13] occurrences matches {0..1} matches {	-- Order start date/time
+										value matches {
+											DV_DATE_TIME[id201] 
+										}
+									}
+									ELEMENT[id14] occurrences matches {0..1} matches {	-- Order stop date/time
+										value matches {
+											DV_DATE_TIME[id202] 
+										}
+									}
+									ELEMENT[id12] matches {	-- Order start criterion
+										value matches {
+											DV_TEXT[id203] 
+										}
+									}
+									ELEMENT[id17] matches {	-- Order stop criterion
+										value matches {
+											DV_TEXT[id204] 
+										}
+									}
+									ELEMENT[id61] occurrences matches {0..1} matches {	-- Administrations completed
+										value matches {
+											DV_COUNT[id205] matches {
+												magnitude matches {|>=0|}
+											}
+										}
+									}
+									ELEMENT[id51] occurrences matches {0..1} matches {	-- Duration of order completed
+										value matches {
+											DV_DURATION[id206] matches {
+												value matches {PWDTH/|>=PT0S|}
+											}
+										}
+									}
+									allow_archetype CLUSTER[id113] matches {	-- Order summary
+										include
+											archetype_id/value matches {/openEHR-EHR-CLUSTER\.medication_order_summary(-[a-zA-Z0-9_]+)*\.v0|openEHR-EHR-CLUSTER\.medication_order_summary(-[a-zA-Z0-9_]+)*\.v1/}
+									}
+								}
+							}
+							allow_archetype CLUSTER[id70] matches {	-- Authorisation directions
+								include
+									archetype_id/value matches {/openEHR-EHR-CLUSTER\.medication_authorisation(-[a-zA-Z0-9_]+)*\.v0|openEHR-EHR-CLUSTER\.medication_authorisation(-[a-zA-Z0-9_]+)*\.v1/}
+							}
+							CLUSTER[id130] occurrences matches {0..1} matches {	-- Dispense directions
+								items matches {
+									ELEMENT[id107] matches {	-- Dispense instruction
+										value matches {
+											DV_TEXT[id207] 
+										}
+									}
+									allow_archetype CLUSTER[id66] matches {	-- Dispense amount
+										include
+											archetype_id/value matches {/openEHR-EHR-CLUSTER\.medication_supply_amount(-[a-zA-Z0-9_]+)*\.v0|openEHR-EHR-CLUSTER\.medication_supply_amount(-[a-zA-Z0-9_]+)*\.v1/}
+									}
+									ELEMENT[id133] occurrences matches {0..1} matches {	-- Substitution direction
+										value matches {
+											DV_CODED_TEXT[id208] matches {
+												defining_code matches {[ac1]}		-- Substitution direction (synthesised)
+											}
+										}
+									}
+									ELEMENT[id155] occurrences matches {0..1} matches {	-- Non-substitution reason
+										value matches {
+											DV_TEXT[id209] 
+										}
+									}
+									ELEMENT[id140] occurrences matches {0..1} matches {	-- Priority
+										value matches {
+											DV_TEXT[id210] 
+										}
+									}
+									ELEMENT[id156] occurrences matches {0..1} matches {	-- Dispensing start date
+										value matches {
+											DV_DATE_TIME[id211] 
+										}
+									}
+									ELEMENT[id162] occurrences matches {0..1} matches {	-- Dispensing expiry date
+										value matches {
+											DV_DATE_TIME[id212] 
+										}
+									}
+									allow_archetype CLUSTER[id171] matches {	-- Dispense details
+										include
+											archetype_id/value matches {/.*/}
+									}
+								}
+							}
+							allow_archetype CLUSTER[id167] matches {	-- Additional details
+								include
+									archetype_id/value matches {/.*/}
+							}
+							ELEMENT[id168] occurrences matches {0..1} matches {	-- Comment
+								value matches {
+									DV_TEXT[id213] 
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		protocol matches {
+			ITEM_TREE[id6] matches {	-- Dose amount description
+				items matches {
+					ELEMENT[id5] matches {	-- Order identifier
+						value matches {
+							DV_IDENTIFIER[id214] 
+						}
+					}
+					allow_archetype CLUSTER[id9] matches {	-- Extension
+						include
+							archetype_id/value matches {/.*/}
+					}
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Medication order">
+				description = <"An order for a medication, vaccine, nutritional product or other therapeutic item for an identified individual.">
+			>
+			["id2"] = <
+				text = <"Order">
+				description = <"Details of the requested order.">
+			>
+			["id5"] = <
+				text = <"Order identifier">
+				description = <"Unique identifier for the medication order.">
+			>
+			["id6"] = <
+				text = <"Dose amount description">
+				description = <"The amount and units of the medication, vaccine or other therapeutic good to be used or administered at one time.">
+			>
+			["id9"] = <
+				text = <"Extension">
+				description = <"Additional information required to capture local content or to align with other reference models/formalisms.">
+			>
+			["id10"] = <
+				text = <"Overall directions description">
+				description = <"Complete narrative description about how the ordered item is to be used.">
+			>
+			["id12"] = <
+				text = <"Order start criterion">
+				description = <"A condition which, when met, requires the commencement of administration or use.">
+			>
+			["id13"] = <
+				text = <"Order start date/time">
+				description = <"The date and optional time to commence use of the ordered item.">
+			>
+			["id14"] = <
+				text = <"Order stop date/time">
+				description = <"The date and optional time when it is planned to cease use of the ordered item.">
+			>
+			["id17"] = <
+				text = <"Order stop criterion">
+				description = <"A condition which, when met, requires the cessation of administration or use.">
+			>
+			["id19"] = <
+				text = <"Clinical indication">
+				description = <"The clinical reason for use of the ordered item.">
+			>
+			["id45"] = <
+				text = <"Additional instruction">
+				description = <"An additional instruction on how to use or store the ordered item.">
+			>
+			["id48"] = <
+				text = <"Parsable directions">
+				description = <"A parsable, computable text representation of the directions.">
+			>
+			["id51"] = <
+				text = <"Duration of order completed">
+				description = <"The time period during which the individual/patient has already been using the ordered item as a part of the intended whole order but prior to the issuance of this order.">
+			>
+			["id52"] = <
+				text = <"Maximum dose">
+				description = <"Details about the maximum, cumulative dose allowed over a defined period for the ordered item.">
+			>
+			["id54"] = <
+				text = <"Allowed period">
+				description = <"The period of time during which the maximum dose is calculated.">
+			>
+			["id61"] = <
+				text = <"Administrations completed">
+				description = <"The number of administrations of the ordered item that have been completed, as part of the intended whole order but prior to the issuance of this order.">
+			>
+			["id63"] = <
+				text = <"Medication safety">
+				description = <"Details about medication safety for the ordered item.">
+			>
+			["id65"] = <
+				text = <"Exceptional safety override?">
+				description = <"Confirmation by the prescriber that the normal dose or other safety limit has been overridden due to exceptional circumstances.">
+			>
+			["id66"] = <
+				text = <"Dispense amount">
+				description = <"Details about the amount of the ordered item to be dispensed.">
+			>
+			["id70"] = <
+				text = <"Authorisation directions">
+				description = <"Details of authorisation of the ordered item, including supporting local self-administration, issue and endorsement policies.">
+			>
+			["id71"] = <
+				text = <"Medication item">
+				description = <"Name of the medication, vaccine or other therapeutic/prescribable item being ordered.">
+			>
+			["id92"] = <
+				text = <"Route">
+				description = <"The route by which the ordered item is to be administered into the subject's body.">
+			>
+			["id93"] = <
+				text = <"Body site">
+				description = <"Name of the site of administration of the ordered item.">
+			>
+			["id94"] = <
+				text = <"Structured body site">
+				description = <"Structured description of the site of administration of the ordered item.">
+			>
+			["id95"] = <
+				text = <"Delivery method">
+				description = <"The technique or device by which the ordered item is to be delivered.">
+			>
+			["id96"] = <
+				text = <"Delivery device details">
+				description = <"Details of the medical device used to assist delivery of the ordered item.">
+			>
+			["id106"] = <
+				text = <"Patient information">
+				description = <"An additional instruction directed primarily at the individual/patient or carers.">
+			>
+			["id107"] = <
+				text = <"Dispense instruction">
+				description = <"An additional instruction directed primarily at the person dispensing the ordered item.">
+			>
+			["id108"] = <
+				text = <"Monitoring instruction">
+				description = <"An additional instruction which gives advice on recommended or required monitoring of the ordered item.">
+			>
+			["id113"] = <
+				text = <"Order summary">
+				description = <"Summary information about use of the ordered item, such as current status or key dates, generally used in non-prescription contexts.">
+			>
+			["id114"] = <
+				text = <"Order details">
+				description = <"Details about the whole medication order.">
+			>
+			["id130"] = <
+				text = <"Dispense directions">
+				description = <"Directions about the dispensing of the ordered item.">
+			>
+			["id131"] = <
+				text = <"Maximum amount">
+				description = <"The maximum, cumulative amount of medication which should be administered within the allowed period. The unit for this amount is carried in Maximum amount unit.">
+			>
+			["id133"] = <
+				text = <"Substitution direction">
+				description = <"Permission for substitution with a bioequivalent item.">
+			>
+			["id140"] = <
+				text = <"Priority">
+				description = <"An indicator of the urgency with which the ordered item should be dispensed.">
+			>
+			["id144"] = <
+				text = <"Preparation details">
+				description = <"Structured details about the overall preparation including strength, form and constituent substances.">
+			>
+			["id147"] = <
+				text = <"Maximum amount unit">
+				description = <"The unit for the maximum amount allowed.">
+			>
+			["id149"] = <
+				text = <"Therapeutic intent">
+				description = <"The overall therapeutic intent of the ordered item.">
+			>
+			["id151"] = <
+				text = <"Total daily effective dose">
+				description = <"Details about the total daily amount of the ordered item expected to be administered.">
+			>
+			["id152"] = <
+				text = <"Total daily amount">
+				description = <"The amount of ordered item which will be taken each day if administered as intended.">
+			>
+			["id153"] = <
+				text = <"Total daily amount unit">
+				description = <"The dose unit associated with the total daily amount.">
+			>
+			["id155"] = <
+				text = <"Non-substitution reason">
+				description = <"The reason why an ordered item should not be substituted at dispense.">
+			>
+			["id156"] = <
+				text = <"Dispensing start date">
+				description = <"The date from which the ordered item is permitted to be dispensed for the first time.">
+			>
+			["id162"] = <
+				text = <"Dispensing expiry date">
+				description = <"The date after which the ordered item is no longer valid to be legally dispensed.">
+			>
+			["id163"] = <
+				text = <"Override reason">
+				description = <"The reason for a clinical safety or maximum dose override.">
+			>
+			["id166"] = <
+				text = <"Purpose">
+				description = <"Description of the reason for recording a total daily effective dose.">
+			>
+			["id167"] = <
+				text = <"Additional details">
+				description = <"Additional structured details about the ordered item not captured in other fields.">
+			>
+			["id168"] = <
+				text = <"Comment">
+				description = <"Additional narrative about the medication order not captured in other fields.">
+			>
+			["at169"] = <
+				text = <"Permitted">
+				description = <"Substitution of the medication with a bioequivalent medication is allowed.">
+			>
+			["at170"] = <
+				text = <"Not permitted">
+				description = <"Substitution of the medication with a bioequivalent medication is not allowed.">
+			>
+			["id171"] = <
+				text = <"Dispense details">
+				description = <"Further details related to dispense directions.">
+			>
+			["id172"] = <
+				text = <"Overriden safety advice">
+				description = <"A known or recognised safety issue which applies to this subject and the ordered item, such as an allergy, drug duplication warning or contraindication. This element is normally only recorded when this safety advice is overridden.">
+			>
+			["id174"] = <
+				text = <"Specific directions description">
+				description = <"A narrative description of a specific part of overall directions.">
+			>
+			["id175"] = <
+				text = <"Dosage justification">
+				description = <"A description of the justification used to calculate a dose amount or administration rate where this is dependent on some other factor.">
+			>
+			["id178"] = <
+				text = <"Structured dose and timing directions">
+				description = <"Details of structured dose and timing directions.">
+			>
+			["at171"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["ac1"] = <
+				text = <"Substitution direction (synthesised)">
+				description = <"Permission for substitution with a bioequivalent item. (synthesised)">
+			>
+		>
+		["nb"] = <
+			["id1"] = <
+				text = <"Legemiddelordinering">
+				description = <"Ordinering av et legemiddel, en vaksine, parenteral væske, ernæringsprodukt eller medisinsk forbruksmateriell, for et spesifikt individ.">
+			>
+			["id2"] = <
+				text = <"Ordinering">
+				description = <"Detaljer knyttet til ordineringen.">
+			>
+			["id5"] = <
+				text = <"Ordineringsidentifikator">
+				description = <"Unik identifikator for ordineringen.">
+			>
+			["id6"] = <
+				text = <"Tree">
+				description = <"@ internal @">
+			>
+			["id9"] = <
+				text = <"Tilleggsinformasjon">
+				description = <"Ytterligere informasjon som er nødvendig for å registrere lokalt innhold/kontekst, eller for å sammenstille med andre referansemodeller/formalismer.">
+			>
+			["id10"] = <
+				text = <"Overordnet anvisningsbeskrivelse">
+				description = <"En komplett fritekstbeskrivelse av hvordan den ordinerte varen skal brukes.">
+			>
+			["id12"] = <
+				text = <"Startkriterium">
+				description = <"Et vilkår for at den ordinerte varen kan tas i bruk.">
+			>
+			["id13"] = <
+				text = <"Startdato/tid for ordineringen">
+				description = <"Dato og valgfri tid for oppstart av den ordinerte varen.">
+			>
+			["id14"] = <
+				text = <"Dato/tid for seponering">
+				description = <"Dato og valgfri tid når det er planlagt å seponere den ordinerte varen.">
+			>
+			["id17"] = <
+				text = <"Seponeringskriterium">
+				description = <"Et vilkår for at den ordinerte varen skal seponeres.">
+			>
+			["id19"] = <
+				text = <"Klinisk indikasjon">
+				description = <"Den kliniske begrunnelsen for bruk av den ordinerte varen.">
+			>
+			["id45"] = <
+				text = <"Tilleggsinstruksjon">
+				description = <"Tilleggsinstruksjon for hvordan bruke eller lagre den ordinerte varen.">
+			>
+			["id48"] = <
+				text = <"Maskinlesbare anvisninger">
+				description = <"En maskinlesbar tekstfremstilling av anvisningene.">
+			>
+			["id51"] = <
+				text = <"Del av ordinering allerede administrert">
+				description = <"Tidsperioden individet/pasienten har brukt den ordinerte varen i forkant av denne instruksjonen.">
+			>
+			["id52"] = <
+				text = <"Maksimumsdose">
+				description = <"Detaljer om den maksimale kumulative dosen av den ordinerte varen som er tillatt i en definert tidsperiode.">
+			>
+			["id54"] = <
+				text = <"Tidsperiode">
+				description = <"Tidsperioden maksimumsdosen er kalkulert for.">
+			>
+			["id61"] = <
+				text = <"Antall administreringer utført">
+				description = <"Antall administreringer av den ordinerte varen som er utført som del av den planlagte ordineringen, men i forkant av denne instruksjonen.">
+			>
+			["id63"] = <
+				text = <"Legemiddelsikkerhet">
+				description = <"Detaljer knyttet til sikkerhet rundt den ordinerte varen.">
+			>
+			["id65"] = <
+				text = <"Overstyring av sikkerhetsgrenser?">
+				description = <"Bekreftelse fra forskriveren om at den maksimale dosen eller andre sikkerhetsgrenser er overstyrt på grunn av spesielle omstendigheter.">
+			>
+			["id66"] = <
+				text = <"Utdelingsmengde">
+				description = <"Detaljer om mengden av den ordinerte varen som skal utdeles.">
+			>
+			["id70"] = <
+				text = <"Autoriseringsveiledning">
+				description = <"Detaljer om autoriseringen for den ordinerte varen, støtter også selvadministrering, utlevering og retningslinjer for godkjenning.">
+			>
+			["id71"] = <
+				text = <"Legemiddel">
+				description = <"Navnet på legemiddelet, vaksinen eller det medisinske forbruksmateriellet som ordineres.">
+			>
+			["id92"] = <
+				text = <"Administreringsvei">
+				description = <"Administreringsveien for den ordinerte varen.">
+			>
+			["id93"] = <
+				text = <"Anatomisk lokalisering">
+				description = <"Navn på kroppsstedet der den ordinerte varen skal administreres.">
+			>
+			["id94"] = <
+				text = <"Strukturert anatomisk lokalisering">
+				description = <"Strukturert beskrivelse av administreringsstedet for den ordinerte varen.">
+			>
+			["id95"] = <
+				text = <"Administreringsmetode">
+				description = <"Teknikken eller utstyret som brukes for å administrere den ordinerte varen.">
+			>
+			["id96"] = <
+				text = <"Detaljer om administreringsutstyr">
+				description = <"Detaljer om det medisinske utstyret som brukes til å administrere den ordinerte varen.">
+			>
+			["id106"] = <
+				text = <"Bruksområde">
+				description = <"Tilleggsinstruksjon primært rettet mot pasient og pårørende.">
+			>
+			["id107"] = <
+				text = <"Utdelingsinstruksjon">
+				description = <"Tilleggsinstruksjon primært rettet mot personen som deler ut den ordinerte varen.">
+			>
+			["id108"] = <
+				text = <"Overvåkningsinstruksjon">
+				description = <"Tilleggsinstruksjon som gir råd om anbefalt eller nødvendig overvåkning ved bruk av den ordinerte varen.">
+			>
+			["id113"] = <
+				text = <"Sammendrag av ordineringen">
+				description = <"Oppsummerende informasjon om bruk av den ordinerte varen, f.eks. nåværende status eller nøkkeldatoer, som regel brukt i andre sammenhenger enn resepter.">
+			>
+			["id114"] = <
+				text = <"Ordineringsdetaljer">
+				description = <"Detaljer om hele legemiddelordineringen.">
+			>
+			["id130"] = <
+				text = <"Utdelingsanvisning">
+				description = <"Veiledning for utdeling av den ordinerte varen.">
+			>
+			["id131"] = <
+				text = <"Maksimum legemiddelmengde">
+				description = <"Den maksimale kumulative legemiddelmengden som bør administreres i perioden. Enheten for denne mengden legges i elementet \"Enhet for maksimum legemiddelmengde\".">
+			>
+			["id133"] = <
+				text = <"Generisk bytte">
+				description = <"Indikerer om generisk bytte med en bioekvivalent vare er tillatt.">
+			>
+			["id140"] = <
+				text = <"Prioritet">
+				description = <"En indikator for hastegraden den ordinerte varen bør utdeles under.">
+			>
+			["id144"] = <
+				text = <"Legemiddeldetaljer">
+				description = <"Strukturerte detaljer om det overordnede legemiddelet, blant annet styrke, form og substansene det består av.">
+			>
+			["id147"] = <
+				text = <"Enhet for maksimum legemiddelmengde">
+				description = <"Enheten for \"Maksimum legemiddelmengde\".">
+			>
+			["id149"] = <
+				text = <"Terapeutisk hensikt">
+				description = <"Overordnet terapeutisk hensikt med den ordinerte varen.">
+			>
+			["id151"] = <
+				text = <"Total daglig effektiv dose">
+				description = <"Detaljer om den totale daglige mengden av den ordinerte varen som skal administreres.">
+			>
+			["id152"] = <
+				text = <"Total daglig dosemengde">
+				description = <"Mengden ordinert vare som skal tas per dag dersom det administreres som ordinert.">
+			>
+			["id153"] = <
+				text = <"Enhet for total daglig dosemengde">
+				description = <"Enheten som hører til den totale daglige dosemengden.">
+			>
+			["id155"] = <
+				text = <"Begrunnelse for byttereservasjon">
+				description = <"Begrunnelsen for beslutningen om at generisk bytte av den ordinerte varen ikke tillates.">
+			>
+			["id156"] = <
+				text = <"Startdato utlevering">
+				description = <"Datoen den ordinerte varen kan utdeles for første gang.">
+			>
+			["id162"] = <
+				text = <"Utløpsdato utdeling">
+				description = <"Dato da ordineringen ikke lenger er gyldig for utdeling.">
+			>
+			["id163"] = <
+				text = <"Årsak til overstyring">
+				description = <"Begrunnelsen for hvorfor sikkerhetsgrensen eller maksimumsdosen er overstyrt.">
+			>
+			["id166"] = <
+				text = <"Formål">
+				description = <"Begrunnelsen for at det registreres en total daglig effektiv dose.">
+			>
+			["id167"] = <
+				text = <"Tilleggsinformasjon">
+				description = <"Ytterligere strukturerte detaljer om den ordinerte varen som ikke omfattes av andre felt.">
+			>
+			["id168"] = <
+				text = <"Kommentar">
+				description = <"Ytterligere fritekst om legemiddelordineringen som ikke er fanget i andre felt.">
+			>
+			["at169"] = <
+				text = <"Tillatt">
+				description = <"Generisk bytte med bioekvivalent legemiddel er tillatt.">
+			>
+			["at170"] = <
+				text = <"Ikke tillatt">
+				description = <"Generisk bytte med bioekvivalent legemiddel er ikke tillatt.">
+			>
+			["id171"] = <
+				text = <"Utdelingsdetaljer">
+				description = <"Ytterligere detaljer relatert til utdelingsanvisningene.">
+			>
+			["id172"] = <
+				text = <"Overstyrt sikkerhetsanbefaling">
+				description = <"Et kjent problem relatert til legemiddelsikkerhet for dette individet og den ordinerte varen, f.eks. allergi, advarsel om legemiddelduplisering, eller kontraindikasjon. Registreres ordinært bare dersom anbefalingen overstyres.">
+			>
+			["id174"] = <
+				text = <"Spesifikk anvisningsbeskrivelse">
+				description = <"Fritekstbeskrivelse av en spesifikk del av den overordnede anvisningen.">
+			>
+			["id175"] = <
+				text = <"Begrunnelse for dose">
+				description = <"Begrunnelsen for hvorfor en spesifikk dose er valgt, der dette er avhengig av en ytre faktor.">
+			>
+			["id178"] = <
+				text = <"Strukturerte anvisninger om dose og timing">
+				description = <"Detaljerte og strukturerte anvisninger om dose og timing.">
+			>
+			["at171"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["ac1"] = <
+				text = <"Generisk bytte (synthesised)">
+				description = <"Indikerer om generisk bytte med en bioekvivalent vare er tillatt. (synthesised)">
+			>
+		>
+		["pt-br"] = <
+			["id1"] = <
+				text = <"Prescrição de Medicamentos">
+				description = <"Prescrição de medicamentos, vacina, produtos nutricionais ou outro item de tratamento para um indivíduo identificado.">
+			>
+			["id2"] = <
+				text = <"Prescrição">
+				description = <"Detalhes da prescrição solicitada.">
+			>
+			["id5"] = <
+				text = <"Outros identificadores">
+				description = <"Identificador unívoco do ítem prescrito.">
+			>
+			["id6"] = <
+				text = <"Descrição da quantidade da dose">
+				description = <"A quantidade e unidades de medida do medicamento, vacina ou outro ítem terapêutico viável para utilização e administração num período de tempo.">
+			>
+			["id9"] = <
+				text = <"Extensão">
+				description = <"Informações adicionais necessárias para capturar o conteúdo local ou para se alinhar com outros modelos de referência / formalismos.">
+			>
+			["id10"] = <
+				text = <"Instruções Gerais da Prescrição">
+				description = <"Narrativa completa da descrição de como o item deve ser utilizado.">
+			>
+			["id12"] = <
+				text = <"Critério para o início da prescrição">
+				description = <"Uma condição que, quando encontrada, exige o início da administração ou uso.">
+			>
+			["id13"] = <
+				text = <"Data/Hora do início prescrição">
+				description = <"A data e hora opcional para iniciar o uso do medicamento prescrito.">
+			>
+			["id14"] = <
+				text = <"Data/hora do final da prescrição">
+				description = <"A data e hora opcional quando está planejado finalizar a utilização do ítem prescrito">
+			>
+			["id17"] = <
+				text = <"Critérios para interromper a prescrição">
+				description = <"Uma condição que se existente, exige a interrupção da administração ou uso.">
+			>
+			["id19"] = <
+				text = <"Indicação Clínica">
+				description = <"A indicação clínica para o uso do item prescrito.">
+			>
+			["id45"] = <
+				text = <"Instruções adicionais">
+				description = <"Instruções adicionais sobre como usar ou armazenar o ítem prescrito.">
+			>
+			["id48"] = <
+				text = <"Orientação para parsear texto">
+				description = <"Uma representação em texto parseável das orientações.">
+			>
+			["id51"] = <
+				text = <"Duração do uso do ítem da prescrição">
+				description = <"O período de tempo em que o indíviduo/paciente vem fazendo uso do item prescrito com parte da duração total do tratamento, antes da execução da prescrição atual.">
+			>
+			["id52"] = <
+				text = <"Dose máxima">
+				description = <"Detalhes sobre a dose máxima cumulativa permitida durante um período definido para o item prescrito.">
+			>
+			["id54"] = <
+				text = <"Periodo de tempo permitido">
+				description = <"O período do tempo durante o qual a dose máxima é calculada.">
+			>
+			["id61"] = <
+				text = <"Administrações finalizadas">
+				description = <"O número de administrações realizadas do item prescrito, como parte da prescrição total, antes da execução da prescrição atual.">
+			>
+			["id63"] = <
+				text = <"Segurança de medicamentos">
+				description = <"Detalhes sobre a segurança de medicamentos prescritos.">
+			>
+			["id65"] = <
+				text = <"Cancelamento excepcional do alerta?">
+				description = <"Confirmação pelo prescritor de que a dose normal ou outro limite de segurança foi ultrapassado, por circunstâncias excepcionais.">
+			>
+			["id66"] = <
+				text = <"Quantidade a ser dispensada">
+				description = <"Detalhes sobre a quantidade do item prescrito a ser dispensada.">
+			>
+			["id70"] = <
+				text = <"Informações da autorização">
+				description = <"Detalhes da autorização do ítem prescrito, incluindo o local de administração e políticas de reembolso.">
+			>
+			["id71"] = <
+				text = <"Item da prescrição de medicamentos">
+				description = <"Nome do medicamento, vacina ou outro item terapêutico/prescritível a ser solicitado.">
+			>
+			["id92"] = <
+				text = <"Via de Administração">
+				description = <"A via de administração pela qual o item prescrito deve ser administrada à pessoa.">
+			>
+			["id93"] = <
+				text = <"Local do corpo">
+				description = <"Nome do local de administração do item prescrito.">
+			>
+			["id94"] = <
+				text = <"Local do corpo estruturado">
+				description = <"Descrição estruturada do local da administração do item prescrito.">
+			>
+			["id95"] = <
+				text = <"Método da administração">
+				description = <"A técnica ou dispositivo pelo qual o item prescrito é administrado.">
+			>
+			["id96"] = <
+				text = <"Detalhes do dispositivo">
+				description = <"Detalhes do dispositivo medicinal utilizado para suportar a administração do item prescrito.">
+			>
+			["id106"] = <
+				text = <"Informações do paciente">
+				description = <"Informações adicionais direcionadas principalmente para o indivíduo/paciente ou cuidador.">
+			>
+			["id107"] = <
+				text = <"Instruções para a dispensação">
+				description = <"Instruções adicionais direcionadas primariamente para a pessoa responsável pela dispensação do ítem prescrito.">
+			>
+			["id108"] = <
+				text = <"Monitoramento da instrução">
+				description = <"Instruções adicionais que advertem sobre o monitoramento dos itens prescritos.">
+			>
+			["id113"] = <
+				text = <"Sumário da prescrição">
+				description = <"Informações sumarizadas sobre o uso do item prescrito, tais como: status atual, datas chave, geralmente utilizado fora do contexto da prescrição.">
+			>
+			["id114"] = <
+				text = <"Prescrição detalhada">
+				description = <"Detalhes sobre a prescrição como um todo.">
+			>
+			["id130"] = <
+				text = <"Orientações para a dispensação">
+				description = <"Orientações sobre a dispensação do ítem prescrito.">
+			>
+			["id131"] = <
+				text = <"Quantidade máxima">
+				description = <"A quantidade máxima, cumulativa de medicamento que deve ser administrado dentro do período permitido. A unidade para esta quantidade é descrita na unidade da quantidade máxima.">
+			>
+			["id133"] = <
+				text = <"Orientações para substituição">
+				description = <"Permissão para substituir item prescrito por outro bioequivalente.">
+			>
+			["id140"] = <
+				text = <"Prioridade">
+				description = <"Indicador da urgência de dispensação do ítem prescrito.">
+			>
+			["id144"] = <
+				text = <"Detalhes da preparação">
+				description = <"Detalhes estruturados sobre a preparação geral, incluindo a concentração, forma farmacêutica e ingredientes.">
+			>
+			["id147"] = <
+				text = <"Unidade da quantidade máxima">
+				description = <"A unidade da quantidade máxima permitida.">
+			>
+			["id149"] = <
+				text = <"Intenção terapêutica">
+				description = <"A intenção terapêutica sobre o item prescrito.">
+			>
+			["id151"] = <
+				text = <"Dose efetiva total diária">
+				description = <"Detalhes sobre a quantidade total diária do item prescrito a ser administrado.">
+			>
+			["id152"] = <
+				text = <"Quantidade diária total">
+				description = <"A quantidade do item prescrito que será ingerida diariamente se administrada conforme pretendido.">
+			>
+			["id153"] = <
+				text = <"Quantidade da unidade total diária">
+				description = <"A unidade de dose associada com a quantidade total diária.">
+			>
+			["id155"] = <
+				text = <"Justificativa para a não substituição">
+				description = <"Motivo pelo qual o ítem prescrito não deve ser substituído no momento da dispensação.">
+			>
+			["id156"] = <
+				text = <"Data do início da dispensação">
+				description = <"Data inicial permitida para a primeira dispensação do ítem prescrito.">
+			>
+			["id162"] = <
+				text = <"Data de validade da dispensação">
+				description = <"Data a partir da qual a dispensação não é mais válida.">
+			>
+			["id163"] = <
+				text = <"Justificativa do cancelamento do alerta">
+				description = <"O motivo pelo qual um item de segurança clínica ou de uma dose máxima não foi cumprido.">
+			>
+			["id166"] = <
+				text = <"Propósito">
+				description = <"Descrição do motivo para registrar a dose efetiva diária total.">
+			>
+			["id167"] = <
+				text = <"Detalhes adicionais">
+				description = <"Detalhes adicionais estruturados sobre o ítem prescrito, não capturados em outros campos.">
+			>
+			["id168"] = <
+				text = <"Comentários">
+				description = <"Comentários adicionais sobre o ítem prescrito em texto livre, não capturados em outros campos.">
+			>
+			["at169"] = <
+				text = <"Perimitido">
+				description = <"Permitir a subsituição do medicamento por medicamento bioequivalente.">
+			>
+			["at170"] = <
+				text = <"Não permitidio">
+				description = <"Não é permitido subsituir medicamento por medicamento bioequivalente.">
+			>
+			["id171"] = <
+				text = <"Detalhes da dispensação">
+				description = <"Detalhes adicionais das instruções de dispensação.">
+			>
+			["id172"] = <
+				text = <"Aviso de segurança cancelado">
+				description = <"Uma questão de segurança conhecida ou reconhecida de uma pessoa ecom relação ao item prescrito, tais como, alergia, aviso de duplicidade de drogas ou contra-indicação. Este elemento normalmente é registrado apenas quando este aviso de segurança é cancelado.">
+			>
+			["id174"] = <
+				text = <"Orientações específicas">
+				description = <"Descrição em texto de uma parte das orientações globais.">
+			>
+			["id175"] = <
+				text = <"Justificativa da dosagem">
+				description = <"A descrição da justificativa utilizada para calcular a dose total ou taxa da administração quando esta é dependente de algum outro fator.">
+			>
+			["id178"] = <
+				text = <"Orientações estuturadas de dose e duração">
+				description = <"Detalhes das orientações estuturadas de dose e duração.">
+			>
+			["at171"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["ac1"] = <
+				text = <"Orientações para substituição (synthesised)">
+				description = <"Permissão para substituir item prescrito por outro bioequivalente. (synthesised)">
+			>
+		>
+	>
+	term_bindings = <
+		["openehr"] = <
+			["at171"] = <http://openehr.org/id/380>
+		>
+	>
+	value_sets = <
+		["ac1"] = <
+			id = <"ac1">
+			members = <"at169", "at170">
+		>
+	>

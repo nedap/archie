@@ -1,0 +1,121 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated)
+	openEHR-EHR-CLUSTER.ear_cleaning.v1.0.0
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Heather Leslie">
+		["organisation"] = <"Ocean Informatics">
+		["email"] = <"heather.leslie@oceaninformatics.com">
+		["date"] = <"2012-12-05">
+	>
+	copyright = <"© National E-Health Transition Authority">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record details about cleaning of the external auditory canal.">
+			use = <"Use to record details about the cleaning of the external auditory canal.
+
+This archetype has been designed to provide structured details as part of a request for ear cleaning or recording an ear cleaning activity - use within INSTRUCTION.procedure or ACTION.procedure archetypes.">
+			keywords = <"ear", "cleaning", "method", "canal", "external", "auditory", "pus", "discharge", "wax", "instrument", "suction", "irrigation", "flushing", "tissue">
+			misuse = <"">
+		>
+	>
+	other_contributors = <"Stephen Chu, NEHTA, Australia", "Kimberley Crebbin, NT Hearing Services, Australia", "Kathy Currie, Northern Territory Health, Australia", "Jade Frederikson, Hearing Health Program, DoH, NT", "Sam Heard, Ocean Informatics, Australia", "Oliver Hosking, Remote Health NT, Australia", "Anthony Leech, Hearing Health, Australia", "Kerrie Lee, Ngaanyatjarra Health Service, Australia (Editor)", "Heather Leslie, Ocean Informatics, Australia (Editor)", "Ian McNicoll, Ocean Informatics UK, United Kingdom", "Vanessa Rotumah, NT Government - Health DEvelopment, Australia">
+	other_details = <
+		["current_contact"] = <"Heather Leslie, Ocean Informatics, heather.leslie@oceaninformatics.com">
+		["MD5-CAM-1.0.1"] = <"C252621521746D26C0622C56F61FA5AA">
+	>
+
+definition
+	CLUSTER[id1] matches {	-- Ear Cleaning Details
+		items matches {
+			ELEMENT[id2] occurrences matches {0..1} matches {	-- Ear Cleaned
+				value matches {
+					DV_CODED_TEXT[id11] matches {
+						defining_code matches {[ac1]}		-- Ear Cleaned (synthesised)
+					}
+				}
+			}
+			ELEMENT[id10] occurrences matches {0..1} matches {	-- Description
+				value matches {
+					DV_TEXT[id12] 
+				}
+			}
+			ELEMENT[id6] occurrences matches {0..1} matches {	-- Method
+				value matches {
+					DV_TEXT[id13] 
+				}
+			}
+			ELEMENT[id5] occurrences matches {0..1} matches {	-- Wash Agent
+				value matches {
+					DV_TEXT[id14] 
+				}
+			}
+			ELEMENT[id7] occurrences matches {0..1} matches {	-- Instrument
+				value matches {
+					DV_TEXT[id15] 
+				}
+			}
+			ELEMENT[id8] matches {	-- Outcome
+				value matches {
+					DV_TEXT[id16] 
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Ear Cleaning Details">
+				description = <"Details about method for cleaning the external ear canal.">
+			>
+			["id2"] = <
+				text = <"Ear Cleaned">
+				description = <"Identification of the ear being cleaned.">
+			>
+			["at3"] = <
+				text = <"Left Ear">
+				description = <"The left ear was cleaned.">
+			>
+			["at4"] = <
+				text = <"Right Ear">
+				description = <"The right ear was cleaned.">
+			>
+			["id5"] = <
+				text = <"Wash Agent">
+				description = <"Substance used for ear wash.">
+			>
+			["id6"] = <
+				text = <"Method">
+				description = <"Method used for ear wash.">
+			>
+			["id7"] = <
+				text = <"Instrument">
+				description = <"Instrument used to assist cleaning.">
+			>
+			["id8"] = <
+				text = <"Outcome">
+				description = <"Description of the outcome of ear cleaning.">
+			>
+			["id10"] = <
+				text = <"Description">
+				description = <"Narrative description of the ear cleaning activity.">
+			>
+			["ac1"] = <
+				text = <"Ear Cleaned (synthesised)">
+				description = <"Identification of the ear being cleaned. (synthesised)">
+			>
+		>
+	>
+	value_sets = <
+		["ac1"] = <
+			id = <"ac1">
+			members = <"at3", "at4">
+		>
+	>

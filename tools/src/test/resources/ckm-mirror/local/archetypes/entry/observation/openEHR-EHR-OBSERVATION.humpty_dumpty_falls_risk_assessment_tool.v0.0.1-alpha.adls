@@ -1,0 +1,551 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated; uid=aadbfa22-ad8c-495d-961c-60d7dbcbec49)
+	openEHR-EHR-OBSERVATION.humpty_dumpty_falls_risk_assessment_tool.v0.0.1-alpha
+
+language
+	original_language = <[ISO_639-1::en]>
+	translations = <
+		["es-ar"] = <
+			language = <[ISO_639-1::es-ar]>
+			author = <
+				["name"] = <"Alan D. March">
+				["organisation"] = <"Hospital Universitario Austral, Pilar, Buenos Aires, Argentina">
+				["email"] = <"alandmarch@gmail.com">
+			>
+		>
+	>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Alan D. March">
+		["organisation"] = <"Hospital Universitario Austral, Pilar, Buenos Aires, Argentina.">
+		["email"] = <"alandmarch@gmail.com">
+		["date"] = <"2016-07-25">
+	>
+	original_namespace = <"org.openehr">
+	original_publisher = <"openEHR Foundation">
+	custodian_namespace = <"org.openehr">
+	custodian_organisation = <"openEHR Foundation">
+	copyright = <"© openEHR Foundation">
+	licence = <"This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 License. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/.">
+	details = <
+		["es-ar"] = <
+			language = <[ISO_639-1::es-ar]>
+			purpose = <"Herramienta para la evaluación del riesgo de caídas en niños y adolescentes. Utiliza un escala multidimensional de 7 parámetros.">
+			use = <"Se evaluan 7 parámetros a los cuales se asignan puntajes: Edad, Género, Diagnóstico, Déficits congitivos, Factores ambientales, Respuesta a cirugía/sedación/antestesia y Uso de medicamentos.">
+			keywords = <"caídas", "escala", "edad", "género", "diagnóstico", "déficit cognitivo", "factor ambiental", "cirugía", "sedación", "antestesia", "medicamento">
+			misuse = <"No utilizar en pacientes mayores de 18 años.">
+		>
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"A tool for the assesment of risk of falls in children, based on the measurement of 7 parameters.">
+			use = <"Seven parameters are evaluated and a numerical score is assigned to each: Age, Gender, Diagnosis, Cognitive impairments, Environmental factors, Response to surgery/sedation/anesthesia and Medication usage.">
+			keywords = <"falls", "scale", "age", "gender", "diagnosis", "cognitive impairment", "environmental factor", "surgery", "sedation", "anesthesia", "medication">
+			misuse = <"Not to be used in patients above 18 years of age.">
+		>
+	>
+	references = <
+		["1"] = <"Hill-Rodriguez D, Messmer PR, Wood ML (2007). Humpty Dumpty sat on a wall—developing a pediatric falls prevention program and scale. Paper presented at the 17th Annual">
+		["2"] = <"Society of Pediatric Nurses 17th Annual Convention Milwaukee, WI.">
+		["3"] = <"Hill-Rodriguez D, Williams PD, Zeller RA, Williams AR, Wood M, Henry M (2009). The Humpty Dumpty Falls Scale: a case-control study. J Spec Pediatr Nurs 2009 Jan;14(1):22-32.">
+		["4"] = <"Pauley BJ, Houston LS, Cheng D, Johnston DM (2014). Clinical relevance of the Humpty Dumpty Falls Scale in a pediatric specialty hospital. Pediatr Nurs 2014 May-Jun;40(3):137-42.">
+	>
+	other_details = <
+		["current_contact"] = <"Alan D. March <alandmarch@gmail.com>">
+		["MD5-CAM-1.0.1"] = <"DDAFC50B0B0EE75A9708B15575AD16CE">
+		["build_uid"] = <"beb34161-8f16-46ec-89b9-a1b0e6a4b546">
+	>
+
+definition
+	OBSERVATION[id1] matches {	-- Humpty dumpty falls scale
+		data matches {
+			HISTORY[id2] matches {
+				events cardinality matches {1..*; unordered} matches {
+					EVENT[id3] occurrences matches {0..1} matches {	-- Any event
+						data matches {
+							ITEM_TREE[id4] matches {
+								items matches {
+									ELEMENT[id5] occurrences matches {0..1} matches {	-- Age
+										value matches {
+											DV_ORDINAL[id39] matches {
+												[value, symbol] matches {
+													[{1}, {[at9]}],
+													[{2}, {[at8]}],
+													[{3}, {[at7]}],
+													[{4}, {[at6]}]
+												}
+											}
+										}
+									}
+									ELEMENT[id10] occurrences matches {0..1} matches {	-- Gender
+										value matches {
+											DV_ORDINAL[id40] matches {
+												[value, symbol] matches {
+													[{1}, {[at11]}],
+													[{2}, {[at12]}]
+												}
+											}
+										}
+									}
+									ELEMENT[id13] occurrences matches {0..1} matches {	-- Diagnosis
+										value matches {
+											DV_ORDINAL[id41] matches {
+												[value, symbol] matches {
+													[{1}, {[at14]}],
+													[{2}, {[at15]}],
+													[{3}, {[at16]}],
+													[{4}, {[at17]}]
+												}
+											}
+										}
+									}
+									ELEMENT[id18] occurrences matches {0..1} matches {	-- Cognitive impairments
+										value matches {
+											DV_ORDINAL[id42] matches {
+												[value, symbol] matches {
+													[{1}, {[at19]}],
+													[{2}, {[at20]}],
+													[{3}, {[at21]}]
+												}
+											}
+										}
+									}
+									ELEMENT[id22] occurrences matches {0..1} matches {	-- Environmental factors
+										value matches {
+											DV_ORDINAL[id43] matches {
+												[value, symbol] matches {
+													[{1}, {[at23]}],
+													[{2}, {[at24]}],
+													[{3}, {[at25]}],
+													[{4}, {[at26]}]
+												}
+											}
+										}
+									}
+									ELEMENT[id27] occurrences matches {0..1} matches {	-- Response to surgery/sedation/anesthesia
+										value matches {
+											DV_ORDINAL[id44] matches {
+												[value, symbol] matches {
+													[{1}, {[at28]}],
+													[{2}, {[at29]}],
+													[{3}, {[at30]}]
+												}
+											}
+										}
+									}
+									ELEMENT[id31] occurrences matches {0..1} matches {	-- Medication usage
+										value matches {
+											DV_ORDINAL[id45] matches {
+												[value, symbol] matches {
+													[{1}, {[at32]}],
+													[{2}, {[at33]}],
+													[{3}, {[at34]}]
+												}
+											}
+										}
+									}
+									ELEMENT[id35] occurrences matches {0..1} matches {	-- Total score
+										value matches {
+											DV_COUNT[id46] matches {
+												magnitude matches {|7..23|}
+											}
+										}
+									}
+									ELEMENT[id36] matches {	-- Comment
+										value matches {
+											DV_TEXT[id47] 
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		protocol matches {
+			ITEM_TREE[id37] matches {
+				items matches {
+					ELEMENT[id38] matches {	-- Confounding factor
+						value matches {
+							DV_TEXT[id48] 
+						}
+					}
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Humpty dumpty falls scale">
+				description = <"A scale for the assesment of risk of falls in children, based on the measurement of 7 parameters.">
+			>
+			["id3"] = <
+				text = <"Any event">
+				description = <"*">
+			>
+			["id5"] = <
+				text = <"Age">
+				description = <"Age of patient.">
+			>
+			["at6"] = <
+				text = <"Less than 3 years old">
+				description = <"Patient is less than 3 years old.">
+			>
+			["at7"] = <
+				text = <"3 to less than 7 years old">
+				description = <"Patient is 3 to less than 7 years old.">
+			>
+			["at8"] = <
+				text = <"7 to less than 13 years old">
+				description = <"Patient is 7 to less than 13 years old.">
+			>
+			["at9"] = <
+				text = <"13 years and above">
+				description = <"Patient is 13 years and above.">
+			>
+			["id10"] = <
+				text = <"Gender">
+				description = <"Gender">
+			>
+			["at11"] = <
+				text = <"Female">
+				description = <"Patient is female.">
+			>
+			["at12"] = <
+				text = <"Male">
+				description = <"Patient is male.">
+			>
+			["id13"] = <
+				text = <"Diagnosis">
+				description = <"Diagnosis">
+			>
+			["at14"] = <
+				text = <"Other diagnosis">
+				description = <"Patient has ">
+			>
+			["at15"] = <
+				text = <"Psychological/behavioural diagnosis">
+				description = <"Patient has other diagnosis.">
+			>
+			["at16"] = <
+				text = <"Alterations in oxygenation (respiratory diagnosis, dehydration, anemia, anorexia, syncope/dizziness, etc.)">
+				description = <"Patient has alterations in oxygenation (respiratory diagnosis, dehydration, anemia, anorexia, syncope/dizziness, etc.).">
+			>
+			["at17"] = <
+				text = <"Neurological diagnosis">
+				description = <"Patient has neurological diagnosis.">
+			>
+			["id18"] = <
+				text = <"Cognitive impairments">
+				description = <"Cognitive impairments.">
+			>
+			["at19"] = <
+				text = <"Oriented to own ability">
+				description = <"Patient is oriented to own ability.">
+			>
+			["at20"] = <
+				text = <"Forgets limitations">
+				description = <"Patient forgets limitations.">
+			>
+			["at21"] = <
+				text = <"Not aware of limitations">
+				description = <"Patient is not aware of limitations.">
+			>
+			["id22"] = <
+				text = <"Environmental factors">
+				description = <"Environmental factors">
+			>
+			["at23"] = <
+				text = <"Outpatient area">
+				description = <"Patient is in outpatient area.">
+			>
+			["at24"] = <
+				text = <"Patient placed in bed">
+				description = <"Patient is placed in bed.">
+			>
+			["at25"] = <
+				text = <"Patient uses assistive device or infant-toddler in crib or furniture/lighting (tripled room)">
+				description = <"Patient uses assistive device or infant-toddler in crib or furniture/lighting (tripled room).">
+			>
+			["at26"] = <
+				text = <"History of falls or infant-toddler placed in bed">
+				description = <"Patient has history of falls or is an infant-toddler placed in bed.">
+			>
+			["id27"] = <
+				text = <"Response to surgery/sedation/anesthesia">
+				description = <"Patient's response to surgery/sedation/anesthesia.">
+			>
+			["at28"] = <
+				text = <"More than 48 hours/None">
+				description = <"Patient is more than 48 hours from surgery/sedation/anesthesia or has had none.">
+			>
+			["at29"] = <
+				text = <"Within 48 hours">
+				description = <"Patient within 48 hours from surgery/sedation/anesthesia.">
+			>
+			["at30"] = <
+				text = <"Within 24 hours">
+				description = <"Patient within 24 hours  from surgery/sedation/anesthesia.">
+			>
+			["id31"] = <
+				text = <"Medication usage">
+				description = <"Medication usage.">
+			>
+			["at32"] = <
+				text = <"Other medications/none">
+				description = <"Patient receives other medications or none.">
+			>
+			["at33"] = <
+				text = <"One of the meds listed above">
+				description = <"Patient receives one of the medications listed above.">
+			>
+			["at34"] = <
+				text = <"Multiple usage of: sedatives (excluding ICU patients sedated and paralyzed), hypnotics, barbiturates, phenothiazines, antidepressants, laxatives/diuretics, narcotic">
+				description = <"Multiple usage of: sedatives (excluding ICU patients sedated and paralyzed), hypnotics, barbiturates, phenothiazines, antidepressants, laxatives/diuretics, narcotic.">
+			>
+			["id35"] = <
+				text = <"Total score">
+				description = <"Total score.">
+			>
+			["id36"] = <
+				text = <"Comment">
+				description = <"Comments.">
+			>
+			["id38"] = <
+				text = <"Confounding factor">
+				description = <"Any incidental factors related to the state of the subject which may affect clinical interpretation of the measurement.">
+			>
+			["ac1"] = <
+				text = <"Age (synthesised)">
+				description = <"Age of patient. (synthesised)">
+			>
+			["ac2"] = <
+				text = <"Gender (synthesised)">
+				description = <"Gender (synthesised)">
+			>
+			["ac3"] = <
+				text = <"Diagnosis (synthesised)">
+				description = <"Diagnosis (synthesised)">
+			>
+			["ac4"] = <
+				text = <"Cognitive impairments (synthesised)">
+				description = <"Cognitive impairments. (synthesised)">
+			>
+			["ac5"] = <
+				text = <"Environmental factors (synthesised)">
+				description = <"Environmental factors (synthesised)">
+			>
+			["ac6"] = <
+				text = <"Response to surgery/sedation/anesthesia (synthesised)">
+				description = <"Patient's response to surgery/sedation/anesthesia. (synthesised)">
+			>
+			["ac7"] = <
+				text = <"Medication usage (synthesised)">
+				description = <"Medication usage. (synthesised)">
+			>
+		>
+		["es-ar"] = <
+			["id1"] = <
+				text = <"Humpty dumpty falls scale">
+				description = <"Escala para la evaluación del riesgo de caídas en niños, Utiliza un escala multidimensional de 7 parámetros.">
+			>
+			["id3"] = <
+				text = <"Any event">
+				description = <"*">
+			>
+			["id5"] = <
+				text = <"Edad">
+				description = <"Edad del paciente.">
+			>
+			["at6"] = <
+				text = <"Menos de 3 años">
+				description = <"El paciente tiene menos de 3 años.">
+			>
+			["at7"] = <
+				text = <"3 a menos de 7 años">
+				description = <"El paciente tiene 3 a menos de 7 años.">
+			>
+			["at8"] = <
+				text = <"7 a menos de 13 años">
+				description = <"El paciente tiene 7 a menos de 13 años.">
+			>
+			["at9"] = <
+				text = <"13 años o más">
+				description = <"El paciente tiene 13 años o más.">
+			>
+			["id10"] = <
+				text = <"Género">
+				description = <"Género del paciente">
+			>
+			["at11"] = <
+				text = <"Femenino">
+				description = <"Paciente femenina.">
+			>
+			["at12"] = <
+				text = <"Masculino">
+				description = <"Paciente masculino.">
+			>
+			["id13"] = <
+				text = <"Diagnóstico">
+				description = <"Diagnóstico del paciente.">
+			>
+			["at14"] = <
+				text = <"Otros diagnósticos">
+				description = <"El paciente presenta otros diagnósticos.">
+			>
+			["at15"] = <
+				text = <"Diagnósticos psicologicos o conductuales">
+				description = <"El paciente presenta diagnósticos psicologicos o conductuales.">
+			>
+			["at16"] = <
+				text = <"Alteraciones en la oxigenación (diagnósticos respiratorios, deshidratación, anemia, anorexia, síncope/mareos, etc.)">
+				description = <"El paciente presenta alteraciones en la oxigenación (diagnósticos respiratorios, deshidratación, anemia, anorexia, síncope/mareos, etc.).">
+			>
+			["at17"] = <
+				text = <"Diagnóstico neurológico">
+				description = <"El paciente presenta un diagnóstico neurológico.">
+			>
+			["id18"] = <
+				text = <"Déficits cognitivos">
+				description = <"Déficits cognitivos.">
+			>
+			["at19"] = <
+				text = <"Orientado en cuanto a capacidades propias">
+				description = <"Paciente orientado en cuanto a capacidades propias.">
+			>
+			["at20"] = <
+				text = <"Olvida sus limitaciones">
+				description = <"Paciente olvida sus limitaciones.">
+			>
+			["at21"] = <
+				text = <"No consciente de sus limitaciones">
+				description = <"Paciente no consciente de sus limitaciones.">
+			>
+			["id22"] = <
+				text = <"Factores ambientales">
+				description = <"Factores ambientales">
+			>
+			["at23"] = <
+				text = <"Área ambulatoria">
+				description = <"Paciente en área ambulatoria.">
+			>
+			["at24"] = <
+				text = <"Paciente en cama">
+				description = <"Paciente en cama">
+			>
+			["at25"] = <
+				text = <"Paciente que utiliza dispositivos de asistencia o bebé en cuna o presencia de muebles/iluminación (habitación triple)">
+				description = <"Paciente que utiliza dispositivos de asistencia o bebé en cuna o presencia de muebles/iluminación (habitación triple)">
+			>
+			["at26"] = <
+				text = <"Antecedente de caídas o niño-bebé colocado en cama">
+				description = <"Paciente que presenta antecedente de caídas o es niño-bebé colocado en cama.">
+			>
+			["id27"] = <
+				text = <"Respuesta a cirugía/sedación/antestesia">
+				description = <"Respuesta a cirugía/sedación/antestesia">
+			>
+			["at28"] = <
+				text = <"Mas de 48 horas/Ninguna">
+				description = <"Paciente a mas de 48 horas o sin cirugia.">
+			>
+			["at29"] = <
+				text = <"*Within 48 hours(en)">
+				description = <"*Patient within 48 hours from surgery/sedation/anesthesia.(en)">
+			>
+			["at30"] = <
+				text = <"*Within 24 hours(en)">
+				description = <"*Patient within 24 hours  from surgery/sedation/anesthesia.(en)">
+			>
+			["id31"] = <
+				text = <"Uso de medicamentos">
+				description = <"Uso de medicamentos por parte del paciente.">
+			>
+			["at32"] = <
+				text = <"Otros medicamentos">
+				description = <"Paciente que recibe otros medicamentos.">
+			>
+			["at33"] = <
+				text = <"Uno solo de los medicamentos listados arriba">
+				description = <"Paciente que recibe uno solo de los medicamentos listados arriba.">
+			>
+			["at34"] = <
+				text = <"Uso de múltiples medicamentos (excluyendo pacientes sedados o paralizados en UCI, hipnóticos, barbitúricos, fenotiazinas, antidepresivos, laxantes/diuréticos, narcóticos">
+				description = <"Paciente que recibe múltiples medicamentos (excluyendo pacientes sedados o paralizados en UCI, hipnóticos, barbitúricos, fenotiazinas, antidepresivos, laxantes/diuréticos, narcóticos.">
+			>
+			["id35"] = <
+				text = <"Puntaje total">
+				description = <"Puntaje total">
+			>
+			["id36"] = <
+				text = <"Comentario">
+				description = <"Comentario">
+			>
+			["id38"] = <
+				text = <"Factor de confusión">
+				description = <"Todo factor incidental relacionado con el estado del sujeto y que pueda afectar la interpetación clínica del parametro medido.">
+			>
+			["ac1"] = <
+				text = <"Edad (synthesised)">
+				description = <"Edad del paciente. (synthesised)">
+			>
+			["ac2"] = <
+				text = <"Género (synthesised)">
+				description = <"Género del paciente (synthesised)">
+			>
+			["ac3"] = <
+				text = <"Diagnóstico (synthesised)">
+				description = <"Diagnóstico del paciente. (synthesised)">
+			>
+			["ac4"] = <
+				text = <"Déficits cognitivos (synthesised)">
+				description = <"Déficits cognitivos. (synthesised)">
+			>
+			["ac5"] = <
+				text = <"Factores ambientales (synthesised)">
+				description = <"Factores ambientales (synthesised)">
+			>
+			["ac6"] = <
+				text = <"Respuesta a cirugía/sedación/antestesia (synthesised)">
+				description = <"Respuesta a cirugía/sedación/antestesia (synthesised)">
+			>
+			["ac7"] = <
+				text = <"Uso de medicamentos (synthesised)">
+				description = <"Uso de medicamentos por parte del paciente. (synthesised)">
+			>
+		>
+	>
+	value_sets = <
+		["ac1"] = <
+			id = <"ac1">
+			members = <"at9", "at8", "at7", "at6">
+		>
+		["ac2"] = <
+			id = <"ac2">
+			members = <"at11", "at12">
+		>
+		["ac3"] = <
+			id = <"ac3">
+			members = <"at14", "at15", "at16", "at17">
+		>
+		["ac4"] = <
+			id = <"ac4">
+			members = <"at19", "at20", "at21">
+		>
+		["ac5"] = <
+			id = <"ac5">
+			members = <"at23", "at24", "at25", "at26">
+		>
+		["ac6"] = <
+			id = <"ac6">
+			members = <"at28", "at29", "at30">
+		>
+		["ac7"] = <
+			id = <"ac7">
+			members = <"at32", "at33", "at34">
+		>
+	>

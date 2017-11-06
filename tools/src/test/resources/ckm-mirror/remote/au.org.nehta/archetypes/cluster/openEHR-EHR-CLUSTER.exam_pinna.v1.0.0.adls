@@ -1,0 +1,274 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated)
+	openEHR-EHR-CLUSTER.exam_pinna.v1.0.0
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Heather Leslie">
+		["organisation"] = <"Ocean Informatics">
+		["email"] = <"heather.leslie@oceaninformatics.com">
+		["date"] = <"2013-02-05">
+	>
+	copyright = <"© National E-Health Transition Authority">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"For recording a narrative description, structured details and clinical interpretation of the findings observed during the physical examination of an identified pinnae and presence of scars in the adjacent peri-auricular region.">
+			use = <"Use to record findings observed during the physical examination of a specified pinna and associated scars.
+
+Use to incorporate the narrative descriptions of clinical findings within existing or legacy clinical systems into an archetyped format, using the 'Clinical Description' data element.
+
+Specifically designed to be used within the CLUSTER.exam_ears archetype, but may be used within any clinically appropriate ENTRY or CLUSTER archetype related to physical examination of the ear.">
+			keywords = <"examination", "physical", "clinical", "findings", "exam", "pinna", "ear", "external", "auricle">
+			misuse = <"Not to be used for recording the clinical history - use specific OBSERVATION and CLUSTER archetypes. For example OBSERVATION.story and CLUSTER.symptom.
+
+Not to be used to record stand-alone clinical observations or measurements - use specific OBSERVATION archetypes. For example OBSERVATION.blood_pressure, OBSERVATION.body_weight, or OBSERVATION.height.">
+		>
+	>
+	other_contributors = <"Stephen Chu, NEHTA, Australia", "Harvey Coates, UWA, Australia", "Marissa Cookson, Dept of Health, Australia", "Kimberley Crebbin, NT Hearing Services, Australia", "Kathy Currie, Northern Territory Health, Australia", "Jade Frederiksen, Hearing Health Program, DoH, Australia", "Sam Heard, Ocean Informatics, Australia", "Paul Hickey, Hearing Health Program, Australia", "Oliver Hosking, Remote Health NT, Australia", "Anthony Leech, Hearing Health, Australia", "Kerrie Lee, Ngaanyatjarra Health Service, Australia (Editor)", "Heather Leslie, Ocean Informatics, Australia (Editor)", "Ian McNicoll, Ocean Informatics UK, United Kingdom", "Mark Ramjan, NT Department of Health, Australia", "Kelly Simmons, Department of Health, Australia", "Fiona Wake, RAHC, Australia", "Christine Wigger, Menzies School of Health Research, Australia">
+	references = <
+		["1"] = <"Examination - Pinnae, draft archetype, National eHealth Transition Authority [Internet]. NEHTA Clinical Knowledge Manager. Authored: 09 Oct 2012. Available at: http://dcm.nehta.org.auhttp://dcm.nehta.org.au/ckm/OKM.html#showarchetype_1013.1.1095 (accessed 05 Feb 2013).">
+		["2"] = <"Communication with clinical domain experts associated with Australia's Northern Territory Hearing Health Program.">
+		["3"] = <"Northern Territory Government, Department of Health: Hearing Health Program ENT Specialist Consultation Form 2011 12 07.">
+		["4"] = <"Northern Territory Government, Department of Health: Northern Territory Hearing Health Program Teleotology Nurse Consultation Form 2011 12 07.">
+		["5"] = <"Northern Territory Government, Department of Health: Northern Territory Hearing Health Program Audiologist Consultation Form 2011 12 07.">
+		["6"] = <"OATSIH: The Recommendations for Clinical Care Guidelines on the Management of Otitis Media in Aboriginal and Torres Strait Islander Populations (2010). Available at: http://www.health.gov.au/internet/publications/publishing.nsf/Content/CA2578620005D57ACA25792800821BE8?OpenDocument.">
+	>
+	other_details = <
+		["current_contact"] = <"Heather Leslie, Ocean Informatics, heather.leslie@oceaninformatics.com">
+		["MD5-CAM-1.0.1"] = <"BDE448E3CAD2FE81A91FE03BEBD0EF9C">
+	>
+
+definition
+	CLUSTER[id1] matches {	-- Examination of Pinna
+		items matches {
+			ELEMENT[id11] occurrences matches {0..1} matches {	-- Pinna examined
+				value matches {
+					DV_CODED_TEXT[id24] matches {
+						defining_code matches {[ac1]}		-- Pinna examined (synthesised)
+					}
+				}
+			}
+			ELEMENT[id19] occurrences matches {0..1} matches {	-- No abnormality detected
+				value matches {
+					DV_BOOLEAN[id25] matches {
+						value matches {True}
+					}
+				}
+			}
+			ELEMENT[id2] occurrences matches {0..1} matches {	-- Clinical description
+				value matches {
+					DV_TEXT[id26] 
+				}
+			}
+			CLUSTER[id16] matches {	-- Surgical scar
+				items matches {
+					ELEMENT[id20] occurrences matches {0..1} matches {	-- Present?
+						value matches {
+							DV_CODED_TEXT[id27] matches {
+								defining_code matches {[ac2]}		-- Present? (synthesised)
+							}
+						}
+					}
+					ELEMENT[id17] occurrences matches {0..1} matches {	-- Site of scar
+						value matches {
+							DV_TEXT[id28] 
+						}
+					}
+					ELEMENT[id18] occurrences matches {0..1} matches {	-- Scar description
+						value matches {
+							DV_TEXT[id29] 
+						}
+					}
+				}
+			}
+			allow_archetype CLUSTER[id3] matches {	-- Pinna details
+				include
+					archetype_id/value matches {/.*/}
+			}
+			ELEMENT[id6] matches {	-- Multimedia representation
+				value matches {
+					DV_MULTIMEDIA[id30] matches {
+						media_type matches {[ac3]}		-- Multimedia representation (synthesised)
+					}
+				}
+			}
+			ELEMENT[id4] matches {	-- Clinical interpretation
+				value matches {
+					DV_TEXT[id31] 
+				}
+			}
+			allow_archetype CLUSTER[id23] matches {	-- Exam not done
+				include
+					archetype_id/value matches {/openEHR-EHR-CLUSTER\.exclusion_exam(-[a-zA-Z0-9_]+)*\.v1/}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Examination of Pinna">
+				description = <"Findings observed during the physical examination of the external structure of the ears, and scars in the adjacent periauricular region.">
+			>
+			["id2"] = <
+				text = <"Clinical description">
+				description = <"Narrative description of the findings observed during a physical examination of a single identified pinna, including size, shape and position.">
+			>
+			["id3"] = <
+				text = <"Pinna details">
+				description = <"Structured details of physical examination findings for the specific parts of the identified pinna or related structures.">
+			>
+			["id4"] = <
+				text = <"Clinical interpretation">
+				description = <"Single word, phrase or brief description represents the clinical meaning and significance of the physical examination findings.">
+			>
+			["id6"] = <
+				text = <"Multimedia representation">
+				description = <"Digital image or video taken, or a diagram drawn, during the physical examination of the body system or anatomical structure.">
+			>
+			["id11"] = <
+				text = <"Pinna examined">
+				description = <"Identification of the pinna examined.">
+			>
+			["at12"] = <
+				text = <"Left pinna">
+				description = <"Examination findings for the left pinna.">
+			>
+			["at13"] = <
+				text = <"Right pinna">
+				description = <"Examination findings for the right pinna.">
+			>
+			["id16"] = <
+				text = <"Surgical scar">
+				description = <"Findings about surgical scars identified on, or related to the identified pinna.">
+			>
+			["id17"] = <
+				text = <"Site of scar">
+				description = <"Identification of the the specific anatomical structure of the pinna or related anatomical region examined.">
+			>
+			["id18"] = <
+				text = <"Scar description">
+				description = <"Narrative description of the scar, including likely aetiology and state of healing.">
+			>
+			["id19"] = <
+				text = <"No abnormality detected">
+				description = <"Statement that no abnormality was detected on examination.">
+			>
+			["id20"] = <
+				text = <"Present?">
+				description = <"Is a scar present in the periaural region?">
+			>
+			["at21"] = <
+				text = <"Present">
+				description = <"A post-surgical scar is present.">
+			>
+			["at22"] = <
+				text = <"Absent">
+				description = <"A post-surgical scar is not present.">
+			>
+			["id23"] = <
+				text = <"Exam not done">
+				description = <"Details to explicitly record that this examination was not performed.">
+			>
+			["at23"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at24"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at25"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at26"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at27"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at28"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at29"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at30"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at31"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at32"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at33"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at34"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at35"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["ac1"] = <
+				text = <"Pinna examined (synthesised)">
+				description = <"Identification of the pinna examined. (synthesised)">
+			>
+			["ac2"] = <
+				text = <"Present? (synthesised)">
+				description = <"Is a scar present in the periaural region? (synthesised)">
+			>
+			["ac3"] = <
+				text = <"Multimedia representation (synthesised)">
+				description = <"Digital image or video taken, or a diagram drawn, during the physical examination of the body system or anatomical structure. (synthesised)">
+			>
+		>
+	>
+	term_bindings = <
+		["openehr"] = <
+			["at23"] = <http://openehr.org/id/425>
+			["at24"] = <http://openehr.org/id/426>
+			["at25"] = <http://openehr.org/id/427>
+			["at26"] = <http://openehr.org/id/428>
+			["at27"] = <http://openehr.org/id/429>
+			["at28"] = <http://openehr.org/id/401>
+			["at29"] = <http://openehr.org/id/402>
+			["at30"] = <http://openehr.org/id/404>
+			["at31"] = <http://openehr.org/id/405>
+			["at32"] = <http://openehr.org/id/406>
+			["at33"] = <http://openehr.org/id/407>
+			["at34"] = <http://openehr.org/id/414>
+			["at35"] = <http://openehr.org/id/518>
+		>
+	>
+	value_sets = <
+		["ac1"] = <
+			id = <"ac1">
+			members = <"at12", "at13">
+		>
+		["ac2"] = <
+			id = <"ac2">
+			members = <"at21", "at22">
+		>
+		["ac3"] = <
+			id = <"ac3">
+			members = <"at23", "at24", "at25", "at26", "at27", "at28", "at29", "at30", "at31", "at32", "at33", "at34", "at35">
+		>
+	>

@@ -1,0 +1,270 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated; uid=1570d6f6-b0b7-4f28-b050-2dbff9d2d863)
+	openEHR-EHR-OBSERVATION.intraocular_pressure.v0.0.1-alpha
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Gustavo M Bacelar-Silva">
+		["organisation"] = <"Faculty of Medicine - University of Porto">
+		["email"] = <"mail@gustavobacelar.com">
+		["date"] = <"2012-06-05">
+	>
+	original_namespace = <"org.openehr">
+	original_publisher = <"openEHR Foundation">
+	custodian_namespace = <"org.openehr">
+	custodian_organisation = <"openEHR Foundation">
+	copyright = <"© openEHR Foundation">
+	licence = <"This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 License. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/.">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record the measurement of intraocular pressure in a single eye.">
+			use = <"Use to record the measurement of intraocular pressure in a single eye.  
+
+The CLUSTER.exclusion_exam archetype can be nested within the 'Measurement not done' SLOT to optionally record explicit details about the measurement not being performed.">
+			keywords = <"IOP", "toniometry", "glaucoma", "eye">
+			misuse = <"Where details of methodology carried under protocol change between the examination of each eye, a new Entry must be created at run-time.">
+		>
+	>
+	other_contributors = <"Ian McNicoll, freshEHR Informatics, UK ", "Heather Leslie, Ocean Informatics, Australia">
+	references = <
+		["1"] = <"IHE Eye Care Domain. General Eye Evaluation (GEE) [Internet]. IHE; 2012. Available from: http://www.ihe.net/Technical_Framework/upload/IHE_EyeCare_Supp_GEE_Rev1-1_TI_2012-06-29.pdf">
+		["2"] = <"Royal College of Opthalmologists. Cataract National Dataset for Adults [Internet]. 2011. Available from: http://www.rcophth.ac.uk/page.asp?section=583&sectionTitle=Cataract+National+Data+Set+for+Adults">
+		["3"] = <"CfH, UK. Do Once & Share - Glaucoma [Internet]. [cited 2012 Sep 26]. Available from: http://www.doasglaucoma.org/">
+		["4"] = <"DICOM Supplement 30 [Internet]. [cited 2012 Sep 26]. Available from: http://medical.nema.org/">
+		["5"] = <"Lamparter, J., & Hoffmann, E. M. (2009). Messung des Augeninnendrucks (Tonometrie) mit unterschiedlichen Verfahren. Der Ophthalmologe, 106(8), 676-682.">
+	>
+	other_details = <
+		["current_contact"] = <"Gustavo M Bacelar-Silva, mail@gustavobacelar.com">
+		["MD5-CAM-1.0.1"] = <"EB76730D0E9461B2EF9B62ACD3C539E9">
+		["build_uid"] = <"ede25bbc-002d-4a19-8e2e-7f836b815f02">
+	>
+
+definition
+	OBSERVATION[id1] matches {	-- Intraocular pressure test result
+		data matches {
+			HISTORY[id2] matches {
+				events cardinality matches {1..*; unordered} matches {
+					EVENT[id3] matches {	-- Any event
+						data matches {
+							ITEM_TREE[id4] matches {
+								items matches {
+									ELEMENT[id58] occurrences matches {0..1} matches {	-- Eye examined
+										value matches {
+											DV_CODED_TEXT[id82] matches {
+												defining_code matches {[ac1]}		-- Eye examined (synthesised)
+											}
+										}
+									}
+									ELEMENT[id43] occurrences matches {0..1} matches {	-- Pressure
+										value matches {
+											DV_QUANTITY[id83] matches {
+												property matches {[at68]}
+												magnitude matches {|0.0..90.0|}
+												precision matches {1}
+												units matches {"mm[Hg]"}
+											}
+										}
+									}
+									ELEMENT[id66] occurrences matches {0..1} matches {	-- Applanation time
+										value matches {
+											DV_QUANTITY[id84] matches {
+												property matches {[at69]}
+												magnitude matches {|>=0.0|}
+												precision matches {0}
+												units matches {"ms"}
+											}
+										}
+									}
+									ELEMENT[id62] matches {	-- Clinical interpretation
+										value matches {
+											DV_TEXT[id85] 
+										}
+									}
+									allow_archetype CLUSTER[id81] matches {	-- Multimedia
+										include
+											archetype_id/value matches {/openEHR-EHR-CLUSTER\.multimedia(-[a-zA-Z0-9_]+)*\.v1/}
+									}
+									ELEMENT[id64] occurrences matches {0..1} matches {	-- Comment
+										value matches {
+											DV_TEXT[id86] 
+										}
+									}
+									allow_archetype CLUSTER[id79] matches {	-- Test not done
+										include
+											archetype_id/value matches {/openEHR-EHR-CLUSTER\.exclusion_exam(-[a-zA-Z0-9_]+)*\.v1/}
+									}
+								}
+							}
+						}
+						state matches {
+							ITEM_TREE[id8] matches {
+								items matches {
+									ELEMENT[id75] matches {	-- Confounding factors
+										value matches {
+											DV_TEXT[id87] 
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		protocol matches {
+			ITEM_TREE[id69] matches {
+				items matches {
+					ELEMENT[id47] occurrences matches {0..1} matches {	-- Tonometry Method
+						value matches {
+							DV_CODED_TEXT[id88] matches {
+								defining_code matches {[ac2]}		-- Tonometry Method (synthesised)
+							}
+							DV_TEXT[id89] 
+						}
+					}
+					allow_archetype CLUSTER[id56] occurrences matches {0..1} matches {	-- Device details
+						include
+							archetype_id/value matches {/openEHR-EHR-CLUSTER\.device(-[a-zA-Z0-9_]+)*\.v1/}
+					}
+					allow_archetype CLUSTER[id80] matches {	-- Extension
+						include
+							archetype_id/value matches {/.*/}
+					}
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Intraocular pressure test result">
+				description = <"The local measurement of intraocular pressure, most commonly using a tonometry device.">
+			>
+			["id3"] = <
+				text = <"Any event">
+				description = <"Default, unspecified point in time or interval event which may be explicitly defined in a template or at run-time.">
+			>
+			["id43"] = <
+				text = <"Pressure">
+				description = <"Measured intraocular pressure.">
+			>
+			["id47"] = <
+				text = <"Tonometry Method">
+				description = <"Type of tonometery used to measure intracoular pressure.">
+			>
+			["at48"] = <
+				text = <"Goldmann">
+				description = <"Goldmann tonometry.">
+			>
+			["at49"] = <
+				text = <"Perkins">
+				description = <"Perkins tonometry.">
+			>
+			["at50"] = <
+				text = <"Tono-Pen">
+				description = <"Tono-Pen tonometry.">
+			>
+			["at51"] = <
+				text = <"Icare (Rebound)">
+				description = <"Icare (Rebound) tonometry.">
+			>
+			["at52"] = <
+				text = <"Dynamic Contour">
+				description = <"Dynamic Contour tonometry.">
+			>
+			["at53"] = <
+				text = <"Ocular Response Analyzer">
+				description = <"Ocular Response Analyzer.">
+			>
+			["at54"] = <
+				text = <"TGDc-01">
+				description = <"A TGDc-01 device was used to perform the test.">
+			>
+			["id56"] = <
+				text = <"Device details">
+				description = <"Details about the tonometry device used to measure intraocular pressure.">
+			>
+			["id58"] = <
+				text = <"Eye examined">
+				description = <"Identification of the eye under examination.">
+			>
+			["at59"] = <
+				text = <"Left">
+				description = <"The left eye was examined.">
+			>
+			["at60"] = <
+				text = <"Right">
+				description = <"The right eye was examined.">
+			>
+			["id62"] = <
+				text = <"Clinical interpretation">
+				description = <"Single word, phrase or brief description that represents the clinical meaning and significance of the physical examination findings.">
+			>
+			["id64"] = <
+				text = <"Comment">
+				description = <"Additional narrative about the measurement, not captured in other fields.">
+			>
+			["id66"] = <
+				text = <"Applanation time">
+				description = <"The time taken for a non-contact tonometer to flatten the cornea, used to calculate intraocular pressure.">
+			>
+			["at67"] = <
+				text = <"Non-contact tonometry">
+				description = <"Non-contact tonometry was used to perfrom the test.">
+			>
+			["id75"] = <
+				text = <"Confounding factors">
+				description = <"Description of any incidental factors related to the state of the subject which may affect clinical interpretation of the measurement.">
+			>
+			["id79"] = <
+				text = <"Test not done">
+				description = <"Details to explicitly record that this test was not performed.">
+			>
+			["id80"] = <
+				text = <"Extension">
+				description = <"Additional information required to capture local content or to align with other reference models/formalisms.">
+			>
+			["id81"] = <
+				text = <"Multimedia">
+				description = <"Digital image, video or diagram representing the measurement of intraocular pressure.">
+			>
+			["at68"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at69"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["ac1"] = <
+				text = <"Eye examined (synthesised)">
+				description = <"Identification of the eye under examination. (synthesised)">
+			>
+			["ac2"] = <
+				text = <"Tonometry Method (synthesised)">
+				description = <"Type of tonometery used to measure intracoular pressure. (synthesised)">
+			>
+		>
+	>
+	term_bindings = <
+		["openehr"] = <
+			["at68"] = <http://openehr.org/id/125>
+			["at69"] = <http://openehr.org/id/128>
+		>
+	>
+	value_sets = <
+		["ac2"] = <
+			id = <"ac2">
+			members = <"at48", "at49", "at50", "at51", "at52", "at53", "at54", "at67">
+		>
+		["ac1"] = <
+			id = <"ac1">
+			members = <"at59", "at60">
+		>
+	>

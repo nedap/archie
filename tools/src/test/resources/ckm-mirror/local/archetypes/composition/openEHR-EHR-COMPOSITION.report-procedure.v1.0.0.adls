@@ -1,0 +1,68 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated; uid=a8d1333d-63ef-4db0-958f-62643d0fa6c5)
+	openEHR-EHR-COMPOSITION.report-procedure.v1.0.0
+
+specialize
+	openEHR-EHR-COMPOSITION.report.v1
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Heather Leslie">
+		["organisation"] = <"Ocean Informatics">
+		["email"] = <"heather.leslie@oceaninformatics.com">
+		["date"] = <"2012-12-10">
+	>
+	original_namespace = <"org.openehr">
+	original_publisher = <"openEHR Foundation">
+	custodian_namespace = <"org.openehr">
+	custodian_organisation = <"openEHR Foundation">
+	copyright = <"© openEHR Foundation">
+	licence = <"This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 License. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/.">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"Generic container archetype to carry information about any stand-alone procedure or operation performed.">
+			use = <"Use as a generic procedure-related archetype to carry information about any stand-alone procedure or operation performed. 
+
+It is anticipated that each COMPOSITION.report-procedure archetype will contain at least one ACTION.procedure (or related archetype) but depending on the complexity of the procedure it may contain a variety of other archetypes depending on the nature and complexity of the procedure performed. For example, archetypes to describe the associated anaesthetic or imaging activities carried out during the procedure.
+
+Common use cases are: 
+- any procedure that is not recorded as part of a consultation but needs to be carried out recorded as a stand-alone activity; 
+- Endoscopy Report; through to a 
+- complete Operation Report for an laparotomy or joint replacement.
+
+Record of the anaesthetic used to cover the procedure will be recorded using purpose-specific archetypes. They can be committed to the health record at the same time as the Procedure report, most likely in one of two ways:
+- in a separate Anaesthetic report. This is most likely if the anaesthetic is administered by a separate clinician to the one performing the procedure; or
+- in the same Procedure report as the procedure is recorded. This is most likely if the anaesthetic was administered by the same clinician who performed the procedure.
+
+The Sections component has been deliberately left unconstrained to maximise re-use of this archetype.">
+			keywords = <"report", "procedure", "operation">
+			misuse = <"Not to be used for reports that are not related to a procedure. Use the generic COMPOSITION.report or purpose specific COMPOSITIONs as appropriate.
+
+Not to be used for procedures that are recorded as part of a consultation note, for example removal of a skin lesion in a primary care consultation - use a ACTION.procedure archetype inside the COMPOSITION.encouter for this purpose.
+
+Not to be used for procedures that are recorded as part of a nursing progress note, for example insertion of a catheter - use an ACTION.procedure archetype inside the COMPOSITION.progress_note.">
+		>
+	>
+	other_contributors = <"Vebjoern Arntzen, Oslo university hospital, Norway", "Silje Ljosland Bakke, Bergen Hospital Trust, Norway (openEHR Editor)", "Sistine Barretto-Daniels, Ocean Informatics, Australia", "Lars Bitsch-Larsen, Haukeland University hospital, Norway", "Heath Frankel, Ocean Informatics, Australia", "Heather Grain, Llewelyn Grain Informatics, Australia", "Sam Heard, Ocean Informatics, Australia", "Lars Karlsen, DIPS ASA, Norway", "Sabine Leh, Haukeland University Hospital, Department of Pathology, Norway", "Heather Leslie, Ocean Informatics, Australia (openEHR Editor)", "Hugh Leslie, Ocean Informatics, Australia", "Ian McNicoll, freshEHR Clinical Informatics, United Kingdom (openEHR Editor)", "Andrej Orel, Marand d.o.o., Slovenia", "Jussara Rotzsch, UNB, Brazil">
+	other_details = <
+		["current_contact"] = <"Heather Leslie, Ocean Informatics, heather.leslie@oceaninformatics.com">
+		["MD5-CAM-1.0.1"] = <"DB2F1DD89E18B247BB5A55DEB3105531">
+		["build_uid"] = <"cc0b3876-5ff5-4de9-8aa9-f86df27ae720">
+	>
+
+definition
+	COMPOSITION[id1.1] 	-- Procedure Report
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1.1"] = <
+				text = <"Procedure Report">
+				description = <"Document to communicate information to others about any stand-alone procedure or operation performed.">
+			>
+		>
+	>

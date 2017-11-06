@@ -1,0 +1,207 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated)
+	openEHR-EHR-CLUSTER.education.v1.0.0
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Heather Leslie">
+		["organisation"] = <"Ocean Informatics">
+		["email"] = <"heather.leslie@oceaninformatics.com">
+		["date"] = <"2010-12-21">
+	>
+	copyright = <"© National E-Health Transition Authority">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record an education and training summary about the subject, including current activity if still undergoing education and/or past achievements.">
+			use = <"Use to record the current education status of the subject. This includes current activity if still undergoing education (such as school attendance status) and educational/training achievements to date. As the education status of the subject changes data can be updated or achievements added to create an evolving education summary held within a Persistent COMPOSITION record.
+
+Specifically designed to be used within the EVALUATION.social_summary archetype, but may be used within any clinically appropriate ENTRY or CLUSTER archetype related to recording social context.">
+			keywords = <"education", "school", "university", "secondary", "tertiary", "college", "apprenticeship", "training", "needs", "primary">
+			misuse = <"">
+		>
+	>
+	other_contributors = <"John Bennett, NEHTA, Australia", "Stephen Chu, NEHTA, Australia", "Matthew Cordell, NEHTA, Australia", "David Evans, Queensland Health, Australia", "Andrew Goodchild, NEHTA, Australia", "Mary Kelaher, NEHTA, Australia", "Robert L'egan, NEHTA, Australia", "Heather Leslie, Ocean Informatics, Australia (Editor)", "Ian McNicoll, Ocean Informatics UK, United Kingdom", "Stewart Morrison, NEHTA, Australia", "Jodie Pycroft, Adelaide Northern Division of General Practice Ltd, Australia", "John Taylor, NEHTA, Australia", "Gordon Tomes, National Disability Insurance Scheme Agency, Australia", "Richard Townley-O'Neill, NEHTA, Australia">
+	references = <
+		["1"] = <"METeOR (Metadata Online Registry) [Internet]. Australia: Australian Institute of Health and Welfare. Person—school enrolment and attendance status. Available from: http://meteor.aihw.gov.au/content/index.phtml/itemId/401809 (accessed 2013 Mar 01).">
+	>
+	other_details = <
+		["current_contact"] = <"Heather Leslie, Ocean Informatics, heather.leslie@oceaninformatics.com">
+		["MD5-CAM-1.0.1"] = <"46E03B6737066C6037D81E0058F5BB86">
+	>
+
+definition
+	CLUSTER[id1] matches {	-- Education and Training
+		items matches {
+			ELEMENT[id19] occurrences matches {0..1} matches {	-- Description
+				value matches {
+					DV_TEXT[id22] 
+				}
+			}
+			ELEMENT[id4] occurrences matches {0..1} matches {	-- Age Commenced Formal Education
+				value matches {
+					DV_DURATION[id23] matches {
+						value matches {PYM}
+					}
+				}
+			}
+			ELEMENT[id21] occurrences matches {0..1} matches {	-- Category
+				value matches {
+					DV_CODED_TEXT[id24] matches {
+						defining_code matches {[ac1]}		-- Category (synthesised)
+					}
+				}
+			}
+			ELEMENT[id12] occurrences matches {0..1} matches {	-- Attendance
+				value matches {
+					DV_CODED_TEXT[id25] matches {
+						defining_code matches {[ac2]}		-- Attendance (synthesised)
+					}
+				}
+			}
+			ELEMENT[id3] occurrences matches {0..1} matches {	-- Highest Achieved
+				value matches {
+					DV_TEXT[id26] 
+				}
+			}
+			CLUSTER[id6] matches {	-- Milestone Achieved
+				items matches {
+					ELEMENT[id5] occurrences matches {0..1} matches {	-- Milestone
+						value matches {
+							DV_TEXT[id27] 
+						}
+					}
+					ELEMENT[id20] occurrences matches {0..1} matches {	-- Place
+						value matches {
+							DV_TEXT[id28] 
+						}
+					}
+					ELEMENT[id7] occurrences matches {0..1} matches {	-- Date Achieved
+						value matches {
+							DV_DATE_TIME[id29] 
+						}
+					}
+				}
+			}
+			ELEMENT[id8] occurrences matches {0..1} matches {	-- Comment
+				value matches {
+					DV_TEXT[id30] 
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Education and Training">
+				description = <"Summary of the educational and training background of the subject.">
+			>
+			["id3"] = <
+				text = <"Highest Achieved">
+				description = <"Description of highest level of education or training achieved to date.">
+			>
+			["id4"] = <
+				text = <"Age Commenced Formal Education">
+				description = <"Age when the individual commenced formal education.">
+			>
+			["id5"] = <
+				text = <"Milestone">
+				description = <"Name of the education or training milestone or academic qualification achieved.">
+			>
+			["id6"] = <
+				text = <"Milestone Achieved">
+				description = <"Identification of educational or training milestones acheived.">
+			>
+			["id7"] = <
+				text = <"Date Achieved">
+				description = <"Date that education milestone was achieved.">
+			>
+			["id8"] = <
+				text = <"Comment">
+				description = <"Overall comment about the individual's education.">
+			>
+			["id12"] = <
+				text = <"Attendance">
+				description = <"Description of attendance at educational facility/location.">
+			>
+			["at13"] = <
+				text = <"Enrolled; Attending">
+				description = <"The subject is currently enrolled and attending school regularly.">
+			>
+			["at14"] = <
+				text = <"Enrolled; Not Always Attending">
+				description = <"The subject is currently enrolled and is not attending school regularly.">
+			>
+			["at15"] = <
+				text = <"Enrolled; Not Attending">
+				description = <"The subject is currently enrolled and is not attending school at all.">
+			>
+			["at16"] = <
+				text = <"Enrolled; Waiting to Commence">
+				description = <"The subject is currently enrolled but is waiting to commence.">
+			>
+			["at17"] = <
+				text = <"Home Education">
+				description = <"The subject is currently educated at home.">
+			>
+			["at18"] = <
+				text = <"Not Enrolled; Not Home Education">
+				description = <"The subject is currently not enrolled and is not educated at home.">
+			>
+			["id19"] = <
+				text = <"Description">
+				description = <"Narrative description of education and training, including current activity and/or past experience.">
+			>
+			["id20"] = <
+				text = <"Place">
+				description = <"Facility or institution at which milestone was achieved.">
+			>
+			["id21"] = <
+				text = <"Category">
+				description = <"Category of education that is appropriate for a child subject to attend, based on age and ability.">
+			>
+			["at22"] = <
+				text = <"Not Applicable">
+				description = <"It is not appropriate for this subject to attend.">
+			>
+			["at23"] = <
+				text = <"Childcare">
+				description = <"The subject is of the appropriate age and ability to attend a Childcare facility.">
+			>
+			["at24"] = <
+				text = <"Pre-school">
+				description = <"The subject is of the appropriate age and ability to attend a Pre-school facility.">
+			>
+			["at25"] = <
+				text = <"Primary School">
+				description = <"The subject is of the appropriate age and ability to attend Primary School.">
+			>
+			["at26"] = <
+				text = <"Secondary School">
+				description = <"The subject is of the appropriate age and ability to attend Secondary School.">
+			>
+			["ac1"] = <
+				text = <"Category (synthesised)">
+				description = <"Category of education that is appropriate for a child subject to attend, based on age and ability. (synthesised)">
+			>
+			["ac2"] = <
+				text = <"Attendance (synthesised)">
+				description = <"Description of attendance at educational facility/location. (synthesised)">
+			>
+		>
+	>
+	value_sets = <
+		["ac1"] = <
+			id = <"ac1">
+			members = <"at23", "at24", "at25", "at26", "at22">
+		>
+		["ac2"] = <
+			id = <"ac2">
+			members = <"at13", "at14", "at15", "at16", "at17", "at18">
+		>
+	>

@@ -1,0 +1,497 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated; uid=8be8331c-4a26-4f8e-b46c-e76431349c9a)
+	openEHR-EHR-OBSERVATION.menstrual_cycle.v0.0.1-alpha
+
+language
+	original_language = <[ISO_639-1::en]>
+	translations = <
+		["pt-br"] = <
+			language = <[ISO_639-1::pt-br]>
+			author = <
+				["name"] = <"Marivan Abrahão, Gabriela Alves, Adriana Kitajima e Maria Ângela Scatena">
+				["organisation"] = <"Core Consulting">
+				["email"] = <"contato@coreconsulting.com.br">
+			>
+			accreditation = <"Hospital Alemão Oswaldo Cruz (HAOC)">
+		>
+	>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Heather Leslie">
+		["organisation"] = <"Ocean Informatics">
+		["email"] = <"heather.leslie@oceaninformatics.com">
+		["date"] = <"2011-03-09">
+	>
+	original_namespace = <"org.openehr">
+	original_publisher = <"openEHR Foundation">
+	custodian_namespace = <"org.openehr">
+	custodian_organisation = <"openEHR Foundation">
+	copyright = <"© openEHR Foundation">
+	licence = <"This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 License. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/.">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record details about the menstrual cycle, including the menses and associated symptoms.">
+			use = <"Use to record details about a single menstrual cycle - using the 'Specific cycle' event.
+
+Use to record details about the typical, or average, menstrual pattern over multiple cycles - using the 'Multiple cycles' event.
+
+Use some of the elements to record details about menstrual bleeding and associated symptoms on a single day eg as part of a menstrual diary - using the 'Specific day in a cycle' event.">
+			keywords = <"menstruation", "menses", "cycle", "menstrual">
+			misuse = <"">
+		>
+		["pt-br"] = <
+			language = <[ISO_639-1::pt-br]>
+			purpose = <"Para registar detalhes sobre o ciclo menstrual, incluindo a menstruação e sintomas associados.">
+			use = <"Usar para gravar detalhes sobre um único ciclo menstrual - usando o evento \"ciclo específico\".
+
+Usar para gravar detalhes sobre o padrão menstrual típico ou médio, ao longo de vários ciclos - usando o evento dos \"vários ciclos \".
+
+Usar alguns dos elementos para gravar detalhes sobre o sangramento menstrual e sintomas associados em um único dia, por exemplo, como parte de um diário menstrual - usando o \"dia específico em um ciclo de 'evento.">
+			keywords = <"menstruação", "regras menstruais", "ciclo", "menstrual">
+			misuse = <"">
+		>
+	>
+	other_contributors = <"Sam Heard, Ocean Informatics, Australia", ...>
+	references = <
+		["1"] = <"Menstrual cycle, Draft Archetype [Internet]. National eHealth Transition Authority, NEHTA Clinical Knowledge Manager [cited: 2015-03-16]. Available from: http://dcm.nehta.org.au/ckm/#showArchetype_1013.1.994.">
+	>
+	other_details = <
+		["current_contact"] = <"Heather Leslie, Ocean Informatics, heather.leslie@oceaninformatics.com">
+		["MD5-CAM-1.0.1"] = <"4D3AF46ABCB4DB568B10ED25D0E5649B">
+		["build_uid"] = <"12f5a695-9661-440b-9e31-c71300fc9cbe">
+	>
+
+definition
+	OBSERVATION[id1] matches {	-- Menstrual cycle
+		data matches {
+			HISTORY[id2] matches {
+				events cardinality matches {1..*; unordered} matches {
+					EVENT[id3] occurrences matches {0..1} matches {	-- Any event
+						data matches {
+							ITEM_TREE[id4] matches {
+								items matches {
+									ELEMENT[id12] occurrences matches {0..1} matches {	-- Length of cycle
+										value matches {
+											DV_DURATION[id36] matches {
+												value matches {PWD/|>=PT0S|}
+											}
+										}
+									}
+									ELEMENT[id14] occurrences matches {0..1} matches {	-- Description of cycle
+										value matches {
+											DV_TEXT[id37] 
+										}
+									}
+									allow_archetype ELEMENT[id35] matches {	-- Last Normal Menstrual Period (LNMP)
+										include
+											archetype_id/value matches {/openEHR-EHR-ELEMENT\.last_normal_menstrual_period(-[a-zA-Z0-9_]+)*\.v1/}
+										exclude
+											archetype_id/value matches {/.*/}
+									}
+									ELEMENT[id5] occurrences matches {0..1} matches {	-- Start of menses
+										value matches {
+											DV_DATE_TIME[id38] 
+										}
+									}
+									ELEMENT[id6] occurrences matches {0..1} matches {	-- End of menses
+										value matches {
+											DV_DATE_TIME[id39] 
+										}
+									}
+									ELEMENT[id11] occurrences matches {0..1} matches {	-- Duration of menses
+										value matches {
+											DV_DURATION[id40] matches {
+												value matches {PWD/|>=PT0S|}
+											}
+										}
+									}
+									ELEMENT[id15] occurrences matches {0..1} matches {	-- Description of menses
+										value matches {
+											DV_TEXT[id41] 
+										}
+									}
+									ELEMENT[id19] occurrences matches {0..1} matches {	-- Qualitative description of menses
+										value matches {
+											DV_CODED_TEXT[id42] matches {
+												defining_code matches {[ac1]}		-- Qualitative description of menses (synthesised)
+											}
+										}
+									}
+									ELEMENT[id23] occurrences matches {0..1} matches {	-- Blood clots
+										value matches {
+											DV_BOOLEAN[id43] matches {
+												value matches {True}
+											}
+										}
+									}
+									ELEMENT[id24] occurrences matches {0..1} matches {	-- Flooding
+										value matches {
+											DV_BOOLEAN[id44] matches {
+												value matches {True}
+											}
+										}
+									}
+									CLUSTER[id25] matches {	-- Sanitary products used
+										items matches {
+											ELEMENT[id26] occurrences matches {0..1} matches {	-- Type of product
+												value matches {
+													DV_CODED_TEXT[id45] matches {
+														defining_code matches {[ac2]}		-- Type of product (synthesised)
+													}
+												}
+											}
+											ELEMENT[id27] occurrences matches {0..1} matches {	-- Daily quantity
+												value matches {
+													DV_QUANTITY[id46] matches {
+														property matches {[at35]}
+														magnitude matches {|>=0.0|}
+														units matches {"/d"}
+													}
+												}
+											}
+										}
+									}
+									allow_archetype CLUSTER[id8] matches {	-- Associated symptoms
+										include
+											archetype_id/value matches {/openEHR-EHR-CLUSTER\.symptom(-[a-zA-Z0-9_]+)*\.v1/}
+									}
+								}
+							}
+						}
+						state matches {
+							ITEM_TREE[id9] matches {
+								items matches {
+									ELEMENT[id10] occurrences matches {0..1} matches {	-- Contraception use
+										value matches {
+											DV_TEXT[id47] 
+										}
+									}
+								}
+							}
+						}
+					}
+					POINT_EVENT[id7] occurrences matches {0..1} matches {	-- Specific day in a cycle
+						data matches {
+							use_node ITEM_TREE[id48] /data[id2]/events[id3]/data[id4]	-- /data[id2]/events[Any event]/data[id4]
+						}
+						state matches {
+							use_node ITEM_TREE[id49] /data[id2]/events[id3]/state[id9]	-- /data[id2]/events[Any event]/state[id9]
+						}
+					}
+					INTERVAL_EVENT[id16] occurrences matches {0..1} matches {	-- Specific cycle
+						data matches {
+							use_node ITEM_TREE[id50] /data[id2]/events[id3]/data[id4]	-- /data[id2]/events[Any event]/data[id4]
+						}
+						state matches {
+							use_node ITEM_TREE[id51] /data[id2]/events[id3]/state[id9]	-- /data[id2]/events[Any event]/state[id9]
+						}
+					}
+					INTERVAL_EVENT[id28] occurrences matches {0..1} matches {	-- Multiple cycles
+						data matches {
+							use_node ITEM_TREE[id52] /data[id2]/events[id3]/data[id4]	-- /data[id2]/events[Any event]/data[id4]
+						}
+						state matches {
+							use_node ITEM_TREE[id53] /data[id2]/events[id3]/state[id9]	-- /data[id2]/events[Any event]/state[id9]
+						}
+					}
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Menstrual cycle">
+				description = <"Record information about a menstural cyclea single day within a menstrual cycle.">
+			>
+			["id3"] = <
+				text = <"Any event">
+				description = <"Any event.">
+			>
+			["id5"] = <
+				text = <"Start of menses">
+				description = <"Date of onset of menstrual bleeding in a single cycle.">
+			>
+			["id6"] = <
+				text = <"End of menses">
+				description = <"End date of menstrual bleeding in a single cycle.">
+			>
+			["id7"] = <
+				text = <"Specific day in a cycle">
+				description = <"Details of menstrual bleeding/symptoms on a specific day, eg in a menstrual diary.">
+			>
+			["id8"] = <
+				text = <"Associated symptoms">
+				description = <"Details about symptoms related to menses. For example, menstrual cramps or headaches.">
+			>
+			["id10"] = <
+				text = <"Contraception use">
+				description = <"Identify concurrent hormone or intrauterine contraception use. Coding with a terminology is preferred, where possible.">
+			>
+			["id11"] = <
+				text = <"Duration of menses">
+				description = <"Duration of menstrual bleeding in a single cycle or typical duration over many cycles.">
+			>
+			["id12"] = <
+				text = <"Length of cycle">
+				description = <"Length of single menstrual cycle or typical length over many cycles.">
+			>
+			["id14"] = <
+				text = <"Description of cycle">
+				description = <"Narrative description of the menstrual cycle as a whole.">
+			>
+			["id15"] = <
+				text = <"Description of menses">
+				description = <"Narrative description of the menstrual bleeding.">
+			>
+			["id16"] = <
+				text = <"Specific cycle">
+				description = <"Details of a specific cycle.">
+			>
+			["at17"] = <
+				text = <"Very heavy flow">
+				description = <"Very heavy menstrual flow, often causing additional problems such as flooding and clotting.">
+			>
+			["at18"] = <
+				text = <"Heavy flow">
+				description = <"Heavy menstrual flow.">
+			>
+			["id19"] = <
+				text = <"Qualitative description of menses">
+				description = <"Qualitative description of amount of menstrual flow.">
+			>
+			["at20"] = <
+				text = <"Normal, or typical, flow">
+				description = <"Normal menstrual flow.">
+			>
+			["at21"] = <
+				text = <"Light flow">
+				description = <"Light menstrual flow.">
+			>
+			["at22"] = <
+				text = <"Spotting only">
+				description = <"Menstrual spotting only.">
+			>
+			["id23"] = <
+				text = <"Blood clots">
+				description = <"Presence of blood clots in the menstrual flow.">
+			>
+			["id24"] = <
+				text = <"Flooding">
+				description = <"Presence of heavy menstrual flow that exceeded capacity of sanitary napkins and other menstrual products to absorb the menstrual flow.">
+			>
+			["id25"] = <
+				text = <"Sanitary products used">
+				description = <"Details about the type and amount of sanitary products used.">
+			>
+			["id26"] = <
+				text = <"Type of product">
+				description = <"Type of sanitary product used.">
+			>
+			["id27"] = <
+				text = <"Daily quantity">
+				description = <"Number of products needed per day to absorb menstrual flow.">
+			>
+			["id28"] = <
+				text = <"Multiple cycles">
+				description = <"Details of typical menstrual pattern over multiple cycles.">
+			>
+			["at29"] = <
+				text = <"Sanitary napkins - 'super'">
+				description = <"Use of napkin suited for heavy menstrual flow.">
+			>
+			["at30"] = <
+				text = <"Sanitary napkins - 'normal'">
+				description = <"Use of a napkin suited for 'normal' menstrual flow.">
+			>
+			["at31"] = <
+				text = <"Sanitary napkin - 'mini'">
+				description = <"Use of a napkin suited to very light menstrual flow or spotting.">
+			>
+			["at32"] = <
+				text = <"Tampon - 'super'">
+				description = <"Use of tampon suited for heavy menstrual flow.">
+			>
+			["at33"] = <
+				text = <"Tampon - 'normal'">
+				description = <"Use of tampon suited for 'normal' menstrual flow.">
+			>
+			["at34"] = <
+				text = <"Cloth pad or towel">
+				description = <"Use of a cloth pad or towel.">
+			>
+			["id35"] = <
+				text = <"Last Normal Menstrual Period (LNMP)">
+				description = <"Date of onset of menstrual bleeding in the last normal menstrual cycle.">
+			>
+			["at35"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["ac1"] = <
+				text = <"Qualitative description of menses (synthesised)">
+				description = <"Qualitative description of amount of menstrual flow. (synthesised)">
+			>
+			["ac2"] = <
+				text = <"Type of product (synthesised)">
+				description = <"Type of sanitary product used. (synthesised)">
+			>
+		>
+		["pt-br"] = <
+			["id1"] = <
+				text = <"Ciclo menstrual">
+				description = <"Registre as informações sobre um ciclo menstrual, um único dia durante um ciclo menstrual.">
+			>
+			["id3"] = <
+				text = <"Qualquer evento">
+				description = <"Qualquer evento.">
+			>
+			["id5"] = <
+				text = <"Início da regra menstrual">
+				description = <"Data de início do sangramento menstrual num único ciclo.">
+			>
+			["id6"] = <
+				text = <"Fim da menstruação">
+				description = <"Data do fim do sangramento menstrual num único ciclo.">
+			>
+			["id7"] = <
+				text = <"Dia específico em um ciclo">
+				description = <"Detalhes do sangramento menstrual / sintomas em um dia específico, por exemplo, em um diário menstrual.">
+			>
+			["id8"] = <
+				text = <"Sintomas associados">
+				description = <"Os detalhes sobre os sintomas relacionados à menstruação. Por exemplo, cólicas menstruais e dores de cabeça.">
+			>
+			["id10"] = <
+				text = <"O uso de anticoncepcionais">
+				description = <"Identificar uso o concomitante de hormônio ou de contraceptivo intra-uterino. A coodificação com uma terminologia é preferível, quando possível.">
+			>
+			["id11"] = <
+				text = <"Duração da menstruação">
+				description = <"Duração do sangramento menstrual num único ciclo de duração típica ou ao longo de muitos ciclos.">
+			>
+			["id12"] = <
+				text = <"Duração do ciclo">
+				description = <"Duração de um único ciclo menstrual ou a duração típica ao longo de muitos ciclos.">
+			>
+			["id14"] = <
+				text = <"Descrição do ciclo">
+				description = <"Descrição narrativa do ciclo menstrual como um todo.">
+			>
+			["id15"] = <
+				text = <"Descrição da menstruação">
+				description = <"Descrição narrativa do sangramento menstrual.">
+			>
+			["id16"] = <
+				text = <"Ciclo específico">
+				description = <"Detalhes de um ciclo específico.">
+			>
+			["at17"] = <
+				text = <"Fluxo muito intenso">
+				description = <"Fluxo menstrual muito intenso, muitas vezes causando problemas adicionais, tais como vazamentos e coagulação.">
+			>
+			["at18"] = <
+				text = <"Fluxo intenso">
+				description = <"Fluxo menstrual intenso.">
+			>
+			["id19"] = <
+				text = <"Descrição qualitativa da menstruação">
+				description = <"Descrição qualitativa da quantidade de fluxo menstrual.">
+			>
+			["at20"] = <
+				text = <"Fluxo médio ou típico">
+				description = <"Fluxo menstrual médio.">
+			>
+			["at21"] = <
+				text = <"Fluxo fraco">
+				description = <"Fluxo menstrual fraco.">
+			>
+			["at22"] = <
+				text = <"Somente mancha">
+				description = <"Manchas menstruais somente.">
+			>
+			["id23"] = <
+				text = <"Coágulos de sangue">
+				description = <"Presença de coágulos sanguíneos no fluxo menstrual.">
+			>
+			["id24"] = <
+				text = <"Vazamento">
+				description = <"Presença de fluxo menstrual intenso, que excedeu a capacidade dos absorventes higiênicos e outros produtos para absorver o fluxo menstrual.">
+			>
+			["id25"] = <
+				text = <"Produtos de higiene usados">
+				description = <"Os detalhes sobre o tipo e quantidade de produtos sanitários utilizados.">
+			>
+			["id26"] = <
+				text = <"Tipo de produto">
+				description = <"Tipo de produtos de higiene usados.">
+			>
+			["id27"] = <
+				text = <"Quantidade diária">
+				description = <"Número de produtos necessários por dia para absorver o fluxo menstrual.">
+			>
+			["id28"] = <
+				text = <"Múltiplos ciclos">
+				description = <"Detalhes do padrão menstrual típico ao longo de vários ciclos.">
+			>
+			["at29"] = <
+				text = <"Absorventes higiênicos - 'super'">
+				description = <"Uso do absorvente adequado para o fluxo menstrual intenso.">
+			>
+			["at30"] = <
+				text = <"Absorventes higiênicos - 'médio'">
+				description = <"Uso do absorvente adequado para o fluxo menstrual médio.">
+			>
+			["at31"] = <
+				text = <"Absorventes higiênicos - 'mini'">
+				description = <"Uso do absorvente adequado para o fluxo menstrual muito fraco.">
+			>
+			["at32"] = <
+				text = <"Tampão - \"super\"">
+				description = <"Uso de tampões adequados para o fluxo menstrual intenso.">
+			>
+			["at33"] = <
+				text = <"Tampão - \"médio\"">
+				description = <"Uso de tampões adequados para o fluxo menstrual médio.">
+			>
+			["at34"] = <
+				text = <"Almofada de pano ou toalha">
+				description = <"O uso de um pedaço de tecido ou uma toalha.">
+			>
+			["id35"] = <
+				text = <"Dia da última menstruação (DUM)">
+				description = <"Data de início do sangramento menstrual no último ciclo menstrual normal.">
+			>
+			["at35"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["ac1"] = <
+				text = <"Descrição qualitativa da menstruação (synthesised)">
+				description = <"Descrição qualitativa da quantidade de fluxo menstrual. (synthesised)">
+			>
+			["ac2"] = <
+				text = <"Tipo de produto (synthesised)">
+				description = <"Tipo de produtos de higiene usados. (synthesised)">
+			>
+		>
+	>
+	term_bindings = <
+		["openehr"] = <
+			["at35"] = <http://openehr.org/id/382>
+		>
+	>
+	value_sets = <
+		["ac1"] = <
+			id = <"ac1">
+			members = <"at17", "at18", "at20", "at21", "at22">
+		>
+		["ac2"] = <
+			id = <"ac2">
+			members = <"at29", "at30", "at31", "at32", "at33", "at34">
+		>
+	>

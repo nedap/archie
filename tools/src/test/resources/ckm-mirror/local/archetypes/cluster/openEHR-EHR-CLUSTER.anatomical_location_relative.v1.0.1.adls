@@ -1,0 +1,673 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated; uid=cf6935cb-7093-41eb-ac6d-b0319ff7a3c4)
+	openEHR-EHR-CLUSTER.anatomical_location_relative.v1.0.1
+
+language
+	original_language = <[ISO_639-1::en]>
+	translations = <
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			author = <
+				["name"] = <"Lars Bitsch-Larsen">
+				["organisation"] = <"Haukeland University Hospital of Bergen, Norway">
+			>
+			accreditation = <"MD, DEAA, MBA, spec in anesthesia, spec in tropical medicine.">
+		>
+		["pt-br"] = <
+			language = <[ISO_639-1::pt-br]>
+			author = <
+				["name"] = <"Beatriz de Faria Leao">
+				["organisation"] = <"BLEAO INFORMÁTICA EM SAÚDE">
+				["email"] = <"bfleao@terra.com.br">
+			>
+			accreditation = <"MD, PhD">
+		>
+		["sl"] = <
+			language = <[ISO_639-1::sl]>
+			author = <
+				["name"] = <"Biljana Princic">
+			>
+		>
+		["ar-sy"] = <
+			language = <[ISO_639-1::ar-sy]>
+			author = <
+				["name"] = <"Mona Saleh">
+			>
+		>
+	>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Heather Leslie">
+		["organisation"] = <"Ocean Informatics">
+		["email"] = <"heather.leslie@oceaninformatics.com">
+		["date"] = <"2008-11-10">
+	>
+	original_namespace = <"org.openehr">
+	original_publisher = <"openEHR Foundation">
+	custodian_namespace = <"org.openehr">
+	custodian_organisation = <"openEHR Foundation">
+	copyright = <"© openEHR Foundation">
+	licence = <"This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 License. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/.">
+	details = <
+		["ar-sy"] = <
+			language = <[ISO_639-1::ar-sy]>
+			purpose = <"تسجيل المكان التشريحي بالتفصيل">
+			use = <"">
+			keywords = <"الموقع", "المكان", "تشريحي">
+			misuse = <"لا يستخدم لتحديد حالات الحدوث في جانب واحد أو في الجانبين - حيث إن ذلك متعلق بتقييم قد يتضمن العديد من الأماكن">
+		>
+		["sl"] = <
+			language = <[ISO_639-1::sl]>
+			purpose = <"*To record details about anatomical location.(en)">
+			use = <"">
+			keywords = <"*location(en)", "*site(en)", "*anatomical(en)">
+			misuse = <"*Not for specifiying unilateral/bilateral occurence - this is related to an evaluation which perhaps includes multiple locations.(en)">
+		>
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			purpose = <"For registrering av detaljer om et anatomisk sted.">
+			use = <"">
+			keywords = <"sted", "lokasjon", "anatomisk", "site">
+			misuse = <"Anvendes ikke for spesifisering av unilateral/bilateral forekomst - dette relateres til en vurdering som kanskje omfatter flere steder.">
+		>
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To identify and record structured details about a single physical site on, or within, the human body in terms of its relationship to other macroscopic anatomical landmarks.">
+			use = <"Use to record structured and consistent details about a single identified physical site on, or within, the human body by describing its location in relation to identified macroscopic anatomical landmarks. It may be necessary to describe the single physical location using more than one relative location - for example, 2 cm inferior to 'landmark A' AND 3 cm medial to 'landmark B'. 
+
+In practice, some archetypes carry a single data element for carrying a simple description of body site - for example, OBSERVATION.blood_pressure and CLUSTER.symptom when describing ear pain. In this situation, where the value set is predictable and simple to define, this single data element is a very accurate and pragmatic way to record the site in the body and to query at a later date. However in the situation where the anatomical location is not well defined or needs to be determined at run-time, it may be more flexible to use this structured archetype.
+
+This archetype is specifically designed to be used within the context of any appropriate ENTRY or CLUSTER archetypes which supply the context of the identified body site, including insertion within the CLUSTER.anatomical_location if 'Body site name' or other data elements are also required.
+
+Clinical use cases: 
+- 5 cm inferior to the left tibial tuberosity
+- 2 cm medial to the right nipple
+- medial aspect of R great toe nail.
+
+In the situation where the CLUSTER.anatomical_location can only be used to name a large and/or non-specific body part, the use of this archetype within the 'Alternative Structure' SLOT will support recording of a more precise location - for example, 2 cm anterior to the cubital fossa of the left forearm or 4 cm below R costal margin on the chest wall in the mid-clavicular line.">
+			keywords = <"location", "site", "anatomical", "relative", "approximate", "anatomic region", "topographic anatomy", "macroscopic anatomy", "macroscopic", "anatomic", "anatomy">
+			misuse = <"Not to be used for specifying unilateral/bilateral occurrences of an anatomical feature.
+
+Not to be used to specify a simple location of a named physical site in the body, such as left femur or medial aspect of nose. Use the CLUSTER.anatomical_location archetype for this purpose.">
+		>
+		["pt-br"] = <
+			language = <[ISO_639-1::pt-br]>
+			purpose = <"Identificar and registras detalhes estruturados sobre um único local físico dentro ou fora do corpo humano, a partir das suas relações com outros pontos macroscópicos de referência anatômica.">
+			use = <"Utilizar para registrar os detalhes estruturados e consistentes sobre um único local físico identificado no corpo humano ou dentro dele, descrevendo sua localização em relação a marcos anatômicos macroscópicos identificados. Pode ser necessário descrever a localização física única usando mais de uma localização relativa - por exemplo, 2 cm inferior a \"marco A\" E 3 cm medial para 'marco B'.
+
+Na prática, alguns arquétipos possuem um único elemento de dados para representar uma descrição simples do local do corpo - por exemplo, OBSERVATION.blood_pressure e CLUSTER.smpto quando descreve a dor nos ouvidos. Nessa situação, onde o conjunto de valores é previsível e simples de definir, este elemento de dados único é uma maneira muito precisa e pragmática de gravar o local do corpo e consultar posteriormente. No entanto, na situação em que a localização anatômica não está bem definida ou precisa ser determinada em tempo de execução, pode ser mais flexível usar este arquétipo estruturado.
+
+Este arquétipo é projetado especificamente para ser usado no contexto de qualquer arquétipo ENTRY ou CLUSTER apropriado que forneça o contexto do local do corpo identificado, incluindo a inserção dentro da localização CLUSTER.anatomical se \"Nome do site do corpo\" ou outros elementos de dados também forem necessários.
+
+Casos de uso clínico:
+- 5 cm inferior à tuberosidade tibial esquerda
+- 2 cm medial ao mamilo direito
+- aspecto medial da unha do dedo indicador da mão.
+
+Na situação em que o CLUSTER.anatomical_location só pode ser usado para nomear uma parte do corpo grande e / ou não específica, o uso deste arquétipo dentro do SLOT 'Estrutura alternativa' suportará a gravação de uma localização mais precisa - por exemplo, 2 Cm anterior à fossa cubital do antebraço esquerdo ou 4 cm abaixo da margem costal R na parede torácica na linha médio clavicular.
+">
+			keywords = <"localização", "local", "anatômico", "relativo", "aproximado", "região anatômica", "Anatomia topográfica", "Anatomia macroscópica", "macroscópico", "anatômico", "anatomia">
+			misuse = <"Não utilizar para especificar ocorrências de características anatômicas de lateralidade.
+Não utilizar para especificar um local simples de locais do corpo já nominados, tais como, femur esquerdo ou a fossa medial do nariz. Utilize neste caso o CLUSTER.anatomical_location.">
+		>
+	>
+	other_contributors = <"Tomas Alme, DIPS, Norway", "Vebjoern Arntzen, Oslo university hospital, Norway", "Koray Atalag, University of Auckland, New Zealand", "Gustavo Bacelar-Silva, Healthcare Designs, Brazil (openEHR Editor)", "Silje Ljosland Bakke, Bergen Hospital Trust, Norway", "Lars Bitsch-Larsen, Haukeland University hospital, Norway", "Aitor Eguzkitza, UPNA (Public University of Navarre) - CHN (Complejo Hospitalario de Navarra), Spain", "Shahla Foozonkhah, Ocean Informatics, Australia", "Einar Fosse, National Centre for Integrated Care and Telemedicine, Norway", "Sebastian Garde, Ocean Informatics, Germany", "Heather Grain, Llewelyn Grain Informatics, Australia", "Dunmail Hodkinson, Black Pear Software Ltd, UK", "Lars Karlsen, DIPS ASA, Norway", "Shinji Kobayashi, Kyoto University, Japan", "Sabine Leh, Haukeland University Hospital, Department of Pathology, Norway", "Heather Leslie, Ocean Informatics, Australia (openEHR Editor)", "Vesna Levasic, Orthopaedic Hospital Valdoltra, Slovenia", "Hallvard Lærum, Oslo University Hospital, Norway", "Luis Marco Ruiz, Norwegian Center for Integrated Care and Telemedicine, Norway", "Ian McNicoll, freshEHR Clinical Informatics, United Kingdom (openEHR Editor)", "Bjoern Naess, DIPS ASA, Norway", "Andrej Orel, Marand d.o.o., Slovenia", "Rowan Thomas, St. Vincent's Hospital Melbourne, Australia", "Richard Townley-O'Neill, NEHTA, Australia", "John Tore Valand, Helse Bergen, Norway", "Dmitri Wall, Irish Skin Foundation, Ireland">
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"69F05002E42382404123044AF11BFC60">
+		["build_uid"] = <"f6c25068-44f4-4ece-986b-cad4b5b28898">
+	>
+
+definition
+	CLUSTER[id1] matches {	-- Relative anatomical location
+		items matches {
+			CLUSTER[id21] matches {	-- Relative location
+				items matches {
+					ELEMENT[id22] matches {	-- Landmark name
+						value matches {
+							DV_TEXT[id64] 
+						}
+					}
+					ELEMENT[id63] occurrences matches {0..1} matches {	-- Laterality
+						value matches {
+							DV_TEXT[id65] 
+						}
+					}
+					ELEMENT[id23] occurrences matches {0..1} matches {	-- Distance from landmark
+						value matches {
+							DV_QUANTITY[id66] matches {
+								property matches {[at66]}
+								[magnitude, units, precision] matches {
+									[{|>=0.0|}, {"cm"}, {1}],
+									[{|>=0.0|}, {"in"}, {1}],
+									[{|>=0.0|}, {"mm"}, {1}]
+								}
+							}
+						}
+					}
+					ELEMENT[id7] occurrences matches {0..6} matches {	-- Direction
+						value matches {
+							DV_CODED_TEXT[id67] matches {
+								defining_code matches {[ac1]}		-- Direction (synthesised)
+							}
+							DV_TEXT[id68] 
+						}
+					}
+				}
+			}
+			ELEMENT[id24] occurrences matches {0..1} matches {	-- Description
+				value matches {
+					DV_TEXT[id69] 
+				}
+			}
+			allow_archetype CLUSTER[id55] matches {	-- Multimedia representation
+				include
+					archetype_id/value matches {/openEHR-EHR-CLUSTER\.multimedia(-[a-zA-Z0-9_]+)*\.v1/}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["ar-sy"] = <
+			["id1"] = <
+				text = <"*Relative anatomical location(en)">
+				description = <"*A physical site on or within the human body that is described in terms of its relationship to other body parts.(en)">
+			>
+			["id7"] = <
+				text = <"*Direction(en)">
+				description = <"*Detail about the relative direction of the body site to the landmark.(en)">
+			>
+			["at8"] = <
+				text = <"إنسيّ/ وسطي">
+				description = <"المكان النسبي هو متوسط للمَعْلَم">
+			>
+			["at9"] = <
+				text = <"جانبي">
+				description = <"المكان النسبي هو جانبي بالنسبة للمَعْلَم">
+			>
+			["at10"] = <
+				text = <"عُلْوي">
+				description = <"المكان النسبي هو علويّ بالنسبة للمَعْلَم">
+			>
+			["at11"] = <
+				text = <"سُفْلي">
+				description = <"المكان النسبي هو سفلي بالنسبة للمَعْلَم">
+			>
+			["at13"] = <
+				text = <"أمامي">
+				description = <"المكان النسبي هو أمام المَعْلَم">
+			>
+			["at14"] = <
+				text = <"خلفي">
+				description = <"المكان النسبي هو خلف المَعْلَم ">
+			>
+			["id21"] = <
+				text = <"*Relative location(en)">
+				description = <"*Detail to identify a single physical site either on, or within, the human body in terms of its relationship to other macroscopic anatomical landmarks.(en)">
+			>
+			["id22"] = <
+				text = <"*Landmark name(en)">
+				description = <"*Identified body site used as a reference point for the actual body site.(en)">
+			>
+			["id23"] = <
+				text = <"المسافة من المَعْلَم">
+				description = <"المسافة بين المكان و المَعْلَم المعروف">
+			>
+			["id24"] = <
+				text = <"*Description(en)">
+				description = <"*Narrative description that can be used to further refine and support the relative location structured data.(en)">
+			>
+			["id55"] = <
+				text = <"*Cluster(en)">
+				description = <"**(en)">
+			>
+			["at56"] = <
+				text = <"*Proximal to(en)">
+				description = <"**(en)">
+			>
+			["at57"] = <
+				text = <"*Distal to(en)">
+				description = <"**(en)">
+			>
+			["at58"] = <
+				text = <"*Superficial to(en)">
+				description = <"**(en)">
+			>
+			["at59"] = <
+				text = <"*Deep to(en)">
+				description = <"**(en)">
+			>
+			["at60"] = <
+				text = <"*Within(en)">
+				description = <"**(en)">
+			>
+			["at61"] = <
+				text = <"*External to(en)">
+				description = <"*Outside the landmark.(en)">
+			>
+			["id63"] = <
+				text = <"*Laterality(en)">
+				description = <"*The side of the body on which the identified landmark is located.(en)">
+			>
+			["at64"] = <
+				text = <"*Oral to(en)">
+				description = <"*Towards the mouth. Usually used to describe locations within the digestive system.(en)">
+			>
+			["at65"] = <
+				text = <"*Anal to(en)">
+				description = <"*Towards the anus. Usually used to describe locations within the digestive system.(en)">
+			>
+			["at66"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["ac1"] = <
+				text = <"*Direction(en) (synthesised)">
+				description = <"*Detail about the relative direction of the body site to the landmark.(en) (synthesised)">
+			>
+		>
+		["sl"] = <
+			["id1"] = <
+				text = <"*Relative anatomical location(en)">
+				description = <"*A physical site on or within the human body that is described in terms of its relationship to other body parts.(en)">
+			>
+			["id7"] = <
+				text = <"*Direction(en)">
+				description = <"*Detail about the relative direction of the body site to the landmark.(en)">
+			>
+			["at8"] = <
+				text = <"Srednji">
+				description = <"*Relative location medial to the landmark.(en)">
+			>
+			["at9"] = <
+				text = <"Stranski">
+				description = <"*Relative location lateral to the landmark.(en)">
+			>
+			["at10"] = <
+				text = <"Višje">
+				description = <"*Relative location superior to the landmark.(en)">
+			>
+			["at11"] = <
+				text = <"Nižje">
+				description = <"*Relative location inferior to the landmark.(en)">
+			>
+			["at13"] = <
+				text = <"Spredaj">
+				description = <"*Relative location anterior to the landmark.(en)">
+			>
+			["at14"] = <
+				text = <"Zadaj">
+				description = <"*Relative location posterior to the landmark.(en)">
+			>
+			["id21"] = <
+				text = <"*Relative location(en)">
+				description = <"*Detail to identify a single physical site either on, or within, the human body in terms of its relationship to other macroscopic anatomical landmarks.(en)">
+			>
+			["id22"] = <
+				text = <"*Landmark name(en)">
+				description = <"*Identified body site used as a reference point for the actual body site.(en)">
+			>
+			["id23"] = <
+				text = <"*Distance from landmark(en)">
+				description = <"*Distance of location from the identified landmark.(en)">
+			>
+			["id24"] = <
+				text = <"*Description(en)">
+				description = <"*Narrative description that can be used to further refine and support the relative location structured data.(en)">
+			>
+			["id55"] = <
+				text = <"*Cluster(en)">
+				description = <"**(en)">
+			>
+			["at56"] = <
+				text = <"*Proximal to(en)">
+				description = <"**(en)">
+			>
+			["at57"] = <
+				text = <"*Distal to(en)">
+				description = <"**(en)">
+			>
+			["at58"] = <
+				text = <"*Superficial to(en)">
+				description = <"**(en)">
+			>
+			["at59"] = <
+				text = <"*Deep to(en)">
+				description = <"**(en)">
+			>
+			["at60"] = <
+				text = <"*Within(en)">
+				description = <"**(en)">
+			>
+			["at61"] = <
+				text = <"*External to(en)">
+				description = <"*Outside the landmark.(en)">
+			>
+			["id63"] = <
+				text = <"*Laterality(en)">
+				description = <"*The side of the body on which the identified landmark is located.(en)">
+			>
+			["at64"] = <
+				text = <"*Oral to(en)">
+				description = <"*Towards the mouth. Usually used to describe locations within the digestive system.(en)">
+			>
+			["at65"] = <
+				text = <"*Anal to(en)">
+				description = <"*Towards the anus. Usually used to describe locations within the digestive system.(en)">
+			>
+			["at66"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["ac1"] = <
+				text = <"*Direction(en) (synthesised)">
+				description = <"*Detail about the relative direction of the body site to the landmark.(en) (synthesised)">
+			>
+		>
+		["en"] = <
+			["id1"] = <
+				text = <"Relative anatomical location">
+				description = <"A physical site on or within the human body that is described in terms of its relationship to other body parts.">
+			>
+			["id7"] = <
+				text = <"Direction">
+				description = <"Detail about the relative direction of the body site to the landmark.">
+			>
+			["at8"] = <
+				text = <"Medial to">
+				description = <"Towards the middle, from the landmark.">
+			>
+			["at9"] = <
+				text = <"Lateral to">
+				description = <"Towards the side, from the landmark.">
+			>
+			["at10"] = <
+				text = <"Superior to">
+				description = <"Above the landmark, often referring towards the head.">
+			>
+			["at11"] = <
+				text = <"Inferior to">
+				description = <"Below the landmark, often referring towards the feet.">
+			>
+			["at13"] = <
+				text = <"Anterior to">
+				description = <"Towards the front, or ventral aspect, from the landmark.">
+			>
+			["at14"] = <
+				text = <"Posterior to">
+				description = <"Towards the back, or dorsal aspect, from the landmark.">
+			>
+			["id21"] = <
+				text = <"Relative location">
+				description = <"Detail to identify a single physical site either on, or within, the human body in terms of its relationship to other macroscopic anatomical landmarks.">
+			>
+			["id22"] = <
+				text = <"Landmark name">
+				description = <"Identified body site used as a reference point for the actual body site.">
+			>
+			["id23"] = <
+				text = <"Distance from landmark">
+				description = <"Distance of location from the identified landmark.">
+			>
+			["id24"] = <
+				text = <"Description">
+				description = <"Narrative description that can be used to further refine and support the relative location structured data.">
+			>
+			["id55"] = <
+				text = <"Multimedia representation">
+				description = <"Image or other media used to support identification of the location on the body.">
+			>
+			["at56"] = <
+				text = <"Proximal to">
+				description = <"Closer to the body, relative to the landmark.">
+			>
+			["at57"] = <
+				text = <"Distal to">
+				description = <"Further from the body, relative to the landmark.">
+			>
+			["at58"] = <
+				text = <"Superficial to">
+				description = <"Nearer the outer surface, relative to the landmark.">
+			>
+			["at59"] = <
+				text = <"Deep to">
+				description = <"Further away from the outer surface, relative to the landmark.">
+			>
+			["at60"] = <
+				text = <"Within">
+				description = <"Inside the landmark.">
+			>
+			["at61"] = <
+				text = <"External to">
+				description = <"Outside the landmark.">
+			>
+			["id63"] = <
+				text = <"Laterality">
+				description = <"The side of the body on which the identified landmark is located.">
+			>
+			["at64"] = <
+				text = <"Oral to">
+				description = <"Towards the mouth. Usually used to describe locations within the digestive system.">
+			>
+			["at65"] = <
+				text = <"Anal to">
+				description = <"Towards the anus. Usually used to describe locations within the digestive system.">
+			>
+			["at66"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["ac1"] = <
+				text = <"Direction (synthesised)">
+				description = <"Detail about the relative direction of the body site to the landmark. (synthesised)">
+			>
+		>
+		["nb"] = <
+			["id1"] = <
+				text = <"*Relative anatomical location(en)">
+				description = <"*A physical site on or within the human body that is described in terms of its relationship to other body parts.(en)">
+			>
+			["id7"] = <
+				text = <"*Direction(en)">
+				description = <"*Detail about the relative direction of the body site to the landmark.(en)">
+			>
+			["at8"] = <
+				text = <"Medialt">
+				description = <"Det relative sted medialt til landemerket.">
+			>
+			["at9"] = <
+				text = <"Lateralt">
+				description = <"Det relative sted lateralt for landemerket.">
+			>
+			["at10"] = <
+				text = <"Superiort">
+				description = <"Det relative sted superiort til landemerket.">
+			>
+			["at11"] = <
+				text = <"Inferiort">
+				description = <"Det relative sted inferiort til landemerket.">
+			>
+			["at13"] = <
+				text = <"Anteriort">
+				description = <"Det relative sted anteriort til landemerket.">
+			>
+			["at14"] = <
+				text = <"Posteriort">
+				description = <"Det relative sted posteriort til landemerket.">
+			>
+			["id21"] = <
+				text = <"*Relative location(en)">
+				description = <"*Detail to identify a single physical site either on, or within, the human body in terms of its relationship to other macroscopic anatomical landmarks.(en)">
+			>
+			["id22"] = <
+				text = <"*Landmark name(en)">
+				description = <"*Identified body site used as a reference point for the actual body site.(en)">
+			>
+			["id23"] = <
+				text = <"Avstand til landemerket">
+				description = <"Avstanden til det identifiserte landemerke.">
+			>
+			["id24"] = <
+				text = <"*Description(en)">
+				description = <"*Narrative description that can be used to further refine and support the relative location structured data.(en)">
+			>
+			["id55"] = <
+				text = <"*Cluster(en)">
+				description = <"**(en)">
+			>
+			["at56"] = <
+				text = <"*Proximal to(en)">
+				description = <"**(en)">
+			>
+			["at57"] = <
+				text = <"*Distal to(en)">
+				description = <"**(en)">
+			>
+			["at58"] = <
+				text = <"*Superficial to(en)">
+				description = <"**(en)">
+			>
+			["at59"] = <
+				text = <"*Deep to(en)">
+				description = <"**(en)">
+			>
+			["at60"] = <
+				text = <"*Within(en)">
+				description = <"**(en)">
+			>
+			["at61"] = <
+				text = <"*External to(en)">
+				description = <"*Outside the landmark.(en)">
+			>
+			["id63"] = <
+				text = <"*Laterality(en)">
+				description = <"*The side of the body on which the identified landmark is located.(en)">
+			>
+			["at64"] = <
+				text = <"*Oral to(en)">
+				description = <"*Towards the mouth. Usually used to describe locations within the digestive system.(en)">
+			>
+			["at65"] = <
+				text = <"*Anal to(en)">
+				description = <"*Towards the anus. Usually used to describe locations within the digestive system.(en)">
+			>
+			["at66"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["ac1"] = <
+				text = <"*Direction(en) (synthesised)">
+				description = <"*Detail about the relative direction of the body site to the landmark.(en) (synthesised)">
+			>
+		>
+		["pt-br"] = <
+			["id1"] = <
+				text = <"Localização anatômica relativa">
+				description = <"Loca físico fora ou dentro do corpo humano que pode ser descrito em termos de seus relacionamentos com outras partes do corpo.">
+			>
+			["id7"] = <
+				text = <"Direção">
+				description = <"Detalhe sobre a direção relativa do local do corpo para o ponto de referência.">
+			>
+			["at8"] = <
+				text = <"Medial a(ao)">
+				description = <"Em direção ao meio do ponto de referência">
+			>
+			["at9"] = <
+				text = <"Lateral a (ao)">
+				description = <"Lateral ao ponto de referência.">
+			>
+			["at10"] = <
+				text = <"Superior a(ao)">
+				description = <"Superior ao ponto de referência.">
+			>
+			["at11"] = <
+				text = <"Inferior a(ao)">
+				description = <"Inferior ao ponto de referência.">
+			>
+			["at13"] = <
+				text = <"Anterior a (ao)">
+				description = <"Na frente, ou ventralmente, em relação ao ponto de referência.">
+			>
+			["at14"] = <
+				text = <"Posterior a (ao)">
+				description = <"Para trás, ou dorsalmente, em relação ao ponto de referência.">
+			>
+			["id21"] = <
+				text = <"Localização relativa">
+				description = <"Detalhe para identificar um único local físico, seja dentro ou dentro do corpo humano em termos de sua relação com outros marcos anatômicos macroscópicos.">
+			>
+			["id22"] = <
+				text = <"Nome do ponto de referência">
+				description = <"Site do corpo identificado usado como ponto de referência para o local em questão do corpo.">
+			>
+			["id23"] = <
+				text = <"Distância do ponto de referência">
+				description = <"Distância da localização ao ponto de referência identificado.">
+			>
+			["id24"] = <
+				text = <"Descrição">
+				description = <"Descrição narrativa que pode ser utilizada para refinar e apoiar os dados estruturados da localização relativa.">
+			>
+			["id55"] = <
+				text = <"Representação mulimídia">
+				description = <"Imagem ou outra mídia usada para suportar a identificação da localização no corpo.">
+			>
+			["at56"] = <
+				text = <"Proximal a">
+				description = <"Proximal em relação ao ponto de referência">
+			>
+			["at57"] = <
+				text = <"Distal a (ao),">
+				description = <"Distal em relação ao ponto de referência.">
+			>
+			["at58"] = <
+				text = <"Superficial a(ao)">
+				description = <"Próximo a superfície externa com relação ao ponto de referência.">
+			>
+			["at59"] = <
+				text = <"Em profundidade a">
+				description = <"Distante da superfície externa com relação ao ponto de referência.">
+			>
+			["at60"] = <
+				text = <"Dentro">
+				description = <"Dentro do ponto de referência.">
+			>
+			["at61"] = <
+				text = <"Externo a(ao)">
+				description = <"Fora do ponto de referência.">
+			>
+			["id63"] = <
+				text = <"Lateralidade">
+				description = <"O lado do corpo no qual o ponto de referência está localizado.">
+			>
+			["at64"] = <
+				text = <"Para a cavidade oral">
+				description = <"Em direção a boca. Utilizado geralmente para descrever localizações do sistema digestivo.">
+			>
+			["at65"] = <
+				text = <"Em direção ao ânus.">
+				description = <"Em direção ao ânus. Utilizado para descrever localizações do sistema digestivo.">
+			>
+			["at66"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["ac1"] = <
+				text = <"Direção (synthesised)">
+				description = <"Detalhe sobre a direção relativa do local do corpo para o ponto de referência. (synthesised)">
+			>
+		>
+	>
+	term_bindings = <
+		["openehr"] = <
+			["at66"] = <http://openehr.org/id/122>
+		>
+	>
+	value_sets = <
+		["ac1"] = <
+			id = <"ac1">
+			members = <"at8", "at9", "at10", "at11", "at13", "at14", "at56", "at57", "at58", "at59", "at60", "at61", "at64", "at65">
+		>
+	>

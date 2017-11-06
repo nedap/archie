@@ -1,0 +1,336 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated)
+	openEHR-EHR-ACTION.pathology_test.v1.0.0
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Heather Leslie">
+		["organisation"] = <"Ocean Informatics">
+		["email"] = <"heather.leslie@oceaninformatics.com">
+		["date"] = <"9/03/2011">
+	>
+	copyright = <"© 2011 NEHTA">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record activity regarding the performance of pathology tests.">
+			use = <"Use to record activity regarding the performance of pathology tests.">
+			misuse = <"">
+		>
+	>
+	other_contributors = <"Sam Heard, Ocean Informatics, Australia", ...>
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"1B03B5EA64876E5D414A6C7E27DF28BE">
+	>
+
+definition
+	ACTION[id1] matches {	-- Pathology test
+		ism_transition matches {
+			ISM_TRANSITION[id24] matches {
+				current_state matches {
+					DV_CODED_TEXT[id25] matches {
+						defining_code matches {[at16]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id26] matches {
+						defining_code matches {[at3]}
+					}
+				}
+			}
+			ISM_TRANSITION[id27] matches {
+				current_state matches {
+					DV_CODED_TEXT[id28] matches {
+						defining_code matches {[at16]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id29] matches {
+						defining_code matches {[at4]}
+					}
+				}
+			}
+			ISM_TRANSITION[id30] matches {
+				current_state matches {
+					DV_CODED_TEXT[id31] matches {
+						defining_code matches {[at17]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id32] matches {
+						defining_code matches {[at10]}
+					}
+				}
+			}
+			ISM_TRANSITION[id33] matches {
+				current_state matches {
+					DV_CODED_TEXT[id34] matches {
+						defining_code matches {[at18]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id35] matches {
+						defining_code matches {[at12]}
+					}
+				}
+			}
+			ISM_TRANSITION[id36] matches {
+				current_state matches {
+					DV_CODED_TEXT[id37] matches {
+						defining_code matches {[at19]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id38] matches {
+						defining_code matches {[at5]}
+					}
+				}
+			}
+			ISM_TRANSITION[id39] matches {
+				current_state matches {
+					DV_CODED_TEXT[id40] matches {
+						defining_code matches {[at19]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id41] matches {
+						defining_code matches {[at6]}
+					}
+				}
+			}
+			ISM_TRANSITION[id42] matches {
+				current_state matches {
+					DV_CODED_TEXT[id43] matches {
+						defining_code matches {[at20]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id44] matches {
+						defining_code matches {[at9]}
+					}
+				}
+			}
+			ISM_TRANSITION[id45] matches {
+				current_state matches {
+					DV_CODED_TEXT[id46] matches {
+						defining_code matches {[at20]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id47] matches {
+						defining_code matches {[at15]}
+					}
+				}
+			}
+			ISM_TRANSITION[id48] matches {
+				current_state matches {
+					DV_CODED_TEXT[id49] matches {
+						defining_code matches {[at21]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id50] matches {
+						defining_code matches {[at11]}
+					}
+				}
+			}
+			ISM_TRANSITION[id51] matches {
+				current_state matches {
+					DV_CODED_TEXT[id52] matches {
+						defining_code matches {[at22]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id53] matches {
+						defining_code matches {[at13]}
+					}
+				}
+			}
+			ISM_TRANSITION[id54] matches {
+				current_state matches {
+					DV_CODED_TEXT[id55] matches {
+						defining_code matches {[at23]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id56] matches {
+						defining_code matches {[at8]}
+					}
+				}
+			}
+		}
+		description matches {
+			ITEM_TREE[id2] matches {
+				items matches {
+					ELEMENT[id18] occurrences matches {0..1} matches {	-- Test name
+						value matches {
+							DV_TEXT[id57] 
+						}
+					}
+					ELEMENT[id19] occurrences matches {0..1} matches {	-- Description
+						value matches {
+							DV_TEXT[id58] 
+						}
+					}
+					ELEMENT[id20] occurrences matches {0..1} matches {	-- Reason
+						value matches {
+							DV_TEXT[id59] 
+						}
+					}
+					allow_archetype CLUSTER[id23] matches {	-- Specimen detail
+						include
+							archetype_id/value matches {/openEHR-EHR-CLUSTER\.specimen(-[a-zA-Z0-9_]+)*\.v1/}
+					}
+					allow_archetype CLUSTER[id22] matches {	-- Test procedure
+						include
+							archetype_id/value matches {/.*/}
+					}
+					ELEMENT[id21] occurrences matches {0..1} matches {	-- Comment
+						value matches {
+							DV_TEXT[id60] 
+						}
+					}
+				}
+			}
+		}
+		protocol matches {
+			ITEM_TREE[id16] matches {
+				items matches {
+					ELEMENT[id17] occurrences matches {0..1} matches {	-- Start date/time
+						value matches {
+							DV_DATE_TIME[id61] 
+						}
+					}
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Pathology test">
+				description = <"Clinical activity about performing a pathology test.">
+			>
+			["at3"] = <
+				text = <"Test planned">
+				description = <"Pathology test is planned.">
+			>
+			["at4"] = <
+				text = <"Test requested">
+				description = <"Pathology test has been requested.">
+			>
+			["at5"] = <
+				text = <"Appointment scheduled">
+				description = <"Appoinment for pathology test has been made.">
+			>
+			["at6"] = <
+				text = <"Appointment rescheduled">
+				description = <"Appointment for pathology test has been rescheduled.">
+			>
+			["at8"] = <
+				text = <"Test complete">
+				description = <"The pathology test has been performed and all associated activities completed.">
+			>
+			["at9"] = <
+				text = <"Test performed">
+				description = <"The pathology test has been performed but related activities not completed.">
+			>
+			["at10"] = <
+				text = <"Test postponed">
+				description = <"The pathology test has been postponed.">
+			>
+			["at11"] = <
+				text = <"Test suspended">
+				description = <"The pathology test has been suspended.">
+			>
+			["at12"] = <
+				text = <"Test cancelled">
+				description = <"The planned pathology test has been cancelled prior to commencement.">
+			>
+			["at13"] = <
+				text = <"Test aborted">
+				description = <"The pathology test has been aborted.">
+			>
+			["at15"] = <
+				text = <"Failed attempt">
+				description = <"The pathology test was commenced but not completed successfully.">
+			>
+			["id17"] = <
+				text = <"Start date/time">
+				description = <"The start date and/or time for the test. This will indicate the scheduled date/time when recorded against the 'Appointment scheduled' care pathway step or the actual Start date/time in the 'Test performed' step.">
+			>
+			["id18"] = <
+				text = <"Test name">
+				description = <"The name of the pathology test (to be) performed. Coding of the specific test with a terminology is preferred, where possible.">
+			>
+			["id19"] = <
+				text = <"Description">
+				description = <"Narrative description about the activity or care pathway step for the identified test, for example description about the performance and findings from the test, the failed attempt or the cancellation of the test.">
+			>
+			["id20"] = <
+				text = <"Reason">
+				description = <"Reason that the activity or care pathway step for the identified test was carried out, for example, the reason for the cancellation or suspension of the test.">
+			>
+			["id21"] = <
+				text = <"Comment">
+				description = <"Additional narrative about the activity or care pathway step not captured in other fields.">
+			>
+			["id22"] = <
+				text = <"Test procedure">
+				description = <"Structured information about the test. Use to capture detailed, structured information about method & technique etc.">
+			>
+			["id23"] = <
+				text = <"Specimen detail">
+				description = <"Structured information about the specimen on which the test was conducted.">
+			>
+			["at16"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at17"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at18"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at19"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at20"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at21"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at22"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at23"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+		>
+	>
+	term_bindings = <
+		["openehr"] = <
+			["at16"] = <http://openehr.org/id/526>
+			["at17"] = <http://openehr.org/id/527>
+			["at18"] = <http://openehr.org/id/528>
+			["at19"] = <http://openehr.org/id/529>
+			["at20"] = <http://openehr.org/id/245>
+			["at21"] = <http://openehr.org/id/530>
+			["at22"] = <http://openehr.org/id/531>
+			["at23"] = <http://openehr.org/id/532>
+		>
+	>

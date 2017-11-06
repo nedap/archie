@@ -1,0 +1,108 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated; uid=69453c5f-b816-40d9-98a4-a2a1a1164877)
+	openEHR-EHR-CLUSTER.nyha_heart_failure.v1.0.0-alpha
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Dr Ian McNicoll">
+		["organisation"] = <"Ocean Informatics, UK">
+		["email"] = <"ian.mcnicoll@oceaninformatics.com">
+		["date"] = <"2012-04-12">
+	>
+	original_namespace = <"org.openehr">
+	original_publisher = <"openEHR Foundation">
+	custodian_namespace = <"org.openehr">
+	custodian_organisation = <"openEHR Foundation">
+	copyright = <"© openEHR Foundation">
+	licence = <"This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 License. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/.">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record a functional classification of heart failure related symptoms, as defined by the New York Heart Association.">
+			use = <"Use to record a functional classification of heart failure related symptoms. 
+
+This archetype has been specifically designed to be used in the 'Specific details' SLOT within the  EVALUATION.problem_diagnosis archetype, in SLOTs within other clinically appropriate ENTRY or CLUSTER archetypes, or alternatively as a standalone assessment of heart failure in the 'Detail' SLOT within the generic EVALUATION.container archetype.">
+			keywords = <"heart", "failure", "cardiac", "breathlessness", "fatigue">
+			misuse = <"Should not be used to record a classification or assessment of symptoms outside the context of heart failure.">
+		>
+	>
+	other_contributors = <"Kerrie Lee, Australia", ...>
+	references = <
+		["1"] = <"American Heart Association (1994) AHA medical/scientific statement: 1994 revisions to classification of functional capacity and objective assessment of patients with diseases of the heart. Circulation 90:644–645.">
+	>
+	other_details = <
+		["current_contact"] = <"ian McNicoll, freshEHR Informatics, UK, ian@freshehr.com">
+		["MD5-CAM-1.0.1"] = <"9420CDF1BC877C255A8651B9ADF41600">
+		["build_uid"] = <"c45555cf-1629-408b-bacb-e85031e83370">
+	>
+
+definition
+	CLUSTER[id1] matches {	-- NYHA heart failure classification
+		items matches {
+			ELEMENT[id2] occurrences matches {0..1} matches {	-- Heart failure classification
+				value matches {
+					DV_ORDINAL[id3] matches {
+						[value, symbol] matches {
+							[{1}, {[at3]}],
+							[{2}, {[at4]}],
+							[{3}, {[at5]}],
+							[{4}, {[at6]}]
+						}
+					}
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"NYHA heart failure classification">
+				description = <"A classification of heart failure related symptoms defined by the New York Heart Association.">
+			>
+			["id2"] = <
+				text = <"Heart failure classification">
+				description = <"The functional classification of heart failure based on patient symptoms.">
+			>
+			["at3"] = <
+				text = <"Class I">
+				description = <"No limitation of physical activity. Ordinary physical activity does not cause undue fatigue, palpitation, or dyspnoea.">
+			>
+			["at4"] = <
+				text = <"Class II">
+				description = <"Slight limitation of physical activity. Comfortable at rest, but ordinary physical activity results in fatigue, palpitation, or dyspnoea.">
+			>
+			["at5"] = <
+				text = <"Class III">
+				description = <"Marked limitation of physical activity. Comfortable at rest, but less than ordinary activity results in fatigue, palpitation, or dyspnoea.">
+			>
+			["at6"] = <
+				text = <"Class IV">
+				description = <"Unable to carry on any physical activity without discomfort. Symptoms at rest. If any physical activity is undertaken, discomfort is increased.">
+			>
+			["ac1"] = <
+				text = <"Heart failure classification (synthesised)">
+				description = <"The functional classification of heart failure based on patient symptoms. (synthesised)">
+			>
+		>
+	>
+	term_bindings = <
+		["Snomed"] = <
+			["id1"] = <http://snomed.info/id/420816009>
+			["id2"] = <http://snomed.info/id/420816009>
+			["at3"] = <http://snomed.info/id/420300004>
+			["at4"] = <http://snomed.info/id/421704003>
+			["at5"] = <http://snomed.info/id/420913000>
+			["at6"] = <http://snomed.info/id/421704003>
+		>
+	>
+	value_sets = <
+		["ac1"] = <
+			id = <"ac1">
+			members = <"at3", "at4", "at5", "at6">
+		>
+	>

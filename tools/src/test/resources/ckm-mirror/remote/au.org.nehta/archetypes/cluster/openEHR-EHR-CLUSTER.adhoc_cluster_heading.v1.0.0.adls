@@ -1,0 +1,52 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated)
+	openEHR-EHR-CLUSTER.adhoc_cluster_heading.v1.0.0
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Heather Leslie">
+		["organisation"] = <"Ocean Informatics">
+		["email"] = <"heather.leslie@oceaninformatics.com">
+		["date"] = <"2013-05-14">
+	>
+	copyright = <"© National E-Health Transition Authority">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"A generic cluster header which is normally renamed locally at template level.">
+			use = <"To construct and name a cluster within a local template.">
+			misuse = <"">
+		>
+	>
+	other_contributors = <"Heath Frankel, Ocean Informatics, Australia", "Sistine Barretto-Daniels, Ocean Informatics, Australia">
+	other_details = <
+		["current_contact"] = <"Heather Leslie, Ocean Informatics, heather.leslie@oceaninformatics.com">
+		["MD5-CAM-1.0.1"] = <"E8FBB8EA00051FAEC61F8AF3D95BF2F5">
+	>
+
+definition
+	CLUSTER[id1] matches {	-- Adhoc Cluster Heading
+		items matches {
+			allow_archetype ITEM[id3] matches {	-- Content
+				include
+					archetype_id/value matches {/.*/}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Adhoc Cluster Heading">
+				description = <"A generic cluster heading for contextual renaming within a template.">
+			>
+			["id3"] = <
+				text = <"Content">
+				description = <"SLOT for Detailed Content.">
+			>
+		>
+	>

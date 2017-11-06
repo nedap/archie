@@ -1,0 +1,526 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated; uid=6cc7cd82-e39e-4410-8f48-3c83aed51ede)
+	openEHR-EHR-CLUSTER.micronutrients.v0.0.1-alpha
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Priscila Maranhão; Gustavo Bacelar">
+		["organisation"] = <"MEDCIDS-FMUP; VIRTUAL CARE">
+		["email"] = <"priscilamaranhao@gmail.com; gbacelar@gmail.com">
+		["date"] = <"2016-12-14">
+	>
+	original_namespace = <"org.openehr">
+	original_publisher = <"openEHR Foundation">
+	custodian_namespace = <"org.openehr">
+	custodian_organisation = <"openEHR Foundation">
+	copyright = <"© openEHR Foundation">
+	licence = <"This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 License. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/.">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record the nutrients that are required in trace amounts.">
+			use = <"Use to record the nutrients that are required in trace amounts.
+
+This archetype has been designed to be used within the 'Details' SLOT in the OBSERVATION.dietary_nutrients archetype.">
+			keywords = <"nutrients", "diet", "vitamins", "minerals">
+			misuse = <"No to be used to record measurements of vitamins and minerals in blood analyses - use the OBSERVATION.laboratory_test for this purpose.">
+		>
+	>
+	other_contributors = <"Ricardo Correia", "Pedro Marques", "Duarte Ferreira", "Heather Leslie, Ocean Health Systems, Australia">
+	references = <
+		["1"] = <"Franceschini, SCC; Priore, SE; Euclydes, MP et al. Necessidades e recomendações de nutrientes. In: Cuppari, L. Guias de medicina ambulatorial e hospitalar da EPM-UNIFESP, Nutricção Clínica no Adulto. Barueri, SP: Manole, 2014.">
+		["2"] = <"Institute of Medicine/ Food and nutrition Board, 2011. Dietary reference Intake. Disponível em: <https://ods.od.nih.gov/Health_Information/Dietary_Reference_Intakes.aspx>">
+		["3"] = <"FAO/WHO (Food and Agricultural/World Health Organization). Classificação dos Carboidratos - 1998. Disponível em: <http://fao.org>">
+		["4"] = <"Caruso, L. Distúrbios do trato digestório. In: Cuppari, L. Guias de medicina ambulatorial e hospitalar da EPM-UNIFESP, Nutricção Clínica no Adulto. Barueri, SP: Manole, 2014.">
+	>
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"66DA63C71AB7BA669E9A90D422D83C52">
+		["build_uid"] = <"39e8db05-6e5a-4265-b37b-a7724016c5b1">
+	>
+
+definition
+	CLUSTER[id1] matches {	-- Micronutrients
+		items cardinality matches {2..*; unordered} matches {
+			CLUSTER[id77] occurrences matches {0..1} matches {	-- Vitamins
+				items matches {
+					ELEMENT[id80] occurrences matches {0..1} matches {	-- Vitamin A
+						value matches {
+							DV_QUANTITY[id115] matches {
+								property matches {[at1]}
+								units matches {"ug"}
+							}
+						}
+					}
+					ELEMENT[id81] occurrences matches {0..1} matches {	-- Vitamin B6
+						value matches {
+							DV_QUANTITY[id116] matches {
+								property matches {[at1]}
+								units matches {"mg"}
+							}
+						}
+					}
+					ELEMENT[id82] occurrences matches {0..1} matches {	-- Vitamin B12
+						value matches {
+							DV_QUANTITY[id117] matches {
+								property matches {[at1]}
+								units matches {"ug"}
+							}
+						}
+					}
+					ELEMENT[id83] occurrences matches {0..1} matches {	-- Biotin
+						value matches {
+							DV_QUANTITY[id118] matches {
+								property matches {[at1]}
+								units matches {"ug"}
+							}
+						}
+					}
+					ELEMENT[id84] occurrences matches {0..1} matches {	-- Vitamin C
+						value matches {
+							DV_QUANTITY[id119] matches {
+								property matches {[at1]}
+								units matches {"mg"}
+							}
+						}
+					}
+					ELEMENT[id85] occurrences matches {0..1} matches {	-- Carotenoids
+						value matches {
+							DV_QUANTITY[id120] matches {
+								property matches {[at1]}
+								units matches {"mg"}
+							}
+						}
+					}
+					ELEMENT[id86] occurrences matches {0..1} matches {	-- Choline
+						value matches {
+							DV_QUANTITY[id121] matches {
+								property matches {[at1]}
+								units matches {"ug"}
+							}
+						}
+					}
+					ELEMENT[id87] occurrences matches {0..1} matches {	-- Vitamin D
+						value matches {
+							DV_QUANTITY[id122] matches {
+								property matches {[at2]}
+								magnitude matches {|>=0.0|}
+								units matches {"IU"}
+							}
+						}
+					}
+					ELEMENT[id88] occurrences matches {0..1} matches {	-- Vitamin E
+						value matches {
+							DV_QUANTITY[id123] matches {
+								property matches {[at1]}
+								units matches {"mg"}
+							}
+						}
+					}
+					ELEMENT[id89] occurrences matches {0..1} matches {	-- Folate
+						value matches {
+							DV_QUANTITY[id124] matches {
+								property matches {[at1]}
+								units matches {"ug"}
+							}
+						}
+					}
+					ELEMENT[id90] occurrences matches {0..1} matches {	-- Vitamin K
+						value matches {
+							DV_QUANTITY[id125] matches {
+								property matches {[at1]}
+								units matches {"ug"}
+							}
+						}
+					}
+					ELEMENT[id91] occurrences matches {0..1} matches {	-- Niacin
+						value matches {
+							DV_QUANTITY[id126] matches {
+								property matches {[at1]}
+								units matches {"mg"}
+							}
+						}
+					}
+					ELEMENT[id92] occurrences matches {0..1} matches {	-- Pantothenic acid
+						value matches {
+							DV_QUANTITY[id127] matches {
+								property matches {[at1]}
+								units matches {"mg"}
+							}
+						}
+					}
+					ELEMENT[id93] occurrences matches {0..1} matches {	-- Riboflavin
+						value matches {
+							DV_QUANTITY[id128] matches {
+								property matches {[at1]}
+								units matches {"mg"}
+							}
+						}
+					}
+					ELEMENT[id94] occurrences matches {0..1} matches {	-- Thiamin
+						value matches {
+							DV_QUANTITY[id129] matches {
+								property matches {[at1]}
+								units matches {"mg"}
+							}
+						}
+					}
+				}
+			}
+			CLUSTER[id78] occurrences matches {0..1} matches {	-- Minerals
+				items matches {
+					ELEMENT[id110] occurrences matches {0..1} matches {	-- Arsenic
+						value matches {
+							DV_QUANTITY[id130] matches {
+								property matches {[at1]}
+								units matches {"ug"}
+							}
+						}
+					}
+					ELEMENT[id111] occurrences matches {0..1} matches {	-- Boron
+						value matches {
+							DV_QUANTITY[id131] matches {
+								property matches {[at1]}
+								units matches {"mg"}
+							}
+						}
+					}
+					ELEMENT[id95] occurrences matches {0..1} matches {	-- Calcium
+						value matches {
+							DV_QUANTITY[id132] matches {
+								property matches {[at1]}
+								units matches {"mg"}
+							}
+						}
+					}
+					ELEMENT[id108] occurrences matches {0..1} matches {	-- Chloride
+						value matches {
+							DV_QUANTITY[id133] matches {
+								property matches {[at1]}
+								units matches {"g"}
+							}
+						}
+					}
+					ELEMENT[id96] occurrences matches {0..1} matches {	-- Chromium
+						value matches {
+							DV_QUANTITY[id134] matches {
+								property matches {[at1]}
+								units matches {"ug"}
+							}
+						}
+					}
+					ELEMENT[id97] occurrences matches {0..1} matches {	-- Copper
+						value matches {
+							DV_QUANTITY[id135] matches {
+								property matches {[at1]}
+								units matches {"ug"}
+							}
+						}
+					}
+					ELEMENT[id98] occurrences matches {0..1} matches {	-- Fluoride
+						value matches {
+							DV_QUANTITY[id136] matches {
+								property matches {[at1]}
+								units matches {"mg"}
+							}
+						}
+					}
+					ELEMENT[id99] occurrences matches {0..1} matches {	-- Iodine
+						value matches {
+							DV_QUANTITY[id137] matches {
+								property matches {[at1]}
+								units matches {"ug"}
+							}
+						}
+					}
+					ELEMENT[id100] occurrences matches {0..1} matches {	-- Iron
+						value matches {
+							DV_QUANTITY[id138] matches {
+								property matches {[at1]}
+								units matches {"mg"}
+							}
+						}
+					}
+					ELEMENT[id101] occurrences matches {0..1} matches {	-- Magnesium
+						value matches {
+							DV_QUANTITY[id139] matches {
+								property matches {[at1]}
+								units matches {"mg"}
+							}
+						}
+					}
+					ELEMENT[id102] occurrences matches {0..1} matches {	-- Manganese
+						value matches {
+							DV_QUANTITY[id140] matches {
+								property matches {[at1]}
+								units matches {"mg"}
+							}
+						}
+					}
+					ELEMENT[id103] occurrences matches {0..1} matches {	-- Molybdenum
+						value matches {
+							DV_QUANTITY[id141] matches {
+								property matches {[at1]}
+								units matches {"ug"}
+							}
+						}
+					}
+					ELEMENT[id112] occurrences matches {0..1} matches {	-- Nickel
+						value matches {
+							DV_QUANTITY[id142] matches {
+								property matches {[at1]}
+								units matches {"mg"}
+							}
+						}
+					}
+					ELEMENT[id104] occurrences matches {0..1} matches {	-- Phosphorus
+						value matches {
+							DV_QUANTITY[id143] matches {
+								property matches {[at1]}
+								units matches {"mg"}
+							}
+						}
+					}
+					ELEMENT[id105] occurrences matches {0..1} matches {	-- Potassium
+						value matches {
+							DV_QUANTITY[id144] matches {
+								property matches {[at1]}
+								units matches {"g"}
+							}
+						}
+					}
+					ELEMENT[id106] occurrences matches {0..1} matches {	-- Selenium
+						value matches {
+							DV_QUANTITY[id145] matches {
+								property matches {[at1]}
+								units matches {"ug"}
+							}
+						}
+					}
+					ELEMENT[id113] occurrences matches {0..1} matches {	-- Silicon
+						value matches {
+							DV_QUANTITY[id146] matches {
+								property matches {[at1]}
+								units matches {"mg"}
+							}
+						}
+					}
+					ELEMENT[id107] occurrences matches {0..1} matches {	-- Sodium
+						value matches {
+							DV_QUANTITY[id147] matches {
+								property matches {[at1]}
+								units matches {"g"}
+							}
+						}
+					}
+					ELEMENT[id114] occurrences matches {0..1} matches {	-- Vanadium
+						value matches {
+							DV_QUANTITY[id148] matches {
+								property matches {[at1]}
+								units matches {"mg"}
+							}
+						}
+					}
+					ELEMENT[id109] occurrences matches {0..1} matches {	-- Zinc
+						value matches {
+							DV_QUANTITY[id149] matches {
+								property matches {[at1]}
+								units matches {"mg"}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Micronutrients">
+				description = <"The nutrients that are required in trace amounts for the normal growth and development of living organisms.">
+			>
+			["id77"] = <
+				text = <"Vitamins">
+				description = <"Assessment of vitamins of an individual.">
+			>
+			["id78"] = <
+				text = <"Minerals">
+				description = <"Assessment of minerals of an individual.">
+			>
+			["id80"] = <
+				text = <"Vitamin A">
+				description = <"Assessment of vitamin A.">
+			>
+			["id81"] = <
+				text = <"Vitamin B6">
+				description = <"Assessment of vitamin B6 (pyridoxine and related compounds).">
+			>
+			["id82"] = <
+				text = <"Vitamin B12">
+				description = <"Assessment of v itamin B12 (cobalamin).">
+			>
+			["id83"] = <
+				text = <"Biotin">
+				description = <"Assessment of biotin.">
+			>
+			["id84"] = <
+				text = <"Vitamin C">
+				description = <"Assessment of vitamin C (ascorbic acid).">
+			>
+			["id85"] = <
+				text = <"Carotenoids">
+				description = <"Assessment of carotenoids.">
+			>
+			["id86"] = <
+				text = <"Choline">
+				description = <"Assessment of choline.">
+			>
+			["id87"] = <
+				text = <"Vitamin D">
+				description = <"Assessment of vitamina D.">
+			>
+			["id88"] = <
+				text = <"Vitamin E">
+				description = <"Assessment of Vitamin E which is a fat-soluble nutrient that functions as a chain-breaking
+antioxidant in the body by preventing the spread of free-radical reactions.">
+			>
+			["id89"] = <
+				text = <"Folate">
+				description = <"Assessment of Folate which is a B vitamin that functions as a coenzyme in the metabolism of
+nucleic and amino acids.">
+			>
+			["id90"] = <
+				text = <"Vitamin K">
+				description = <"Assessment of vitamin K which presents functions such as a coenzyme for biological reactions involved in
+blood coagulation and bone metabolism.">
+			>
+			["id91"] = <
+				text = <"Niacin">
+				description = <"Assessment of niacin  which is involved in many biological
+reactions, including intracellular respiration and fatty acid synthesis.">
+			>
+			["id92"] = <
+				text = <"Pantothenic acid">
+				description = <"Assessment of pantothenic acid functions which is a component of coenzyme A (CoA), which is involved in fatty acid metabolism.">
+			>
+			["id93"] = <
+				text = <"Riboflavin">
+				description = <"Assessment of riboflavin (vitamin B2)  which presents functions as a coenzyme for numerous oxidation–reduction reactions in several metabolic pathways and in energy production.">
+			>
+			["id94"] = <
+				text = <"Thiamin">
+				description = <"Assessment of thiamin, which is also known as vitamin B1 and aneurin, functions as a coenzyme in the metabolism of carbohydrates and branched-chain amino acids.">
+			>
+			["id95"] = <
+				text = <"Calcium">
+				description = <"Assessment of calcium  which plays a key role in bone health. In fact, more than 99 percent of total body calcium is found in the bones and teeth. Calcium is also involved in vascular, neuromuscular, and glandular functions in the body.">
+			>
+			["id96"] = <
+				text = <"Chromium">
+				description = <"Assessment of chromium which  presents potentiates the action of insulin and may improve glucose
+tolerance.">
+			>
+			["id97"] = <
+				text = <"Copper">
+				description = <"Assessement of copper functions  as a component of several metalloenzymes, which act
+as oxidases in the reduction of molecular oxygen.">
+			>
+			["id98"] = <
+				text = <"Fluoride">
+				description = <"Assessment of fluoride, which  is vital for the health of teeth and bones. About 99 percent of body fluoride is found in calcified tissues, where it protects against dental caries and can stimulate new bone formation.">
+			>
+			["id99"] = <
+				text = <"Iodine">
+				description = <"Assessment of Iodine which is an essential component of thyroid hormones that are involved in the regulation of various enzymes and metabolic processes.">
+			>
+			["id100"] = <
+				text = <"Iron">
+				description = <"Assessment of iron which is a critical component of several proteins, including enzymes, cytochromes, myoglobin, and hemoglobin, the latter of which transports oxygen throughout the body.">
+			>
+			["id101"] = <
+				text = <"Magnesium">
+				description = <"Assessment of magnesium which is involved in more than 300 enzymatic processes in the
+body, as well as in bone health and in the maintenance of intracellular
+levels of potassium and calcium.">
+			>
+			["id102"] = <
+				text = <"Manganese">
+				description = <"Assessment of manganese which is involved in the formation of bone and in specific reactions related to amino acid, cholesterol, and carbohydrate metabolism.">
+			>
+			["id103"] = <
+				text = <"Molybdenum">
+				description = <"Assessment of molybdenum which presents functions as a cofactor for several enzymes, including
+sulfite oxidase, xanthine oxidase, and aldehyde oxidase.">
+			>
+			["id104"] = <
+				text = <"Phosphorus">
+				description = <"Assessment of phosphorus is found in nature (e.g., foods, water, and living
+tissues) primarily as phosphate (PO4).">
+			>
+			["id105"] = <
+				text = <"Potassium">
+				description = <"Assessment of the potassium which is the main intracellular cation in the body and is
+required for normal cellular function.">
+			>
+			["id106"] = <
+				text = <"Selenium">
+				description = <"Assessment of selenium, which is an antioxidant nutrient involved in the defense against oxidative stress.">
+			>
+			["id107"] = <
+				text = <"Sodium">
+				description = <"Assessment of sodium  which is necessary to maintain extracellular fluid volume
+and plasma osmolality.">
+			>
+			["id108"] = <
+				text = <"Chloride">
+				description = <"Assessment of chloride which is necessary to maintain extracellular fluid volume
+and plasma osmolality.">
+			>
+			["id109"] = <
+				text = <"Zinc">
+				description = <"Assessment of zinc which is crucial for growth and development. It facilitates several enzymatic processes related to the metabolism of protein, carbohydrates, and fats.">
+			>
+			["id110"] = <
+				text = <"Arsenic">
+				description = <"Assessment of arsenic, that play a beneficial role in some physiological processes of certain animal species.">
+			>
+			["id111"] = <
+				text = <"Boron">
+				description = <"Assessment of the  boron which play a beneficial role in some physiological processes of certain
+animal species.">
+			>
+			["id112"] = <
+				text = <"Nickel">
+				description = <"Assessment of the nickel that play a beneficial role in some physiological processes of certain
+animal species.">
+			>
+			["id113"] = <
+				text = <"Silicon">
+				description = <"Assessment of the silicon, which play a beneficial role in some physiological processes of certain.animal species.">
+			>
+			["id114"] = <
+				text = <"Vanadium">
+				description = <"Assessment of the 
+vanadium that play a beneficial role in some physiological processes of certain.
+animal species.">
+			>
+			["at1"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at2"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+		>
+	>
+	term_bindings = <
+		["openehr"] = <
+			["at1"] = <http://openehr.org/id/124>
+			["at2"] = <http://openehr.org/id/385>
+		>
+	>

@@ -1,0 +1,75 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated)
+	openEHR-EHR-COMPOSITION.obstetric_history.v1.0.0
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Sam Heard">
+		["organisation"] = <"NT mEHR Project">
+		["email"] = <"sam.heard@oceaninformatics.com">
+		["date"] = <"2012-01-02">
+	>
+	copyright = <"© National E-Health Transition Authority">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record and update a summary of all pregnancies and outcomes as well as detailed summaries of all individual pregnancies.">
+			use = <"To record all persistent data about pregnancies and a summary statement of all past and current pregnancies.">
+			keywords = <"obstetric", "summary", "history">
+			misuse = <"Not to be used to record event data relating to a pregnancy.">
+		>
+	>
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"BDA392E2FE39808A65BDCA96E526DB14">
+	>
+
+definition
+	COMPOSITION[id1] matches {	-- Obstetric history
+		category matches {
+			DV_CODED_TEXT[id5] matches {
+				defining_code matches {[at1]}
+			}
+		}
+		content cardinality matches {1..*; unordered} matches {
+			allow_archetype EVALUATION[id3] occurrences matches {0..1} matches {	-- Obstetric summary
+				include
+					archetype_id/value matches {/openEHR-EHR-EVALUATION\.obstetric_summary(-[a-zA-Z0-9_]+)*\.v1/}
+			}
+			allow_archetype EVALUATION[id4] matches {	-- Pregnancies
+				include
+					archetype_id/value matches {/openEHR-EHR-EVALUATION\.pregnancy(-[a-zA-Z0-9_]+)*\.v1/}
+				exclude
+					archetype_id/value matches {/.*/}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Obstetric history">
+				description = <"Information about current and previous pregnancies which may include a summary count of outcomes.">
+			>
+			["id3"] = <
+				text = <"Obstetric summary">
+				description = <"An optional summary statement of all previous and current pregnancies.">
+			>
+			["id4"] = <
+				text = <"Pregnancies">
+				description = <"Summary information about current and previous pregnancies.">
+			>
+			["at1"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+		>
+	>
+	term_bindings = <
+		["openehr"] = <
+			["at1"] = <http://openehr.org/id/431>
+		>
+	>

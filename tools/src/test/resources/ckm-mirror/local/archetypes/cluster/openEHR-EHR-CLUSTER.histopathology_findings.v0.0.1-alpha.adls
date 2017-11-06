@@ -1,0 +1,265 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated; uid=6bbb2e0f-3c60-4815-b06a-2b1f6b308f6c)
+	openEHR-EHR-CLUSTER.histopathology_findings.v0.0.1-alpha
+
+language
+	original_language = <[ISO_639-1::en]>
+	translations = <
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			author = <
+				["name"] = <"Silje Ljosland Bakke">
+				["organisation"] = <"Nasjonal IKT HF">
+			>
+		>
+	>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Silje Ljosland Bakke">
+		["organisation"] = <"Nasjonal IKT HF">
+		["email"] = <"silje.ljosland.bakke@nasjonalikt.no">
+		["date"] = <"2016-11-23">
+	>
+	original_namespace = <"no.nasjonalikt">
+	original_publisher = <"Nasjonal IKT">
+	custodian_namespace = <"no.nasjonalikt">
+	custodian_organisation = <"Nasjonal IKT">
+	copyright = <"© openEHR Foundation, Nasjonal IKT HF">
+	licence = <"This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 International License. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/4.0/.">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record the findings and interpretation of histopathology (anatomic pathology) tests performed on tissues and body fluids.">
+			use = <"Use to record any histopathology test result, including intra-operative, microscopic, macroscopic examinations of tissue.
+
+This archetype is designed specifically to be used in the \"Test findings\" SLOT within the OBSERVATION.laboratory_test archetype, but may also be used withing other ENTRY class archetypes where appropriate.
+
+Detailed structured findings are captured within child cluster archetypes.">
+			misuse = <"Not to be used for reporting on non-histopathology test results e.g. biochemistry or haematology tests.
+
+Not to be used to record an autopsy report, although tests on some specimens that are taken at autopsy may be represented using this archetype.">
+		>
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			purpose = <"For å registrere funn og tolkninger ved patologiske undersøkelser utført på vev og kroppsvæsker.">
+			use = <"Brukes til å registrere alle patologifunn, inkludert intraoperative, mikroskopiske eller makroskopiske undersøkelser av vev.
+
+Arketypen er laget spesifikt for å brukes i SLOTet \"Analysesvar\" i arketypen OBSERVATION.laboratory_test, men kan også brukes innen andre arketyper der det er passende.
+
+Detaljerte strukturerte funn kan registreres i spesifikke CLUSTER-arketyper som nøstes under denne.">
+			misuse = <"Brukes ikke til å registrere funn som ikke kommer fra patologiundersøkelser, f.eks. klinisk biokjemi eller mikrobiologi.
+
+Brukes ikke for å registrere en obduksjon, selv om funn ved undersøkelser av spesifikke prøver som tas under en obduksjon kan representeres ved hjelp av denne arketypen.">
+		>
+	>
+	other_contributors = <"Vebjørn Arntzen, Oslo universitetssykehus, Norway", "Johan Bjerner, Fürst AS, Norway", "Kristin Eik, Kreftregisteret, Norway", "Anca Heyd, DIPS ASA, Norway", "Sabine Leh, Helse-Bergen, Norway (Nasjonal IKT redaktør)", "Heather Leslie, Ocean Informatics, Australia (openEHR Editor)", "Silje Ljosland Bakke, Nasjonal IKT HF, Norway (Nasjonal IKT redaktør)", "Jan-Arne Ludvigsen, DIPS ASA, Norway", "Ole Martin Sand, DIPS ASA, Norway", "Ian McNicoll, freshEHR Clinical Informatics, United Kingdom (openEHR Editor)", "Bjørn Næss, DIPS ASA, Norway", "Sveinung Sørbye, UNN HF, Norway", "John Tore Valand, Helse Bergen HF, Norway", "Torleif Trydal, Fürst AS, Norway">
+	references = <
+		["1"] = <"Derived from Histopathology test, Draft Archetype [Internet]. openEHR Foundation, openEHR Clinical Knowledge Manager [cited: 2016-11-29]. Available from: http://openehr.org/ckm/#showArchetype_1013.1.2195">
+	>
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"F5408FC3E4BD84ED2B04A074072F5EA1">
+		["build_uid"] = <"b97d3642-8b41-4463-a3ff-d1c0dbe957d4">
+	>
+
+definition
+	CLUSTER[id1] matches {	-- Histopathology findings
+		items matches {
+			CLUSTER[id13] matches {	-- Histopathology examination
+				name matches {
+					DV_CODED_TEXT[id17] matches {
+						defining_code matches {[ac1]}		-- Histopathology examination (synthesised)
+					}
+				}
+				items matches {
+					CLUSTER[id6] matches {	-- Histopathology finding
+						items matches {
+							ELEMENT[id7] occurrences matches {0..1} matches {	-- Tissue available
+								value matches {
+									DV_BOOLEAN[id18] matches {
+										value matches {True, False}
+									}
+								}
+							}
+							ELEMENT[id9] occurrences matches {0..1} matches {	-- Description
+								value matches {
+									DV_TEXT[id19] 
+								}
+							}
+							allow_archetype CLUSTER[id10] matches {	-- Structured findings
+								include
+									archetype_id/value matches {/.*/}
+							}
+							ELEMENT[id11] matches {	-- Pathological interpretation
+								value matches {
+									DV_TEXT[id20] 
+								}
+							}
+							ELEMENT[id15] matches {	-- Test representation
+								value matches {
+									DV_MULTIMEDIA[id21] matches {
+										media_type 
+									}
+								}
+							}
+						}
+					}
+					ELEMENT[id12] occurrences matches {0..1} matches {	-- Description
+						value matches {
+							DV_TEXT[id22] 
+						}
+					}
+					allow_archetype CLUSTER[id16] matches {	-- Specimen detail
+						include
+							archetype_id/value matches {/.*/}
+					}
+				}
+			}
+			allow_archetype CLUSTER[id8] matches {	-- Specimen detail
+				include
+					archetype_id/value matches {/openEHR-EHR-CLUSTER\.specimen(-[a-zA-Z0-9_]+)*\.v0/}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Histopathology findings">
+				description = <"Findings and interpretation of histopathology (anatomic pathology) tests performed on tissues and body fluids.">
+			>
+			["at2"] = <
+				text = <"Intra-operative examination">
+				description = <"Findings related to tissue examined intra-operatively.">
+			>
+			["at3"] = <
+				text = <"Macroscopic examination">
+				description = <"Findings recorded on examination of a gross specimen.">
+			>
+			["at4"] = <
+				text = <"Microscopic examination">
+				description = <"Findings recorded after microsopic examination.">
+			>
+			["at5"] = <
+				text = <"Histopathology examination">
+				description = <"General histopathology findings.">
+			>
+			["id6"] = <
+				text = <"Histopathology finding">
+				description = <"Details of an individual histopathology finding, often related to a specific anatomical location or specimen.">
+			>
+			["id7"] = <
+				text = <"Tissue available">
+				description = <"True if the tissue is available for examination.">
+			>
+			["id8"] = <
+				text = <"Specimen detail">
+				description = <"Details of specimen(s) related to this examination.">
+			>
+			["id9"] = <
+				text = <"Description">
+				description = <"A narrative description of the histopathology finding.">
+			>
+			["id10"] = <
+				text = <"Structured findings">
+				description = <"Detailed structured findings.">
+			>
+			["id11"] = <
+				text = <"Pathological interpretation">
+				description = <"Single word, phrase of brief description representing the interpretation of the histopathology finding. A coded term is preferred.">
+			>
+			["id12"] = <
+				text = <"Description">
+				description = <"A narrative description of the group of histopathology findings.">
+			>
+			["id13"] = <
+				text = <"Histopathology examination">
+				description = <"A group of findings within the histopathology examination. The Runtime name constraint allows identification of the type of histopathology examination performed.">
+			>
+			["id15"] = <
+				text = <"Test representation">
+				description = <"Rich text or other multimedia representation of this particular result as issued by the diagnostic service.">
+			>
+			["id16"] = <
+				text = <"Specimen detail">
+				description = <"Details of specimen related to this finding.">
+			>
+			["ac1"] = <
+				text = <"Histopathology examination (synthesised)">
+				description = <"A group of findings within the histopathology examination. The Runtime name constraint allows identification of the type of histopathology examination performed. (synthesised)">
+			>
+		>
+		["nb"] = <
+			["id1"] = <
+				text = <"Patologifunn">
+				description = <"Funn og tolkninger ved patologiske undersøkelser utført på vev og kroppsvæsker.">
+			>
+			["at2"] = <
+				text = <"Intraoperativ undersøkelse">
+				description = <"Funn relatert til vev som er undersøkt intraoperativt.">
+			>
+			["at3"] = <
+				text = <"Makroskopisk undersøkelse">
+				description = <"Funn ved undersøkelse av makroskopiske egenskaper ved prøven.">
+			>
+			["at4"] = <
+				text = <"Mikroskopisk undersøkelse">
+				description = <"Funn ved undersøkelse av mikroskopiske egenskaper ved prøven.">
+			>
+			["at5"] = <
+				text = <"Patologisk undersøkelse">
+				description = <"Generiske patologifunn.">
+			>
+			["id6"] = <
+				text = <"Patologifunn">
+				description = <"Detaljer om et individuelt patologifunn, ofte relatert til en spesifikk anatomisk lokalisasjon.">
+			>
+			["id7"] = <
+				text = <"Vev tilgjengelig">
+				description = <"Sann dersom vevet er tilgjengelig for undersøkelse.">
+			>
+			["id8"] = <
+				text = <"Prøvedetaljer">
+				description = <"Detaljer om prøve(r) relatert til undersøkelsen.">
+			>
+			["id9"] = <
+				text = <"Beskrivelse">
+				description = <"Fritekstbeskrivelse av patologifunnet.">
+			>
+			["id10"] = <
+				text = <"Strukturerte funn">
+				description = <"Detaljerte strukturerte funn.">
+			>
+			["id11"] = <
+				text = <"Patologisk tolkning">
+				description = <"Enkeltord, frase eller kort beskrivelse som representerer tolkningen av patologifunnet. Koding med en terminologi foretrekkes.">
+			>
+			["id12"] = <
+				text = <"Beskrivelse">
+				description = <"Fritekstbeskrivelse av gruppen patologifunn.">
+			>
+			["id13"] = <
+				text = <"Patologiundersøkelse">
+				description = <"En gruppering av funn innenfor patologiundersøkelsen. Dette elementets \"Runtime name constraint\" gjør det mulig å angi hva slags type patologiundersøkelse som er utført.">
+			>
+			["id15"] = <
+				text = <"Svarrepresentasjon">
+				description = <"Rik tekst eller multimediarepresentasjon av dette spesifikke svaret.">
+			>
+			["id16"] = <
+				text = <"Prøvedetaljer">
+				description = <"Detaljer om prøve relatert til funn.">
+			>
+			["ac1"] = <
+				text = <"Patologiundersøkelse (synthesised)">
+				description = <"En gruppering av funn innenfor patologiundersøkelsen. Dette elementets \"Runtime name constraint\" gjør det mulig å angi hva slags type patologiundersøkelse som er utført. (synthesised)">
+			>
+		>
+	>
+	value_sets = <
+		["ac1"] = <
+			id = <"ac1">
+			members = <"at2", "at3", "at4", "at5">
+		>
+	>

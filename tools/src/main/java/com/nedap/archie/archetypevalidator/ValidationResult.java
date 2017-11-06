@@ -54,8 +54,17 @@ public class ValidationResult {
         return archetypeId;
     }
 
+    public boolean hasWarningsOrErrors() {
+        return !errors.isEmpty();
+    }
+
     public boolean passes() {
-        return errors.isEmpty();
+        for(ValidationMessage message:getErrors()) {
+            if(!message.isWarning()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -68,5 +77,20 @@ public class ValidationResult {
 
     public List<ValidationResult> getOverlayValidations() {
         return overlayValidations;
+    }
+
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        result.append("archetype: " + archetypeId);
+        result.append("\n");
+        result.append("passes: " + passes());
+        result.append("\n");
+        for(ValidationMessage message:errors) {
+            result.append(message);
+            result.append("\n");
+
+        }
+
+        return result.toString();
     }
 }
