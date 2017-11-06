@@ -15,6 +15,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Utility that defines the java mapping of type and attribute names of a given reference model.
@@ -39,6 +40,7 @@ public abstract class ReflectionModelInfoLookup implements ModelInfoLookup {
     private Map<Class, RMTypeInfo> classesToRmTypeInfo = new HashMap<>();
 
     private boolean inConstructor = true;
+    private boolean addAttributesWithoutField = true;
 
     /**
      * All methods that cannot be called by using reflection. For example getClass();
@@ -49,7 +51,7 @@ public abstract class ReflectionModelInfoLookup implements ModelInfoLookup {
     );
 
     public ReflectionModelInfoLookup(ModelNamingStrategy namingStrategy, Class baseClass) {
-        this(namingStrategy, baseClass, ReflectionModelInfoLookup.class.getClassLoader());
+        this(namingStrategy, baseClass, ReflectionModelInfoLookup.class.getClassLoader(), true);
     }
 
     public ReflectionModelInfoLookup(ModelNamingStrategy namingStrategy, String packageName, ClassLoader classLoader) {
@@ -71,8 +73,9 @@ public abstract class ReflectionModelInfoLookup implements ModelInfoLookup {
         inConstructor = false;
     }
 
-    public ReflectionModelInfoLookup(ModelNamingStrategy namingStrategy, Class baseClass, ClassLoader classLoader) {
+    public ReflectionModelInfoLookup(ModelNamingStrategy namingStrategy, Class baseClass, ClassLoader classLoader, boolean addAttributesWithoutField) {
         this.namingStrategy = namingStrategy;
+        this.addAttributesWithoutField = addAttributesWithoutField;
 
         this.classLoader = classLoader;
         addSubtypesOf(baseClass);
@@ -132,23 +135,31 @@ public abstract class ReflectionModelInfoLookup implements ModelInfoLookup {
         //TODO: it's possible to constrain some method as well. should we do that here too?
         TypeToken typeToken = TypeToken.of(clazz);
 
-        for(Field field: ReflectionUtils.getAllFields(clazz)) {
+        Set<Field> allFields = ReflectionUtils.getAllFields(clazz);
+        Map<String, Field> fieldsByName = allFields.stream()
+                .filter( field -> !field.getName().startsWith("$")) //jacoco adds $ fields.. annoying :)
+                .collect(Collectors.toMap((field) -> field.getName(), (field) -> field,
+                        (duplicate1, duplicate2) -> duplicate1));
+        for(Field field: fieldsByName.values()) {
             addRMAttributeInfo(clazz, typeInfo, typeToken, field);
         }
-        Set<Method> getters = ReflectionUtils.getAllMethods(clazz, (method) -> method.getName().startsWith("get") || method.getName().startsWith("is"));
-        for(Method method:getters) {
-            addRMAttributeInfo(clazz, typeInfo, typeToken, method);
+        if(addAttributesWithoutField) {
+            Set<Method> getters = ReflectionUtils.getAllMethods(clazz, (method) -> method.getName().startsWith("get") || method.getName().startsWith("is"));
+            for (Method method : getters) {
+                addRMAttributeInfo(clazz, typeInfo, typeToken, method, fieldsByName);
+            }
         }
     }
 
-    private void addRMAttributeInfo(Class clazz, RMTypeInfo typeInfo, TypeToken typeToken, Method getMethod) {
+    private void addRMAttributeInfo(Class clazz, RMTypeInfo typeInfo, TypeToken typeToken, Method getMethod, Map<String, Field> fieldsByName) {
         String attributeName = namingStrategy.getAttributeName(getMethod);
         String javaFieldName = null;
         if(getMethod.getName().startsWith("is")) {
-            javaFieldName = getMethod.getName().substring(2);
+            javaFieldName = lowerCaseFirstChar(getMethod.getName().substring(2));
         } else {
-            javaFieldName = getMethod.getName().substring(3);
+            javaFieldName = lowerCaseFirstChar(getMethod.getName().substring(3));
         }
+        Field field = fieldsByName.get(javaFieldName);
         String javaFieldNameUpperCased = upperCaseFirstChar(javaFieldName);
         Method setMethod = null, addMethod = null;
 
@@ -169,7 +180,7 @@ public abstract class ReflectionModelInfoLookup implements ModelInfoLookup {
        // if (setMethod != null) {
             RMAttributeInfo attributeInfo = new RMAttributeInfo(
                     attributeName,
-                    null,
+                    field,
                     rawFieldType,
                     typeInCollection,
                     getMethod.getAnnotation(Nullable.class) != null,
@@ -177,11 +188,14 @@ public abstract class ReflectionModelInfoLookup implements ModelInfoLookup {
                     setMethod,
                     addMethod
             );
-            typeInfo.addAttribute(attributeInfo);
+            if(typeInfo.getAttribute(attributeName) == null) {
+                typeInfo.addAttribute(attributeInfo);
+            }
         //} else {
         //    logger.info("property without a set method ignored for field {} on class {}", attributeName, clazz.getSimpleName());
        // }
     }
+
 
     private void addRMAttributeInfo(Class clazz, RMTypeInfo typeInfo, TypeToken typeToken, Field field) {
         String attributeName = namingStrategy.getAttributeName(field);
@@ -287,6 +301,12 @@ public abstract class ReflectionModelInfoLookup implements ModelInfoLookup {
         return new StringBuilder(name).replace(0,1,
                 Character.toString(Character.toUpperCase(name.charAt(0)))
             ).toString();
+    }
+
+    private String lowerCaseFirstChar(String name) {
+        return new StringBuilder(name).replace(0,1,
+                Character.toString(Character.toLowerCase(name.charAt(0)))
+        ).toString();
     }
 
     @Override

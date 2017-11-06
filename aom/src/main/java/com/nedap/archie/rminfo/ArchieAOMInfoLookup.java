@@ -20,7 +20,7 @@ public class ArchieAOMInfoLookup extends ReflectionModelInfoLookup {
     private static ArchieAOMInfoLookup instance;
 
     public ArchieAOMInfoLookup() {
-        super(new ArchieModelNamingStrategy(), ArchetypeModelObject.class);
+        super(new ArchieModelNamingStrategy(), ArchetypeModelObject.class, ArchieAOMInfoLookup.class.getClassLoader(), false /* no attributes without field */);
         addSubtypesOf(Interval.class); //extra class from the base package. No RMObject because it is also used in the AOM
         addSubtypesOf(Cardinality.class); //extra class from the base package. No RMObject because it is also used in the AOM
         addSubtypesOf(TerminologyCode.class); //extra class from the base package. No RMObject because it is also used in the AOM

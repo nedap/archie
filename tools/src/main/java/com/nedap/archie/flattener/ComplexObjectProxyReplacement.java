@@ -24,7 +24,7 @@ public class ComplexObjectProxyReplacement {
         proxy.getParent().replaceChild(proxy.getNodeId(), replacement);
     }
 
-    private ComplexObjectProxyReplacement getComplexObjectProxyReplacement(CComplexObjectProxy proxy) {
+    public static ComplexObjectProxyReplacement getComplexObjectProxyReplacement(CComplexObjectProxy proxy) {
         CObject newObject = new AOMPathQuery(proxy.getTargetPath()).find(getNearestArchetypeRoot(proxy));
         if (newObject == null) {
             return null;
@@ -45,7 +45,7 @@ public class ComplexObjectProxyReplacement {
      * Get the archetype root that is the most near parent. Either returns a C_ARCHETYPE_ROOT or the complex_object at archetype.getDefinition()
      * @return
      */
-    private CComplexObject getNearestArchetypeRoot(CObject object) {
+    private static CComplexObject getNearestArchetypeRoot(CObject object) {
         //find a C_ARCHETYPE_ROOT
         CAttribute parentAttribute = object.getParent();
         while(parentAttribute != null) {

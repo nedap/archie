@@ -121,6 +121,9 @@ public class AOMUtils {
 
     public static boolean hasReferenceModelPath(ModelInfoLookup lookup, String rmTypeName, String path) {
         //cannot find the implementation in the eiffel ADL-tools, but I think it should be this:
+        if(!path.startsWith("/")) {
+            return false;
+        }
         RMTypeInfo typeInfo = lookup.getTypeInfo(rmTypeName);
         APathQuery query = new APathQuery(path);
         for(PathSegment segment:query.getPathSegments()) {
