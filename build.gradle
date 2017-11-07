@@ -39,18 +39,14 @@ subprojects {
 
   def artifactoryUserMethod = hasProperty('artifactoryUser') ? artifactoryUser : ""
   def artifactoryPasswordMethod = hasProperty('artifactoryPassword') ? artifactoryPassword : ""
-  def ossrhUsernameSafe = hasProperty('ossrhUsername') ? ossrhUsername : ""
-  def ossrhPasswordSafe = hasProperty('ossrhPassword') ? ossrhPassword : ""
+  def ossrhUsernameSafe = ossrhUsername//hasProperty('ossrhUsername') ? ossrhUsername : ""
+  def ossrhPasswordSafe = ossrhPassword//hasProperty('ossrhPassword') ? ossrhPassword : ""
 
   apply plugin: 'maven-publish'
   apply plugin: "com.jfrog.artifactory"
   apply plugin: 'ch.raffael.pegdown-doclet'
   apply plugin: 'jacoco'
   apply plugin: 'org.owasp.dependencycheck'
-
-  if(hasProperty('signing.keyId')) {
-    apply plugin: 'signing'
-  }
 
 
   repositories {
@@ -81,13 +77,15 @@ subprojects {
     testCompile 'org.slf4j:slf4j-simple:1.7.25'
   }
 
-  task javadocJar(type: Jar) {
-    classifier = 'javadoc'
-    from javadoc
-  }
 
   javadoc {
       options.encoding = 'UTF-8'
+  }
+
+  //configure the jar files: sources and javaod
+  task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
   }
 
   task sourcesJar(type: Jar) {
@@ -99,11 +97,11 @@ subprojects {
       archives javadocJar, sourcesJar
   }
 
-  if(hasProperty('signing.keyId')) {
-    signing {
-        sign configurations.archives
-    }
+  
+  signing {
+      sign configurations.archives
   }
+  
 
   def generatedSources = ["**/com/nedap/archie/adlparser/antlr**"]
 
@@ -130,12 +128,12 @@ subprojects {
   }
 
   check.dependsOn jacocoTestReport
+
+  //upload to sonatype configuration
   uploadArchives {
     repositories {
       mavenDeployer {
-      if(hasProperty('signing.keyId')) {
-          beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-        }
+        beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
         repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
           authentication(userName: ossrhUsernameSafe, password: ossrhPasswordSafe)
@@ -145,37 +143,6 @@ subprojects {
           authentication(userName: ossrhUsernameSafe, password: ossrhPasswordSafe)
         }
 
-/*        pom.project {
-          name 'Archie'
-          packaging 'jar'
-          // optionally artifactId can be defined here 
-          description 'An openEHR library, supporting ADL 2'
-          url 'https://github.com/nedap/archie'        
-
-          scm {
-              connection 'scm:git:https://github.com/nedap/archie.git'
-              developerConnection 'scm:git:git@github.com:nedap/archie.git'
-              url 'https://github.com/nedap/archie.git'
-          }
-
-          licenses {
-            license {
-              name 'The Apache License, Version 2.0'
-              url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-              distribution 'repo'
-            }
-          }
-
-          developers {
-            developer {
-              id 'pieterbos'
-              name 'Pieter Bos'
-              email 'pieterbos@nedap.com'
-              organization 'nedap'
-              organizationUrl 'http://www.nedap.com'
-            }
-          }
-        }*/
         beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
       }
     }
