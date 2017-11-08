@@ -5,6 +5,7 @@ import com.nedap.archie.aom.CObject;
 import com.nedap.archie.aom.CPrimitiveObject;
 
 import java.lang.reflect.Field;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -148,4 +149,16 @@ public interface ModelInfoLookup {
      * @param parent
      */
     void pathHasBeenUpdated(Object rmObject, Archetype archetype, String pathOfParent, Object parent);
+
+    /**
+     * True if the given attribute at given type is ok for given CPrimitiveObject, false otherwise
+     * TODO: this should be solved with AOM_PROFILE
+     * @param rmTypeName
+     * @param rmAttributeName
+     * @param cObject
+     * @return
+     */
+    boolean validatePrimitiveType(String rmTypeName, String rmAttributeName, CPrimitiveObject cObject);
+
+    Collection<RMPackageId> getId();
 }

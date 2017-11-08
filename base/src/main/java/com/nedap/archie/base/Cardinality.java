@@ -68,6 +68,12 @@ public class Cardinality extends OpenEHRBase {
         return result;
     }
 
+    public static Cardinality mandatoryAndUnbounded() {
+        Cardinality result = new Cardinality();
+        result.setInterval(new MultiplicityInterval(1, true, false, null, true, true));
+        return result;
+    }
+
     /**
      * True if the semantics of this cardinality represent a bag, i.e. unordered, non-unique membership.
      *

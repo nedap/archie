@@ -1,0 +1,120 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated)
+	openEHR-EHR-OBSERVATION.telecommunication.v1.0.0
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Sam Heard">
+		["organisation"] = <"Ocean Informatics">
+		["email"] = <"sam.heard@oceaninformatics.com">
+		["date"] = <"2013-01-25">
+	>
+	copyright = <"© National E-Health Transition Authority">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record evidence of interactions between healthcare providers that support the record of health care.">
+			use = <"Use to record the (bi-directional) text conversation, or video- or audio-conference recording, between two or more parties and which is captured as part of the record of health care. For example, capture a phone or online chat conversation between remote healthcare providers about patient management decisions; or audio- and video-conference recordings that record aspects of telemedicine consultations or case conferences. 
+
+The record of interaction may take place over a specified interval of time.">
+			keywords = <"chat", "videoconference", "audioconference", "conversation", "discussion", "teleconference", "telehealth", "telecommunication">
+			misuse = <"">
+		>
+	>
+	other_contributors = <"Stephen Chu, NEHTA, Australia", "Christian Ghan, The Chris O'Brien Lifehouse at RPA, Australia", "Sam Heard, Ocean Informatics, Australia (Editor)", "Oliver Hosking, Remote Health NT, Australia", "Heather Leslie, Ocean Informatics, Australia (Editor)", "Fabian Schwarz, NT Health, Australia", "Gary Sinclair, NT DoH, Australia">
+	other_details = <
+		["current_contact"] = <"Heather Leslie, Ocean Informatics, heather.leslie@oceaninformatics.com">
+		["MD5-CAM-1.0.1"] = <"734C3E7875AD042679AA171B1AB01631">
+	>
+
+definition
+	OBSERVATION[id1] matches {	-- Telecommunication Record
+		data matches {
+			HISTORY[id2] matches {
+				events cardinality matches {1..*; unordered} matches {
+					POINT_EVENT[id3] matches {	-- Start Time
+						data matches {
+							ITEM_TREE[id4] matches {
+								items matches {
+									ELEMENT[id6] occurrences matches {0..1} matches {	-- Record
+										value matches {
+											DV_MULTIMEDIA[id11] matches {
+												media_type 
+											}
+										}
+									}
+									ELEMENT[id5] matches {	-- Comment
+										value matches {
+											DV_TEXT[id12] 
+										}
+									}
+								}
+							}
+						}
+					}
+					INTERVAL_EVENT[id7] matches {	-- Recording Interval
+						math_function matches {
+							DV_CODED_TEXT[id13] matches {
+								defining_code matches {[at1]}
+							}
+						}
+						data matches {
+							use_node ITEM_TREE[id14] /data[id2]/events[id3]/data[id4]	-- /data[id2]/events[Start Time]/data[id4]
+						}
+					}
+				}
+			}
+		}
+		protocol matches {
+			ITEM_TREE[id9] matches {
+				items matches {
+					allow_archetype CLUSTER[id10] matches {	-- Device
+						include
+							archetype_id/value matches {/openEHR-EHR-CLUSTER\.device(-[a-zA-Z0-9_]+)*\.v1/}
+					}
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Telecommunication Record">
+				description = <"Record of a telecommunication, usually a text conversation, or video- or teleconference recording between two or more parties, captured as part of the record of health care.">
+			>
+			["id3"] = <
+				text = <"Start Time">
+				description = <"The time that represents the start of the telecommunication.">
+			>
+			["id5"] = <
+				text = <"Comment">
+				description = <"Additional narrative about the telecommunication.">
+			>
+			["id6"] = <
+				text = <"Record">
+				description = <"The actual record of any telecommunication between two or more healthcare providers.">
+			>
+			["id7"] = <
+				text = <"Recording Interval">
+				description = <"The period of time over which the telecommunication was recorded.">
+			>
+			["id10"] = <
+				text = <"Device">
+				description = <"Details of device used to capture the telecommunication.">
+			>
+			["at1"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+		>
+	>
+	term_bindings = <
+		["openehr"] = <
+			["at1"] = <http://openehr.org/id/640>
+		>
+	>

@@ -1,0 +1,153 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated; uid=7b920caf-9c5b-4fa3-9857-84d7b4511fe1)
+	openEHR-EHR-OBSERVATION.cgas.v1.0.0
+
+language
+	original_language = <[ISO_639-1::en]>
+	translations = <
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			author = <
+				["name"] = <"Silje Ljosland Bakke">
+				["organisation"] = <"Nasjonal IKT HF">
+			>
+		>
+	>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"John Tore Valand / Silje Ljosland Bakke">
+		["organisation"] = <"Helse Bergen HF / Nasjonal IKT HF">
+		["email"] = <"john.tore.valand@helse-bergen.no / silje.ljosland.bakke@nasjonalikt.no">
+		["date"] = <"2016-02-15">
+	>
+	original_namespace = <"org.openehr">
+	original_publisher = <"openEHR Foundation">
+	custodian_namespace = <"org.openehr">
+	custodian_organisation = <"openEHR Foundation">
+	copyright = <"© Nasjonal IKT HF, openEHR Foundation">
+	licence = <"This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 International License. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/4.0/.">
+	details = <
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			purpose = <"For å finne personens dårligste, generelle funksjonsnivå for en angitt tidsperiode. Funksjonsnivået uttrykkes ved en skår.">
+			use = <"Brukes for å finne personens dårligste, generelle funksjonsnivå for den angitte tidsperioden ved å velge laveste nivå som beskriver hans eller hennes funksjon på et hypotetisk kontinuum av helse /sykdom. Bruk mellomliggende tall når det passer (for eksempel 35, 58, 62). Det er den faktiske funksjonsevne som skal skåres, uten hensyn til behandling eller prognose.
+
+Skåringen benyttes på personer over 4 år. Ulike kilder har ulik øvre begrensing på alder for bruk av skåringen. I Norge benyttes skåringen på personer mellom 4 og 18 år.">
+			keywords = <"CGAS, funksjonsnivå, akse 6", ...>
+			misuse = <"Brukes ikke til personer under 4 år.">
+		>
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To score a child's most impaired level of emotional and behavioural functioning in the specified period of time.">
+			use = <"Use to score a child's most impaired level of emotional and behavioural functioning in the specified time period by selecting the lowest level which describes his/her functioning on a hypothetical continuum of health-illness. The scores can range from 1, which is the very worst, to 100, which is the very best. Use intermediary levels (e.g. 35, 58, 62).
+
+The score is used for children over the age of 4. Different sources have different upper limits for the age of the individual being scored, the most common being 16 or 18 years of age.">
+			keywords = <"CGAS", ...>
+			misuse = <"Not to be used for children under the age of 4.">
+		>
+	>
+	other_contributors = <"Morten Aas, Oslo Universitetssykehus, Norway", "Tomas Alme, DIPS, Norway", "Vebjørn Arntzen, Oslo universitetssykehus HF, Norway (Nasjonal IKT Editor)", "Koray Atalag, University of Auckland, New Zealand", "Silje Ljosland Bakke, Nasjonal IKT HF, Norway (openEHR Editor)", "Bjørn Christensen, Helse Bergen HF, Norway", "Sigrund Drivenes, Helse-Fonna/BUP Haugesund, Norway", "Sebastian Garde, Ocean Informatics, Germany", "Heather Grain, Llewelyn Grain Informatics, Australia", "Cecilie Graver, Oslo universitetssykehus HF, Norway", "Evelyn Hovenga, EJSH Consulting, Australia", "Lars Morgan Karlsen, DIPS ASA, Norway", "Heather Leslie, Ocean Informatics, Australia", "Siv Marie Lien, DIPS ASA, Norway", "Ian McNicoll, freshEHR Clinical Informatics, United Kingdom", "Bjørn Næss, DIPS ASA, Norway", "Andrej Orel, Marand d.o.o., Slovenia", "Anne Pauline Anderssen, Helse Nord RHF, Norway", "Phuong Pedersen, DIPS, Norway", "Tanja Riise, Nasjonal IKT HF, Norway", "Line Silsand, Universitetssykehuset i Nord-Norge, Norway", "Norwegian Review Summary, Nasjonal IKT HF, Norway", "Micaela Thierley, Helse Bergen/Haraldsplass sykehus, Norway", "John Tore Valand, Haukeland Universitetssjukehus, Norway (Nasjonal IKT Editor)">
+	references = <
+		["1"] = <"Shaffer, D, M. Gould, J. Brasic, P. Ambrosini, P. Fisher, H. Bird, S. Aluwahlia: “A Children's Global Assessment Scale (CGAS)”. Psychopharmacology Bulletin 1985, 21,747-48. https://www.researchgate.net/profile/James_Brasic/publication/16557623_Children%27s_global_assessment_scale_%28CGAS%29/links/55b7e04e08aec0e5f43934b5.pdf">
+		["2"] = <"Vandvik, I H. Akse 6 – CGAS (Children’s Global Assessment Scale) - Norsk oversettelse. [Internet]. The Norwegian Directorate of eHealth; 2007. Available from: https://ehelse.no/Documents/Helsefaglig%20kodeverk/retningslinjer-for-multiaksial-klass-bup.pdf  [Accessed 2016-09-16].">
+		["3"] = <"Hanssen-Bauer, K. (2008). \"Multiaksial klassifikasjon i psykisk helsevern for barn og unge\". Regionsenter for barn og unges psykiske helse, Helse Sør-Øst. https://helsedirektoratet.no/Documents/Medisinske%20koder%20og%20kodeverk/BUP/bup-klass.pdf.">
+		["4"] = <"CGAS, Draft Archetype [Internet]. Nasjonal IKT, Nasjonal IKT Clinical Knowledge Manager [cited: 2016-10-31]. Available from: http://arketyper.no/ckm/#showArchetype_1078.36.1289">
+	>
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"CAEC2A993FFA595D368F7B2C29CF3499">
+		["build_uid"] = <"59c97632-a118-4035-95b4-ee297f061712">
+	>
+
+definition
+	OBSERVATION[id1] matches {	-- Children's Global Assessment Scale
+		data matches {
+			HISTORY[id2] matches {
+				events cardinality matches {1..*; unordered} matches {
+					EVENT[id3] matches {	-- Unspecified event
+						data matches {
+							ITEM_TREE[id4] matches {
+								items matches {
+									ELEMENT[id5] occurrences matches {0..1} matches {	-- Score
+										value matches {
+											DV_COUNT[id15] matches {
+												magnitude matches {|1..100|}
+											}
+										}
+									}
+									ELEMENT[id6] occurrences matches {0..1} matches {	-- Comment
+										value matches {
+											DV_TEXT[id16] 
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		protocol matches {
+			ITEM_TREE[id13] matches {
+				items matches {
+					allow_archetype CLUSTER[id14] matches {	-- Extension
+						include
+							archetype_id/value matches {/.*/}
+					}
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["nb"] = <
+			["id1"] = <
+				text = <"CGAS">
+				description = <"Children's Global Assessment Scale (CGAS) for å skåre et barns dårligste, generelle funksjonsnivå for en angitt tidsperiode.">
+			>
+			["id3"] = <
+				text = <"Uspesifisert hendelse">
+				description = <"Standard, uspesifisert tidspunkt eller tidsintervall som kan defineres mer eksplisitt i en template eller i en applikasjon.">
+			>
+			["id5"] = <
+				text = <"Skår">
+				description = <"Personens dårligste, generelle funksjonsnivå for den angitte tidsperioden.">
+			>
+			["id6"] = <
+				text = <"Kommentar">
+				description = <"Ytterligere kommentar til CGAS-skåringen som ikke er fanget opp i andre felt.">
+			>
+			["id14"] = <
+				text = <"Tilleggsinformasjon">
+				description = <"Ytterligere informasjon som trengs for å kunne registrere lokalt definert innhold eller for å tilpasse til andre referansemodeller/formalismer.">
+			>
+		>
+		["en"] = <
+			["id1"] = <
+				text = <"Children's Global Assessment Scale">
+				description = <"Children's Global Assessment Scale (CGAS) to score a subject's most impaired level of emotional and behavioural functioning in a specified period of time.">
+			>
+			["id3"] = <
+				text = <"Unspecified event">
+				description = <"Default, unspecified point in time or interval event which may be explicitly defined in a template or at run-time.">
+			>
+			["id5"] = <
+				text = <"Score">
+				description = <"The child's most impaired level of emotional and behavioural functioning in a specified period of time.">
+			>
+			["id6"] = <
+				text = <"Comment">
+				description = <"Additional comment about the overall CGAS score not captured in other fields.">
+			>
+			["id14"] = <
+				text = <"Extension">
+				description = <"Additional information required to capture local content or to align with other reference models/formalisms.">
+			>
+		>
+	>
+	term_bindings = <
+		["SNOMED-CT"] = <
+			["id1"] = <http://snomed.info/id/450740006>
+		>
+	>

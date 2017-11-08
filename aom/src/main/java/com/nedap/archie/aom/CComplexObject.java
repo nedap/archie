@@ -31,7 +31,7 @@ public class CComplexObject extends CDefinedObject<ArchetypeModelObject> {
     protected transient Archetype archetype;
 
     public boolean isAnyAllowed() {
-        return attributes.isEmpty();
+        return attributes == null || attributes.isEmpty();
     }
 
     @Override

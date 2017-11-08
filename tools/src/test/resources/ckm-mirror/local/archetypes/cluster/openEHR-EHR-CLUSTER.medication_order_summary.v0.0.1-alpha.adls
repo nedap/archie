@@ -1,0 +1,338 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated; uid=d8ac401c-6267-4873-b56c-30ed5007c00c)
+	openEHR-EHR-CLUSTER.medication_order_summary.v0.0.1-alpha
+
+language
+	original_language = <[ISO_639-1::en]>
+	translations = <
+		["pt-br"] = <
+			language = <[ISO_639-1::pt-br]>
+			author = <
+				["name"] = <"Beatriz Defarialeao">
+				["organisation"] = <"Bleão Informática em Saúde">
+				["email"] = <"bfleao@terra.com.br">
+			>
+			accreditation = <"MD, Phd">
+		>
+	>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Ian McNicoll">
+		["organisation"] = <"freshEHR Clinical Informatics Ltd.">
+		["email"] = <"ian@freshehr.com">
+		["date"] = <"2015-11-01">
+	>
+	original_namespace = <"org.openehr">
+	original_publisher = <"openEHR Foundation">
+	custodian_namespace = <"org.openehr">
+	custodian_organisation = <"openEHR Foundation">
+	copyright = <"© openEHR Foundation">
+	licence = <"This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 License. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/.">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To provide an overall summary of the status and key dates, related to a medication order.">
+			use = <"Use within the context of a medication order Instruction where a summary of the overallcourse is required. This will normally be where the order is is being used within the context of a medicaton summary list, and not in the context of an orderable prescription record, where medication ctions will normally carry the primary record of the status of the order and key date information.">
+			misuse = <"">
+		>
+		["pt-br"] = <
+			language = <[ISO_639-1::pt-br]>
+			purpose = <"Para fornecer um resumo geral do status e datas-chave de uma prescrição.">
+			use = <"Utilizar no contexto de uma INSTRUCTION de medicamentos, onde é necessário um resumo do esquema medicamentoso. Normalmente ocorre onde a prescrição está sendo utilizada, no contexto de oferecer uma lista de resumo do esquema medicamentoso. Não se aplica no registro de uma prescrição.">
+			misuse = <"">
+		>
+	>
+	references = <
+		["1"] = <"Medication item, Draft Archetype [Internet]. UK Clinical Models, UK Clinical Models Clinical Knowledge Manager [cited: 2015-11-01]. Available from: http://clinicalmodels.org.uk/ckm/#showArchetype_1051.32.3">
+		["2"] = <"Medication event summary, Draft Archetype [Internet]. UK Clinical Models, UK Clinical Models Clinical Knowledge Manager [cited: 2015-11-01]. Available from: http://clinicalmodels.org.uk/ckm/#showArchetype_1051.32.140">
+		["3"] = <"Medication order status valueset[Internet]. HL7 FHIR , HL7 FHIR DSTU2 [cited: 2015-11-01]. Available from https://www.hl7.org/fhir/valueset-medication-order-status.html">
+	>
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"EC6F51A4CD0D4A77E44E56EF799E1DFF">
+		["build_uid"] = <"0f879032-026f-4e01-a490-6a6a7df8cfbc">
+	>
+
+definition
+	CLUSTER[id1] matches {	-- Medication course summary
+		items matches {
+			ELEMENT[id2] occurrences matches {0..1} matches {	-- Course status
+				value matches {
+					DV_CODED_TEXT[id4] matches {
+						defining_code matches {[ac1]}		-- Course status (synthesised)
+					}
+				}
+			}
+			ELEMENT[id3] matches {	-- Key course dates
+				name matches {
+					DV_CODED_TEXT[id5] matches {
+						defining_code matches {[ac2]}		-- Key course dates (synthesised)
+					}
+				}
+				value matches {
+					DV_DATE_TIME[id6] 
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Medication course summary">
+				description = <"Overall summary of the medication course.">
+			>
+			["id2"] = <
+				text = <"Course status">
+				description = <"The overall status of this order.">
+			>
+			["id3"] = <
+				text = <"Key course dates">
+				description = <"Key medication event dates.">
+			>
+			["at4"] = <
+				text = <"Date ordered/recommended">
+				description = <"The data at which the medication course was first ordered or recommended.">
+			>
+			["at5"] = <
+				text = <"Date first prescription issued">
+				description = <"The date at which the medication was first issued. 'Issued' refers to the prescription 'token' electronic or paper which authorises supply of a medication.">
+			>
+			["at6"] = <
+				text = <"Date last prescription issued">
+				description = <"The date at which the medication prescription was last issued. This refers to the prescription 'token' electronic or paper which authorises supply of a medication.">
+			>
+			["at7"] = <
+				text = <"Date first authorised">
+				description = <"The date at which the medication was first authorised.For a repeat prescription, authorisation refers to the creation of the repeat prescription 'master' which is followed by the production of one or more prescription issues.">
+			>
+			["at8"] = <
+				text = <"Date last authorised">
+				description = <"The data at which the medication was last authorised. For a repeat prescription, authorisation refers to the creation of the repeat prescription 'master' which is followed by the production of one or more prescription issues. Authorisation is generally only given for a limited period or limited number of issues, after which re-authorisation is required.">
+			>
+			["at9"] = <
+				text = <"Date first dispensed">
+				description = <"The date at which the medicaton was first physically dispensed.">
+			>
+			["at10"] = <
+				text = <"Date last dispensed">
+				description = <"The date at which the medication was last dispensed.">
+			>
+			["at11"] = <
+				text = <"Date first administered">
+				description = <"The date at which the medication was first administered to the patient.">
+			>
+			["at12"] = <
+				text = <"Date last administered">
+				description = <"The date at which the medication was last administered.">
+			>
+			["at13"] = <
+				text = <"Date discontinued">
+				description = <"The date at which the medication was discontinued.">
+			>
+			["at14"] = <
+				text = <"Date authorised">
+				description = <"The date at which the medication was authorised or re-authorised.">
+			>
+			["at15"] = <
+				text = <"Date prescription issued">
+				description = <"The date at which a medication prescription was issued i.e the physical or electronic prescription token was created.">
+			>
+			["at16"] = <
+				text = <"Date dispensed">
+				description = <"The date at which a medication was dispensed.">
+			>
+			["at17"] = <
+				text = <"Date administered">
+				description = <"The date at which a medication was administered.">
+			>
+			["at18"] = <
+				text = <"Date administration withheld">
+				description = <"The data at which administration of a medication was withheld or suspended.">
+			>
+			["at19"] = <
+				text = <"Date reviewed">
+				description = <"The date at which the medication order was reviewed.">
+			>
+			["at20"] = <
+				text = <"Date last reviewed">
+				description = <"The date at which the medication order was last reviewed.">
+			>
+			["at21"] = <
+				text = <"Date changed">
+				description = <"The date at which the medication instruction was modified.">
+			>
+			["at22"] = <
+				text = <"Active">
+				description = <"This is an active medication.">
+			>
+			["at23"] = <
+				text = <"Stopped">
+				description = <"This is a medication that has previously been issued, dispensed or administered but has now been discontinued.">
+			>
+			["at24"] = <
+				text = <"Never active">
+				description = <"A medication which was ordered or authorised but has been cancelled prior to being issued, dispensed or adiminstered.">
+			>
+			["at25"] = <
+				text = <"Completed">
+				description = <"The medication course has been completed.">
+			>
+			["at26"] = <
+				text = <"Obsolete">
+				description = <"This medication order has been superseded by another.">
+			>
+			["at27"] = <
+				text = <"Suspended">
+				description = <"Actions reuulting from the order are to be temporarily halted, but are expected to continue later. May also be called 'on-hold'.">
+			>
+			["at28"] = <
+				text = <"Draft">
+				description = <"The medication order has been made but further processes e.g. sign-off or verification are required before it becomes actionable.">
+			>
+			["ac1"] = <
+				text = <"Course status (synthesised)">
+				description = <"The overall status of this order. (synthesised)">
+			>
+			["ac2"] = <
+				text = <"Key course dates (synthesised)">
+				description = <"Key medication event dates. (synthesised)">
+			>
+		>
+		["pt-br"] = <
+			["id1"] = <
+				text = <"Resumo do Esquema Medicamentoso">
+				description = <"Resumo do Esquema Medicamentoso.">
+			>
+			["id2"] = <
+				text = <"Status do Esquema Medicamentoso">
+				description = <"Status da esquema medicamentoso.">
+			>
+			["id3"] = <
+				text = <"Principais datas">
+				description = <"Principais datas do tratamento medicamentoso.">
+			>
+			["at4"] = <
+				text = <"Data da prescrição">
+				description = <"Data da primeira prescrição deste tratamento.">
+			>
+			["at5"] = <
+				text = <"Data de liberação da prescrição">
+				description = <"Data de liberação da prescrição, quer eletrônica ou em papel, iniciando processo de fornecimento do medicamento.">
+			>
+			["at6"] = <
+				text = <"Data da última liberação prescrição">
+				description = <"Data da última liberação da prescrição, quer eletrônica ou em papel.">
+			>
+			["at7"] = <
+				text = <"Data da primeira autorização">
+				description = <"Data da primeira autorização do medicamento. Para uma prescrição de uso contínuo, a autorização refere-se à criação da receita \"mestre\", seguida de uma ou mais prescrições. A autorização geralmente é dada apenas por um período limitado ou número limitado de ítens, após o que é necessária uma nova autorização.
+
+">
+			>
+			["at8"] = <
+				text = <"Data da última autorização">
+				description = <"Os dados em que a medicação foi autorizada pela última vez. Para uma prescrição de uso contínuo, a autorização refere-se à criação da receita \"mestre\", seguida de uma ou mais prescrições. A autorização geralmente é dada apenas por um período limitado ou número limitado de ítens, após o que é necessária uma nova autorização.">
+			>
+			["at9"] = <
+				text = <"Data da primeira dispensação">
+				description = <"Data da primeira vez que o medicamento foi dispensado fisicamente.">
+			>
+			["at10"] = <
+				text = <"Data da última dispensação">
+				description = <"Data da última dispensação do medicamento.">
+			>
+			["at11"] = <
+				text = <"Data da primeira administração">
+				description = <"Data da primeira administração do medicamento ao paciente.">
+			>
+			["at12"] = <
+				text = <"Data da última administração">
+				description = <"Data da última administração do medicamento.">
+			>
+			["at13"] = <
+				text = <"Data de interrupção">
+				description = <"Data em que o medicamento foi descontinuado.">
+			>
+			["at14"] = <
+				text = <"Data da autorização">
+				description = <"Data da autorização ou re-autorização do medicamento.">
+			>
+			["at15"] = <
+				text = <"Data de liberação da prescrição">
+				description = <"Data de liberação da prescrição, quer eletrônica ou em papel.">
+			>
+			["at16"] = <
+				text = <"Data de dispensarão">
+				description = <"Data de dispensarão do medicamento.">
+			>
+			["at17"] = <
+				text = <"Data de administração">
+				description = <"Data de administração do medicamento.">
+			>
+			["at18"] = <
+				text = <"Data de suspensão do medicamento">
+				description = <"Data de suspensão do medicamento.">
+			>
+			["at19"] = <
+				text = <"Data de revisão">
+				description = <"Data de revisão da prescrição do medicamento.">
+			>
+			["at20"] = <
+				text = <"Data da última revisão">
+				description = <"Data da última revisão da prescrição do medicamento.">
+			>
+			["at21"] = <
+				text = <"Data de modificação">
+				description = <"Data de modificação da prescrição do medicamento.
+">
+			>
+			["at22"] = <
+				text = <"Em uso">
+				description = <"Medicamento em uso.">
+			>
+			["at23"] = <
+				text = <"Descontinuado">
+				description = <"Medicamento que foi prescrito, dispensado ou administrado mas foi descontinuado.">
+			>
+			["at24"] = <
+				text = <"Nunca foi utilizado">
+				description = <"Medicamento que foi prescrito e autorizado mas foi cancelado antes de ser dispensado ou administrado.">
+			>
+			["at25"] = <
+				text = <"Tratamento finalizado">
+				description = <"Tratamento com este esquema medicamentoso finalizado.">
+			>
+			["at26"] = <
+				text = <"Obsoleto">
+				description = <"Este ítem da prescrição foi substituído por outro.">
+			>
+			["at27"] = <
+				text = <"Suspenso">
+				description = <"Medicamento temporariamente suspenso. A expectativa é que a prescrição continue em outro momento.">
+			>
+			["at28"] = <
+				text = <"Aguardando validação">
+				description = <"Prescrição que necessita validação adicional, p. ex. assinatura para se tornar executável.">
+			>
+			["ac1"] = <
+				text = <"Status do Esquema Medicamentoso (synthesised)">
+				description = <"Status da esquema medicamentoso. (synthesised)">
+			>
+			["ac2"] = <
+				text = <"Principais datas (synthesised)">
+				description = <"Principais datas do tratamento medicamentoso. (synthesised)">
+			>
+		>
+	>
+	value_sets = <
+		["ac1"] = <
+			id = <"ac1">
+			members = <"at22", "at23", "at24", "at25", "at26", "at27", "at28">
+		>
+		["ac2"] = <
+			id = <"ac2">
+			members = <"at4", "at5", "at6", "at7", "at8", "at9", "at10", "at11", "at12", "at13", "at14", "at15", "at16", "at17", "at18", "at19", "at20", "at21">
+		>
+	>

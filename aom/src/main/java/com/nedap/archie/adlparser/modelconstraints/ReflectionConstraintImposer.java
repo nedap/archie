@@ -37,7 +37,12 @@ public class ReflectionConstraintImposer implements ModelConstraintImposer {
         }
 
         if(attributeInfo.isMultipleValued()) {
-            attribute.setCardinality(Cardinality.unbounded());
+            if(attributeInfo.isNullable()) {
+                attribute.setCardinality(Cardinality.unbounded());
+            } else {
+                attribute.setCardinality(Cardinality.mandatoryAndUnbounded());
+            }
+
             attribute.setMultiple(true);
         } else {
             //only for container attributes (list, set, etc)

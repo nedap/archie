@@ -24,24 +24,18 @@ description
 		["de"] = <
 			language = <[ISO_639-1::de]>
 			purpose = <"Zur Beschreibung der Ausmaße eines betrachteten Teils.">
-			use = <"">
 			keywords = <"Größe", "Volumen">
-			misuse = <"">
 		>
 		["en"] = <
 			language = <[ISO_639-1::en]>
 			purpose = <"To describe the dimensions of a part examined or viewed">
-			use = <"">
 			keywords = <"size", "volume">
-			misuse = <"">
 		>
 	>
 	other_details = <
 		["regression"] = <"PASS">
-		["references"] = <"">
 	>
 	lifecycle_state = <"Initial">
-	other_contributors = <>
 
 definition
 	CLUSTER[at0000.1] matches {	-- Area of wound

@@ -1,0 +1,175 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated)
+	openEHR-EHR-OBSERVATION.psychiatric_risk_nt_rmp.v1.0.0
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Heather Leslie">
+		["organisation"] = <"Ocean Informatics">
+		["email"] = <"heather.leslie@oceaninformatics.com">
+		["date"] = <"2013-03-18">
+	>
+	copyright = <"© National E-Health Transition Authority">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record a Risk Assessment about the potential risk of transporting a patient with psychiatric issues to a treatment facility by aeroplane within the Remote Medical Practitioner On-Call service in the Northern Territory, Australia.">
+			use = <"Use this questionnaire as a tool to record a Risk Assessment about the potential risk of transporting a patient with psychiatric issues to a treatment facility by aeroplane. 
+
+This risk assessment is used by the patient retrieval organisation, Careflight, as part of its guidelines for patient transport within remote areas of Australia.">
+			keywords = <"assessment", "risk", "psychiatric", "harm", "self", "involuntary", "violence", "weapons">
+			misuse = <"">
+		>
+	>
+	references = <
+		["1"] = <"Careflight. Guidelines for the Transport of Psychiatric Patients. Australia; Date effective: 08 May 2012. Ref: MN-003-02. Appendix B, Risk Assessment Tool; p. 13.">
+	>
+	other_details = <
+		["current_contact"] = <"Heather Leslie, Ocean Informatics, heather.leslie@oceaninformatics.com">
+		["MD5-CAM-1.0.1"] = <"FB5D85BE2FDE1F7F00DF30AF0283EE68">
+	>
+
+definition
+	OBSERVATION[id1] matches {	-- Psychiatric Risk Assessment (NT RMP)
+		data matches {
+			HISTORY[id2] matches {
+				events cardinality matches {1..*; unordered} matches {
+					EVENT[id13] occurrences matches {0..1} matches {	-- Any event
+						data matches {
+							ITEM_TREE[id14] matches {
+								items matches {
+									ELEMENT[id3] occurrences matches {0..1} matches {	-- Marked Disorientation
+										value matches {
+											DV_BOOLEAN[id15] matches {
+												value matches {True, False}
+											}
+										}
+									}
+									ELEMENT[id4] occurrences matches {0..1} matches {	-- Marked Agitation
+										value matches {
+											DV_BOOLEAN[id16] matches {
+												value matches {True, False}
+											}
+										}
+									}
+									ELEMENT[id5] occurrences matches {0..1} matches {	-- Current Violence to Persons or Property
+										value matches {
+											DV_BOOLEAN[id17] matches {
+												value matches {True, False}
+											}
+										}
+									}
+									ELEMENT[id6] occurrences matches {0..1} matches {	-- Current Violent Ideation or Threats of Violence
+										value matches {
+											DV_BOOLEAN[id18] matches {
+												value matches {True, False}
+											}
+										}
+									}
+									ELEMENT[id7] occurrences matches {0..1} matches {	-- Current Self Harm or Intention
+										value matches {
+											DV_BOOLEAN[id19] matches {
+												value matches {True, False}
+											}
+										}
+									}
+									ELEMENT[id8] occurrences matches {0..1} matches {	-- History of Violence
+										value matches {
+											DV_BOOLEAN[id20] matches {
+												value matches {True, False}
+											}
+										}
+									}
+									ELEMENT[id9] occurrences matches {0..1} matches {	-- Previous History of Difficulties During Transportation
+										value matches {
+											DV_BOOLEAN[id21] matches {
+												value matches {True, False}
+											}
+										}
+									}
+									ELEMENT[id10] occurrences matches {0..1} matches {	-- Involuntary Patient
+										value matches {
+											DV_BOOLEAN[id22] matches {
+												value matches {True, False}
+											}
+										}
+									}
+									ELEMENT[id11] occurrences matches {0..1} matches {	-- Known to Threaten to Use Weapons
+										value matches {
+											DV_BOOLEAN[id23] matches {
+												value matches {True, False}
+											}
+										}
+									}
+									ELEMENT[id12] occurrences matches {0..1} matches {	-- Referral Facility Unable to Achieve Recommended Management
+										value matches {
+											DV_BOOLEAN[id24] matches {
+												value matches {True, False}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Psychiatric Risk Assessment (NT RMP)">
+				description = <"Risk Assessment Tool to determine the potential risk of transporting patients with psychiatric issues to a treatment facility by aeroplane. This assessment tool is specifically used with the Remote Medical Practitioner On-Call service in the Northern Territory, Australia.">
+			>
+			["id3"] = <
+				text = <"Marked Disorientation">
+				description = <"The subject appears to be markedly disoriented.">
+			>
+			["id4"] = <
+				text = <"Marked Agitation">
+				description = <"The subject appears to be markedly agitated.">
+			>
+			["id5"] = <
+				text = <"Current Violence to Persons or Property">
+				description = <"The subject has been violent towards persons or property.">
+			>
+			["id6"] = <
+				text = <"Current Violent Ideation or Threats of Violence">
+				description = <"The subject has been threatening violence towards persons or property.">
+			>
+			["id7"] = <
+				text = <"Current Self Harm or Intention">
+				description = <"The subject has deliberately self harmed or is threatening self harm.">
+			>
+			["id8"] = <
+				text = <"History of Violence">
+				description = <"The subject has a known history of known violence.">
+			>
+			["id9"] = <
+				text = <"Previous History of Difficulties During Transportation">
+				description = <"The subject has a known history of difficulties during transportation.">
+			>
+			["id10"] = <
+				text = <"Involuntary Patient">
+				description = <"The subject has been placed  under an involuntary treatment order.">
+			>
+			["id11"] = <
+				text = <"Known to Threaten to Use Weapons">
+				description = <"The subject has been known to threaten to use weapons.">
+			>
+			["id12"] = <
+				text = <"Referral Facility Unable to Achieve Recommended Management">
+				description = <"The referral facility has been unable to achieve recommended treatment.">
+			>
+			["id13"] = <
+				text = <"Any event">
+				description = <"Default, unspecified point in time or interval event which may be explicitly defined in a template or at run-time.">
+			>
+		>
+	>

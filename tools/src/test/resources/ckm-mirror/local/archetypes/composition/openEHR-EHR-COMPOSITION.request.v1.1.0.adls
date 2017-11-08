@@ -1,0 +1,126 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated; uid=0942a3f6-3f2d-431c-871c-84bc722f4626)
+	openEHR-EHR-COMPOSITION.request.v1.1.0
+
+language
+	original_language = <[ISO_639-1::en]>
+	translations = <
+		["ar-sy"] = <
+			language = <[ISO_639-1::ar-sy]>
+			author = <
+				["name"] = <"Mona Saleh">
+			>
+		>
+	>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Dr Ian McNicoll">
+		["organisation"] = <"freshEHR Informatics, UK">
+		["email"] = <"ian@freshehr.com">
+		["date"] = <"2008-01-08">
+	>
+	original_namespace = <"org.openehr">
+	original_publisher = <"openEHR Foundation">
+	custodian_namespace = <"org.openehr">
+	custodian_organisation = <"openEHR Foundation">
+	copyright = <"© openEHR Foundation">
+	licence = <"This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 License. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/.">
+	details = <
+		["ar-sy"] = <
+			language = <[ISO_639-1::ar-sy]>
+			purpose = <"لتوصيل طلب إحالة أو طلب تقديم خدمة إلى من يقوم بتقديمها.">
+			use = <"">
+			keywords = <"إحالة", "طلب">
+			misuse = <"">
+		>
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To request advice, a specified service or transfer of care from a healthcare provider or organisation about the subject of care.">
+			use = <"Use as basis for a request for advice, a service or transfer of care from a healthcare provider or organisation about the subject of care. This document will typically include details about the scope and duration of validity of the request, as well as relevant clinical information about the subject. Requests can vary from a simple request for a consultation, seeking recommendation about further action, requesting a specific procedure or diagnostic test, through to full handover of care and clinical responsibility to the receiving healthcare provider.
+
+Use cases include, but are not limited to a request for:
+- a consultation, second opinion or management advice from a specialist;
+- a diagnostic test;
+- home care from visiting nurses;
+- transfer of care to a rehabilitation facility;
+- for aged care assessment;
+- for a medication review by a pharmacist; and
+- for provision of physiotherapy or occupational therapy.
+
+Requests may be targeted (identifying a specific healthcare provider or organisation to carry out the request) or untargeted (identifying only the type of care desired).">
+			keywords = <"referral", "request", "service">
+			misuse = <"Not to be used to represent the document recorded as part of a single clinical encounter or visit. Use COMPOSITION.encounter for this purpose.
+
+Not to be used to provide a transfer of care summary to another organisation or provider - use COMPOSITION.transfer_summary for this purpose.">
+		>
+	>
+	other_contributors = <"Nadim Anani, Karolinska Institutet, Sweden", "Vebjoern Arntzen, Oslo university hospital, Norway", "Silje Ljosland Bakke, Bergen Hospital Trust, Norway (openEHR Editor)", "Lars Bitsch-Larsen, Haukeland University hospital, Norway", "Shahla Foozonkhah, Ocean Informatics, Australia", "Heather Grain, Llewelyn Grain Informatics, Australia", "Lars Karlsen, DIPS ASA, Norway", "Shinji Kobayashi, Kyoto University, Japan", "Heather Leslie, Ocean Informatics, Australia (openEHR Editor)", "Ian McNicoll, freshEHR Clinical Informatics, United Kingdom (openEHR Editor)", "Andrej Orel, Marand d.o.o., Slovenia", "Jussara Rotzsch, UNB, Brazil", "Norwegian Review Summary, Nasjonal IKT, Norway">
+	references = <
+		["1"] = <"FHIR ReferralRequest resource: http://hl7-fhir.github.io/referralrequest.html">
+	>
+	other_details = <
+		["current_contact"] = <"Heather Leslie, Ocean Informatics<heather.leslie@oceaninformatics.com>">
+		["MD5-CAM-1.0.1"] = <"359240E886E60B5DF8FF06904482F72E">
+		["build_uid"] = <"74936fc0-0b66-4e45-913e-0462c173c70f">
+	>
+
+definition
+	COMPOSITION[id1] matches {	-- Request for service
+		category matches {
+			DV_CODED_TEXT[id44] matches {
+				defining_code matches {[at1]}
+			}
+		}
+		context matches {
+			EVENT_CONTEXT[id45] matches {
+				other_context matches {
+					ITEM_TREE[id2] matches {
+						items matches {
+							allow_archetype CLUSTER[id43] matches {	-- Extension
+								include
+									archetype_id/value matches {/.*/}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Request for service">
+				description = <"Document sent from one treating healthcare provider or organisation to another, for the purpose of requesting advice, a service or transfer of care.">
+			>
+			["id43"] = <
+				text = <"Extension">
+				description = <"Additional information required to capture local context or to align with other reference models/formalisms.">
+			>
+			["at1"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+		>
+		["ar-sy"] = <
+			["id1"] = <
+				text = <"*Request for service(en)">
+				description = <"*Document sent from one treating healthcare provider or organisation to another, for the purpose of requesting advice, a service or transfer of care.(en)">
+			>
+			["id43"] = <
+				text = <"*Extension(en)">
+				description = <"*Additional information required to capture local context or to align with other reference models/formalisms.(en)">
+			>
+			["at1"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+		>
+	>
+	term_bindings = <
+		["openehr"] = <
+			["at1"] = <http://openehr.org/id/433>
+		>
+	>

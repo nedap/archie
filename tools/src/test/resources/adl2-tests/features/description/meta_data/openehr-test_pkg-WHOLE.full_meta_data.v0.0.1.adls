@@ -22,8 +22,8 @@ description
 			misuse = <"This archetype should not be used around children or dogs.">
 			keywords = <"governance", "test">
    	        original_resource_uri = <
-		        ["resource A"] = <http://aaa.bbb/path/to/resource>
-		        ["resource B"] = <http://aaa.bbb/path/to/resource>
+		        ["resource A"] = <"Some resource available in the English language <http://aaa.bbb/path/to/resource>">
+		        ["resource B"] = <"Some other resource available in the English language <http://aaa.bbb/path/to/resource>">
 	        >
 		>
 	>

@@ -1,0 +1,139 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated; uid=f0c5e105-6d57-45e4-9966-fe3cb19a2063)
+	openEHR-EHR-CLUSTER.language.v0.0.1-alpha
+
+language
+	original_language = <[ISO_639-1::en]>
+	translations = <
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			author = <
+				["name"] = <"Vebjoern Arntzen">
+				["organisation"] = <"Oslo universitetssykehus HF">
+			>
+		>
+	>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Vebjørn Arntzen">
+		["organisation"] = <"Oslo University Hospital">
+		["email"] = <"varntzen@ous-hf.no">
+		["date"] = <"2017-07-06">
+	>
+	original_namespace = <"no.nasjonalikt">
+	original_publisher = <"Nasjonal IKT">
+	custodian_namespace = <"no.nasjonalikt">
+	custodian_organisation = <"Nasjonal IKT">
+	licence = <"This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 International License. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/4.0/.">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"For recording details about a spoken, written or symbolic system of communication.">
+			use = <"Use to record details about a spoken, written or symbolic system of communication.
+
+Use for example to record the requested or actual language for interpretation in the CLUSTER.interpreter_details archetype.">
+			keywords = <"signing", "sign language", "speake", "tongue">
+			misuse = <"">
+		>
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			purpose = <"For å registrere detaljer om et muntlig, skrevet eller tegnbasert system for kommunikasjon.">
+			use = <"Brukes for å registrere detaljer om et muntlig, skrevet eller tegnbasert system for kommunikasjon.
+
+Brukes for eksempel for å registrere hvilket språk som er ønsket eller hvilket språk tolking ble gjennomført på i arketypen CLUSTER.interpreter_details.">
+			keywords = <"tegn", "tegnspråk", "tale", "morsmål">
+			misuse = <"">
+		>
+	>
+	other_contributors = <"Silje Ljosland Bakke, Nasjonal IKT HF, Norway", "Heather Leslie, Ocean Health Systems, Australia", "John Tore Valand, Helse Bergen HF, Norway">
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"5E10897327D9590987FEC03C74491D10">
+		["build_uid"] = <"c27b5254-f7f5-4649-a35c-1df529aed48a">
+	>
+
+definition
+	CLUSTER[id1] matches {	-- Language
+		items matches {
+			ELEMENT[id2] matches {	-- Language name
+				value matches {
+					DV_TEXT[id7] 
+				}
+			}
+			ELEMENT[id3] occurrences matches {0..1} matches {	-- Dialect
+				value matches {
+					DV_TEXT[id8] 
+				}
+			}
+			ELEMENT[id4] occurrences matches {0..1} matches {	-- Proficiency
+				value matches {
+					DV_TEXT[id9] 
+				}
+			}
+			ELEMENT[id5] matches {	-- Comment
+				value matches {
+					DV_TEXT[id10] 
+				}
+			}
+			allow_archetype CLUSTER[id6] matches {	-- Details
+				include
+					archetype_id/value matches {/.*/}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["nb"] = <
+			["id1"] = <
+				text = <"Språk">
+				description = <"Detaljer om et muntlig, skrevet eller tegnbasert system for kommunikasjon.">
+			>
+			["id2"] = <
+				text = <"Navn på språk">
+				description = <"Navnet på språket.">
+			>
+			["id3"] = <
+				text = <"Dialekt">
+				description = <"Navnet på dialekten.">
+			>
+			["id4"] = <
+				text = <"Ferdighet">
+				description = <"Individets evne til å kommunisere språket eller dialekten.">
+			>
+			["id5"] = <
+				text = <"Kommentar">
+				description = <"Ytterligere fritekstbeskrivelse om språket.">
+			>
+			["id6"] = <
+				text = <"Detaljer">
+				description = <"Ytterligere detaljer om individets språk eller evne til å kommunisere språket eller dialekten.">
+			>
+		>
+		["en"] = <
+			["id1"] = <
+				text = <"Language">
+				description = <"Details about a spoken, written or symbolic system of communication.">
+			>
+			["id2"] = <
+				text = <"Language name">
+				description = <"The name of the language.">
+			>
+			["id3"] = <
+				text = <"Dialect">
+				description = <"The name of the dialect.">
+			>
+			["id4"] = <
+				text = <"Proficiency">
+				description = <"The individual's ability to communicate in the language or dialect.">
+			>
+			["id5"] = <
+				text = <"Comment">
+				description = <"Additional narrative description about the language.">
+			>
+			["id6"] = <
+				text = <"Details">
+				description = <"Additional details about the individual's language or the ability to communicate in the language or dialect.">
+			>
+		>
+	>

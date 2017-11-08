@@ -1,5 +1,6 @@
 package com.nedap.archie.aom;
 
+import com.nedap.archie.rminfo.ArchieModelNamingStrategy;
 import com.nedap.archie.rminfo.ModelInfoLookup;
 
 
@@ -106,6 +107,32 @@ public abstract class CPrimitiveObject<Constraint, ValueType> extends CDefinedOb
         }
         result.append("}");
         return result.toString();
+    }
+
+    @Override
+    public boolean cConformsTo(CObject other, ModelInfoLookup lookup) {
+        if(other instanceof CPrimitiveObject && other.getClass().equals(getClass())) {
+            if(other == null) {
+                return false;
+            }
+            return occurrencesConformsTo(other) && getRmTypeName().equalsIgnoreCase(other.getRmTypeName());
+        } else {
+            return false;
+        }
+    }
+
+    public String constrainedTypename () {
+        //TODO: this works usually, but probably needs RM access
+        //TODO: add to parserPostProcessor that rmTypeName will be set
+        return ArchieModelNamingStrategy.snakeCaseStrategy.translate(this.getClass().getSimpleName().substring(1));
+    }
+
+    public String getRmTypeName() {
+        return constrainedTypename();
+    }
+
+    public boolean hasAssumedValue() {
+        return getAssumedValue() != null;
     }
 
     @Override

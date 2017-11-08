@@ -1,0 +1,99 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated; uid=d52dad84-025b-4086-a42a-1a15491f8f57)
+	openEHR-EHR-INSTRUCTION.health_education.v0.0.1-alpha
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Heather Leslie">
+		["organisation"] = <"Ocean Health Systems">
+		["email"] = <"heather.leslie@oceanhealthsystems.com">
+		["date"] = <"2013-02-25">
+	>
+	original_namespace = <"org.openehr">
+	original_publisher = <"openEHR Foundation">
+	custodian_namespace = <"org.openehr">
+	custodian_organisation = <"openEHR Foundation">
+	copyright = <"© openEHR Foundation">
+	licence = <"This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 License. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/.">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record an order for Information that needs to be shared with the individual or carer about their health.">
+			use = <"Use to record an order for Information that needs to be shared with the individual or carer about their health.">
+			keywords = <"education", "information">
+			misuse = <"">
+		>
+	>
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"6DAE5BFF4F74BBCEF65F12C0640B66C3">
+		["build_uid"] = <"c4fe8a18-f607-4f4a-a52d-3844eff8ca0f">
+	>
+
+definition
+	INSTRUCTION[id1] matches {	-- Health education
+		activities matches {
+			ACTIVITY[id2] occurrences matches {0..1} matches {	-- Current Activity
+				description matches {
+					ITEM_TREE[id3] matches {
+						items cardinality matches {1..*; unordered} matches {
+							ELEMENT[id4] matches {	-- Topic
+								value matches {
+									DV_TEXT[id8] 
+								}
+							}
+							ELEMENT[id5] matches {	-- Details
+								value matches {
+									DV_TEXT[id9] 
+								}
+							}
+							ELEMENT[id6] occurrences matches {0..1} matches {	-- Number of sessions
+								value matches {
+									DV_COUNT[id10] matches {
+										magnitude matches {|>0|; 1}
+									}
+								}
+							}
+							ELEMENT[id7] occurrences matches {0..1} matches {	-- Indication
+								value matches {
+									DV_TEXT[id11] 
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Health education">
+				description = <"Information shared with the individual or carer about their health.">
+			>
+			["id2"] = <
+				text = <"Current Activity">
+				description = <"Current Activity">
+			>
+			["id4"] = <
+				text = <"Topic">
+				description = <"The headline topic of the education.">
+			>
+			["id5"] = <
+				text = <"Details">
+				description = <"Detailed areas to be covered as part of the education.">
+			>
+			["id6"] = <
+				text = <"Number of sessions">
+				description = <"The number of educational sessions to be undertaken.">
+			>
+			["id7"] = <
+				text = <"Indication">
+				description = <"The reason for undertaking this education process.">
+			>
+		>
+	>

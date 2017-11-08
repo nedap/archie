@@ -1,0 +1,211 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated; uid=4fe94967-5791-4094-9547-e2a4a8c61f15)
+	openEHR-EHR-EVALUATION.exclusion_global.v1.0.0
+
+language
+	original_language = <[ISO_639-1::en]>
+	translations = <
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			author = <
+				["name"] = <"Silje Ljosland Bakke">
+				["organisation"] = <"Nasjonal IKT HF">
+			>
+		>
+	>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Silje Ljosland Bakke">
+		["organisation"] = <"Nasjonal IKT HF">
+		["email"] = <"silje.ljosland.bakke@nasjonalikt.no">
+		["date"] = <"2017-02-16">
+	>
+	original_namespace = <"org.openehr">
+	original_publisher = <"openEHR Foundation">
+	custodian_namespace = <"org.openehr">
+	custodian_organisation = <"openEHR Foundation">
+	copyright = <"© Nasjonal IKT HF, openEHR Foundation">
+	licence = <"This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 International License. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/4.0/.">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record an overall statement of exclusion about all Problem/diagnosis, Family history, Medications, Procedures, Adverse reactions or other clinical item that are either not currently present, or have not been present in the past.">
+			use = <"Use to record an overall statement of exclusion about all Problem/diagnosis, Family history, Medications, Procedures, Adverse reactions or other clinical item that are either not currently present, or have not been present in the past.
+
+This archetype has been specifically designed to make a clear and unambiguous statement of an overall exclusion of a type of clinical item from the health record. This approach is used in preference to relying on flags or terminology to express negation.
+
+Each global statement should be recorded in a separate instance - for example a separate instance for a statement about medications and another for adverse reactions.
+
+The 'Global statement' data element allows for recording of a single Global statement. The different Global statements listed in the \"Global statement' run-time name constraint identifies the the different global exclusions. This name constraint can be applied during template modelling or at run-time within a software application.
+
+Please note that exclusion statements can only be considered to be current and accurate at the point-in-time of recording. It is possible for a record to be able to state that an individual has NO KNOWN history of any problems or diagnoses (using an exclusion statement) at the same consultation as recording the evidence of their first experience of a problem or diagnosis (using the EVALUATION.problem_diagnosis archetype). In future record statements, the individual may have a KNOWN history of the problem or diagnosis recorded in their problem list.">
+			keywords = <"exclusion, negation, rule out, rule-out, r/o, absence", ...>
+			misuse = <"Not to be used to record the exclusion of a specific problem/diagnosis, medication, procedure, family history, adverse reaction or other clinical item - use the EVALUATION.exclusion_specific archetype for this purpose.
+
+Not to be used to record the exclusion of any component of a physical examination - use the CLUSTER.exclusion_exam archetype within an appropriate OBSERVATION or CLUSTER archetype.
+
+Not to be used to record the exclusion of symptoms use the CLUSTER.exclusion_symptom archetype within an appropriate OBSERVATION or CLUSTER archetype.
+
+Not to be used to record the absence of information - use the EVALUATION.absense archetype for this purpose.">
+		>
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			purpose = <"For å registrere et overordnet eksklusjonsutsagn om alle problemer/diagnoser, familiære sykdommer, legemidler, prosedyrer, overfølsomheter eller andre kliniske konsepter som ikke er tilstede hos et individ, enten i nåtid eller fortid.">
+			use = <"Brukes til å registrere et overordnet eksklusjonsutsagn om alle problemer/diagnoser, familiære sykdommer, legemidler, prosedyrer, overfølsomheter eller andre kliniske konsepter som ikke er tilstede hos et individ, enten i nåtid eller fortid.
+
+Arketypen er laget spesifikt for å kunne uttrykke klart og tydelig en overordnet utelukkelse av en type klinisk konsept fra journalen. Denne tilnærmingen er valgt i stedet for å basere seg på flagg eller terminologi for å uttrykke negasjon.
+
+Hver globale eksklusjon registreres i en egen instans av arketypen, for eksempel en egen instans for utelukkelse av legemidler og en annen for overfølsomhetsreaksjoner.
+
+Elementet \"Overordnet utsagn\" brukes til å registrere et enkelt globalt eksklusjonsutsagn. De forskjellige typene utsagn som er listet opp i elementets runtime name constraint navngir de forskjellige globale eksklusjonene. En runtime name constraint kan brukes enten under templatmodellering eller i en applikasjon.
+
+Merk at eksklusjonsutsagn kun kan regnes som aktuelle og pålitelige på det tidspunktet de registreres. Et journalnotat kan gjerne uttrykke at et individ har ingen problemer eller diagnoser i sin historikk (ved hjelp av et eksklusjonsutsagn) i den samme konsultasjonen der det for første gang registreres et problem eller en diagnose (ved hjelp av arketypen EVALUATION.problem_diagnosis). I senere journalnotater kan individet ha det aktuelle problemet eller diagnosen som del av sin kjente historikk.">
+			keywords = <"eksklusjon, negasjon, utelukkelse, fravær", ...>
+			misuse = <"Brukes ikke for å registrere eksklusjon av et spesifikt problem eller diagnose, legemiddel, prosedyre, familiær sykdom, overfølsomhet eller annet klinisk konsept - bruk arketypen EVALUATION.exclusion_specific for dette formålet.
+
+Brukes ikke for å registrere eksklusjon av noen komponent av en fysisk undersøkelse - bruk arketypen CLUSTER.exclusion_exam i en passende OBSERVATION- eller CLUSTER-arketype.
+
+Brukes ikke for å registrere eksklusjon av symptomer - bruk arketypen CLUSTER.exclusion_symptom i en passende OBSERVATION- eller CLUSTER-arketype.
+
+Brukes ikke for å registrere fravær av informasjon - bruk arketypen EVALUATION.absence for dette formålet.">
+		>
+	>
+	other_contributors = <"Tomas Alme, DIPS ASA, Norway", "Vebjørn Arntzen, Oslo universitetssykehus HF, Norway (Nasjonal IKT redaktør)", "Silje Ljosland Bakke, Nasjonal IKT HF, Norway (openEHR Editor)", "Kristian Berg, Universitetssykehuset Nord Norge, Norway", "SumanBhusan Bhattacharyya, Sudisa Consultancy Services, India", "Bjørn Christensen, Helse Bergen HF, Norway", "Lisbeth Dahlhaug, Helse Midt - Norge IT, Norway", "Heather Grain, Llewelyn Grain Informatics, Australia", "Annette Hole Sjøborg, DIPS ASA, Norway", "Hilde Hollås, DIPS ASA, Norway", "Evelyn Hovenga, EJSH Consulting, Australia", "Tom Jarl Jakobsen, Helse Bergen, Norway", "Hanne Joensen, Helse- bergen HUS, Norway", "Lars Morgan Karlsen, DIPS ASA, Norway", "Heather Leslie, Ocean Health Systems, Australia (openEHR Editor)", "Hallvard Lærum, Direktoratet for e-helse, Norway", "Ian McNicoll, freshEHR Clinical Informatics, United Kingdom (openEHR Editor)", "Bjørn Næss, DIPS ASA, Norway", "Andrej Orel, Marand d.o.o., Slovenia", "Arild Stangeland, Helse Bergen, Norway", "Norwegian Review Summary, Nasjonal IKT HF, Norway", "Nyree Taylor, Ocean Informatics, Australia", "Pål Thorberg, DIPS ASA, Norway", "Lene Thoresen, St. Olavs Hospital, Norway", "John Tore Valand, Haukeland Universitetssjukehus, Norway (Nasjonal IKT redaktør)">
+	references = <
+		["1"] = <"Derived from: Eksklusjonsutsagn - overordnet, Draft archetype [Internet]. Nasjonal IKT, Nasjonal IKT Clinical Knowledge Manager [cited: 2017-03-17]. Available from: http://arketyper.no/ckm/#showArchetype_1078.36.1650">
+		["2"] = <"Exclusion statement, Deprecated Archetype [Internet]. openEHR Foundation, openEHR Clinical Knowledge Manager [cited: 2017-02-17]. Available from: http://openehr.org/ckm/#showArchetype_1013.1.617">
+	>
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"73B0159032E4B95760FF05E869D505F9">
+		["build_uid"] = <"f7fc2dd5-b349-48ee-842d-ef616f1c5579">
+	>
+
+definition
+	EVALUATION[id1] matches {	-- Exclusion - global
+		data matches {
+			ITEM_TREE[id2] matches {
+				items cardinality matches {1..*; unordered} matches {
+					ELEMENT[id3] matches {	-- Global exclusion statement
+						name matches {
+							DV_CODED_TEXT[id13] matches {
+								defining_code matches {[ac1]}		-- Global exclusion statement (synthesised)
+							}
+						}
+						value matches {
+							DV_TEXT[id14] 
+						}
+					}
+					ELEMENT[id12] occurrences matches {0..1} matches {	-- Comment
+						value matches {
+							DV_TEXT[id15] 
+						}
+					}
+				}
+			}
+		}
+		protocol matches {
+			ITEM_TREE[id9] matches {
+				items matches {
+					allow_archetype CLUSTER[id11] matches {	-- Extension
+						include
+							archetype_id/value matches {/.*/}
+					}
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Exclusion - global">
+				description = <"An overall statement of exclusion about all Problems/diagnoses, Family history, Medications, Procedures, Adverse reactions or other clinical items that are either not currently present, or have not been present in the past.">
+			>
+			["id3"] = <
+				text = <"Global exclusion statement">
+				description = <"An overall statement of exclusion about all Problems/diagnoses, Family history, Medications, Procedures, Adverse reactions or other clinical items.">
+			>
+			["at4"] = <
+				text = <"Global exclusion of problems/diagnoses">
+				description = <"Overall statement of exclusion of all problems or diagnoses at the time of recording.">
+			>
+			["at5"] = <
+				text = <"Global exclusion of family history">
+				description = <"Overall statement of exclusion of all significant health-related problems in relatives or family members of the individual at the time of recording.">
+			>
+			["at6"] = <
+				text = <"Global exclusion of medication use">
+				description = <"Overall statement of exclusion about the use of all medications at the time of recording.">
+			>
+			["at7"] = <
+				text = <"Global exclusion of procedures">
+				description = <"Overall statement of exclusion about all procedures at the time of recording.">
+			>
+			["at8"] = <
+				text = <"Global exclusion of adverse reactions">
+				description = <"Overall statement of exclusion about all adverse reactions at the time of recording.">
+			>
+			["id11"] = <
+				text = <"Extension">
+				description = <"Additional information required to capture local content or to align with other reference models/formalisms.">
+			>
+			["id12"] = <
+				text = <"Comment">
+				description = <"Additional comment not covered in other fields.">
+			>
+			["ac1"] = <
+				text = <"Global exclusion statement (synthesised)">
+				description = <"An overall statement of exclusion about all Problems/diagnoses, Family history, Medications, Procedures, Adverse reactions or other clinical items. (synthesised)">
+			>
+		>
+		["nb"] = <
+			["id1"] = <
+				text = <"Eksklusjonsutsagn - overordnet">
+				description = <"Et overordnet eksklusjonsutsagn om alle problemer/diagnoser, familiære sykdommer, legemidler, prosedyrer, overfølsomheter eller andre kliniske konsepter som ikke er tilstede hos et individ, enten i nåtid eller fortid.">
+			>
+			["id3"] = <
+				text = <"Overordnet eksklusjonsutsagn">
+				description = <"Et overordnet eksklusjonsutsagn om alle problemer/diagnoser, familiære sykdommer, legemidler, prosedyrer, overfølsomheter eller andre kliniske konsepter.">
+			>
+			["at4"] = <
+				text = <"Overordnet eksklusjon av problemer/diagnoser">
+				description = <"Overordnet eksklusjonsutsagn om alle problemer eller diagnoser ved registreringstidspunktet.">
+			>
+			["at5"] = <
+				text = <"Overordnet eksklusjon av familiære sykdommer">
+				description = <"Overordnet eksklusjonsutsagn om alle betydningsfulle helserelaterte problemer hos familiemedlemmer eller slektninger av individet ved registreringstidspunktet.">
+			>
+			["at6"] = <
+				text = <"Overordnet eksklusjon av legemiddelbruk">
+				description = <"Overordnet eksklusjonsutsagn om all bruk av legemidler ved registreringstidspunktet.">
+			>
+			["at7"] = <
+				text = <"Overordnet eksklusjon av prosedyrer">
+				description = <"Overordnet eksklusjonsutsagn om alle prosedyrer ved registreringstidspunktet.">
+			>
+			["at8"] = <
+				text = <"Overordnet eksklusjon av overfølsomhetsreaksjoner">
+				description = <"Overordnet eksklusjonsutsagn om alle overfølsomhetsreaksjoner ved registreringstidspunktet.">
+			>
+			["id11"] = <
+				text = <"Tilleggsinformasjon">
+				description = <"Ytterligere informasjon som trengs for å kunne registrere lokalt definert innhold eller for å tilpasse til andre referansemodeller/formalismer.">
+			>
+			["id12"] = <
+				text = <"Kommentar">
+				description = <"Ytterligere kommentar som ikke dekkes av andre felt.">
+			>
+			["ac1"] = <
+				text = <"Overordnet eksklusjonsutsagn (synthesised)">
+				description = <"Et overordnet eksklusjonsutsagn om alle problemer/diagnoser, familiære sykdommer, legemidler, prosedyrer, overfølsomheter eller andre kliniske konsepter. (synthesised)">
+			>
+		>
+	>
+	value_sets = <
+		["ac1"] = <
+			id = <"ac1">
+			members = <"at4", "at5", "at6", "at7", "at8">
+		>
+	>

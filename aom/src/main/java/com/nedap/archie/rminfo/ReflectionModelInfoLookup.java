@@ -15,6 +15,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Utility that defines the java mapping of type and attribute names of a given reference model.
@@ -39,6 +40,7 @@ public abstract class ReflectionModelInfoLookup implements ModelInfoLookup {
     private Map<Class, RMTypeInfo> classesToRmTypeInfo = new HashMap<>();
 
     private boolean inConstructor = true;
+    private boolean addAttributesWithoutField = true;
 
     /**
      * All methods that cannot be called by using reflection. For example getClass();
@@ -49,7 +51,7 @@ public abstract class ReflectionModelInfoLookup implements ModelInfoLookup {
     );
 
     public ReflectionModelInfoLookup(ModelNamingStrategy namingStrategy, Class baseClass) {
-        this(namingStrategy, baseClass, ReflectionModelInfoLookup.class.getClassLoader());
+        this(namingStrategy, baseClass, ReflectionModelInfoLookup.class.getClassLoader(), true);
     }
 
     public ReflectionModelInfoLookup(ModelNamingStrategy namingStrategy, String packageName, ClassLoader classLoader) {
@@ -60,7 +62,6 @@ public abstract class ReflectionModelInfoLookup implements ModelInfoLookup {
         Reflections reflections = new Reflections(packageName, new SubTypesScanner(false));
         Set<String> typeNames = reflections.getAllTypes();
 
-        System.out.println("type names size: " + typeNames.size());
         typeNames.forEach(typeName -> {
             try {
                 addClass(classLoader.loadClass(typeName));
@@ -72,8 +73,9 @@ public abstract class ReflectionModelInfoLookup implements ModelInfoLookup {
         inConstructor = false;
     }
 
-    public ReflectionModelInfoLookup(ModelNamingStrategy namingStrategy, Class baseClass, ClassLoader classLoader) {
+    public ReflectionModelInfoLookup(ModelNamingStrategy namingStrategy, Class baseClass, ClassLoader classLoader, boolean addAttributesWithoutField) {
         this.namingStrategy = namingStrategy;
+        this.addAttributesWithoutField = addAttributesWithoutField;
 
         this.classLoader = classLoader;
         addSubtypesOf(baseClass);
@@ -111,7 +113,6 @@ public abstract class ReflectionModelInfoLookup implements ModelInfoLookup {
         Reflections reflections = new Reflections(ClasspathHelper.forClass(baseClass), new SubTypesScanner(false));
         Set<Class<?>> classes = reflections.getSubTypesOf(baseClass);
 
-        System.out.println("type names size: " + classes.size());
         classes.forEach(this::addClass);
         addClass(baseClass);
     }
@@ -134,10 +135,67 @@ public abstract class ReflectionModelInfoLookup implements ModelInfoLookup {
         //TODO: it's possible to constrain some method as well. should we do that here too?
         TypeToken typeToken = TypeToken.of(clazz);
 
-        for(Field field: ReflectionUtils.getAllFields(clazz)) {
+        Set<Field> allFields = ReflectionUtils.getAllFields(clazz);
+        Map<String, Field> fieldsByName = allFields.stream()
+                .filter( field -> !field.getName().startsWith("$")) //jacoco adds $ fields.. annoying :)
+                .collect(Collectors.toMap((field) -> field.getName(), (field) -> field,
+                        (duplicate1, duplicate2) -> duplicate1));
+        for(Field field: fieldsByName.values()) {
             addRMAttributeInfo(clazz, typeInfo, typeToken, field);
         }
+        if(addAttributesWithoutField) {
+            Set<Method> getters = ReflectionUtils.getAllMethods(clazz, (method) -> method.getName().startsWith("get") || method.getName().startsWith("is"));
+            for (Method method : getters) {
+                addRMAttributeInfo(clazz, typeInfo, typeToken, method, fieldsByName);
+            }
+        }
     }
+
+    private void addRMAttributeInfo(Class clazz, RMTypeInfo typeInfo, TypeToken typeToken, Method getMethod, Map<String, Field> fieldsByName) {
+        String attributeName = namingStrategy.getAttributeName(getMethod);
+        String javaFieldName = null;
+        if(getMethod.getName().startsWith("is")) {
+            javaFieldName = lowerCaseFirstChar(getMethod.getName().substring(2));
+        } else {
+            javaFieldName = lowerCaseFirstChar(getMethod.getName().substring(3));
+        }
+        Field field = fieldsByName.get(javaFieldName);
+        String javaFieldNameUpperCased = upperCaseFirstChar(javaFieldName);
+        Method setMethod = null, addMethod = null;
+
+        if (getMethod == null) {
+            getMethod = getMethod(clazz, "is" + javaFieldNameUpperCased);
+        }
+        if (getMethod != null) {
+            setMethod = getMethod(clazz, "set" + javaFieldNameUpperCased, getMethod.getReturnType());
+            addMethod = getAddMethod(clazz, typeToken, attributeName, javaFieldNameUpperCased, getMethod);
+        } else {
+            logger.warn("No get method found for attribute {} on class {}", attributeName, clazz.getSimpleName());
+        }
+
+        TypeToken fieldType = typeToken.resolveType(getMethod.getGenericReturnType());;
+
+        Class rawFieldType = fieldType.getRawType();
+        Class typeInCollection = getTypeInCollection(fieldType);
+       // if (setMethod != null) {
+            RMAttributeInfo attributeInfo = new RMAttributeInfo(
+                    attributeName,
+                    field,
+                    rawFieldType,
+                    typeInCollection,
+                    getMethod.getAnnotation(Nullable.class) != null,
+                    getMethod,
+                    setMethod,
+                    addMethod
+            );
+            if(typeInfo.getAttribute(attributeName) == null) {
+                typeInfo.addAttribute(attributeInfo);
+            }
+        //} else {
+        //    logger.info("property without a set method ignored for field {} on class {}", attributeName, clazz.getSimpleName());
+       // }
+    }
+
 
     private void addRMAttributeInfo(Class clazz, RMTypeInfo typeInfo, TypeToken typeToken, Field field) {
         String attributeName = namingStrategy.getAttributeName(field);
@@ -150,7 +208,7 @@ public abstract class ReflectionModelInfoLookup implements ModelInfoLookup {
         }
         if (getMethod != null) {
             setMethod = getMethod(clazz, "set" + javaFieldNameUpperCased, getMethod.getReturnType());
-            addMethod = getAddMethod(clazz, typeToken, field, javaFieldNameUpperCased, getMethod);
+            addMethod = getAddMethod(clazz, typeToken, attributeName, javaFieldNameUpperCased, getMethod);
         } else {
             logger.warn("No get method found for field {} on class {}", field.getName(), clazz.getSimpleName());
         }
@@ -200,7 +258,7 @@ public abstract class ReflectionModelInfoLookup implements ModelInfoLookup {
         return rawFieldType;
     }
 
-    private Method getAddMethod(Class clazz, TypeToken typeToken, Field field, String javaFieldNameUpperCased, Method getMethod) {
+    private Method getAddMethod(Class clazz, TypeToken typeToken, String name, String javaFieldNameUpperCased, Method getMethod) {
         Method addMethod = null;
         if (Collection.class.isAssignableFrom(getMethod.getReturnType())) {
             Type[] typeArguments = ((ParameterizedType) getMethod.getGenericReturnType()).getActualTypeArguments();
@@ -215,7 +273,7 @@ public abstract class ReflectionModelInfoLookup implements ModelInfoLookup {
                     if (allAddMethods.size() == 1) {
                         addMethod = allAddMethods.iterator().next();
                     } else {
-                        logger.warn("strange number of add methods for field {} on class {}", field.getName(), clazz.getSimpleName());
+                        logger.warn("strange number of add methods for field {} on class {}", name, clazz.getSimpleName());
                     }
                 }
             }
@@ -245,9 +303,16 @@ public abstract class ReflectionModelInfoLookup implements ModelInfoLookup {
             ).toString();
     }
 
+    private String lowerCaseFirstChar(String name) {
+        return new StringBuilder(name).replace(0,1,
+                Character.toString(Character.toLowerCase(name.charAt(0)))
+        ).toString();
+    }
+
     @Override
-    public Class getClass(String rmTypename) {
-        RMTypeInfo rmTypeInfo = rmTypeNamesToRmTypeInfo.get(rmTypename);
+    public Class getClass(String rmTypeName) {
+        String strippedRmTypeName = getTypeWithoutGenericType(rmTypeName);
+        RMTypeInfo rmTypeInfo = rmTypeNamesToRmTypeInfo.get(strippedRmTypeName);
         return rmTypeInfo == null ? null : rmTypeInfo.getJavaClass();
     }
 
@@ -279,7 +344,16 @@ public abstract class ReflectionModelInfoLookup implements ModelInfoLookup {
 
     @Override
     public RMTypeInfo getTypeInfo(String rmTypeName) {
-        return this.rmTypeNamesToRmTypeInfo.get(rmTypeName);
+        String strippedRmTypeName = getTypeWithoutGenericType(rmTypeName);
+        return this.rmTypeNamesToRmTypeInfo.get(strippedRmTypeName);
+    }
+
+    private String getTypeWithoutGenericType(String rmTypeName) {
+        if(rmTypeName.indexOf('<') > 0) {
+            //strip generic types, cannot handle them yet
+            rmTypeName = rmTypeName.substring(0, rmTypeName.indexOf('<'));
+        }
+        return rmTypeName;
     }
 
     @Override
@@ -290,7 +364,8 @@ public abstract class ReflectionModelInfoLookup implements ModelInfoLookup {
 
     @Override
     public RMAttributeInfo getAttributeInfo(String rmTypeName, String attributeName) {
-        RMTypeInfo typeInfo = this.rmTypeNamesToRmTypeInfo.get(rmTypeName);
+        String strippedRmTypeName = getTypeWithoutGenericType(rmTypeName);
+        RMTypeInfo typeInfo = this.rmTypeNamesToRmTypeInfo.get(strippedRmTypeName);
         return typeInfo == null ? null : typeInfo.getAttribute(attributeName);
     }
 

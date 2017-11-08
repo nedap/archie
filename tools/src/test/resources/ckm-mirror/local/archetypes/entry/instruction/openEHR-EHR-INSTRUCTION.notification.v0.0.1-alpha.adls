@@ -1,0 +1,89 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated; uid=eb63e73b-155b-4d04-a974-6c1869c22a7e)
+	openEHR-EHR-INSTRUCTION.notification.v0.0.1-alpha
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Heather Leslie">
+		["organisation"] = <"Ocean Informatics">
+		["email"] = <"heather.leslie@oceaninformatics.com">
+		["date"] = <"2016-05-04">
+	>
+	original_namespace = <"org.openehr">
+	original_publisher = <"openEHR Foundation">
+	custodian_namespace = <"org.openehr">
+	custodian_organisation = <"openEHR Foundation">
+	copyright = <"© openEHR Foundation">
+	licence = <"This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 License. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/.">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To enable clinical systems to generate a notice or announcement containing non-clinical information, which will be triggered at certain time/s or by occurrence of an event.">
+			use = <"Use to enable clinical systems to generate a notice or announcement containing non-clinical information, which will be triggered at certain time/s or by occurrence of an event.">
+			keywords = <"notice", "announcement">
+			misuse = <"Not to be used to provide clinical safety alerts or warnings. Use other, more specific archetypes for this purpose, such as EVALUATION.adverse_reaction_risk or EVALUATION.contraindication.">
+		>
+	>
+	other_contributors = <"Heath Frankel, Ocean Informatics, Australia", ...>
+	other_details = <
+		["current_contact"] = <"Heather Leslie, Ocean Informatics<heather.leslie@oceaninformatics.com>">
+		["MD5-CAM-1.0.1"] = <"E6D74E5744C64C64A83F35F401CD4440">
+		["build_uid"] = <"00ceae4c-ee24-43b7-aa29-b0c4bf3fead7">
+	>
+
+definition
+	INSTRUCTION[id1] matches {	-- Notification
+		activities matches {
+			ACTIVITY[id2] occurrences matches {0..1} matches {	-- Current Activity
+				description matches {
+					ITEM_TREE[id3] matches {
+						items matches {
+							ELEMENT[id4] occurrences matches {0..1} matches {	-- Topic name
+								value matches {
+									DV_TEXT[id7] 
+								}
+							}
+							allow_archetype CLUSTER[id6] matches {	-- Timing
+								include
+									archetype_id/value matches {/openEHR-EHR-CLUSTER\.timing_repetition(-[a-zA-Z0-9_]+)*\.v0|openEHR-EHR-CLUSTER\.daily_timing(-[a-zA-Z0-9_]+)*\.v0/}
+							}
+							ELEMENT[id5] occurrences matches {0..1} matches {	-- Description
+								value matches {
+									DV_TEXT[id8] 
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Notification">
+				description = <"Order for generation of a notice or announcement containing non-clinical information, which will be triggered at certain time/s or by occurrence of an event.">
+			>
+			["id2"] = <
+				text = <"Current Activity">
+				description = <"Current Activity">
+			>
+			["id4"] = <
+				text = <"Topic name">
+				description = <"Identification of the topic of the notification, by name.">
+			>
+			["id5"] = <
+				text = <"Description">
+				description = <"Narrative description or note about the notification.">
+			>
+			["id6"] = <
+				text = <"Timing">
+				description = <"Structured details to describe the timing of a single instance of notification or a repetitive pattern of notifications.">
+			>
+		>
+	>

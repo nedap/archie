@@ -1,0 +1,183 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated)
+	openEHR-EHR-CLUSTER.hip_arthroplasty_component.v1.0.0
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Ian McNicoll">
+		["organisation"] = <"Ocean Informatics UK">
+		["email"] = <"ian.mcnicoll@oceaninformatics.com">
+		["date"] = <"2014-03-27">
+	>
+	copyright = <"© openEHR Foundation">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record additional details of a hip arthropasty component.">
+			use = <"">
+			misuse = <"">
+		>
+	>
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"04DA7D9A3F87A76703D62E160A2BD940">
+	>
+
+definition
+	CLUSTER[id1] matches {	-- Hip arthroplasty component
+		items matches {
+			ELEMENT[id9] matches {	-- Material
+				value matches {
+					DV_TEXT[id18] 
+				}
+			}
+			ELEMENT[id10] occurrences matches {0..1} matches {	-- Size
+				value matches {
+					DV_QUANTITY[id19] matches {
+						property matches {[at17]}
+						magnitude matches {|0.0..20.0|}
+						precision matches {1}
+						units matches {"mm"}
+					}
+				}
+			}
+			ELEMENT[id3] occurrences matches {0..1} matches {	-- Cement name
+				value matches {
+					DV_TEXT[id20] 
+				}
+			}
+			ELEMENT[id6] occurrences matches {0..1} matches {	-- HA-Coating
+				value matches {
+					DV_TEXT[id21] 
+				}
+			}
+			ELEMENT[id7] occurrences matches {0..1} matches {	-- Depth of cement
+				value matches {
+					DV_QUANTITY[id22] matches {
+						property matches {[at17]}
+						magnitude matches {|>=0.0|}
+						units matches {"mm"}
+					}
+				}
+			}
+			ELEMENT[id13] occurrences matches {0..1} matches {	-- Fixation type
+				value matches {
+					DV_CODED_TEXT[id23] matches {
+						defining_code matches {[ac1]}		-- Fixation type (synthesised)
+					}
+				}
+			}
+			ELEMENT[id14] occurrences matches {0..1} matches {	-- Fixation sub-type
+				value matches {
+					DV_TEXT[id24] 
+				}
+			}
+			ELEMENT[id17] occurrences matches {0..1} matches {	-- Tesla level
+				value matches {
+					DV_COUNT[id25] matches {
+						magnitude matches {|0..5|}
+					}
+				}
+			}
+			ELEMENT[id11] matches {	-- Potential safety issue
+				value matches {
+					DV_TEXT[id26] 
+				}
+			}
+			ELEMENT[id12] occurrences matches {0..1} matches {	-- Manufacturer safety information
+				value matches {
+					DV_URI[id27] 
+				}
+			}
+			ELEMENT[id8] occurrences matches {0..1} matches {	-- Antibacterial in cement?
+				value matches {
+					DV_BOOLEAN[id28] matches {
+						value matches {True, False}
+					}
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Hip arthroplasty component">
+				description = <"Additional details of hip arthropasty component.">
+			>
+			["id3"] = <
+				text = <"Cement name">
+				description = <"The name of the cement used.">
+			>
+			["id6"] = <
+				text = <"HA-Coating">
+				description = <"The name of the coating used.">
+			>
+			["id7"] = <
+				text = <"Depth of cement">
+				description = <"The depth of cement applied.">
+			>
+			["id8"] = <
+				text = <"Antibacterial in cement?">
+				description = <"True if antibiotics/antibacterials were added to the cement.">
+			>
+			["id9"] = <
+				text = <"Material">
+				description = <"The material  used in the manufacture of the arthroplasty component.">
+			>
+			["id10"] = <
+				text = <"Size">
+				description = <"The size of the component.">
+			>
+			["id11"] = <
+				text = <"Potential safety issue">
+				description = <"Issues identified or excluded that may have a safety impact e.g MRI risk.">
+			>
+			["id12"] = <
+				text = <"Manufacturer safety information">
+				description = <"Link to manufacturer safety information.">
+			>
+			["id13"] = <
+				text = <"Fixation type">
+				description = <"The type of fixation used.">
+			>
+			["id14"] = <
+				text = <"Fixation sub-type">
+				description = <"The fixation sub-type.">
+			>
+			["at15"] = <
+				text = <"Cemented">
+				description = <"Cemented.">
+			>
+			["at16"] = <
+				text = <"Non-cemented">
+				description = <"Non-cemented.">
+			>
+			["id17"] = <
+				text = <"Tesla level">
+				description = <"The tested MRI Tesla safety level.">
+			>
+			["at17"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["ac1"] = <
+				text = <"Fixation type (synthesised)">
+				description = <"The type of fixation used. (synthesised)">
+			>
+		>
+	>
+	term_bindings = <
+		["openehr"] = <
+			["at17"] = <http://openehr.org/id/122>
+		>
+	>
+	value_sets = <
+		["ac1"] = <
+			id = <"ac1">
+			members = <"at15", "at16">
+		>
+	>

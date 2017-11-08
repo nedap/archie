@@ -1,0 +1,289 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated; uid=f75928ec-b84b-4063-9f21-dc65d620ac0e)
+	openEHR-EHR-CLUSTER.inspired_oxygen.v0.0.1-alpha
+
+language
+	original_language = <[ISO_639-1::en]>
+	translations = <
+		["de"] = <
+			language = <[ISO_639-1::de]>
+			author = <
+				["name"] = <"Jasmin Buck, Sebastian Garde">
+				["organisation"] = <"University of Heidelberg, Central Queensland University">
+			>
+		>
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			author = <
+				["name"] = <"Lars Bitsch-Larsen, Vebjørn Arntzen">
+				["organisation"] = <"Haukeland University Hospital of Bergen / Oslo University Hospital, Norway">
+			>
+		>
+		["es-ar"] = <
+			language = <[ISO_639-1::es-ar]>
+			author = <
+				["name"] = <"Dr. Leonardo Der Jachadurian">
+				["organisation"] = <"Bitios.com">
+			>
+			accreditation = <"Medical Doctor (Internal Medicine Specialist)">
+		>
+	>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Ian McNicoll">
+		["organisation"] = <"Ocean Informatics">
+		["email"] = <"ian.mcnicoll@oceaninformatics.com">
+		["date"] = <"2009-06-08">
+	>
+	original_namespace = <"org.openehr">
+	original_publisher = <"openEHR Foundation">
+	custodian_namespace = <"org.openehr">
+	custodian_organisation = <"openEHR Foundation">
+	copyright = <"© openEHR Foundation">
+	licence = <"This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 License. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/.">
+	details = <
+		["es-ar"] = <
+			language = <[ISO_639-1::es-ar]>
+			purpose = <"Para registrar la cantidad de oxígeno administrada al sujeto en el momento de la observación. Se asumen valores de 21% de O2, FiO2 de 0,21 y velocidad de flujo de oxígeno de cero.">
+			use = <"Puede ser usado dentro de un arquetipo ACTION para especificar oxígenoterapia o dentro de arquetipos OBSERVATION tales como Gases arteriales o Respiraciones, como parte del estado del paciente, donde el conocimiento de la concentración de oxígeno ambiental es crítica para la interpretación de la observación.">
+			keywords = <"respirando", "oxígeno", "ambiental", "FiO2">
+			misuse = <"">
+		>
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record the amount of oxygen available in the air the subject inspires at the time of observation, or the amount of oxygen that is to be delivered, if part of an order.
+">
+			use = <"Use within an INSTRUCTION archetype to specify an order of oxygen, in an ACTION archetype to record performed oxygen therapy, or within OBSERVATION archetypes such as Blood gases or Respirations, as part of patient state, where knowledge of ambient oxygen status is critical to interpretation of the observation.
+
+Also use in calculation of FiO2/paO2 ratio, in addition to other algorithms in intensive care medicine, for example oxygen extraction ratio, etc.
+
+Atmospheric pressure is assumed to equivalent to sea-level pressure, unless otherwise specified.
+
+Where not specifically recorded values of 21% O2, FiO2 of 0.21 and oxygen flow rate of zero may be assumed.
+
+'Inspired oxygen' implies the amount of oxygen that was ordered or actioned, and normally reported in clinical records e.g.' the patient is on 30% Oxygen' and is not intended to capture the actual 'physiological' amount of oxygen that the patient receives, which will vary depending on the delivery method and other external conditions, such as whether the individual is breathing shallowly or is frequently removing the nasal prongs.">
+			keywords = <"breathing", "oxygen", "air", "respiration", "flow rate", "therapy", "O2">
+			misuse = <"Do not use for other inhaled gases such as nitrous oxide.">
+		>
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			purpose = <"For registrering av andel oksygen tilgjengelig i den luften pasienten innånder på observasjonstidspunktet, eller mengden oksygen som skal gis dersom registreringen er del av en forordning.">
+			use = <"Brukes i en INSTRUCTION-arketype for å spesifisere en oksygenforordning, i en ACTION-arketype for å dokumentere oksygenterapi utført, eller i en OBSERVATION-arketype, som for eksempel \"Oksimetri\" eller \"Åndedrett\" som en del av pasientstatus, hvor kunnskap om eventuell oksygentilførsel er kritisk for tolking av observasjonen. Brukes også i beregning av FiO2/paO2-ratio, samt andre avanserte algoritmer i intensivmedisin så som oksygenekstraksjonsratio etc. 
+
+Atmosfærisk trykk er antatt å være tilsvarende som ved havoverflaten, dersom det ikke er nærmere angitt.
+
+Hvis det ikke er angitt nærmere og ingen ekstra oksygentilførsel er gitt, kan det antas at individet er i omgivelser der det er 21% O2, FiO2 er 0.21.
+
+Selv om konseptnavnet i denne arketypen er \"Innåndet oksygen\" betyr det ikke at individet nødvendigvis puster inn den mengden oksygen/oksygenblanding som er ordinert eller gitt. 
+ For eksempel kan det være rapportert i kliniske journaler at \"pasienten får 3 liter O2 på nesekateter\". Den faktisk innpustede oksygenblandingen vil variere med administrasjonsmåte eller andre utenomforliggende faktorer, for eksempel om individet puster overfladisk eller til stadighet fjerner nesekateter.">
+			keywords = <"pusting", "respirasjon", "luft", "oksygen", "O2", "innpust", "inspirasjon", "FiO2", "oksygentilførsel", "ånding">
+			misuse = <"Skal ikke brukes for andre innpustede gasser, som for eksempel nitrogenoksid.">
+		>
+	>
+	other_contributors = <"Nadim Anani, Karolinska Institutet, Sweden", "Vebjørn Arntzen, Oslo University Hospital, Norway", "Koray Atalag, University of Auckland, New Zealand", "Silje Ljosland Bakke, Nasjonal IKT HF, Norway (openEHR Editor)", "Marcus Baw, openGPSoC / BawMedical Ltd, United Kingdom", "SBhusan Bhattacharyya, Sudisa Consultancy Services, India", "Lars Bitsch-Larsen, Haukeland University hospital, Norway", "Marja Buur, Medisch Centrum Alkmaar, Netherlands", "Gregory Caulton PatientOS Inc., USA", "Einar Fosse, National Centre for Integrated Care and Telemedicine, Norway", "Sebastian Garde, Ocean Informatics, Germany", "Heather Grain, Llewelyn Grain Informatics, Australia", "Anne Harbison, CPCER, Australia", "Sam Heard, Ocean Informatics, Australia", "Omer Hotomargolu,, Turkey", "Evelyn Hovenga, EJSH Consulting, Australia", "Sundarasan Jaganathan NHS Scotland, United Kingdom", "Andrew James, University of Toronto, Canada", "Lars Karlsen, DIPS ASA, Norway", "Lars Morgan Karlsen, DIPS ASA, Norway", "Shinji Kobayashi, Kyoto University, Japan", "Heather Leslie, Ocean Informatics, Australia (openEHR Editor)", "Ian McNicoll, freshEHR Clinical Informatics, United Kingdom (openEHR Editor)", "Bjoern Naess, DIPS ASA, Norway", "Andrej Orel, Marand d.o.o., Slovenia", "Rafa Sotoca, Spanish Ministry of Health, Spain", "Rowan Thomas, St. Vincent's Hospital Melbourne, Australia", "Marc Twagirumukiza, Agfa HealthCare, Belgium">
+	references = <
+		["1"] = <"Oxygen therapy. In: Wikipedia, the free encyclopedia [Internet]. 2015 [cited 2015 Dec 4]. Available from: https://en.wikipedia.org/w/index.php?title=Oxygen_therapy&oldid=689103828">
+	>
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"68BF737A42BC2117A265739978FC6F8E">
+		["build_uid"] = <"a5c21f1b-55bd-496f-aa43-1a6f90c97db9">
+	>
+
+definition
+	CLUSTER[id1] matches {	-- Inspired oxygen
+		items matches {
+			ELEMENT[id52] occurrences matches {0..1} matches {	-- Flow rate
+				value matches {
+					DV_QUANTITY[id60] matches {
+						property matches {[at1]}
+						[magnitude, units, precision] matches {
+							[{|0.0..50000.0|}, {"ml/min"}, {2}],
+							[{|0.0..50.0|}, {"l/min"}, {2}]
+						}
+					}
+				}
+			}
+			ELEMENT[id53] occurrences matches {0..1} matches {	-- FiO2
+				value matches {
+					DV_PROPORTION[id61] matches {
+						numerator matches {|0.0..1.0|}
+						is_integral matches {False}
+						type matches {1}
+					}
+				}
+			}
+			ELEMENT[id54] occurrences matches {0..1} matches {	-- Percent O2
+				value matches {
+					DV_PROPORTION[id62] matches {
+						numerator matches {|0.0..100.0|}
+						is_integral matches {False}
+						type matches {2}
+					}
+				}
+			}
+			ELEMENT[id58] occurrences matches {0..1} matches {	-- On air
+				value matches {
+					DV_BOOLEAN[id63] matches {
+						value matches {True, False}
+					}
+				}
+			}
+			ELEMENT[id55] matches {	-- Method of oxygen delivery
+				value matches {
+					DV_TEXT[id64] 
+				}
+			}
+			allow_archetype CLUSTER[id59] matches {	-- Oxygen delivery detail
+				include
+					archetype_id/value matches {/.*/}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["de"] = <
+			["id1"] = <
+				text = <"*Inspired oxygen(en)">
+				description = <"*The amount of oxygen being delivered, or to be delivered, to the patient.(en)">
+			>
+			["id52"] = <
+				text = <"*Oxygen flow rate(en)">
+				description = <"*Flow rate of inspired oxygen.(en)">
+			>
+			["id53"] = <
+				text = <"*FiO2(en)">
+				description = <"*Fraction of inspired oxygen.(en)">
+			>
+			["id54"] = <
+				text = <"*Percent O2(en)">
+				description = <"*Percentage of inspired oxygen.(en)">
+			>
+			["id55"] = <
+				text = <"*Method of oxygen delivery(en)">
+				description = <"*The method used to delivery the oxygen.(en)">
+			>
+			["id58"] = <
+				text = <"*On air(en)">
+				description = <"*The patient is receiving air, equivalent to 21% O2, 0.21 FiO2 and an oxygen flow rate  of 0.(en)">
+			>
+			["id59"] = <
+				text = <"*Oxygen delivery detail(en)">
+				description = <"*Further details of the method of oxygen delivery.(en)">
+			>
+			["at1"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+		>
+		["es-ar"] = <
+			["id1"] = <
+				text = <"*Inspired oxygen(en)">
+				description = <"*The amount of oxygen being delivered, or to be delivered, to the patient.(en)">
+			>
+			["id52"] = <
+				text = <"*Oxygen flow rate(en)">
+				description = <"*Flow rate of inspired oxygen.(en)">
+			>
+			["id53"] = <
+				text = <"*FiO2(en)">
+				description = <"*Fraction of inspired oxygen.(en)">
+			>
+			["id54"] = <
+				text = <"*Percent O2(en)">
+				description = <"*Percentage of inspired oxygen.(en)">
+			>
+			["id55"] = <
+				text = <"*Method of oxygen delivery(en)">
+				description = <"*The method used to delivery the oxygen.(en)">
+			>
+			["id58"] = <
+				text = <"*On air(en)">
+				description = <"*The patient is receiving air, equivalent to 21% O2, 0.21 FiO2 and an oxygen flow rate  of 0.(en)">
+			>
+			["id59"] = <
+				text = <"*Oxygen delivery detail(en)">
+				description = <"*Further details of the method of oxygen delivery.(en)">
+			>
+			["at1"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+		>
+		["en"] = <
+			["id1"] = <
+				text = <"Inspired oxygen">
+				description = <"The amount of oxygen being delivered, or to be delivered, to the patient given as a fraction, percentage or indirectly as a flow rate.">
+			>
+			["id52"] = <
+				text = <"Flow rate">
+				description = <"Oxygen flow rate given to an individual.
+">
+			>
+			["id53"] = <
+				text = <"FiO2">
+				description = <"Fraction of oxygen in inspired air.">
+			>
+			["id54"] = <
+				text = <"Percent O2">
+				description = <"Percentage of oxygen in inspired air.">
+			>
+			["id55"] = <
+				text = <"Method of oxygen delivery">
+				description = <"The method used to deliver the oxygen.">
+			>
+			["id58"] = <
+				text = <"On air">
+				description = <"The patient is receiving air, equivalent to 21% O2 or 0.21 FiO2 and an oxygen flow rate of 0 litres per minute.">
+			>
+			["id59"] = <
+				text = <"Oxygen delivery detail">
+				description = <"Further details of the method of oxygen delivery.">
+			>
+			["at1"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+		>
+		["nb"] = <
+			["id1"] = <
+				text = <"Innåndet oksygen">
+				description = <"Andel administrert eller forordnet oksygen, angitt i fraksjon, prosent eller indirekte som flow.
+">
+			>
+			["id52"] = <
+				text = <"Flow">
+				description = <"Oksygenflow gitt til et individ.">
+			>
+			["id53"] = <
+				text = <"FiO2">
+				description = <"Fraksjonen av oksygen i inspirasjonsluft.">
+			>
+			["id54"] = <
+				text = <"Prosent O2">
+				description = <"Prosent av oksygen i inspirasjonsluft.">
+			>
+			["id55"] = <
+				text = <"Administrasjonsmåte for oksygen">
+				description = <"Administrasjonsmåter for oksygenet.">
+			>
+			["id58"] = <
+				text = <"På romluft">
+				description = <"Individet får luft som tilsvarer 21 % O2 (alternativt 0.21 FiO2) og en oksygenflow på 0 liter per minutt.">
+			>
+			["id59"] = <
+				text = <"Detaljer om administrasjonsmåte">
+				description = <"Ytterligere detaljer om administrasjonsmåter for oksygentilførselen.">
+			>
+			["at1"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+		>
+	>
+	term_bindings = <
+		["openehr"] = <
+			["at1"] = <http://openehr.org/id/126>
+		>
+	>

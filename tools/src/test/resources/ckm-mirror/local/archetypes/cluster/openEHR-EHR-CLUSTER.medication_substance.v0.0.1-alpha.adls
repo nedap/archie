@@ -1,0 +1,587 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated; uid=b99802e4-3553-4a78-b146-7935a444cb70)
+	openEHR-EHR-CLUSTER.medication_substance.v0.0.1-alpha
+
+language
+	original_language = <[ISO_639-1::en]>
+	translations = <
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			author = <
+				["name"] = <"John Tore Valand, Gro Hilde Ulriksen, Line Silsand">
+				["organisation"] = <"Helse Bergen Hospital Trust, Norwegian Centre for E-health Research">
+			>
+		>
+		["pt"] = <
+			language = <[ISO_639-1::pt]>
+			author = <
+				["name"] = <"Beatriz de Faria Leao">
+				["organisation"] = <"Bleao Informática em Saúde">
+				["email"] = <"bfleao@terra.com.br">
+			>
+			accreditation = <"MD, PhD">
+		>
+	>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Sam Heard">
+		["organisation"] = <"NEHTA">
+		["email"] = <"sam.heard@oceaninformatics.com">
+		["date"] = <"2015-10-21">
+	>
+	original_namespace = <"org.openehr">
+	original_publisher = <"openEHR Foundation">
+	custodian_namespace = <"org.openehr">
+	custodian_organisation = <"openEHR Foundation">
+	copyright = <"© openEHR Foundation">
+	licence = <"This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 License. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/.">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record details of a medication preparation, including ,where necessary, details of mutliple ingredients, in the context of an infusion or ad-hoc (extemperaneous) preparation. The majority of dose-based prescriptions will have their precise preparation determined by available ward stock, or by pharmacy supply, while with product-based prescribing, the medication name carries details of the form and strength of the preparation.">
+			use = <"For recording details of a medication preparation with in the context of the original medication order INSTRUCTION and carrying the prescriber's intent, or in the context of a medication ACTION where it serves of a record of the prepartion actually supplied.">
+			keywords = <"medication", "order", "prescribe", "therapy", "substance", "drug", "therapeutic", "otc", "therapeutic good", "ad-hoc", "extemperaneous">
+			misuse = <"Use in pharmacy stock-control is out-of-scope of the design of this archetype.">
+		>
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			purpose = <"For å registrere detaljer om et legemiddel, omhandler også detaljer om flere ingredienser i konteksten av en infusjon eller magistrell tilbereding av legemiddelet der det er nødvendig. De fleste dosebaserte preparater vil bestemmes av tilgjengelig lagervare, eller apotekbeholdning, mens for de fleste preparater som bestilles per produkt vil legemiddelnavnet inneholde detaljer om form og styrke for preparatet.">
+			use = <"Brukes for å registrere detaljer tilberedningen av et legemiddel/preparat en legemiddelordinering (INSTRUCTION.medication) som inneholder forskriverens hensikt med ordineringen, eller i en legemiddelhandling (ACTION.medication) som dokumenterer hvilket preparatet som faktisk ble gitt.">
+			keywords = <"legemiddel", "tilbereding", "ordinering", "forskrive", "terapi", "substans", "medikament", "terapeutisk", "medikamenter solgt over disk", "vare", "ad-hoc", "magistrell", "ex tempore", "improvisert">
+			misuse = <"Brukes ikke for å få oversikt over varelageret på et apotek.">
+		>
+		["pt"] = <
+			language = <[ISO_639-1::pt]>
+			purpose = <"Para registrar detalhes de uma preparação de medicamentos, incluindo, quando necessário, detalhes de múltiplos ingredientes, no contexto de uma infusão ou preparação ad-hoc (manipulada). A maioria das prescrições baseadas em dose terá sua precisa preparação determinada pelo estoque disponível na unidade, ou pelo fornecimento de farmácia, enquanto que, com a prescrição baseada em produtos, o nome da medicação traz detalhes da forma e concentração da preparação.">
+			use = <"Para registrar os detalhes da preparação de um medicamento prescrito na INSTRUCTION de medicamentos, obedecendo a intenção do prescritor, no momento da execução da prescrição registrada pela ACTION de medicamentos, anotando a preparação efetivamente fornecida.">
+			keywords = <"medicação", "ordem", "prescrever", "terapia", "substância", "droga", "terapêutico", "venda livre", "ítem terapêutico", "Ad hoc", "manipulados">
+			misuse = <"Utilização em controle de estoque de farmácias está fora do escopo deste arquétipo.">
+		>
+	>
+	other_contributors = <"Silje Ljosland Bakke, Helse Bergen HF, Norway (Editor)", "John Bennett, NEHTA, Australia", "Sharmila Biswas, Australia", "Stephen Chu, NEHTA, Australia (Editor)", "Matthew Cordell, NEHTA, Australia", "Gail Easterbrook, Flinders Medical Centre, Australia", "David Evans, Queensland Health, Australia", "Sarah Gaunt, NEHTA, Australia", "Trina Gregory, cpc, Australia", "Sam Heard, Ocean Informatics, Australia (Editor)", "Mary Kelaher, NEHTA, Australia", "Robert L'egan, NEHTA, Australia", "Heather Leslie, Ocean Informatics, Australia (Editor)", "Susan McIndoe, Royal District Nursing Service, Australia", "David McKillop, NEHTA, Australia", "Chris Mitchell, RACGP, Australia", "Stewart Morrison, NEHTA, Australia", "Chris Pearce, Melbourne East GP Network, Australia", "Camilla Preeston, Royal Australian College of General Practitioners, Australia", "Margaret Prichard, NEHTA, Australia", "Cathy Richardson, NEHTA, Australia", "Robyn Richards, NEHTA - Clinical Terminology, Australia", "John Taylor, NEHTA, Australia", "Richard Townley-O'Neill, NEHTA, Australia (Editor)", "Kylie Young, The Royal Australian College of General Practitioners, Australia", "Ian McNicoll, freshEHR Clinical Informatics Ltd., UK">
+	references = <
+		["1"] = <"openEHR Foundation Medication archetypes http://www.openehr.org/knowledge">
+		["2"] = <"NEHTA's Therapeutic Good Use Data Group from the NEHTA Website http://www.nehta.gov.au">
+		["3"] = <"Intermountain Healthcare Medication order model, Personal Communication to Sam Heard by Dr Stan Huff.">
+		["4"] = <"Royal Australian College of General Practitioners. Fact Sheet: Medicines List. 2010.">
+	>
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"A7AAD6671DE8A1E92FF311E6F77A9BF3">
+		["build_uid"] = <"35ffeddd-29a4-41f7-97c9-57962741beb0">
+	>
+
+definition
+	CLUSTER[id1] occurrences matches {0..1} matches {	-- Medication substance
+		items matches {
+			ELEMENT[id133] occurrences matches {0..1} matches {	-- Substance name
+				value matches {
+					DV_TEXT[id144] 
+				}
+			}
+			ELEMENT[id72] matches {	-- Form
+				value matches {
+					DV_TEXT[id145] 
+				}
+			}
+			ELEMENT[id143] occurrences matches {0..1} matches {	-- Category
+				value matches {
+					DV_CODED_TEXT[id146] matches {
+						defining_code matches {[ac1; at148]}		-- Category (synthesised)
+					}
+				}
+			}
+			ELEMENT[id116] occurrences matches {0..1} matches {	-- Strength
+				value matches {
+					DV_QUANTITY[id147] matches {
+						property matches {[at149]}
+						magnitude matches {|>=0.0|}
+						units matches {"1"}
+					}
+				}
+			}
+			ELEMENT[id117] occurrences matches {0..1} matches {	-- Strength unit
+				value matches {
+					DV_TEXT[id148] 
+				}
+			}
+			CLUSTER[id118] occurrences matches {0..1} matches {	-- Strength diluent
+				items matches {
+					ELEMENT[id125] occurrences matches {0..1} matches {	-- Diluent amount
+						value matches {
+							DV_QUANTITY[id149] matches {
+								property matches {[at149]}
+								magnitude matches {|>=0.0|}
+								units matches {"1"}
+							}
+						}
+					}
+					ELEMENT[id126] occurrences matches {0..1} matches {	-- Diluent unit
+						value matches {
+							DV_TEXT[id150] 
+						}
+					}
+				}
+			}
+			CLUSTER[id127] matches {	-- Ingredient
+				items matches {
+					allow_archetype CLUSTER[id139] occurrences matches {0..1} matches {	-- Ingredient substance
+						include
+							archetype_id/value matches {/openEHR-EHR-CLUSTER\.medication_substance(-[a-zA-Z0-9_]+)*\.v0/}
+					}
+					ELEMENT[id140] occurrences matches {0..1} matches {	-- Ingredient amount
+						value matches {
+							DV_QUANTITY[id151] matches {
+								property matches {[at149]}
+								magnitude matches {|>=0.0|}
+								units matches {"1"}
+							}
+						}
+					}
+					ELEMENT[id141] occurrences matches {0..1} matches {	-- Ingredient amount unit
+						value matches {
+							DV_TEXT[id152] 
+						}
+					}
+					ELEMENT[id128] occurrences matches {0..1} matches {	-- Role
+						value matches {
+							DV_CODED_TEXT[id153] matches {
+								defining_code matches {[ac2]}		-- Role (synthesised)
+							}
+							DV_TEXT[id154] 
+						}
+					}
+				}
+			}
+			ELEMENT[id134] occurrences matches {0..1} matches {	-- Description
+				value matches {
+					DV_TEXT[id155] 
+				}
+			}
+			allow_archetype CLUSTER[id142] matches {	-- Substance details
+				include
+					archetype_id/value matches {/.*/}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Medication substance">
+				description = <"The strength and form of the medication substance, including details of specific ingredients where required by an ad-hoc preparation or infusion.">
+			>
+			["id72"] = <
+				text = <"Form">
+				description = <"The formulation or presentation of the medication.">
+			>
+			["at75"] = <
+				text = <"Ingredient">
+				description = <"Details of an ingredient used to make up a mixed preparation or infuson.">
+			>
+			["at81"] = <
+				text = <"Therapeutic">
+				description = <"The chemical has a known and desired effect which is positive.">
+			>
+			["at82"] = <
+				text = <"Electrolyte">
+				description = <"This ingredient is an electrolyte.">
+			>
+			["at83"] = <
+				text = <"Toxic">
+				description = <"This chemical is toxic and has no therapeutic effect.">
+			>
+			["at84"] = <
+				text = <"Adjuvant">
+				description = <"The chemical is active but aids the therapeutic effect of another ingredient.">
+			>
+			["at85"] = <
+				text = <"Diluent">
+				description = <"Inert diluent.">
+			>
+			["at86"] = <
+				text = <"Propellent">
+				description = <"Inert propellent.">
+			>
+			["at87"] = <
+				text = <"Preservative">
+				description = <"The ingredient is present to prolong the life of the substance.">
+			>
+			["at88"] = <
+				text = <"Colouring">
+				description = <"The ingredient is used to colour the substance.">
+			>
+			["id116"] = <
+				text = <"Strength">
+				description = <"The value of the strength of the preparation or product as a real number.">
+			>
+			["id117"] = <
+				text = <"Strength unit">
+				description = <"The dose unit of the medication substance strength.">
+			>
+			["id118"] = <
+				text = <"Strength diluent">
+				description = <"The amount of any diluent used as part of description of the strenth of the preparation, for both packaged products and ad-hoc mixtures.">
+			>
+			["id125"] = <
+				text = <"Diluent amount">
+				description = <"The value of the amount of diluent as a real number.">
+			>
+			["id126"] = <
+				text = <"Diluent unit">
+				description = <"The unit for the preparation diluent.">
+			>
+			["id127"] = <
+				text = <"Ingredient">
+				description = <"Details of an ingredient used to make up a mixed preparation or infuson.">
+			>
+			["id128"] = <
+				text = <"Role">
+				description = <"The role of the ingredient within the mixture or infusion.">
+			>
+			["id133"] = <
+				text = <"Substance name">
+				description = <"The name of the medication substance. This item should be coded if possible.">
+			>
+			["id134"] = <
+				text = <"Description">
+				description = <"A text description of the substance  where it is not possible to describe this fully using numerical strengths and amounts.">
+			>
+			["id139"] = <
+				text = <"Ingredient substance">
+				description = <"Details of ingredient substance.">
+			>
+			["id140"] = <
+				text = <"Ingredient amount">
+				description = <"The value of the amount of the ingredient as a real number.">
+			>
+			["id141"] = <
+				text = <"Ingredient amount unit">
+				description = <"The dose unit of the ingredient amount.">
+			>
+			["id142"] = <
+				text = <"Substance details">
+				description = <"Further details about the medicatin preparation.">
+			>
+			["id143"] = <
+				text = <"Category">
+				description = <"The nature of a compound product, consisting of multiple ingredients.">
+			>
+			["at144"] = <
+				text = <"Ad-hoc mixture">
+				description = <"The substance is composed of a mixture of ingredients specificied within this order.">
+			>
+			["at145"] = <
+				text = <"Combination product">
+				description = <"The preparation consists of a number of ingredients which are pre-combined by the manufacturer.">
+			>
+			["at146"] = <
+				text = <"Single-substance  product">
+				description = <"The substance is a manufactured product containing a single ingredient.">
+			>
+			["at147"] = <
+				text = <"Ingredient">
+				description = <"The substance is an individual ingredient of the medication.">
+			>
+			["at148"] = <
+				text = <"Product">
+				description = <"The substance is a manufactured product, containing one or more ingredients.">
+			>
+			["at149"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["ac1"] = <
+				text = <"Category (synthesised)">
+				description = <"The nature of a compound product, consisting of multiple ingredients. (synthesised)">
+			>
+			["ac2"] = <
+				text = <"Role (synthesised)">
+				description = <"The role of the ingredient within the mixture or infusion. (synthesised)">
+			>
+		>
+		["nb"] = <
+			["id1"] = <
+				text = <"Legemiddelsubstans">
+				description = <"Legemiddelsubstansens styrke og form og detaljer om spesifikke ingredienser som er nødvendig ved magistrell tilbereding eller infusjon.">
+			>
+			["id72"] = <
+				text = <"Form">
+				description = <"Legemiddelets form eller fremstilling.">
+			>
+			["at75"] = <
+				text = <"Ingrediens">
+				description = <"Detaljer om en ingrediensen som brukes for å tilberede et sammensatt preparat eller infusjon.">
+			>
+			["at81"] = <
+				text = <"Terapeutisk">
+				description = <"Ingrediensen har en kjent og ønsket positiv effekt.">
+			>
+			["at82"] = <
+				text = <"Elektrolytt">
+				description = <"Ingrediensen er en elektrolytt.">
+			>
+			["at83"] = <
+				text = <"Giftig">
+				description = <"Ingrediensen er giftig og har ingen terapeutisk effekt.">
+			>
+			["at84"] = <
+				text = <"Adjuvant">
+				description = <"Ingrediensen er aktiv, men modifiserer og forsterker effekten av andre substanser, men har liten eller ingen virkning i seg selv.">
+			>
+			["at85"] = <
+				text = <"Fortynningsmiddel">
+				description = <"Fortynningsmiddel som ikke reagerer med andre ingredienser.">
+			>
+			["at86"] = <
+				text = <"Drivmiddel">
+				description = <"Drivmiddel som ikke reagerer med andre ingredienser.">
+			>
+			["at87"] = <
+				text = <"Konserveringsmiddel">
+				description = <"Ingrediensen er tilstede for å forlenge legemiddelets levetid.">
+			>
+			["at88"] = <
+				text = <"Farge">
+				description = <"Ingrediensen brukes for å sette farge på legemiddelet.">
+			>
+			["id116"] = <
+				text = <"Styrke">
+				description = <"Preparatet eller produktets styrke som et reelt tall.">
+			>
+			["id117"] = <
+				text = <"Styrkeenhet">
+				description = <"Doseringsenheten viser legemiddelsubstansens styrke.">
+			>
+			["id118"] = <
+				text = <"Fortynningsmiddel">
+				description = <"Mengden av et hvilket som helst fortynningsmiddel, brukes som en del av styrkebeskrivelsen til et preparat, gjelder både for fabrikkproduserte medikamenter og for magistrelltilberedte blandinger.">
+			>
+			["id125"] = <
+				text = <"Mengde fortynningsmiddel">
+				description = <"Mengde fortynningsmiddel som en reell tallverdi.">
+			>
+			["id126"] = <
+				text = <"Fortynningsmiddelets enhet">
+				description = <"Enheten for preparatets fortynningsmiddel.">
+			>
+			["id127"] = <
+				text = <"Ingrediens">
+				description = <"Detaljer om ingrediensen som brukes for å lage et blandingspreparat eller en infusjon.">
+			>
+			["id128"] = <
+				text = <"Rolle">
+				description = <"Ingrediensens rolle i en blanding eller infusjon.">
+			>
+			["id133"] = <
+				text = <"Substansnavn">
+				description = <"Navnet på legemiddelsubstansen. Dette elementet bør kodes med en terminologi om mulig.">
+			>
+			["id134"] = <
+				text = <"Beskrivelse">
+				description = <"Fritekstbeskrivelse av substansen der det ikke er mulig med en fullstendig beskrivelse verd hjelp av styrke eller mengde beskrevet med tall.">
+			>
+			["id139"] = <
+				text = <"Ingrediensens substans">
+				description = <"Detaljer om ingrediensens substans.">
+			>
+			["id140"] = <
+				text = <"Ingrediensens mengde">
+				description = <"Mengden av en ingrediens som en reell tallverdi.">
+			>
+			["id141"] = <
+				text = <"Ingrediensens mengdeenhet">
+				description = <"Dosenheten for mengden av en ingrediens.">
+			>
+			["id142"] = <
+				text = <"Detaljer om substans">
+				description = <"Ytterligere detaljer om legemiddelprepraratet.">
+			>
+			["id143"] = <
+				text = <"Kategori">
+				description = <"Et sammensatt produkt som består av flere ingredienser.">
+			>
+			["at144"] = <
+				text = <"Magistrellforskrevet blanding">
+				description = <"Legemiddelet er en sammensatt blanding av ingredienser som er spesifisert i en ordinering.">
+			>
+			["at145"] = <
+				text = <"Kombinasjonsprodukt">
+				description = <"Preparatet består av en rekke ingredienser som er satt sammen av produsenten.">
+			>
+			["at146"] = <
+				text = <"Produkt som består av en legemiddelsubsans">
+				description = <"Substansen er et fabrikkframstilt produkt som kun består av en enkelt aktiv ingrediens.">
+			>
+			["at147"] = <
+				text = <"Bestanddel">
+				description = <"Substansen er en individuell ingrediens i legemiddelet.">
+			>
+			["at148"] = <
+				text = <"Produkt">
+				description = <"Substansen er et fabrikkfremstilt produkt som inneholder en eller flere ingredienser.">
+			>
+			["at149"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["ac1"] = <
+				text = <"Kategori (synthesised)">
+				description = <"Et sammensatt produkt som består av flere ingredienser. (synthesised)">
+			>
+			["ac2"] = <
+				text = <"Rolle (synthesised)">
+				description = <"Ingrediensens rolle i en blanding eller infusjon. (synthesised)">
+			>
+		>
+		["pt"] = <
+			["id1"] = <
+				text = <"Substância do medicamento">
+				description = <"A concentração e forma farmacêutica da substância medicamentosa, incluindo os detalhes de ingredientes específicos para preparações manipuladas ou infusões.">
+			>
+			["id72"] = <
+				text = <"Forma Farmacêutica">
+				description = <"A forma farmacêutica da apresentação do medicamento.">
+			>
+			["at75"] = <
+				text = <"Ingrediente">
+				description = <"Detalhes de um ingrediente utilizado para fazer uma preparação mista ou uma infusão.">
+			>
+			["at81"] = <
+				text = <"Terapêutico">
+				description = <"Este elemento químico tem um efeito conhecido e considerado como positivo.">
+			>
+			["at82"] = <
+				text = <"Eletrólito">
+				description = <"O ingrediente é um eletrólito.">
+			>
+			["at83"] = <
+				text = <"Tóxico">
+				description = <"Este elemento químico é tóxico e não tem efeito terapêutico.">
+			>
+			["at84"] = <
+				text = <"Coadjuvante">
+				description = <"Este elemento químico é ativo mas apoia o efeito terapêutico de outro ingrediente.">
+			>
+			["at85"] = <
+				text = <"Diluente">
+				description = <"Diluente inerte.">
+			>
+			["at86"] = <
+				text = <"Propulsor">
+				description = <"Propulsor inerte.">
+			>
+			["at87"] = <
+				text = <"Conservante">
+				description = <"O ingrediente está presente para prolongar a vida da substância.">
+			>
+			["at88"] = <
+				text = <"Colorante">
+				description = <"O ingrediente é utilizado para colorir a substância.">
+			>
+			["id116"] = <
+				text = <"Concentração">
+				description = <"O valor da concentração do medicamento, em números reais.">
+			>
+			["id117"] = <
+				text = <"Unidade da concentração">
+				description = <"A Unidade que expressa a concentração do medicamento.">
+			>
+			["id118"] = <
+				text = <"Diluente">
+				description = <"A concentração do qualquer diluente utilizado na preparação do medicamento.">
+			>
+			["id125"] = <
+				text = <"Quantidade de diluente">
+				description = <"O valor da quantidade de difluente, em números reais.">
+			>
+			["id126"] = <
+				text = <"Unidade do diluente">
+				description = <"A unidade de preparação do diluente.">
+			>
+			["id127"] = <
+				text = <"Ingrediente">
+				description = <"Detalhes de um ingrediente utilizado para fazer uma preparação manipulada ou infusão.">
+			>
+			["id128"] = <
+				text = <"Finalidade/Ação">
+				description = <"A finalidade ou ação deste ingrediente dentro da mistura ou infusão.">
+			>
+			["id133"] = <
+				text = <"Nome da substância">
+				description = <"Nome da substância medicamentosa. Se possível, este ítem deve estar codificado.">
+			>
+			["id134"] = <
+				text = <"Descrição">
+				description = <"Uma descrição em texto livre da substância quando não for possível descreve-la utilizando as quantidades e concentrações de forma numérica, com as respectivas unidades.">
+			>
+			["id139"] = <
+				text = <"Substância do ingrediente">
+				description = <"Detalhes da substância do ingrediente.">
+			>
+			["id140"] = <
+				text = <"Quantidade do ingrediente">
+				description = <"O valor da quantidade do ingrediente, em números reais.">
+			>
+			["id141"] = <
+				text = <"Unidade da quantidade do ingrediente">
+				description = <"A unidade da quantidade do ingrediente.">
+			>
+			["id142"] = <
+				text = <"Detalhes da substância">
+				description = <"Detalhes adicionais sobre a preparação do medicamento.">
+			>
+			["id143"] = <
+				text = <"Categoria">
+				description = <"A natureza de um produto composto por vários ingredientes.">
+			>
+			["at144"] = <
+				text = <"Manipulado">
+				description = <"A substância é composta de uma mistura de ingredientes especificados nesta prescrição.">
+			>
+			["at145"] = <
+				text = <"Produto Combinado">
+				description = <"A preparação consiste de vários ingredients que foram pre-combinados pelo fabricante.">
+			>
+			["at146"] = <
+				text = <"Produto de substância única.">
+				description = <"A substância é um produto manufaturado com um único ingrediente.">
+			>
+			["at147"] = <
+				text = <"Ingrediente">
+				description = <"A substância é um ingrediente individual de um medicamento.">
+			>
+			["at148"] = <
+				text = <"Produto">
+				description = <"A substância é um produto, contendo um ou mais ingredientes.">
+			>
+			["at149"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["ac1"] = <
+				text = <"Categoria (synthesised)">
+				description = <"A natureza de um produto composto por vários ingredientes. (synthesised)">
+			>
+			["ac2"] = <
+				text = <"Finalidade/Ação (synthesised)">
+				description = <"A finalidade ou ação deste ingrediente dentro da mistura ou infusão. (synthesised)">
+			>
+		>
+	>
+	term_bindings = <
+		["openehr"] = <
+			["at149"] = <http://openehr.org/id/380>
+		>
+	>
+	value_sets = <
+		["ac1"] = <
+			id = <"ac1">
+			members = <"at148", "at144", "at147", "at145", "at146">
+		>
+		["ac2"] = <
+			id = <"ac2">
+			members = <"at81", "at82", "at83", "at84", "at85", "at86", "at87", "at88", "at75">
+		>
+	>

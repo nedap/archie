@@ -1,0 +1,96 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated)
+	openEHR-EHR-CLUSTER.myringotomy.v1.0.0
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Heather Leslie">
+		["organisation"] = <"Ocean Informatics">
+		["email"] = <"heather.leslie@oceaninformatics.com">
+		["date"] = <"2013-03-21">
+	>
+	copyright = <"© National E-Health Transition Authority">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record details about the myringotomy performed.">
+			use = <"Use to record details about the myringotomy performed.">
+			keywords = <"operation", "myringotomy">
+			misuse = <"">
+		>
+	>
+	other_details = <
+		["current_contact"] = <"Heather Leslie, Ocean Informatics, heather.leslie@oceaninformatics.com">
+		["MD5-CAM-1.0.1"] = <"B0DC5C3C430ABA20C5877EEFA0675FFE">
+	>
+
+definition
+	CLUSTER[id1] matches {	-- Myringotomy
+		items matches {
+			ELEMENT[id2] occurrences matches {0..1} matches {	-- Fluid
+				value matches {
+					DV_CODED_TEXT[id8] matches {
+						defining_code matches {[ac1]}		-- Fluid (synthesised)
+					}
+				}
+			}
+			ELEMENT[id6] occurrences matches {0..1} matches {	-- Ventilation Tube Inserted
+				value matches {
+					DV_BOOLEAN[id9] matches {
+						value matches {True}
+					}
+				}
+			}
+			allow_archetype CLUSTER[id7] matches {	-- Ventilation Tube
+				include
+					archetype_id/value matches {/openEHR-EHR-CLUSTER\.device(-[a-zA-Z0-9_]+)*\.v1/}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Myringotomy">
+				description = <"Surgical procedure in which an incision is made in the tympanic membrane to relieve pressure and/or drain fluid. This is often accompanied by insertion of a ventilation tube to keep the middle ear aerated and prevent reaccumulation of fluid.">
+			>
+			["id2"] = <
+				text = <"Fluid">
+				description = <"Description of the fluid observed in the middle ear.">
+			>
+			["at3"] = <
+				text = <"None">
+				description = <"No fluid was present.">
+			>
+			["at4"] = <
+				text = <"Serous">
+				description = <"Serous fluid was present.">
+			>
+			["at5"] = <
+				text = <"Mucoid">
+				description = <"Pus was present.">
+			>
+			["id6"] = <
+				text = <"Ventilation Tube Inserted">
+				description = <"Was a ventilation tube inserted?">
+			>
+			["id7"] = <
+				text = <"Ventilation Tube">
+				description = <"Details of the ventilation tubes inserted.">
+			>
+			["ac1"] = <
+				text = <"Fluid (synthesised)">
+				description = <"Description of the fluid observed in the middle ear. (synthesised)">
+			>
+		>
+	>
+	value_sets = <
+		["ac1"] = <
+			id = <"ac1">
+			members = <"at3", "at4", "at5">
+		>
+	>

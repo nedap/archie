@@ -1,9 +1,13 @@
 package com.nedap.archie.rm.datavalues.quantity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.nedap.archie.rm.datavalues.DvCodedText;
+
 import javax.annotation.Nullable;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 /**
@@ -23,6 +27,14 @@ public class DvQuantity extends DvAmount<Double> {
     private String units;
     @XmlElement
     private Double magnitude;
+
+    /**
+     * This has been removed, but causes many archetypes to fail because they still define it. So introduce, but don't use
+     * don't even serialize
+     */
+    @Deprecated
+    @JsonIgnore
+    private transient DvCodedText property;
 
     @Nullable
     public Long getPrecision() {
@@ -48,5 +60,15 @@ public class DvQuantity extends DvAmount<Double> {
 
     public void setMagnitude(Double magnitude) {
         this.magnitude = magnitude;
+    }
+
+    @Deprecated
+    public DvCodedText getProperty() {
+        return property;
+    }
+
+    @Deprecated
+    public void setProperty(DvCodedText property) {
+        this.property = property;
     }
 }

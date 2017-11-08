@@ -1,0 +1,96 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated)
+	openEHR-EHR-COMPOSITION.family_history.v1.0.0
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Heather Leslie">
+		["organisation"] = <"Ocean Informatics">
+		["email"] = <"heather.leslie@oceaninformatics.com">
+		["date"] = <"2013-06-16">
+	>
+	copyright = <"© National E-Health Transition Authority">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record a persistent and managed list of all relevant family history for the subject, or statements about positive exclusion or actual absence of information about adverse reactions, that may influence clinical decision-making and care provision.">
+			use = <"Use to record a persistent and managed list of all relevant family history for the subject, or statements about positive exclusion or actual absence of information about adverse reactions, that may influence clinical decision-making and care provision.
+
+It is also possible to record family history information for individuals other than the subject of the health record - for example information about the father of an unborn fetus needs to be stored in the mother's health record until birth. In this situation the subject of care must be explicitly specified.
+
+The intent of this COMPOSITION is for use as a persistent summary, however it has been identified that for implementation the archetype also needs additional attributes related to the context of the event. As a result, the COMPOSITION has been temporarily modified as an EVENT COMPOSITION which allows addition of an Items SLOT into which additional context-related archetypes can be included. This new requirement for context-related attributes in the Persistent COMPOSITION has been requested as a future openEHR Reference Model update.">
+			keywords = <"family", "history", "pedigree">
+			misuse = <"">
+		>
+	>
+	other_details = <
+		["current_contact"] = <"Heather Leslie, Ocean Informatics, heather.leslie@oceaninformatics.com">
+		["MD5-CAM-1.0.1"] = <"F5E7D64BFB84798E0FB3E568C4AC7E4A">
+	>
+
+definition
+	COMPOSITION[id1] matches {	-- Family History
+		category matches {
+			DV_CODED_TEXT[id6] matches {
+				defining_code matches {[at1]}
+			}
+		}
+		context matches {
+			EVENT_CONTEXT[id7] matches {
+				other_context matches {
+					ITEM_TREE[id4] matches {
+						items matches {
+							allow_archetype ITEM[id5] matches {	-- Items
+								include
+									archetype_id/value matches {/openEHR-EHR-CLUSTER\.document_entry_metadata(-[a-zA-Z0-9_]+)*\.v1/}
+							}
+						}
+					}
+				}
+			}
+		}
+		content cardinality matches {1..*; unordered} matches {
+			allow_archetype EVALUATION[id2] matches {	-- Family History
+				include
+					archetype_id/value matches {/openEHR-EHR-EVALUATION\.exclusion-family_history(-[a-zA-Z0-9_]+)*\.v1|openEHR-EHR-EVALUATION\.family_history(-[a-zA-Z0-9_]+)*\.v1|openEHR-EHR-EVALUATION\.absence(-[a-zA-Z0-9_]+)*\.v1/}
+			}
+			allow_archetype EVALUATION[id3] matches {	-- Exclusion/Absence
+				include
+					archetype_id/value matches {/.*/}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Family History">
+				description = <"A persistent and managed list about relevant family history of the subject that may influence clinical decision-making and care provision.">
+			>
+			["id2"] = <
+				text = <"Family History">
+				description = <"Details about known family history.">
+			>
+			["id3"] = <
+				text = <"Exclusion/Absence">
+				description = <"Positive statement/s about exclusion of family history or that no information is available.">
+			>
+			["id5"] = <
+				text = <"Items">
+				description = <"Additional COMPOSITION related data.">
+			>
+			["at1"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+		>
+	>
+	term_bindings = <
+		["openehr"] = <
+			["at1"] = <http://openehr.org/id/433>
+		>
+	>

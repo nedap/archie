@@ -1,0 +1,169 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated; uid=79bff813-096a-46f0-86a5-6a58190d7bac)
+	openEHR-EHR-CLUSTER.gender.v0.0.1-alpha
+
+language
+	original_language = <[ISO_639-1::en]>
+	translations = <
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			author = <
+				["name"] = <"Silje Ljosland Bakke">
+				["organisation"] = <"Nasjonal IKT HF">
+			>
+		>
+	>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Silje Ljosland Bakke">
+		["organisation"] = <"Nasjonal IKT HF">
+		["email"] = <"silje.ljosland.bakke@nasjonalikt.no">
+		["date"] = <"2017-01-17">
+	>
+	original_namespace = <"no.nasjonalikt">
+	original_publisher = <"Nasjonal IKT">
+	custodian_namespace = <"no.nasjonalikt">
+	custodian_organisation = <"Nasjonal IKT">
+	licence = <"This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 International License. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/4.0/.">
+	details = <
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			purpose = <"For å angi individets kjønn.">
+			use = <"Brukes for å angi individets kjønn, inkludert identitet, foretrukne pronomen og anatomi.
+
+Arketypen er laget for å brukes innenfor en ENTRY-arketype der det er relevant, f.eks. innenfor OBSERVATION.story (Anamnese), INSTRUCTION.laboratory_test (Laboratorierekvisisjon) eller CLUSTER.interpreter.
+
+Den medisinske kunnskapen om genetikk og reseptorceller i forbindelse med kjønn er i rivende utvikling, men det er kunnskap i tidlig stadium og er ikke ennå innarbeidet og i vanlig bruk. Arketypen kan på et senere tidspunkt utvides til å inneholde elementer som inneholder data om dette, eller de kan lagt til i SLOT'et (utbyggingssporet) for ytterligere detaljer om individets kjønn. Dette SLOT'et kan også bli brukt til å registrere detaljer om den fysiske fremtoningen i primære kjønnskarakteristika, for eksempel knyttet til kjønnsbekreftende behandling, eller andre relevante detaljer.">
+			keywords = <"mann", "kvinne", "androgyn">
+			misuse = <"Skal ikke brukes til å registrere informasjon relatert til seksuell orientering eller adferd.">
+		>
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record an individual's gender.">
+			use = <"Use to record the individual's gender, including identity, preferred pronouns and anatomy.
+
+This archetype has been designed to be used within an ENTRY archetype where relevant, for example within OBSERVATION.story, INSTRUCTION.laboratory_test or CLUSTER-interpreter.
+
+The medical knowledge in the area of genetics and receptor cells related to gender is rapidly expanding, but is at present still in it's early days and not commonly acknowledged and used. The archetype can later be expanded to include information on those areas, or can be added in the SLOT for additional structured details about the individuals gender. This SLOT can also be used to register details in the physical appearence in primary gender characteristica, for example related to gender confirmation treatment, or other relevant details.">
+			keywords = <"sex", "male", "female", "androgynous">
+			misuse = <"Not to be used for recording information relating to sexual orientation or practice.">
+		>
+	>
+	other_contributors = <"Vebjørn Arntzen, Oslo universitetssykehus HF, Norway", "Hallvard Lærum, Direktoratet for e-helse, Norway", "John Tore Valand, Helse Bergen HF, Norway", "Ira Haraldsen, Oslo universitetssykehus HF, Norway">
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"4D7EDAF64912F37CDDB40F3EEC0AA339">
+		["build_uid"] = <"48e83295-3c80-406e-b36c-7833e354f7f4">
+	>
+
+definition
+	CLUSTER[id1] matches {	-- Gender
+		items matches {
+			ELEMENT[id15] occurrences matches {0..1} matches {	-- Description
+				value matches {
+					DV_TEXT[id27] 
+				}
+			}
+			ELEMENT[id2] occurrences matches {0..1} matches {	-- Gender identity
+				value matches {
+					DV_TEXT[id28] 
+				}
+			}
+			ELEMENT[id21] occurrences matches {0..1} matches {	-- Preferred pronouns
+				value matches {
+					DV_TEXT[id29] 
+				}
+			}
+			ELEMENT[id20] occurrences matches {0..1} matches {	-- Anatomical gender
+				value matches {
+					DV_TEXT[id30] 
+				}
+			}
+			ELEMENT[id23] occurrences matches {0..1} matches {	-- Legal gender
+				value matches {
+					DV_TEXT[id31] 
+				}
+			}
+			ELEMENT[id26] occurrences matches {0..1} matches {	-- Gender expression
+				value matches {
+					DV_TEXT[id32] 
+				}
+			}
+			allow_archetype CLUSTER[id24] matches {	-- Details
+				include
+					archetype_id/value matches {/.*/}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["nb"] = <
+			["id1"] = <
+				text = <"Kjønn">
+				description = <"Detaljert beskrivelse av individets kjønn inkludert identitet, omtale, kjønnsutrykk og anatomi.">
+			>
+			["id2"] = <
+				text = <"Opplevd kjønn">
+				description = <"Kjønn slik individet opplever det selv.">
+			>
+			["id15"] = <
+				text = <"Beskrivelse">
+				description = <"Oppsummerende fritekstbeskrivelse av individets kjønn.">
+			>
+			["id20"] = <
+				text = <"Anatomisk kjønn">
+				description = <"Individets kjønn ut fra primære anatomiske kjønnskarakteristika.">
+			>
+			["id21"] = <
+				text = <"Foretrukne pronomen">
+				description = <"De personlige pronomen individet foretrekker å bli omtalt som.">
+			>
+			["id23"] = <
+				text = <"Juridisk kjønn">
+				description = <"Individets kjønn i henhold til offentlige registre eller andre juridiske forhold som f.eks. fødselsattest.">
+			>
+			["id24"] = <
+				text = <"Detaljer">
+				description = <"SLOT for ytterligere strukturerte detaljer knyttet til individets kjønn.">
+			>
+			["id26"] = <
+				text = <"Kjønnsuttrykk">
+				description = <"Hvilket kjønn individet fremstår som.">
+			>
+		>
+		["en"] = <
+			["id1"] = <
+				text = <"Gender">
+				description = <"Detailed description of the individual's gender, including identity, pronouns , expression and anatomy.">
+			>
+			["id2"] = <
+				text = <"Gender identity">
+				description = <"The individual's own perception of it's gender.">
+			>
+			["id15"] = <
+				text = <"Description">
+				description = <"Summary narrative description of the individual's gender.">
+			>
+			["id20"] = <
+				text = <"Anatomical gender">
+				description = <"The indivdual's gender by primary anatomical gender characteristics.">
+			>
+			["id21"] = <
+				text = <"Preferred pronouns">
+				description = <"The personal pronouns the individual prefers to be referred to with.">
+			>
+			["id23"] = <
+				text = <"Legal gender">
+				description = <"The individual's gender according to public registries or other legal circumstances such as birth certificate.">
+			>
+			["id24"] = <
+				text = <"Details">
+				description = <"Additional structured details about the individuals gender.">
+			>
+			["id26"] = <
+				text = <"Gender expression">
+				description = <"The gender the individual appears as.">
+			>
+		>
+	>

@@ -1,0 +1,78 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; uid=ac33fa64-f61a-4feb-bd29-0e5b1f4710a0)
+	openEHR-EHR-CLUSTER.symptom_sign_severity.v1.0.0
+
+specialize
+	openEHR-EHR-CLUSTER.symptom_sign.v1
+
+language
+	original_language = <[ISO_639-1::en]>
+	translations = <
+		["nl"] = <
+			language = <[ISO_639-1::nl]>
+			author = <
+				["name"] = <"Pieter Bos">
+				["organisation"] = <"Nedap Healthcare">
+			>
+		>
+	>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"My Name <my_email_id@my_org.org>">
+		["organisation"] = <"Org name <http://www.my_org.org>">
+	>
+	copyright = <"Copyright (c) 2017 My Name OR Some Org">
+	licence = <"Creative Commons CC-BY 4.0 unported <http://creativecommons.org/>">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"???">
+		>
+	>
+
+definition
+	CLUSTER[id1.1] matches {	-- -
+		items matches {
+			ELEMENT[id36] occurrences matches {0} -- nil significance
+			ELEMENT[id152] occurrences matches {0} -- body site
+			allow_archetype CLUSTER[id148] occurrences matches {0} -- structured body site
+			ELEMENT[id176] occurrences matches {0} -- episodicity
+			ELEMENT[id187] occurrences matches {0} -- first ever?
+			ELEMENT[id153] occurrences matches {0} -- episode onset
+			ELEMENT[id165] occurrences matches {0} -- onset type
+			ELEMENT[id29] occurrences matches {0}	-- Duration			}
+			ELEMENT[id22] occurrences matches {0}	-- Severity category
+			-- severity rating id27 has been kept
+			ELEMENT[id181] occurrences matches {0}-- Progression
+			ELEMENT[id4] occurrences matches {0}	-- Pattern
+			CLUSTER[id19]occurrences matches {0}	-- Modifying factor
+			CLUSTER[id166] occurrences matches {0}	-- Precipitating/resolving factor
+			ELEMENT[id156] occurrences matches {0} 	-- Impact		
+			ELEMENT[id38] occurrences matches {0}	-- Episode description		
+			allow_archetype CLUSTER[id154] occurrences matches {0}	-- Specific details
+			ELEMENT[id162] occurrences matches {0}	-- Resolution date/time			
+			ELEMENT[id58] occurrences matches {0}	-- Description of previous episodes
+			ELEMENT[id32] occurrences matches {0}	-- Number of previous episodes
+			allow_archetype CLUSTER[id147] occurrences matches {0}	-- Previous episodes
+			allow_archetype CLUSTER[id64]occurrences matches {0}	-- Associated symptom/sign			
+			ELEMENT[id164] occurrences matches {0}	-- Comment
+
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1.1"] = <
+				text = <"Symptom/sign severity">
+				description = <"A sign or symptom plus its severity, intended for simple patient input">
+			>
+		>
+		["nl"] = <
+			["id1.1"] = <
+				text = <"Symptom/signaal ernst">
+				description = <"Een symptoom of signaal plus de ernst, bedoeld voor simpele invoer door de patient zelf">
+			>
+		>
+	>

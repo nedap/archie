@@ -1,0 +1,257 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated; uid=5aafd686-dfd7-4b5a-a93b-ef81bf9b78b2)
+	openEHR-EHR-CLUSTER.occupation.v0.0.1-alpha
+
+language
+	original_language = <[ISO_639-1::en]>
+	translations = <
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			author = <
+				["name"] = <"Kristian Berg">
+				["organisation"] = <"Universitetssykehuset Nord Norge">
+				["email"] = <"kristian.berg@unn.no">
+			>
+		>
+	>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Heather Leslie">
+		["organisation"] = <"Ocean Informatics">
+		["email"] = <"heather.leslie@oceaninformatics.com">
+		["date"] = <"2010-12-17">
+	>
+	original_namespace = <"au.org.nehta">
+	original_publisher = <"NEHTA, Australia">
+	custodian_namespace = <"org.openehr">
+	custodian_organisation = <"openEHR Foundation">
+	copyright = <"© 2010 NEHTA, openEHR Foundation, Nasjonal IKT HF">
+	licence = <"This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 International License. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/4.0/.">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record information about the current occupation and occupation background of the individual.">
+			use = <"Use to record information about the current occupation and occupation background of the individual.
+
+This archetype has been specifically designed to be used in the 'Details' SLOT within the EVALUATION.social_summary archetype, but can also be used within any other ENTRY or CLUSTER archetypes, where clinically appropriate.">
+			keywords = <"employment", "employer", "job", "occupation", "work", "profession", "unemployed", "employee", "unemployment">
+			misuse = <"Not to be used for detailed descriptions of health risks or exposure to hazardous substances in the workplace. Use the archetypes EVALUATION.health_risk or EVALUATION.exposure for this purpose.
+
+Not to be used to record information about sources of income or income details for the individual. Use the archetype CLUSTER.income for this purpose.">
+		>
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			purpose = <"For å registrere informasjon om individets nåværende og tidligere sysselsettingsforhold.">
+			use = <"Brukes for å registrere informasjon om individets nåværende og tidligere sysselsettingsforhold.
+
+Arketypen er laget for å benyttes i SLOTet \"Detaljer\" i arketypen EVALUATION.social_summary (Sosialanamnese), men kan også brukes i andre ENTRY eller CLUSTER arketyper der det er klinisk relevant.">
+			keywords = <"arbeid", "arbeidstaker", "arbeidsgiver", "arbeidsforhold", "arbeidshistorikk", "jobb", "ansatt", "yrke", "arbeidsløs">
+			misuse = <"Brukes ikke for å beskrive helserisikoer eller eksponering for farlige substanser i arbeidssituasjonen. Til dette brukes henholdsvis arketypene EVALUATION.health_risk eller EVALUATION.exposure.
+
+Brukes ikke for å registrere informasjon om individets inntektskilder eller detaljer om inntekt. Bruk arketypen CLUSTER.income for dette formålet.">
+		>
+	>
+	other_contributors = <"Vebjørn Arntzen, Oslo universitetssykehus HF, Norway (Nasjonal IKT redaktør)", "Koray Atalag, University of Auckland, New Zealand", "Silje Ljosland Bakke, Nasjonal IKT HF, Norway (Nasjonal IKT redaktør)", "Marcus Baw, openGPSoC / BawMedical Ltd, United Kingdom", "Hildegard Franke, freshEHR Clinical Informatics Ltd., United Kingdom", "Sergio Freire, State University of Rio de Janeiro, Brazil", "Heather Grain, Llewelyn Grain Informatics, Australia", "Anne Gunn Haugland, Helse Bergen HF, Norway", "Kristian Heldal, Telemark Hospital Trust, Norway", "Susanna Jönsson, Landstinget i Värmland, Sweden", "Lars Morgan Karlsen, DIPS ASA, Norway", "Heather Leslie, Ocean Informatics, Australia (openEHR Editor)", "Siv Marie Lien, DIPS ASA, Norway", "Ian McNicoll, freshEHR Clinical Informatics, United Kingdom (openEHR Editor)", "Erik Nissen, Cambio Healthcare Systems AB, Sweden", "Andrej Orel, Marand d.o.o., Slovenia", "Martin Paulson, Sykehuset i Vestfold, Norway", "Tanja Riise, Nasjonal IKT HF, Norway", "Jon Tysdahl, Furst medlab AS, Norway", "John Tore Valand, Haukeland Universitetssjukehus, Norway (Nasjonal IKT redaktør)">
+	references = <
+		["1"] = <"Derived from: Employment Summary, Draft Archetype [Internet]. nehta, Australia, nehta Clinical Knowledge Manager [cited: 2016-01-11]. Available from: http://dcm.nehta.org.au/ckm/#showArchetype_1013.1.925">
+	>
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"394828381F3EA0E2D8DB187F8107E133">
+		["build_uid"] = <"3696a008-fe1e-4b77-9777-89573457489a">
+	>
+
+definition
+	CLUSTER[id1] matches {	-- Occupation
+		items matches {
+			ELEMENT[id2] occurrences matches {0..1} matches {	-- Occupation category
+				value matches {
+					DV_TEXT[id18] 
+				}
+			}
+			ELEMENT[id17] occurrences matches {0..1} matches {	-- Description
+				value matches {
+					DV_TEXT[id19] 
+				}
+			}
+			CLUSTER[id3] matches {	-- Occupation episode
+				items matches {
+					ELEMENT[id4] occurrences matches {0..1} matches {	-- Employer name
+						value matches {
+							DV_TEXT[id20] 
+						}
+					}
+					allow_archetype CLUSTER[id5] matches {	-- Employer details
+						include
+							archetype_id/value matches {/.*/}
+					}
+					ELEMENT[id6] matches {	-- Title/role
+						value matches {
+							DV_TEXT[id21] 
+						}
+					}
+					ELEMENT[id14] occurrences matches {0..1} matches {	-- Full time equivalent
+						value matches {
+							DV_QUANTITY[id22] matches {
+								property matches {[at1]}
+								[magnitude, units, precision] matches {
+									[{|0.0..100.0|}, {"%"}, {2}],
+									[{|0.0..1.0|}, {"1"}, {1}]
+								}
+							}
+						}
+					}
+					ELEMENT[id7] occurrences matches {0..1} matches {	-- Classification
+						value matches {
+							DV_TEXT[id23] 
+						}
+					}
+					ELEMENT[id16] occurrences matches {0..1} matches {	-- Status
+						value matches {
+							DV_TEXT[id24] 
+						}
+					}
+					ELEMENT[id8] occurrences matches {0..1} matches {	-- Date commenced
+						value matches {
+							DV_DATE_TIME[id25] 
+						}
+					}
+					ELEMENT[id9] occurrences matches {0..1} matches {	-- Date ceased
+						value matches {
+							DV_DATE_TIME[id26] 
+						}
+					}
+					ELEMENT[id15] occurrences matches {0..1} matches {	-- Comment
+						value matches {
+							DV_TEXT[id27] 
+						}
+					}
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Occupation">
+				description = <"Detailed information about the current occupation and occupation background of the individual.">
+			>
+			["id2"] = <
+				text = <"Occupation category">
+				description = <"Current occupation category.">
+			>
+			["id3"] = <
+				text = <"Occupation episode">
+				description = <"Details of each episode of occupation.">
+			>
+			["id4"] = <
+				text = <"Employer name">
+				description = <"Identification of employer - company, organisation or individual.">
+			>
+			["id5"] = <
+				text = <"Employer details">
+				description = <"Further detail about the Employer.">
+			>
+			["id6"] = <
+				text = <"Title/role">
+				description = <"Job title or role of the occupation episode.">
+			>
+			["id7"] = <
+				text = <"Classification">
+				description = <"Classification of the type of occupation undertaken by the individual.">
+			>
+			["id8"] = <
+				text = <"Date commenced">
+				description = <"Date occupation episode commenced.">
+			>
+			["id9"] = <
+				text = <"Date ceased">
+				description = <"Date occupation episode ceased.">
+			>
+			["id14"] = <
+				text = <"Full time equivalent">
+				description = <"The position's fraction or percentage of a full time equivalent.">
+			>
+			["id15"] = <
+				text = <"Comment">
+				description = <"Additional narrative about the occupation episode not captured in other fields.">
+			>
+			["id16"] = <
+				text = <"Status">
+				description = <"The current status for this specific occupation episode.">
+			>
+			["id17"] = <
+				text = <"Description">
+				description = <"Narrative description of current and historical occupation.">
+			>
+			["at1"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+		>
+		["nb"] = <
+			["id1"] = <
+				text = <"Sysselsetting">
+				description = <"Informasjon om individets nåværende og tidligere sysselsettingsforhold.">
+			>
+			["id2"] = <
+				text = <"Sysselsettingskategori">
+				description = <"Nåværende sysselsettingskategori.">
+			>
+			["id3"] = <
+				text = <"Sysselsettingsepisode">
+				description = <"Detaljert informasjon om hver enkelt sysselsettingsepisode.">
+			>
+			["id4"] = <
+				text = <"Arbeidsgiver">
+				description = <"Arbeidsgiver - selskap, organisasjon eller individ.">
+			>
+			["id5"] = <
+				text = <"Detaljer om arbeidsgiver">
+				description = <"Ytterligere detaljer om arbeidsgiver.">
+			>
+			["id6"] = <
+				text = <"Tittel/rolle">
+				description = <"Stillingstittel eller rolle for sysselsettingsepisoden.">
+			>
+			["id7"] = <
+				text = <"Klassifisering">
+				description = <"Klassifisering av typen sysselsetting.">
+			>
+			["id8"] = <
+				text = <"Dato for oppstart">
+				description = <"Datoen sysselsettingsepisoden startet.">
+			>
+			["id9"] = <
+				text = <"Dato opphør">
+				description = <"Datoen asysselsettingsepisoden opphørte.">
+			>
+			["id14"] = <
+				text = <"Stillingsandel">
+				description = <"Stillingens andel av en fulltidsstilling.">
+			>
+			["id15"] = <
+				text = <"Kommentar">
+				description = <"Ytterligere kommentar til sysselsettingsepisoden som ikke er fanget i andre felt.">
+			>
+			["id16"] = <
+				text = <"Status">
+				description = <"Individets arbeidsstatus for denne spesifikke sysselsettingsepisoden.">
+			>
+			["id17"] = <
+				text = <"Beskrivelse">
+				description = <"Fritekstbeskrivelse av nåværende og tidligere sysselsettingsforhold.">
+			>
+			["at1"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+		>
+	>
+	term_bindings = <
+		["openehr"] = <
+			["at1"] = <http://openehr.org/id/380>
+		>
+	>

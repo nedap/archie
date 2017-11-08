@@ -1,0 +1,285 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated; uid=5adc3031-4772-4c11-8174-f480b46cd1b5)
+	openEHR-EHR-OBSERVATION.mews_nt_rmp.v0.0.1-alpha
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Heather Leslie">
+		["organisation"] = <"Ocean Informatics">
+		["email"] = <"heather.leslie@oceaninformatics.com">
+		["date"] = <"2013-02-07">
+	>
+	original_namespace = <"au.org.nehta">
+	original_publisher = <"nehta, Australia">
+	custodian_namespace = <"au.org.nehta">
+	custodian_organisation = <"nehta, Australia">
+	copyright = <"© National E-Health Transition Authority">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record provide a composite score based on categorising physiological readings and observations, as a simple method to support objective assessment of the degree of illness in an unwell patient over the age of 14 years.">
+			use = <"Use to record a composite score to support assessmennt of the degree of illness in an unwell patient, over the age of 14 years. A score >5 has been correlated to an increased risk of death, HDU admission and ICU admission.
+
+MEWS is based on data derived from four physiological readings (systolic blood pressure, heart rate, respiratory rate, body temperature) and one observation (level of consciousness) which are compared to normal ranges. The score for each parameter is added to generate a single composite score.
+
+From the NT Remote Health Atlas: 
+\"Response: 
+- Score < 3: DMO continues management as appropriate. 
+- Score 3 – 5: ED consultant should be notified if DMO has any concerns. 
+- Score > 5: ED consultant must be notified immediately. ED consultant should consider speaking directly to referrer. Plan evacuation with Retrieval MO escort, Priority 1 or 2.\"
+
+Different MEWS are in use in different jurisdictions in Australia and in other parts of the world. This version of MEWS is mandated for use by the Remote Medical Practitioner On-Call service in the Northern Territory, Australia to support remote clincians to determine the degree of illness in a unseen patient and the need for emergency retrieval.">
+			keywords = <"MEWS", "warning", "AVPU", "RR", "HR", "BP", "Temp", "SBP", "triage">
+			misuse = <"Not to be used to record each physical measurement or clinical observation. Use specific OBSERVATION archetypes for this purpose - OBSERVATION.blood_pressure, OBSERVATION.heart_rate, OBSERVATION.respirations, OBSERVATION.body_temperature, OBSERVATION.avpu and OBSERVATION.glasgow_coma.
+
+Not to be used for children/teens under the age of 14 years.">
+		>
+	>
+	other_contributors = <"Stephen Chu, NEHTA, Australia", "Sam Heard, Ocean Informatics, Australia (Editor)", "Oliver Hosking, Remote Health NT, Australia", "Heather Leslie, Ocean Informatics, Australia (Editor)", "Ian McNicoll, Ocean Informatics UK, United Kingdom", "Gary Sinclair, NT DoH, Australia">
+	references = <
+		["1"] = <"Remote Health Atlas: Appendix to Retrieval Algorithm for patients outside Alice Springs Hospital (MEWS Score) [PDF]. Northern Territory Government, Department of Health & Families; February 2009. Available from: http://remotehealthatlas.nt.gov.au/appendix_mews.pdf.">
+		["2"] = <"Remote Health Atlas: Retrieval Flowchart - Primary and Interfacility [PDF]. Northern Territory Government, Department of Health & Families; October 2008. Available from: http://remotehealthatlas.nt.gov.au/retrieval_flowchart_primary_&_interfacility.pdf.">
+	>
+	other_details = <
+		["current_contact"] = <"Heather Leslie, Ocean Informatics, heather.leslie@oceaninformatics.com">
+		["MD5-CAM-1.0.1"] = <"1FE7FCA01B420153B06079FA25C9EFED">
+		["build_uid"] = <"220fb6eb-549e-4355-9706-2b39d3dc9057">
+	>
+
+definition
+	OBSERVATION[id1] matches {	-- Modified Early Warning Score (NT RMP)
+		data matches {
+			HISTORY[id2] matches {
+				events cardinality matches {1..*; unordered} matches {
+					POINT_EVENT[id3] occurrences matches {0..1} matches {	-- Point in time
+						data matches {
+							ITEM_TREE[id4] matches {
+								items matches {
+									ELEMENT[id5] occurrences matches {0..1} matches {	-- Systolic Blood Pressure
+										value matches {
+											DV_ORDINAL[id30] matches {
+												[value, symbol] matches {
+													[{0}, {[at15]}],
+													[{1}, {[at16]}],
+													[{2}, {[at17]}],
+													[{3}, {[at18]}]
+												}
+											}
+										}
+									}
+									ELEMENT[id6] occurrences matches {0..1} matches {	-- Heart Rate
+										value matches {
+											DV_ORDINAL[id31] matches {
+												[value, symbol] matches {
+													[{0}, {[at14]}],
+													[{1}, {[at13]}],
+													[{2}, {[at12]}],
+													[{3}, {[at11]}]
+												}
+											}
+										}
+									}
+									ELEMENT[id7] occurrences matches {0..1} matches {	-- Respiratory Rate
+										value matches {
+											DV_ORDINAL[id32] matches {
+												[value, symbol] matches {
+													[{0}, {[at19]}],
+													[{1}, {[at20]}],
+													[{2}, {[at21]}],
+													[{3}, {[at22]}]
+												}
+											}
+										}
+									}
+									ELEMENT[id8] occurrences matches {0..1} matches {	-- Temperature
+										value matches {
+											DV_ORDINAL[id33] matches {
+												[value, symbol] matches {
+													[{0}, {[at23]}],
+													[{2}, {[at24]}]
+												}
+											}
+										}
+									}
+									ELEMENT[id9] occurrences matches {0..1} matches {	-- AVPU
+										value matches {
+											DV_ORDINAL[id34] matches {
+												[value, symbol] matches {
+													[{0}, {[at25]}],
+													[{1}, {[at26]}],
+													[{2}, {[at27]}],
+													[{3}, {[at28]}]
+												}
+											}
+										}
+									}
+									ELEMENT[id29] occurrences matches {0..1} matches {	-- Total Score
+										value matches {
+											DV_COUNT[id35] matches {
+												magnitude matches {|0..14|}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Modified Early Warning Score (NT RMP)">
+				description = <"A simple score used to provide an objective indication of the degree of illness of a patient. This version is used by the Remote Medical Practitioner On-Call service in the Northern Territory, Australia.">
+			>
+			["id3"] = <
+				text = <"Point in time">
+				description = <"A specific date and/or time which may be explicitly defined in a template or at run-time.">
+			>
+			["id5"] = <
+				text = <"Systolic Blood Pressure">
+				description = <"Range category for the systolic blood pressure (SBP) measurement of a patient.">
+			>
+			["id6"] = <
+				text = <"Heart Rate">
+				description = <"Range category for the heart rate (HR) measurement of a patient.">
+			>
+			["id7"] = <
+				text = <"Respiratory Rate">
+				description = <"Range category for the respiratory rate (RR) measurement of a patient.">
+			>
+			["id8"] = <
+				text = <"Temperature">
+				description = <"Range category for the body temperature (Temp) measurement of a patient.">
+			>
+			["id9"] = <
+				text = <"AVPU">
+				description = <"Observed category for the AVPU scale rating of a patient's conscious state.">
+			>
+			["at11"] = <
+				text = <">129">
+				description = <"The heart rate measurement is greater than 129 beats/min; scored as 3 points.">
+			>
+			["at12"] = <
+				text = <"<41 or 111-129">
+				description = <"The heart rate measurement is less than 41 beats/min or between 111 and 129 beats/min; scored as 2 points.">
+			>
+			["at13"] = <
+				text = <"41-50 or 101-110">
+				description = <"The heart rate measurement is between 41 and 50 beats/min or between 101 and 110 beats/min; scored as 1 point.">
+			>
+			["at14"] = <
+				text = <"51-100">
+				description = <"The heart rate measurement is between 51 and 100 beats/min; scored as 0 points.">
+			>
+			["at15"] = <
+				text = <"101-199">
+				description = <"The systolic blood pressure measurement is between 101 and 199 mmHg; scored as 0 points.">
+			>
+			["at16"] = <
+				text = <"81-100">
+				description = <"The systolic blood pressure measurement is between 81 and 100 mmHg; scored as 1 point.">
+			>
+			["at17"] = <
+				text = <"71-80 or >199">
+				description = <"The systolic blood pressure measurement is between 71 and 80 mmHg or greater than 199 mmHg; scored as 2 points.">
+			>
+			["at18"] = <
+				text = <"<71">
+				description = <"The systolic blood pressure measurement is less than 71 mmHg; scored as 3 points.">
+			>
+			["at19"] = <
+				text = <"9-14">
+				description = <"The respiratory rate measurement is between 9 and 14 breaths/min; scored as 0 points.">
+			>
+			["at20"] = <
+				text = <"15-20">
+				description = <"The respiratory rate measurement is between 15 and 20 breaths/min; scored as 1 point.">
+			>
+			["at21"] = <
+				text = <"<9 or 21-29">
+				description = <"The respiratory rate measurement is less than 9 breaths/min or between 21 and 29 breaths/min; scored as 2 points.">
+			>
+			["at22"] = <
+				text = <">29">
+				description = <"The respiratory rate measurement is greater than 29 breaths/min; scored as 3 points.">
+			>
+			["at23"] = <
+				text = <"35-38.4">
+				description = <"The body temperature measurement is between 35 and 38.4 degrees Celsius; scored as 0 points.">
+			>
+			["at24"] = <
+				text = <"<35 or >38.4">
+				description = <"The body temperature measurement is less than 35 degrees Celsius or greater than 38.4 degrees Celsius; scored as 2 points.">
+			>
+			["at25"] = <
+				text = <"A">
+				description = <"The patient is alert or awake; scored as 0 points.">
+			>
+			["at26"] = <
+				text = <"V">
+				description = <"The patient responds to verbal stimulus; scored as 1 point.">
+			>
+			["at27"] = <
+				text = <"P">
+				description = <"The patient responds to painful stimulus; scored as 2 points.">
+			>
+			["at28"] = <
+				text = <"U">
+				description = <"The patient is unconscious and not responding to stimulation; scored as 3 points.">
+			>
+			["id29"] = <
+				text = <"Total Score">
+				description = <"The composite total score of each MEWS parameter category.">
+			>
+			["ac1"] = <
+				text = <"Systolic Blood Pressure (synthesised)">
+				description = <"Range category for the systolic blood pressure (SBP) measurement of a patient. (synthesised)">
+			>
+			["ac2"] = <
+				text = <"Heart Rate (synthesised)">
+				description = <"Range category for the heart rate (HR) measurement of a patient. (synthesised)">
+			>
+			["ac3"] = <
+				text = <"Respiratory Rate (synthesised)">
+				description = <"Range category for the respiratory rate (RR) measurement of a patient. (synthesised)">
+			>
+			["ac4"] = <
+				text = <"Temperature (synthesised)">
+				description = <"Range category for the body temperature (Temp) measurement of a patient. (synthesised)">
+			>
+			["ac5"] = <
+				text = <"AVPU (synthesised)">
+				description = <"Observed category for the AVPU scale rating of a patient's conscious state. (synthesised)">
+			>
+		>
+	>
+	value_sets = <
+		["ac1"] = <
+			id = <"ac1">
+			members = <"at15", "at16", "at17", "at18">
+		>
+		["ac2"] = <
+			id = <"ac2">
+			members = <"at14", "at13", "at12", "at11">
+		>
+		["ac3"] = <
+			id = <"ac3">
+			members = <"at19", "at20", "at21", "at22">
+		>
+		["ac4"] = <
+			id = <"ac4">
+			members = <"at23", "at24">
+		>
+		["ac5"] = <
+			id = <"ac5">
+			members = <"at25", "at26", "at27", "at28">
+		>
+	>

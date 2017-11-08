@@ -1,0 +1,689 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated; uid=12e8fcc3-a17b-45ad-a7dd-6e8ec78d60a4)
+	openEHR-EHR-EVALUATION.family_history.v2.0.0
+
+language
+	original_language = <[ISO_639-1::en]>
+	translations = <
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			author = <
+				["name"] = <"Micaela Thierley, Einar Fosse, John Tore Valand, Silje Ljosland Bakke">
+			>
+		>
+		["pt-br"] = <
+			language = <[ISO_639-1::pt-br]>
+			author = <
+				["name"] = <"Vladimir Pizzo">
+				["organisation"] = <"Hospital Sirio Libanes - Brazil">
+				["email"] = <"vladimir.pizzo@hsl.org.br">
+			>
+		>
+	>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Sam Heard">
+		["organisation"] = <"Ocean Informatics">
+		["email"] = <"sam.heard@oceaninformatics.com">
+		["date"] = <"2010-12-15">
+	>
+	original_namespace = <"org.openehr">
+	original_publisher = <"openEHR Foundation">
+	custodian_namespace = <"org.openehr">
+	custodian_organisation = <"openEHR Foundation">
+	copyright = <"© openEHR Foundation">
+	licence = <"This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 License. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/.">
+	details = <
+		["pt-br"] = <
+			language = <[ISO_639-1::pt-br]>
+			purpose = <"Para registrar informações sobre a ocorrência de problemas significativos relacionados com a saúde de membros da família (relacionados ou não relacionados) tanto vivos quanto falecidos.
+
+O âmbito de aplicação deste arquétipo é deliberadamente mantido amplo para incluir a maior gama de problemas ou questões que possam ser encontrados dentro das famílias. Ele inclui problemas e diagnósticos, marcadores biológicos identificados, além de todos os fatores psicossociais e ambientais relevantes conhecidos.">
+			use = <"Use para gravar um resumo das informações sobre problemas ou diagnósticos encontrados nos membros da família. Esta informação pode ser utilizada para contribuir numa avaliação de risco de condições potencialmente herdadas ou início de atividades preventivas de saúde para o indivíduo.
+
+Tradicionalmente, o escopo da história da família tem sido focado em fatores genéticos ou biomarcadores como indicadores de risco ou risco potencial. No entanto, o escopo deste arquétipo inclui explicitamente o registro da informação sobre problemas ou diagnósticos que possam ser influenciados pela exposição familiar de membros não aparentados a fatores psicossociais ou ambientais. Exemplos que são relevantes para os membros não aparentados da família incluem a exposição a toxinas no ambiente familiar, violência doméstica, abuso sexual, alcoolismo e outros vícios.
+
+Membros da família não aparentados podem incluir crianças adotadas, os relacionados pelo casamento, ou outros indivíduos não aparentados que participam na vida regular e influência da família.
+
+Este arquétipo foi projetado para incluir:
+- Uma visão narrativa como texto livre. Isso permitirá que detalhes de história da família sejam incorporados como texto não-estruturado; e
+- Uma exposição detalhada com foco em detalhes de saúde relevantes sobre os membros da família específicos, incluindo a sua história clínica e marcadores biológicos.
+
+Este arquétipo pode ser usado em muitos contextos. Por exemplo, a gravação da história da família dentro de uma consulta clínica; preencher uma lista de História da Família; ou para fornecer uma declaração resumida num sumário de alta.
+
+Detalhes adicionais sobre o problema ou diagnóstico específico de um membro da família podem ser capturados usando o arquétipo EVALUATION.problem_diagnosis e especificando o 'Sujeito do Cuidado' como o membro da família, em vez do sujeito do registro de saúde.
+
+Este arquétipo pode ser usado como a base para uma genealogia dos problemas / ou diagnósticos de saúde de uma família para permitir as estimativas de risco de uma patologia com base em prevalência na história da família ou marcadores biológicos conhecidos.
+
+Pode ser necessário identificar cada membro da família especificamente e não apenas pela relação com o paciente. Por exemplo, só há uma avó materna mas podem haver muitas primas maternas. Isso pode ser necessário para assegurar que um gráfico de linhagem seja preciso. Ele também permite alterações no registro para cada membro da família identificado. Se o registro for privado e não puder ser compartilhado, pode ser preferível gravar o nome real do parente. Se o registro, ou parte do registro, puder ser compartilhado, pode ser mais apropriado que o membro da família seja identificado por um rótulo exclusivo ou alias.
+">
+			keywords = <"família", "história", "estória", "saúde", "condição", "problema", "diagnóstico", "genético", "pedigree", "genealogia", "história familiar", "parente", "hereditário">
+			misuse = <"Não deve ser usado para registrar informações sobre o risco relativo ou absoluto de desenvolver uma condição devido à história familiar - usar o arquétipo EVALUATION.health_risk , incluindo o CLUSTER.family_prevalence para detalhes sobre a relação dos membros da família afetada.
+
+Não deve ser usado para busca de contactantes de doenças infecciosas que requeiram ações imediatas.
+
+Não deve ser usado para registrar uma exclusão de História Familiar - utilizar o arquétipo EVALUATION.exclusion-family_history para esta finalidade.">
+		>
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record information about the occurrence of significant health-related problems in genetic and non-genetic family members - both alive and deceased. 
+
+The intended scope of this archetype is deliberately kept loose to include the broadest range of problems or issues that might be found within families. It specifically includes known problems and diagnoses, identified biological markers, plus any relevant psychosocial factors and environmental factors.">
+			use = <"Use to record a summary of information about problems or diagnoses found in family members. This information may be used to contribute to the identification of a current health problem, assessment of future risk from familial problems or conditions, or to initiate preventive health activities.
+
+Traditionally the scope of family history has been focused on genetic factors or biomarkers as indicators of risk or potential risk. The scope of this archetype includes both recording of problems or diagnoses that have an inheritable origin as well as those that are not directly inheritable but influenced by the domestic setting, including psychosocial or environmental factors. Examples include exposure to toxins in the family environment, domestic violence, sexual abuse, alcoholism and other addictions.
+
+Non-genetic family members can include adopted or long term fostered children, those related by marriage, or other unrelated individuals who participate in the regular life and influence of the family.
+
+This archetype has been designed to include:
+- a narrative overview as free text. This will allow family history details from existing systems to be incorporated as non-structured text; and
+- a detailed area focusing on relevant health details about specific family members, including their medical history and biomarkers.
+
+This archetype can be used within many contexts. For example, recording a family history entry within a clinical consultation; populating a Family History List; or to provide a summary statement within a Discharge Summary document.
+
+Additional detail about a family member's specific problem, diagnosis or past procedures can be captured using the EVALUATION.problem_diagnosis or the ACTION.procedure archetype and specifying the 'Subject of Care' as the family member, rather than the subject of the health record. 
+
+This archetype can be used as the basis for a Family Pedigree chart of health problems/diagnoses or to support estimations of risk of a condition based on prevalence in the family history or known biomarkers.
+
+It may be necessary to identify each family member specifically and not just by the relationship to the patient. For example, while there will be only one maternal grandmother, there may be many female maternal cousins. This may be required to ensure that a pedigree chart is accurate. It will also enable accurate amendments to the record for each identified family member. If the record is private and will not be shared, for reasons of clarity it may be preferable to record the relative's actual name. If the record, or part of the record, is to be shared, it may be more appropriate for the family member to be identified by a unique label or alias.">
+			keywords = <"family", "history", "health", "condition", "problem", "diagnosis", "genetic", "pedigree", "genealogy", "family history", "relative", "hereditary", "inherited", "familial", "heredity">
+			misuse = <"Not to be used to record information about the relative or absolute risk of developing a condition due to family history - use the EVALUATION.health_risk archetype, including the CLUSTER.family_prevalence for details about the affected ratio of family members.
+
+Not to be used for contact tracing for infectious diseases requiring immediate action. Use specific archetypes for this purpose.
+
+Not to be used to record an exclusion of Family History - use the EVALUATION.exclusion-family_history archetype for this purpose.">
+		>
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			purpose = <"For registrering av informasjon om forekomst av helserelaterte forhold hos både levende og døde, genetiske og ikke-genetiske familiemedlemmer.
+
+Arketypens avgrensninger er med vilje gjort utydelige, for å omfatte et bredest mulig spekter av problemer som kan opptre innenfor familier. Arketypen omfatter kjente problemer eller diagnoser, identifiserte biologiske markører, samt alle relevante psykososiale faktorer og miljøfaktorer.">
+			use = <"Brukes for å registrere et sammendrag av helserelaterte forhold, problemer eller diagnoser hos familiemedlemmer. Informasjonen kan bidra til identifisering av et eksisterende helseproblem, et grunnlag for å vurdere individets fremtidige risiko for familiære sykdommer eller for å iverksette forebyggende helsearbeid.
+
+Tradisjonelt har familieanamnese fokusert på genetiske faktorer eller biomarkører som indikatorer for risiko eller potensiell risiko. Denne arketypen omfatter registrering av informasjon både om arvelige problemer eller diagnoser, og de som ikke er arvelige. Dette kan gjelde påvirkninger i familiesituasjonen, psykososiale eller miljøfaktorer. Eksempler kan være eksponering for toksiner i hjemmet, vold i nære relasjoner, seksuelle overgrep, alkoholisme eller andre avhengigheter.
+
+Ikke-genetiske familiemedlemmer kan være adoptivbarn eller langtidsplasserte fosterbarn, ektefeller eller andre personer som deltar i familiehverdagen og har innflytelse på familien.
+
+Arketypen inneholder:
+- En fritekstoversikt. Dette tillater at detaljer om familieanamnesen kan importeres fra eksisterende systemer som en ustrukturert tekst.
+- En detaljert del, som fokuserer på relevant helseinformasjon om spesifikke familiemedlemmer, deres medisinske anamnese og biomarkører.
+
+Arketypen kan brukes i mange sammenhenger, for eksempel registrering av familieanamnese i en klinisk konsultasjon, i en persistent oversikt over familieanamnese eller som del av en epikrise.
+
+Ytterligere detaljer om et familiemedlems spesifikke problemer, diagnoser eller gjennomgåtte prosedyrer kan registreres ved å bruke EVALUATION.problem_diagnosis- eller ACTION.procedure-arketypen og spesifisere \"Subject of Care\" til familiemedlemmet, i stedet for individet som journalen omhandler.
+
+Arketypen kan brukes som basis for et slektstre over helseproblemer og diagnoser, eller for å understøtte risikoberegninger basert på forekomst i familieanamnesen eller kjente biomarkører.
+
+Det kan være nødvendig å identifisere hvert enkelt familiemedlem spesifikt og ikke bare relasjonen til pasienten. For eksempel: Det finnes bare én mormor, men det er mulig at det finnes flere kvinnelige søskenbarn på morssiden. En slik registrering kan være nødvendig for å sikre at et slektstre blir nøyaktig, og kan også muliggjøre nøyaktige korreksjoner eller tillegg til journalen for hvert identifiserte familiemedlem.">
+			keywords = <"familie", "anamnese", "helse", "tilstand", "problem", "diagnose", "genetisk", "slektstre", "genealogi", "familieanamnese", "slektning", "arvelighet", "biologisk", "familietre", "hereditet", "ikke-genetisk", "ikke-biologisk", "familiær", "genetikk", "arvelig", "hereditær", "far", "mor", "foreldre">
+			misuse = <"Skal ikke benyttes for å registrere informasjon om relativ eller absolutt risiko for å utvikle en tilstand ut fra en familieanamnese, bruk EVALUATION.health_risk-arketypen med CLUSTER.family_prevalence-arketypen for å registrere detaljer om andelen familiemedlemmer som er rammet.
+
+Brukes ikke for smittesporing av sykdommer som krever øyeblikkelig handling. Bruk spesifikke arketyper for dette formålet.
+
+Brukes ikke for å registrere fravær av problemer og eller diagnoser i familieanamnesen, bruk EVALUATION.exclusion-family_history-arketypen.">
+		>
+	>
+	other_contributors = <"Tomas Alme, DIPS ASA, Norway", "Anne Pauline Anderssen, Helse Nord RHF, Norway", "Rita Apelt, Department of Health,NT, Australia", "Vebjørn Arntzen, Oslo universitetssykehus HF, Norway (Nasjonal IKT redaktør)", "Koray Atalag, University of Auckland, New Zealand", "Silje Ljosland Bakke, Nasjonal IKT HF, Norway (Nasjonal IKT redaktør)", "John Bennett, NEHTA, Australia", "Kristian Berg, Universitetssykehuset Nord Norge, Norway", "Lars Bitsch-Larsen, Haukeland University Hospital, Bergen, Norway", "Ole Andreas Bjordal, Webmed, Norway", "Anita Bjørnnes, Helse Bergen, Norway", "Terje Bless, Helse Nord FIKS, Norway", "Diego Bosca, IBIME group, Spain", "Mauricio Botero, Universidad de Caldas, Colombia", "Hans Johan Breidablik, Helse Førde HF, Norway", "Rong Chen, Cambio Healthcare Systems, Sweden", "Bjørn Christensen, HUS, Norway", "Stephen Chu, Queensland Health, Australia", "Lisbeth Dahlhaug, Helse Midt - Norge IT, Norway", "Eva Dybvik, Nasjonal kompetansetjeneste for leddproteser og hoftebrudd, Haukeland Universitetssjukehus, Norway", "David Evans, Queensland Health, Australia", "Shahla Foozonkhah, Ocean Informatics, Australia", "Einar Fosse, UNN HF, Norwegian Centre for Integrated Care and Telemedicine, Norway", "Samuel Frade, Marand, Portugal", "Hildegard Franke, freshEHR Clinical Informatics Ltd., United Kingdom", "Tim Garden, NTG Department of Health, Australia", "Sebastian Garde, Ocean Informatics, Germany", "Jacquie Garton-Smith, Royal Perth Hospital and DoHWA, Australia", "Andrew Goodchild, NEHTA, Australia", "Gyri Gradek, Senter for medisinsk genetikk og molekylærmedisin, Haukeland Universitetssykehus, Norway", "Heather Grain, Llewelyn Grain Informatics, Australia", "Elisabeth Gudmestad, Helse Bergen HF, Haukeland Universitetssykehus, Dokumentasjonsavdelingen, Norway", "Daniel Habashi, PasientSky AS, Norway", "Dag Hanoa, Oslo universitetssykehus, Norway", "Leif Ivar Havelin, Helse Bergen, Norway", "Sam Heard, Ocean Informatics, Australia (Editor)", "Kristian Heldal, Telemark Hospital Trust, Norway", "Anca Heyd, DIPS ASA, Norway", "Nils-Harald Holsen, Nasjonal IKT HF, Norway", "Evelyn Hovenga, EJSH Consulting, Australia", "Lars Karlsen, DIPS ASA, Norway", "Lars Morgan Karlsen, DIPS ASA, Norway", "Goran Karlstrom, County Of Värmland, Sweden", "Mary Kelaher, NEHTA, Australia", "Shinji Kobayashi, Kyoto University, Japan", "Nils Kolstrup, Skansen Legekontor og Nasjonalt Senter for samhandling og telemedisin, Norway", "Kirsten Steen Kyrkjebø, Helse Vest IKT AS, Norway", "Robert L'egan, NEHTA, Australia", "Sabine Leh, Helse-Bergen, Norway", "Heather Leslie, Ocean Informatics, Australia", "Hugh Leslie, Ocean Informatics, Australia", "Hallvard Lærum, Oslo Universitetssykehus HF, Norway", "Mike Martyn, The Hobart Anaesthetic Group, Australia", "Shane McKee, Belfast Health & Social Care Trust, United Kingdom", "Ian McNicoll, freshEHR Clinical Informatics, United Kingdom (openEHR Editor)", "Lars Ivar Mehlum, Helse Bergen HF, Norway", "Chris Mitchell, RACGP, Australia", "Ann Iren Tellnes Moe, Helse Vest IKT, Norway", "Stewart Morrison, NEHTA, Australia", "Bengt Nilssen, Sykehuset Innlandet HFq, Norway", "Bjørn Næss, DIPS ASA, Norway", "Jeremy Oats, NT Health, Australia", "Andrej Orel, Marand d.o.o., Slovenia", "Lynne Parsons, Primary and Community Health Services, Australia", "Vladimir Pizzo, Hospital Sírio Libanês, Brazil", "Jodie Pycroft, Adelaide Northern Division of General Practice Ltd, Australia", "Norwegian Review Summary, National ICT Norway, Norway", "Robyn Richards, NEHTA - Clinical Terminology, Australia", "Tanja Riise, Nasjonal IKT HF, Norway", "Jussara Rotzsch, UNB, Brazil", "Anoop Shah, University College London, United Kingdom", "Gunn Anita Skjulhaug, Helse-Bergen HF, Norway", "Elizabeth Stanick, Hobart Anaesthetic Group, Australia", "Møyfrid Stokke, Helse Vest IKT, Norway", "Line Sæle, Nasjonal IKT HF, Norway", "John Taylor, NEHTA, Australia", "Micaela Thierley, Helse Bergen, Norway", "Gordon Tomes, Australian Institute of Health and Welfare, Australia", "Richard Townley-O'Neill, NEHTA, Australia", "Donna Truran, ACCTI-UoW, Australia", "Jon Tysdahl, Furst medlab AS, Norway", "John Tore Valand, Haukeland Universitetssjukehus, Norway (Nasjonal IKT redaktør, Nasjonal IKT oversettelsesredaktør)", "Ørjan Vermeer, Haukeland Universitetssjukehus, Kvinneklinikken, Norway", "Jo Wright, NT Dept of Health, Australia (Editor)">
+	references = <
+		["1"] = <"Family History, draft archetype [Internet]. Australia, National eHealth Transition Authority, NEHTA Clinical Knowledge Manager. Authored: 2010 12 15. Available at: http://dcm.nehta.org.au/ckm/#showArchetype_1013.1.927 (last accessed 2015 03 05).">
+		["2"] = <"Risk of condition based on family history, rejected archetype, openEHR Clinical Knowledge Manager [Internet]. openEHR Foundation. Authored: 2006 04 23. Available at: http://www.openehr.org/ckm/#showArchetype_1013.1.125 (last accessed 2015 03 05).">
+		["3"] = <"HL7 Version 3 Standard: Clinical Genomics; Pedigree, Release 1. ANSI/HL7 V3 CGPED, R1-2007. Published 2007 05 07. Available at: http://www.hl7.org/implement/standards/product_brief.cfm?product_id=8 (last accessed 2015 03 05).">
+	>
+	other_details = <
+		["current_contact"] = <"Heather Leslie, Ocean Informatics, heather.leslie@oceaninformatics.com">
+		["MD5-CAM-1.0.1"] = <"9C5F2B93C53BFD0F2D9D5F9020883DAB">
+		["build_uid"] = <"5f2eb6d1-ff6b-4630-be2d-640513e55a80">
+	>
+
+definition
+	EVALUATION[id1] matches {	-- Family history
+		data matches {
+			ITEM_TREE[id2] matches {
+				items matches {
+					ELEMENT[id3] occurrences matches {0..1} matches {	-- Summary
+						value matches {
+							DV_TEXT[id62] 
+						}
+					}
+					CLUSTER[id29] matches {	-- Per problem
+						items matches {
+							ELEMENT[id30] occurrences matches {0..1} matches {	-- Problem/diagnosis name
+								value matches {
+									DV_TEXT[id63] 
+								}
+							}
+							ELEMENT[id31] occurrences matches {0..1} matches {	-- Description
+								value matches {
+									DV_TEXT[id64] 
+								}
+							}
+							allow_archetype CLUSTER[id60] matches {	-- Problem details
+								include
+									archetype_id/value matches {/openEHR-EHR-CLUSTER\.family_prevalence(-[a-zA-Z0-9_]+)*\.v1/}
+							}
+						}
+					}
+					CLUSTER[id4] matches {	-- Per family member
+						items matches {
+							ELEMENT[id5] occurrences matches {0..1} matches {	-- Family member name
+								value matches {
+									DV_TEXT[id65] 
+								}
+							}
+							ELEMENT[id21] occurrences matches {0..1} matches {	-- Alias
+								value matches {
+									DV_TEXT[id66] 
+								}
+							}
+							allow_archetype CLUSTER[id49] matches {	-- Family member details
+								include
+									archetype_id/value matches {/openEHR-EHR-CLUSTER\.person_name(-[a-zA-Z0-9_]+)*\.v1/}
+							}
+							ELEMENT[id61] occurrences matches {0..1} matches {	-- Biological sex
+								value matches {
+									DV_TEXT[id67] 
+								}
+							}
+							ELEMENT[id17] occurrences matches {0..1} matches {	-- Relationship
+								value matches {
+									DV_TEXT[id68] 
+								}
+							}
+							ELEMENT[id6] occurrences matches {0..1} matches {	-- Date of birth
+								value matches {
+									DV_DATE_TIME[id69] 
+								}
+							}
+							ELEMENT[id24] occurrences matches {0..1} matches {	-- Deceased?
+								value matches {
+									DV_BOOLEAN[id70] matches {
+										value matches {True}
+									}
+								}
+							}
+							ELEMENT[id12] occurrences matches {0..1} matches {	-- Age at death
+								value matches {
+									DV_DURATION[id71] 
+								}
+							}
+							ELEMENT[id59] occurrences matches {0..1} matches {	-- Date of death
+								value matches {
+									DV_DATE_TIME[id72] 
+								}
+							}
+							CLUSTER[id9] matches {	-- Clinical history
+								items matches {
+									ELEMENT[id10] occurrences matches {0..1} matches {	-- Problem/diagnosis name
+										value matches {
+											DV_TEXT[id73] 
+										}
+									}
+									ELEMENT[id13] occurrences matches {0..1} matches {	-- Clinical description
+										value matches {
+											DV_TEXT[id74] 
+										}
+									}
+									ELEMENT[id11] occurrences matches {0..1} matches {	-- Age at onset
+										value matches {
+											DV_DURATION[id75] 
+										}
+									}
+									ELEMENT[id15] occurrences matches {0..1} matches {	-- Cause of death?
+										value matches {
+											DV_CODED_TEXT[id76] matches {
+												defining_code matches {[ac1]}		-- Cause of death? (synthesised)
+											}
+											DV_TEXT[id77] 
+										}
+									}
+								}
+							}
+							ELEMENT[id47] occurrences matches {0..1} matches {	-- Comment
+								value matches {
+									DV_TEXT[id78] 
+								}
+							}
+							CLUSTER[id25] occurrences matches {0..1} matches {	-- Biomarkers
+								items matches {
+									ELEMENT[id23] occurrences matches {0..1} matches {	-- Biomarker description
+										value matches {
+											DV_TEXT[id79] 
+										}
+									}
+									allow_archetype CLUSTER[id28] matches {	-- Biomarker details
+										include
+											archetype_id/value matches {/.*/}
+									}
+								}
+							}
+						}
+					}
+					allow_archetype CLUSTER[id54] matches {	-- Multimedia
+						include
+							archetype_id/value matches {/openEHR-EHR-CLUSTER\.multimedia(-[a-zA-Z0-9_]+)*\.v1/}
+					}
+				}
+			}
+		}
+		protocol matches {
+			ITEM_TREE[id26] matches {
+				items matches {
+					ELEMENT[id27] occurrences matches {0..1} matches {	-- Last Updated
+						value matches {
+							DV_DATE_TIME[id80] 
+						}
+					}
+					allow_archetype CLUSTER[id46] matches {	-- Extension
+						include
+							archetype_id/value matches {/.*/}
+					}
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Family history">
+				description = <"Summary information about the significant health-related problems found in family members.">
+			>
+			["id3"] = <
+				text = <"Summary">
+				description = <"Narrative overview about problems, diagnoses, psychosocial, environmental and genetic markers that have been identified in family members.">
+			>
+			["id4"] = <
+				text = <"Per family member">
+				description = <"Details about a specific family member.">
+			>
+			["id5"] = <
+				text = <"Family member name">
+				description = <"Name of family member.">
+			>
+			["id6"] = <
+				text = <"Date of birth">
+				description = <"Full or partial date of birth of the family member.">
+			>
+			["id9"] = <
+				text = <"Clinical history">
+				description = <"Detail about problems or diagnoses for the family member.">
+			>
+			["id10"] = <
+				text = <"Problem/diagnosis name">
+				description = <"Identification of the significant problem or diagnosis in the identified family member.">
+			>
+			["id11"] = <
+				text = <"Age at onset">
+				description = <"Estimated or actual age of the family member when the problem/diagnosis was clinically recognised.">
+			>
+			["id12"] = <
+				text = <"Age at death">
+				description = <"Exact or estimated age of the family member at death.">
+			>
+			["id13"] = <
+				text = <"Clinical description">
+				description = <"Narrative description or comments about clinical aspects of the family member's problem/diagnosis.">
+			>
+			["id15"] = <
+				text = <"Cause of death?">
+				description = <"Relationship of the problem/diagnosis to the death of this family member.">
+			>
+			["id17"] = <
+				text = <"Relationship">
+				description = <"The relationship of the family member to the subject of care.">
+			>
+			["id21"] = <
+				text = <"Alias">
+				description = <"An alternative name or label to uniquely identify a family member, without using a personal name which might publicly identify the individual.">
+			>
+			["id23"] = <
+				text = <"Biomarker description">
+				description = <"Description of risk-related biological markers identified in this family member.">
+			>
+			["id24"] = <
+				text = <"Deceased?">
+				description = <"Is the family member deceased?">
+			>
+			["id25"] = <
+				text = <"Biomarkers">
+				description = <"Detailed information about measurable indicators of a biological state or condition of the family member.">
+			>
+			["id27"] = <
+				text = <"Last Updated">
+				description = <"The date this family history summary was last updated.">
+			>
+			["id28"] = <
+				text = <"Biomarker details">
+				description = <"Structured details about biological markers.">
+			>
+			["id29"] = <
+				text = <"Per problem">
+				description = <"Details about the presence of a specific problem or diagnosis in family members.">
+			>
+			["id30"] = <
+				text = <"Problem/diagnosis name">
+				description = <"Identification of the significant problem or diagnosis in the family overall.">
+			>
+			["id31"] = <
+				text = <"Description">
+				description = <"Narrative description about occurrence of the problem or diagnosis in family members.">
+			>
+			["id46"] = <
+				text = <"Extension">
+				description = <"Additional information required to capture local content or to align with other reference models/formalisms.">
+			>
+			["id47"] = <
+				text = <"Comment">
+				description = <"Additional narrative about the family member not captured in other fields.">
+			>
+			["id49"] = <
+				text = <"Family member details">
+				description = <"Structured detail about the identified family member.">
+			>
+			["id54"] = <
+				text = <"Multimedia">
+				description = <"Multimedia representation of the family history.">
+			>
+			["id59"] = <
+				text = <"Date of death">
+				description = <"Full or partial date of death of the family member.">
+			>
+			["id60"] = <
+				text = <"Problem details">
+				description = <"Structured details about the identified problem or diagnosis.">
+			>
+			["id61"] = <
+				text = <"Biological sex">
+				description = <"The family member's biological sex.">
+			>
+			["at62"] = <
+				text = <"Direct cause or closely related">
+				description = <"The problem or diagnosis was a direct cause or closely related to the direct cause of death.">
+			>
+			["at63"] = <
+				text = <"Unrelated">
+				description = <"The problem or diagnosis was unrelated to the cause of death.">
+			>
+			["at64"] = <
+				text = <"Indeterminate">
+				description = <"It is impossible to determine whether the problem or diagnosis was closely related to the direct cause of death.">
+			>
+			["ac1"] = <
+				text = <"Cause of death? (synthesised)">
+				description = <"Relationship of the problem/diagnosis to the death of this family member. (synthesised)">
+			>
+		>
+		["pt-br"] = <
+			["id1"] = <
+				text = <"História familiar">
+				description = <"Resumo dos problemas significativos, relacionados à saúde, encontrados nos membros da família.">
+			>
+			["id3"] = <
+				text = <"Resumo">
+				description = <"Relato dos problemas, diagnósticos, marcadores biológicos, ambientais e psicossociais que tenham sido identificados em membros da família">
+			>
+			["id4"] = <
+				text = <"Por membro da família">
+				description = <"Detalhes sobre um membro específico da família.">
+			>
+			["id5"] = <
+				text = <"Nome do membro da família">
+				description = <"Nome do membro da família.">
+			>
+			["id6"] = <
+				text = <"Data de nascimento">
+				description = <"Data de nascimento (completa ou parcial) do membro da família.">
+			>
+			["id9"] = <
+				text = <"*Clinical history(en)">
+				description = <"*Detail about problems or diagnoses for the family member.(en)">
+			>
+			["id10"] = <
+				text = <"*Problem/diagnosis name(en)">
+				description = <"*Identification of the significant problem or diagnosis in the identified family member.(en)">
+			>
+			["id11"] = <
+				text = <"Idade da detecção do problema/diagnóstico">
+				description = <"Idade (real ou estimada) do membro da família quando o problema/diagnóstico foi reconhecido clinicamente.">
+			>
+			["id12"] = <
+				text = <"*Age at death(en)">
+				description = <"*Exact or estimated age of the family member at death.(en)">
+			>
+			["id13"] = <
+				text = <"Descrição clínica">
+				description = <"Descrição narrativa ou comentários sobre aspectos clínicos dos problemas/diagnósticos do membro da família.">
+			>
+			["id15"] = <
+				text = <"*Cause of death?(en)">
+				description = <"*Relationship of the problem/diagnosis to the death of this family member.(en)">
+			>
+			["id17"] = <
+				text = <"*Relationship(en)">
+				description = <"*The relationship of the family member to the subject of care.(en)">
+			>
+			["id21"] = <
+				text = <"Alias">
+				description = <"Um nome ou rótulo alternativo que identifica unicamente um membro da família sem utilizar uma denominação pessoal que possa identificar publicamente o indivíduo.">
+			>
+			["id23"] = <
+				text = <"Descrição do marcador biológico">
+				description = <"Descrição de marcadores biológicos relacionados a riscos identificados neste membro da família.">
+			>
+			["id24"] = <
+				text = <"*Deceased?(en)">
+				description = <"*Is the family member deceased?(en)">
+			>
+			["id25"] = <
+				text = <"*Biomarkers(en)">
+				description = <"*Detailed information about measurable indicators of a biological state or condition of the family member.(en)">
+			>
+			["id27"] = <
+				text = <"Última atualização">
+				description = <"Data da última atualização deste Sumário de história familiar.">
+			>
+			["id28"] = <
+				text = <"*Biomarker details(en)">
+				description = <"*Structured details about biological markers.(en)">
+			>
+			["id29"] = <
+				text = <"*Per problem(en)">
+				description = <"*Details about the presence of a specific problem or diagnosis in family members.(en)">
+			>
+			["id30"] = <
+				text = <"*Problem/diagnosis name(en)">
+				description = <"*Identification of the significant problem or diagnosis in the family overall.(en)">
+			>
+			["id31"] = <
+				text = <"*Description(en)">
+				description = <"*Narrative description about occurrence of the problem or diagnosis in family members.(en)">
+			>
+			["id46"] = <
+				text = <"Extensão">
+				description = <"Informações adicionais necessárias para capturar conteúdo local ou para alinhar outros modelos/formalismos de referência.">
+			>
+			["id47"] = <
+				text = <"Comentários">
+				description = <"Narrativa adicional sobre membro da família não contemplado em outro campo.">
+			>
+			["id49"] = <
+				text = <"*Family member details(en)">
+				description = <"*Structured detail about the identified family member.(en)">
+			>
+			["id54"] = <
+				text = <"*Multimedia(en)">
+				description = <"*Multimedia representation of the family history.(en)">
+			>
+			["id59"] = <
+				text = <"Data de falecimento">
+				description = <"Data completa ou parcial do falecimento do membro da família.">
+			>
+			["id60"] = <
+				text = <"*Problem details(en)">
+				description = <"*Structured details about the identified problem or diagnosis.(en)">
+			>
+			["id61"] = <
+				text = <"*Sex(en)">
+				description = <"*The family member's biological sex. (en)">
+			>
+			["at62"] = <
+				text = <"*Direkte eller nært relatert(en)">
+				description = <"*Problemet eller diagnosen var en direkte årsak eller nært relatert til den direkte dødsårsaken.(en)">
+			>
+			["at63"] = <
+				text = <"*Urelatert(en)">
+				description = <"*Problemet eller diagnosen var ikke relatert til den direkte dødsårsaken.(en)">
+			>
+			["at64"] = <
+				text = <"*Ubestemmelig(en)">
+				description = <"*Det er ikke mulig å fastslå hvorvidt problemet eller diagnosen var nært relatert til den direkte dødsårsaken.(en)">
+			>
+			["ac1"] = <
+				text = <"*Cause of death?(en) (synthesised)">
+				description = <"*Relationship of the problem/diagnosis to the death of this family member.(en) (synthesised)">
+			>
+		>
+		["nb"] = <
+			["id1"] = <
+				text = <"Familieanamnese">
+				description = <"Sammenfattet informasjon om helserelaterte forhold hos familiemedlemmer.">
+			>
+			["id3"] = <
+				text = <"Sammendrag">
+				description = <"Fritekstoversikt over problemer, diagnoser og psykososiale, miljømessige eller genetiske markører som er funnet hos familiemedlemmer.">
+			>
+			["id4"] = <
+				text = <"Per familiemedlem">
+				description = <"Detaljer om ett spesifikt familiemedlem.">
+			>
+			["id5"] = <
+				text = <"Navn på familiemedlem">
+				description = <"Navnet på familiemedlemmet.">
+			>
+			["id6"] = <
+				text = <"Fødselsdato">
+				description = <"Familiemedlemmets hele eller delvise fødselsdato.">
+			>
+			["id9"] = <
+				text = <"Klinisk historie">
+				description = <"Detaljer om problemene eller diagnosene til familiemedlemmet.">
+			>
+			["id10"] = <
+				text = <"Problem/diagnosenavn">
+				description = <"Identifisering av et viktig problem eller diagnose identifisert hos familiemedlemmet.">
+			>
+			["id11"] = <
+				text = <"Debutalder">
+				description = <"Familiemedlemmets estimerte eller faktiske alder da problemet eller diagnosen ble satt.">
+			>
+			["id12"] = <
+				text = <"Alder ved død">
+				description = <"Familiemedlemmets nøyaktige eller anslåtte alder ved død.">
+			>
+			["id13"] = <
+				text = <"Klinisk beskrivelse">
+				description = <"Friktekstbeskrivelse eller kommentarer om kliniske aspekter ved familiemedlemmets problem eller diagnose.">
+			>
+			["id15"] = <
+				text = <"Dødsårsak?">
+				description = <"Forholdet mellom problemet/diagnosen og familiemedlemmets død.">
+			>
+			["id17"] = <
+				text = <"Slektsforhold">
+				description = <"Slektsforholdet mellom familiemedlemmet og helsetjenestemottakeren.">
+			>
+			["id21"] = <
+				text = <"Alias">
+				description = <"Et alternativt navn eller merkelapp slik at man uten å bruke navn entydig kan identifisere familiemedlemmet.">
+			>
+			["id23"] = <
+				text = <"Beskrivelse av biomarkør">
+				description = <"Beskrivelse av risikorelaterte biologiske markører som er identifisert hos dette familiemedlemmet.">
+			>
+			["id24"] = <
+				text = <"Død?">
+				description = <"Er familiemedlemmet død?">
+			>
+			["id25"] = <
+				text = <"Biomarkører">
+				description = <"Detaljert informasjon om helsetjenestemottakerens målbare indikatorer for en biologisk tilstand eller lidelse.">
+			>
+			["id27"] = <
+				text = <"Sist oppdatert">
+				description = <"Datoen familieanamnesen sist ble oppdatert.">
+			>
+			["id28"] = <
+				text = <"Detaljer om biomarkør">
+				description = <"Strukturerte detaljer om biologiske markører.">
+			>
+			["id29"] = <
+				text = <"Per problem">
+				description = <"Detaljer om forekomst av et spesifikt problem eller diagnose hos familiemedlemmer.">
+			>
+			["id30"] = <
+				text = <"Problem/diagnosenavn">
+				description = <"Navn på problem eller diagnose.">
+			>
+			["id31"] = <
+				text = <"Beskrivelse">
+				description = <"Fritekstbeskrivelse av forekomst av problem eller diagnose hos familiemedlemmer.">
+			>
+			["id46"] = <
+				text = <"Utvidelse">
+				description = <"Tilleggsinformasjon for å fange opp lokalt innhold eller for å sammenstille med andre referansemodeller/formalismer.">
+			>
+			["id47"] = <
+				text = <"Kommentar">
+				description = <"Ytterligere fritekstbeskrivelse om familiemedlemmet som ikke er registrert i andre felt.">
+			>
+			["id49"] = <
+				text = <"Detaljer om familiemedlem">
+				description = <"Strukturerte detaljer om det identifiserte familiemedlemmet.">
+			>
+			["id54"] = <
+				text = <"Multimedia">
+				description = <"Multimediarepresentasjon av familieanamnesen.">
+			>
+			["id59"] = <
+				text = <"Dødsdato">
+				description = <"Familiemedlemmets nøyaktige eller anslåtte dødsdato.">
+			>
+			["id60"] = <
+				text = <"Problemdetaljer">
+				description = <"Strukturerte detaljer om det identifiserte problemet eller diagnosen.">
+			>
+			["id61"] = <
+				text = <"Biologisk kjønn">
+				description = <"Familiemedlemmets biologiske kjønn.">
+			>
+			["at62"] = <
+				text = <"Relatert">
+				description = <"Problemet eller diagnosen var en umiddelbar, underliggende eller medvirkende dødsårsak.">
+			>
+			["at63"] = <
+				text = <"Urelatert">
+				description = <"Problemet eller diagnosen var ikke en umiddelbar, underliggende eller medvirkende dødsårsak.">
+			>
+			["at64"] = <
+				text = <"Ukjent">
+				description = <"Det er ikke mulig å fastslå hvorvidt problemet eller diagnosen var en umiddelbar, underliggende eller medvirkende dødsårsak.">
+			>
+			["ac1"] = <
+				text = <"Dødsårsak? (synthesised)">
+				description = <"Forholdet mellom problemet/diagnosen og familiemedlemmets død. (synthesised)">
+			>
+		>
+	>
+	term_bindings = <
+		["SNOMED-CT"] = <
+			["id1"] = <http://snomed.info/id/57177007>
+		>
+	>
+	value_sets = <
+		["ac1"] = <
+			id = <"ac1">
+			members = <"at62", "at63", "at64">
+		>
+	>

@@ -1,7 +1,10 @@
 package com.nedap.archie.aom.primitives;
 
+import com.nedap.archie.aom.CObject;
 import com.nedap.archie.aom.CPrimitiveObject;
+import com.nedap.archie.rminfo.ModelInfoLookup;
 
+import javax.annotation.Nullable;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -17,6 +20,7 @@ import java.util.List;
 public class CBoolean extends CPrimitiveObject<Boolean, Boolean> {
     @XmlElement(name="assumed_value")
     private Boolean assumedValue;
+    @Nullable
     private List<Boolean> constraint = new ArrayList<>();
 
     @Override
@@ -43,5 +47,29 @@ public class CBoolean extends CPrimitiveObject<Boolean, Boolean> {
     @Override
     public void addConstraint(Boolean constraint) {
         this.constraint.add(constraint);
+    }
+
+    @Override
+    public boolean cConformsTo(CObject other, ModelInfoLookup lookup) {
+        if(!super.cConformsTo(other, lookup)) {
+            return false;
+        }
+        //now guaranteed to be the same class
+
+        CBoolean otherBoolean = (CBoolean) other;
+        if(otherBoolean.constraint.isEmpty()) {
+            return true;
+        }
+
+        if(!(constraint.size() < otherBoolean.constraint.size())) {
+            return false;
+        }
+
+        for(Boolean constraint:constraint) {
+            if(!otherBoolean.constraint.contains(constraint)) {
+                return false;
+            }
+        }
+        return true;
     }
 }

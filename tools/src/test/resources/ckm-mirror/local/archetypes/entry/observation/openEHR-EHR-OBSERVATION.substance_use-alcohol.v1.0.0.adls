@@ -1,0 +1,358 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated)
+	openEHR-EHR-OBSERVATION.substance_use-alcohol.v1.0.0
+
+specialize
+	openEHR-EHR-OBSERVATION.substance_use.v1
+
+language
+	original_language = <[ISO_639-1::en]>
+	translations = <
+		["ar-sy"] = <
+			language = <[ISO_639-1::ar-sy]>
+			author = <
+				["name"] = <"Mona Saleh">
+			>
+		>
+		["es-ar"] = <
+			language = <[ISO_639-1::es-ar]>
+			author = <
+				["name"] = <"Dr. Leonardo Der Jachadurian">
+				["organisation"] = <"Bitios.com">
+			>
+			accreditation = <"Medical Doctor (Internal Medicine Specialist)">
+		>
+	>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Heather Leslie">
+		["organisation"] = <"Ocean Informatics">
+		["email"] = <"heather.leslie@oceaninformatics.com">
+		["date"] = <"2009-05-06">
+	>
+	copyright = <"© openEHR Foundation">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"This is an archetype used to record details of the use of all forms of alcohol.">
+			use = <"Use to record details of the use of all forms of alcohol.  This includes use at specific point in time, over intervals of time, and use of mathematical functions such as average or minimum e.g. average consumption over a week.  A typical use would be to record usage in an alcohol consumption diary.">
+			keywords = <"substance", "addiction", "consumption", "use">
+			misuse = <"Not to be used for recording persistent and summary details about the use of the substance - this should be captured using the EVALUATION.substance_use_summary archetype.
+Not to be used for recording use or consumption histories for substances other than alcohol.">
+		>
+		["es-ar"] = <
+			language = <[ISO_639-1::es-ar]>
+			purpose = <"Este es un arquetipo usado para registrar detalles del consumo de alcohol en toda clase de bebidas.">
+			use = <"Para registrar detalles del consumo de toda clase de bebidas alcohólicas. Esto incluye el consumo en un momento específico, a lo largo de períodos de tiempo y el uso de funciones matemáticas tales como el promedio el mínimo. Ej. Promedio de consumo en una semana. EL uso típico podría ser para registrar el consumo diario de bebidas alcohólicas.">
+			keywords = <"sustancia", "adicción", "consumo", "uso">
+			misuse = <"No para registrar detalles permanentes y de sumario acerca del consumo del alcohol. Esto debería ser registrado usando el arquetipo EVALUATION.substance_use_summary archetype. No usar para registrar el consumo de otras sustancias distintas del alcohol.">
+		>
+		["ar-sy"] = <
+			language = <[ISO_639-1::ar-sy]>
+			purpose = <"يستخدم هذا النموذج لتسجيل تفاصيل استخدام جميع أشكال الكحول">
+			use = <"يستخدم لتسجيل تفاصيل استخدام جميع الأشكال من الكحول. و هذا يتضمن الاستخدام في نقطة زمنية معينة, عبر فترة زمنية معينة, و استخدام دوال رياضية مثل المتوسط و الحد الأدنى, مثلا متوسط الاستهلاك خلال أسبوع. الاستخدام النمطي للنموذج يتضمن تسجيل الاستخدام في ملاحظات يومية لاستهلاك الكحول.">
+			keywords = <"*substance(en)", "*addiction(en)", "*consumption(en)", "*use(en)">
+			misuse = <"لا يتم استخدام النموذج لتسجيل التفاصيل المتكررة أو الملخصة عن استخدام المواد. يمكن استخدام نموذج تقييم. ملخص استخدام المواد.
+لا يستخدم لتسجيل تاريخ (سوابق) الاستخدام أو الاستهلاك لمواد غير الكحول
+">
+		>
+	>
+	other_contributors = <"Sam Heard, Ocean Informatics, Australia", ...>
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"82233D4E9F595CB8CDF62F7D796BF8F6">
+	>
+
+definition
+	OBSERVATION[id1.1] matches {	-- Alcohol Consumption
+		protocol matches {
+			ITEM_TREE[id0.29] matches {
+				items cardinality matches {1..*; unordered} matches {
+					ELEMENT[id0.30] occurrences matches {0..1} matches {	-- Alcohol per standard drink
+						value matches {
+							DV_QUANTITY[id0.33] matches {
+								property matches {[at0.31]}
+								units matches {"gm"}
+							}
+						}
+					}
+				}
+			}
+		}
+		/data[id2]/events[id3]/data[id4]/items cardinality matches {1..*; unordered} matches {
+			ELEMENT[id5] matches {
+				value matches {
+					DV_CODED_TEXT[id20.1] matches {
+						defining_code matches {[at0.19]}
+					}
+				}
+			}
+			CLUSTER[id11] matches {
+				items matches {
+					ELEMENT[id12] matches {
+						value matches {
+							DV_CODED_TEXT[id21.1] matches {
+								defining_code matches {[ac0.1]}		-- Form (synthesised)
+							}
+						}
+					}
+					ELEMENT[id13] 
+					ELEMENT[id13.1] matches {	-- Standard drinks
+						value matches {
+							DV_QUANTITY[id0.31] matches {
+								property matches {[at0.29]}
+								units matches {"/h", "/d", "/wk"}
+							}
+						}
+					}
+					ELEMENT[id13.2] matches {	-- Grams of alcohol
+						value matches {
+							DV_QUANTITY[id0.32] matches {
+								property matches {[at0.30]}
+								units matches {"gm/d", "gm/wk"}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["at0.19"] = <
+				text = <"Alcohol">
+				description = <"Details about Alcohol consumption.">
+			>
+			["at0.20"] = <
+				text = <"All alcohol">
+				description = <"Total amount of alcohol consumed.">
+			>
+			["at0.21"] = <
+				text = <"All beer">
+				description = <"All beer consumed.">
+			>
+			["at0.22"] = <
+				text = <"All wine">
+				description = <"All wine consumed.">
+			>
+			["at0.23"] = <
+				text = <"All spirits">
+				description = <"All spirits consumed.">
+			>
+			["at0.24"] = <
+				text = <"Full strength beer">
+				description = <"Full strength beer consumed.">
+			>
+			["at0.25"] = <
+				text = <"Light beer">
+				description = <"Light beer consumed.">
+			>
+			["at0.26"] = <
+				text = <"Red wine">
+				description = <"Red wine consumed.">
+			>
+			["at0.27"] = <
+				text = <"White wine">
+				description = <"White wine consumed.">
+			>
+			["at0.28"] = <
+				text = <"Fortified wine">
+				description = <"Fortified wine consumed.">
+			>
+			["id0.30"] = <
+				text = <"Alcohol per standard drink">
+				description = <"Amount of alchohol defining a standard drink - this differs in many countries.">
+			>
+			["id1.1"] = <
+				text = <"Alcohol Consumption">
+				description = <"Archetype to record the actual use or consumption of alcohol at the present time, a specific time or over a period of time.">
+			>
+			["id13.1"] = <
+				text = <"Standard drinks">
+				description = <"Number of standard drinks of alcohol consumed.">
+			>
+			["id13.2"] = <
+				text = <"Grams of alcohol">
+				description = <"Number of grams of alcohol consumed.">
+			>
+			["at0.29"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at0.30"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at0.31"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["ac0.1"] = <
+				text = <"Form (synthesised)">
+				description = <"Form of alcohol used. (synthesised)">
+			>
+		>
+		["es-ar"] = <
+			["at0.19"] = <
+				text = <"Alcohol">
+				description = <"Detalles acerca del consumo de alcohol.">
+			>
+			["at0.20"] = <
+				text = <"Todo tipo de bebidas alcohólicas">
+				description = <"Cantidad total del alcohol consumido.">
+			>
+			["at0.21"] = <
+				text = <"Toda la cerverza">
+				description = <"Toda la cerveza consumida.">
+			>
+			["at0.22"] = <
+				text = <"Todo el vino">
+				description = <"Todo el vino consumido.">
+			>
+			["at0.23"] = <
+				text = <"Todos el licor">
+				description = <"Todos el licor consumido.">
+			>
+			["at0.24"] = <
+				text = <"Cerveza fuerte">
+				description = <"La cerveza fuerte consumida.">
+			>
+			["at0.25"] = <
+				text = <"Cerveza liviana">
+				description = <"La cerveza liviana consumida.">
+			>
+			["at0.26"] = <
+				text = <"Vino tinto">
+				description = <"El vino tinto consumido.">
+			>
+			["at0.27"] = <
+				text = <"Vino blanco">
+				description = <"El vino blanco consumido.">
+			>
+			["at0.28"] = <
+				text = <"Vino generoso">
+				description = <"El vino generoso o fortificado consumido.">
+			>
+			["id0.30"] = <
+				text = <"Cantidad de alcohol por trago estándar">
+				description = <"La cantidad de alcohol que define un trago estándar (puede diferir en distintos países).">
+			>
+			["id1.1"] = <
+				text = <"Consumo de Alcohol">
+				description = <"Arquetipo para registrar el consumo de alcohol actual.">
+			>
+			["id13.1"] = <
+				text = <"Tragos estándar">
+				description = <"El número de tragos estándar de alcohol que se han consumido. Un trago estándar contiene 14 gramos de alcohol puro.">
+			>
+			["id13.2"] = <
+				text = <"Gramos de alcohol">
+				description = <"La cantidad en gramos de alcohol consumida.">
+			>
+			["at0.29"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at0.30"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at0.31"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["ac0.1"] = <
+				text = <"Forma (synthesised)">
+				description = <"Forma de consumo del alcohol. (synthesised)">
+			>
+		>
+		["ar-sy"] = <
+			["at0.19"] = <
+				text = <"الكحول">
+				description = <"تفاصيل عن استهلاك الكحول">
+			>
+			["at0.20"] = <
+				text = <"جميع الكحول">
+				description = <"الكمية الكلية للكحول المستهلك">
+			>
+			["at0.21"] = <
+				text = <"جميع البيرة - الجعة">
+				description = <"البيرة (الجعة) الكلية المستهلكة">
+			>
+			["at0.22"] = <
+				text = <"جميع النبيذ">
+				description = <"جميع النبيذ الذي تم استهلاكه">
+			>
+			["at0.23"] = <
+				text = <"جميع الكحولات">
+				description = <"جميع الكحولات التي يتم استهلاكها">
+			>
+			["at0.24"] = <
+				text = <"البيرة (الجعة) كاملة القوة">
+				description = <"البيرة (الجعة) كاملة القوة التي تم استهلاكها">
+			>
+			["at0.25"] = <
+				text = <"البيرة الخفيفة">
+				description = <"البيرة الخفيفة التي تم استهلاكها">
+			>
+			["at0.26"] = <
+				text = <"النبيذ الأحمر">
+				description = <"النبيذ الأحمر الذي تم استهلاكه">
+			>
+			["at0.27"] = <
+				text = <"النبيذ الأبيض">
+				description = <"النبيذ الأبيض الذي تم استهلاكه">
+			>
+			["at0.28"] = <
+				text = <"النبيذ المقوَّى">
+				description = <"النبيذ المقوَّى الذي تم استخدامه">
+			>
+			["id0.30"] = <
+				text = <"كمية الكحول في الشراب المعياري">
+				description = <"كمية الكحول التي تُعَرِّف الشراب المعياري - و ذلك يختلف في العديد من الدول">
+			>
+			["id1.1"] = <
+				text = <"استهلاك الكحول">
+				description = <"نموذج يستخدم لتسجيل الاستخدام الفعلي أو استهلاك الكحول في الوقت الحالي, أو وقت معين أو عبر مدة زمنية معينة.">
+			>
+			["id13.1"] = <
+				text = <"الأشربة المعيارية">
+				description = <"عدد أشربة الكحول المعيارية التي يتم استهلاكها">
+			>
+			["id13.2"] = <
+				text = <"جرامات الكحول">
+				description = <"عدد جرامات الكحول المستخدمة">
+			>
+			["at0.29"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at0.30"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at0.31"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["ac0.1"] = <
+				text = <"الشكل (synthesised)">
+				description = <"شكل الكحول المستخدم (synthesised)">
+			>
+		>
+	>
+	term_bindings = <
+		["openehr"] = <
+			["at0.29"] = <http://openehr.org/id/382>
+			["at0.30"] = <http://openehr.org/id/347>
+			["at0.31"] = <http://openehr.org/id/124>
+		>
+	>
+	value_sets = <
+		["ac0.1"] = <
+			id = <"ac0.1">
+			members = <"at0.20", "at0.21", "at0.22", "at0.23", "at0.24", "at0.25", "at0.26", "at0.27", "at0.28">
+		>
+	>

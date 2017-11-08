@@ -1,0 +1,239 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated; uid=93df738b-d3ab-4495-8592-2fb38d0fe68c)
+	openEHR-EHR-CLUSTER.specimen_container.v0.0.1-alpha
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Dr Ian McNicoll">
+		["organisation"] = <"Ocean Informatics">
+		["email"] = <"ian.mcnicoll@oceaninformatics.com">
+		["date"] = <"2009-06-21">
+	>
+	original_namespace = <"org.openehr">
+	original_publisher = <"openEHR Foundation">
+	custodian_namespace = <"org.openehr">
+	custodian_organisation = <"openEHR Foundation">
+	copyright = <"© openEHR Foundation">
+	licence = <"This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 License. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/.">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record details of the container used to hold a pathology specimen.">
+			use = <"Normally used within a parent OBSERVATION.laboratory_test archetype or specialisation.">
+			keywords = <"specimen", "lab", "laboratory", "pathology">
+			misuse = <"">
+		>
+	>
+	other_contributors = <"Koray Atalag University of Auckland, New Zealand", ...>
+	references = <
+		["1"] = <"Digital Imaging and Communications in Medicine (DICOM) Supplement 122: Specimen Module and Revised Pathology SOP Classes">
+		["2"] = <"DICOM Standards Committee, Working Groups 26, Pathology">
+		["3"] = <"Hl7 FHIR Specimen resource: HL7 FHIR; Available from http://www.hl7.org/implement/standards/fhir/specimenn.html">
+	>
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"FE3E7A7FAA446F566981459D7B8C296E">
+		["build_uid"] = <"50248e84-0bba-4b97-afcf-34957129b1d1">
+	>
+
+definition
+	CLUSTER[id1] matches {	-- Specimen container
+		items matches {
+			ELEMENT[id6] occurrences matches {0..1} matches {	-- Container type
+				value matches {
+					DV_CODED_TEXT[id30] matches {
+						defining_code matches {[ac1]}		-- Container type (synthesised)
+					}
+					DV_TEXT[id31] 
+				}
+			}
+			ELEMENT[id27] occurrences matches {0..1} matches {	-- Container additive
+				value matches {
+					DV_TEXT[id32] 
+				}
+			}
+			ELEMENT[id14] occurrences matches {0..1} matches {	-- Description
+				value matches {
+					DV_TEXT[id33] 
+				}
+			}
+			ELEMENT[id25] occurrences matches {0..1} matches {	-- Datetime transported
+				value matches {
+					DV_DATE_TIME[id34] 
+				}
+			}
+			ELEMENT[id4] matches {	-- Container Identifier
+				value matches {
+					DV_IDENTIFIER[id35] 
+				}
+			}
+			ELEMENT[id3] occurrences matches {0..1} matches {	-- Collection area Identifier
+				value matches {
+					DV_IDENTIFIER[id36] 
+				}
+			}
+			ELEMENT[id26] occurrences matches {0..1} matches {	-- Transporter identifier
+				value matches {
+					DV_IDENTIFIER[id37] 
+				}
+			}
+			allow_archetype CLUSTER[id29] matches {	-- Container component
+				include
+					archetype_id/value matches {/.*/}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Specimen container">
+				description = <"Details of a specimen container. This is often integral to workflow and reporting of pathology specimens, particularly anatomical and histological pathology specimens.">
+			>
+			["id3"] = <
+				text = <"Collection area Identifier">
+				description = <"Identifier of the place from where the container should be collected.">
+			>
+			["id4"] = <
+				text = <"Container Identifier">
+				description = <"The unique identifier given to the container. May be multiple.">
+			>
+			["id6"] = <
+				text = <"Container type">
+				description = <"The type of container.">
+			>
+			["at7"] = <
+				text = <"Tissue cassette">
+				description = <"The container is a tissue cassette.">
+			>
+			["at8"] = <
+				text = <"Tissue microarray cassette">
+				description = <"The container is a tissue microarray cassette.">
+			>
+			["at9"] = <
+				text = <"Specimen vial">
+				description = <"The container is a specimen vial.">
+			>
+			["at10"] = <
+				text = <"Microscope slide">
+				description = <"The container is a microscope slide.">
+			>
+			["at11"] = <
+				text = <"Specimen container">
+				description = <"The container is a gneric specimen container.">
+			>
+			["at12"] = <
+				text = <"Electron microscopy grid">
+				description = <"The container is an electron microscopy grid.">
+			>
+			["at13"] = <
+				text = <"Specimen well">
+				description = <"The container is a specimen well.">
+			>
+			["id14"] = <
+				text = <"Description">
+				description = <"A text description of the container.">
+			>
+			["id25"] = <
+				text = <"Datetime transported">
+				description = <"The data and time that the specimen was uplifted for transportation to the laboratory.">
+			>
+			["id26"] = <
+				text = <"Transporter identifier">
+				description = <"Identifier of person or agency responsible for transporting the container to the lab.">
+			>
+			["id27"] = <
+				text = <"Container additive">
+				description = <"Any special fixative or transport medium requirements.">
+			>
+			["id29"] = <
+				text = <"Container component">
+				description = <"Details of a sub-components which comprises the container
+(e.g. description of the slide 
+and of the coverslip).">
+			>
+			["ac1"] = <
+				text = <"Container type (synthesised)">
+				description = <"The type of container. (synthesised)">
+			>
+		>
+		["sl"] = <
+			["id1"] = <
+				text = <"*Specimen container(en)">
+				description = <"*Details of a specimen container. This is often integral to workflow and reporting of pathology specimens, particularly antamical and histological pathology specimens.(en)">
+			>
+			["id3"] = <
+				text = <"*Collection Area Identifier(en)">
+				description = <"*Identifier of the place from where the container should be collected.(en)">
+			>
+			["id4"] = <
+				text = <"*Container Identifier(en)">
+				description = <"*The unique identifier given to the container. May be multiple.(en)">
+			>
+			["id6"] = <
+				text = <"*Container type(en)">
+				description = <"*The type of container.(en)">
+			>
+			["at7"] = <
+				text = <"*Tissue cassette(en)">
+				description = <"**(en)">
+			>
+			["at8"] = <
+				text = <"*Tissue microarray cassette(en)">
+				description = <"**(en)">
+			>
+			["at9"] = <
+				text = <"*Specimen vial(en)">
+				description = <"**(en)">
+			>
+			["at10"] = <
+				text = <"*Microscope slide(en)">
+				description = <"**(en)">
+			>
+			["at11"] = <
+				text = <"*Specimen container(en)">
+				description = <"**(en)">
+			>
+			["at12"] = <
+				text = <"*Electron microscopy grid(en)">
+				description = <"**(en)">
+			>
+			["at13"] = <
+				text = <"*Specimen well(en)">
+				description = <"**(en)">
+			>
+			["id14"] = <
+				text = <"*Description(en)">
+				description = <"*A text description of the container.(en)">
+			>
+			["id25"] = <
+				text = <"*Datetime Transported(en)">
+				description = <"*The data and time that the specimen was uplifted for transportation to the laboratory.(en)">
+			>
+			["id26"] = <
+				text = <"*Transporter Identifier(en)">
+				description = <"*Identifier of person or agency responsible for transporting the container to the lab.(en)">
+			>
+			["id27"] = <
+				text = <"*Container Additive(en)">
+				description = <"*Any special fixative or transport medium requirements.(en)">
+			>
+			["id29"] = <
+				text = <"*Cluster(en)">
+				description = <"**(en)">
+			>
+			["ac1"] = <
+				text = <"*Container type(en) (synthesised)">
+				description = <"*The type of container.(en) (synthesised)">
+			>
+		>
+	>
+	value_sets = <
+		["ac1"] = <
+			id = <"ac1">
+			members = <"at7", "at8", "at9", "at10", "at11", "at12", "at13">
+		>
+	>
