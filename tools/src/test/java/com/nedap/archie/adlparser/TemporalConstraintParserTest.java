@@ -3,12 +3,14 @@ package com.nedap.archie.adlparser;
 import com.nedap.archie.aom.primitives.CDate;
 import com.nedap.archie.aom.primitives.CDuration;
 import com.nedap.archie.base.Interval;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.time.Duration;
 import java.time.Period;
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAmount;
+import java.util.Locale;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -20,6 +22,11 @@ import static org.junit.Assert.assertTrue;
 public class TemporalConstraintParserTest extends PrimitivesConstraintParserTest {
 
 
+    @Before
+    public void setup() throws Exception {
+        Locale.setDefault(Locale.US);
+        super.setup();
+    }
     @Test
     public void noParseErrors() {
         parser.getErrors().logToLogger();
