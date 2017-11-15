@@ -19,8 +19,7 @@ public class OverridingArchetypeRepository implements ArchetypeRepository {
         this.root = root;
         overrides = new SimpleArchetypeRepository();
     }
-
-    public void addArchetype(Archetype archetype) {
+    public void addExtraArchetype(Archetype archetype) {
         overrides.addArchetype(archetype);
     }
 

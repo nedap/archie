@@ -13,6 +13,7 @@ It is licensed under the Apache license.
 
 We are splitting Archie into separate modules. This causes a few API incompatibilities, which is not limited to the following list:
 
+- Cardinality was moved to the om.nedap.archie.base package
 - APathQuery is now changed into AOMPathQuery and RMPathQuery. If you used itemAtPath and itemsAtPath this will not affect your code.
 - The default AOM methods no longer use ArchieRMInfoLookup by default. You need to supply it by hand. List of a few cases where this happens:
     - CAttributeTuple.isValidValue()
@@ -21,8 +22,15 @@ We are splitting Archie into separate modules. This causes a few API incompatibi
     - ArchetypeValidator
     - RMQueries
     - RuleEvaluation
+    - RMQueryContext
     - ... probably more
+- RMQueryContext now needs a JAXBContext for the RM to function. You can use JAXBUtil.getArchieJaxbContext() for the openehr-rm 
+- The ArchetypeRepository interface now has a getAll() method. It's likely this interface will be renamed or removed in the future in favor of what is now the FullArchetypeRepository
+- OverridingArchetypeRepository.addArchetype has been renamed to addExtraArchetype
 - ADLPArser.withConstrainsImposer has been removed. You can still do new ADLPArser(new RMConstraintsImposer()) if you want, or use it manually. 
+- all datetime parsers are now located in com.nedap.archie.datetime.DateTimeParsers
+- CObject is now an abstract class, as it should be according to specs
+
 
 This README is out of date for this branch, but will be updated soon. It is up to date for the production version.
 

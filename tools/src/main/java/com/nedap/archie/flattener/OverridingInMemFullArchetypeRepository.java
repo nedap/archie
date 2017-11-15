@@ -3,6 +3,7 @@ package com.nedap.archie.flattener;
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.OperationalTemplate;
 import com.nedap.archie.archetypevalidator.ValidationResult;
+import org.apache.commons.lang.mutable.Mutable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,10 +19,10 @@ import java.util.concurrent.ConcurrentHashMap;
  * ValidationResults and flattened archetypes will automatically be added to the extra archetypes repository if it
  * contains the archetype id in its unflattened form
  */
-public class OverridingInMemFullArchetypeRepository implements FullArchetypeRepository {
+public class OverridingInMemFullArchetypeRepository implements FullArchetypeRepository, MutableArchetypeRepository {
 
     private final FullArchetypeRepository originalRepository;
-    private final FullArchetypeRepository extraArchetypes = new InMemoryFullArchetypeRepository();
+    private final InMemoryFullArchetypeRepository extraArchetypes = new InMemoryFullArchetypeRepository();
 
     public OverridingInMemFullArchetypeRepository() {
         originalRepository = new InMemoryFullArchetypeRepository();
@@ -69,7 +70,11 @@ public class OverridingInMemFullArchetypeRepository implements FullArchetypeRepo
 
     @Override
     public void addArchetype(Archetype archetype) {
-        originalRepository.addArchetype(archetype);
+        if(originalRepository instanceof MutableArchetypeRepository) {
+            ((MutableArchetypeRepository) originalRepository).addArchetype(archetype);
+        } else {
+            throw new UnsupportedOperationException("original archetype repository is not a mutable repository");
+        }
     }
 
 

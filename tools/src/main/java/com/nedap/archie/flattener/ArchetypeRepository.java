@@ -17,10 +17,7 @@ public interface ArchetypeRepository {
      */
     Archetype getArchetype(String archetypeId);
 
-    public List<Archetype> getAllArchetypes();
-
-    void addArchetype(Archetype archetype);
-
+    List<Archetype> getAllArchetypes();
 
     /**
      * Return true if an only if the child archetype has parent as its parent somewhere in the tree

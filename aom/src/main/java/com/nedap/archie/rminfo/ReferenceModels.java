@@ -15,6 +15,12 @@ public class ReferenceModels {
 
     }
 
+    public ReferenceModels(ModelInfoLookup... models) {
+        for(ModelInfoLookup model:models) {
+            registerModel(model);
+        }
+    }
+
     public void registerModel(ModelInfoLookup model) {
         for(RMPackageId id:model.getId()) {
             referenceModelsById.put(id, model);

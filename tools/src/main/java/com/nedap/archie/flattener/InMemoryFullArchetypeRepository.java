@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class InMemoryFullArchetypeRepository extends SimpleArchetypeRepository implements FullArchetypeRepository {
+public class InMemoryFullArchetypeRepository extends SimpleArchetypeRepository implements FullArchetypeRepository, MutableArchetypeRepository {
 
     private Map<String, ValidationResult> validationResult = new ConcurrentHashMap<>();
 
