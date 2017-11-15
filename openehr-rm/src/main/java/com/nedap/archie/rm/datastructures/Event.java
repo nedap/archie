@@ -1,5 +1,6 @@
 package com.nedap.archie.rm.datastructures;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nedap.archie.rm.archetyped.Locatable;
 import com.nedap.archie.rm.datavalues.quantity.datetime.DvDateTime;
 import com.nedap.archie.rm.datavalues.quantity.datetime.DvDuration;
@@ -55,6 +56,7 @@ public abstract class Event<Type extends ItemStructure> extends Locatable {
         setThisAsParent(data, "data");
     }
 
+    @JsonIgnore
     public DvDuration getOffset() {
         DvDuration result = new DvDuration();
         Duration duration = Duration.between(OffsetDateTime.from(((History) getParent()).getOrigin().getValue()), OffsetDateTime.from(time.getValue()));
