@@ -3,12 +3,14 @@ package com.nedap.archie.adlparser;
 import com.nedap.archie.aom.primitives.CDate;
 import com.nedap.archie.aom.primitives.CDuration;
 import com.nedap.archie.base.Interval;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.time.Duration;
 import java.time.Period;
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAmount;
+import java.util.Locale;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -20,11 +22,10 @@ import static org.junit.Assert.assertTrue;
 public class TemporalConstraintParserTest extends PrimitivesConstraintParserTest {
 
 
-    @Test
-    public void noParseErrors() {
-        parser.getErrors().logToLogger();
-        assertTrue(parser.getErrors().getErrors().isEmpty());
-        //assertTrue(parser.getErrors().getWarnings().isEmpty());
+    @Before
+    public void setup() throws Exception {
+        Locale.setDefault(Locale.US);
+        super.setup();
     }
 
     @Test
@@ -76,7 +77,7 @@ public class TemporalConstraintParserTest extends PrimitivesConstraintParserTest
 
     @Test
     public void assumedValues() throws Exception {
-        archetype = parser.parse(TemporalConstraintParserTest.class.getResourceAsStream("/adl2-tests/features/aom_structures/basic/openEHR-TEST_PKG-WHOLE.assumed_values.v1.0.0.adls"));
+        archetype = getAssumedValuesArchetype();
         CDate dateAttr4 = getAttribute("date_attr4");
         assertEquals("yyyy-??-XX", dateAttr4.getPatternedConstraint());
         assertEquals(1995, dateAttr4.getAssumedValue().get(ChronoField.YEAR));

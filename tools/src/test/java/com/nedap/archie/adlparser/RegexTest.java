@@ -7,6 +7,7 @@ import com.nedap.archie.rules.BinaryOperator;
 import com.nedap.archie.rules.Constraint;
 import com.nedap.archie.rules.ModelReference;
 import com.nedap.archie.rules.RuleStatement;
+import com.nedap.archie.testutil.TestUtil;
 import org.junit.Test;
 
 import java.util.List;
@@ -31,7 +32,7 @@ public class RegexTest extends PrimitivesConstraintParserTest {
 
     @Test
     public void extended_regexp() throws Exception {
-        archetype = parser.parse(getClass().getResourceAsStream("/regexps.adls"));
+        archetype = TestUtil.parseFailOnErrors("/regexps.adls");
         CString regexpSlashEscape = getAttribute("slash_escaped");
         CString regexpUTF8 = getAttribute("utf8");
         CString regexpAssumedValue = getAttribute("utf8_assumed_value");

@@ -1,6 +1,7 @@
 package com.nedap.archie.aom;
 
 import com.nedap.archie.adlparser.ADLParser;
+import com.nedap.archie.testutil.TestUtil;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,7 +16,7 @@ public class ArchetypeCloneTest {
 
     @Before
     public void setup() throws Exception {
-        archetype = new ADLParser().parse(getClass().getResourceAsStream("/basic.adl"));
+        archetype = TestUtil.parseFailOnErrors("/basic.adl");
     }
 
     @Test

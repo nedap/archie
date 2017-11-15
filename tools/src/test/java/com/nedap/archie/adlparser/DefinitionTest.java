@@ -8,6 +8,8 @@ import com.nedap.archie.aom.CComplexObject;
 import com.nedap.archie.aom.CObject;
 import com.nedap.archie.aom.primitives.CString;
 import com.nedap.archie.aom.primitives.CTerminologyCode;
+import com.nedap.archie.testutil.TestUtil;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -22,9 +24,15 @@ import static org.junit.Assert.assertTrue;
  */
 public class DefinitionTest {
 
+    private Archetype archetype;
+
+    @Before
+    public void setup() throws Exception {
+        archetype = TestUtil.parseFailOnErrors("/basic.adl");;
+    }
+
     @Test
     public void definition() throws Exception {
-        Archetype archetype = new ADLParser().parse(getClass().getResourceAsStream("/basic.adl"));
         CComplexObject definition = archetype.getDefinition();
         assertEquals("COMPOSITION", definition.getRmTypeName());
         assertEquals("id1", definition.getNodeId());
@@ -63,7 +71,6 @@ public class DefinitionTest {
 											DV_EHR_URI[id12]
 											DV_IDENTIFIER[id13]
          */
-        Archetype archetype = new ADLParser().parse(getClass().getResourceAsStream("/basic.adl"));
 
         ArchetypeModelObject archetypeModelObject = archetype.itemAtPath("/context[id11]/other_context[id2]/items[id3]/items[id4]/value");
 
@@ -82,7 +89,6 @@ public class DefinitionTest {
 
     @Test
     public void stringConstraint() throws Exception {
-        Archetype archetype = new ADLParser().parse(getClass().getResourceAsStream("/basic.adl"));
 
         ArchetypeModelObject archetypeModelObject = archetype.itemAtPath("/context[id11]/other_context[id2]/items[id3]/items[id5]/value[id14]/value");
 
@@ -100,7 +106,6 @@ public class DefinitionTest {
 
     @Test
     public void tupleConstraint() throws Exception {
-        Archetype archetype = new ADLParser().parse(getClass().getResourceAsStream("/basic.adl"));
 
         ArchetypeModelObject archetypeModelObject = archetype.itemAtPath("/context[id11]/other_context[id2]/items[id3]/items[id7]/value[id16]");
 

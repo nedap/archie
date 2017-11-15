@@ -31,8 +31,10 @@ public class RMPathQueryTest {
 
     @Before
     public void setup() throws Exception {
-        archetype = new ADLParser(new RMConstraintImposer()).parse(getClass().getResourceAsStream("/basic.adl"));
         testUtil = new TestUtil();
+        archetype = TestUtil.parseFailOnErrors("/basic.adl");
+        new RMConstraintImposer().imposeConstraints(archetype.getDefinition());
+
     }
 
     @Test
