@@ -30,6 +30,7 @@ We are splitting Archie into separate modules. This causes a few API incompatibi
 - ADLPArser.withConstrainsImposer has been removed. You can still do new ADLPArser(new RMConstraintsImposer()) if you want, or use it manually. 
 - all datetime parsers are now located in com.nedap.archie.datetime.DateTimeParsers
 - CObject is now an abstract class, as it should be according to specs
+- ModelInfoLookup now also returns computed attributes, with isComputed() returning true. This can break lots of RM processing tools!
 
 
 This README is out of date for this branch, but will be updated soon. It is up to date for the production version.
