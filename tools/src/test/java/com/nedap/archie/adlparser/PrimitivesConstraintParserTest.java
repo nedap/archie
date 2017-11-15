@@ -19,8 +19,13 @@ public abstract class PrimitivesConstraintParserTest {
     @Before
     public void setup() throws Exception {
         System.out.println("IS THIS ON?");
-        parser = new ADLParser();
-        archetype = parser.parse(TemporalConstraintParserTest.class.getResourceAsStream("/adl2-tests/features/aom_structures/basic/openEHR-TEST_PKG-WHOLE.primitive_types.v1.0.0.adls"));
+        try {
+            parser = new ADLParser();
+            archetype = parser.parse(TemporalConstraintParserTest.class.getResourceAsStream("/adl2-tests/features/aom_structures/basic/openEHR-TEST_PKG-WHOLE.primitive_types.v1.0.0.adls"));
+        } catch (Exception e) {
+            System.out.println("exception happened:");
+            e.printStackTrace();
+        }
         parser.getErrors().logToLogger();
         assertFalse(parser.getErrors().toString(), parser.getErrors().hasErrors());
         assertNotNull(archetype);
