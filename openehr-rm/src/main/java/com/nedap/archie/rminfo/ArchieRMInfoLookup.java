@@ -22,6 +22,7 @@ import com.nedap.archie.rm.datastructures.PointEvent;
 import com.nedap.archie.rm.datatypes.CodePhrase;
 import com.nedap.archie.rm.datavalues.DvCodedText;
 
+import java.lang.reflect.Method;
 import java.time.temporal.Temporal;
 import java.time.temporal.TemporalAccessor;
 import java.time.temporal.TemporalAmount;
@@ -81,6 +82,14 @@ public class ArchieRMInfoLookup extends ReflectionModelInfoLookup {
             return convertTerminologyCode((TerminologyCode) object);
         }
         return object;
+    }
+
+    @Override
+    protected boolean shouldAdd(Method method) {
+        if(method.getName().equals("getPathSegments")) {
+            return false;
+        }
+        return super.shouldAdd(method);
     }
 
     private CodePhrase convertTerminologyCode(TerminologyCode terminologyCode) {

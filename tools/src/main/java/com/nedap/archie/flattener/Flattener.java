@@ -103,7 +103,7 @@ public class Flattener {
             for(TemplateOverlay overlay:childTemplate.getTemplateOverlays()) {
                 //we'll flatten them later when we need them, otherwise, you run into problems with archetypes
                 //not yet added to repository while we already need them
-                repository.addArchetype(overlay);
+                repository.addExtraArchetype(overlay);
             }
         }
 

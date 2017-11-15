@@ -34,6 +34,7 @@ public class DvQuantity extends DvAmount<Double> {
      */
     @Deprecated
     @JsonIgnore
+    @Nullable
     private transient DvCodedText property;
 
     @Nullable
