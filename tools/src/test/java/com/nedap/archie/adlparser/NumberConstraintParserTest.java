@@ -123,7 +123,7 @@ public class NumberConstraintParserTest extends PrimitivesConstraintParserTest {
 	*/
     @Test
     public void assumedIntegerValues() throws Exception {
-		archetype = parser.parse(TemporalConstraintParserTest.class.getResourceAsStream("/adl2-tests/features/aom_structures/basic/openEHR-TEST_PKG-WHOLE.assumed_values.v1.0.0.adls"));
+		archetype = parser.parse(TemporalConstraintParserTest.class.getResourceAsStream("/adl2-tests/features/aom_structures/basic/openEHR-TEST_PKG-WHOLE.assumed_values.v1.adls"));
 		CInteger integerAttr1 = getAttribute("integer_attr1");
 		CInteger integerAttr2 = getAttribute("integer_attr2");
 		CInteger integerAttr3 = getAttribute("integer_attr3");
@@ -173,7 +173,7 @@ public class NumberConstraintParserTest extends PrimitivesConstraintParserTest {
 	 */
 	@Test
 	public void assumedRealValues() throws Exception {
-		archetype = parser.parse(TemporalConstraintParserTest.class.getResourceAsStream("/adl2-tests/features/aom_structures/basic/openEHR-TEST_PKG-WHOLE.assumed_values.v1.0.0.adls"));
+		archetype = parser.parse(TemporalConstraintParserTest.class.getResourceAsStream("/adl2-tests/features/aom_structures/basic/openEHR-TEST_PKG-WHOLE.assumed_values.v1.adls"));
 		CReal realAttr1 = getAttribute("real_attr1");
 		CReal realAttr2 = getAttribute("real_attr2");
 		CReal realAttr3 = getAttribute("real_attr3");

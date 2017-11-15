@@ -95,10 +95,8 @@ subprojects {
 
   test {
    testLogging {
-      events "standard_out", "standard_error", "failed"
-      exceptionFormat "full"
-      showStandardStreams true
-      showStackTraces true
+      events "failed"
+      exceptionFormat "full"      
     }
   }
 
