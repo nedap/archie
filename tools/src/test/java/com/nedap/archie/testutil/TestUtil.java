@@ -1,6 +1,8 @@
 package com.nedap.archie.testutil;
 
 import com.google.common.collect.Lists;
+import com.nedap.archie.adlparser.ADLParser;
+import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.CAttribute;
 import com.nedap.archie.aom.CComplexObject;
 import com.nedap.archie.aom.CObject;
@@ -9,6 +11,8 @@ import com.nedap.archie.creation.RMObjectCreator;
 import com.nedap.archie.rm.RMObject;
 import com.nedap.archie.rminfo.ArchieRMInfoLookup;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -120,6 +124,19 @@ public class TestUtil {
 
     private static boolean primitiveObjectMatches(CPrimitiveObject o1, CObject o2) {
         return (o2 instanceof CPrimitiveObject) && Objects.equals(((CPrimitiveObject) o2).getConstraint(), o1.getConstraint());
+    }
 
+    public static Archetype parseFailOnErrors(String resourceName) throws IOException {
+        ADLParser parser = new ADLParser();
+        try(InputStream stream = TestUtil.class.getResourceAsStream(resourceName)) {
+            if(stream == null) {
+                throw new RuntimeException("Resource does not exist: " + resourceName);
+            }
+            Archetype archetype = parser.parse(stream);
+            parser.getErrors().logToLogger();
+            assertFalse(parser.getErrors().toString(), parser.getErrors().hasErrors());
+            assertNotNull(archetype);
+            return archetype;
+        }
     }
 }

@@ -6,6 +6,7 @@ import com.nedap.archie.aom.ArchetypeModelObject;
 import com.nedap.archie.aom.CAttribute;
 import com.nedap.archie.aom.CComplexObject;
 import com.nedap.archie.query.AOMPathQuery;
+import com.nedap.archie.testutil.TestUtil;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -23,7 +24,7 @@ public class AOMPathQueryTest {
 
     @Before
     public void setup() throws Exception {
-        archetype = new ADLParser(new RMConstraintImposer()).parse(getClass().getResourceAsStream("/basic.adl"));
+        archetype = TestUtil.parseFailOnErrors("/basic.adl");
     }
 
 
