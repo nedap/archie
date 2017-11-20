@@ -30,7 +30,7 @@ public abstract class PrimitivesConstraintParserTest {
     }
 
     public Archetype getAssumedValuesArchetype() throws Exception {
-        return TestUtil.parseFailOnErrors("/adl2-tests/features/aom_structures/basic/openEHR-TEST_PKG-WHOLE.assumed_values.v1.0.0.adls");
+        return TestUtil.parseFailOnErrors("/adl2-tests/features/aom_structures/basic/openehr-TEST_PKG-WHOLE.assumed_values.v1.0.0.adls");
     }
 
 
