@@ -19,7 +19,7 @@ public class RMConstraintImposerTest {
 
     @Before
     public void setup() throws Exception {
-        archetype = new ADLParser(new RMConstraintImposer()).parse(getClass().getResourceAsStream("/adl2-tests/features/alternatives/openEHR-EHR-ADMIN_ENTRY.dependency_choice.v1.adls"));
+        archetype = new ADLParser(new RMConstraintImposer()).parse(getClass().getResourceAsStream("/adl2-tests/features/alternatives/openEHR-EHR-ADMIN_ENTRY.dependency_choice.v1.0.0.adls"));
     }
 
     @Test
@@ -57,9 +57,9 @@ public class RMConstraintImposerTest {
         CAttribute attribute = archetype.getDefinition().getAttribute("data").getChild("id2").getAttribute("items").getChild("id3").getAttribute("items");
         Cardinality cardinality = attribute.getCardinality();
         assertNotNull(cardinality);
-        assertEquals(new Integer(0), cardinality.getInterval().getLower());
+        assertEquals(new Integer(1), cardinality.getInterval().getLower());
         assertTrue(cardinality.getInterval().isLowerIncluded());
-        assertTrue(cardinality.getInterval().isUpperIncluded());
+        assertTrue(cardinality.getInterval().isUpperUnbounded());
         assertTrue(attribute.isMultiple());
 
         MultiplicityInterval existence = attribute.getExistence();

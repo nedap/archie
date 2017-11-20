@@ -1,0 +1,92 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated)
+	openEHR-EHR-CLUSTER.multimedia.v1.0.0
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Heather Leslie">
+		["organisation"] = <"Ocean Informatics">
+		["email"] = <"heather.leslie@oceaninformatics.com">
+		["date"] = <"2014-10-22">
+	>
+	copyright = <"© openEHR Foundation">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record metadats details about a multimedia representation of the clinical data that is not captured using the Multimedia data type alone.">
+			use = <"Use to record additional metadata about a multimedia representation of clincal data that is not captured using the Multimedia data type alone.">
+			keywords = <"image", "audio", "text", "video", "application">
+			misuse = <"">
+		>
+	>
+	other_contributors = <"Grahame Grieve, Health Intersections, Australia", "Ian McNicoll, freshEHR, UK">
+	other_details = <
+		["current_contact"] = <"Heather Leslie, Ocean Informatics, heather.leslie@oceaninformatics.com">
+		["MD5-CAM-1.0.1"] = <"626AFF94BCD3048F45914AD130D54262">
+	>
+
+definition
+	CLUSTER[id1] matches {	-- Multimedia Resource
+		items matches {
+			ELEMENT[id2] occurrences matches {0..1} matches {	-- Multimedia resource
+				value matches {
+					DV_MULTIMEDIA[id7] matches {
+						media_type 
+					}
+				}
+			}
+			ELEMENT[id3] occurrences matches {0..1} matches {	-- Title
+				value matches {
+					DV_TEXT[id8] 
+				}
+			}
+			ELEMENT[id6] occurrences matches {0..1} matches {	-- Description
+				value matches {
+					DV_TEXT[id9] 
+				}
+			}
+			ELEMENT[id4] occurrences matches {0..1} matches {	-- Source
+				value matches {
+					DV_TEXT[id10] 
+				}
+			}
+			ELEMENT[id5] occurrences matches {0..1} matches {	-- Date created
+				value matches {
+					DV_DATE_TIME[id11] 
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Multimedia Resource">
+				description = <"Details about an multimedia representation of the clinical data.">
+			>
+			["id2"] = <
+				text = <"Multimedia resource">
+				description = <"Multimedia representation of the clinical observation or finding.">
+			>
+			["id3"] = <
+				text = <"Title">
+				description = <"Name of the multimedia resource.">
+			>
+			["id4"] = <
+				text = <"Source">
+				description = <"The source of the multimedia resource.">
+			>
+			["id5"] = <
+				text = <"Date created">
+				description = <"Date/time that the multimedia resource was created.">
+			>
+			["id6"] = <
+				text = <"Description">
+				description = <"Narrative description of the multimedia resource.">
+			>
+		>
+	>

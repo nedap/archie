@@ -3,9 +3,11 @@ package com.nedap.archie.aom;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nedap.archie.ArchieLanguageConfiguration;
 import com.nedap.archie.aom.terminology.ArchetypeTerm;
+import com.nedap.archie.aom.utils.AOMUtils;
 import com.nedap.archie.base.MultiplicityInterval;
 import com.nedap.archie.definitions.AdlCodeDefinitions;
 import com.nedap.archie.paths.PathSegment;
+import com.nedap.archie.rminfo.ModelInfoLookup;
 import org.apache.commons.lang.StringUtils;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -228,7 +230,7 @@ public abstract class CObject extends ArchetypeConstraint {
     }
 
     /**
-     * Return true if and only if this is a root node.
+     * Return true if and only if this is a root node. Implemented in CComplexObject
      * @return
      */
     @JsonIgnore
@@ -245,17 +247,57 @@ public abstract class CObject extends ArchetypeConstraint {
      * @return
      */
     public Integer specialisationDepth() {
-        if(nodeId == null) {
-            return -1;
-        } else if(nodeId.indexOf(AdlCodeDefinitions.SPECIALIZATION_SEPARATOR) < 0) {
-            return 0;
-        } else {
-            return StringUtils.countMatches(nodeId, String.valueOf(AdlCodeDefinitions.SPECIALIZATION_SEPARATOR));
-        }
+        return AOMUtils.getSpecializationDepthFromCode(nodeId);
     }
 
     @Override
     public String toString() {
         return "CObject: " + getRmTypeName() + "[" + getNodeId() + "]";
     }
+
+    public boolean isProhibited() {
+        return occurrences != null && occurrences.isProhibited();
+    }
+
+    /**
+     * True if constraints represented by this node, ignoring any sub-parts, are narrower or the same as other. Typically used during validation of special-ised archetype nodes.
+     * @param other
+     * @param lookup
+     * @return
+     */
+    public boolean cConformsTo(CObject other, ModelInfoLookup lookup) {
+        return nodeIdConformsTo(other) &&
+                occurrencesConformsTo(other)
+                && typeNameConformsTo(other, lookup);
+
+    }
+
+    public boolean typeNameConformsTo(CObject other, ModelInfoLookup lookup) {
+        if(other.getRmTypeName() == null || getRmTypeName() == null) {
+            return true;//these are not nullable, but we're not throwing exceptions here
+        }
+        if(other.getRmTypeName().equalsIgnoreCase(getRmTypeName())) {
+            return true;
+        }
+        return AOMUtils.typeNamesConformant(getRmTypeName(), other.getRmTypeName(), lookup);
+
+    }
+
+    /**
+     * True if this node id conforms to other.node_id, which includes the ids being identical; other is assumed to be in a flat archetype.
+     * @param other
+     * @return
+     */
+    public boolean nodeIdConformsTo(CObject other) {
+        return AOMUtils.codesConformant(this.getNodeId(), other.getNodeId());
+    }
+
+    public boolean occurrencesConformsTo(CObject other) {
+        if(occurrences != null && other.occurrences != null) {
+            return other.occurrences.contains(occurrences);
+        } else {
+            return true;
+        }
+    }
+
 }

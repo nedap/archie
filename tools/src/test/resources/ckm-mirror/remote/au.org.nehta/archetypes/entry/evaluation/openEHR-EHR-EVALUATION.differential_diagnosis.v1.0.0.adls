@@ -1,0 +1,128 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated)
+	openEHR-EHR-EVALUATION.differential_diagnosis.v1.0.0
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Sam Heard">
+		["organisation"] = <"Ocean Informatics">
+		["email"] = <"Sam.Heard@OceanInformatics.com">
+		["date"] = <"2004-12-08">
+	>
+	copyright = <"copyright (c) openEHR">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To express one or more suspected or probable diagnoses, until a single, working diagnosis is determined.">
+			use = <"Use to record a set of differential diagnoses that are to be used as part of the diagnostic process.">
+			keywords = <"differential", "diagnosis">
+			misuse = <"Not to be used to record information about working problems or diagnoses - use EVALUATION.problem.">
+		>
+	>
+	other_contributors = <"Dipak Kalra, UCL", "Heather Leslie, Ocean Informatics, Australia">
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"9B8EFA6C542004A86CFAF1D55DA60997">
+	>
+
+definition
+	EVALUATION[id1] matches {	-- Differential diagnoses
+		data matches {
+			ITEM_TREE[id2] matches {
+				items cardinality matches {1..*; ordered} matches {
+					CLUSTER[id4] occurrences matches {1..*} matches {	-- Differential
+						items matches {
+							ELEMENT[id8] matches {	-- Diagnosis
+								value matches {
+									DV_TEXT[id16] 
+								}
+							}
+							ELEMENT[id5] occurrences matches {0..1} matches {	-- Likelihood
+								value matches {
+									DV_CODED_TEXT[id17] matches {
+										defining_code matches {[ac1]}		-- Likelihood (synthesised)
+									}
+								}
+							}
+							ELEMENT[id7] occurrences matches {0..1} matches {	-- Rationale
+								value matches {
+									DV_TEXT[id18] 
+								}
+							}
+						}
+					}
+					ELEMENT[id6] occurrences matches {0..1} matches {	-- Comment
+						value matches {
+							DV_TEXT[id19] 
+						}
+					}
+				}
+			}
+		}
+		protocol matches {
+			ITEM_LIST[id14] matches {
+				items matches {
+					ELEMENT[id15] matches {	-- Reference
+						value matches {
+							DV_TEXT[id20] 
+						}
+					}
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Differential diagnoses">
+				description = <"A set of 1 or more diagnoses considered as reasonable but as yet hypothetical causes of the patients signs and symptoms
+Set of one or more interim diagnoses that could account for a patient's history, examination findings, measurements and results. In practice, the intent is that as further evidence is gathered differential diagnoses will be eliminated one by one until one diagnosis becomes most likely.">
+			>
+			["id4"] = <
+				text = <"Differential">
+				description = <"A group of diagnoses or explanation and likelihoods being considered.">
+			>
+			["id5"] = <
+				text = <"Likelihood">
+				description = <"The likelihood of this diagnosis being present.">
+			>
+			["id6"] = <
+				text = <"Comment">
+				description = <"Comment on the whole set of differential diagnoses.">
+			>
+			["id7"] = <
+				text = <"Rationale">
+				description = <"Rationale for this diagnosis being included as a differential.">
+			>
+			["id8"] = <
+				text = <"Diagnosis">
+				description = <"Identification of diagnosis. It is desirable that this should be coded where possible.">
+			>
+			["id15"] = <
+				text = <"Reference">
+				description = <"Any literary references supporting the diagnoses.">
+			>
+			["at16"] = <
+				text = <"Suspected">
+				description = <"Possibly the diagnosis, but without a weight of supportive evidence.">
+			>
+			["at18"] = <
+				text = <"Likely">
+				description = <"Likely to be the working diagnosis, with good supportive evidence.">
+			>
+			["ac1"] = <
+				text = <"Likelihood (synthesised)">
+				description = <"The likelihood of this diagnosis being present. (synthesised)">
+			>
+		>
+	>
+	value_sets = <
+		["ac1"] = <
+			id = <"ac1">
+			members = <"at16", "at18">
+		>
+	>

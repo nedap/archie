@@ -1,0 +1,121 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated)
+	openEHR-EHR-EVALUATION.nutrition_summary.v1.0.0
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Hugh Leslie">
+		["organisation"] = <"Ocean Informatics">
+		["email"] = <"hugh.leslie@oceaninformatics.com">
+		["date"] = <"17/12/2010">
+	>
+	copyright = <"© 2010 NEHTA">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record an overview of the nutritional status of an individual.">
+			use = <"Use to record an overview of the nutritional status of an individual, as assessed by a clinician.">
+			keywords = <"nutrition", "obese", "overweight", "underweight", "malnourished">
+			misuse = <"Not to be used to record measurements such as weight, height or Body Mass Index. Use specific archetypes to record these measurements - OBSERVATION.weight, OBSERVATION.height and OBSERVATION.body_mass_index.">
+		>
+	>
+	other_contributors = <"Stephen Chu, NEHTA, Australia", ...>
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"84C2A0159856F573A01ABE90DAC4850E">
+	>
+
+definition
+	EVALUATION[id1] matches {	-- Nutrition Summary
+		data matches {
+			ITEM_TREE[id2] matches {
+				items matches {
+					ELEMENT[id3] occurrences matches {0..1} matches {	-- Nutrition status
+						value matches {
+							DV_TEXT[id12] 
+						}
+					}
+					ELEMENT[id4] occurrences matches {0..1} matches {	-- Weight status
+						value matches {
+							DV_CODED_TEXT[id13] matches {
+								defining_code matches {[ac1]}		-- Weight status (synthesised)
+							}
+						}
+					}
+					ELEMENT[id9] occurrences matches {0..1} matches {	-- Dietary preference
+						value matches {
+							DV_TEXT[id14] 
+						}
+					}
+					ELEMENT[id10] matches {	-- Dietary Requirements
+						value matches {
+							DV_TEXT[id15] 
+						}
+					}
+					ELEMENT[id11] occurrences matches {0..1} matches {	-- Comment
+						value matches {
+							DV_TEXT[id16] 
+						}
+					}
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Nutrition Summary">
+				description = <"Summary of the nutritional status of an individual, as assessed by a clinician.">
+			>
+			["id3"] = <
+				text = <"Nutrition status">
+				description = <"Description of the individual's nutritional status as assessed by a clinician, for example, malnourished or well nourished.  Coding with a terminology is desirable, where possible.">
+			>
+			["id4"] = <
+				text = <"Weight status">
+				description = <"Assessment of the individual's weight status.">
+			>
+			["at5"] = <
+				text = <"Underweight">
+				description = <"Is underweight for age and sex according to BMI or other measure.">
+			>
+			["at6"] = <
+				text = <"Overweight">
+				description = <"Is overweight for age and sex according to BMI or other measure.">
+			>
+			["at7"] = <
+				text = <"Obese">
+				description = <"Is obese for age and sex according to BMI or other measure.">
+			>
+			["at8"] = <
+				text = <"Normal">
+				description = <"Is normal weight for age and sex according to BMI or other measure.">
+			>
+			["id9"] = <
+				text = <"Dietary preference">
+				description = <"A description of an individual's dietary preference e.g. Vegetarian or Vegan.  Coding with a terminology is desirable, where possible.">
+			>
+			["id10"] = <
+				text = <"Dietary Requirements">
+				description = <"Description of a special dietary requirement e.g. Lactose free or Gluten free.  Coding with a terminology is desirable, where possible.">
+			>
+			["id11"] = <
+				text = <"Comment">
+				description = <"Comment about the individual's nutrition.">
+			>
+			["ac1"] = <
+				text = <"Weight status (synthesised)">
+				description = <"Assessment of the individual's weight status. (synthesised)">
+			>
+		>
+	>
+	value_sets = <
+		["ac1"] = <
+			id = <"ac1">
+			members = <"at5", "at8", "at6", "at7">
+		>
+	>

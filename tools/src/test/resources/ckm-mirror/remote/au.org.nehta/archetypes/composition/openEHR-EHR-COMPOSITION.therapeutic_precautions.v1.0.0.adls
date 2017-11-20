@@ -1,0 +1,55 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated)
+	openEHR-EHR-COMPOSITION.therapeutic_precautions.v1.0.0
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Sam Heard">
+		["organisation"] = <"NEHTA">
+		["email"] = <"sam.heard@oceaninformatics.com">
+		["date"] = <"2012-09-29">
+	>
+	copyright = <"© National E-Health Transition Authority">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"A persistent composition or managed list to record key information that will influence or preclude use of particular medications, therapies or interventions.">
+			use = <"For managing the list of adverse reactions, allergies, intolerances etc that will influence or preclude use of therapies.">
+			keywords = <"allergy list", "contraindications", "intolerance">
+			misuse = <"Only use for agreed archetypes to express these precautions.">
+		>
+	>
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"71D63B1E8B45D999A4E914D34826C366">
+	>
+
+definition
+	COMPOSITION[id1] matches {	-- Therapeutic precautions
+		category matches {
+			DV_CODED_TEXT[id2] matches {
+				defining_code matches {[at1]}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Therapeutic precautions">
+				description = <"Persistent data relating to issues that may influence or preclude the administration of one or more therapies or interventions.">
+			>
+			["at1"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+		>
+	>
+	term_bindings = <
+		["openehr"] = <
+			["at1"] = <http://openehr.org/id/431>
+		>
+	>

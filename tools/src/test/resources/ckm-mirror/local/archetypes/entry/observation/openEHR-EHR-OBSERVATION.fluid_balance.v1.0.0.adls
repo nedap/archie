@@ -1,0 +1,262 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated; uid=3b738daa-034d-49b2-ba40-55b8d169778a)
+	openEHR-EHR-OBSERVATION.fluid_balance.v1.0.0
+
+language
+	original_language = <[ISO_639-1::en]>
+	translations = <
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			author = <
+				["name"] = <"Vebjørn Arntzen">
+				["organisation"] = <"Oslo Univeristy Hospital HF, Norway">
+				["email"] = <"varntzen@ous-hf.no">
+			>
+		>
+	>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Heather Leslie">
+		["organisation"] = <"Ocean Informatics">
+		["email"] = <"heather.leslie@oceaninformatics.com">
+		["date"] = <"2013-02-22">
+	>
+	original_namespace = <"org.openehr">
+	original_publisher = <"openEHR Foundation">
+	custodian_namespace = <"org.openehr">
+	custodian_organisation = <"openEHR Foundation">
+	copyright = <"© Australian Digital Health Agency, openEHR Foundation, Nasjonal IKT HF">
+	licence = <"This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 International License. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/4.0/.">
+	details = <
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			purpose = <"For å registrere oppsamlet eller total mengde væskeinntak og væsketap, samt estimat over væskebalansen til et individ i et spesifisert tidsintervall.
+
+For å registrere et estimat over forskjellen mellom væskeinntak og væsketap i et spesifisert tidsintervall.">
+			use = <"Brukes for å registrere oppsamlet eller total mengde væskeinntak og væsketap, samt estimat over væskebalanse til et individ i et spesifisert tidsintervall.
+
+En væskebalanse vil vanligvis bestå av en kombinasjon av flere instanser av både OBSERVATION.fluid_input (Norsk: Væskeinntak) og OBSERVATION.fluid_output (Norsk: Væsketap) for å fange opp alt av inntak og væsketap, pluss en enkelt instans av OBSERVATION.fluid_balance (denne arketypen) for å registrere den overordnede væskebalansen.">
+			keywords = <"væske", "balanse", "væskeinntak", "væsketap", "tap", "inntak", "svette", "perspiratio", "fordamping", "drikke", "diurese", "urin", "uttørring", "oppkast", "diare", "væskeregnskap">
+			misuse = <"Skal ikke brukes for å registrere enkeltmålinger av væskeinntak eller væsketap. Bruk OBSERVATION.fluid_input (Væskeinntak) eller OBSERVATION.fluid_output (Væsketap) for dette.">
+		>
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record the cumulative or total amounts of fluid input and output, plus an estimation of the fluid balance status of an individual over specified intervals of time.
+
+To record the estimation of the difference between fluid input and output during a specified interval of time.">
+			use = <"Use to record cumulative or total amounts of fluid input and output, plus an estimation of the fluid balance status of a subject over specified periods of time.
+
+A fluid balance chart will typically require a combination of multiple instances of both the OBSERVATION.fluid_output archetype and the OBSERVATION.fluid_input archetype to capture all of the various inputs and outputs, plus a single instance of the OBSERVATION.fluid_balance to record the overall fluid status.">
+			keywords = <"fluid", "balance", "input", "output", "loss", "sweat", "insensible", "evaporation", "perspiration">
+			misuse = <"Not to be used to record individual measurements of fluid input or output. Use the OBSERVATION.fluid_input or OBSERVATION.fluid_output archetypes for these purposes.">
+		>
+	>
+	other_contributors = <"Tomas Alme, DIPS, Norway", "Vebjørn Arntzen, Oslo University Hospital, Norway (openEHR Editor)", "Silje Ljosland Bakke, Nasjonal IKT HF, Norway (openEHR Editor)", "Marcus Baw, openGPSoC / BawMedical Ltd, United Kingdom", "Ingeborg Berge, Direktoratet for e-helse, Norway", "Kristian Berg, Vestvågøy kommune - Fagutviklingsavdelingen, Norway", "SB Bhattacharyya, Sudisa Consultancy Services, India", "Bjørn Christensen, Helse Bergen HF, Norway", "Stig Erik Hegrestad, Helse Førde, Norway", "Hildegard Franke, freshEHR Clinical Informatics Ltd., United Kingdom", "Mikkel Gaup Grønmo, FSE, Helse Nord, Norway", "Heather Grain, Llewelyn Grain Informatics, Australia", "Cecilie Graver, Oslo universitetssykehus HF, Norway", "Ingrid Heitmann, Oslo universitetssykehus HF, Norway", "Annette Hole Sjøborg, DIPS ASA, Norway", "Hilde Hollås, DIPS ASA, Norway", "Evelyn Hovenga, EJSH Consulting, Australia", "Lars Ivar Mehlum, Helse Bergen HF, Norway", "Tom Jarl Jakobsen, Helse Bergen, Norway", "Lars Morgan Karlsen, DIPS ASA, Norway", "Harmony Kosola, Alberta Health Services, Canada", "Anne Kristin Strand, Sykehuspartner HF, Norway", "Heather Leslie, Ocean Health Systems, Australia", "Marit Ludvigsen, St Olavs Hospital, Norway", "Hallvard Lærum, Direktoratet for e-helse, Norway", "Siv Marie Lien, DIPS ASA, Norway", "Ian McNicoll, freshEHR Clinical Informatics, United Kingdom", "Andrej Orel, Marand d.o.o., Slovenia", "Anne Pauline Anderssen, Helse Nord RHF, Norway", "Vladimir Pizzo, Hospital Sírio Libanês, Brazil", "Navin Ramachandran, NHS, United Kingdom", "Tanja Riise, Nasjonal IKT HF, Norway", "Anoop Shah, University College London, United Kingdom", "Line Silsand, Universitetssykehuset i Nord-Norge, Norway", "Iztok Stotl, UKCLJ, Slovenia", "Roy Støle, OUS, Norway", "Norwegian Review Summary, Nasjonal IKT HF, Norway", "Nyree Taylor, Ocean Informatics, Australia", "Tesfay Teame, Folkehelseinstittutet, Norway", "Rowan Thomas, St. Vincent's Hospital Melbourne, Australia", "Gro-Hilde Ulriksen, Norwegian center for ehealthresearch, Norway", "John Tore Valand, Helse Bergen, Norway (openEHR Editor)">
+	references = <
+		["1"] = <"Fluid Balance, Draft Archetype [Internet]. Australian Digital Health Agency, Australian Digital Health Agency Clinical Knowledge Manager [cited: 2017-05-04]. Available from: http://dcm.nehta.org.au/ckm/#showArchetype_1013.1.1203.">
+	>
+	other_details = <
+		["current_contact"] = <"Heather Leslie, Ocean Informatics, heather.leslie@oceaninformatics.com">
+		["MD5-CAM-1.0.1"] = <"ED6F7DAE2B414E68C00889961000441E">
+		["build_uid"] = <"e651eda7-b177-4f13-8bb8-cb582b23c819">
+	>
+
+definition
+	OBSERVATION[id1] matches {	-- Fluid balance
+		data matches {
+			HISTORY[id2] matches {
+				events cardinality matches {1..*; unordered} matches {
+					INTERVAL_EVENT[id3] matches {	-- Any interval event
+						data matches {
+							ITEM_TREE[id4] matches {
+								items matches {
+									ELEMENT[id6] occurrences matches {0..1} matches {	-- Total input
+										value matches {
+											DV_QUANTITY[id13] matches {
+												property matches {[at1]}
+												[magnitude, units, precision] matches {
+													[{|>=0.0|}, {"ml"}, {|>=0|}],
+													[{|>=0.0|}, {"l"}, {3}],
+													[{|>=0.0|}, {"[foz_us]"}, {|>=0|}]
+												}
+											}
+										}
+									}
+									ELEMENT[id7] occurrences matches {0..1} matches {	-- Total output
+										value matches {
+											DV_QUANTITY[id14] matches {
+												property matches {[at1]}
+												[magnitude, units, precision] matches {
+													[{|>=0.0|}, {"ml"}, {|>=0|}],
+													[{|>=0.0|}, {"l"}, {3}],
+													[{|>=0.0|}, {"[foz_us]"}, {|>=0|}]
+												}
+											}
+										}
+									}
+									ELEMENT[id5] occurrences matches {0..1} matches {	-- Insensible loss
+										value matches {
+											DV_QUANTITY[id15] matches {
+												property matches {[at1]}
+												[magnitude, units, precision] matches {
+													[{|>=0.0|}, {"ml"}, {|>=0|}],
+													[{|>=0.0|}, {"l"}, {3}],
+													[{|>=0.0|}, {"[foz_us]"}, {|>=0|}]
+												}
+											}
+										}
+									}
+									ELEMENT[id8] occurrences matches {0..1} matches {	-- Fluid balance
+										value matches {
+											DV_QUANTITY[id16] matches {
+												property matches {[at1]}
+												[magnitude, units, precision] matches {
+													[{|>=0.0|}, {"ml"}, {|>=0|}],
+													[{|>=0.0|}, {"l"}, {3}],
+													[{|>=0.0|}, {"[foz_us]"}, {|>=0|}]
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+					INTERVAL_EVENT[id9] occurrences matches {0..1} matches {	-- 24 hour total
+						math_function matches {
+							DV_CODED_TEXT[id17] matches {
+								defining_code matches {[at2]}
+							}
+						}
+						width matches {
+							DV_DURATION[id18] matches {
+								value matches {PT24H}
+							}
+						}
+						data matches {
+							use_node ITEM_TREE[id19] /data[id2]/events[id3]/data[id4]	-- /data[id2]/events[Any interval event]/data[id4]
+						}
+					}
+				}
+			}
+		}
+		protocol matches {
+			ITEM_TREE[id10] matches {
+				items matches {
+					ELEMENT[id11] occurrences matches {0..1} matches {	-- Insensible loss formula
+						value matches {
+							DV_TEXT[id20] 
+						}
+					}
+					allow_archetype CLUSTER[id12] matches {	-- Extension
+						include
+							archetype_id/value matches {/.*/}
+					}
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Fluid balance">
+				description = <"The difference between fluid input and output during a specified interval of time.">
+			>
+			["id3"] = <
+				text = <"Any interval event">
+				description = <"Unspecified interval event which may be explicitly defined in a template or at run-time.">
+			>
+			["id5"] = <
+				text = <"Insensible loss">
+				description = <"The amount of fluid loss by evaporation from the skin and respiratory tract.">
+			>
+			["id6"] = <
+				text = <"Total input">
+				description = <"The total amount of fluid administered or ingested during a specified interval of time.">
+			>
+			["id7"] = <
+				text = <"Total output">
+				description = <"The total amount of fluid lost or excreted during a specified interval of time.">
+			>
+			["id8"] = <
+				text = <"Fluid balance">
+				description = <"The difference between fluid input and output during a specified interval of time.">
+			>
+			["id9"] = <
+				text = <"24 hour total">
+				description = <"Total fluid volume recorded during an interval of 24 hour duration.">
+			>
+			["id11"] = <
+				text = <"Insensible loss formula">
+				description = <"The formula used to calculate the amount of insensible loss.">
+			>
+			["id12"] = <
+				text = <"Extension">
+				description = <"Additional information required to capture local content or to align with other reference models/formalisms.">
+			>
+			["at1"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at2"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+		>
+		["nb"] = <
+			["id1"] = <
+				text = <"Væskebalanse">
+				description = <"Forskjellen mellom væskeinntak og væsketap i et spesifisert tidsintervall. 
+">
+			>
+			["id3"] = <
+				text = <"Uspesifisert hendelse">
+				description = <"Standard, uspesifisert tidspunkt eller tidsintervall som kan defineres mer eksplisitt i en template eller i en applikasjon.">
+			>
+			["id5"] = <
+				text = <"Perspiratio">
+				description = <"Mengden væsketap ved fordampning fra hud og luftveier.">
+			>
+			["id6"] = <
+				text = <"Totalt væskeinntak">
+				description = <"Den totale mengden væske som er administrert eller drukket i et spesifisert tidsintervall.">
+			>
+			["id7"] = <
+				text = <"Totalt væsketap">
+				description = <"Den totale mengden væske som er tapt eller utsondret i et spesifisert tidsintervall.">
+			>
+			["id8"] = <
+				text = <"Væskebalanse">
+				description = <"Forskjellen mellom væskeinntak og væsketap i et spesifisert tidsintervall.">
+			>
+			["id9"] = <
+				text = <"Væskebalanse døgn">
+				description = <"Væskebalansen over en periode på 24 timer.">
+			>
+			["id11"] = <
+				text = <"Formel for perspiratio">
+				description = <"Formelen som er brukt for å beregne perspiratio.">
+			>
+			["id12"] = <
+				text = <"Tilleggsinformasjon">
+				description = <"Ytterligere informasjon som trengs for å kunne registrere lokalt definert innhold eller for å tilpasse til andre referansemodeller/formalismer.">
+			>
+			["at1"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at2"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+		>
+	>
+	term_bindings = <
+		["openehr"] = <
+			["at1"] = <http://openehr.org/id/129>
+			["at2"] = <http://openehr.org/id/148>
+		>
+	>

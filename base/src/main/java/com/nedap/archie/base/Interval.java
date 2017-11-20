@@ -224,7 +224,19 @@ public class Interval<T>  extends OpenEHRBase {
      * @return
      */
     public Boolean contains(Interval<T> other) {
-        return has(other.lower) && has(other.upper);
+        boolean otherHasLower = false;
+        boolean otherHasUpper = false;
+        if(other.lowerUnbounded) {
+            otherHasLower = this.lowerUnbounded;
+        } else {
+            otherHasLower = has(other.lower);
+        }
+        if(other.upperUnbounded) {
+            otherHasUpper = this.upperUnbounded;
+        } else {
+            otherHasUpper = has(other.upper);
+        }
+        return otherHasLower && otherHasUpper;
     }
 
     /**

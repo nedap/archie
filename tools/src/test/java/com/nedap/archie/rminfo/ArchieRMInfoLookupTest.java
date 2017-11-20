@@ -107,7 +107,7 @@ public class ArchieRMInfoLookupTest {
     @Test
     public void getField() throws Exception {
         Field items = ArchieRMInfoLookup.getInstance().getField(Cluster.class, "items");
-        assertEquals(items, Cluster.class.getDeclaredField("items"));
+        assertEquals(Cluster.class.getDeclaredField("items"), items);
     }
 
     @Test

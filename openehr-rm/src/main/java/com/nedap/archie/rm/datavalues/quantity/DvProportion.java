@@ -59,6 +59,10 @@ public class DvProportion extends DvAmount<Double> {
         this.precision = precision;
     }
 
+    public boolean isIntegral() {
+        return precision != null && precision == 0;
+    }
+
     @Override
     public Double getMagnitude() {
         if(denominator != 0.0d) {

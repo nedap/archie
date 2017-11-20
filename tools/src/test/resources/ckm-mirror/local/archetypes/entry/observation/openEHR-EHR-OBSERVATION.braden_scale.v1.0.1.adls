@@ -1,0 +1,938 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated; uid=3eb327e3-8913-411e-a968-db15efdb3838)
+	openEHR-EHR-OBSERVATION.braden_scale.v1.0.1
+
+language
+	original_language = <[ISO_639-1::en]>
+	translations = <
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			author = <
+				["name"] = <"John Tore Valand og Silje Ljosland Bakke">
+				["organisation"] = <"Helse Bergen og Nasjonal IKT">
+			>
+		>
+		["es-ar"] = <
+			language = <[ISO_639-1::es-ar]>
+			author = <
+				["name"] = <"Alan March">
+				["organisation"] = <"Hospital Universitario Austral, Pilar, Buenos Aires, Argentina.">
+				["email"] = <"alandmarch@gmail.com">
+			>
+		>
+		["pt-br"] = <
+			language = <[ISO_639-1::pt-br]>
+			author = <
+				["name"] = <"Osmeire Chamelette Sanzovo">
+				["organisation"] = <"Hospital Sírio Libanês - SP">
+				["email"] = <"osmeire.acsanzovo@hsl.org.br">
+			>
+		>
+	>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Ian McNicoll">
+		["organisation"] = <"Ocean Informatics, UK">
+		["email"] = <"ian.mcnicoll@oceaninformatics.com">
+		["date"] = <"2011-08-01">
+	>
+	original_namespace = <"org.openehr">
+	original_publisher = <"openEHR Foundation">
+	custodian_namespace = <"org.openehr">
+	custodian_organisation = <"openEHR Foundation">
+	copyright = <"© openEHR Foundation">
+	licence = <"This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 International License. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/4.0/.">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record information about factors used to assess the risk of pressure ulcer development, and the total Braden Scale score.">
+			use = <"Use to assess risk of pressure ulcer development in an adult population or for children aged 5 and over, in both hospital and community settings.
+
+There are two commonly used variants - one intended for hospital use and the other for home use. They differ only in the description of the Moisture data element where the frequency of bedding change is described as \"three times per 24 hours\" for home use or \"once per shift\" for hospital use. As these two descriptions have the same essential meaning, this archetype has used the most generally applicable wording, based on the home use variant.
+
+While openEHR archetypes are all freely available under an open license, the specific content of this Braden Scale archetype is copyright protected. Any use of this archetype within implementations must be in compliance with the terms established by the copyright owners. 
+
+Copyright statement: Barbara Braden and Nancy Bergstrom, 1988 All rights reserved
+
+Copyright information: http://bradenscale.com/copyright.htm">
+			keywords = <"pressure", "sore", "ulcer", "Braden", "adult", "score", "assessment">
+			misuse = <"Not to be used unless the terms of copyright have been observed -see http://bradenscale.com/copyright.htm for details.
+
+The Braden Scale should not be used for children between 21 days and 5 years. Use an archetype specifically designed for the Paediatric Braden Scale.
+
+The Braden Scale should not be used for children aged less than 21 days. Use an archetype specifically designed for the Neonatal Braden Scale.">
+		>
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			purpose = <"For å registrere informasjon om risikofaktorer for utvikling av trykksår, samt utregning av totalskår.
+">
+			use = <"Brukes for å vurdere risiko for utvikling av trykksår hos voksne eller hos barn som er 5 år eller eldre både i spesialist- og i primærhelsetjenesten. Den publiserte skalaen har to varianter, en for sykehus og en for bruk i hjemmet. Disse har kun små forskjeller i beskrivelsen i dataelementet \"Fuktighet\" hvor foreslått frekvens av sengetøyskift er satt til \"tre ganger per 24 timer\" for hjemmebruk og \"en gang per vakt\" for sykehusbruk. Da de to beskrivelsene har samme meningsinnhold, baseres denne arketypen på varianten for hjemmebruk da denne har den mest generiske ordlyden.
+
+openEHR-arketyper er fritt tilgjengelige under en åpen lisens, men det spesifikke innholdet i denne Braden-skala-arketypen er opphavsrettslig beskyttet. All bruk av denne arketypen i implementasjoner må gjøres i henhold til vilkår gitt av innehaverne av opphavsretten.
+
+Erklæring om opphavsrett: Barbara Braden and Nancy Bergstrom, 1988 All rights reserved.
+
+Informasjon om opphavsretten: http://bradenscale.com/copyright.htm.">
+			keywords = <"trykk", "sår", "braden", "skår", "score", "vurdering", "decubitus", "dekubitus", "dekutbitalsår", "ernæring", "mobilitet", "hud", "forflytning", "forebygging", "risikofaktorer", "liggesår">
+			misuse = <"Braden-skala skal ikke brukes med mindre opphavsrettsbetingelsene er oppfylt - for detaljer se: 
+http://bradenscale.com/copyright.htm.
+
+Braden-skala skal ikke benyttes for barn som er mellom 21 dager og 5 år gamle. Bruk egen arketype for Pediatrisk Braden-skala for dette formålet.
+
+Braden-skala skal ikke benyttes for barn som er yngre enn 21 dager gamle - Bruk egen arketype for Neonatal Braden-skala for dette formålet.">
+		>
+		["pt-br"] = <
+			language = <[ISO_639-1::pt-br]>
+			purpose = <"Registrar informações sobre os fatores utilizados para avaliar o risco de desenvolvimento de úlceras por pressão e a pontuação total da Escala de Braden.">
+			use = <"Use para avaliar o risco de desenvolvimento de úlceras por pressão em uma população adulta ou para crianças com 5 anos ou mais, tanto em ambientes hospitalares quanto em comunitários.
+
+Existem duas variantes comumente utilizadas - uma destinada a uso hospitalar e outra a uso doméstico. Elas diferem apenas na descrição do elemento de dados de umidade onde a frequência de mudança de cama é descrita como \"três vezes em 24 horas\" para uso doméstico ou \"uma vez por turno\" para uso hospitalar. Como estas duas descrições tem o mesmo significado essencial, este arquétipo usou a formulação mais aplicável, baseada na variante de uso doméstico.
+
+Enquanto os arquétipos openEHR estão todos disponíveis gratuitamente sob uma licença aberta, o conteúdo específico deste arquétipo de Escala de Braden é protegido por direitos autorais. Qualquer uso deste arquétipo dentro de implementações deve estar em conformidade com os termos estabelecidos pelos proprietários de direitos autorais.
+
+Declaração de direitos autorais: Barbara Braden and Nancy Bergstrom, 1988 All rights reserved
+
+Informações sobre direitos autorais: http://bradenscale.com/copyright.htm">
+			keywords = <"pressão", "ferida", "úlcera", "Braden", "adulto", "score", "avaliação">
+			misuse = <"Não deve ser utilizado a menos que os termos dos direitos autorais tenham sido observados - consulte os detalhes em http://bradenscale.com/copyright.htm. 
+
+A escala de Braden não deve ser utilizada para crianças entre 21 dias e 5 anos. Use um arquétipo projetado especificamente para a escala de Braden Pediátrica.
+
+A escala de Braden não deve ser utilizada para ser utilizada para crianças menores de 21 dias. Use um arquétipo projetado especificamente para a escala de Braden Neonatal.
+
+">
+		>
+		["es-ar"] = <
+			language = <[ISO_639-1::es-ar]>
+			purpose = <"Registrar información acerca de los factores utilziados para evaluar el riesgo de desarrollo de úlceras de decúbito, con el puntaje total de la Escala de Braden.">
+			use = <"Utilizar para evaluar el riesgo de desarrollo de úlceras por decúbito en poblaciones adultas y en niños de 5 o más años de edad, tanto en el hospital como en la comunidad.
+Existen dos variantes comunmente utilizadas: una esta dirigida al uso hospitalario y otra para el uso en el hogar. SOlo difieren en la descripción del dato Humedad. donde la frecuencia de cambio de la ropa de cama se decribe como \"tres veces en 24 horas\" para el uso en el hogar y \"una vez por turno\" para el uso hospitalario. Como estas dos descripciones tienen el esencialmente el mismo significado, este arquetipo utiliza el fraseo mas generalmente aplicado, basado en la variante de uso en el hogar.
+En tanto que los arquetipos openEHR se encuentran libremente disponibles bajo una licencia abierta, el contenido específico de la escala de Braden se encuentra protegido por un derecho de autor. Cualquier uso de este arquetipo en una implementación debe cumplir con los términos establecidos por los titulares del derecho de autor.
+Declaración de derecho de autor: Barbara Braden y Nancy Bergstrom, 1988 Todos los derechos reservados.
+Información sobre el derecho de autor: http://bradenscale.com/copyright.htm">
+			keywords = <"decúbito", "escara", "úlcera", "Braden", "adulto", "puntaje", "evaluación">
+			misuse = <"No utilizar excepto se hayan cumplimentado los término del derecho de autor - ver http://bradenscale.com/copyright.htm para detalles.
+La Escala de Braden no debe ser utilizada en niños entre 21 días y cinco años de edad. Utilizar un arquetipo especialmente diseñado para la Escala de Braden Pediátrica.
+La Escala de Braden no debe ser utilizada en niños menores de 21 días de edad. Utilizar un arquetipo especialmente diseñado para la Escala de Braden Neonatal.
+">
+		>
+	>
+	other_contributors = <"Vebjørn Arntzen, Oslo universitetssykehus HF, Norway (Nasjonal IKT redaktør)", "Silje Ljosland Bakke, National ICT Norway, Norway (openEHR Editor)", "Lars Bitsch-Larsen, Haukeland University Hospital, Bergen, Norway", "Karen Bjøro, Norsk Sykepleierforbund, Norway", "Rui Coutinho, Centro Hospitalar do Porto, Portugal", "Lisbeth Dahlhaug, Helse Midt - Norge IT, Norway", "Heather Grain, Llewelyn Grain Informatics, Australia", "Øygunn Leite Kallevik, Helse Bergen, Norway", "Heather Leslie, Ocean Informatics, Australia (openEHR Editor)", "Siv Marie Lien, DIPS ASA, Norway", "Ian McNicoll, freshEHR Clinical Informatics, United Kingdom (openEHR Editor)", "Lars Morgan Karlsen, DIPS ASA, Norway", "Knut Nesheim, Helse Bergen, Norway", "Mona Oppedal, Helse Bergen, Norway", "Andrej Orel, Marand d.o.o., Slovenia", "Rune Pedersen, Universitetssykehuset i Nord Norge, Norway", "Navin Ramachandran, NHS, United Kingdom", "Tanja Riise, Nasjonal IKT HF, Norway", "Line Sæle, Nasjonal IKT HF, Norway", "John Tore Valand, Haukeland Universitetssjukehus, Norway (Nasjonal IKT redaktør)">
+	references = <
+		["1"] = <"Bergstrom, N., Braden, B., Laguzza, A. & Holman, A. (1987). The Braden Scale for predicting pressure sore risk. Nursing Research. 36(4), 205-210.">
+		["2"] = <"Braden, B. J. & Blanchard, S. (2007). Risk assessment in pressure ulcer prevention. In D. L. Krasner, G. T. Rodeheaver, & R. G. Sibbald (Eds.), Chronic Wound Care: A Clinical Source Book for Healthcare Professionals (4th ed.). Wayne PA: HMP Communications">
+		["3"] = <"Ayello, E.A. & Braden, B. (2002) How and why to do pressure ulcer risk assessment. Advances in Wound Care, 15 (3), 125-131.">
+		["4"] = <"Prevention Plus - Home of the Braden Scale [Internet]. [date unknown];[cited 2011 Aug 1] Available from: http://bradenscale.com/index.htm">
+		["5"] = <"Braden Scale for Predicting Pressure Score Risk [Internet]. [date unknown];[cited 2011 Aug 1] Available from: http://bradenscale.com/images/bradenscale.pdf">
+		["6"] = <"Braden Scale for Predicting Pressure Score Risk in Home Care [Internet]. [date unknown];[cited 2011 Aug 1] Available from: http://bradenscale.com/images/bschome.pdf">
+		["7"] = <"Norwegian translation by Bjøro (1998), from Metode for å redusere forekomst av trykksår ved norske sykehjem, Sintef (2007). https://www.sintef.no/globalassets/upload/helse/levekar-og-tjenester/forebygging-av-trykksar-i-sykehjem.pdf">
+	>
+	other_details = <
+		["current_contact"] = <"Ian McNicoll, Ocean Informatics, UK, ian.mcnicoll@oceaninformatics.com">
+		["MD5-CAM-1.0.1"] = <"33EB255B152A7AC6ADB70B5185B20F8C">
+		["build_uid"] = <"c0b28c02-1f62-47f7-bbc0-8faa1e11fd11">
+	>
+
+definition
+	OBSERVATION[id1] matches {	-- Braden Scale
+		data matches {
+			HISTORY[id2] matches {
+				events cardinality matches {1..*; unordered} matches {
+					EVENT[id3] occurrences matches {0..1} matches {	-- Any event
+						data matches {
+							ITEM_TREE[id4] matches {
+								items matches {
+									ELEMENT[id5] occurrences matches {0..1} matches {	-- Sensory perception
+										value matches {
+											DV_ORDINAL[id36] matches {
+												[value, symbol] matches {
+													[{1}, {[at6]}],
+													[{2}, {[at7]}],
+													[{3}, {[at8]}],
+													[{4}, {[at9]}]
+												}
+											}
+										}
+									}
+									ELEMENT[id10] occurrences matches {0..1} matches {	-- Moisture
+										value matches {
+											DV_ORDINAL[id37] matches {
+												[value, symbol] matches {
+													[{1}, {[at16]}],
+													[{2}, {[at17]}],
+													[{3}, {[at18]}],
+													[{4}, {[at19]}]
+												}
+											}
+										}
+									}
+									ELEMENT[id11] occurrences matches {0..1} matches {	-- Activity
+										value matches {
+											DV_ORDINAL[id38] matches {
+												[value, symbol] matches {
+													[{1}, {[at12]}],
+													[{2}, {[at13]}],
+													[{3}, {[at14]}],
+													[{4}, {[at15]}]
+												}
+											}
+										}
+									}
+									ELEMENT[id20] occurrences matches {0..1} matches {	-- Mobility
+										value matches {
+											DV_ORDINAL[id39] matches {
+												[value, symbol] matches {
+													[{1}, {[at27]}],
+													[{2}, {[at28]}],
+													[{3}, {[at29]}],
+													[{4}, {[at30]}]
+												}
+											}
+										}
+									}
+									ELEMENT[id21] occurrences matches {0..1} matches {	-- Nutrition
+										value matches {
+											DV_ORDINAL[id40] matches {
+												[value, symbol] matches {
+													[{1}, {[at31]}],
+													[{2}, {[at32]}],
+													[{3}, {[at33]}],
+													[{4}, {[at34]}]
+												}
+											}
+										}
+									}
+									ELEMENT[id22] occurrences matches {0..1} matches {	-- Friction and shear
+										value matches {
+											DV_ORDINAL[id41] matches {
+												[value, symbol] matches {
+													[{1}, {[at24]}],
+													[{2}, {[at25]}],
+													[{3}, {[at26]}]
+												}
+											}
+										}
+									}
+									ELEMENT[id35] occurrences matches {0..1} matches {	-- Comment
+										value matches {
+											DV_TEXT[id42] 
+										}
+									}
+									ELEMENT[id23] occurrences matches {0..1} matches {	-- Total score
+										value matches {
+											DV_COUNT[id43] matches {
+												magnitude matches {|6..23|}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Braden Scale">
+				description = <"The Braden Scale for Predicting Pressure Sore Risk is a tool used to assess the risk of pressure ulcer development in adults and children over the age of five years.">
+			>
+			["id3"] = <
+				text = <"Any event">
+				description = <"Default, unspecified point in time event which may be explicitly defined in a template or at run-time.">
+			>
+			["id5"] = <
+				text = <"Sensory perception">
+				description = <"Ability to respond meaningfully to pressure-related discomfort.">
+			>
+			["at6"] = <
+				text = <"Completely limited">
+				description = <"Unresponsive (does not moan, flinch, or grasp) to painful stimuli, due to diminished level of consciousness or sedation. OR limited ability to feel pain over most of body.">
+			>
+			["at7"] = <
+				text = <"Very limited">
+				description = <"Responds only to painful stimuli. Cannot communicate discomfort except by moaning or restlessness. OR has a sensory impairment which limits the ability to feel pain or discomfort over 1/2 of body.">
+			>
+			["at8"] = <
+				text = <"Slightly limited">
+				description = <"Responds to verbal commands, but cannot always communicate discomfort or the need to be turned. OR has some sensory impairment which limits ability to feel pain or discomfort in 1 or 2 extremities.">
+			>
+			["at9"] = <
+				text = <"No impairment">
+				description = <"Responds to verbal commands. Has no sensory deficit which would limit ability to feel or voice pain or discomfort.">
+			>
+			["id10"] = <
+				text = <"Moisture">
+				description = <"Degree to which skin is exposed to moisture.">
+			>
+			["id11"] = <
+				text = <"Activity">
+				description = <"Degree of physical ability.">
+			>
+			["at12"] = <
+				text = <"Bedfast">
+				description = <"Confined to bed.">
+			>
+			["at13"] = <
+				text = <"Chairfast">
+				description = <"Ability to walk severely limited or non-existent. Cannot bear own weight and/or must be assisted into chair or wheelchair.">
+			>
+			["at14"] = <
+				text = <"Walks occasionally">
+				description = <"Walks occasionally during day, but for very short distances, with or without assistance. Spends majority of each shift in bed or chair. OR spends majority of each day at home in bed or chair.">
+			>
+			["at15"] = <
+				text = <"Walks frequently">
+				description = <"Walks outside room at least twice a day and inside room at least once every two hours during waking hours.">
+			>
+			["at16"] = <
+				text = <"Constantly moist">
+				description = <"Skin is kept moist almost constantly by perspiration, urine etc. Dampness is detected every time patient is moved or turned.">
+			>
+			["at17"] = <
+				text = <"Very moist">
+				description = <"Skin is often, but not always moist. Linen must be changed as often as 3 times in 24 hours.">
+			>
+			["at18"] = <
+				text = <"Occasionally moist">
+				description = <"Skin is occasionally moist, requiring an extra linen change approximately once a day.">
+			>
+			["at19"] = <
+				text = <"Rarely moist">
+				description = <"Skin is usually dry, linen only requires changing at routine intervals.">
+			>
+			["id20"] = <
+				text = <"Mobility">
+				description = <"Ability to change and control body position.">
+			>
+			["id21"] = <
+				text = <"Nutrition">
+				description = <"Usual food intake pattern.">
+			>
+			["id22"] = <
+				text = <"Friction and shear">
+				description = <"Friction occurs when skin moves against support surfaces. Shear occurs when skin and adjacent bony surface slide across one another.">
+			>
+			["id23"] = <
+				text = <"Total score">
+				description = <"The sum of the ordinal scores recorded for each of the six component responses.">
+			>
+			["at24"] = <
+				text = <"Problem">
+				description = <"Requires moderate to maximum assistance in moving. Complete lifting without sliding against sheets is impossible. Frequently slides down in bed or chair, requiring frequent repositioning with maximum assistance. Spasticity, contractures or agitation leads to almost constant friction.">
+			>
+			["at25"] = <
+				text = <"Potential problem">
+				description = <"Moves feebly or requires minimum assistance. During a move skin probably slides to some extent against sheets, chair, restraints or other devices. Maintains relatively good position in chair or bed most of the time but occasionally slides down.">
+			>
+			["at26"] = <
+				text = <"No apparent problem">
+				description = <"Moves in bed and in chair independently and has sufficient muscle strength to lift up completely during move. Maintains good position in bed or chair.">
+			>
+			["at27"] = <
+				text = <"Completely immobile">
+				description = <"Does not make even slight changes in body or extremity position without assistance.">
+			>
+			["at28"] = <
+				text = <"Very limited">
+				description = <"Makes occasional slight changes in body or extremity position but unable to make frequent or significant changes independently.">
+			>
+			["at29"] = <
+				text = <"Slightly limited">
+				description = <"Makes frequent though slight changes in body or extremity position independently.">
+			>
+			["at30"] = <
+				text = <"No limitation">
+				description = <"Makes major and frequent changes in position without assistance.">
+			>
+			["at31"] = <
+				text = <"Very poor">
+				description = <"Never eats a complete meal. Rarely eats more than a 1/3 of any food offered. Eats 2 servings or less of protein (meat or dairy products) per day. Takes fluids poorly. Does not take a liquid dietary supplement. OR is NPO and/or maintained on clear liquids or IV's for more than 5 days.">
+			>
+			["at32"] = <
+				text = <"Probably inadequate">
+				description = <"Rarely eats a complete meal and generally eats only about 1/2 of any food offered. Protein intake includes only 3 servings of meat or dairy products per day. Occasionally will take a dietary supplement. OR receives less than optimum amount of liquid diet or tube feeding.">
+			>
+			["at33"] = <
+				text = <"Adequate">
+				description = <"Eats over half of most meals. Eats a total of 4 servings of protein (meat, dairy products per day. Occasionally will refuse a meal, but will usually take a supplement when offered OR is on a tube feeding or TPN regimen which probably meets most of their nutritional needs.">
+			>
+			["at34"] = <
+				text = <"Excellent">
+				description = <"Eats most of every meal. Never refuses a meal. Usually eats a total of 4 or more servings of meat and dairy products. Occasionally eats between meals. Does not require supplementation.">
+			>
+			["id35"] = <
+				text = <"Comment">
+				description = <"Additional narrative about the assessment of the Braden scale, not captured in the structured ratings.">
+			>
+			["ac1"] = <
+				text = <"Sensory perception (synthesised)">
+				description = <"Ability to respond meaningfully to pressure-related discomfort. (synthesised)">
+			>
+			["ac2"] = <
+				text = <"Moisture (synthesised)">
+				description = <"Degree to which skin is exposed to moisture. (synthesised)">
+			>
+			["ac3"] = <
+				text = <"Activity (synthesised)">
+				description = <"Degree of physical ability. (synthesised)">
+			>
+			["ac4"] = <
+				text = <"Mobility (synthesised)">
+				description = <"Ability to change and control body position. (synthesised)">
+			>
+			["ac5"] = <
+				text = <"Nutrition (synthesised)">
+				description = <"Usual food intake pattern. (synthesised)">
+			>
+			["ac6"] = <
+				text = <"Friction and shear (synthesised)">
+				description = <"Friction occurs when skin moves against support surfaces. Shear occurs when skin and adjacent bony surface slide across one another. (synthesised)">
+			>
+		>
+		["nb"] = <
+			["id1"] = <
+				text = <"Braden-skala">
+				description = <"Braden-skala for vurdering av trykksår er et verktøy som brukes for å vurdere risiko for trykksårutvikling hos voksne og hos barn som er eldre enn fem år gamle.">
+			>
+			["id3"] = <
+				text = <"Uspesifisert hendelse">
+				description = <"Standard, uspesifisert tidspunkt eller tidsintervall som kan defineres mer eksplisitt i en template eller i en applikasjon.">
+			>
+			["id5"] = <
+				text = <"Evnen til å oppfatte og reagere på stimuli">
+				description = <"Evnen til å reagere hensiktsmessig ved ubehag som er trykkrelatert.">
+			>
+			["at6"] = <
+				text = <"Totalt redusert">
+				description = <"Reagerer ikke på smertestimuli på grunn av redusert bevissthetsnivå eller sedasjon, (stønner ikke, avverger ikke) eller har redusert evne til å kjenne smerte over mesteparten av kroppens overflate.">
+			>
+			["at7"] = <
+				text = <"Meget redusert">
+				description = <"Reagerer kun på smertestimuli. Kommuniserer ikke ubehag unntatt ved stønn eller rastløshet eller har redusert evne til å oppfatte sansestimuli med begrenset evne til å kjenne smerte eller ubehag over halvparten av kroppens overflate.">
+			>
+			["at8"] = <
+				text = <"Noe redusert">
+				description = <"Reagerer på verbale stimuli men klarer ikke alltid å formidle ubehag eller behov for å bli snudd eller
+har noe redusert evne til å oppfatte sansestimuli med begrenset evne til å kjenne smerte eller behag i en eller to ekstremiteter.">
+			>
+			["at9"] = <
+				text = <"Ikke redusert">
+				description = <"Reagerer på muntlige beskjeder. Har ingen svikt i sanseapparat med begrensning av evnen til å kjenne eller gi uttrykk for smerte eller ubehag.">
+			>
+			["id10"] = <
+				text = <"Fuktighet">
+				description = <"I hvor stor grad er huden utsatt for fuktighet.">
+			>
+			["id11"] = <
+				text = <"Aktivitet">
+				description = <"Grad av fysisk aktivitet.">
+			>
+			["at12"] = <
+				text = <"Sengeliggende">
+				description = <"Er ikke ute av sengen. Eventuelt løftes ut av sengen og løftes tilbake igjen etter meget kort tid.">
+			>
+			["at13"] = <
+				text = <"Stolbundet">
+				description = <"Evnen til å gå er svært begrenset eller mangler helt. Kan ikke bære egen kroppsvekt og/eller må ha hjelp til å komme seg over i stol eller rullestol.">
+			>
+			["at14"] = <
+				text = <"Går av og til">
+				description = <"Går av og til I løpet av dagen men kun korte avstander, med eller uten hjelp. Tilbringer mesteparten av hver vakt i seng eller stol.">
+			>
+			["at15"] = <
+				text = <"Går ofte">
+				description = <"Går utenfor rommet minst to ganger daglig og I rommet minst en gang
+annen hver time om dagen.">
+			>
+			["at16"] = <
+				text = <"Fuktig mesteparten av tiden">
+				description = <"Huden er fuktig store deler av tiden på grunn av svette, urin o.l. Fuktighet kjennes hver gang pasienten skal flyttes eller snus.">
+			>
+			["at17"] = <
+				text = <"Fuktig">
+				description = <"Huden er ofte fuktig, men ikke alltid. Sengetøyskift er nødvendig minst 3 ganger per 24 timer.">
+			>
+			["at18"] = <
+				text = <"Fuktig av og til">
+				description = <"Huden er fuktig av og til, sengetøyskift er nødvendig omtrent en gang pr. dag.">
+			>
+			["at19"] = <
+				text = <"Sjelden fuktig">
+				description = <"Huden er vanligvis tørr, sengetøyet skiftes kun til fastsatte tidspunkter.">
+			>
+			["id20"] = <
+				text = <"Mobilitet">
+				description = <"Evne til å styre kroppen og skifte stilling.">
+			>
+			["id21"] = <
+				text = <"Ernæring">
+				description = <"Vanlig mønster for fødeinntak/ ernæring .">
+			>
+			["id22"] = <
+				text = <"Friksjon og skyveeffekt">
+				description = <"Friksjon oppstår når hud beveges mot overflater. Skyveeffekt oppstår når hud og underliggende bein beveges over hverandre.">
+			>
+			["id23"] = <
+				text = <"Braden totalskår">
+				description = <"Totalskår basert på summering av alle underskår som fastslår pasientens risiko for å utvikle trykksår.">
+			>
+			["at24"] = <
+				text = <"Problem">
+				description = <"Trenger moderat til maksimalt hjelp ved forflytning. Løfting uten gnidning mot sengetøy er ikke mulig. Glir ofte ned i sengen eller stolen. Trenger hyppig stillingsendring med maksimal assistanse. Muskelspasmer, kontrakturer eller agitasjon medfører friksjon nesten hele tiden.">
+			>
+			["at25"] = <
+				text = <"Potensielt problem">
+				description = <"Er svak og skral eller trenger noe hjelp til å bevege seg. Under forflytning glir huden til en viss grad mot laken, stol eller hjelpemidler. Opprettholder bra stilling i stol eller seng mesteparten av tiden, men glir ned av og til.">
+			>
+			["at26"] = <
+				text = <"Ikke noe øyensynlig problem">
+				description = <"Forflytter seg i seng og i stol uten hjelp og har tilstrekkelig muskelstyrke til å løfte seg helt fra
+underlaget ved forflytning. Opprettholder god stilling i seng eller stol til enhver tid.">
+			>
+			["at27"] = <
+				text = <"Fullstendig immobil">
+				description = <"Gjør ingen endringer i kroppens stilling eller endring av ekstremiteters stilling uten hjelp.">
+			>
+			["at28"] = <
+				text = <"Meget begrenset">
+				description = <"Gjør av og til mindre endringer i kroppens eller ekstremitetenes stilling, men er ikke i stand til å gjøre hyppige eller større endringer uten hjelp.">
+			>
+			["at29"] = <
+				text = <"Noe begrenset">
+				description = <"Gjør hyppige eller mindre endringer i kroppens eller ekstremitetenes stilling selv.">
+			>
+			["at30"] = <
+				text = <"Ingen begrensninger">
+				description = <"Gjør store og hyppige endringer i stilling uten hjelp.">
+			>
+			["at31"] = <
+				text = <"Svært dårlig">
+				description = <"Spiser aldri et fullstendig måltid. Spiser sjelden mer enn en tredjedel av maten som tilbys. Spiser to porsjoner eller mindre av proteiner (kjøtt eller melkeprodukter) pr. dag. Tar ikke drikke med ernæringstilskudd, eller Er null pr. os og/eller får kun klar væske eller intravenøst i mer enn 5 døgn.">
+			>
+			["at32"] = <
+				text = <"Sannsynligvis utilstrekkelig">
+				description = <"Spiser sjelden et fullstendig måltid og spiser kun omtrent halvparten av maten som tilbys. Proteininntak omfatter kun tre porsjoner kjøtt eller melkeprodukter pr. dag. Får ernæringstilskudd av og til, eller får mindre enn optimal mengde flytende kost eller sondenæring.">
+			>
+			["at33"] = <
+				text = <"Tilstrekkelig">
+				description = <"Spiser mer enn halvparten av de fleste måltider. Spiser totalt fire porsjoner protein (kjøtt eller melkeprodukter) pr. dag. Avviser av og til et måltid, men tar vanligvis tilskudd hvis tilbudt. eller
+Får sondeernæring eller totalparenteral ernæring, som sannsynligvis tilfredsstiller ernæringsbehovet.">
+			>
+			["at34"] = <
+				text = <"Meget bra">
+				description = <"Spiser mesteparten av hvert måltid. Avviser aldri et måltid. Spiser vanligvis fire eller flere porsjoner med kjøtt og melkeprodukter. Spiser av og til mellom måltider. Har ikke behov for ernæringstilskudd.">
+			>
+			["id35"] = <
+				text = <"Kommentar">
+				description = <"Ytterligere kommentar om bruk av Braden-skalaen.">
+			>
+			["ac1"] = <
+				text = <"Evnen til å oppfatte og reagere på stimuli (synthesised)">
+				description = <"Evnen til å reagere hensiktsmessig ved ubehag som er trykkrelatert. (synthesised)">
+			>
+			["ac2"] = <
+				text = <"Fuktighet (synthesised)">
+				description = <"I hvor stor grad er huden utsatt for fuktighet. (synthesised)">
+			>
+			["ac3"] = <
+				text = <"Aktivitet (synthesised)">
+				description = <"Grad av fysisk aktivitet. (synthesised)">
+			>
+			["ac4"] = <
+				text = <"Mobilitet (synthesised)">
+				description = <"Evne til å styre kroppen og skifte stilling. (synthesised)">
+			>
+			["ac5"] = <
+				text = <"Ernæring (synthesised)">
+				description = <"Vanlig mønster for fødeinntak/ ernæring . (synthesised)">
+			>
+			["ac6"] = <
+				text = <"Friksjon og skyveeffekt (synthesised)">
+				description = <"Friksjon oppstår når hud beveges mot overflater. Skyveeffekt oppstår når hud og underliggende bein beveges over hverandre. (synthesised)">
+			>
+		>
+		["pt-br"] = <
+			["id1"] = <
+				text = <"Escala de Braden">
+				description = <"A Escala de Braden para Previsão do Risco de Feridas por Pressão é uma ferramenta utilizada para avaliar o risco de desenvolvimento de úlceras por pressão em adultos e crianças com idade superior a cinco anos.">
+			>
+			["id3"] = <
+				text = <"Qualquer evento">
+				description = <"Padrão, ponto indeterminado no evento de tempo que pode ser definido explicitamente em um modelo ou em tempo de execução.">
+			>
+			["id5"] = <
+				text = <"Percepção sensorial">
+				description = <"Capacidade de responder significativamente ao desconforto relacionado à pressão.">
+			>
+			["at6"] = <
+				text = <"Completamente limitada">
+				description = <"Não responde (não geme, vacila ou compreende) a estímulos dolorosos, devido ao reduzido nível de consciência ou sedação. OU limitada capacidade de sentir dor na maior parte do corpo.">
+			>
+			["at7"] = <
+				text = <"Muito limitada">
+				description = <"Responde apenas a estímulos dolorosos. Não pode comunicar o desconforto exceto por gemidos ou inquietação. OU tem uma deficiência sensorial que limita a capacidade de sentir dor ou desconforto em metade do corpo.">
+			>
+			["at8"] = <
+				text = <"Um pouco limitada">
+				description = <"Responde a comandos verbais, mas não pode sempre comunicar o desconforto ou a necessidade de ser virado (mudança de decúbito). OU tem algum comprometimento sensorial que limita a capacidade de sentir dor ou desconforto em 1 ou 2 extremidades.">
+			>
+			["at9"] = <
+				text = <"Sem prejuízo">
+				description = <"Responde aos comandos verbais. Não tem déficit sensorial que limite a capacidade de sentir ou verbalizar dor ou desconforto.">
+			>
+			["id10"] = <
+				text = <"Umidade">
+				description = <"Grau ao qual a pele é exposta à umidade.">
+			>
+			["id11"] = <
+				text = <"Atividade">
+				description = <"Grau de habilidade física.">
+			>
+			["at12"] = <
+				text = <"Acamados">
+				description = <"Confinado na cama.">
+			>
+			["at13"] = <
+				text = <"Cadeirante">
+				description = <"Habilidade para andar severamente limitada ou inexistente. Não pode sustentar o seu próprio peso e/ou deve ser assistido em cadeira ou cadeira de rodas.">
+			>
+			["at14"] = <
+				text = <"Caminha ocasionalmente">
+				description = <"Caminha ocasionalmente durante o dia, mas para distâncias muito curtas, com ou sem assistência. Fica a maior parte do tempo na cama ou na cadeira. OU fica a maior parte do dia em casa na cama ou na cadeira.">
+			>
+			["at15"] = <
+				text = <"Caminha frequentemente">
+				description = <"Caminha fora do quarto pelo menos duas vezes por dia e dentro do quarto pelo menos uma vez a cada duas horas durante o período que está em vigília.">
+			>
+			["at16"] = <
+				text = <"Constantemente úmido">
+				description = <"A pele permanece úmida quase constantemente por suor, urina, etc.. A umidade é detectada sempre que o paciente é movido ou virado.">
+			>
+			["at17"] = <
+				text = <"Muito úmido">
+				description = <"A pele fica frequentemente, mas não sempre úmida. Roupa de cama deve ser trocada aproximadamente 3 vezes em 24 horas.">
+			>
+			["at18"] = <
+				text = <"Ocasionalmente úmido">
+				description = <"a pele fica ocasionalmente úmida, exigindo uma mudança da roupa de cama aproximadamente uma vez por dia.">
+			>
+			["at19"] = <
+				text = <"Raramente úmido">
+				description = <"A pele fica geralmente seca, a troca da roupa de cama deve ser feita apenas em intervalos de rotina.">
+			>
+			["id20"] = <
+				text = <"Mobilidade">
+				description = <"Capacidade de mudar e controlar a posição do corpo.">
+			>
+			["id21"] = <
+				text = <"Nutrição">
+				description = <"Padrão de ingestão alimentar habitual.">
+			>
+			["id22"] = <
+				text = <"Atrito e cisalhamento">
+				description = <"Fricção ocorre quando a pele se move contra superfícies de apoio. O cisalhamento ocorre quando a pele e a superfície óssea adjacente deslizam uma sobre a outra.">
+			>
+			["id23"] = <
+				text = <"Score total">
+				description = <"A soma das pontuações registradas para cada uma das respostas dos seis componentes.">
+			>
+			["at24"] = <
+				text = <"Problema">
+				description = <"Requer assistência de moderada a máxima em movimento. O levantamento completo sem deslizamento contra lençóis é impossível. Freqüentemente desliza para baixo na cama ou cadeira, exigindo freqüentes reposicionamentos com assistência máxima. Espasticidade, contraturas ou agitação levam a atritos quase constantes.">
+			>
+			["at25"] = <
+				text = <"Problema potencial">
+				description = <"Move-se devagar ou requer assistência mínima. Durante um movimento de pele provavelmente desliza em certa medida contra lençóis, cadeira, restrições ou outros dispositivos. Mantêm a posição relativamente boa na cadeira ou na cama na maioria das vezes, mas ocasionalmente desliza para baixo.">
+			>
+			["at26"] = <
+				text = <"Aparentemente sem problema">
+				description = <"Move-se na cama e na cadeira de forma independente e tem força muscular suficiente para levantar completamente durante o movimento. Mantêm boa posição na cama ou cadeira.">
+			>
+			["at27"] = <
+				text = <"Completamente imóvel">
+				description = <"Não faz pequenas alterações na posição do corpo ou nas extremidades em auxílio.">
+			>
+			["at28"] = <
+				text = <"Muito limitado">
+				description = <"Faz mudanças ocasionais na posição do corpo ou nas extremidades mas é incapaz de fazer mudanças frequentes ou significativas de forma independente.">
+			>
+			["at29"] = <
+				text = <"Um pouco limitado">
+				description = <"Faz mudanças frequentes, embora sutis, na posição do corpo ou da extremidade de forma independente.">
+			>
+			["at30"] = <
+				text = <"Sem limitação">
+				description = <"Faz mudanças importantes e frequentes na posição sem assistência.">
+			>
+			["at31"] = <
+				text = <"Muito pobre">
+				description = <"Nunca come uma refeição completa. Raramente come mais do 1/3 de qualquer alimento oferecido. Come 2 porções ou menos de proteína (carne ou produtos lácteos) por dia. Dificuldade em ingerir fluídos. Não toma um suplemento dietético liquido. OU é não se alimenta por boca e/ou é mantido por líquidos ou endovenosa por mais de 5 dias.">
+			>
+			["at32"] = <
+				text = <"Provavelmente inadequado">
+				description = <"Raramente come uma refeição completa e geralmente come somente metade de qualquer alimento oferecido. O consumo de proteínas inclui apenas 3 porções de carne ou de produtos lácteos por dia. Ocasionalmente toma um suplemento dietético. OU recebe uma quantidade inferior à quantidade ótima de dieta líquida ou alimentação por tubo.">
+			>
+			["at33"] = <
+				text = <"Adequada">
+				description = <"Come mais da metade da maioria das refeições. come um total de 4 porções d proteína (carne, produtos lácteos por dia). Ocasionalmente, recusa uma refeição, mas geralmente toma um suplemento quando oferecido OU utiliza um tubo de alimentação ou regime de nutrição parenteral total (NPT) que provavelmente atende a maioria de suas necessidades nutricionais.">
+			>
+			["at34"] = <
+				text = <"Excelente">
+				description = <"Come a maior parte da refeição. Nunca recusa uma refeição. Geralmente come um total de 4 ou mais porções de carne e produtos lácteos. Ocasionalmente come entre as refeições. Não requer suplementação.">
+			>
+			["id35"] = <
+				text = <"Comentários">
+				description = <"Narrativa adicional sobre a avaliação da escala de Braden não informada nas avaliações estruturadas.">
+			>
+			["ac1"] = <
+				text = <"Percepção sensorial (synthesised)">
+				description = <"Capacidade de responder significativamente ao desconforto relacionado à pressão. (synthesised)">
+			>
+			["ac2"] = <
+				text = <"Umidade (synthesised)">
+				description = <"Grau ao qual a pele é exposta à umidade. (synthesised)">
+			>
+			["ac3"] = <
+				text = <"Atividade (synthesised)">
+				description = <"Grau de habilidade física. (synthesised)">
+			>
+			["ac4"] = <
+				text = <"Mobilidade (synthesised)">
+				description = <"Capacidade de mudar e controlar a posição do corpo. (synthesised)">
+			>
+			["ac5"] = <
+				text = <"Nutrição (synthesised)">
+				description = <"Padrão de ingestão alimentar habitual. (synthesised)">
+			>
+			["ac6"] = <
+				text = <"Atrito e cisalhamento (synthesised)">
+				description = <"Fricção ocorre quando a pele se move contra superfícies de apoio. O cisalhamento ocorre quando a pele e a superfície óssea adjacente deslizam uma sobre a outra. (synthesised)">
+			>
+		>
+		["es-ar"] = <
+			["id1"] = <
+				text = <"Escala de Braden">
+				description = <"La Escala de Braden para pa predicción de úlceras de decúbito es una herramienta utilizada para evaluar el riesgo de desarrollo de úlceras de decúbito en adultos y niños mayores de 5 años de edad.">
+			>
+			["id3"] = <
+				text = <"Any event">
+				description = <"Por defecto, un momento en el tiempo que puede ser explícitamente definifo en una plantilla o en tiempo de ejecución.">
+			>
+			["id5"] = <
+				text = <"Percepción sensorial">
+				description = <"Capacidad para responder significativamente al desconfort relacionado con la presión.">
+			>
+			["at6"] = <
+				text = <"Completamente limitada">
+				description = <"No responde (no se queja, no se defiende ni se agarra) ante estímulos dolorosos, por un nivel disminuido de conciencia o sedación o capacidad limitada para sentir dolor sobre la mayoría de la superficie corporal.">
+			>
+			["at7"] = <
+				text = <"Muy limitada">
+				description = <"Responde solamente a estímulos dolorosos. No puede comunicar el disconfort excepto por quejido o agitación O tiene un deterioro sensorial que limita la capacidad para sentir dolor O disconfort sobre la mitad del cuerpo.">
+			>
+			["at8"] = <
+				text = <"Levemente limitada">
+				description = <"Responde a órdenes verbales pero no siempre puede comunicar el disconfort o la necesidad de ser volteado o tiene alguna alteración sensorial que limita la capacidad para sentir dolor o disconfort en una o dos extremidades">
+			>
+			["at9"] = <
+				text = <"No alterada">
+				description = <"Responde a órdenes verbales. No tiene déficit sensorial que limite la capacidad de sentir o manifestar dolor o disconfort.">
+			>
+			["id10"] = <
+				text = <"Humedad">
+				description = <"Grado en el cual la piel está expuesta a la humedad.">
+			>
+			["id11"] = <
+				text = <"Actividad">
+				description = <"Grado de actividad física.">
+			>
+			["at12"] = <
+				text = <"En cama">
+				description = <"Confinado a la cama.">
+			>
+			["at13"] = <
+				text = <"En silla">
+				description = <"Capacidad para caminar severamente limitada o inexistente. No puede soportar su propio peso o debe ser asistido en la silla común o silla de ruedas.">
+			>
+			["at14"] = <
+				text = <"Camina ocasionalmente">
+				description = <"Camina ocasionalmente durante el día pero muy cortas distancias con o sin asistencia. Pasa la mayor parte del turno (8 horas) en la silla o en la cama.">
+			>
+			["at15"] = <
+				text = <"Camina con frecuencia">
+				description = <"Camina fuera del cuarto por lo menos dos veces en el día y dentro de él por lo menos una vez cada dos horas.">
+			>
+			["at16"] = <
+				text = <"Constantemente húmeda">
+				description = <"La piel permanece húmeda casi constantemente por sudoración, orina, etc. Cada vez que es movilizado o girado, se encuentra mojado.">
+			>
+			["at17"] = <
+				text = <"Muy húmeda">
+				description = <"La piel está frecuentemente húmeda. Las sábanas deben cambiarse por lo menos una vez por turno (cada ocho horas).">
+			>
+			["at18"] = <
+				text = <"Ocasionalmente húmeda">
+				description = <"La piel está ocasionalmente húmeda, requieriendo un cambio extra de sábanas aproximadamente una vez al día (cada 12 horas).">
+			>
+			["at19"] = <
+				text = <"Rara vez húmeda">
+				description = <"La piel está usualmente seca; las sábanas requieren cambio con intervalos de rutina (cada 24 horas).">
+			>
+			["id20"] = <
+				text = <"Movilidad">
+				description = <"Capacidad para cambiar y controlar la posición del cuerpo.">
+			>
+			["id21"] = <
+				text = <"Nutrición">
+				description = <"Patrón usual de consumo alimentario.">
+			>
+			["id22"] = <
+				text = <"Fricción y deslizamiento">
+				description = <"La fricción ocurre cuando la piel se mueve contra las superficies de apoyo. El deslizamiento ocurre cuando la piel y la superficie osea adyacente se deslizan una sobre otra.">
+			>
+			["id23"] = <
+				text = <"Puntaje total">
+				description = <"La suma de las escalas ordinales registradas para cada uno de los seis componentes respondidos.">
+			>
+			["at24"] = <
+				text = <"Es un problema">
+				description = <"Requiere asistencia de moderada a máxima al movilizarlo. Levantarlo completamente sin deslizarlo sobre las sábanas es imposible. Frecuentemente se desliza en la cama o en la silla y requiere constantes cambios de posición con un máximo de asistencia. La espasticidad y contracturas llevan a fricción casi constante.">
+			>
+			["at25"] = <
+				text = <"Es un problema potencial">
+				description = <"Se mueve debilmente o requiere mínima asistencia. Durante un movimiento, la piel probablemente se desliza en algún grado contra las sábanas, la silla u otros objetos. Mantiene relativamente buena posición en la silla o en la cama la mayoría del tiempo, pero ocasionalmente se desliza hacia abajo.">
+			>
+			["at26"] = <
+				text = <"Sin problema aparente">
+				description = <"Se mueve en la cama o en la silla y tiene suficiente fuerza muscular para sostenerse completamente durante el movimiento. Mantiene buena posición en la cama o en la silla en todo momento.">
+			>
+			["at27"] = <
+				text = <"Completamente inmóvil">
+				description = <"No realiza siquiera ligeros cambios en la posición del cuerpo o las extremidades sin asistencia.">
+			>
+			["at28"] = <
+				text = <"Muy limitada">
+				description = <"Realiza cambios mínimos y ocasionales de la posición del cuerpo o las extremidades, pero es incapaz de realizar cambios frecuentes o significativos en forma independiente.">
+			>
+			["at29"] = <
+				text = <"Ligeramente limitada">
+				description = <"Realiza cambios frecuentes aunque ligeros en la posición del cuerpo o de las extremidades en forma independiente.">
+			>
+			["at30"] = <
+				text = <"Sin limitaciones">
+				description = <"Realiza cambios mayores y frecuentes en la posición sin asistencia.">
+			>
+			["at31"] = <
+				text = <"Muy pobre">
+				description = <"Nunca come una comida completa. Rara vez come más de un tercio de cualquier comida ofrecida. Come dos porciones o menos de proteínas (carne o lácteos) por día. Toma poco líquido. O no toma un suplemento alimenticio líquido y/o está sin vía oral o con dieta líquida clara o intravenosa por más de cinco días.">
+			>
+			["at32"] = <
+				text = <"Probablemente inadecuada">
+				description = <"Rara vez come una comida completa y generalmente come solo la mitad de cualquier comida ofrecida. La ingesta de proteínas incluye solamente tres porciones de carne o productos lácteos por día. Ocasionalmente toma un suplemento alimenticio. O recibe menos de la cantidad óptima de dieta líquida o alimentación por sonda.">
+			>
+			["at33"] = <
+				text = <"Adecuada">
+				description = <"Come más de la mitad de la mayoría de las comidas. Come el total de cuatro porciones de proteína por día. Ocasionalmente rechaza una comida pero usualmente toma un suplemento alimenticio si se le ofrece o está siendo alimentado por sonda o nutrición parenteral.">
+			>
+			["at34"] = <
+				text = <"Excelente">
+				description = <"Come la mayoría de todas las comidas, nunca rechaza una comida, usualmente come un total de cuatro o más porciones de carne y productos lácteos, ocasionalmente come entre comidas. No requiere suplemento alimenticio.">
+			>
+			["id35"] = <
+				text = <"Comentario">
+				description = <"Narrativa adicional acerca de la evaluación de la Escala de Braden, no capturada en la evaluación estructurada.">
+			>
+			["ac1"] = <
+				text = <"Percepción sensorial (synthesised)">
+				description = <"Capacidad para responder significativamente al desconfort relacionado con la presión. (synthesised)">
+			>
+			["ac2"] = <
+				text = <"Humedad (synthesised)">
+				description = <"Grado en el cual la piel está expuesta a la humedad. (synthesised)">
+			>
+			["ac3"] = <
+				text = <"Actividad (synthesised)">
+				description = <"Grado de actividad física. (synthesised)">
+			>
+			["ac4"] = <
+				text = <"Movilidad (synthesised)">
+				description = <"Capacidad para cambiar y controlar la posición del cuerpo. (synthesised)">
+			>
+			["ac5"] = <
+				text = <"Nutrición (synthesised)">
+				description = <"Patrón usual de consumo alimentario. (synthesised)">
+			>
+			["ac6"] = <
+				text = <"Fricción y deslizamiento (synthesised)">
+				description = <"La fricción ocurre cuando la piel se mueve contra las superficies de apoyo. El deslizamiento ocurre cuando la piel y la superficie osea adyacente se deslizan una sobre otra. (synthesised)">
+			>
+		>
+	>
+	term_bindings = <
+		["LOINC"] = <
+			["id5"] = <http://loinc.org/id/38222-6>
+			["at6"] = <http://loinc.org/id/LA9603-7>
+			["at7"] = <http://loinc.org/id/LA9605-4>
+			["at8"] = <http://loinc.org/id/LA9605-2>
+			["at9"] = <http://loinc.org/id/LA9606-0>
+			["id10"] = <http://loinc.org/id/38229-1>
+			["id11"] = <http://loinc.org/id/38223-4>
+			["at12"] = <http://loinc.org/id/LA6742-6>
+			["at13"] = <http://loinc.org/id/LA9611-0>
+			["at14"] = <http://loinc.org/id/LA9612-8>
+			["at15"] = <http://loinc.org/id/LA9613-6>
+			["at16"] = <http://loinc.org/id/LA9607-8>
+			["at17"] = <http://loinc.org/id/LA9608-6>
+			["at18"] = <http://loinc.org/id/LA9609-4>
+			["at19"] = <http://loinc.org/id/LA9610-2>
+			["id20"] = <http://loinc.org/id/38224-2>
+			["id21"] = <http://loinc.org/id/38225-9>
+			["id22"] = <http://loinc.org/id/38226-7>
+			["id23"] = <http://loinc.org/id/38227-5>
+			["at24"] = <http://loinc.org/id/LA9617-7>
+			["at25"] = <http://loinc.org/id/LA9618-5>
+			["at26"] = <http://loinc.org/id/LA9619-3>
+			["at27"] = <http://loinc.org/id/LA9614-4>
+			["at30"] = <http://loinc.org/id/LA120-8>
+			["at31"] = <http://loinc.org/id/LA9615-1>
+			["at32"] = <http://loinc.org/id/LA9616-9>
+			["at33"] = <http://loinc.org/id/LA8913-1>
+			["at34"] = <http://loinc.org/id/LA9206-9>
+		>
+		["SNOMED-CT"] = <
+			["id1"] = <http://snomed.info/id/413139004>
+			["id23"] = <http://snomed.info/id/443428004>
+		>
+	>
+	value_sets = <
+		["ac1"] = <
+			id = <"ac1">
+			members = <"at6", "at7", "at8", "at9">
+		>
+		["ac2"] = <
+			id = <"ac2">
+			members = <"at16", "at17", "at18", "at19">
+		>
+		["ac3"] = <
+			id = <"ac3">
+			members = <"at12", "at13", "at14", "at15">
+		>
+		["ac4"] = <
+			id = <"ac4">
+			members = <"at27", "at28", "at29", "at30">
+		>
+		["ac5"] = <
+			id = <"ac5">
+			members = <"at31", "at32", "at33", "at34">
+		>
+		["ac6"] = <
+			id = <"ac6">
+			members = <"at24", "at25", "at26">
+		>
+	>

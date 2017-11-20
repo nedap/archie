@@ -8,6 +8,10 @@ import com.nedap.archie.base.Cardinality;
 import com.nedap.archie.base.Interval;
 import com.nedap.archie.base.terminology.TerminologyCode;
 
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Collection;
+
 /**
  * Created by pieter.bos on 06/07/16.
  */
@@ -16,7 +20,7 @@ public class ArchieAOMInfoLookup extends ReflectionModelInfoLookup {
     private static ArchieAOMInfoLookup instance;
 
     public ArchieAOMInfoLookup() {
-        super(new ArchieModelNamingStrategy(), ArchetypeModelObject.class);
+        super(new ArchieModelNamingStrategy(), ArchetypeModelObject.class, ArchieAOMInfoLookup.class.getClassLoader(), false /* no attributes without field */);
         addSubtypesOf(Interval.class); //extra class from the base package. No RMObject because it is also used in the AOM
         addSubtypesOf(Cardinality.class); //extra class from the base package. No RMObject because it is also used in the AOM
         addSubtypesOf(TerminologyCode.class); //extra class from the base package. No RMObject because it is also used in the AOM
@@ -69,6 +73,18 @@ public class ArchieAOMInfoLookup extends ReflectionModelInfoLookup {
     @Override
     public void pathHasBeenUpdated(Object rmObject, Archetype archetype, String pathOfParent, Object parent) {
         throw new UnsupportedOperationException("not supported");//TODO: split this to different classes
+    }
+
+    @Override
+    public boolean validatePrimitiveType(String rmTypeName, String rmAttributeName, CPrimitiveObject cObject) {
+        return true;
+    }
+
+    @Override
+    public Collection<RMPackageId> getId() {
+        List<RMPackageId> result = new ArrayList<>();
+        result.add(new RMPackageId("OpenEHR", "AOM"));
+        return result;
     }
 
 }

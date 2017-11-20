@@ -1,0 +1,206 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated)
+	openEHR-EHR-OBSERVATION.scorad_score.v1.0.0
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Ian McNicoll">
+		["organisation"] = <"HANDIHealth,UK">
+		["email"] = <"ian@handihealth.org">
+		["date"] = <"2015-02-09">
+	>
+	copyright = <"© openEHR Foundation">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record an estimate of severity of atopic dermatitis.">
+			use = <"">
+			misuse = <"">
+		>
+	>
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"0875ACBBA81B936B450BE5FF13913E76">
+	>
+
+definition
+	OBSERVATION[id1] matches {	-- SCORAD score
+		data matches {
+			HISTORY[id2] matches {
+				events cardinality matches {1..*; unordered} matches {
+					EVENT[id3] occurrences matches {0..1} matches {	-- Any event
+						data matches {
+							ITEM_TREE[id4] matches {
+								items matches {
+									ELEMENT[id5] occurrences matches {0..1} matches {	-- Affected area
+										value matches {
+											DV_PROPORTION[id22] matches {
+												numerator matches {|0.0..100.0|}
+												is_integral matches {True}
+												type matches {2}
+											}
+										}
+									}
+									CLUSTER[id7] occurrences matches {0..1} matches {	-- Intensity of specific lesions
+										items matches {
+											ELEMENT[id6] matches {	-- Specific lesion
+												name matches {
+													DV_CODED_TEXT[id23] matches {
+														defining_code matches {[ac1]}		-- Specific lesion (synthesised)
+													}
+												}
+												value matches {
+													DV_ORDINAL[id24] matches {
+														[value, symbol] matches {
+															[{0}, {[at14]}],
+															[{1}, {[at15]}],
+															[{2}, {[at16]}],
+															[{3}, {[at17]}]
+														}
+													}
+												}
+											}
+										}
+									}
+									allow_archetype CLUSTER[id18] matches {	-- Symptom intensity
+										include
+											archetype_id/value matches {/.*/}
+									}
+									ELEMENT[id20] occurrences matches {0..1} matches {	-- Total SCORAD score
+										value matches {
+											DV_COUNT[id25] 
+										}
+									}
+									ELEMENT[id21] occurrences matches {0..1} matches {	-- Total intensity grade
+										value matches {
+											DV_CODED_TEXT[id26] matches {
+												defining_code matches {[ac2]}		-- Total intensity grade (synthesised)
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"SCORAD score">
+				description = <"SCORAD - atopic dematitis severity score.">
+			>
+			["id3"] = <
+				text = <"Any event">
+				description = <"Any event.">
+			>
+			["id5"] = <
+				text = <"Affected area">
+				description = <"Extent of affected area.">
+			>
+			["id6"] = <
+				text = <"Specific lesion">
+				description = <"The level of intensity of a symptom.">
+			>
+			["id7"] = <
+				text = <"Intensity of specific lesions">
+				description = <"The intensity of typical specific lesions.">
+			>
+			["at8"] = <
+				text = <"Erythema">
+				description = <"Intensity of erythema.">
+			>
+			["at9"] = <
+				text = <"Oedema/ papulation">
+				description = <"Intensity of oedema/ papulation.">
+			>
+			["at10"] = <
+				text = <"Oozing / crust">
+				description = <"Intensity of oozing / crust.">
+			>
+			["at11"] = <
+				text = <"Excoriation">
+				description = <"Intensity of excoriation.">
+			>
+			["at12"] = <
+				text = <"Lichenification">
+				description = <"Intensity of lichenification.">
+			>
+			["at13"] = <
+				text = <"Dryness">
+				description = <"Intensity of dryness.">
+			>
+			["at14"] = <
+				text = <"Absent">
+				description = <"Symptom is absent.">
+			>
+			["at15"] = <
+				text = <"Mild">
+				description = <"Symptom is mild.">
+			>
+			["at16"] = <
+				text = <"Moderate">
+				description = <"Symptom is moderate.">
+			>
+			["at17"] = <
+				text = <"Severe">
+				description = <"Symptom is severe.">
+			>
+			["id18"] = <
+				text = <"Symptom intensity">
+				description = <"Symptom intensity scores.">
+			>
+			["id20"] = <
+				text = <"Total SCORAD score">
+				description = <"The total SCORAD score.">
+			>
+			["id21"] = <
+				text = <"Total intensity grade">
+				description = <"The total score expressed as a set of grades.">
+			>
+			["at22"] = <
+				text = <"Mild">
+				description = <"The overall score is less than 25.">
+			>
+			["at23"] = <
+				text = <"Moderate">
+				description = <"The score is between 25 and 50.">
+			>
+			["at24"] = <
+				text = <"Severe">
+				description = <"The toal score is over 50.">
+			>
+			["ac1"] = <
+				text = <"Specific lesion (synthesised)">
+				description = <"The level of intensity of a symptom. (synthesised)">
+			>
+			["ac2"] = <
+				text = <"Total intensity grade (synthesised)">
+				description = <"The total score expressed as a set of grades. (synthesised)">
+			>
+			["ac3"] = <
+				text = <"Specific lesion (synthesised)">
+				description = <"The level of intensity of a symptom. (synthesised)">
+			>
+		>
+	>
+	value_sets = <
+		["ac1"] = <
+			id = <"ac1">
+			members = <"at8", "at9", "at10", "at11", "at12", "at13">
+		>
+		["ac2"] = <
+			id = <"ac2">
+			members = <"at22", "at23", "at24">
+		>
+		["ac3"] = <
+			id = <"ac3">
+			members = <"at14", "at15", "at16", "at17">
+		>
+	>

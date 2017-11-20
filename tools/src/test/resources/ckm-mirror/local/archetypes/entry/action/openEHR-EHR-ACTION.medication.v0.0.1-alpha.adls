@@ -1,0 +1,3064 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated; uid=f1875ab8-c67a-4915-9bbb-5e4817700414)
+	openEHR-EHR-ACTION.medication.v0.0.1-alpha
+
+language
+	original_language = <[ISO_639-1::en]>
+	translations = <
+		["ru"] = <
+			language = <[ISO_639-1::ru]>
+			author = <
+				["name"] = <"Art Latyp; Артур Латыпов">
+				["organisation"] = <"RusBITech; Русбитех, Москва">
+			>
+			accreditation = <"hmm">
+		>
+		["es-ar"] = <
+			language = <[ISO_639-1::es-ar]>
+			author = <
+				["name"] = <"Guillermo Palli">
+			>
+		>
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			author = <
+				["name"] = <"Vebjørn Arntzen, Silje L. Bakke">
+				["organisation"] = <"Oslo universitetssykehus HF, Nasjonal IKT HF, Norway">
+			>
+		>
+		["pt-br"] = <
+			language = <[ISO_639-1::pt-br]>
+			author = <
+				["name"] = <"Beatriz de Faria Leao">
+				["organisation"] = <"Bleao Informática em Saúde">
+				["email"] = <"bfleao@terra.com.br">
+			>
+			accreditation = <"MD, PhD">
+		>
+		["ar-sy"] = <
+			language = <[ISO_639-1::ar-sy]>
+			author = <
+				["name"] = <"Mona Saleh">
+			>
+		>
+		["sl"] = <
+			language = <[ISO_639-1::sl]>
+			author = <
+				["name"] = <"Biljana Prinčič">
+				["organisation"] = <"Marand, Ljubljana">
+				["email"] = <"biljana.princic@marand.si">
+			>
+		>
+	>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Ian McNicoll">
+		["organisation"] = <"freshEHR Clinical Informatics UK">
+		["email"] = <"ian@freshehr.com">
+		["date"] = <"2017-05-29">
+	>
+	original_namespace = <"org.openehr">
+	original_publisher = <"openEHR Foundation">
+	custodian_namespace = <"org.openehr">
+	custodian_organisation = <"openEHR Foundation">
+	copyright = <"© openEHR Foundation">
+	licence = <"This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 License. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/.">
+	details = <
+		["sl"] = <
+			language = <[ISO_639-1::sl]>
+			purpose = <"*The recording of activities undertaken with regard to a medicine, vaccine or other therapeutic good and linking to the instruction if appropriate.">
+			use = <"*For recording the planning, issuing of a prescription, dispensing, administration, cessation, suspension, completion of a medicine, vaccine or other therapeutic good . This will usually be in response to a medication order but may be administered immediately without an order at times, thus requiring recording of the administration alone (e.g. in an emergency situation). 
+
+Such a record may be made to indicate the administration of a dose, dispensing of a certain quantity or as a record of ceasing a medication. The state of the medication instruction is altered by the action taken as indicated in the Pathway definition.
+
+There is a date and time at which this ACTION took place (as there is for all ACTIONs)  and use of this archetype indicates that some action has actually occurred.">
+			keywords = <"*medication", "*prescibe", "*dispense", "*administration", "*cessation", "*therapeutic good", "*supply", "*medicine", "*drug">
+			misuse = <"*Do not use when recording an instruction or order (use INSTRUCTION.medication).">
+		>
+		["es-ar"] = <
+			language = <[ISO_639-1::es-ar]>
+			purpose = <"Este ACTION permite la grabación de las ordenes de prescripciones. Esto será normalmente en respuesta a una orden de medicación o prescripción, pero puede ser autoadministrado o suministrada por una farmacia. No existe informacion sobre si el uso de este arquetipo implica que alguna accion haya efectivamente sido ejecutada">
+			use = <"*For recording the planning, issuing of a prescription, dispensing, administration, cessation, suspension, completion of a medicine, vaccine or other therapeutic good . This will usually be in response to a medication order but may be administered immediately without an order at times, thus requiring recording of the administration alone (e.g. in an emergency situation). 
+
+Such a record may be made to indicate the administration of a dose, dispensing of a certain quantity or as a record of ceasing a medication. The state of the medication instruction is altered by the action taken as indicated in the Pathway definition.
+
+There is a date and time at which this ACTION took place (as there is for all ACTIONs)  and use of this archetype indicates that some action has actually occurred.(en)">
+			keywords = <"*medication(en)", "*prescibe(en)", "*dispense(en)", "*administration(en)", "*cessation(en)", "*therapeutic good(en)", "*supply(en)", "*medicine(en)", "*drug(en)">
+			misuse = <"*Do not use when recording an instruction or order (use INSTRUCTION.medication).(en)">
+		>
+		["ar-sy"] = <
+			language = <[ISO_639-1::ar-sy]>
+			purpose = <"يُمَكِّن هذا الفعل من تسجيل الأفعال التي يتم تنفيذها فيما يتعلق بالأدوية. و عادة ما يكون ذلك استجابة لأمر دوائي أو وصفة دوائية, و لكنه قد يكون إما قام المريض بتناوله بنفسه أو عن طريق الصيدلية. لا يوجد في هذا النموذج تفاصيل حول الوقت حيث إنه يشير إلى فعل تم في الواقع.">
+			use = <"*For recording the planning, issuing of a prescription, dispensing, administration, cessation, suspension, completion of a medicine, vaccine or other therapeutic good . This will usually be in response to a medication order but may be administered immediately without an order at times, thus requiring recording of the administration alone (e.g. in an emergency situation). 
+
+Such a record may be made to indicate the administration of a dose, dispensing of a certain quantity or as a record of ceasing a medication. The state of the medication instruction is altered by the action taken as indicated in the Pathway definition.
+
+There is a date and time at which this ACTION took place (as there is for all ACTIONs)  and use of this archetype indicates that some action has actually occurred.(en)">
+			keywords = <"*medication(en)", "*prescibe(en)", "*dispense(en)", "*administration(en)", "*cessation(en)", "*therapeutic good(en)", "*supply(en)", "*medicine(en)", "*drug(en)">
+			misuse = <"*Do not use when recording an instruction or order (use INSTRUCTION.medication).(en)">
+		>
+		["ru"] = <
+			language = <[ISO_639-1::ru]>
+			purpose = <"этот архетип класса ДЕЙСТВИЕ позволяет записывать активность, связанную с введением лекарств или применением лечения. Обычно такая активность возникает в ответ на назначение лекарства врачом, но также может быть при самолечении или лечении по совету аптекаря. Информация о времени приема отсутствует, так как использование данного архетипа предполагает, что действие произведено в настоящий момент времени.">
+			use = <"*For recording the planning, issuing of a prescription, dispensing, administration, cessation, suspension, completion of a medicine, vaccine or other therapeutic good . This will usually be in response to a medication order but may be administered immediately without an order at times, thus requiring recording of the administration alone (e.g. in an emergency situation). 
+
+Such a record may be made to indicate the administration of a dose, dispensing of a certain quantity or as a record of ceasing a medication. The state of the medication instruction is altered by the action taken as indicated in the Pathway definition.
+
+There is a date and time at which this ACTION took place (as there is for all ACTIONs)  and use of this archetype indicates that some action has actually occurred.(en)">
+			keywords = <"лекарство", "медикамент", "введение", "прием">
+			misuse = <"*Do not use when recording an instruction or order (use INSTRUCTION.medication).(en)">
+		>
+		["pt-br"] = <
+			language = <[ISO_639-1::pt-br]>
+			purpose = <"Para registrar as atividades realizadas com respeito a um medicamento, vacina ou outro item terapêutico e vinculando a respectiva prescrição (INSTRUCTION), se apropriado.">
+			use = <"Para registrar o planejamento, liberação de prescrição, dispensação, administração, interrupção, suspensão, conclusão de tratamento de um medicamento, vacina ou outro ítem terapêutico. Isso geralmente será em resposta a uma prescrição, mas pode ser administrado imediatamente sem uma prescrição, exigindo assim o registro somente da administração (por exemplo, em uma situação de emergência).
+
+Esse registro pode ser feito para representar a administração de uma dose, dispensação de uma determinada quantidade ou como registro de interrupção de uma medicação. O status da prescrição de medicação é alterado pela ação realizada, conforme indicado na definição do elemento 'pathway'.
+
+Há uma data e hora em que esta ACTION ocorreu (como existe para todas as ACTION) e o uso desse arquétipo indica que alguma ação efetivamente aconteceu.">
+			keywords = <"medicamento", "prescrever", "dispensar", "administração", "cessação", "ítem terapêutico", "fornecimento", "remédio", "medicamento">
+			misuse = <"Não utilizar para registrar uma prescrição (use a INSTRUCTION.medication).">
+		>
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			purpose = <"For å registrere detaljer om enhver legemiddelrelatert oppgave som utføres fra et legemiddel er ordinert eller rekvirert til det er utdelt eller eventuelt kassert, for eksempel bestilling, klargjøring, administrering, utdeling eller seponering. Dette kan også omfatte en lenke til ordineringen.">
+			use = <"Brukes til å registrere detaljer om enhver legemiddelrelatert oppgave som utføres fra et legemiddel er ordinert eller rekvirert til det er utdelt eller eventuelt kassert, for eksempel bestilling, klargjøring, administrering eller utdeling.
+
+Dette vil vanligvis følge av en legemiddelordinering, men kan i gitte tilfeller skje uten en forutgående ordinering og krever dermed kun en registrering av administreringen (for eksempel i en akuttsituasjon).
+
+Slike oppføringer kan gjøres for å markere administrering av en dose, utdeling av en bestemt mengde eller som dokumentasjon av seponering. Statusen til legemiddelordineringen blir endret i henhold til prosesstrinnene.
+
+Som for alle ACTION-arketyper, er det et tidsstempel på når handlingen fant sted. Bruk av denne arketypen indikerer derfor at en handling faktisk har blitt utført.">
+			keywords = <"medikasjon", "utdeling", "administrasjon", "utsettelse", "seponering", "terapeutisk vare", "medisinsk vare", "tilførsel", "medisin", "apotekervare", "legemiddel", "legemiddellogistikk", "istandgjøring", "opptrekking", "utblanding", "apotekvare", "administrere", "gi">
+			misuse = <"Skal ikke brukes for å registrere ordinering av legemidler. Bruk arketypen INSTRUCTION.medication_order for dette formålet.
+
+Skal ikke brukes for å registrere administrering eller utlevering av blodkomponenter, da dette er en grunnleggende annerledes prosess som krever annen informasjon. Bruk en annen, passende ACTION-arketype til dette formålet.">
+		>
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"For recording details about any medication related task that is performed after ordering, such as planning, preparation, administration, dispensing or cessation. If appropriate this can include a link to the order.">
+			use = <"Use for recording details about any medication related task that is performed after ordering, such as planning, preparation, administration, dispensing or cessation. 
+
+This will usually be in response to a medication order but may be administered immediately without an order at times, thus requiring recording of the administration alone (e.g. in an emergency situation). 
+
+Such a record may be made to indicate the administration of a dose, dispensing of a certain quantity or as a record of ceasing a medication. The state of the medication instruction is altered by the action taken as indicated in the Pathway definition.
+
+There is a date and time at which this ACTION took place (as there is for all ACTIONs)  and use of this archetype indicates that some action has actually occurred.">
+			keywords = <"medication", "prescibe", "dispense", "administration", "cessation", "therapeutic good", "supply", "medicine", "drug">
+			misuse = <"Not to be used for recording a medication order or instruction. Use the INSTRUCTION.medication_order archetype for this purpose.
+
+Not to be used to record the administration or dispensing of blood products, which involves a fundamentally different clinical process and is likely to require different supporting information Use a a different appropriate ACTION archetype for this purpose.">
+		>
+	>
+	other_contributors = <"Ole Andreas Bjordal, Webmed, Norway", "Vebjørn Arntzen, Oslo University Hospital, Norway (openEHR Editor)", "Silje Ljosland Bakke, Nasjonal IKT HF, Norway (openEHR Editor)", "SB Bhattacharyya, Sudisa Consultancy Services, India", "Laila Bruun, Oslo universitetssykehus HF, Norway", "Ruth Caudwell, retired, United Kingdom", "Bjørn Christensen, Helse Bergen HF, Norway", "Stephen Chu, NEHTA, Australia (Editor)", "Lisbeth Dahlhaug, Helse Midt - Norge IT, Norway", "Samo Drnovšek, Marand, Slovenia (Editor)", "Robert Eager, Healthways, Australia", "Tone Engen, Norway", "Peter Fedorcsak, Oslo universitetssykehus, Norway", "Samuel Frade, Marand, Portugal", "Jacquie Garton-Smith, Royal Perth Hospital and DoHWA, Australia", "Mikkel Gaup Grønmo, FSE, Helse Nord, Norway", "Heather Grain, Llewelyn Grain Informatics, Australia", "Sam Heard, Ocean Health Systems, Australia", "Annette Hole Sjøborg, DIPS ASA, Norway", "Hilde Hollås, DIPS ASA, Norway", "Roar Holm, Helse Vest IKT A/S, Norway", "Alfred Honore, Haukeland, Norway", "Evelyn Hovenga, EJSH Consulting, Australia", "Lars Ivar Mehlum, Helse Bergen HF, Norway", "Tom Jarl Jakobsen, Helse Bergen, Norway", "Harmony Kosola, Alberta Health Services, Canada", "Robert L'egan, NEHTA, Australia", "Heather Leslie, Ocean Health Systems, Australia (openEHR Editor)", "Marit Ludvigsen, St Olavs Hospital, Norway", "Siv Marie Lien, DIPS ASA, Norway", "James McClay, University of Nebraska Medical Center, United States", "Ian McNicoll, freshEHR Clinical Informatics, United Kingdom (openEHR Editor)", "Jude Michel, Queensland Health, Australia", "Chris Mitchell, RACGP, Australia", "Andrej Orel, Marand d.o.o., Slovenia", "Vladimir Pizzo, Hospital Sírio Libanês, Brazil", "Jodie Pycroft, Adelaide Northern Division of General Practice Ltd, Australia", "Line Silsand, Universitetssykehuset i Nord-Norge, Norway", "Sam Stokes, Citizen Scientist, United States", "Norwegian Review Summary, Nasjonal IKT HF, Norway", "Nyree Taylor, Ocean Informatics, Australia", "Rowan Thomas, St. Vincent's Hospital Melbourne, Australia", "Gordon Tomes, Australian Institute of Health and Welfare, Australia", "Stian Torleif Varpe, Helse Bergen, Norway", "Richard Townley-O'Neill, NEHTA, Australia (Editor)", "Gro-Hilde Ulriksen, Norwegian center for ehealthresearch, Norway", "John Tore Valand, Helse Bergen, Norway (openEHR Editor)", "Kylie Young, The Royal Australian College of General Practitioners, Australia">
+	references = <
+		["1"] = <"Based on Medication Action, Published Archetype [Internet]. Australian Digital Health Agency, Australian Digital Health Agency Clinical Knowledge Manager [cited: 2017-08-10]. Available from: http://dcm.nehta.org.au/ckm/#showArchetype_1013.1.876">
+		["2"] = <"Medication statement, [Internet]. Intermountain Healthcare. Available from http://www.opencem.org/#/20170613/Intermountain/MedicationStatement">
+		["3"] = <"Messaging Implementation Manual (GP2GP messages) [Internet], NHS Digital England. Available from: https://data.developer.nhs.uk/dms/mim/6.3.01/Domains/GP2GP/Document%20files/GP2GP%20IM.htm#_Toc_Section_7.2">
+		["4"] = <"Standards for the clinical structure and content of patient records (Complete document) [Internet]. PRSB London. [cited 2017 Aug 29]. Available from: http://theprsb.org/download/document/7-standards-for-the-clinical-structure-and-content-of-patient-records\" <http://theprsb.org/download/document/7-standards-for-the-clinical-structure-and-content-of-patient-records>">
+	>
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"BCD80A002FE65A53DAF9A0ACD7BC947C">
+		["build_uid"] = <"e5f5b11e-7f42-4f75-ae16-9355f4d78887">
+	>
+
+definition
+	ACTION[id1] matches {	-- Medication
+		ism_transition matches {
+			ISM_TRANSITION[id110] matches {	-- Medication recommended
+				current_state matches {
+					DV_CODED_TEXT[id151] matches {
+						defining_code matches {[at150]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id152] matches {
+						defining_code matches {[at110]}
+					}
+				}
+			}
+			ISM_TRANSITION[id146] matches {	-- Draft prescription prepared
+				current_state matches {
+					DV_CODED_TEXT[id153] matches {
+						defining_code matches {[ac1]}		-- Draft prescription prepared (synthesised)
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id154] matches {
+						defining_code matches {[at146]}
+					}
+				}
+			}
+			ISM_TRANSITION[id14] matches {	-- Scheduled medication postponed
+				current_state matches {
+					DV_CODED_TEXT[id155] matches {
+						defining_code matches {[at151]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id156] matches {
+						defining_code matches {[at14]}
+					}
+				}
+			}
+			ISM_TRANSITION[id13] matches {	-- Medication course cancelled
+				current_state matches {
+					DV_CODED_TEXT[id157] matches {
+						defining_code matches {[at152]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id158] matches {
+						defining_code matches {[at13]}
+					}
+				}
+			}
+			ISM_TRANSITION[id17] matches {	-- Medication start date/condition set
+				current_state matches {
+					DV_CODED_TEXT[id159] matches {
+						defining_code matches {[at153]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id160] matches {
+						defining_code matches {[at17]}
+					}
+				}
+			}
+			ISM_TRANSITION[id138] matches {	-- Medication restart date/condition set
+				current_state matches {
+					DV_CODED_TEXT[id161] matches {
+						defining_code matches {[at153]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id162] matches {
+						defining_code matches {[at138]}
+					}
+				}
+			}
+			ISM_TRANSITION[id3] matches {	-- Prescription issued
+				current_state matches {
+					DV_CODED_TEXT[id163] matches {
+						defining_code matches {[at154]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id164] matches {
+						defining_code matches {[at3]}
+					}
+				}
+			}
+			ISM_TRANSITION[id4] matches {	-- Medication dispensed
+				current_state matches {
+					DV_CODED_TEXT[id165] matches {
+						defining_code matches {[at154]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id166] matches {
+						defining_code matches {[at4]}
+					}
+				}
+			}
+			ISM_TRANSITION[id5] matches {	-- Medication course commenced
+				current_state matches {
+					DV_CODED_TEXT[id167] matches {
+						defining_code matches {[at154]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id168] matches {
+						defining_code matches {[at5]}
+					}
+				}
+			}
+			ISM_TRANSITION[id6] matches {	-- Medication course reviewed
+				current_state matches {
+					DV_CODED_TEXT[id169] matches {
+						defining_code matches {[at154]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id170] matches {
+						defining_code matches {[at6]}
+					}
+				}
+			}
+			ISM_TRANSITION[id42] matches {	-- Minor change to order
+				current_state matches {
+					DV_CODED_TEXT[id171] matches {
+						defining_code matches {[at154]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id172] matches {
+						defining_code matches {[at42]}
+					}
+				}
+			}
+			ISM_TRANSITION[id7] matches {	-- Dose administered
+				current_state matches {
+					DV_CODED_TEXT[id173] matches {
+						defining_code matches {[at154]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id174] matches {
+						defining_code matches {[at7]}
+					}
+				}
+			}
+			ISM_TRANSITION[id107] matches {	-- Medication re-authorised
+				current_state matches {
+					DV_CODED_TEXT[id175] matches {
+						defining_code matches {[at154]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id176] matches {
+						defining_code matches {[at107]}
+					}
+				}
+			}
+			ISM_TRANSITION[id19] matches {	-- Dose administration omitted
+				current_state matches {
+					DV_CODED_TEXT[id177] matches {
+						defining_code matches {[at154]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id178] matches {
+						defining_code matches {[at19]}
+					}
+				}
+			}
+			ISM_TRANSITION[id45] matches {	-- Dose administration deferred
+				current_state matches {
+					DV_CODED_TEXT[id179] matches {
+						defining_code matches {[at154]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id180] matches {
+						defining_code matches {[at45]}
+					}
+				}
+			}
+			ISM_TRANSITION[id36] matches {	-- Dispensed medication returned.
+				current_state matches {
+					DV_CODED_TEXT[id181] matches {
+						defining_code matches {[at154]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id182] matches {
+						defining_code matches {[at36]}
+					}
+				}
+			}
+			ISM_TRANSITION[id149] matches {	-- Medication prepared
+				current_state matches {
+					DV_CODED_TEXT[id183] matches {
+						defining_code matches {[at154]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id184] matches {
+						defining_code matches {[at149]}
+					}
+				}
+			}
+			ISM_TRANSITION[id9] matches {	-- Medication course supply delayed
+				current_state matches {
+					DV_CODED_TEXT[id185] matches {
+						defining_code matches {[at155]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id186] matches {
+						defining_code matches {[at9]}
+					}
+				}
+			}
+			ISM_TRANSITION[id10] matches {	-- Medication administration suspended
+				current_state matches {
+					DV_CODED_TEXT[id187] matches {
+						defining_code matches {[at155]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id188] matches {
+						defining_code matches {[at10]}
+					}
+				}
+			}
+			ISM_TRANSITION[id12] matches {	-- Prescription re-issue suspended
+				current_state matches {
+					DV_CODED_TEXT[id189] matches {
+						defining_code matches {[at155]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id190] matches {
+						defining_code matches {[at12]}
+					}
+				}
+			}
+			ISM_TRANSITION[id147] matches {	-- Prescription re-authorisation required
+				current_state matches {
+					DV_CODED_TEXT[id191] matches {
+						defining_code matches {[at155]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id192] matches {
+						defining_code matches {[at147]}
+					}
+				}
+			}
+			ISM_TRANSITION[id16] matches {	-- Medication course stopped
+				current_state matches {
+					DV_CODED_TEXT[id193] matches {
+						defining_code matches {[at156]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id194] matches {
+						defining_code matches {[at16]}
+					}
+				}
+			}
+			ISM_TRANSITION[id40] matches {	-- Major change to order
+				current_state matches {
+					DV_CODED_TEXT[id195] matches {
+						defining_code matches {[at156]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id196] matches {
+						defining_code matches {[at40]}
+					}
+				}
+			}
+			ISM_TRANSITION[id8] matches {	-- Medication course completed
+				current_state matches {
+					DV_CODED_TEXT[id197] matches {
+						defining_code matches {[at157]}
+					}
+				}
+				careflow_step matches {
+					DV_CODED_TEXT[id198] matches {
+						defining_code matches {[at8]}
+					}
+				}
+			}
+		}
+		description matches {
+			ITEM_TREE[id18] matches {
+				items matches {
+					ELEMENT[id21] occurrences matches {0..1} matches {	-- Medication
+						value matches {
+							DV_TEXT[id199] 
+						}
+					}
+					CLUSTER[id83] matches {	-- Product
+						items matches {
+							allow_archetype CLUSTER[id105] occurrences matches {0..1} matches {	-- Preparation details
+								include
+									archetype_id/value matches {/openEHR-EHR-CLUSTER\.medication_substance(-[a-zA-Z0-9_]+)*\.v0/}
+							}
+							ELEMENT[id131] occurrences matches {0..1} matches {	-- Manufacturer
+								value matches {
+									DV_TEXT[id200] 
+								}
+							}
+							ELEMENT[id84] occurrences matches {0..1} matches {	-- Batch ID
+								value matches {
+									DV_TEXT[id201] 
+								}
+							}
+							ELEMENT[id85] occurrences matches {0..1} matches {	-- Expiry date
+								value matches {
+									DV_DATE[id202] 
+								}
+							}
+							allow_archetype CLUSTER[id132] occurrences matches {0..1} matches {	-- Amount
+								include
+									archetype_id/value matches {/openEHR-EHR-CLUSTER\.medication_supply_amount(-[a-zA-Z0-9_]+)*\.v0|openEHR-EHR-CLUSTER\.dosage_administration(-[a-zA-Z0-9_]+)*\.v0/}
+							}
+							ELEMENT[id133] occurrences matches {0..1} matches {	-- Substitution
+								value matches {
+									DV_CODED_TEXT[id203] matches {
+										defining_code matches {[ac2]}		-- Substitution (synthesised)
+									}
+								}
+							}
+							ELEMENT[id134] occurrences matches {0..1} matches {	-- Substitution reason
+								value matches {
+									DV_TEXT[id204] 
+								}
+							}
+						}
+					}
+					ELEMENT[id44] occurrences matches {0..1} matches {	-- Original scheduled datetime
+						value matches {
+							DV_DATE_TIME[id205] 
+						}
+					}
+					ELEMENT[id22] matches {	-- Reason
+						value matches {
+							DV_TEXT[id206] 
+						}
+					}
+					CLUSTER[id141] occurrences matches {0..1} matches {	-- Delivery details
+						items matches {
+							ELEMENT[id148] occurrences matches {0..1} matches {	-- Route
+								value matches {
+									DV_TEXT[id207] 
+								}
+							}
+							ELEMENT[id142] occurrences matches {0..1} matches {	-- Body site
+								value matches {
+									DV_TEXT[id208] 
+								}
+							}
+							allow_archetype CLUSTER[id143] occurrences matches {0..1} matches {	-- Structured body site
+								include
+									archetype_id/value matches {/openEHR-EHR-CLUSTER\.anatomical_location(-[a-zA-Z0-9_]+)*\.v1|openEHR-EHR-CLUSTER\.anatomical_location_clock(-[a-zA-Z0-9_]+)*\.v0|openEHR-EHR-CLUSTER\.anatomical_location_relative(-[a-zA-Z0-9_]+)*\.v1/}
+							}
+							ELEMENT[id144] matches {	-- Delivery method
+								value matches {
+									DV_TEXT[id209] 
+								}
+							}
+							allow_archetype CLUSTER[id145] matches {	-- Delivery device details
+								include
+									archetype_id/value matches {/openEHR-EHR-CLUSTER\.device(-[a-zA-Z0-9_]+)*\.v1/}
+							}
+						}
+					}
+					allow_archetype CLUSTER[id54] matches {	-- Details
+						include
+							archetype_id/value matches {/openEHR-EHR-CLUSTER\.medication_authorisation(-[a-zA-Z0-9_]+)*\.v0/}
+					}
+					ELEMENT[id34] matches {	-- Patient guidance
+						value matches {
+							DV_TEXT[id210] 
+						}
+					}
+					ELEMENT[id150] occurrences matches {0..1} matches {	-- Double-checked?
+						value matches {
+							DV_BOOLEAN[id211] matches {
+								value matches {True, False}
+							}
+						}
+					}
+					ELEMENT[id26] occurrences matches {0..1} matches {	-- Sequence number
+						value matches {
+							DV_COUNT[id212] 
+						}
+					}
+					ELEMENT[id25] occurrences matches {0..1} matches {	-- Comment
+						value matches {
+							DV_TEXT[id213] 
+						}
+					}
+				}
+			}
+		}
+		protocol matches {
+			ITEM_TREE[id31] matches {
+				items cardinality matches {1..*; unordered} matches {
+					ELEMENT[id104] matches {	-- Order ID
+						value matches {
+							DV_IDENTIFIER[id214] 
+						}
+					}
+					allow_archetype CLUSTER[id86] matches {	-- Extension
+						include
+							archetype_id/value matches {/.*/}
+					}
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["ar-sy"] = <
+			["id1"] = <
+				text = <"*Medication(en)">
+				description = <"*Details about any medication related task that is performed after ordering, such as plannling, preparation, administration, dispensing or cessation.(en)">
+			>
+			["id3"] = <
+				text = <"*Prescription issued(en)">
+				description = <"*The medication has been issued as an item on a prescription.(en)">
+			>
+			["id4"] = <
+				text = <"*Medication dispensed(en)">
+				description = <"*The medication has been dispensed, for example from a pharmacy to the patient.(en)">
+			>
+			["id5"] = <
+				text = <"*Medication course commenced(en)">
+				description = <"*The medication has been taken by, or administered to, the patient for the first time. Although in some settings this significant date may be computable as the first of several administrations, in other settings, such as primary care, specific administration dates are not readily available.(en)">
+			>
+			["id6"] = <
+				text = <"*Medication course reviewed(en)">
+				description = <"*The specific medication item has been reviewed, as planned. This is not intended to capture review of the whole medication list.(en)">
+			>
+			["id7"] = <
+				text = <"*Dose administered(en)">
+				description = <"*A single administration of the medication has taken place.(en)">
+			>
+			["id8"] = <
+				text = <"*Medication course completed(en)">
+				description = <"*The medication course has been completed as planned.(en)">
+			>
+			["id9"] = <
+				text = <"*Medication course supply delayed(en)">
+				description = <"*The medication course has not been dispensed as supply is not yet available.(en)">
+			>
+			["id10"] = <
+				text = <"*Medication administration suspended(en)">
+				description = <"*The administration of the medication has been suspended. No further doses should be given until further notice, or when the restart date or conditions have been met.(en)">
+			>
+			["id12"] = <
+				text = <"*Prescription re-issue suspended(en)">
+				description = <"*Reissuing of this prescription is not available without some intervention.(en)">
+			>
+			["id13"] = <
+				text = <"*Medication course cancelled(en)">
+				description = <"*The planned medication has been cancelled prior to any administration.(en)">
+			>
+			["id14"] = <
+				text = <"*Scheduled medication postponed(en)">
+				description = <"*A scheduled medication has been postponed prior to any administration.(en)">
+			>
+			["id16"] = <
+				text = <"*Medication course stopped(en)">
+				description = <"*The administration of this medication has been ceased after the first dose has been administered, but before intended completion of the course.  (en)">
+			>
+			["id17"] = <
+				text = <"*Medication start date/condition set(en)">
+				description = <"*The time to start this medication, or other starting condition, has been set.(en)">
+			>
+			["id19"] = <
+				text = <"*Dose administration omitted(en)">
+				description = <"*The administration of a medication has been withheld and not given. There is no expectation that it will be given later, though the next dose (if any) should be administered according to the original order.(en)">
+			>
+			["id21"] = <
+				text = <"*Medication(en)">
+				description = <"*Name of the medication, vaccine or other therapeutic/prescribable item which was the focus of the action..(en)">
+			>
+			["id22"] = <
+				text = <"*Reason(en)">
+				description = <"*The reason(s) the specific action or step was carried out. Note: This is not the reason for the medication instruction, rather the specific reason that a care step was carried out, and will often be to document some variance from the original order.(en)">
+			>
+			["id25"] = <
+				text = <"*Comment(en)">
+				description = <"*A comment on the action taken including details of any variance between the intended action and the action actually performed.(en)">
+			>
+			["id26"] = <
+				text = <"*Sequence number(en)">
+				description = <"*The sequence number specific to the action being recorded.(en)">
+			>
+			["id34"] = <
+				text = <"*Patient guidance(en)">
+				description = <"*Any guidance, instructions or advice given to the subject of care or personal carer at the time of the action.(en)">
+			>
+			["id36"] = <
+				text = <"*Dispensed medication returned.(en)">
+				description = <"*A dispensed medication is returned, or not collected, without being used.(en)">
+			>
+			["id40"] = <
+				text = <"*Major change to order.(en)">
+				description = <"*A major change to the order was required, resulting in this order being stopped and a replacement order being started.(en)">
+			>
+			["id42"] = <
+				text = <"*Minor change to order(en)">
+				description = <"*The medication order has been changed in a manner which does not require a new instruction/order to be issued, according to local clinical rules.(en)">
+			>
+			["id44"] = <
+				text = <"*Original scheduled datetime(en)">
+				description = <"*The datetime at which the medication action was scheduled to occur.(en)">
+			>
+			["id45"] = <
+				text = <"*Dose administration deferred(en)">
+				description = <"*Administration of a dose of mediciation has been delayed but is expected to be given as soon as possible.(en)">
+			>
+			["id54"] = <
+				text = <"*Details(en)">
+				description = <"*Further structured details of the action, possibly specific to a pathway step.(en)">
+			>
+			["id83"] = <
+				text = <"*Product(en)">
+				description = <"*Details of the product dispensed, authorised or administered.(en)">
+			>
+			["id84"] = <
+				text = <"*New element(en)">
+				description = <"**(en)">
+			>
+			["id85"] = <
+				text = <"*Expiry date(en)">
+				description = <"*The expiry date of the medicine administered as documented by the manufacturer.(en)">
+			>
+			["id86"] = <
+				text = <"*Cluster(en)">
+				description = <"**(en)">
+			>
+			["id104"] = <
+				text = <"*Order ID(en)">
+				description = <"*Unique identifier for the medication order.(en)">
+			>
+			["id105"] = <
+				text = <"*Preparation details(en)">
+				description = <"*Structured details about the overall preparation including strength, form and constituent substances.(en)">
+			>
+			["id107"] = <
+				text = <"*Medication re-authorised(en)">
+				description = <"*The original medication order has been re-authorised to allow repeat prescription or dispensing. In some jurisdictions an entirely new order must be issued in these circumstances.(en)">
+			>
+			["id110"] = <
+				text = <"*Medication recommended(en)">
+				description = <"*The medication has been recommended but no steps have been taken to initiate prescribing.(en)">
+			>
+			["id131"] = <
+				text = <"*Manufacturer(en)">
+				description = <"*The manufacturer of the medication.(en)">
+			>
+			["id132"] = <
+				text = <"*Amount(en)">
+				description = <"*Details of the amount of medication supplied i.e. authorised, dispensed or administered.(en)">
+			>
+			["id133"] = <
+				text = <"*Substitution(en)">
+				description = <"*Subsitution action taken by the person administering or dispensing the drug.(en)">
+			>
+			["id134"] = <
+				text = <"*Substitution reason(en)">
+				description = <"*The reason or justification for the substitution action taken.(en)">
+			>
+			["id138"] = <
+				text = <"*Medication restart date/condition set(en)">
+				description = <"*A  suspended medication has had its restart date or condition set.(en)">
+			>
+			["at139"] = <
+				text = <"*Substitution performed(en)">
+				description = <"*A medication was substituted which is bioequivalent to that ordered.(en)">
+			>
+			["at140"] = <
+				text = <"*Substitution not performed(en)">
+				description = <"*Although allowed by the medication order a bioequvalent medication was not substituted.(en)">
+			>
+			["id141"] = <
+				text = <"*Delivery details(en)">
+				description = <"*Details of body site and delivery of the medication.(en)">
+			>
+			["id142"] = <
+				text = <"*Body site(en)">
+				description = <"*Structured description of the site of administration of the ordered item.(en)">
+			>
+			["id143"] = <
+				text = <"*Structured body site(en)">
+				description = <"*Structured description of the site of administration  of the medication, vaccine or therapeutic good.(en)">
+			>
+			["id144"] = <
+				text = <"*Delivery method(en)">
+				description = <"*The technique or device by which the ordered item was, or is to be, delivered.(en)">
+			>
+			["id145"] = <
+				text = <"*Delivery device details(en)">
+				description = <"*Details of the medical device used to assist delivery of the medication.(en)">
+			>
+			["id146"] = <
+				text = <"*Draft prescription prepared(en)">
+				description = <"*Draft prescription has been prepared and is awaiting confirmation from an authorised clinician. May be used where reauthorisations are performed as a batch. This careflow_step may have a status of 'planned' or 'active', reflecting the need to to handle new orders as well as re-authorised orders.(en)">
+			>
+			["id147"] = <
+				text = <"*Prescription re-authorisation required(en)">
+				description = <"*Repeat prescription/dispensing of the medication awaits re-authorisation.(en)">
+			>
+			["id148"] = <
+				text = <"*Route(en)">
+				description = <"*The route by which the ordered item was, or is to be, administered into the subject's body.(en)">
+			>
+			["id149"] = <
+				text = <"*Medication prepared(en)">
+				description = <"*The medication has been physically prepared. For example: preparation of an intravenous mixture.(en)">
+			>
+			["id150"] = <
+				text = <"*Double-checked?(en)">
+				description = <"*The action step has been checked by a separate individual.(en)">
+			>
+			["at110"] = <
+				text = <"*Medication recommended(en)">
+				description = <"*The medication has been recommended but no steps have been taken to initiate prescribing.(en)">
+			>
+			["at146"] = <
+				text = <"*Draft prescription prepared(en)">
+				description = <"*Draft prescription has been prepared and is awaiting confirmation from an authorised clinician. May be used where reauthorisations are performed as a batch. This careflow_step may have a status of 'planned' or 'active', reflecting the need to to handle new orders as well as re-authorised orders.(en)">
+			>
+			["at14"] = <
+				text = <"*Scheduled medication postponed(en)">
+				description = <"*A scheduled medication has been postponed prior to any administration.(en)">
+			>
+			["at13"] = <
+				text = <"*Medication course cancelled(en)">
+				description = <"*The planned medication has been cancelled prior to any administration.(en)">
+			>
+			["at17"] = <
+				text = <"*Medication start date/condition set(en)">
+				description = <"*The time to start this medication, or other starting condition, has been set.(en)">
+			>
+			["at138"] = <
+				text = <"*Medication restart date/condition set(en)">
+				description = <"*A  suspended medication has had its restart date or condition set.(en)">
+			>
+			["at3"] = <
+				text = <"*Prescription issued(en)">
+				description = <"*The medication has been issued as an item on a prescription.(en)">
+			>
+			["at4"] = <
+				text = <"*Medication dispensed(en)">
+				description = <"*The medication has been dispensed, for example from a pharmacy to the patient.(en)">
+			>
+			["at5"] = <
+				text = <"*Medication course commenced(en)">
+				description = <"*The medication has been taken by, or administered to, the patient for the first time. Although in some settings this significant date may be computable as the first of several administrations, in other settings, such as primary care, specific administration dates are not readily available.(en)">
+			>
+			["at6"] = <
+				text = <"*Medication course reviewed(en)">
+				description = <"*The specific medication item has been reviewed, as planned. This is not intended to capture review of the whole medication list.(en)">
+			>
+			["at42"] = <
+				text = <"*Minor change to order(en)">
+				description = <"*The medication order has been changed in a manner which does not require a new instruction/order to be issued, according to local clinical rules.(en)">
+			>
+			["at7"] = <
+				text = <"*Dose administered(en)">
+				description = <"*A single administration of the medication has taken place.(en)">
+			>
+			["at107"] = <
+				text = <"*Medication re-authorised(en)">
+				description = <"*The original medication order has been re-authorised to allow repeat prescription or dispensing. In some jurisdictions an entirely new order must be issued in these circumstances.(en)">
+			>
+			["at19"] = <
+				text = <"*Dose administration omitted(en)">
+				description = <"*The administration of a medication has been withheld and not given. There is no expectation that it will be given later, though the next dose (if any) should be administered according to the original order.(en)">
+			>
+			["at45"] = <
+				text = <"*Dose administration deferred(en)">
+				description = <"*Administration of a dose of mediciation has been delayed but is expected to be given as soon as possible.(en)">
+			>
+			["at36"] = <
+				text = <"*Dispensed medication returned.(en)">
+				description = <"*A dispensed medication is returned, or not collected, without being used.(en)">
+			>
+			["at149"] = <
+				text = <"*Medication prepared(en)">
+				description = <"*The medication has been physically prepared. For example: preparation of an intravenous mixture.(en)">
+			>
+			["at9"] = <
+				text = <"*Medication course supply delayed(en)">
+				description = <"*The medication course has not been dispensed as supply is not yet available.(en)">
+			>
+			["at10"] = <
+				text = <"*Medication administration suspended(en)">
+				description = <"*The administration of the medication has been suspended. No further doses should be given until further notice, or when the restart date or conditions have been met.(en)">
+			>
+			["at12"] = <
+				text = <"*Prescription re-issue suspended(en)">
+				description = <"*Reissuing of this prescription is not available without some intervention.(en)">
+			>
+			["at147"] = <
+				text = <"*Prescription re-authorisation required(en)">
+				description = <"*Repeat prescription/dispensing of the medication awaits re-authorisation.(en)">
+			>
+			["at16"] = <
+				text = <"*Medication course stopped(en)">
+				description = <"*The administration of this medication has been ceased after the first dose has been administered, but before intended completion of the course.  (en)">
+			>
+			["at40"] = <
+				text = <"*Major change to order.(en)">
+				description = <"*A major change to the order was required, resulting in this order being stopped and a replacement order being started.(en)">
+			>
+			["at8"] = <
+				text = <"*Medication course completed(en)">
+				description = <"*The medication course has been completed as planned.(en)">
+			>
+			["at150"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at151"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at152"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at153"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at154"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at155"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at156"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at157"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at158"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at159"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["ac1"] = <
+				text = <"*Draft prescription prepared(en) (synthesised)">
+				description = <"*Draft prescription has been prepared and is awaiting confirmation from an authorised clinician. May be used where reauthorisations are performed as a batch. This careflow_step may have a status of 'planned' or 'active', reflecting the need to to handle new orders as well as re-authorised orders.(en) (synthesised)">
+			>
+			["ac2"] = <
+				text = <"*Substitution(en) (synthesised)">
+				description = <"*Subsitution action taken by the person administering or dispensing the drug.(en) (synthesised)">
+			>
+		>
+		["sl"] = <
+			["id1"] = <
+				text = <"*Medication(en)">
+				description = <"*Details about any medication related task that is performed after ordering, such as plannling, preparation, administration, dispensing or cessation.(en)">
+			>
+			["id3"] = <
+				text = <"*Prescription issued(en)">
+				description = <"*The medication has been issued as an item on a prescription.(en)">
+			>
+			["id4"] = <
+				text = <"*Medication dispensed(en)">
+				description = <"*The medication has been dispensed, for example from a pharmacy to the patient.(en)">
+			>
+			["id5"] = <
+				text = <"*Medication course commenced(en)">
+				description = <"*The medication has been taken by, or administered to, the patient for the first time. Although in some settings this significant date may be computable as the first of several administrations, in other settings, such as primary care, specific administration dates are not readily available.(en)">
+			>
+			["id6"] = <
+				text = <"*Medication course reviewed(en)">
+				description = <"*The specific medication item has been reviewed, as planned. This is not intended to capture review of the whole medication list.(en)">
+			>
+			["id7"] = <
+				text = <"*Dose administered(en)">
+				description = <"*A single administration of the medication has taken place.(en)">
+			>
+			["id8"] = <
+				text = <"*Medication course completed(en)">
+				description = <"*The medication course has been completed as planned.(en)">
+			>
+			["id9"] = <
+				text = <"*Medication course supply delayed(en)">
+				description = <"*The medication course has not been dispensed as supply is not yet available.(en)">
+			>
+			["id10"] = <
+				text = <"*Medication administration suspended(en)">
+				description = <"*The administration of the medication has been suspended. No further doses should be given until further notice, or when the restart date or conditions have been met.(en)">
+			>
+			["id12"] = <
+				text = <"*Prescription re-issue suspended(en)">
+				description = <"*Reissuing of this prescription is not available without some intervention.(en)">
+			>
+			["id13"] = <
+				text = <"*Medication course cancelled(en)">
+				description = <"*The planned medication has been cancelled prior to any administration.(en)">
+			>
+			["id14"] = <
+				text = <"*Scheduled medication postponed(en)">
+				description = <"*A scheduled medication has been postponed prior to any administration.(en)">
+			>
+			["id16"] = <
+				text = <"*Medication course stopped(en)">
+				description = <"*The administration of this medication has been ceased after the first dose has been administered, but before intended completion of the course.  (en)">
+			>
+			["id17"] = <
+				text = <"*Medication start date/condition set(en)">
+				description = <"*The time to start this medication, or other starting condition, has been set.(en)">
+			>
+			["id19"] = <
+				text = <"*Dose administration omitted(en)">
+				description = <"*The administration of a medication has been withheld and not given. There is no expectation that it will be given later, though the next dose (if any) should be administered according to the original order.(en)">
+			>
+			["id21"] = <
+				text = <"*Medication(en)">
+				description = <"*Name of the medication, vaccine or other therapeutic/prescribable item which was the focus of the action..(en)">
+			>
+			["id22"] = <
+				text = <"*Reason(en)">
+				description = <"*The reason(s) the specific action or step was carried out. Note: This is not the reason for the medication instruction, rather the specific reason that a care step was carried out, and will often be to document some variance from the original order.(en)">
+			>
+			["id25"] = <
+				text = <"*Comment(en)">
+				description = <"*A comment on the action taken including details of any variance between the intended action and the action actually performed.(en)">
+			>
+			["id26"] = <
+				text = <"Zaporedna številka cepljenja ">
+				description = <"Zaporedna številka cepljenja">
+			>
+			["id34"] = <
+				text = <"*Patient guidance(en)">
+				description = <"*Any guidance, instructions or advice given to the subject of care or personal carer at the time of the action.(en)">
+			>
+			["id36"] = <
+				text = <"*Dispensed medication returned.(en)">
+				description = <"*A dispensed medication is returned, or not collected, without being used.(en)">
+			>
+			["id40"] = <
+				text = <"*Major change to order.(en)">
+				description = <"*A major change to the order was required, resulting in this order being stopped and a replacement order being started.(en)">
+			>
+			["id42"] = <
+				text = <"*Minor change to order(en)">
+				description = <"*The medication order has been changed in a manner which does not require a new instruction/order to be issued, according to local clinical rules.(en)">
+			>
+			["id44"] = <
+				text = <"*Original scheduled datetime(en)">
+				description = <"*The datetime at which the medication action was scheduled to occur.(en)">
+			>
+			["id45"] = <
+				text = <"*Dose administration deferred(en)">
+				description = <"*Administration of a dose of mediciation has been delayed but is expected to be given as soon as possible.(en)">
+			>
+			["id54"] = <
+				text = <"*Details(en)">
+				description = <"*Further structured details of the action, possibly specific to a pathway step.(en)">
+			>
+			["id83"] = <
+				text = <"*Product(en)">
+				description = <"*Details of the product dispensed, authorised or administered.(en)">
+			>
+			["id84"] = <
+				text = <"*New element(en)">
+				description = <"**(en)">
+			>
+			["id85"] = <
+				text = <"*Expiry date(en)">
+				description = <"*The expiry date of the medicine administered as documented by the manufacturer.(en)">
+			>
+			["id86"] = <
+				text = <"*Cluster(en)">
+				description = <"**(en)">
+			>
+			["id104"] = <
+				text = <"*Order ID(en)">
+				description = <"*Unique identifier for the medication order.(en)">
+			>
+			["id105"] = <
+				text = <"*Preparation details(en)">
+				description = <"*Structured details about the overall preparation including strength, form and constituent substances.(en)">
+			>
+			["id107"] = <
+				text = <"*Medication re-authorised(en)">
+				description = <"*The original medication order has been re-authorised to allow repeat prescription or dispensing. In some jurisdictions an entirely new order must be issued in these circumstances.(en)">
+			>
+			["id110"] = <
+				text = <"*Medication recommended(en)">
+				description = <"*The medication has been recommended but no steps have been taken to initiate prescribing.(en)">
+			>
+			["id131"] = <
+				text = <"*Manufacturer(en)">
+				description = <"*The manufacturer of the medication.(en)">
+			>
+			["id132"] = <
+				text = <"*Amount(en)">
+				description = <"*Details of the amount of medication supplied i.e. authorised, dispensed or administered.(en)">
+			>
+			["id133"] = <
+				text = <"*Substitution(en)">
+				description = <"*Subsitution action taken by the person administering or dispensing the drug.(en)">
+			>
+			["id134"] = <
+				text = <"*Substitution reason(en)">
+				description = <"*The reason or justification for the substitution action taken.(en)">
+			>
+			["id138"] = <
+				text = <"*Medication restart date/condition set(en)">
+				description = <"*A  suspended medication has had its restart date or condition set.(en)">
+			>
+			["at139"] = <
+				text = <"*Substitution performed(en)">
+				description = <"*A medication was substituted which is bioequivalent to that ordered.(en)">
+			>
+			["at140"] = <
+				text = <"*Substitution not performed(en)">
+				description = <"*Although allowed by the medication order a bioequvalent medication was not substituted.(en)">
+			>
+			["id141"] = <
+				text = <"*Delivery details(en)">
+				description = <"*Details of body site and delivery of the medication.(en)">
+			>
+			["id142"] = <
+				text = <"*Body site(en)">
+				description = <"*Structured description of the site of administration of the ordered item.(en)">
+			>
+			["id143"] = <
+				text = <"*Structured body site(en)">
+				description = <"*Structured description of the site of administration  of the medication, vaccine or therapeutic good.(en)">
+			>
+			["id144"] = <
+				text = <"*Delivery method(en)">
+				description = <"*The technique or device by which the ordered item was, or is to be, delivered.(en)">
+			>
+			["id145"] = <
+				text = <"*Delivery device details(en)">
+				description = <"*Details of the medical device used to assist delivery of the medication.(en)">
+			>
+			["id146"] = <
+				text = <"*Draft prescription prepared(en)">
+				description = <"*Draft prescription has been prepared and is awaiting confirmation from an authorised clinician. May be used where reauthorisations are performed as a batch. This careflow_step may have a status of 'planned' or 'active', reflecting the need to to handle new orders as well as re-authorised orders.(en)">
+			>
+			["id147"] = <
+				text = <"*Prescription re-authorisation required(en)">
+				description = <"*Repeat prescription/dispensing of the medication awaits re-authorisation.(en)">
+			>
+			["id148"] = <
+				text = <"*Route(en)">
+				description = <"*The route by which the ordered item was, or is to be, administered into the subject's body.(en)">
+			>
+			["id149"] = <
+				text = <"*Medication prepared(en)">
+				description = <"*The medication has been physically prepared. For example: preparation of an intravenous mixture.(en)">
+			>
+			["id150"] = <
+				text = <"*Double-checked?(en)">
+				description = <"*The action step has been checked by a separate individual.(en)">
+			>
+			["at110"] = <
+				text = <"*Medication recommended(en)">
+				description = <"*The medication has been recommended but no steps have been taken to initiate prescribing.(en)">
+			>
+			["at146"] = <
+				text = <"*Draft prescription prepared(en)">
+				description = <"*Draft prescription has been prepared and is awaiting confirmation from an authorised clinician. May be used where reauthorisations are performed as a batch. This careflow_step may have a status of 'planned' or 'active', reflecting the need to to handle new orders as well as re-authorised orders.(en)">
+			>
+			["at14"] = <
+				text = <"*Scheduled medication postponed(en)">
+				description = <"*A scheduled medication has been postponed prior to any administration.(en)">
+			>
+			["at13"] = <
+				text = <"*Medication course cancelled(en)">
+				description = <"*The planned medication has been cancelled prior to any administration.(en)">
+			>
+			["at17"] = <
+				text = <"*Medication start date/condition set(en)">
+				description = <"*The time to start this medication, or other starting condition, has been set.(en)">
+			>
+			["at138"] = <
+				text = <"*Medication restart date/condition set(en)">
+				description = <"*A  suspended medication has had its restart date or condition set.(en)">
+			>
+			["at3"] = <
+				text = <"*Prescription issued(en)">
+				description = <"*The medication has been issued as an item on a prescription.(en)">
+			>
+			["at4"] = <
+				text = <"*Medication dispensed(en)">
+				description = <"*The medication has been dispensed, for example from a pharmacy to the patient.(en)">
+			>
+			["at5"] = <
+				text = <"*Medication course commenced(en)">
+				description = <"*The medication has been taken by, or administered to, the patient for the first time. Although in some settings this significant date may be computable as the first of several administrations, in other settings, such as primary care, specific administration dates are not readily available.(en)">
+			>
+			["at6"] = <
+				text = <"*Medication course reviewed(en)">
+				description = <"*The specific medication item has been reviewed, as planned. This is not intended to capture review of the whole medication list.(en)">
+			>
+			["at42"] = <
+				text = <"*Minor change to order(en)">
+				description = <"*The medication order has been changed in a manner which does not require a new instruction/order to be issued, according to local clinical rules.(en)">
+			>
+			["at7"] = <
+				text = <"*Dose administered(en)">
+				description = <"*A single administration of the medication has taken place.(en)">
+			>
+			["at107"] = <
+				text = <"*Medication re-authorised(en)">
+				description = <"*The original medication order has been re-authorised to allow repeat prescription or dispensing. In some jurisdictions an entirely new order must be issued in these circumstances.(en)">
+			>
+			["at19"] = <
+				text = <"*Dose administration omitted(en)">
+				description = <"*The administration of a medication has been withheld and not given. There is no expectation that it will be given later, though the next dose (if any) should be administered according to the original order.(en)">
+			>
+			["at45"] = <
+				text = <"*Dose administration deferred(en)">
+				description = <"*Administration of a dose of mediciation has been delayed but is expected to be given as soon as possible.(en)">
+			>
+			["at36"] = <
+				text = <"*Dispensed medication returned.(en)">
+				description = <"*A dispensed medication is returned, or not collected, without being used.(en)">
+			>
+			["at149"] = <
+				text = <"*Medication prepared(en)">
+				description = <"*The medication has been physically prepared. For example: preparation of an intravenous mixture.(en)">
+			>
+			["at9"] = <
+				text = <"*Medication course supply delayed(en)">
+				description = <"*The medication course has not been dispensed as supply is not yet available.(en)">
+			>
+			["at10"] = <
+				text = <"*Medication administration suspended(en)">
+				description = <"*The administration of the medication has been suspended. No further doses should be given until further notice, or when the restart date or conditions have been met.(en)">
+			>
+			["at12"] = <
+				text = <"*Prescription re-issue suspended(en)">
+				description = <"*Reissuing of this prescription is not available without some intervention.(en)">
+			>
+			["at147"] = <
+				text = <"*Prescription re-authorisation required(en)">
+				description = <"*Repeat prescription/dispensing of the medication awaits re-authorisation.(en)">
+			>
+			["at16"] = <
+				text = <"*Medication course stopped(en)">
+				description = <"*The administration of this medication has been ceased after the first dose has been administered, but before intended completion of the course.  (en)">
+			>
+			["at40"] = <
+				text = <"*Major change to order.(en)">
+				description = <"*A major change to the order was required, resulting in this order being stopped and a replacement order being started.(en)">
+			>
+			["at8"] = <
+				text = <"*Medication course completed(en)">
+				description = <"*The medication course has been completed as planned.(en)">
+			>
+			["at150"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at151"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at152"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at153"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at154"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at155"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at156"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at157"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at158"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at159"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["ac1"] = <
+				text = <"*Draft prescription prepared(en) (synthesised)">
+				description = <"*Draft prescription has been prepared and is awaiting confirmation from an authorised clinician. May be used where reauthorisations are performed as a batch. This careflow_step may have a status of 'planned' or 'active', reflecting the need to to handle new orders as well as re-authorised orders.(en) (synthesised)">
+			>
+			["ac2"] = <
+				text = <"*Substitution(en) (synthesised)">
+				description = <"*Subsitution action taken by the person administering or dispensing the drug.(en) (synthesised)">
+			>
+		>
+		["es-ar"] = <
+			["id1"] = <
+				text = <"*Medication(en)">
+				description = <"*Details about any medication related task that is performed after ordering, such as plannling, preparation, administration, dispensing or cessation.(en)">
+			>
+			["id3"] = <
+				text = <"*Prescription issued(en)">
+				description = <"*The medication has been issued as an item on a prescription.(en)">
+			>
+			["id4"] = <
+				text = <"*Medication dispensed(en)">
+				description = <"*The medication has been dispensed, for example from a pharmacy to the patient.(en)">
+			>
+			["id5"] = <
+				text = <"*Medication course commenced(en)">
+				description = <"*The medication has been taken by, or administered to, the patient for the first time. Although in some settings this significant date may be computable as the first of several administrations, in other settings, such as primary care, specific administration dates are not readily available.(en)">
+			>
+			["id6"] = <
+				text = <"*Medication course reviewed(en)">
+				description = <"*The specific medication item has been reviewed, as planned. This is not intended to capture review of the whole medication list.(en)">
+			>
+			["id7"] = <
+				text = <"*Dose administered(en)">
+				description = <"*A single administration of the medication has taken place.(en)">
+			>
+			["id8"] = <
+				text = <"*Medication course completed(en)">
+				description = <"*The medication course has been completed as planned.(en)">
+			>
+			["id9"] = <
+				text = <"*Medication course supply delayed(en)">
+				description = <"*The medication course has not been dispensed as supply is not yet available.(en)">
+			>
+			["id10"] = <
+				text = <"*Medication administration suspended(en)">
+				description = <"*The administration of the medication has been suspended. No further doses should be given until further notice, or when the restart date or conditions have been met.(en)">
+			>
+			["id12"] = <
+				text = <"*Prescription re-issue suspended(en)">
+				description = <"*Reissuing of this prescription is not available without some intervention.(en)">
+			>
+			["id13"] = <
+				text = <"*Medication course cancelled(en)">
+				description = <"*The planned medication has been cancelled prior to any administration.(en)">
+			>
+			["id14"] = <
+				text = <"*Scheduled medication postponed(en)">
+				description = <"*A scheduled medication has been postponed prior to any administration.(en)">
+			>
+			["id16"] = <
+				text = <"*Medication course stopped(en)">
+				description = <"*The administration of this medication has been ceased after the first dose has been administered, but before intended completion of the course.  (en)">
+			>
+			["id17"] = <
+				text = <"*Medication start date/condition set(en)">
+				description = <"*The time to start this medication, or other starting condition, has been set.(en)">
+			>
+			["id19"] = <
+				text = <"*Dose administration omitted(en)">
+				description = <"*The administration of a medication has been withheld and not given. There is no expectation that it will be given later, though the next dose (if any) should be administered according to the original order.(en)">
+			>
+			["id21"] = <
+				text = <"*Medication(en)">
+				description = <"*Name of the medication, vaccine or other therapeutic/prescribable item which was the focus of the action..(en)">
+			>
+			["id22"] = <
+				text = <"*Reason(en)">
+				description = <"*The reason(s) the specific action or step was carried out. Note: This is not the reason for the medication instruction, rather the specific reason that a care step was carried out, and will often be to document some variance from the original order.(en)">
+			>
+			["id25"] = <
+				text = <"*Comment(en)">
+				description = <"*A comment on the action taken including details of any variance between the intended action and the action actually performed.(en)">
+			>
+			["id26"] = <
+				text = <"*Sequence number(en)">
+				description = <"*The sequence number specific to the action being recorded.(en)">
+			>
+			["id34"] = <
+				text = <"*Patient guidance(en)">
+				description = <"*Any guidance, instructions or advice given to the subject of care or personal carer at the time of the action.(en)">
+			>
+			["id36"] = <
+				text = <"*Dispensed medication returned.(en)">
+				description = <"*A dispensed medication is returned, or not collected, without being used.(en)">
+			>
+			["id40"] = <
+				text = <"*Major change to order.(en)">
+				description = <"*A major change to the order was required, resulting in this order being stopped and a replacement order being started.(en)">
+			>
+			["id42"] = <
+				text = <"*Minor change to order(en)">
+				description = <"*The medication order has been changed in a manner which does not require a new instruction/order to be issued, according to local clinical rules.(en)">
+			>
+			["id44"] = <
+				text = <"*Original scheduled datetime(en)">
+				description = <"*The datetime at which the medication action was scheduled to occur.(en)">
+			>
+			["id45"] = <
+				text = <"*Dose administration deferred(en)">
+				description = <"*Administration of a dose of mediciation has been delayed but is expected to be given as soon as possible.(en)">
+			>
+			["id54"] = <
+				text = <"*Details(en)">
+				description = <"*Further structured details of the action, possibly specific to a pathway step.(en)">
+			>
+			["id83"] = <
+				text = <"*Product(en)">
+				description = <"*Details of the product dispensed, authorised or administered.(en)">
+			>
+			["id84"] = <
+				text = <"*New element(en)">
+				description = <"**(en)">
+			>
+			["id85"] = <
+				text = <"*Expiry date(en)">
+				description = <"*The expiry date of the medicine administered as documented by the manufacturer.(en)">
+			>
+			["id86"] = <
+				text = <"*Cluster(en)">
+				description = <"**(en)">
+			>
+			["id104"] = <
+				text = <"*Order ID(en)">
+				description = <"*Unique identifier for the medication order.(en)">
+			>
+			["id105"] = <
+				text = <"*Preparation details(en)">
+				description = <"*Structured details about the overall preparation including strength, form and constituent substances.(en)">
+			>
+			["id107"] = <
+				text = <"*Medication re-authorised(en)">
+				description = <"*The original medication order has been re-authorised to allow repeat prescription or dispensing. In some jurisdictions an entirely new order must be issued in these circumstances.(en)">
+			>
+			["id110"] = <
+				text = <"*Medication recommended(en)">
+				description = <"*The medication has been recommended but no steps have been taken to initiate prescribing.(en)">
+			>
+			["id131"] = <
+				text = <"*Manufacturer(en)">
+				description = <"*The manufacturer of the medication.(en)">
+			>
+			["id132"] = <
+				text = <"*Amount(en)">
+				description = <"*Details of the amount of medication supplied i.e. authorised, dispensed or administered.(en)">
+			>
+			["id133"] = <
+				text = <"*Substitution(en)">
+				description = <"*Subsitution action taken by the person administering or dispensing the drug.(en)">
+			>
+			["id134"] = <
+				text = <"*Substitution reason(en)">
+				description = <"*The reason or justification for the substitution action taken.(en)">
+			>
+			["id138"] = <
+				text = <"*Medication restart date/condition set(en)">
+				description = <"*A  suspended medication has had its restart date or condition set.(en)">
+			>
+			["at139"] = <
+				text = <"*Substitution performed(en)">
+				description = <"*A medication was substituted which is bioequivalent to that ordered.(en)">
+			>
+			["at140"] = <
+				text = <"*Substitution not performed(en)">
+				description = <"*Although allowed by the medication order a bioequvalent medication was not substituted.(en)">
+			>
+			["id141"] = <
+				text = <"*Delivery details(en)">
+				description = <"*Details of body site and delivery of the medication.(en)">
+			>
+			["id142"] = <
+				text = <"*Body site(en)">
+				description = <"*Structured description of the site of administration of the ordered item.(en)">
+			>
+			["id143"] = <
+				text = <"*Structured body site(en)">
+				description = <"*Structured description of the site of administration  of the medication, vaccine or therapeutic good.(en)">
+			>
+			["id144"] = <
+				text = <"*Delivery method(en)">
+				description = <"*The technique or device by which the ordered item was, or is to be, delivered.(en)">
+			>
+			["id145"] = <
+				text = <"*Delivery device details(en)">
+				description = <"*Details of the medical device used to assist delivery of the medication.(en)">
+			>
+			["id146"] = <
+				text = <"*Draft prescription prepared(en)">
+				description = <"*Draft prescription has been prepared and is awaiting confirmation from an authorised clinician. May be used where reauthorisations are performed as a batch. This careflow_step may have a status of 'planned' or 'active', reflecting the need to to handle new orders as well as re-authorised orders.(en)">
+			>
+			["id147"] = <
+				text = <"*Prescription re-authorisation required(en)">
+				description = <"*Repeat prescription/dispensing of the medication awaits re-authorisation.(en)">
+			>
+			["id148"] = <
+				text = <"*Route(en)">
+				description = <"*The route by which the ordered item was, or is to be, administered into the subject's body.(en)">
+			>
+			["id149"] = <
+				text = <"*Medication prepared(en)">
+				description = <"*The medication has been physically prepared. For example: preparation of an intravenous mixture.(en)">
+			>
+			["id150"] = <
+				text = <"*Double-checked?(en)">
+				description = <"*The action step has been checked by a separate individual.(en)">
+			>
+			["at110"] = <
+				text = <"*Medication recommended(en)">
+				description = <"*The medication has been recommended but no steps have been taken to initiate prescribing.(en)">
+			>
+			["at146"] = <
+				text = <"*Draft prescription prepared(en)">
+				description = <"*Draft prescription has been prepared and is awaiting confirmation from an authorised clinician. May be used where reauthorisations are performed as a batch. This careflow_step may have a status of 'planned' or 'active', reflecting the need to to handle new orders as well as re-authorised orders.(en)">
+			>
+			["at14"] = <
+				text = <"*Scheduled medication postponed(en)">
+				description = <"*A scheduled medication has been postponed prior to any administration.(en)">
+			>
+			["at13"] = <
+				text = <"*Medication course cancelled(en)">
+				description = <"*The planned medication has been cancelled prior to any administration.(en)">
+			>
+			["at17"] = <
+				text = <"*Medication start date/condition set(en)">
+				description = <"*The time to start this medication, or other starting condition, has been set.(en)">
+			>
+			["at138"] = <
+				text = <"*Medication restart date/condition set(en)">
+				description = <"*A  suspended medication has had its restart date or condition set.(en)">
+			>
+			["at3"] = <
+				text = <"*Prescription issued(en)">
+				description = <"*The medication has been issued as an item on a prescription.(en)">
+			>
+			["at4"] = <
+				text = <"*Medication dispensed(en)">
+				description = <"*The medication has been dispensed, for example from a pharmacy to the patient.(en)">
+			>
+			["at5"] = <
+				text = <"*Medication course commenced(en)">
+				description = <"*The medication has been taken by, or administered to, the patient for the first time. Although in some settings this significant date may be computable as the first of several administrations, in other settings, such as primary care, specific administration dates are not readily available.(en)">
+			>
+			["at6"] = <
+				text = <"*Medication course reviewed(en)">
+				description = <"*The specific medication item has been reviewed, as planned. This is not intended to capture review of the whole medication list.(en)">
+			>
+			["at42"] = <
+				text = <"*Minor change to order(en)">
+				description = <"*The medication order has been changed in a manner which does not require a new instruction/order to be issued, according to local clinical rules.(en)">
+			>
+			["at7"] = <
+				text = <"*Dose administered(en)">
+				description = <"*A single administration of the medication has taken place.(en)">
+			>
+			["at107"] = <
+				text = <"*Medication re-authorised(en)">
+				description = <"*The original medication order has been re-authorised to allow repeat prescription or dispensing. In some jurisdictions an entirely new order must be issued in these circumstances.(en)">
+			>
+			["at19"] = <
+				text = <"*Dose administration omitted(en)">
+				description = <"*The administration of a medication has been withheld and not given. There is no expectation that it will be given later, though the next dose (if any) should be administered according to the original order.(en)">
+			>
+			["at45"] = <
+				text = <"*Dose administration deferred(en)">
+				description = <"*Administration of a dose of mediciation has been delayed but is expected to be given as soon as possible.(en)">
+			>
+			["at36"] = <
+				text = <"*Dispensed medication returned.(en)">
+				description = <"*A dispensed medication is returned, or not collected, without being used.(en)">
+			>
+			["at149"] = <
+				text = <"*Medication prepared(en)">
+				description = <"*The medication has been physically prepared. For example: preparation of an intravenous mixture.(en)">
+			>
+			["at9"] = <
+				text = <"*Medication course supply delayed(en)">
+				description = <"*The medication course has not been dispensed as supply is not yet available.(en)">
+			>
+			["at10"] = <
+				text = <"*Medication administration suspended(en)">
+				description = <"*The administration of the medication has been suspended. No further doses should be given until further notice, or when the restart date or conditions have been met.(en)">
+			>
+			["at12"] = <
+				text = <"*Prescription re-issue suspended(en)">
+				description = <"*Reissuing of this prescription is not available without some intervention.(en)">
+			>
+			["at147"] = <
+				text = <"*Prescription re-authorisation required(en)">
+				description = <"*Repeat prescription/dispensing of the medication awaits re-authorisation.(en)">
+			>
+			["at16"] = <
+				text = <"*Medication course stopped(en)">
+				description = <"*The administration of this medication has been ceased after the first dose has been administered, but before intended completion of the course.  (en)">
+			>
+			["at40"] = <
+				text = <"*Major change to order.(en)">
+				description = <"*A major change to the order was required, resulting in this order being stopped and a replacement order being started.(en)">
+			>
+			["at8"] = <
+				text = <"*Medication course completed(en)">
+				description = <"*The medication course has been completed as planned.(en)">
+			>
+			["at150"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at151"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at152"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at153"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at154"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at155"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at156"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at157"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at158"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at159"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["ac1"] = <
+				text = <"*Draft prescription prepared(en) (synthesised)">
+				description = <"*Draft prescription has been prepared and is awaiting confirmation from an authorised clinician. May be used where reauthorisations are performed as a batch. This careflow_step may have a status of 'planned' or 'active', reflecting the need to to handle new orders as well as re-authorised orders.(en) (synthesised)">
+			>
+			["ac2"] = <
+				text = <"*Substitution(en) (synthesised)">
+				description = <"*Subsitution action taken by the person administering or dispensing the drug.(en) (synthesised)">
+			>
+		>
+		["ru"] = <
+			["id1"] = <
+				text = <"*Medication(en)">
+				description = <"*Details about any medication related task that is performed after ordering, such as plannling, preparation, administration, dispensing or cessation.(en)">
+			>
+			["id3"] = <
+				text = <"*Prescription issued(en)">
+				description = <"*The medication has been issued as an item on a prescription.(en)">
+			>
+			["id4"] = <
+				text = <"*Medication dispensed(en)">
+				description = <"*The medication has been dispensed, for example from a pharmacy to the patient.(en)">
+			>
+			["id5"] = <
+				text = <"*Medication course commenced(en)">
+				description = <"*The medication has been taken by, or administered to, the patient for the first time. Although in some settings this significant date may be computable as the first of several administrations, in other settings, such as primary care, specific administration dates are not readily available.(en)">
+			>
+			["id6"] = <
+				text = <"*Medication course reviewed(en)">
+				description = <"*The specific medication item has been reviewed, as planned. This is not intended to capture review of the whole medication list.(en)">
+			>
+			["id7"] = <
+				text = <"*Dose administered(en)">
+				description = <"*A single administration of the medication has taken place.(en)">
+			>
+			["id8"] = <
+				text = <"*Medication course completed(en)">
+				description = <"*The medication course has been completed as planned.(en)">
+			>
+			["id9"] = <
+				text = <"*Medication course supply delayed(en)">
+				description = <"*The medication course has not been dispensed as supply is not yet available.(en)">
+			>
+			["id10"] = <
+				text = <"*Medication administration suspended(en)">
+				description = <"*The administration of the medication has been suspended. No further doses should be given until further notice, or when the restart date or conditions have been met.(en)">
+			>
+			["id12"] = <
+				text = <"*Prescription re-issue suspended(en)">
+				description = <"*Reissuing of this prescription is not available without some intervention.(en)">
+			>
+			["id13"] = <
+				text = <"*Medication course cancelled(en)">
+				description = <"*The planned medication has been cancelled prior to any administration.(en)">
+			>
+			["id14"] = <
+				text = <"*Scheduled medication postponed(en)">
+				description = <"*A scheduled medication has been postponed prior to any administration.(en)">
+			>
+			["id16"] = <
+				text = <"*Medication course stopped(en)">
+				description = <"*The administration of this medication has been ceased after the first dose has been administered, but before intended completion of the course.  (en)">
+			>
+			["id17"] = <
+				text = <"*Medication start date/condition set(en)">
+				description = <"*The time to start this medication, or other starting condition, has been set.(en)">
+			>
+			["id19"] = <
+				text = <"*Dose administration omitted(en)">
+				description = <"*The administration of a medication has been withheld and not given. There is no expectation that it will be given later, though the next dose (if any) should be administered according to the original order.(en)">
+			>
+			["id21"] = <
+				text = <"*Medication(en)">
+				description = <"*Name of the medication, vaccine or other therapeutic/prescribable item which was the focus of the action..(en)">
+			>
+			["id22"] = <
+				text = <"*Reason(en)">
+				description = <"*The reason(s) the specific action or step was carried out. Note: This is not the reason for the medication instruction, rather the specific reason that a care step was carried out, and will often be to document some variance from the original order.(en)">
+			>
+			["id25"] = <
+				text = <"*Comment(en)">
+				description = <"*A comment on the action taken including details of any variance between the intended action and the action actually performed.(en)">
+			>
+			["id26"] = <
+				text = <"*Sequence number(en)">
+				description = <"*The sequence number specific to the action being recorded.(en)">
+			>
+			["id34"] = <
+				text = <"*Patient guidance(en)">
+				description = <"*Any guidance, instructions or advice given to the subject of care or personal carer at the time of the action.(en)">
+			>
+			["id36"] = <
+				text = <"*Dispensed medication returned.(en)">
+				description = <"*A dispensed medication is returned, or not collected, without being used.(en)">
+			>
+			["id40"] = <
+				text = <"*Major change to order.(en)">
+				description = <"*A major change to the order was required, resulting in this order being stopped and a replacement order being started.(en)">
+			>
+			["id42"] = <
+				text = <"*Minor change to order(en)">
+				description = <"*The medication order has been changed in a manner which does not require a new instruction/order to be issued, according to local clinical rules.(en)">
+			>
+			["id44"] = <
+				text = <"*Original scheduled datetime(en)">
+				description = <"*The datetime at which the medication action was scheduled to occur.(en)">
+			>
+			["id45"] = <
+				text = <"*Dose administration deferred(en)">
+				description = <"*Administration of a dose of mediciation has been delayed but is expected to be given as soon as possible.(en)">
+			>
+			["id54"] = <
+				text = <"*Details(en)">
+				description = <"*Further structured details of the action, possibly specific to a pathway step.(en)">
+			>
+			["id83"] = <
+				text = <"*Product(en)">
+				description = <"*Details of the product dispensed, authorised or administered.(en)">
+			>
+			["id84"] = <
+				text = <"*New element(en)">
+				description = <"**(en)">
+			>
+			["id85"] = <
+				text = <"*Expiry date(en)">
+				description = <"*The expiry date of the medicine administered as documented by the manufacturer.(en)">
+			>
+			["id86"] = <
+				text = <"*Cluster(en)">
+				description = <"**(en)">
+			>
+			["id104"] = <
+				text = <"*Order ID(en)">
+				description = <"*Unique identifier for the medication order.(en)">
+			>
+			["id105"] = <
+				text = <"*Preparation details(en)">
+				description = <"*Structured details about the overall preparation including strength, form and constituent substances.(en)">
+			>
+			["id107"] = <
+				text = <"*Medication re-authorised(en)">
+				description = <"*The original medication order has been re-authorised to allow repeat prescription or dispensing. In some jurisdictions an entirely new order must be issued in these circumstances.(en)">
+			>
+			["id110"] = <
+				text = <"*Medication recommended(en)">
+				description = <"*The medication has been recommended but no steps have been taken to initiate prescribing.(en)">
+			>
+			["id131"] = <
+				text = <"*Manufacturer(en)">
+				description = <"*The manufacturer of the medication.(en)">
+			>
+			["id132"] = <
+				text = <"*Amount(en)">
+				description = <"*Details of the amount of medication supplied i.e. authorised, dispensed or administered.(en)">
+			>
+			["id133"] = <
+				text = <"*Substitution(en)">
+				description = <"*Subsitution action taken by the person administering or dispensing the drug.(en)">
+			>
+			["id134"] = <
+				text = <"*Substitution reason(en)">
+				description = <"*The reason or justification for the substitution action taken.(en)">
+			>
+			["id138"] = <
+				text = <"*Medication restart date/condition set(en)">
+				description = <"*A  suspended medication has had its restart date or condition set.(en)">
+			>
+			["at139"] = <
+				text = <"*Substitution performed(en)">
+				description = <"*A medication was substituted which is bioequivalent to that ordered.(en)">
+			>
+			["at140"] = <
+				text = <"*Substitution not performed(en)">
+				description = <"*Although allowed by the medication order a bioequvalent medication was not substituted.(en)">
+			>
+			["id141"] = <
+				text = <"*Delivery details(en)">
+				description = <"*Details of body site and delivery of the medication.(en)">
+			>
+			["id142"] = <
+				text = <"*Body site(en)">
+				description = <"*Structured description of the site of administration of the ordered item.(en)">
+			>
+			["id143"] = <
+				text = <"*Structured body site(en)">
+				description = <"*Structured description of the site of administration  of the medication, vaccine or therapeutic good.(en)">
+			>
+			["id144"] = <
+				text = <"*Delivery method(en)">
+				description = <"*The technique or device by which the ordered item was, or is to be, delivered.(en)">
+			>
+			["id145"] = <
+				text = <"*Delivery device details(en)">
+				description = <"*Details of the medical device used to assist delivery of the medication.(en)">
+			>
+			["id146"] = <
+				text = <"*Draft prescription prepared(en)">
+				description = <"*Draft prescription has been prepared and is awaiting confirmation from an authorised clinician. May be used where reauthorisations are performed as a batch. This careflow_step may have a status of 'planned' or 'active', reflecting the need to to handle new orders as well as re-authorised orders.(en)">
+			>
+			["id147"] = <
+				text = <"*Prescription re-authorisation required(en)">
+				description = <"*Repeat prescription/dispensing of the medication awaits re-authorisation.(en)">
+			>
+			["id148"] = <
+				text = <"*Route(en)">
+				description = <"*The route by which the ordered item was, or is to be, administered into the subject's body.(en)">
+			>
+			["id149"] = <
+				text = <"*Medication prepared(en)">
+				description = <"*The medication has been physically prepared. For example: preparation of an intravenous mixture.(en)">
+			>
+			["id150"] = <
+				text = <"*Double-checked?(en)">
+				description = <"*The action step has been checked by a separate individual.(en)">
+			>
+			["at110"] = <
+				text = <"*Medication recommended(en)">
+				description = <"*The medication has been recommended but no steps have been taken to initiate prescribing.(en)">
+			>
+			["at146"] = <
+				text = <"*Draft prescription prepared(en)">
+				description = <"*Draft prescription has been prepared and is awaiting confirmation from an authorised clinician. May be used where reauthorisations are performed as a batch. This careflow_step may have a status of 'planned' or 'active', reflecting the need to to handle new orders as well as re-authorised orders.(en)">
+			>
+			["at14"] = <
+				text = <"*Scheduled medication postponed(en)">
+				description = <"*A scheduled medication has been postponed prior to any administration.(en)">
+			>
+			["at13"] = <
+				text = <"*Medication course cancelled(en)">
+				description = <"*The planned medication has been cancelled prior to any administration.(en)">
+			>
+			["at17"] = <
+				text = <"*Medication start date/condition set(en)">
+				description = <"*The time to start this medication, or other starting condition, has been set.(en)">
+			>
+			["at138"] = <
+				text = <"*Medication restart date/condition set(en)">
+				description = <"*A  suspended medication has had its restart date or condition set.(en)">
+			>
+			["at3"] = <
+				text = <"*Prescription issued(en)">
+				description = <"*The medication has been issued as an item on a prescription.(en)">
+			>
+			["at4"] = <
+				text = <"*Medication dispensed(en)">
+				description = <"*The medication has been dispensed, for example from a pharmacy to the patient.(en)">
+			>
+			["at5"] = <
+				text = <"*Medication course commenced(en)">
+				description = <"*The medication has been taken by, or administered to, the patient for the first time. Although in some settings this significant date may be computable as the first of several administrations, in other settings, such as primary care, specific administration dates are not readily available.(en)">
+			>
+			["at6"] = <
+				text = <"*Medication course reviewed(en)">
+				description = <"*The specific medication item has been reviewed, as planned. This is not intended to capture review of the whole medication list.(en)">
+			>
+			["at42"] = <
+				text = <"*Minor change to order(en)">
+				description = <"*The medication order has been changed in a manner which does not require a new instruction/order to be issued, according to local clinical rules.(en)">
+			>
+			["at7"] = <
+				text = <"*Dose administered(en)">
+				description = <"*A single administration of the medication has taken place.(en)">
+			>
+			["at107"] = <
+				text = <"*Medication re-authorised(en)">
+				description = <"*The original medication order has been re-authorised to allow repeat prescription or dispensing. In some jurisdictions an entirely new order must be issued in these circumstances.(en)">
+			>
+			["at19"] = <
+				text = <"*Dose administration omitted(en)">
+				description = <"*The administration of a medication has been withheld and not given. There is no expectation that it will be given later, though the next dose (if any) should be administered according to the original order.(en)">
+			>
+			["at45"] = <
+				text = <"*Dose administration deferred(en)">
+				description = <"*Administration of a dose of mediciation has been delayed but is expected to be given as soon as possible.(en)">
+			>
+			["at36"] = <
+				text = <"*Dispensed medication returned.(en)">
+				description = <"*A dispensed medication is returned, or not collected, without being used.(en)">
+			>
+			["at149"] = <
+				text = <"*Medication prepared(en)">
+				description = <"*The medication has been physically prepared. For example: preparation of an intravenous mixture.(en)">
+			>
+			["at9"] = <
+				text = <"*Medication course supply delayed(en)">
+				description = <"*The medication course has not been dispensed as supply is not yet available.(en)">
+			>
+			["at10"] = <
+				text = <"*Medication administration suspended(en)">
+				description = <"*The administration of the medication has been suspended. No further doses should be given until further notice, or when the restart date or conditions have been met.(en)">
+			>
+			["at12"] = <
+				text = <"*Prescription re-issue suspended(en)">
+				description = <"*Reissuing of this prescription is not available without some intervention.(en)">
+			>
+			["at147"] = <
+				text = <"*Prescription re-authorisation required(en)">
+				description = <"*Repeat prescription/dispensing of the medication awaits re-authorisation.(en)">
+			>
+			["at16"] = <
+				text = <"*Medication course stopped(en)">
+				description = <"*The administration of this medication has been ceased after the first dose has been administered, but before intended completion of the course.  (en)">
+			>
+			["at40"] = <
+				text = <"*Major change to order.(en)">
+				description = <"*A major change to the order was required, resulting in this order being stopped and a replacement order being started.(en)">
+			>
+			["at8"] = <
+				text = <"*Medication course completed(en)">
+				description = <"*The medication course has been completed as planned.(en)">
+			>
+			["at150"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at151"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at152"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at153"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at154"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at155"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at156"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at157"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at158"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at159"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["ac1"] = <
+				text = <"*Draft prescription prepared(en) (synthesised)">
+				description = <"*Draft prescription has been prepared and is awaiting confirmation from an authorised clinician. May be used where reauthorisations are performed as a batch. This careflow_step may have a status of 'planned' or 'active', reflecting the need to to handle new orders as well as re-authorised orders.(en) (synthesised)">
+			>
+			["ac2"] = <
+				text = <"*Substitution(en) (synthesised)">
+				description = <"*Subsitution action taken by the person administering or dispensing the drug.(en) (synthesised)">
+			>
+		>
+		["en"] = <
+			["id1"] = <
+				text = <"Medication">
+				description = <"Details about any medication related task that is performed after ordering, such as plannling, preparation, administration, dispensing or cessation.">
+			>
+			["id3"] = <
+				text = <"Prescription issued">
+				description = <"The medication has been issued as an item on a prescription.">
+			>
+			["id4"] = <
+				text = <"Medication dispensed">
+				description = <"The medication has been dispensed, for example from a pharmacy to the patient.">
+			>
+			["id5"] = <
+				text = <"Medication course commenced">
+				description = <"The medication has been taken by, or administered to, the patient for the first time. Although in some settings this significant date may be computable as the first of several administrations, in other settings, such as primary care, specific administration dates are not readily available.">
+			>
+			["id6"] = <
+				text = <"Medication course reviewed">
+				description = <"The specific medication item has been reviewed, as planned. This is not intended to capture review of the whole medication list.">
+			>
+			["id7"] = <
+				text = <"Dose administered">
+				description = <"A single administration of the medication has taken place.">
+			>
+			["id8"] = <
+				text = <"Medication course completed">
+				description = <"The medication course has been completed as planned.">
+			>
+			["id9"] = <
+				text = <"Medication course supply delayed">
+				description = <"The medication course has not been dispensed as supply is not yet available.">
+			>
+			["id10"] = <
+				text = <"Medication administration suspended">
+				description = <"The administration of the medication has been suspended. No further doses should be given until further notice, or when the restart date or conditions have been met.">
+			>
+			["id12"] = <
+				text = <"Prescription re-issue suspended">
+				description = <"Reissuing of this prescription is not available without some intervention.">
+			>
+			["id13"] = <
+				text = <"Medication course cancelled">
+				description = <"The planned medication has been cancelled prior to any administration.">
+			>
+			["id14"] = <
+				text = <"Scheduled medication postponed">
+				description = <"A scheduled medication has been postponed prior to any administration.">
+			>
+			["id16"] = <
+				text = <"Medication course stopped">
+				description = <"The administration of this medication has been ceased after the first dose has been administered, but before intended completion of the course.">
+			>
+			["id17"] = <
+				text = <"Medication start date/condition set">
+				description = <"The time to start this medication, or other starting condition, has been set.">
+			>
+			["id19"] = <
+				text = <"Dose administration omitted">
+				description = <"The administration of a medication has been withheld and not given. There is no expectation that it will be given later, though the next dose (if any) should be administered according to the original order.">
+			>
+			["id21"] = <
+				text = <"Medication">
+				description = <"Name of the medication, vaccine or other therapeutic/prescribable item which was the focus of the action..">
+			>
+			["id22"] = <
+				text = <"Reason">
+				description = <"The reason(s) the specific action or step was carried out. Note: This is not the reason for the medication instruction, rather the specific reason that a care step was carried out, and will often be to document some variance from the original order.">
+			>
+			["id25"] = <
+				text = <"Comment">
+				description = <"A comment on the action taken including details of any variance between the intended action and the action actually performed.">
+			>
+			["id26"] = <
+				text = <"Sequence number">
+				description = <"The sequence number specific to the action being recorded.">
+			>
+			["id34"] = <
+				text = <"Patient guidance">
+				description = <"Any guidance, instructions or advice given to the subject of care or personal carer at the time of the action.">
+			>
+			["id36"] = <
+				text = <"Dispensed medication returned.">
+				description = <"A dispensed medication is returned, or not collected, without being used.">
+			>
+			["id40"] = <
+				text = <"Major change to order">
+				description = <"A major change to the order was required, resulting in this order being stopped and a replacement order being started.">
+			>
+			["id42"] = <
+				text = <"Minor change to order">
+				description = <"The medication order has been changed in a manner which does not require a new instruction/order to be issued, according to local clinical rules.">
+			>
+			["id44"] = <
+				text = <"Original scheduled datetime">
+				description = <"The datetime at which the medication action was scheduled to occur.">
+			>
+			["id45"] = <
+				text = <"Dose administration deferred">
+				description = <"Administration of a dose of medication has been delayed but is expected to be given as soon as possible.">
+			>
+			["id54"] = <
+				text = <"Details">
+				description = <"Further structured details of the action, possibly specific to a pathway step.">
+			>
+			["id83"] = <
+				text = <"Product">
+				description = <"Details of the product dispensed, authorised or administered.">
+			>
+			["id84"] = <
+				text = <"Batch ID">
+				description = <"Assigned by the manufacturer to identify the manufacturing batch of the item.">
+			>
+			["id85"] = <
+				text = <"Expiry date">
+				description = <"The expiry date of the medicine administered as documented by the manufacturer.">
+			>
+			["id86"] = <
+				text = <"Extension">
+				description = <"Additional information required to capture local content or to align with other reference models/formalisms.">
+			>
+			["id104"] = <
+				text = <"Order ID">
+				description = <"Unique identifier for the medication order.">
+			>
+			["id105"] = <
+				text = <"Preparation details">
+				description = <"Structured details about the overall preparation including strength, form and constituent substances.">
+			>
+			["id107"] = <
+				text = <"Medication re-authorised">
+				description = <"The original medication order has been re-authorised to allow repeat prescription or dispensing. In some jurisdictions an entirely new order must be issued in these circumstances.">
+			>
+			["id110"] = <
+				text = <"Medication recommended">
+				description = <"The medication has been recommended but no steps have been taken to initiate prescribing.">
+			>
+			["id131"] = <
+				text = <"Manufacturer">
+				description = <"The manufacturer of the medication.">
+			>
+			["id132"] = <
+				text = <"Amount">
+				description = <"Details of the amount of medication supplied i.e. authorised, dispensed or administered.">
+			>
+			["id133"] = <
+				text = <"Substitution">
+				description = <"Subsitution action taken by the person administering or dispensing the drug.">
+			>
+			["id134"] = <
+				text = <"Substitution reason">
+				description = <"The reason or justification for the substitution action taken.">
+			>
+			["id138"] = <
+				text = <"Medication restart date/condition set">
+				description = <"A  suspended medication has had its restart date or condition set.">
+			>
+			["at139"] = <
+				text = <"Substitution performed">
+				description = <"A medication was substituted which is bioequivalent to that ordered.">
+			>
+			["at140"] = <
+				text = <"Substitution not performed">
+				description = <"Although allowed by the medication order a bioequvalent medication was not substituted.">
+			>
+			["id141"] = <
+				text = <"Delivery details">
+				description = <"Details of body site and delivery of the medication.">
+			>
+			["id142"] = <
+				text = <"Body site">
+				description = <"Structured description of the site of administration of the ordered item.">
+			>
+			["id143"] = <
+				text = <"Structured body site">
+				description = <"Structured description of the site of administration  of the medication, vaccine or therapeutic good.">
+			>
+			["id144"] = <
+				text = <"Delivery method">
+				description = <"The technique or device by which the ordered item was, or is to be, delivered.">
+			>
+			["id145"] = <
+				text = <"Delivery device details">
+				description = <"Details of the medical device used to assist delivery of the medication.">
+			>
+			["id146"] = <
+				text = <"Draft prescription prepared">
+				description = <"Draft prescription has been prepared and is awaiting confirmation from an authorised clinician. May be used where reauthorisations are performed as a batch. This careflow_step may have a status of 'planned' or 'active', reflecting the need to to handle new orders as well as re-authorised orders.">
+			>
+			["id147"] = <
+				text = <"Prescription re-authorisation required">
+				description = <"Repeat prescription/dispensing of the medication awaits re-authorisation.">
+			>
+			["id148"] = <
+				text = <"Route">
+				description = <"The route by which the ordered item was, or is to be, administered into the subject's body.">
+			>
+			["id149"] = <
+				text = <"Medication prepared">
+				description = <"The medication has been physically prepared. For example: preparation of an intravenous mixture.">
+			>
+			["id150"] = <
+				text = <"Double-checked?">
+				description = <"The action step has been checked by a separate individual.">
+			>
+			["at110"] = <
+				text = <"Medication recommended">
+				description = <"The medication has been recommended but no steps have been taken to initiate prescribing.">
+			>
+			["at146"] = <
+				text = <"Draft prescription prepared">
+				description = <"Draft prescription has been prepared and is awaiting confirmation from an authorised clinician. May be used where reauthorisations are performed as a batch. This careflow_step may have a status of 'planned' or 'active', reflecting the need to to handle new orders as well as re-authorised orders.">
+			>
+			["at14"] = <
+				text = <"Scheduled medication postponed">
+				description = <"A scheduled medication has been postponed prior to any administration.">
+			>
+			["at13"] = <
+				text = <"Medication course cancelled">
+				description = <"The planned medication has been cancelled prior to any administration.">
+			>
+			["at17"] = <
+				text = <"Medication start date/condition set">
+				description = <"The time to start this medication, or other starting condition, has been set.">
+			>
+			["at138"] = <
+				text = <"Medication restart date/condition set">
+				description = <"A  suspended medication has had its restart date or condition set.">
+			>
+			["at3"] = <
+				text = <"Prescription issued">
+				description = <"The medication has been issued as an item on a prescription.">
+			>
+			["at4"] = <
+				text = <"Medication dispensed">
+				description = <"The medication has been dispensed, for example from a pharmacy to the patient.">
+			>
+			["at5"] = <
+				text = <"Medication course commenced">
+				description = <"The medication has been taken by, or administered to, the patient for the first time. Although in some settings this significant date may be computable as the first of several administrations, in other settings, such as primary care, specific administration dates are not readily available.">
+			>
+			["at6"] = <
+				text = <"Medication course reviewed">
+				description = <"The specific medication item has been reviewed, as planned. This is not intended to capture review of the whole medication list.">
+			>
+			["at42"] = <
+				text = <"Minor change to order">
+				description = <"The medication order has been changed in a manner which does not require a new instruction/order to be issued, according to local clinical rules.">
+			>
+			["at7"] = <
+				text = <"Dose administered">
+				description = <"A single administration of the medication has taken place.">
+			>
+			["at107"] = <
+				text = <"Medication re-authorised">
+				description = <"The original medication order has been re-authorised to allow repeat prescription or dispensing. In some jurisdictions an entirely new order must be issued in these circumstances.">
+			>
+			["at19"] = <
+				text = <"Dose administration omitted">
+				description = <"The administration of a medication has been withheld and not given. There is no expectation that it will be given later, though the next dose (if any) should be administered according to the original order.">
+			>
+			["at45"] = <
+				text = <"Dose administration deferred">
+				description = <"Administration of a dose of medication has been delayed but is expected to be given as soon as possible.">
+			>
+			["at36"] = <
+				text = <"Dispensed medication returned.">
+				description = <"A dispensed medication is returned, or not collected, without being used.">
+			>
+			["at149"] = <
+				text = <"Medication prepared">
+				description = <"The medication has been physically prepared. For example: preparation of an intravenous mixture.">
+			>
+			["at9"] = <
+				text = <"Medication course supply delayed">
+				description = <"The medication course has not been dispensed as supply is not yet available.">
+			>
+			["at10"] = <
+				text = <"Medication administration suspended">
+				description = <"The administration of the medication has been suspended. No further doses should be given until further notice, or when the restart date or conditions have been met.">
+			>
+			["at12"] = <
+				text = <"Prescription re-issue suspended">
+				description = <"Reissuing of this prescription is not available without some intervention.">
+			>
+			["at147"] = <
+				text = <"Prescription re-authorisation required">
+				description = <"Repeat prescription/dispensing of the medication awaits re-authorisation.">
+			>
+			["at16"] = <
+				text = <"Medication course stopped">
+				description = <"The administration of this medication has been ceased after the first dose has been administered, but before intended completion of the course.">
+			>
+			["at40"] = <
+				text = <"Major change to order">
+				description = <"A major change to the order was required, resulting in this order being stopped and a replacement order being started.">
+			>
+			["at8"] = <
+				text = <"Medication course completed">
+				description = <"The medication course has been completed as planned.">
+			>
+			["at150"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at151"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at152"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at153"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at154"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at155"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at156"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at157"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at158"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["at159"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["ac1"] = <
+				text = <"Draft prescription prepared (synthesised)">
+				description = <"Draft prescription has been prepared and is awaiting confirmation from an authorised clinician. May be used where reauthorisations are performed as a batch. This careflow_step may have a status of 'planned' or 'active', reflecting the need to to handle new orders as well as re-authorised orders. (synthesised)">
+			>
+			["ac2"] = <
+				text = <"Substitution (synthesised)">
+				description = <"Subsitution action taken by the person administering or dispensing the drug. (synthesised)">
+			>
+		>
+		["nb"] = <
+			["id1"] = <
+				text = <"Legemiddelhåndtering">
+				description = <"Detaljer om enhver legemiddelrelatert oppgave som utføres fra et legemiddel er ordinert eller rekvirert til det er utdelt eller eventuelt kassert, for eksempel bestilling, klargjøring, administrering, utdeling eller seponering.">
+			>
+			["id3"] = <
+				text = <"Resept utstedt">
+				description = <"Det er utstedt en resept for legemiddelet.">
+			>
+			["id4"] = <
+				text = <"Legemiddel utdelt">
+				description = <"Legemiddelet er utdelt, for eksempel fra et apotek til pasienten.">
+			>
+			["id5"] = <
+				text = <"Medisinering startet">
+				description = <"Legemiddelet er tatt av eller administrert til pasienten for første gang. Selv om dette i noen bruksområder som f.eks. sykehus kan utledes fra den første av en rekke administreringer, må det i andre bruksområder som f.eks. allmennpraksis spesifiseres spesifikt siden administreringer ikke dokumenteres på samme måte.">
+			>
+			["id6"] = <
+				text = <"Legemiddel gjennomgått">
+				description = <"Det aktuelle legemiddelet har blitt gjennomgått som planlagt. Dette er ikke ment å omfatte gjennomgang av hele legemiddellisten.">
+			>
+			["id7"] = <
+				text = <"Legemiddel administrert">
+				description = <"En enkelt administrering av legemiddelet er utført.">
+			>
+			["id8"] = <
+				text = <"Medisinering fullført">
+				description = <"Medisineringen er fullført som ordinert.">
+			>
+			["id9"] = <
+				text = <"Forsinket levering">
+				description = <"Legemiddelet er ikke utdelt fordi det ikke er på lager enda.">
+			>
+			["id10"] = <
+				text = <"Administrasjon satt på vent">
+				description = <"Administrasjon av legemiddelet er satt på vent. Ingen ytterligere doser gis inntil videre, eller settes i gang først når vilkår eller dato for å sette medisineringen i gang igjen er møtt.">
+			>
+			["id12"] = <
+				text = <"Reseptfornying satt på vent">
+				description = <"Reseptfornying kan ikke utføres uten inngripen.">
+			>
+			["id13"] = <
+				text = <"Planlagt medisinering avbrutt">
+				description = <"Den planlagte administrasjonen er avbrutt før den første dosen er administrert.">
+			>
+			["id14"] = <
+				text = <"Planlagt medisinering satt på vent">
+				description = <"Den planlagte administrasjonen er satt på vent før den første dosen er administrert.">
+			>
+			["id16"] = <
+				text = <"Legemiddel seponert">
+				description = <"Legemiddelet er seponert etter at første dose er administrert, men før planlagt fullførelse av ordineringen.">
+			>
+			["id17"] = <
+				text = <"Oppstartsdato satt">
+				description = <"Tidspunktet eller vilkår for å starte medisineringen er satt.">
+			>
+			["id19"] = <
+				text = <"Legemiddel holdt tilbake">
+				description = <"Administrasjon av et legemiddel er stoppet, og legemiddelet er holdt tilbake (\"nullet\"). Det er ingen forventing om at den aktuelle dosen skal gis på et senere tidspunkt, men neste dose administreres i henhold til ordineringen.">
+			>
+			["id21"] = <
+				text = <"Legemiddel">
+				description = <"Legemiddelet eller vaksinen som var i fokus i denne aktiviteten (ACTION).">
+			>
+			["id22"] = <
+				text = <"Årsak">
+				description = <"Årsak eller årsaker til at den aktuelle handlingen eller prosessteget ble utført. NB: Dette er ikke årsaken til legemiddelordineringen, men de spesifikke årsakene til at det aktuelle prosessteget ble utført. Dette vil som regel brukes for å dokumentere varians fra den opprinnelige ordineringen.">
+			>
+			["id25"] = <
+				text = <"Kommentar">
+				description = <"En kommentar til handlingen som ble utført, inkludert detaljer om varians mellom den planlagte handlingen og handlingen som faktisk ble utført.">
+			>
+			["id26"] = <
+				text = <"Sekvensnummer">
+				description = <"Sekvensnummeret for den spesifikke handlingen som blir registrert.">
+			>
+			["id34"] = <
+				text = <"Pasientinstruksjoner">
+				description = <"Enhver instruksjon som gis til pasienten eller en omsorgsperson når handlingen utføres.">
+			>
+			["id36"] = <
+				text = <"Legemiddel returnert">
+				description = <"Utdelt legemiddel er returnert ubrukt eller ikke hentet.">
+			>
+			["id40"] = <
+				text = <"Endret dose eller timing">
+				description = <"Det er utført en endring i ordingeringen, denne ordineringen er stoppet og en ny ordinering er igangsatt.">
+			>
+			["id42"] = <
+				text = <"Ordinering endret">
+				description = <"Legemiddelordineringen er endret på en slik måte at det etter lokale retningslinjer ikke er behov for en ny ordinering. For eksempel endring av produkt fra tabletter til kapsler.">
+			>
+			["id44"] = <
+				text = <"Opprinnelig planlagt tid">
+				description = <"Dato/tid for når legemiddelaktiviteten var planlagt å skulle skje.">
+			>
+			["id45"] = <
+				text = <"Administrering utsatt">
+				description = <"Administrasjon av legemiddelet er utsatt/forsinket, men legemiddelet forventes administrert så raskt som mulig.">
+			>
+			["id54"] = <
+				text = <"Detaljer">
+				description = <"Ytterligere strukturerte detaljer om handlingen, for eksempel spesifikk informasjon for det aktuelle prosesstrinnet.">
+			>
+			["id83"] = <
+				text = <"Produkt">
+				description = <"Detaljer om produktet som er utlevert, autorisert eller administrert.">
+			>
+			["id84"] = <
+				text = <"Batch-ID">
+				description = <"Tilordnet av produsenten for å identifisere produksjons-batchen for produktet.">
+			>
+			["id85"] = <
+				text = <"Utløpsdato">
+				description = <"Utløpsdatoen for legemiddelet, som oppgitt av produsenten.">
+			>
+			["id86"] = <
+				text = <"Tilleggsinformasjon">
+				description = <"Ytterligere informasjon som er nødvendig for å sammenstille med andre referansemodeller/formalismer.">
+			>
+			["id104"] = <
+				text = <"OrdineringsID">
+				description = <"Identifikatoren for den opprinnelige ordineringen.">
+			>
+			["id105"] = <
+				text = <"Legemiddeldetaljer">
+				description = <"Strukturerte detaljer om det overordnede legemiddelet, blant annet styrke, form og substansene det består av.">
+			>
+			["id107"] = <
+				text = <"Legemiddel reautorisert">
+				description = <"En repeterende resept har blitt reautorisert. I noen myndighetsområder må det i disse tilfellene utstedes en helt ny resept.">
+			>
+			["id110"] = <
+				text = <"Anbefalt medisinering">
+				description = <"Medisineringen er anbefalt, men ordinering er ikke iverksatt.">
+			>
+			["id131"] = <
+				text = <"Produsent">
+				description = <"Produsenten av legemiddelet.">
+			>
+			["id132"] = <
+				text = <"Dose">
+				description = <"Detaljer om legemiddeldosen som er bestilt, klargjort, administrert, utdelt eller seponert.">
+			>
+			["id133"] = <
+				text = <"Generisk bytte">
+				description = <"Generisk bytte utført ved administrering eller utdeling.">
+			>
+			["id134"] = <
+				text = <"Årsak for bytte/ikke bytte">
+				description = <"Årsak eller begrunnelse for at generisk bytte er utført eller ikke utført.">
+			>
+			["id138"] = <
+				text = <"Vilkår satt for å sette medisineringen i gang igjen">
+				description = <"Et legemiddel som er satt på vent har fått satt dato eller vilkår for å starte igjen.">
+			>
+			["at139"] = <
+				text = <"Generisk bytte utført">
+				description = <"Et legemiddel som var bioekvivalent til det ordinerte ble utdelt.">
+			>
+			["at140"] = <
+				text = <"Generisk bytte ikke utført">
+				description = <"Det ble ikke utført generisk bytte, til tross for at dette var tillatt i ordineringen.">
+			>
+			["id141"] = <
+				text = <"Administrasjonsdetaljer">
+				description = <"Detaljer om administrering av legemiddelet.">
+			>
+			["id142"] = <
+				text = <"Anatomisk lokalisering">
+				description = <"Strukturert beskrivelse av kroppsstedet der det ordinerte produktet skal administreres eller ble administrert.">
+			>
+			["id143"] = <
+				text = <"Strukturert anatomisk lokalisering">
+				description = <"Strukturert beskrivelse av administrasjonsstedet for legemiddelet eller vaksinen.">
+			>
+			["id144"] = <
+				text = <"Administrasjonsmetode">
+				description = <"Metoden legemiddelet ble administrert eller skal administreres ved.">
+			>
+			["id145"] = <
+				text = <"Detaljer om administrasjonsutstyr">
+				description = <"Detaljer om utstyret som ble brukt for å administrere legemiddelet.">
+			>
+			["id146"] = <
+				text = <"Reseptutkast forberedt">
+				description = <"Det er forberedt et utkast for en resept, og denne avventer godkjenning av en autorisert kliniker. Kan brukes der reseptutstedelse utføres satsvis. Dette prosessteget kan brukes enten med status \"planned\" eller \"active\", for å underbygge behovet for å håndtere både nye og reautoriserte ordinasjoner.">
+			>
+			["id147"] = <
+				text = <"Resept må reautoriseres">
+				description = <"Avventer reautorisering for ny resept eller ny utlevering.">
+			>
+			["id148"] = <
+				text = <"Administreringsvei">
+				description = <"Administreringsveien som skal eller ble brukt for legemiddelet.">
+			>
+			["id149"] = <
+				text = <"Legemiddel klargjort">
+				description = <"Legemiddelet er fysisk klargjort, for eksempel klargjøring av en intravenøs blanding.">
+			>
+			["id150"] = <
+				text = <"Dobbeltkontrollert?">
+				description = <"Prosesstrinnet har blitt kontrollert av en annen person enn den som primært utfører det.">
+			>
+			["at110"] = <
+				text = <"Anbefalt medisinering">
+				description = <"Medisineringen er anbefalt, men ordinering er ikke iverksatt.">
+			>
+			["at146"] = <
+				text = <"Reseptutkast forberedt">
+				description = <"Det er forberedt et utkast for en resept, og denne avventer godkjenning av en autorisert kliniker. Kan brukes der reseptutstedelse utføres satsvis. Dette prosessteget kan brukes enten med status \"planned\" eller \"active\", for å underbygge behovet for å håndtere både nye og reautoriserte ordinasjoner.">
+			>
+			["at14"] = <
+				text = <"Planlagt medisinering satt på vent">
+				description = <"Den planlagte administrasjonen er satt på vent før den første dosen er administrert.">
+			>
+			["at13"] = <
+				text = <"Planlagt medisinering avbrutt">
+				description = <"Den planlagte administrasjonen er avbrutt før den første dosen er administrert.">
+			>
+			["at17"] = <
+				text = <"Oppstartsdato satt">
+				description = <"Tidspunktet eller vilkår for å starte medisineringen er satt.">
+			>
+			["at138"] = <
+				text = <"Vilkår satt for å sette medisineringen i gang igjen">
+				description = <"Et legemiddel som er satt på vent har fått satt dato eller vilkår for å starte igjen.">
+			>
+			["at3"] = <
+				text = <"Resept utstedt">
+				description = <"Det er utstedt en resept for legemiddelet.">
+			>
+			["at4"] = <
+				text = <"Legemiddel utdelt">
+				description = <"Legemiddelet er utdelt, for eksempel fra et apotek til pasienten.">
+			>
+			["at5"] = <
+				text = <"Medisinering startet">
+				description = <"Legemiddelet er tatt av eller administrert til pasienten for første gang. Selv om dette i noen bruksområder som f.eks. sykehus kan utledes fra den første av en rekke administreringer, må det i andre bruksområder som f.eks. allmennpraksis spesifiseres spesifikt siden administreringer ikke dokumenteres på samme måte.">
+			>
+			["at6"] = <
+				text = <"Legemiddel gjennomgått">
+				description = <"Det aktuelle legemiddelet har blitt gjennomgått som planlagt. Dette er ikke ment å omfatte gjennomgang av hele legemiddellisten.">
+			>
+			["at42"] = <
+				text = <"Ordinering endret">
+				description = <"Legemiddelordineringen er endret på en slik måte at det etter lokale retningslinjer ikke er behov for en ny ordinering. For eksempel endring av produkt fra tabletter til kapsler.">
+			>
+			["at7"] = <
+				text = <"Legemiddel administrert">
+				description = <"En enkelt administrering av legemiddelet er utført.">
+			>
+			["at107"] = <
+				text = <"Legemiddel reautorisert">
+				description = <"En repeterende resept har blitt reautorisert. I noen myndighetsområder må det i disse tilfellene utstedes en helt ny resept.">
+			>
+			["at19"] = <
+				text = <"Legemiddel holdt tilbake">
+				description = <"Administrasjon av et legemiddel er stoppet, og legemiddelet er holdt tilbake (\"nullet\"). Det er ingen forventing om at den aktuelle dosen skal gis på et senere tidspunkt, men neste dose administreres i henhold til ordineringen.">
+			>
+			["at45"] = <
+				text = <"Administrering utsatt">
+				description = <"Administrasjon av legemiddelet er utsatt/forsinket, men legemiddelet forventes administrert så raskt som mulig.">
+			>
+			["at36"] = <
+				text = <"Legemiddel returnert">
+				description = <"Utdelt legemiddel er returnert ubrukt eller ikke hentet.">
+			>
+			["at149"] = <
+				text = <"Legemiddel klargjort">
+				description = <"Legemiddelet er fysisk klargjort, for eksempel klargjøring av en intravenøs blanding.">
+			>
+			["at9"] = <
+				text = <"Forsinket levering">
+				description = <"Legemiddelet er ikke utdelt fordi det ikke er på lager enda.">
+			>
+			["at10"] = <
+				text = <"Administrasjon satt på vent">
+				description = <"Administrasjon av legemiddelet er satt på vent. Ingen ytterligere doser gis inntil videre, eller settes i gang først når vilkår eller dato for å sette medisineringen i gang igjen er møtt.">
+			>
+			["at12"] = <
+				text = <"Reseptfornying satt på vent">
+				description = <"Reseptfornying kan ikke utføres uten inngripen.">
+			>
+			["at147"] = <
+				text = <"Resept må reautoriseres">
+				description = <"Avventer reautorisering for ny resept eller ny utlevering.">
+			>
+			["at16"] = <
+				text = <"Legemiddel seponert">
+				description = <"Legemiddelet er seponert etter at første dose er administrert, men før planlagt fullførelse av ordineringen.">
+			>
+			["at40"] = <
+				text = <"Endret dose eller timing">
+				description = <"Det er utført en endring i ordingeringen, denne ordineringen er stoppet og en ny ordinering er igangsatt.">
+			>
+			["at8"] = <
+				text = <"Medisinering fullført">
+				description = <"Medisineringen er fullført som ordinert.">
+			>
+			["at150"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at151"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at152"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at153"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at154"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at155"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at156"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at157"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at158"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at159"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["ac1"] = <
+				text = <"Reseptutkast forberedt (synthesised)">
+				description = <"Det er forberedt et utkast for en resept, og denne avventer godkjenning av en autorisert kliniker. Kan brukes der reseptutstedelse utføres satsvis. Dette prosessteget kan brukes enten med status \"planned\" eller \"active\", for å underbygge behovet for å håndtere både nye og reautoriserte ordinasjoner. (synthesised)">
+			>
+			["ac2"] = <
+				text = <"Generisk bytte (synthesised)">
+				description = <"Generisk bytte utført ved administrering eller utdeling. (synthesised)">
+			>
+		>
+		["pt-br"] = <
+			["id1"] = <
+				text = <"*Medication(en)">
+				description = <"*Details about any medication related task that is performed after ordering, such as plannling, preparation, administration, dispensing or cessation.(en)">
+			>
+			["id3"] = <
+				text = <"*Prescription issued(en)">
+				description = <"*The medication has been issued as an item on a prescription.(en)">
+			>
+			["id4"] = <
+				text = <"*Medication dispensed(en)">
+				description = <"*The medication has been dispensed, for example from a pharmacy to the patient.(en)">
+			>
+			["id5"] = <
+				text = <"*Medication course commenced(en)">
+				description = <"*The medication has been taken by, or administered to, the patient for the first time. Although in some settings this significant date may be computable as the first of several administrations, in other settings, such as primary care, specific administration dates are not readily available.(en)">
+			>
+			["id6"] = <
+				text = <"*Medication course reviewed(en)">
+				description = <"*The specific medication item has been reviewed, as planned. This is not intended to capture review of the whole medication list.(en)">
+			>
+			["id7"] = <
+				text = <"Dose administrada">
+				description = <"Dose do medicamento foi administrada.">
+			>
+			["id8"] = <
+				text = <"Final do tratamento medicamentoso">
+				description = <"O tratamento medicamentoso foi finalizado conforme previsto.">
+			>
+			["id9"] = <
+				text = <"Fornecimento da medicação atrasado">
+				description = <"A medicação não foi dispensada pois não está ainda disponível por falta de estoque.">
+			>
+			["id10"] = <
+				text = <"*Medication administration suspended(en)">
+				description = <"*The administration of the medication has been suspended. No further doses should be given until further notice, or when the restart date or conditions have been met.(en)">
+			>
+			["id12"] = <
+				text = <"*Prescription re-issue suspended(en)">
+				description = <"*Reissuing of this prescription is not available without some intervention.(en)">
+			>
+			["id13"] = <
+				text = <"*Medication course cancelled(en)">
+				description = <"*The planned medication has been cancelled prior to any administration.(en)">
+			>
+			["id14"] = <
+				text = <"Medicação agendada adiada">
+				description = <"Uma medicação agendada foi adiada antes de qualquer administração.">
+			>
+			["id16"] = <
+				text = <"*Medication course stopped(en)">
+				description = <"*The administration of this medication has been ceased after the first dose has been administered, but before intended completion of the course.  (en)">
+			>
+			["id17"] = <
+				text = <"Data do início/ Condição de início">
+				description = <"A hora de começar a medicação, ou outra condição para iniciar o tratamento foi estabelecida.">
+			>
+			["id19"] = <
+				text = <"*Dose administration omitted(en)">
+				description = <"*The administration of a medication has been withheld and not given. There is no expectation that it will be given later, though the next dose (if any) should be administered according to the original order.(en)">
+			>
+			["id21"] = <
+				text = <"*Medication(en)">
+				description = <"*Name of the medication, vaccine or other therapeutic/prescribable item which was the focus of the action..(en)">
+			>
+			["id22"] = <
+				text = <"*Reason(en)">
+				description = <"*The reason(s) the specific action or step was carried out. Note: This is not the reason for the medication instruction, rather the specific reason that a care step was carried out, and will often be to document some variance from the original order.(en)">
+			>
+			["id25"] = <
+				text = <"*Comment(en)">
+				description = <"*A comment on the action taken including details of any variance between the intended action and the action actually performed.(en)">
+			>
+			["id26"] = <
+				text = <"Número sequencial">
+				description = <"O número sequencial específico desta ação que está sendo realizada.">
+			>
+			["id34"] = <
+				text = <"*Patient guidance(en)">
+				description = <"*Any guidance, instructions or advice given to the subject of care or personal carer at the time of the action.(en)">
+			>
+			["id36"] = <
+				text = <"Medicamento dispensado devolvido">
+				description = <"Um medicamento dispensado é retornado, ou não coletado, sem ser usado.">
+			>
+			["id40"] = <
+				text = <"Alteração significativa na prescrição">
+				description = <"Foi necessário realizar uma alteração significativa na prescrição, resultando no cancelamento da atual e a substituição por uma nova prescrição.">
+			>
+			["id42"] = <
+				text = <"Prescrição com mínimas mudanças">
+				description = <"A prescrição foi alterada de uma forma que não exige uma nova liberação da prescrição, de acordo com as regras clínicas locais.">
+			>
+			["id44"] = <
+				text = <"*Original scheduled datetime(en)">
+				description = <"*The datetime at which the medication action was scheduled to occur.(en)">
+			>
+			["id45"] = <
+				text = <"Administração da dose adiada">
+				description = <"A administração de uma dose de medicamento foi adiada, mas espera-se que seja administrada o mais rápido possível.">
+			>
+			["id54"] = <
+				text = <"Detalhes">
+				description = <"Detalhes adicionais estruturados da ação, possivelmente específicos para um passo do processo.">
+			>
+			["id83"] = <
+				text = <"Produto">
+				description = <"Detalhes do produto dispensado, autorizado ou administrado.">
+			>
+			["id84"] = <
+				text = <"Identificação do Lote">
+				description = <"Atribuído pelo fabricante para identificar o lote de fabricação do item.">
+			>
+			["id85"] = <
+				text = <"*Expiry date(en)">
+				description = <"*The expiry date of the medicine administered as documented by the manufacturer.(en)">
+			>
+			["id86"] = <
+				text = <"Extensão">
+				description = <"Informações adicionais necessárias para capturar o conteúdo local ou para se alinhar com outros modelos de referência / formalismos.">
+			>
+			["id104"] = <
+				text = <"*Order ID(en)">
+				description = <"*Unique identifier for the medication order.(en)">
+			>
+			["id105"] = <
+				text = <"*Preparation details(en)">
+				description = <"*Structured details about the overall preparation including strength, form and constituent substances.(en)">
+			>
+			["id107"] = <
+				text = <"*Medication re-authorised(en)">
+				description = <"*The original medication order has been re-authorised to allow repeat prescription or dispensing. In some jurisdictions an entirely new order must be issued in these circumstances.(en)">
+			>
+			["id110"] = <
+				text = <"Medicamento recomendado">
+				description = <"Medicamento foi recomendado mas nenhuma ação foi realizada para iniciar a prescrição.">
+			>
+			["id131"] = <
+				text = <"Fabricante">
+				description = <"Nome do fabricante da medicação.">
+			>
+			["id132"] = <
+				text = <"Quantidade">
+				description = <"Detalhes da quantidade de medicamento utilizado, ou seja, autorizado, dispensado ou administrado.">
+			>
+			["id133"] = <
+				text = <"*Substitution(en)">
+				description = <"*Subsitution action taken by the person administering or dispensing the drug.(en)">
+			>
+			["id134"] = <
+				text = <"*Substitution reason(en)">
+				description = <"*The reason or justification for the substitution action taken.(en)">
+			>
+			["id138"] = <
+				text = <"Hora de reinício/Condição de reinicio">
+				description = <"A hora de reiniciar a medicação, ou outra condição para iniciar o tratamento foi estabelecida.">
+			>
+			["at139"] = <
+				text = <"*Substitution performed(en)">
+				description = <"*A medication was substituted which is bioequivalent to that ordered.(en)">
+			>
+			["at140"] = <
+				text = <"*Substitution not performed(en)">
+				description = <"*Although allowed by the medication order a bioequvalent medication was not substituted.(en)">
+			>
+			["id141"] = <
+				text = <"Detalhes da aplicação do medicamento">
+				description = <"Detalhes do local do corpo e aplicação do medicamento.">
+			>
+			["id142"] = <
+				text = <"*Body site(en)">
+				description = <"*Structured description of the site of administration of the ordered item.(en)">
+			>
+			["id143"] = <
+				text = <"Local do corpo estruturado">
+				description = <"Descrição estruturada do local de administração do medicamento, vacina ou tem terapêutico.">
+			>
+			["id144"] = <
+				text = <"*Delivery method(en)">
+				description = <"*The technique or device by which the ordered item was, or is to be, delivered.(en)">
+			>
+			["id145"] = <
+				text = <"Detalhes do dispositivo para aplicação">
+				description = <"Detalhes do dispositivo utilizado para aplicação do medicamento.">
+			>
+			["id146"] = <
+				text = <"*Draft prescription prepared(en)">
+				description = <"*Draft prescription has been prepared and is awaiting confirmation from an authorised clinician. May be used where reauthorisations are performed as a batch. This careflow_step may have a status of 'planned' or 'active', reflecting the need to to handle new orders as well as re-authorised orders.(en)">
+			>
+			["id147"] = <
+				text = <"*Prescription re-authorisation required(en)">
+				description = <"*Repeat prescription/dispensing of the medication awaits re-authorisation.(en)">
+			>
+			["id148"] = <
+				text = <"*Route(en)">
+				description = <"*The route by which the ordered item was, or is to be, administered into the subject's body.(en)">
+			>
+			["id149"] = <
+				text = <"*Medication prepared(en)">
+				description = <"*The medication has been physically prepared. For example: preparation of an intravenous mixture.(en)">
+			>
+			["id150"] = <
+				text = <"*Double-checked?(en)">
+				description = <"*The action step has been checked by a separate individual.(en)">
+			>
+			["at110"] = <
+				text = <"Medicamento recomendado">
+				description = <"Medicamento foi recomendado mas nenhuma ação foi realizada para iniciar a prescrição.">
+			>
+			["at146"] = <
+				text = <"*Draft prescription prepared(en)">
+				description = <"*Draft prescription has been prepared and is awaiting confirmation from an authorised clinician. May be used where reauthorisations are performed as a batch. This careflow_step may have a status of 'planned' or 'active', reflecting the need to to handle new orders as well as re-authorised orders.(en)">
+			>
+			["at14"] = <
+				text = <"Medicação agendada adiada">
+				description = <"Uma medicação agendada foi adiada antes de qualquer administração.">
+			>
+			["at13"] = <
+				text = <"*Medication course cancelled(en)">
+				description = <"*The planned medication has been cancelled prior to any administration.(en)">
+			>
+			["at17"] = <
+				text = <"Data do início/ Condição de início">
+				description = <"A hora de começar a medicação, ou outra condição para iniciar o tratamento foi estabelecida.">
+			>
+			["at138"] = <
+				text = <"Hora de reinício/Condição de reinicio">
+				description = <"A hora de reiniciar a medicação, ou outra condição para iniciar o tratamento foi estabelecida.">
+			>
+			["at3"] = <
+				text = <"*Prescription issued(en)">
+				description = <"*The medication has been issued as an item on a prescription.(en)">
+			>
+			["at4"] = <
+				text = <"*Medication dispensed(en)">
+				description = <"*The medication has been dispensed, for example from a pharmacy to the patient.(en)">
+			>
+			["at5"] = <
+				text = <"*Medication course commenced(en)">
+				description = <"*The medication has been taken by, or administered to, the patient for the first time. Although in some settings this significant date may be computable as the first of several administrations, in other settings, such as primary care, specific administration dates are not readily available.(en)">
+			>
+			["at6"] = <
+				text = <"*Medication course reviewed(en)">
+				description = <"*The specific medication item has been reviewed, as planned. This is not intended to capture review of the whole medication list.(en)">
+			>
+			["at42"] = <
+				text = <"Prescrição com mínimas mudanças">
+				description = <"A prescrição foi alterada de uma forma que não exige uma nova liberação da prescrição, de acordo com as regras clínicas locais.">
+			>
+			["at7"] = <
+				text = <"Dose administrada">
+				description = <"Dose do medicamento foi administrada.">
+			>
+			["at107"] = <
+				text = <"*Medication re-authorised(en)">
+				description = <"*The original medication order has been re-authorised to allow repeat prescription or dispensing. In some jurisdictions an entirely new order must be issued in these circumstances.(en)">
+			>
+			["at19"] = <
+				text = <"*Dose administration omitted(en)">
+				description = <"*The administration of a medication has been withheld and not given. There is no expectation that it will be given later, though the next dose (if any) should be administered according to the original order.(en)">
+			>
+			["at45"] = <
+				text = <"Administração da dose adiada">
+				description = <"A administração de uma dose de medicamento foi adiada, mas espera-se que seja administrada o mais rápido possível.">
+			>
+			["at36"] = <
+				text = <"Medicamento dispensado devolvido">
+				description = <"Um medicamento dispensado é retornado, ou não coletado, sem ser usado.">
+			>
+			["at149"] = <
+				text = <"*Medication prepared(en)">
+				description = <"*The medication has been physically prepared. For example: preparation of an intravenous mixture.(en)">
+			>
+			["at9"] = <
+				text = <"Fornecimento da medicação atrasado">
+				description = <"A medicação não foi dispensada pois não está ainda disponível por falta de estoque.">
+			>
+			["at10"] = <
+				text = <"*Medication administration suspended(en)">
+				description = <"*The administration of the medication has been suspended. No further doses should be given until further notice, or when the restart date or conditions have been met.(en)">
+			>
+			["at12"] = <
+				text = <"*Prescription re-issue suspended(en)">
+				description = <"*Reissuing of this prescription is not available without some intervention.(en)">
+			>
+			["at147"] = <
+				text = <"*Prescription re-authorisation required(en)">
+				description = <"*Repeat prescription/dispensing of the medication awaits re-authorisation.(en)">
+			>
+			["at16"] = <
+				text = <"*Medication course stopped(en)">
+				description = <"*The administration of this medication has been ceased after the first dose has been administered, but before intended completion of the course.  (en)">
+			>
+			["at40"] = <
+				text = <"Alteração significativa na prescrição">
+				description = <"Foi necessário realizar uma alteração significativa na prescrição, resultando no cancelamento da atual e a substituição por uma nova prescrição.">
+			>
+			["at8"] = <
+				text = <"Final do tratamento medicamentoso">
+				description = <"O tratamento medicamentoso foi finalizado conforme previsto.">
+			>
+			["at150"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at151"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at152"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at153"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at154"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at155"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at156"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at157"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at158"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["at159"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["ac1"] = <
+				text = <"*Draft prescription prepared(en) (synthesised)">
+				description = <"*Draft prescription has been prepared and is awaiting confirmation from an authorised clinician. May be used where reauthorisations are performed as a batch. This careflow_step may have a status of 'planned' or 'active', reflecting the need to to handle new orders as well as re-authorised orders.(en) (synthesised)">
+			>
+			["ac2"] = <
+				text = <"*Substitution(en) (synthesised)">
+				description = <"*Subsitution action taken by the person administering or dispensing the drug.(en) (synthesised)">
+			>
+		>
+	>
+	term_bindings = <
+		["openehr"] = <
+			["at150"] = <http://openehr.org/id/526>
+			["at151"] = <http://openehr.org/id/527>
+			["at152"] = <http://openehr.org/id/528>
+			["at153"] = <http://openehr.org/id/529>
+			["at154"] = <http://openehr.org/id/245>
+			["at155"] = <http://openehr.org/id/530>
+			["at156"] = <http://openehr.org/id/531>
+			["at157"] = <http://openehr.org/id/532>
+			["at158"] = <http://openehr.org/id/526>
+			["at159"] = <http://openehr.org/id/245>
+		>
+	>
+	value_sets = <
+		["ac2"] = <
+			id = <"ac2">
+			members = <"at139", "at140">
+		>
+		["ac1"] = <
+			id = <"ac1">
+			members = <"at158", "at159">
+		>
+	>

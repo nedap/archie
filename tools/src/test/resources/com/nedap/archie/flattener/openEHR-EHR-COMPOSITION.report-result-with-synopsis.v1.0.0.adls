@@ -28,8 +28,8 @@ description
 definition
 	 COMPOSITION[id1.1.1] matches {
         content matches {
-            allow_archetype OBSERVATION[id2]
-            use_archetype EVALUATION[id3, openEHR-EHR-EVALUATION.clinical_synopsis.v1] occurrences matches {0..*}
+            allow_archetype OBSERVATION[id0.0.2]
+            use_archetype EVALUATION[id0.0.3, openEHR-EHR-EVALUATION.clinical_synopsis.v1] occurrences matches {0..*}
         }
     }
 
@@ -41,11 +41,11 @@ terminology
 				text = <"Rapportage met resultaat van een meting en samenvatting">
 				description = <"Rapportage met resultaat van een meting en samenvatting">
 			>
-			["id2"] = <
+			["id0.0.2"] = <
                 text = <"Een observatie">
                 description = <"Een observatie">
             >
-            ["id3"] = <
+            ["id0.0.3"] = <
                 text = <"Opmerkingen">
                 description = <"Opmerkingen bij de metingen">
             >

@@ -1,0 +1,230 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated; uid=46b35486-a744-4c31-b874-37480c508304)
+	openEHR-EHR-CLUSTER.exam_lung.v0.0.1-alpha
+
+language
+	original_language = <[ISO_639-1::en]>
+	translations = <
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			author = <
+				["name"] = <"Anca Heyd">
+				["organisation"] = <"DIPS ASA">
+				["ahe@dips.no"] = <"ahe@dips.no">
+			>
+		>
+	>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Heather Leslie">
+		["organisation"] = <"Ocean Informatics">
+		["email"] = <"heather.leslie@oceaninformatics.com">
+		["date"] = <"2015-06-22">
+	>
+	original_namespace = <"org.openehr">
+	original_publisher = <"openEHR Foundation">
+	custodian_namespace = <"org.openehr">
+	custodian_organisation = <"openEHR Foundation">
+	copyright = <"© openEHR Foundation">
+	licence = <"This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 License. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/.">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"For recording a narrative description and clinical interpretation of the findings observed during the physical examination of a lung.">
+			use = <"Use to record a narrative description of the overall findings observed during the physical examination of a single lung. This initial draft archetype consists only of the core examination pattern data elements (as per CLUSTER.exam_pattern) and will likely be expanded further over time as specific clinical requirements are identified.
+
+This archetype has been specifically designed to be used in the 'Examination findings' SLOT within the CLUSTER.exam_chest archetype, but can also be used within the OBSERVATION.exam and other OBSERVATION or CLUSTER archetypes, where clinically appropriate. Record findings of the second lung in a second instance of this archetype within the same SLOT.
+
+Use to provide a framework in which CLUSTER archetypes can be nested in the 'Examination findings' SLOT to record additional structured physical examination findings - for example, CLUSTER.auscultation_lung. 
+
+The CLUSTER.exclusion_exam archetype can be nested within the 'Examination not done' SLOT to optionally record explicit details about the examination not being performed.
+
+Use to incorporate the narrative descriptions of clinical findings within existing or legacy clinical systems into an archetyped format, using the 'Clinical Description' data element.">
+			misuse = <"Not to be used for recording data not related to the physical examination of the lungs.
+
+Not to be used for recording the clinical history - use specific OBSERVATION and CLUSTER archetypes. For example OBSERVATION.story and CLUSTER.symptom.
+
+Not to be used to record stand-alone clinical observations or measurements or test results - use specific OBSERVATION archetypes. For example OBSERVATION.blood_pressure or OBSERVATION.imaging_exam.">
+		>
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			purpose = <"Dokumentasjon av beskrivelse og klinisk interpretasjon av funn observert ved klinisk undersøkelse av en lunge.">
+			use = <"Brukes for å dokumentere en beskrivelse av alle funn og klinisk interpretasjon ved klinisk undersøkelse av en lunge. Denne initielle mønsterarketypen inneholder kun kjernedata (som i CLUSTER.exam_pattern) og vil sansynligvis utvides over tid etter som nye kliniske behov kommer frem.
+
+Denne arketypen er spesiell utviklet for bruk i \"Undersøkelsesfunn\" Slotet i arketype \"Undersøkelse av thorax\", men kan også brukes i \"Funn ved klinisk undersøkelse arketypen\" eller innenfor andre Observation eller Cluster arketyper, der dette er klinisk hensiktsmessig. Dokumenter funn sv den andre lungen i en annen instans av denne arketypen i samme Slot.
+
+Brukes for å gi et rammeverk hvor andre Cluster arketyper kan legges inn i \"Undersøkelsesfunn\" Slot for å dokumentere tilleggsfunn på ens trukturert måte, f.eks. Cluster arketypen \"CLUSTER.auscultation_lung\".
+
+Cluster arketypen \"CLUSTER.exclusion_exam\" kan legges inn i \"Undersøkelse ikke gjennomført slotet for å dokumentere eksplistte detaljer som beskriver at undersøkelsen ikke ble gjennomført.
+
+Brukes for å bygge en en beskrivelse av kliniske funn i eksisterende eller .... (legacy) kliniske sytemer i arketypeformat ved å brfuke dataelementet \"klinisk beskrivelse\".">
+			misuse = <"Skal ikke brukes for å dokumentere data som ikke er relatert til fysisk undersøkelse av lungene. 
+
+Skal ikke brukes for å dokumentere anamnese - bruk spesifikke Observation og Cluster akretyper til dette formålet. For eksempel OBSERVATION.anamnese og CLUSTER.symptom.
+
+Skal ikke brukes for å dokumenter egenstendige kliniske observasjoner, målinger eller testresultaer. For eksempel OBSERVATION.blodtrykk eller OBSERVATION.resultat_av_funn_ved_billeddiagnostiks_undersøkelse">
+		>
+	>
+	other_contributors = <"Silje Ljosland Bakke, Bergen Hospital Trust, Norway", "Ian McNicoll, freshEHR Clinical Informatics, United Kingdom", "John Tore Valand, Haukeland Universitetssjukehus, Norway", "Heather Leslie, Ocean Informatics, Australia">
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"934CBC6813EE0E1EBE73F1271FE8EB8B">
+		["build_uid"] = <"6bb75870-4d12-48aa-b079-840086f13ee7">
+	>
+
+definition
+	CLUSTER[id1] matches {	-- Examination of a lung
+		items matches {
+			ELEMENT[id2] occurrences matches {0..1} matches {	-- Lung examined
+				value matches {
+					DV_CODED_TEXT[id10] matches {
+						defining_code matches {[ac1]}		-- Lung examined (synthesised)
+					}
+				}
+			}
+			ELEMENT[id3] occurrences matches {0..1} matches {	-- No abnormality detected
+				value matches {
+					DV_BOOLEAN[id11] matches {
+						value matches {True}
+					}
+				}
+			}
+			ELEMENT[id4] occurrences matches {0..1} matches {	-- Clinical description
+				value matches {
+					DV_TEXT[id12] 
+				}
+			}
+			allow_archetype CLUSTER[id5] matches {	-- Examination findings
+				include
+					archetype_id/value matches {/openEHR-EHR-CLUSTER\.auscultation_lung(-[a-zA-Z0-9_]+)*\.v0/}
+			}
+			allow_archetype CLUSTER[id6] matches {	-- Multimedia representation
+				include
+					archetype_id/value matches {/openEHR-EHR-CLUSTER\.multimedia(-[a-zA-Z0-9_]+)*\.v1/}
+			}
+			ELEMENT[id7] matches {	-- Clinical interpretation
+				value matches {
+					DV_TEXT[id13] 
+				}
+			}
+			ELEMENT[id8] occurrences matches {0..1} matches {	-- Comment
+				value matches {
+					DV_TEXT[id14] 
+				}
+			}
+			allow_archetype CLUSTER[id9] matches {	-- Exam not done
+				include
+					archetype_id/value matches {/openEHR-EHR-CLUSTER\.exclusion_exam(-[a-zA-Z0-9_]+)*\.v1/}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Examination of a lung">
+				description = <"Findings observed during the physical examination of a single lung.">
+			>
+			["id2"] = <
+				text = <"Lung examined">
+				description = <"Identification of the the lung under examination.">
+			>
+			["id3"] = <
+				text = <"No abnormality detected">
+				description = <"Statement that no abnormality was detected (NAD) on physical examination.">
+			>
+			["id4"] = <
+				text = <"Clinical description">
+				description = <"Narrative description of the overall findings observed during the physical examination.">
+			>
+			["id5"] = <
+				text = <"Examination findings">
+				description = <"Structured details about the physical examination findings.">
+			>
+			["id6"] = <
+				text = <"Multimedia representation">
+				description = <"Digital image, video or diagram representing the physical examination findings.">
+			>
+			["id7"] = <
+				text = <"Clinical interpretation">
+				description = <"Single word, phrase or brief description that represents the clinical meaning and significance of the physical examination findings.">
+			>
+			["id8"] = <
+				text = <"Comment">
+				description = <"Additional narrative about the physical examination findings, not captured in other fields.">
+			>
+			["id9"] = <
+				text = <"Exam not done">
+				description = <"Details to explicitly record that this examination was not performed.">
+			>
+			["at10"] = <
+				text = <"Left">
+				description = <"The left lung was examined.">
+			>
+			["at11"] = <
+				text = <"Right">
+				description = <"The right lung was examined.">
+			>
+			["ac1"] = <
+				text = <"Lung examined (synthesised)">
+				description = <"Identification of the the lung under examination. (synthesised)">
+			>
+		>
+		["nb"] = <
+			["id1"] = <
+				text = <"Undersøkelse av en lunge">
+				description = <"Funn gjort ved fysisk undersøkselse av en lunge.">
+			>
+			["id2"] = <
+				text = <"Undersøkt lunge">
+				description = <"Identfisering av undersøkt lunge">
+			>
+			["id3"] = <
+				text = <"Uten anmerkning">
+				description = <"Konstatering at funn ved undersøkelse ikke viste noe unormalt.">
+			>
+			["id4"] = <
+				text = <"Klinisk beskrivelse">
+				description = <"En tekstlig beskrivelse av samlete funn observert ved den kliniske undersøkelsen.">
+			>
+			["id5"] = <
+				text = <"Unbdersøkelsesfunn">
+				description = <"Strukturerte detaljer vedrørende funn ved klinisk undersøkelse.">
+			>
+			["id6"] = <
+				text = <"Multimedia fremstilling">
+				description = <"Digitale bilder, video eller diagram som representerer funnene ved klinisk undersøkelse.">
+			>
+			["id7"] = <
+				text = <"Klinisk interpretasjon">
+				description = <"Enkelt ord, frase eller kort beskrivelse som representerer klinisk betyning og signifikans av funnene ved klinisk undersøkelse.">
+			>
+			["id8"] = <
+				text = <"Kommentar">
+				description = <"Tekstlig tilleggsinformasjon vedrørende klinisk undersøkelse, som ikke er fanget opp i de andre datalementene.">
+			>
+			["id9"] = <
+				text = <"Undersøkelse ikke gjennomføt">
+				description = <"Detaljer for eksplisitt dokumentasjon nav at undersøkelsen ikke ble gjennomført.">
+			>
+			["at10"] = <
+				text = <"Venstre">
+				description = <"Venstre lunge ble undersøkt.">
+			>
+			["at11"] = <
+				text = <"Høyre">
+				description = <"Høyre lunge ble undersøkt.">
+			>
+			["ac1"] = <
+				text = <"Undersøkt lunge (synthesised)">
+				description = <"Identfisering av undersøkt lunge (synthesised)">
+			>
+		>
+	>
+	value_sets = <
+		["ac1"] = <
+			id = <"ac1">
+			members = <"at10", "at11">
+		>
+	>

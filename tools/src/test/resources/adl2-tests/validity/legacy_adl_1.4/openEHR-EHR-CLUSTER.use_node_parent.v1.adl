@@ -17,10 +17,13 @@ description
 		["en"] = <
 			language = <[ISO_639-1::en]>
 			purpose = <"Parent archetype for use-node redefinition">
-			copyright = <"">
+			copyright = <"openEHR Foundation">
 		>
 	>
 	lifecycle_state = <"Initial">
+	other_details = <
+		["regression"] = <"PASS">
+	>
 
 definition
 	CLUSTER[at0000] matches {	-- Laboratory test panel

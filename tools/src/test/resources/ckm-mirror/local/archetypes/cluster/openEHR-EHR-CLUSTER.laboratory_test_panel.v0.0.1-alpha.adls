@@ -1,0 +1,247 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated; uid=440253f1-61d9-49d3-ae27-58129bbeb6e0)
+	openEHR-EHR-CLUSTER.laboratory_test_panel.v0.0.1-alpha
+
+language
+	original_language = <[ISO_639-1::en]>
+	translations = <
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			author = <
+				["name"] = <"Silje Ljosland Bakke">
+				["organisation"] = <"Nasjonal IKT HF">
+			>
+		>
+	>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Ian McNicoll">
+		["organisation"] = <"freshEHR Clinical Informatics, UK">
+		["email"] = <"ian@freshehr.com">
+		["date"] = <"2015-07-20">
+	>
+	original_namespace = <"org.openehr">
+	original_publisher = <"openEHR Foundation">
+	custodian_namespace = <"org.openehr">
+	custodian_organisation = <"openEHR Foundation">
+	copyright = <"© openEHR Foundation">
+	licence = <"This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 License. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/.">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record laboratory test results as a single value or in a panel/battery format common to clinical pathology testing such as biochemistry, haematology and immunology.">
+			use = <"To record laboratory test results as a single value or in a panel/battery format common to clinical pathology testing such as biochemistry, haematology and immunology. Normally used in conjunction with a parent Laboratory test result (Observation) archetype.
+
+The name attribute of the Laboratory test panel/Result value element is normally replaced in a template or at run-time to carry the name of the specific analyte e.g. 'Haemoglobin', often coded with a reference terminology such as LOINC, SNOMED CT or NPU.
+
+Where other more complex result patterns are required it may be helpful to specialise this archetype or substitute another.">
+			keywords = <"laboratory", "pathology", "panel", "battery", "analyte">
+			misuse = <"Should not be used to record Anatomical pathology macroscopic/microscopic findings.">
+		>
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			purpose = <"For å registrere laboratorieanalyser som en enkeltverdi eller i en analysepakke.">
+			use = <"For å registrere laboratorieanalyser som en enkeltverdi eller i en analysepakke. Brukes normalt i arketypen OBSERVATION.laboratory_test.
+
+Navnene på elementene Laboratoriesvar/Svarverdi vil ordinært erstattes i en templat elller applikasjon med navnet på den spesifikke analysen. f.eks. \"Hemoglobin\", og ofte kodet med en terminologi som NLK, SNOMED CT eller LOINC.
+
+Der det kreves mer komplekse svarmønstre kan det være nødvendig å spesialisere denne arketypen, eller erstatte den med en annen.">
+			keywords = <"laboratorie", "panel", "batteri", "analytt", "analyse", "svar", "resultat", "pakke">
+			misuse = <"Skal ikke brukes til å registrere funn ved patologiundersøkelser.">
+		>
+	>
+	other_contributors = <"Heather Leslie, Ocean Informatics, Australia", "Nasjonal IKT, Norway">
+	references = <
+		["1"] = <"Based on NEHTA 'Pathology Test' archetype. Available from: http://dcm.nehta.org.au/ckm/OKM.html#showarchetype_1013.1.839_8">
+		["2"] = <"Pathology (Data Specifications) Version 1.0 [Internet]. Sydney, Australia: National E-Health Transition Authority; 2007 May 29 [cited 2011 Jul 11]; Available at http://www.nehta.gov.au/component/docman/doc_download/962-pathology-v10.">
+		["3"] = <"Laboratory Technical Framework, Volume 3: Content, Revision 3.0 [Internet]. USA: IHE International; 2011 May 19; [cited 2011 Jul 11]. Available from: http://www.ihe.net/Technical_Framework/index.cfm#laboratory">
+		["4"] = <"Hl7 FHIR Observation resource: HL7 FHIR; Available from http://www.hl7.org/implement/standards/fhir/observation.html">
+	>
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"CEB460F240FB987B15C7C50655BC132D">
+		["build_uid"] = <"759a5eea-3ac3-4239-beed-03af01c434de">
+	>
+
+definition
+	CLUSTER[id1] matches {	-- Laboratory test panel
+		items matches {
+			CLUSTER[id3] matches {	-- Laboratory result
+				items matches {
+					ELEMENT[id2] occurrences matches {0..1} 	-- Result value
+					ELEMENT[id4] matches {	-- Comment
+						value matches {
+							DV_TEXT[id16] 
+						}
+					}
+					ELEMENT[id5] occurrences matches {0..1} matches {	-- Reference range guidance
+						value matches {
+							DV_TEXT[id17] 
+						}
+					}
+					ELEMENT[id6] occurrences matches {0..1} matches {	-- Result status
+						value matches {
+							DV_CODED_TEXT[id18] matches {
+								defining_code matches {[ac1]}		-- Result status (synthesised)
+							}
+						}
+					}
+					ELEMENT[id7] occurrences matches {0..1} matches {	-- Result status timestamp
+						value matches {
+							DV_DATE_TIME[id19] 
+						}
+					}
+					allow_archetype CLUSTER[id15] matches {	-- Result detail
+						include
+							archetype_id/value matches {/.*/}
+					}
+				}
+			}
+			allow_archetype CLUSTER[id14] matches {	-- Other detail
+				include
+					archetype_id/value matches {/.*/}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Laboratory test panel">
+				description = <"Laboratory test result as a single value or in a panel/battery format common to clinical pathology testing.">
+			>
+			["id2"] = <
+				text = <"Result value">
+				description = <"Actual value of the result. The name of this element is normally replaced in a template or at run-time to relfect the actual analyte e.g. Serum sodium and will often be coded.">
+			>
+			["id3"] = <
+				text = <"Laboratory result">
+				description = <"Specific detailed result, including both the value of the result item, and additional information that may be useful for clinical interpretation.">
+			>
+			["id4"] = <
+				text = <"Comment">
+				description = <"Comment about the Result.">
+			>
+			["id5"] = <
+				text = <"Reference range guidance">
+				description = <"Additional advice on the applicability of the reference range.">
+			>
+			["id6"] = <
+				text = <"Result status">
+				description = <"The status of the result value.">
+			>
+			["id7"] = <
+				text = <"Result status timestamp">
+				description = <"The date and/or time that the entire result was issued for the recorded ‘Result status’.">
+			>
+			["at8"] = <
+				text = <"Registered">
+				description = <"No result yet available.">
+			>
+			["at9"] = <
+				text = <"Interim">
+				description = <"This is an initial or interim result: data may be missing or verification not been performed.">
+			>
+			["at10"] = <
+				text = <"Final">
+				description = <"The result is complete and verified by the responsible pathologist.">
+			>
+			["at11"] = <
+				text = <"Amended">
+				description = <"The result has been modified subsequent to being Final, and is complete and verified by the responsible pathologist.">
+			>
+			["at12"] = <
+				text = <"Cancelled/Aborted">
+				description = <"The result is unavailable because the test was not started or not completed.">
+			>
+			["at13"] = <
+				text = <"Not requested">
+				description = <"The result is not available as the test was not requested.">
+			>
+			["id14"] = <
+				text = <"Other detail">
+				description = <"Further details including the specimen for the panel or a further nested panel.">
+			>
+			["id15"] = <
+				text = <"Result detail">
+				description = <"Further detail regarding an individual result.">
+			>
+			["ac1"] = <
+				text = <"Result status (synthesised)">
+				description = <"The status of the result value. (synthesised)">
+			>
+		>
+		["nb"] = <
+			["id1"] = <
+				text = <"Laboratoriesvargruppe">
+				description = <"Laboratoriesvar som en enkeltverdi eller i et panel/pakkeformat.">
+			>
+			["id2"] = <
+				text = <"Svarverdi">
+				description = <"Svarets verdi. Navnet på dette elementet vil ordinært erstattes i en templat eller applikasjon med navnet og/eller koden på analysen, f.eks. Serum natrium.">
+			>
+			["id3"] = <
+				text = <"Laboratoriesvar">
+				description = <"Spesifikt detaljert svar, inkludert både verdien av svaret og annen informasjon som kan være nyttig i klinisk tolkning.">
+			>
+			["id4"] = <
+				text = <"Kommentar">
+				description = <"Kommentar om svaret.">
+			>
+			["id5"] = <
+				text = <"Veiledning til referanseområdet">
+				description = <"Ytterligere veiledning om anvendeligheten av referanseområdet.">
+			>
+			["id6"] = <
+				text = <"Svarstatus">
+				description = <"Statusen til svarverdien.">
+			>
+			["id7"] = <
+				text = <"Tidspunkt for svarstatus">
+				description = <"Dato og/eller tidspunkt hele svaret ble utstedt for den registrerte Svarstatus.">
+			>
+			["at8"] = <
+				text = <"Registrert">
+				description = <"Svar ikke tjengengelig enda.">
+			>
+			["at9"] = <
+				text = <"Foreløpig">
+				description = <"Dette er et midlertidig eller foreløpig svar. Data kan mangle, eller være uverifisert.">
+			>
+			["at10"] = <
+				text = <"Endelig">
+				description = <"Svaret er komplett og verifisert av ansvarlig laboratorielege.">
+			>
+			["at11"] = <
+				text = <"Endret">
+				description = <"Svaret er endret etter å ha hatt status Endelig, og er komplett og verifisert av ansvarlig laboratorielege.">
+			>
+			["at12"] = <
+				text = <"Kansellert">
+				description = <"Svaret er ikke tilgjengelig fordi analysen ikke ble påbegynt eller ferdigstilt.">
+			>
+			["at13"] = <
+				text = <"Ikke bestilt">
+				description = <"Svaret er ikke tilgjengelig siden analysen ikke ble bestilt.">
+			>
+			["id14"] = <
+				text = <"Andre detaljer">
+				description = <"Ytterligere detaljer, inkludert informasjon om prøveeksemplaret, eller en undergruppe av svar.">
+			>
+			["id15"] = <
+				text = <"Svardetaljer">
+				description = <"Ytterligere detaljer om et spesifikt svar.">
+			>
+			["ac1"] = <
+				text = <"Svarstatus (synthesised)">
+				description = <"Statusen til svarverdien. (synthesised)">
+			>
+		>
+	>
+	value_sets = <
+		["ac1"] = <
+			id = <"ac1">
+			members = <"at8", "at9", "at10", "at11", "at12", "at13">
+		>
+	>

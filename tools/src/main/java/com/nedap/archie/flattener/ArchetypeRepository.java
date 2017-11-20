@@ -1,6 +1,7 @@
 package com.nedap.archie.flattener;
 
 import com.nedap.archie.aom.Archetype;
+import java.util.List;
 
 /**
  * Created by pieter.bos on 21/10/15.
@@ -15,4 +16,27 @@ public interface ArchetypeRepository {
      * @return
      */
     Archetype getArchetype(String archetypeId);
+
+    public List<Archetype> getAllArchetypes();
+
+    void addArchetype(Archetype archetype);
+
+
+    /**
+     * Return true if an only if the child archetype has parent as its parent somewhere in the tree
+     * @param parent
+     * @param child
+     * @return
+     */
+    default boolean isChildOf(Archetype parent, Archetype child) {
+        if(child.getArchetypeId().equals(parent.getArchetypeId()) || child.getArchetypeId().toString().equals(parent.getArchetypeId().getSemanticId())) {
+            return true;
+        }
+        Archetype nextChild = getArchetype(child.getParentArchetypeId());
+        if(nextChild != null) {
+            return isChildOf(parent, nextChild);
+        }
+        return false;
+
+    }
 }

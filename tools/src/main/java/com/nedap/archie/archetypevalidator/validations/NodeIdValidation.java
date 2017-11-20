@@ -6,6 +6,8 @@ import com.nedap.archie.aom.CPrimitiveObject;
 import com.nedap.archie.archetypevalidator.ErrorType;
 import com.nedap.archie.archetypevalidator.ValidatingVisitor;
 import com.nedap.archie.archetypevalidator.ValidationMessage;
+import com.nedap.archie.flattener.ArchetypeRepository;
+import com.nedap.archie.rminfo.ModelInfoLookup;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,22 +23,26 @@ public class NodeIdValidation extends ValidatingVisitor {
     //for every id code, it's path
     private HashMap<String, String> nodeIds = new HashMap<>();
 
+    public NodeIdValidation() {
+        super();
+    }
+
     @Override
-    protected void beginValidation(Archetype archetype) {
+    protected void beginValidation() {
         nodeIds.clear();
     }
 
     @Override
-    public List<ValidationMessage> validate(CObject cObject) {
-        List<ValidationMessage> result = new ArrayList<>();
+    public void validate(CObject cObject) {
         if(cObject.getNodeId() == null) {
-            result.add(new ValidationMessage(ErrorType.VCOID, cObject.getPath()));
+            //every object must have a node id
+            addMessageWithPath(ErrorType.VCOID, cObject.getPath());
         }
         else if(!CPrimitiveObject.PRIMITIVE_NODE_ID_VALUE.equals(cObject.getNodeId()) && nodeIds.containsKey(cObject.getNodeId())) {
-            result.add(new ValidationMessage(ErrorType.VCOSU, cObject.getPath(), "node ID " + cObject.getNodeId() + " already used in " + nodeIds.get(cObject.getNodeId())));
+            //every node id in a single archetype must be unique or a primitive object
+            addMessageWithPath(ErrorType.VCOSU, cObject.getPath(), "node ID " + cObject.getNodeId() + " already used in " + nodeIds.get(cObject.getNodeId()));
         }
         nodeIds.put(cObject.getNodeId(), cObject.getPath());
-        return result;
     }
 
 

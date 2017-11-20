@@ -1,4 +1,4 @@
-archetype (adl_version=1.5.1; rm_release=1.0.2)
+archetype (adl_version=2.0.7; rm_release=1.0.2)
 	openEHR-EHR-OBSERVATION.VACSD_wrong_concept_spec_level.v1.0.0
 
 specialise

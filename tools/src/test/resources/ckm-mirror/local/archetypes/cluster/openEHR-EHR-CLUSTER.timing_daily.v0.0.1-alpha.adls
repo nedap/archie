@@ -1,0 +1,269 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated; uid=990278cc-5954-4bc3-8599-919417da096b)
+	openEHR-EHR-CLUSTER.timing_daily.v0.0.1-alpha
+
+language
+	original_language = <[ISO_639-1::en]>
+	translations = <
+		["sl"] = <
+			language = <[ISO_639-1::sl]>
+			author = <
+				["name"] = <"?">
+			>
+		>
+	>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Sam Heard">
+		["organisation"] = <"NEHTA">
+		["email"] = <"sam.heard@oceaninformatics.com">
+		["date"] = <"2010-11-12">
+	>
+	original_namespace = <"org.openehr">
+	original_publisher = <"openEHR Foundation">
+	custodian_namespace = <"org.openehr">
+	custodian_organisation = <"openEHR Foundation">
+	copyright = <"© openEHR Foundation">
+	licence = <"This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 License. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/.">
+	details = <
+		["sl"] = <
+			language = <[ISO_639-1::sl]>
+			purpose = <"*To provide structured information on time schedules within a single day that is suitable for computation and display for human interpretation.(en)">
+			use = <"">
+			misuse = <"">
+		>
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To provide structured information on time schedules within a single day that is suitable for computation and display for human interpretation.">
+			use = <"For use with medication orders and other instructions where timing is complex and needs to be computable.">
+			keywords = <"timing", "administration", "dosing", "frequency">
+			misuse = <"">
+		>
+	>
+	other_contributors = <"Silje Ljosland Bakke, Nasjonal IKT HF, Norway (openEHR Editor)", "Sharmila Biswas, Dr Sharmila Biswas, Australia", "Stephen Chu, NEHTA, Australia (Editor)", "David Evans, Queensland Health, Australia", "Sam Heard, Ocean Informatics, Australia (Editor)", "Heather Leslie, Ocean Informatics, Australia (openEHR Editor)", "Ian McNicoll, freshEHR Clinical Informatics, United Kingdom (openEHR Editor)", "Richard Townley-O'Neill, NEHTA, Australia (Editor)">
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"B479AA8F61F176A3E1A82B4567263EC4">
+		["build_uid"] = <"3408c1bc-b01d-40f6-92ef-9231074bd07f">
+	>
+
+definition
+	CLUSTER[id1] matches {	-- Timing - daily
+		items matches {
+			ELEMENT[id4] occurrences matches {0..1} matches {	-- Frequency
+				value matches {
+					DV_QUANTITY[id28] matches {
+						property matches {[at36]}
+						[magnitude, units, precision] matches {
+							[{|0.0..1.0|}, {"1/d"}, {0}],
+							[{|>=0.0|}, {"1/min"}, {|>=0|}],
+							[{|>=0.0|}, {"1/s"}, {|>=0|}],
+							[{|>=0.0|}, {"1/h"}, {|>=0|}]
+						}
+					}
+					DV_INTERVAL<DV_QUANTITY>[id29] matches {
+						upper matches {
+							DV_QUANTITY[id30] matches {
+								property matches {[at36]}
+								[magnitude, units, precision] matches {
+									[{|<=1.0|}, {"1/d"}, {0}],
+									[{|>=0.0|}, {"1/min"}, {|>=0|}],
+									[{|>=0.0|}, {"1/s"}, {|>=0|}],
+									[{|0.0..24.0|}, {"1/h"}, {0}]
+								}
+							}
+						}
+						lower matches {
+							DV_QUANTITY[id31] matches {
+								property matches {[at36]}
+								[magnitude, units] matches {
+									[{|>=0.0|}, {"1/d"}],
+									[{|>=0.0|}, {"1/min"}],
+									[{|>=0.0|}, {"1/s"}],
+									[{|>=0.0|}, {"1/h"}]
+								}
+							}
+						}
+					}
+				}
+			}
+			ELEMENT[id15] occurrences matches {0..1} matches {	-- Interval
+				value matches {
+					DV_DURATION[id32] matches {
+						value matches {PTHMS/|PT0S..PT24H|}
+					}
+				}
+			}
+			ELEMENT[id5] matches {	-- Specific time
+				value matches {
+					DV_TIME[id33] 
+					DV_INTERVAL<DV_TIME>[id34] matches {
+						upper matches {
+							DV_TIME[id35] 
+						}
+						lower matches {
+							DV_TIME[id36] 
+						}
+					}
+				}
+			}
+			ELEMENT[id27] matches {	-- Named time event
+				value matches {
+					DV_TEXT[id37] 
+					DV_CODED_TEXT[id38] matches {
+						defining_code matches {[ac1]}		-- Named time event (synthesised)
+					}
+				}
+			}
+			ELEMENT[id24] occurrences matches {0..1} matches {	-- Exact timing critical
+				value matches {
+					DV_BOOLEAN[id39] matches {
+						value matches {True, False}
+					}
+				}
+			}
+			ELEMENT[id25] occurrences matches {0..1} matches {	-- As required
+				value matches {
+					DV_BOOLEAN[id40] matches {
+						value matches {True, False}
+					}
+				}
+			}
+			ELEMENT[id26] occurrences matches {0..1} matches {	-- As required criterion
+				value matches {
+					DV_TEXT[id41] 
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Timing - daily">
+				description = <"Structured information about the timing (intended or actual) of administration or use of a medicine, other therapeutic good or other intervention that is given on a scheduled basis.">
+			>
+			["id4"] = <
+				text = <"Frequency">
+				description = <"The frequency as number of times per time period (limited to a single day) that the activity is to take place.">
+			>
+			["id5"] = <
+				text = <"Specific time">
+				description = <"A specific time or interval of time  during a single day when the activity should occur.">
+			>
+			["id15"] = <
+				text = <"Interval">
+				description = <"The time interval or minimum and maximum range of an interval between each scheduled activity, limited to a single day.">
+			>
+			["id24"] = <
+				text = <"Exact timing critical">
+				description = <"Is exact timing of the activity critical to patient safety or wellbeing?">
+			>
+			["id25"] = <
+				text = <"As required">
+				description = <"The activity should only occur when the \"as required\" trigger condition is met.">
+			>
+			["id26"] = <
+				text = <"As required criterion">
+				description = <"The condition which triggers an 'as required' activity.">
+			>
+			["id27"] = <
+				text = <"Named time event">
+				description = <"A specific, named time event within a single day, when the activity should occur.">
+			>
+			["at32"] = <
+				text = <"immediately (stat)">
+				description = <"Perform the activity immediately.">
+			>
+			["at33"] = <
+				text = <"in the morning">
+				description = <"Perform the activity in the morning.">
+			>
+			["at34"] = <
+				text = <"at night">
+				description = <"Perform the activity at night.">
+			>
+			["at35"] = <
+				text = <"in the morning and at night">
+				description = <"Perform the activity in the morning and at night.">
+			>
+			["at36"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["ac1"] = <
+				text = <"Named time event (synthesised)">
+				description = <"A specific, named time event within a single day, when the activity should occur. (synthesised)">
+			>
+		>
+		["sl"] = <
+			["id1"] = <
+				text = <"*Daily timing(en)">
+				description = <"*Structured information about the timing (intended or actual) of administration or use of a medicine, other therapeutic good or other intervention that is given on a scheduled basis.(en)">
+			>
+			["id4"] = <
+				text = <"*Frequency(en)">
+				description = <"*The frequency as number of times per time period (limited to a single day) that the activity is to take place.(en)">
+			>
+			["id5"] = <
+				text = <"*Specific time(en)">
+				description = <"*A specific time during a single day when the activity should occur.(en)">
+			>
+			["id15"] = <
+				text = <"*Interval(en)">
+				description = <"*The time interval between each scheduled activity, limited to a single day.(en)">
+			>
+			["id24"] = <
+				text = <"*Exact timing critical(en)">
+				description = <"*Is exact timing of the activity critical to patient safety or wellbeing?(en)">
+			>
+			["id25"] = <
+				text = <"*As required(en)">
+				description = <"*The activity should only occur when the \"as required\" trigger condition is met.(en)">
+			>
+			["id26"] = <
+				text = <"*As required criterion(en)">
+				description = <"*The condition which triggers an 'as required' activity.(en)">
+			>
+			["id27"] = <
+				text = <"*Named time event(en)">
+				description = <"*A specific, named time event within a single day, when the activity should occur.(en)">
+			>
+			["at32"] = <
+				text = <"*immediately (stat)(en)">
+				description = <"*Perform the activity immediately.(en)">
+			>
+			["at33"] = <
+				text = <"*in the morning(en)">
+				description = <"*Perform the activity in the morning.(en)">
+			>
+			["at34"] = <
+				text = <"*at night(en)">
+				description = <"*Perform the activity at night.(en)">
+			>
+			["at35"] = <
+				text = <"*in the morning and at night(en)">
+				description = <"*Perform the activity in the morning and at night.(en)">
+			>
+			["at36"] = <
+				text = <"*(added by post-parse processor)(en)">
+				description = <"*(added by post-parse processor)(en)">
+			>
+			["ac1"] = <
+				text = <"*Named time event(en) (synthesised)">
+				description = <"*A specific, named time event within a single day, when the activity should occur.(en) (synthesised)">
+			>
+		>
+	>
+	term_bindings = <
+		["openehr"] = <
+			["at36"] = <http://openehr.org/id/382>
+		>
+	>
+	value_sets = <
+		["ac1"] = <
+			id = <"ac1">
+			members = <"at32", "at33", "at34", "at35">
+		>
+	>

@@ -1,0 +1,285 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated)
+	openEHR-EHR-CLUSTER.palpation_of_uterus.v1.0.0
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Sam Heard">
+		["organisation"] = <"Ocean Informatics">
+		["email"] = <"sam.heard@oceaninformatics.com">
+		["date"] = <"2007- 04-08">
+	>
+	copyright = <"© National E-Health Transition Authority">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"Record clinical examination findings on palpation of the uterus, either from an abdominal or vaginal approach.">
+			use = <"Use to record examination findings on palpation of the uterus. This archetype can be used to record either abdominal or vaginal examination findings, and including findings about the pregnant uterus.
+
+This archetype has been designed to be nested inside the OBSERVATION.exam archetype (and its specialisations) or other relevant CLUSTER archetypes, for example providing specific detail in CLUSTER.palpation_of_abdomen which describes palpation of the whole abdomen.">
+			keywords = <"uterus", "fetus", "foetus", "baby", "abdominally", "vaginally">
+			misuse = <"Not to be used to record examination findings on palpation of an individual fetus. Specific examination findings about the fetus should be recorded in CLUSTER.palpation_of_fetus, which can be nested inside this archetype, within the 'Fetal Detail' SLOT.">
+		>
+	>
+	other_contributors = <"Rita Apelt, Department of Health,NT, Australia", "Stephen Chu, NEHTA, Australia", "Margaret Cotter, AMSANT, Australia", "Tim Garden, NTG Department of Health, Australia", "Tanya Gardner, CAAC, Australia", "Sam Heard, Ocean Informatics, Australia (Editor)", "Heather Leslie, Ocean Informatics, Australia (Editor)", "Hugh Leslie, Ocean Informatics, Australia", "Chunlan Ma, Ocean Informatics, Australia", "Ian McNicoll, Ocean Informatics UK, United Kingdom", "Jeremy Oats, NT Health, Australia", "Jo Wright, NT Dept of Health, Australia (Editor)">
+	references = <
+		["1"] = <"openEHR Clinical Knowledge Manager [Internet]. London: openEHR Foundation. [Draft CLUSTER archetype] Examination of the uterus; [authored 2007 Apr 19, cited 2011 Aug 12]. Available from : http://www.openehr.org/knowledge/OKM.html#showArchetype_1013.1.230_4.">
+	>
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"F35A1D25F3D59D5559B97364F1FAFAA9">
+	>
+
+definition
+	CLUSTER[id1] matches {	-- Palpation of Uterus
+		items matches {
+			ELEMENT[id2] occurrences matches {0..1} matches {	-- Clinical Description
+				value matches {
+					DV_TEXT[id32] 
+				}
+			}
+			CLUSTER[id8] occurrences matches {0..1} matches {	-- Uterine size
+				items matches {
+					ELEMENT[id6] occurrences matches {0..1} matches {	-- Fundal Height
+						value matches {
+							DV_QUANTITY[id33] matches {
+								property matches {[at40]}
+								[magnitude, units] matches {
+									[{|0.0..100.0|}, {"cm"}],
+									[{|0.0..100.0|}, {"in"}]
+								}
+							}
+						}
+					}
+					ELEMENT[id7] occurrences matches {0..1} matches {	-- Gestation
+						value matches {
+							DV_DURATION[id34] matches {
+								value matches {PW/|PT0S..P50W|}
+							}
+						}
+					}
+					ELEMENT[id9] occurrences matches {0..1} matches {	-- Relative Size
+						value matches {
+							DV_CODED_TEXT[id35] matches {
+								defining_code matches {[ac1]}		-- Relative Size (synthesised)
+							}
+						}
+					}
+				}
+			}
+			ELEMENT[id3] occurrences matches {0..1} matches {	-- Position
+				value matches {
+					DV_CODED_TEXT[id36] matches {
+						defining_code matches {[ac2]}		-- Position (synthesised)
+					}
+				}
+			}
+			ELEMENT[id31] occurrences matches {0..1} matches {	-- Mobility
+				value matches {
+					DV_CODED_TEXT[id37] matches {
+						defining_code matches {[ac3]}		-- Mobility (synthesised)
+					}
+				}
+			}
+			ELEMENT[id28] occurrences matches {0..1} matches {	-- Surface
+				value matches {
+					DV_TEXT[id38] 
+				}
+			}
+			ELEMENT[id30] occurrences matches {0..1} matches {	-- Tenderness
+				value matches {
+					DV_TEXT[id39] 
+				}
+			}
+			ELEMENT[id29] occurrences matches {0..1} matches {	-- Consistency
+				value matches {
+					DV_TEXT[id40] 
+				}
+			}
+			ELEMENT[id13] occurrences matches {0..1} matches {	-- Liquor Volume
+				value matches {
+					DV_CODED_TEXT[id41] matches {
+						defining_code matches {[ac4]}		-- Liquor Volume (synthesised)
+					}
+				}
+			}
+			ELEMENT[id21] occurrences matches {0..1} matches {	-- Number of Fetuses
+				value matches {
+					DV_COUNT[id42] matches {
+						magnitude matches {|>=0|}
+					}
+				}
+			}
+			allow_archetype CLUSTER[id23] matches {	-- Fetal Detail
+				include
+					archetype_id/value matches {/openEHR-EHR-CLUSTER\.palpation_of_fetus(-[a-zA-Z0-9_]+)*\.v1/}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Palpation of Uterus">
+				description = <"Examination of the uterus by palpation, using either an abdominal or vaginal approach.">
+			>
+			["id2"] = <
+				text = <"Clinical Description">
+				description = <"Narrative description of findings on examination of the uterus.">
+			>
+			["id3"] = <
+				text = <"Position">
+				description = <"Position of uterus.">
+			>
+			["at4"] = <
+				text = <"Anteverted">
+				description = <"Uterine fundus is tipped forward.">
+			>
+			["at5"] = <
+				text = <"Retroverted">
+				description = <"Uterine fundus is tipped backward.">
+			>
+			["id6"] = <
+				text = <"Fundal Height">
+				description = <"The height of the uterine fundus measured from the symphysis pubis.">
+			>
+			["id7"] = <
+				text = <"Gestation">
+				description = <"Uterine size estimation, expressed as length of gestation.">
+			>
+			["id8"] = <
+				text = <"Uterine size">
+				description = <"Measurement or estimation of the size of the uterus.">
+			>
+			["id9"] = <
+				text = <"Relative Size">
+				description = <"Estimated size of the uterus relative to commonly used anatomical markers, estimations of pregnancy gestation (even if non-pregnant) or common objects.">
+			>
+			["at10"] = <
+				text = <"At pubic symphysis">
+				description = <"The fundus of the uterus is just palpable above the pubic symphysis on abdominal examination, and approximately equivalent to the size of a pregnant uterus at 12 weeks.">
+			>
+			["at11"] = <
+				text = <"At umbilicus">
+				description = <"The fundus of the uterus is palpable at, or about, the level of the umbilicus.">
+			>
+			["at12"] = <
+				text = <"At xiphisternum">
+				description = <"The fundus of the uterus is palpable at, or about, the xiphisternum.">
+			>
+			["id13"] = <
+				text = <"Liquor Volume">
+				description = <"Assessment of the relative amount of liquor present in the uterus.">
+			>
+			["at15"] = <
+				text = <"Decreased">
+				description = <"The amount of liquor appears reduced; less than expected for gestation.">
+			>
+			["at17"] = <
+				text = <"Normal">
+				description = <"The amount of liquor appears normal; as expected for gestation.">
+			>
+			["at19"] = <
+				text = <"Increased">
+				description = <"The amount of liquor appears increased; more than expected for gestation.">
+			>
+			["id21"] = <
+				text = <"Number of Fetuses">
+				description = <"The number of fetuses found on palpation of the uterus.">
+			>
+			["id23"] = <
+				text = <"Fetal Detail">
+				description = <"Detailed information about the fetus. Record details about each fetus in a multiple birth separately.">
+			>
+			["at24"] = <
+				text = <"10 weeks gestation">
+				description = <"Uterus is obviously enlarged - approximately equivalent to the size of a grapefruit or a pregnant uterus of 10 weeks gestation.">
+			>
+			["at25"] = <
+				text = <"8 weeks gestation">
+				description = <"Uterus is moderately enlarged - approximately equivalent to the size of a pregnant uterus at 8 weeks gestation.">
+			>
+			["at26"] = <
+				text = <"6 weeks gestation">
+				description = <"Uterus is slightly enlarged - approximately equivalent to the size of a pregnant uterus at 6 weeks gestation.">
+			>
+			["at27"] = <
+				text = <"Normal size">
+				description = <"Uterus is approximately the size of a plum or a normal, non-pregnant uterus.">
+			>
+			["id28"] = <
+				text = <"Surface">
+				description = <"Narrative description of the surface and shape of the uterus.">
+			>
+			["id29"] = <
+				text = <"Consistency">
+				description = <"Narrative description of the consistency of the uterus.">
+			>
+			["id30"] = <
+				text = <"Tenderness">
+				description = <"Narrative description of any findings of tenderness.">
+			>
+			["id31"] = <
+				text = <"Mobility">
+				description = <"Mobility of the uterus.">
+			>
+			["at37"] = <
+				text = <"Mobile">
+				description = <"Uterus is moveable.">
+			>
+			["at38"] = <
+				text = <"Fixed">
+				description = <"Uterus is fixed and immobile.">
+			>
+			["at39"] = <
+				text = <"Upright">
+				description = <"Uterine fundus is neither anteverted nor retroverted.">
+			>
+			["at40"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+			["ac1"] = <
+				text = <"Relative Size (synthesised)">
+				description = <"Estimated size of the uterus relative to commonly used anatomical markers, estimations of pregnancy gestation (even if non-pregnant) or common objects. (synthesised)">
+			>
+			["ac2"] = <
+				text = <"Position (synthesised)">
+				description = <"Position of uterus. (synthesised)">
+			>
+			["ac3"] = <
+				text = <"Mobility (synthesised)">
+				description = <"Mobility of the uterus. (synthesised)">
+			>
+			["ac4"] = <
+				text = <"Liquor Volume (synthesised)">
+				description = <"Assessment of the relative amount of liquor present in the uterus. (synthesised)">
+			>
+		>
+	>
+	term_bindings = <
+		["openehr"] = <
+			["at40"] = <http://openehr.org/id/122>
+		>
+	>
+	value_sets = <
+		["ac1"] = <
+			id = <"ac1">
+			members = <"at27", "at26", "at25", "at24", "at10", "at11", "at12">
+		>
+		["ac2"] = <
+			id = <"ac2">
+			members = <"at4", "at39", "at5">
+		>
+		["ac3"] = <
+			id = <"ac3">
+			members = <"at37", "at38">
+		>
+		["ac4"] = <
+			id = <"ac4">
+			members = <"at15", "at17", "at19">
+		>
+	>

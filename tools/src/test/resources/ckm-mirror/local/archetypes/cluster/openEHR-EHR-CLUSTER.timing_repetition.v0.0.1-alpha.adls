@@ -1,0 +1,218 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated; uid=b40ad367-5aeb-4689-93bd-576986ede5cc)
+	openEHR-EHR-CLUSTER.timing_repetition.v0.0.1-alpha
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Ian McNicoll">
+		["organisation"] = <"freshEHR Clinical Informatics Ltd.">
+		["email"] = <"ian@freshehr.com">
+		["date"] = <"2015-09-11">
+	>
+	original_namespace = <"org.openehr">
+	original_publisher = <"openEHR Foundation">
+	custodian_namespace = <"org.openehr">
+	custodian_organisation = <"openEHR Foundation">
+	copyright = <"© openEHR Foundation">
+	licence = <"This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 License. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/.">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record details of scheduled activities over periods longer than a single day.">
+			use = <"">
+			misuse = <"">
+		>
+	>
+	other_contributors = <"Silje Ljosland Bakke, Nasjonal IKT HF, Norway (openEHR Editor)", "Heather Leslie, Ocean Informatics, Australia (openEHR Editor)", "Ian McNicoll, freshEHR Clinical Informatics, United Kingdom (openEHR Editor)", "John Tore Valand, Helse Bergen, Norway (openEHR Editor)">
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"A182F8A4EA32F8F75E6C0573A5A3B94C">
+		["build_uid"] = <"61cff0b3-ad8c-4e43-8bee-4f609e6da438">
+	>
+
+definition
+	CLUSTER[id1] matches {	-- Timing - repetition
+		items matches {
+			ELEMENT[id3] occurrences matches {0..1} matches {	-- Repetition interval
+				value matches {
+					DV_DURATION[id17] matches {
+						value matches {PYMWD/|>=PT0S|}
+					}
+				}
+			}
+			ELEMENT[id16] occurrences matches {0..1} matches {	-- Single activity only
+				value matches {
+					DV_BOOLEAN[id18] matches {
+						value matches {True}
+					}
+				}
+			}
+			ELEMENT[id15] occurrences matches {0..1} matches {	-- Frequency
+				value matches {
+					DV_QUANTITY[id19] matches {
+						property matches {[at1]}
+						[magnitude, units, precision] matches {
+							[{|>=0.0|}, {"1/wk"}, {|>=0|}],
+							[{|>=0.0|}, {"1/mo"}, {|>=0|}],
+							[{|>=0.0|}, {"1/yr"}, {0}]
+						}
+					}
+					DV_INTERVAL<DV_QUANTITY>[id20] matches {
+						upper matches {
+							DV_QUANTITY[id21] matches {
+								property matches {[at1]}
+								[magnitude, units, precision] matches {
+									[{|0.0..7.0|}, {"1/wk"}, {0}],
+									[{|0.0..31.0|}, {"1/mo"}, {0}],
+									[{|0.0..365.0|}, {"1/yr"}, {0}]
+								}
+							}
+						}
+						lower matches {
+							DV_QUANTITY[id22] matches {
+								property matches {[at1]}
+								[magnitude, units, precision] matches {
+									[{|0.0..7.0|}, {"1/wk"}, {0}],
+									[{|0.0..31.0|}, {"1/mo"}, {0}],
+									[{|0.0..365.0|}, {"1/yr"}, {0}]
+								}
+							}
+						}
+					}
+				}
+			}
+			ELEMENT[id2] matches {	-- Specific date
+				value matches {
+					DV_DATE_TIME[id23] 
+				}
+			}
+			ELEMENT[id4] matches {	-- Specific day of week
+				value matches {
+					DV_COUNT[id24] matches {
+						magnitude matches {|0..6|}
+					}
+				}
+			}
+			ELEMENT[id5] matches {	-- Specific day of month
+				value matches {
+					DV_COUNT[id25] matches {
+						magnitude matches {|1..31|}
+					}
+				}
+			}
+			CLUSTER[id7] matches {	-- Specific event
+				items matches {
+					ELEMENT[id6] occurrences matches {0..1} matches {	-- Event name
+						value matches {
+							DV_TEXT[id26] 
+						}
+					}
+					ELEMENT[id10] occurrences matches {0..1} matches {	-- Start interval
+						value matches {
+							DV_DURATION[id27] matches {
+								value matches {PYMWD}
+							}
+						}
+					}
+				}
+			}
+			CLUSTER[id11] matches {	-- On /off cycle
+				items matches {
+					ELEMENT[id12] occurrences matches {0..1} matches {	-- On
+						value matches {
+							DV_DURATION[id28] matches {
+								value matches {PYMWD/|>=PT0S|}
+							}
+						}
+					}
+					ELEMENT[id13] occurrences matches {0..1} matches {	-- Off
+						value matches {
+							DV_DURATION[id29] matches {
+								value matches {PYWD/|>=PT0S|}
+							}
+						}
+					}
+					ELEMENT[id14] occurrences matches {0..1} matches {	-- Repetitions
+						value matches {
+							DV_COUNT[id30] matches {
+								magnitude matches {|>=0|}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Timing - repetition">
+				description = <"Details of timing schedules repeating over periods longer than a single day.">
+			>
+			["id2"] = <
+				text = <"Specific date">
+				description = <"The activity should take place on a specific date.">
+			>
+			["id3"] = <
+				text = <"Repetition interval">
+				description = <"The interval between repetitions of the activity.">
+			>
+			["id4"] = <
+				text = <"Specific day of week">
+				description = <"The activity should take place on a specific day of the week, with 0 representing Sunday.">
+			>
+			["id5"] = <
+				text = <"Specific day of month">
+				description = <"The activity should take place on a specific day of the month.">
+			>
+			["id6"] = <
+				text = <"Event name">
+				description = <"The name of the event that triggers the activity to take place.">
+			>
+			["id7"] = <
+				text = <"Specific event">
+				description = <"The activity should take place in relation to a specific named event.">
+			>
+			["id10"] = <
+				text = <"Start interval">
+				description = <"The period of time before or after the named event when the activity should take place. Negative durations can be used to signifify that the activity should be taken before a known event.">
+			>
+			["id11"] = <
+				text = <"On /off cycle">
+				description = <"A cycle of activity where an on-off pattern is required.">
+			>
+			["id12"] = <
+				text = <"On">
+				description = <"The period of time for which the activity should take place.">
+			>
+			["id13"] = <
+				text = <"Off">
+				description = <"The period of time for which the activity should NOT take place.">
+			>
+			["id14"] = <
+				text = <"Repetitions">
+				description = <"The number of repetitions of the on/off cycle.">
+			>
+			["id15"] = <
+				text = <"Frequency">
+				description = <"The number of days per time period on which the activity is to take place.">
+			>
+			["id16"] = <
+				text = <"Single activity only">
+				description = <"The activity should only be performed on a single occasion and is not to be repeated.">
+			>
+			["at1"] = <
+				text = <"(added by post-parse processor)">
+				description = <"(added by post-parse processor)">
+			>
+		>
+	>
+	term_bindings = <
+		["openehr"] = <
+			["at1"] = <http://openehr.org/id/382>
+		>
+	>

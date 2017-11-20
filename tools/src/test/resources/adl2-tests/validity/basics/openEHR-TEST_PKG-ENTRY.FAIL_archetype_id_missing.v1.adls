@@ -1,5 +1,3 @@
-concept
-	[at0000]
 language
 	original_language = <[ISO_639-1::en]>
 description
@@ -20,16 +18,14 @@ description
 	lifecycle_state = <"draft">
 
 definition
-	ENTRY[at0000] matches {*}
+	ENTRY[id1]
 
-ontology
+terminology
 	term_definitions = <
 		["en"] = <
-			items = <
-				["at0000"] = <
-					text = <"">
-					description = <"">
-				>
-			>
+            ["id1"] = <
+                text = <"">
+                description = <"">
+            >
 		>
 	>

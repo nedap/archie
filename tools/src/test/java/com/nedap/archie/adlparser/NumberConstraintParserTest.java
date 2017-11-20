@@ -44,7 +44,6 @@ public class NumberConstraintParserTest extends PrimitivesConstraintParserTest {
 		CInteger integerAttr10 = getAttribute("integer_attr10");
 		CInteger integerAttr11 = getAttribute("integer_attr11");
 		CInteger integerAttr12 = getAttribute("integer_attr12");
-		CInteger integerAttr14 = getAttribute("integer_attr14");
         assertEquals(new Interval<>(55l), integerAttr1.getConstraint().get(0));
 		//2 = list!
 		assertEquals(new Interval<>(10l), integerAttr2.getConstraint().get(0));
@@ -61,7 +60,6 @@ public class NumberConstraintParserTest extends PrimitivesConstraintParserTest {
 		assertEquals(Interval.lowerUnbounded(10l, true), integerAttr10.getConstraint().get(0));
 		assertEquals(new Interval<>(-10l, -5l), integerAttr11.getConstraint().get(0));
 		assertEquals(new Interval<>(10l), integerAttr12.getConstraint().get(0));
-		assertEquals(Lists.newArrayList(new Interval<Long>(0l, 1l), new Interval<Long>(2l, 3l)), integerAttr14.getConstraint());
     }
 
 
@@ -94,7 +92,6 @@ public class NumberConstraintParserTest extends PrimitivesConstraintParserTest {
 		CReal realAttr10 = getAttribute("real_attr10");
 		CReal realAttr11 = getAttribute("real_attr11");
 		CReal realAttr12 = getAttribute("real_attr12");
-        CReal realAttr14 = getAttribute("real_attr14");
 		assertEquals(new Interval<>(100d), realAttr1.getConstraint().get(0));
 		//2 = list!
 		assertEquals(new Interval<>(10d), realAttr2.getConstraint().get(0));
@@ -105,13 +102,12 @@ public class NumberConstraintParserTest extends PrimitivesConstraintParserTest {
 		assertEquals(new Interval<>(0d, 100d, false, true), realAttr4.getConstraint().get(0));
 		assertEquals(new Interval<>(0d, 100d, true, false), realAttr5.getConstraint().get(0));
 		assertEquals(new Interval<>(0d, 100d, false, false), realAttr6.getConstraint().get(0));
-		assertEquals(Interval.upperUnbounded(10d, false), realAttr7.getConstraint().get(0));
-		assertEquals(Interval.lowerUnbounded(10d, false), realAttr8.getConstraint().get(0));
+		assertEquals(Interval.upperUnbounded(10d, true), realAttr7.getConstraint().get(0));
+		assertEquals(Interval.lowerUnbounded(10d, true), realAttr8.getConstraint().get(0));
 		assertEquals(Interval.upperUnbounded(10d, true), realAttr9.getConstraint().get(0));
 		assertEquals(Interval.lowerUnbounded(10d, true), realAttr10.getConstraint().get(0));
 		assertEquals(new Interval<>(-10d, -5d), realAttr11.getConstraint().get(0));
 		assertEquals(new Interval<>(10d), realAttr12.getConstraint().get(0));
-        assertEquals(Lists.newArrayList(new Interval<Double>(0.0d, 1.0d), new Interval<Double>(2.0d, 3.0d)), realAttr14.getConstraint());
     }
 
 
@@ -127,7 +123,7 @@ public class NumberConstraintParserTest extends PrimitivesConstraintParserTest {
 	*/
     @Test
     public void assumedIntegerValues() throws Exception {
-		archetype = parser.parse(TemporalConstraintParserTest.class.getResourceAsStream("/adl2-tests/features/aom_structures/basic/openEHR-TEST_PKG-WHOLE.assumed_values.v1.adls"));
+		archetype = parser.parse(TemporalConstraintParserTest.class.getResourceAsStream("/adl2-tests/features/aom_structures/basic/openEHR-TEST_PKG-WHOLE.assumed_values.v1.0.0.adls"));
 		CInteger integerAttr1 = getAttribute("integer_attr1");
 		CInteger integerAttr2 = getAttribute("integer_attr2");
 		CInteger integerAttr3 = getAttribute("integer_attr3");
@@ -177,7 +173,7 @@ public class NumberConstraintParserTest extends PrimitivesConstraintParserTest {
 	 */
 	@Test
 	public void assumedRealValues() throws Exception {
-		archetype = parser.parse(TemporalConstraintParserTest.class.getResourceAsStream("/adl2-tests/features/aom_structures/basic/openEHR-TEST_PKG-WHOLE.assumed_values.v1.adls"));
+		archetype = parser.parse(TemporalConstraintParserTest.class.getResourceAsStream("/adl2-tests/features/aom_structures/basic/openEHR-TEST_PKG-WHOLE.assumed_values.v1.0.0.adls"));
 		CReal realAttr1 = getAttribute("real_attr1");
 		CReal realAttr2 = getAttribute("real_attr2");
 		CReal realAttr3 = getAttribute("real_attr3");
@@ -200,9 +196,9 @@ public class NumberConstraintParserTest extends PrimitivesConstraintParserTest {
 		assertEquals(new Double(20.4d), realAttr3.getAssumedValue());
 
 
-		assertEquals(Interval.upperUnbounded(10d, false), realAttr4.getConstraint().get(0));
+		assertEquals(Interval.upperUnbounded(10d, true), realAttr4.getConstraint().get(0));
 		assertEquals(new Double(20d), realAttr4.getAssumedValue());
-		assertEquals(Interval.lowerUnbounded(10d, false), realAttr5.getConstraint().get(0));
+		assertEquals(Interval.lowerUnbounded(10d, true), realAttr5.getConstraint().get(0));
 		assertEquals(new Double(9.5d), realAttr5.getAssumedValue());
 		assertEquals(Interval.upperUnbounded(10d, true), realAttr6.getConstraint().get(0));
 		assertEquals(new Double(20.3d), realAttr6.getAssumedValue());

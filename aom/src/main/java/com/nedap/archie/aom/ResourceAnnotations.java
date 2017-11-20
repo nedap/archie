@@ -15,6 +15,9 @@ import java.util.Map;
 public class ResourceAnnotations  extends ArchetypeModelObject {
     //TODO: write more convenient methods than this very deep map
     //TODO: probably a custom XML adapter for JAXB
+
+    //language -> path -> annotation key -> annotation
+    //so: en -> /value/items -> 'extra description' -> 'some description here'
     //@XmlElement(name="documentation")
     @XmlTransient
     private Map<String, Map<String, Map<String, String>>> documentation;

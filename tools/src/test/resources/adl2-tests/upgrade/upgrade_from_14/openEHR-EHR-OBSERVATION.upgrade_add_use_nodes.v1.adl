@@ -1,7 +1,7 @@
 ﻿archetype (adl_version=1.4)
 	openEHR-EHR-OBSERVATION.upgrade_add_use_nodes.v1
 specialise
-	openEHR-EHR-OBSERVATION.upgrade_parent_1.v1
+	openEHR-EHR-OBSERVATION.upgrade_parent.v1
 
 concept
 	[at0000.1]	-- Blood glucose

@@ -1,0 +1,661 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated; uid=0bc353a0-345f-4b4c-8f4e-f39c4e925a53)
+	openEHR-EHR-OBSERVATION.honos.v0.0.1-alpha
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Kate Bryan">
+		["organisation"] = <"Stalis Ltd">
+		["email"] = <"kate.b@stalis.com">
+		["date"] = <"2015-11-13">
+	>
+	original_namespace = <"org.openehr">
+	original_publisher = <"openEHR Foundation">
+	custodian_namespace = <"org.openehr">
+	custodian_organisation = <"openEHR Foundation">
+	copyright = <"© openEHR Foundation">
+	licence = <"This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 License. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/.">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"Records the HoNOS score as a simple, repeatable method to document the service user's health or social status at a specific point in time, say at the start or end of an episode of care, after a course of treatment or some other intervention.">
+			use = <"The use of HoNOS is recommended by the English National Service Framework for Mental Health and by the working group to the Department of Health on outcome indicators for severe mental illnesses.
+HoNOS is the most widely used routine clinical outcome measure used by English mental health services.
+
+The 12 scales that are scored are:
+1. Overactive, aggressive, disruptive or agitated behaviour
+2. Non-accidental self-injury
+3. Problem drinking or drug-taking
+4. Cognitive problems
+5. Physical illness or disability problems
+6. Problems associated with hallucinations and delusions
+7. Problems with depressed mood
+8. Other mental and behavioural problems
+9. Problems with relationships
+10. Problems with activities of daily living
+11. Problems with living conditions
+12. Problems with occupation and activities
+
+All scales follow the format:
+0 = no problem
+1 = minor problem requiring no action
+2 = mild problem but definitely present
+3 = moderately severe problem
+4 = severe to very severe problem 
+
+Each scale is rated in order from 1 to 12. Do not include information rated in an earlier item except for item 10 which is an overall rating. The rating is made on the basis of all information available to the rater (whatever the source) and is based on the most severe problem that occurred during the period rated (usually the two weeks leading up to the point of rating).
+
+The HoNOS system is not a standardised clinical assessment and cannot be a substitute for one.
+
+The minimum required is that a rating is made at the start of each episode of care and at the end. Most services using HoNOS also require ratings at any regular review (like the English Care Programme Approach review), when there is a major change in the patient's status (for instance, an admission to or discharge from hospital) HoNOS Score is a copyrighted assessment score: Health of the Nation Outcome Scales (HoNOS) © Royal College of Psychiatrists 1996.
+Please note, from RACP copyright guidance: 
+- \"The RCPsych allows without express permission the free use, copy and reproduction of HoNOS scoresheets for use in NHS-funded care. Use, copy or reproduction of HoNOS scoresheets for any other purpose should be with the explicit permission of the RCPsych.\"
+- \"The RCPsych allows without express permission NHS organisations and other providers of NHS funded care to include HoNOS scoresheets in electronic healthcare records and other computerised clinical systems.\"
+ (http://www.rcpsych.ac.uk/traininpsychiatry/conferencestraining/resources/honos/copyright.aspx)and, for long episodes of care, at every 6 months or so.">
+			keywords = <"HoNOS", "assessment", "score", "mental health", "health of the nation", "index">
+			misuse = <"Users of the HoNOS Score archetype must ensure that they comply with the terms of use of the Royal College of Psychiatrists who own the copyright as per http://www.rcpsych.ac.uk/traininpsychiatry/conferencestraining/resources/honos/copyright.aspx. It should not be used outside the terms of the copyright.">
+		>
+	>
+	references = <
+		["1"] = <"http://www.rcpsych.ac.uk/traininpsychiatry/conferencestraining/resources/honos/whatishonos.aspx">
+		["2"] = <"http://www.rcpsych.ac.uk/traininpsychiatry/conferencestraining/resources/honos/generalinformation/faq.aspx">
+	>
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"19C84ACB68AB64958EBF6C093DE5EBF9">
+		["build_uid"] = <"8e76f707-e261-40ba-85de-0ae73af9e303">
+	>
+
+definition
+	OBSERVATION[id1] matches {	-- HoNOS score
+		data matches {
+			HISTORY[id2] matches {
+				events cardinality matches {1..*; unordered} matches {
+					POINT_EVENT[id77] occurrences matches {0..1} matches {	-- Start of episode of care
+						data matches {
+							ITEM_TREE[id4] matches {
+								items matches {
+									ELEMENT[id5] occurrences matches {0..1} matches {	-- Overactive, aggressive, disruptive or agitated behaviour
+										value matches {
+											DV_ORDINAL[id79] matches {
+												[value, symbol] matches {
+													[{0}, {[at6]}],
+													[{1}, {[at7]}],
+													[{2}, {[at8]}],
+													[{3}, {[at9]}],
+													[{4}, {[at10]}]
+												}
+											}
+										}
+									}
+									ELEMENT[id11] occurrences matches {0..1} matches {	-- Non-accidental self-injury
+										value matches {
+											DV_ORDINAL[id80] matches {
+												[value, symbol] matches {
+													[{0}, {[at12]}],
+													[{1}, {[at13]}],
+													[{2}, {[at14]}],
+													[{3}, {[at55]}],
+													[{4}, {[at56]}]
+												}
+											}
+										}
+									}
+									ELEMENT[id15] occurrences matches {0..1} matches {	-- Problem drinking or drug-taking
+										value matches {
+											DV_ORDINAL[id81] matches {
+												[value, symbol] matches {
+													[{0}, {[at25]}],
+													[{1}, {[at35]}],
+													[{2}, {[at45]}],
+													[{3}, {[at57]}],
+													[{4}, {[at67]}]
+												}
+											}
+										}
+									}
+									ELEMENT[id16] occurrences matches {0..1} matches {	-- Cognitive problems
+										value matches {
+											DV_ORDINAL[id82] matches {
+												[value, symbol] matches {
+													[{0}, {[at26]}],
+													[{1}, {[at36]}],
+													[{2}, {[at46]}],
+													[{3}, {[at58]}],
+													[{4}, {[at68]}]
+												}
+											}
+										}
+									}
+									ELEMENT[id17] occurrences matches {0..1} matches {	-- Physical illness or disability problems
+										value matches {
+											DV_ORDINAL[id83] matches {
+												[value, symbol] matches {
+													[{0}, {[at27]}],
+													[{1}, {[at37]}],
+													[{2}, {[at47]}],
+													[{3}, {[at59]}],
+													[{4}, {[at69]}]
+												}
+											}
+										}
+									}
+									ELEMENT[id18] occurrences matches {0..1} matches {	-- Problems associated with hallucinations and delusions
+										value matches {
+											DV_ORDINAL[id84] matches {
+												[value, symbol] matches {
+													[{0}, {[at28]}],
+													[{1}, {[at38]}],
+													[{2}, {[at48]}],
+													[{3}, {[at60]}],
+													[{4}, {[at70]}]
+												}
+											}
+										}
+									}
+									ELEMENT[id19] occurrences matches {0..1} matches {	-- Problems with depressed mood
+										value matches {
+											DV_ORDINAL[id85] matches {
+												[value, symbol] matches {
+													[{0}, {[at29]}],
+													[{1}, {[at39]}],
+													[{2}, {[at49]}],
+													[{3}, {[at61]}],
+													[{4}, {[at71]}]
+												}
+											}
+										}
+									}
+									ELEMENT[id20] occurrences matches {0..1} matches {	-- Other mental and behavioural problems
+										value matches {
+											DV_ORDINAL[id86] matches {
+												[value, symbol] matches {
+													[{0}, {[at30]}],
+													[{1}, {[at40]}],
+													[{2}, {[at50]}],
+													[{3}, {[at62]}],
+													[{4}, {[at72]}]
+												}
+											}
+										}
+									}
+									ELEMENT[id21] occurrences matches {0..1} matches {	-- Problems with relationships
+										value matches {
+											DV_ORDINAL[id87] matches {
+												[value, symbol] matches {
+													[{0}, {[at31]}],
+													[{1}, {[at41]}],
+													[{2}, {[at51]}],
+													[{3}, {[at63]}],
+													[{4}, {[at73]}]
+												}
+											}
+										}
+									}
+									ELEMENT[id22] occurrences matches {0..1} matches {	-- Problems with activities of daily living
+										value matches {
+											DV_ORDINAL[id88] matches {
+												[value, symbol] matches {
+													[{0}, {[at32]}],
+													[{1}, {[at42]}],
+													[{2}, {[at52]}],
+													[{3}, {[at64]}],
+													[{4}, {[at74]}]
+												}
+											}
+										}
+									}
+									ELEMENT[id23] occurrences matches {0..1} matches {	-- Problems with living conditions
+										value matches {
+											DV_ORDINAL[id89] matches {
+												[value, symbol] matches {
+													[{0}, {[at33]}],
+													[{1}, {[at43]}],
+													[{2}, {[at53]}],
+													[{3}, {[at65]}],
+													[{4}, {[at75]}]
+												}
+											}
+										}
+									}
+									ELEMENT[id24] occurrences matches {0..1} matches {	-- Problems with occupation and activities
+										value matches {
+											DV_ORDINAL[id90] matches {
+												[value, symbol] matches {
+													[{0}, {[at34]}],
+													[{1}, {[at44]}],
+													[{2}, {[at54]}],
+													[{3}, {[at66]}],
+													[{4}, {[at76]}]
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+					POINT_EVENT[id78] occurrences matches {0..1} matches {	-- End of episode of care
+						data matches {
+							use_node ITEM_TREE[id91] /data[id2]/events[id77]/data[id4]	-- /data[id2]/events[Start of episode of care]/data[id4]
+						}
+					}
+					EVENT[id3] occurrences matches {0..1} matches {	-- Any event
+						data matches {
+							use_node ITEM_TREE[id92] /data[id2]/events[id77]/data[id4]	-- /data[id2]/events[Start of episode of care]/data[id4]
+						}
+					}
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"HoNOS score">
+				description = <"Clinical score based on 12 simple scales on which service users with severe mental illness are rated by clinical staff. ">
+			>
+			["id3"] = <
+				text = <"Any event">
+				description = <"*">
+			>
+			["id5"] = <
+				text = <"Overactive, aggressive, disruptive or agitated behaviour">
+				description = <"Observation of the service user's behaviour.">
+			>
+			["at6"] = <
+				text = <"no problem">
+				description = <"no problem">
+			>
+			["at7"] = <
+				text = <"minor problem requiring no action">
+				description = <"minor problem requiring no action">
+			>
+			["at8"] = <
+				text = <"mild problem but definitely present">
+				description = <"mild problem but definitely present">
+			>
+			["at9"] = <
+				text = <"moderately servere problem">
+				description = <"moderately severe problem">
+			>
+			["at10"] = <
+				text = <"severe to very severe problem">
+				description = <"severe to very severe problem">
+			>
+			["id11"] = <
+				text = <"Non-accidental self-injury">
+				description = <"Observation of any non-accidental self-injuries">
+			>
+			["at12"] = <
+				text = <"no problem">
+				description = <"no problem">
+			>
+			["at13"] = <
+				text = <"minor problem requiring no action">
+				description = <"minor problem requiring no action">
+			>
+			["at14"] = <
+				text = <"mild problem but definitely present">
+				description = <"mild problem but definitely present">
+			>
+			["id15"] = <
+				text = <"Problem drinking or drug-taking">
+				description = <"Problem drinking or drug-taking">
+			>
+			["id16"] = <
+				text = <"Cognitive problems">
+				description = <"Cognitive problems">
+			>
+			["id17"] = <
+				text = <"Physical illness or disability problems">
+				description = <"Physical illness or disability problems">
+			>
+			["id18"] = <
+				text = <"Problems associated with hallucinations and delusions">
+				description = <"Problems associated with hallucinations and delusions">
+			>
+			["id19"] = <
+				text = <"Problems with depressed mood">
+				description = <"Problems with depressed mood">
+			>
+			["id20"] = <
+				text = <"Other mental and behavioural problems">
+				description = <"Other mental and behavioural problems">
+			>
+			["id21"] = <
+				text = <"Problems with relationships">
+				description = <"Problems with relationships">
+			>
+			["id22"] = <
+				text = <"Problems with activities of daily living">
+				description = <"Problems with activities of daily living">
+			>
+			["id23"] = <
+				text = <"Problems with living conditions">
+				description = <"Problems with living conditions">
+			>
+			["id24"] = <
+				text = <"Problems with occupation and activities">
+				description = <"Problems with occupation and activities">
+			>
+			["at25"] = <
+				text = <"no problem">
+				description = <"no problem">
+			>
+			["at26"] = <
+				text = <"no problem">
+				description = <"no problem">
+			>
+			["at27"] = <
+				text = <"no problem">
+				description = <"no problem">
+			>
+			["at28"] = <
+				text = <"no problem">
+				description = <"no problem">
+			>
+			["at29"] = <
+				text = <"no problem">
+				description = <"no problem">
+			>
+			["at30"] = <
+				text = <"no problem">
+				description = <"no problem">
+			>
+			["at31"] = <
+				text = <"no problem">
+				description = <"no problem">
+			>
+			["at32"] = <
+				text = <"no problem">
+				description = <"no problem">
+			>
+			["at33"] = <
+				text = <"no problem">
+				description = <"no problem">
+			>
+			["at34"] = <
+				text = <"no problem">
+				description = <"no problem">
+			>
+			["at35"] = <
+				text = <"minor problem requiring no action">
+				description = <"minor problem requiring no action">
+			>
+			["at36"] = <
+				text = <"minor problem requiring no action">
+				description = <"minor problem requiring no action">
+			>
+			["at37"] = <
+				text = <"minor problem requiring no action">
+				description = <"minor problem requiring no action">
+			>
+			["at38"] = <
+				text = <"minor problem requiring no action">
+				description = <"minor problem requiring no action">
+			>
+			["at39"] = <
+				text = <"minor problem requiring no action">
+				description = <"minor problem requiring no action">
+			>
+			["at40"] = <
+				text = <"minor problem requiring no action">
+				description = <"minor problem requiring no action">
+			>
+			["at41"] = <
+				text = <"minor problem requiring no action">
+				description = <"minor problem requiring no action">
+			>
+			["at42"] = <
+				text = <"minor problem requiring no action">
+				description = <"minor problem requiring no action">
+			>
+			["at43"] = <
+				text = <"minor problem requiring no action">
+				description = <"minor problem requiring no action">
+			>
+			["at44"] = <
+				text = <"minor problem requiring no action">
+				description = <"minor problem requiring no action">
+			>
+			["at45"] = <
+				text = <"mild problem but definitely present">
+				description = <"mild problem but definitely present">
+			>
+			["at46"] = <
+				text = <"mild problem but definitely present">
+				description = <"mild problem but definitely present">
+			>
+			["at47"] = <
+				text = <"mild problem but definitely present">
+				description = <"mild problem but definitely present">
+			>
+			["at48"] = <
+				text = <"mild problem but definitely present">
+				description = <"mild problem but definitely present">
+			>
+			["at49"] = <
+				text = <"mild problem but definitely present">
+				description = <"mild problem but definitely present">
+			>
+			["at50"] = <
+				text = <"mild problem but definitely present">
+				description = <"mild problem but definitely present">
+			>
+			["at51"] = <
+				text = <"mild problem but definitely present">
+				description = <"mild problem but definitely present">
+			>
+			["at52"] = <
+				text = <"mild problem but definitely present">
+				description = <"mild problem but definitely present">
+			>
+			["at53"] = <
+				text = <"mild problem but definitely present">
+				description = <"mild problem but definitely present">
+			>
+			["at54"] = <
+				text = <"mild problem but definitely present">
+				description = <"mild problem but definitely present">
+			>
+			["at55"] = <
+				text = <"moderately servere problem">
+				description = <"moderately servere problem">
+			>
+			["at56"] = <
+				text = <"severe to very severe problem">
+				description = <"severe to very severe problem">
+			>
+			["at57"] = <
+				text = <"moderately servere problem">
+				description = <"moderately servere problem">
+			>
+			["at58"] = <
+				text = <"moderately servere problem">
+				description = <"moderately servere problem">
+			>
+			["at59"] = <
+				text = <"moderately servere problem">
+				description = <"moderately servere problem">
+			>
+			["at60"] = <
+				text = <"moderately servere problem">
+				description = <"moderately servere problem">
+			>
+			["at61"] = <
+				text = <"moderately servere problem">
+				description = <"moderately servere problem">
+			>
+			["at62"] = <
+				text = <"moderately servere problem">
+				description = <"moderately servere problem">
+			>
+			["at63"] = <
+				text = <"moderately servere problem">
+				description = <"moderately servere problem">
+			>
+			["at64"] = <
+				text = <"moderately servere problem">
+				description = <"moderately servere problem">
+			>
+			["at65"] = <
+				text = <"moderately servere problem">
+				description = <"moderately servere problem">
+			>
+			["at66"] = <
+				text = <"moderately servere problem">
+				description = <"moderately servere problem">
+			>
+			["at67"] = <
+				text = <"severe to very severe problem">
+				description = <"severe to very severe problem">
+			>
+			["at68"] = <
+				text = <"severe to very severe problem">
+				description = <"severe to very severe problem">
+			>
+			["at69"] = <
+				text = <"severe to very severe problem">
+				description = <"severe to very severe problem">
+			>
+			["at70"] = <
+				text = <"severe to very severe problem">
+				description = <"severe to very severe problem">
+			>
+			["at71"] = <
+				text = <"severe to very severe problem">
+				description = <"severe to very severe problem">
+			>
+			["at72"] = <
+				text = <"severe to very severe problem">
+				description = <"severe to very severe problem">
+			>
+			["at73"] = <
+				text = <"severe to very severe problem">
+				description = <"severe to very severe problem">
+			>
+			["at74"] = <
+				text = <"severe to very severe problem">
+				description = <"severe to very severe problem">
+			>
+			["at75"] = <
+				text = <"severe to very severe problem">
+				description = <"severe to very severe problem">
+			>
+			["at76"] = <
+				text = <"severe to very severe problem">
+				description = <"severe to very severe problem">
+			>
+			["id77"] = <
+				text = <"Start of episode of care">
+				description = <"HoNOS score at start of episode of care.">
+			>
+			["id78"] = <
+				text = <"End of episode of care">
+				description = <"HoNOS score at end of episode of care.">
+			>
+			["ac1"] = <
+				text = <"Overactive, aggressive, disruptive or agitated behaviour (synthesised)">
+				description = <"Observation of the service user's behaviour. (synthesised)">
+			>
+			["ac2"] = <
+				text = <"Non-accidental self-injury (synthesised)">
+				description = <"Observation of any non-accidental self-injuries (synthesised)">
+			>
+			["ac3"] = <
+				text = <"Problem drinking or drug-taking (synthesised)">
+				description = <"Problem drinking or drug-taking (synthesised)">
+			>
+			["ac4"] = <
+				text = <"Cognitive problems (synthesised)">
+				description = <"Cognitive problems (synthesised)">
+			>
+			["ac5"] = <
+				text = <"Physical illness or disability problems (synthesised)">
+				description = <"Physical illness or disability problems (synthesised)">
+			>
+			["ac6"] = <
+				text = <"Problems associated with hallucinations and delusions (synthesised)">
+				description = <"Problems associated with hallucinations and delusions (synthesised)">
+			>
+			["ac7"] = <
+				text = <"Problems with depressed mood (synthesised)">
+				description = <"Problems with depressed mood (synthesised)">
+			>
+			["ac8"] = <
+				text = <"Other mental and behavioural problems (synthesised)">
+				description = <"Other mental and behavioural problems (synthesised)">
+			>
+			["ac9"] = <
+				text = <"Problems with relationships (synthesised)">
+				description = <"Problems with relationships (synthesised)">
+			>
+			["ac10"] = <
+				text = <"Problems with activities of daily living (synthesised)">
+				description = <"Problems with activities of daily living (synthesised)">
+			>
+			["ac11"] = <
+				text = <"Problems with living conditions (synthesised)">
+				description = <"Problems with living conditions (synthesised)">
+			>
+			["ac12"] = <
+				text = <"Problems with occupation and activities (synthesised)">
+				description = <"Problems with occupation and activities (synthesised)">
+			>
+		>
+	>
+	value_sets = <
+		["ac1"] = <
+			id = <"ac1">
+			members = <"at6", "at7", "at8", "at9", "at10">
+		>
+		["ac2"] = <
+			id = <"ac2">
+			members = <"at12", "at13", "at14", "at55", "at56">
+		>
+		["ac3"] = <
+			id = <"ac3">
+			members = <"at25", "at35", "at45", "at57", "at67">
+		>
+		["ac4"] = <
+			id = <"ac4">
+			members = <"at26", "at36", "at46", "at58", "at68">
+		>
+		["ac5"] = <
+			id = <"ac5">
+			members = <"at27", "at37", "at47", "at59", "at69">
+		>
+		["ac6"] = <
+			id = <"ac6">
+			members = <"at28", "at38", "at48", "at60", "at70">
+		>
+		["ac7"] = <
+			id = <"ac7">
+			members = <"at29", "at39", "at49", "at61", "at71">
+		>
+		["ac8"] = <
+			id = <"ac8">
+			members = <"at30", "at40", "at50", "at62", "at72">
+		>
+		["ac9"] = <
+			id = <"ac9">
+			members = <"at31", "at41", "at51", "at63", "at73">
+		>
+		["ac10"] = <
+			id = <"ac10">
+			members = <"at32", "at42", "at52", "at64", "at74">
+		>
+		["ac11"] = <
+			id = <"ac11">
+			members = <"at33", "at43", "at53", "at65", "at75">
+		>
+		["ac12"] = <
+			id = <"ac12">
+			members = <"at34", "at44", "at54", "at66", "at76">
+		>
+	>

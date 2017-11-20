@@ -10,6 +10,10 @@ import com.nedap.archie.aom.CComplexObject;
 import com.nedap.archie.aom.CComplexObjectProxy;
 import com.nedap.archie.aom.CObject;
 import com.nedap.archie.aom.OperationalTemplate;
+import com.nedap.archie.archetypevalidator.ArchetypeValidator;
+import com.nedap.archie.archetypevalidator.ValidationResult;
+import com.nedap.archie.rminfo.ArchieRMInfoLookup;
+import com.nedap.archie.rminfo.ReferenceModels;
 import com.nedap.archie.xml.JAXBUtil;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -42,8 +46,8 @@ public class FlattenerTest {
 
     private Flattener flattener;
 
-    @BeforeClass
-    public static void setup() throws Exception {
+    @Before
+    public void setup() throws Exception {
 
         // reportresult specializes report.
         // blood pressure composition specializes report result.
@@ -66,7 +70,7 @@ public class FlattenerTest {
         bloodPressureWithSynopsis = new ADLParser().parse(FlattenerTest.class.getResourceAsStream("openEHR-EHR-COMPOSITION.blood_pressure_with_synopsis.v1.0.0.adlt"));
 
 
-        repository = new SimpleArchetypeRepository();
+        repository = new InMemoryFullArchetypeRepository();
         repository.addArchetype(report);
         repository.addArchetype(device);
         repository.addArchetype(bloodPressureComposition);
@@ -78,10 +82,6 @@ public class FlattenerTest {
         repository.addArchetype(reportWithSynopsis);
         repository.addArchetype(clinicalSynopsis);
         repository.addArchetype(bloodPressureWithSynopsis);
-    }
-
-    @Before
-    public void before() {
         flattener = new Flattener(repository).createOperationalTemplate(true);
     }
 
@@ -96,9 +96,9 @@ public class FlattenerTest {
         CObject child1 = content.get(0);
         CObject child2 = content.get(1);
 
-        assertEquals("id2.1", child1.getNodeId());
+        assertEquals("id0.0.2.1", child1.getNodeId());
         assertTrue(child1 instanceof CArchetypeRoot);
-        assertEquals("id3", child2.getNodeId());
+        assertEquals("id0.0.3", child2.getNodeId());
         assertTrue(child2 instanceof CArchetypeRoot);
         assertEquals(2, child1.getAttributes().size());
         assertEquals(1, child2.getAttributes().size());
@@ -261,5 +261,17 @@ data matches {
         assertTrue(bloodPressureObservation.getTerminology().getTermDefinitions().containsKey("nl"));
         assertTrue(bloodPressureObservation.getTerminology().getTermDefinitions().containsKey("en"));
 
+    }
+
+    @Test
+    public void validate() {
+        ReferenceModels models = new ReferenceModels();
+        models.registerModel(ArchieRMInfoLookup.getInstance());
+        models.registerModel(com.nedap.archie.openehrtestrm.TestRMInfoLookup.getInstance());
+        ((InMemoryFullArchetypeRepository) repository).compile(models);
+        for(ValidationResult result:((InMemoryFullArchetypeRepository) repository).getAllValidationResults()) {
+            assertTrue(result.getArchetypeId() + " had errors or warnings: " + result.getErrors(), result.passes());
+        }
+        System.out.println(repository);
     }
 }

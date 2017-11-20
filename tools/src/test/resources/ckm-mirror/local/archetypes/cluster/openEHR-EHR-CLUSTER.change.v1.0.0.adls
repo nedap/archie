@@ -1,0 +1,318 @@
+archetype (adl_version=2.0.6; rm_release=1.0.3; generated)
+	openEHR-EHR-CLUSTER.change.v1.0.0
+
+language
+	original_language = <[ISO_639-1::en]>
+	translations = <
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			author = <
+				["name"] = <"Lars Bitsch-Larsen">
+				["organisation"] = <"Haukeland University Hospital of Bergen, Norway">
+			>
+			accreditation = <"MD, DEAA, MBA, spec in anesthesia, spec in tropical medicine.">
+		>
+		["ar-sy"] = <
+			language = <[ISO_639-1::ar-sy]>
+			author = <
+				["name"] = <"Mona Saleh">
+			>
+		>
+	>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Heather Leslie">
+		["organisation"] = <"Ocean Informatics">
+		["email"] = <"heather.leslie@oceaninformatics.com">
+		["date"] = <"2008-01-01">
+	>
+	copyright = <"© openEHR Foundation">
+	details = <
+		["ar-sy"] = <
+			language = <[ISO_639-1::ar-sy]>
+			purpose = <"لتسجيل المعلومات حول تغيير ما">
+			use = <"">
+			misuse = <"">
+		>
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record details about readiness for change of a behaviour.">
+			use = <"">
+			misuse = <"">
+		>
+		["nb"] = <
+			language = <[ISO_639-1::nb]>
+			purpose = <"For dokumentasjon om detaljer om forandring/endring.">
+			use = <"">
+			keywords = <"forandring", "endring">
+			misuse = <"">
+		>
+	>
+	other_contributors = <"Shahla Foozonkhah, Ocean Informatics, Australia", "Heather Leslie, Ocean Informatics, Australia (Editor)", "Ian McNicoll, freshEHR Clinical Informatics, United Kingdom (Editor)">
+	other_details = <
+		["current_contact"] = <"Heather Leslie, Ocean Informatics, heather.leslie@oceaninformatics.com">
+		["MD5-CAM-1.0.1"] = <"107172F291D971A01657907D82AFB0BB">
+	>
+
+definition
+	CLUSTER[id1] matches {	-- Readiness for change
+		items matches {
+			ELEMENT[id2] occurrences matches {0..1} matches {	-- Readiness to change
+				value matches {
+					DV_CODED_TEXT[id13] matches {
+						defining_code matches {[ac1]}		-- Readiness to change (synthesised)
+					}
+				}
+			}
+			ELEMENT[id3] occurrences matches {0..1} matches {	-- Reasons
+				value matches {
+					DV_TEXT[id14] 
+				}
+			}
+			ELEMENT[id4] occurrences matches {0..1} matches {	-- Triggers
+				value matches {
+					DV_TEXT[id15] 
+				}
+			}
+			ELEMENT[id6] occurrences matches {0..1} matches {	-- Positive aspects of current behaviour
+				value matches {
+					DV_TEXT[id16] 
+				}
+			}
+			ELEMENT[id7] occurrences matches {0..1} matches {	-- Negative aspects of current behaviour
+				value matches {
+					DV_TEXT[id17] 
+				}
+			}
+			ELEMENT[id9] occurrences matches {0..1} matches {	-- Positive aspects of change
+				value matches {
+					DV_TEXT[id18] 
+				}
+			}
+			ELEMENT[id10] occurrences matches {0..1} matches {	-- Negative aspects of change
+				value matches {
+					DV_TEXT[id19] 
+				}
+			}
+			ELEMENT[id11] occurrences matches {0..1} matches {	-- Barriers to change
+				value matches {
+					DV_TEXT[id20] 
+				}
+			}
+			ELEMENT[id12] occurrences matches {0..1} matches {	-- Comment
+				value matches {
+					DV_TEXT[id21] 
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["ar-sy"] = <
+			["id1"] = <
+				text = <"*Readiness for change(en)">
+				description = <"*Record details about readiness to change current status.(en)">
+			>
+			["id2"] = <
+				text = <"*Readiness to change(en)">
+				description = <"*Record current status for behaviour change.(en)">
+			>
+			["id3"] = <
+				text = <"*Reasons(en)">
+				description = <"*Narrative descriptions about the individual's reasons for the current behaviour.(en)">
+			>
+			["id4"] = <
+				text = <"*Triggers(en)">
+				description = <"*Identify triggers for the behaviour.(en)">
+			>
+			["id6"] = <
+				text = <"*Positive aspects of current behaviour(en)">
+				description = <"*Narrative description about positive aspects of the current behaviour that have been identified by the individual.(en)">
+			>
+			["id7"] = <
+				text = <"*Negative aspects of current behaviour(en)">
+				description = <"*Narrative description about negative aspects of the current behaviour that have been identified by the individual.(en)">
+			>
+			["id9"] = <
+				text = <"*Positive aspects of change(en)">
+				description = <"*Narrative description about positive aspects of any change to the current behaviour that have been identified by the individual.(en)">
+			>
+			["id10"] = <
+				text = <"*Negative aspects of change(en)">
+				description = <"*Narrative description about negative aspects of any change to the current behaviour that have been identified by the individual.(en)">
+			>
+			["id11"] = <
+				text = <"*Barriers to change(en)">
+				description = <"*Identify barriers which prevent the individual from changing behaviour.(en)">
+			>
+			["id12"] = <
+				text = <"*Comment(en)">
+				description = <"*Comment about individual's willingness to change behaviour.(en)">
+			>
+			["at13"] = <
+				text = <"*Not ready (Precontemplation)(en)">
+				description = <"*Individual is not seriously considering changing in the next 6 months.(en)">
+			>
+			["at14"] = <
+				text = <"*Unsure (Contemplation)(en)">
+				description = <"*Individual is seriously considering changing in the next 6 months.(en)">
+			>
+			["at15"] = <
+				text = <"*Ready (Preparation)(en)">
+				description = <"*Individual is planning to change in the next 30 days.(en)">
+			>
+			["at16"] = <
+				text = <"*Action(en)">
+				description = <"*Individual who is implementing change; includes those who have implemented change within the last 6 months.(en)">
+			>
+			["at17"] = <
+				text = <"*Maintenance(en)">
+				description = <"*Individual who has implemented change over 6 months ago.(en)">
+			>
+			["ac1"] = <
+				text = <"*Readiness to change(en) (synthesised)">
+				description = <"*Record current status for behaviour change.(en) (synthesised)">
+			>
+		>
+		["en"] = <
+			["id1"] = <
+				text = <"Readiness for change">
+				description = <"Record details about readiness to change current status.">
+			>
+			["id2"] = <
+				text = <"Readiness to change">
+				description = <"Record current status for behaviour change.">
+			>
+			["id3"] = <
+				text = <"Reasons">
+				description = <"Narrative descriptions about the individual's reasons for the current behaviour.">
+			>
+			["id4"] = <
+				text = <"Triggers">
+				description = <"Identify triggers for the behaviour.">
+			>
+			["id6"] = <
+				text = <"Positive aspects of current behaviour">
+				description = <"Narrative description about positive aspects of the current behaviour that have been identified by the individual.">
+			>
+			["id7"] = <
+				text = <"Negative aspects of current behaviour">
+				description = <"Narrative description about negative aspects of the current behaviour that have been identified by the individual.">
+			>
+			["id9"] = <
+				text = <"Positive aspects of change">
+				description = <"Narrative description about positive aspects of any change to the current behaviour that have been identified by the individual.">
+			>
+			["id10"] = <
+				text = <"Negative aspects of change">
+				description = <"Narrative description about negative aspects of any change to the current behaviour that have been identified by the individual.">
+			>
+			["id11"] = <
+				text = <"Barriers to change">
+				description = <"Identify barriers which prevent the individual from changing behaviour.">
+			>
+			["id12"] = <
+				text = <"Comment">
+				description = <"Comment about individual's willingness to change behaviour.">
+			>
+			["at13"] = <
+				text = <"Not ready (Precontemplation)">
+				description = <"Individual is not seriously considering changing in the next 6 months.">
+			>
+			["at14"] = <
+				text = <"Unsure (Contemplation)">
+				description = <"Individual is seriously considering changing in the next 6 months.">
+			>
+			["at15"] = <
+				text = <"Ready (Preparation)">
+				description = <"Individual is planning to change in the next 30 days.">
+			>
+			["at16"] = <
+				text = <"Action">
+				description = <"Individual who is implementing change; includes those who have implemented change within the last 6 months.">
+			>
+			["at17"] = <
+				text = <"Maintenance">
+				description = <"Individual who has implemented change over 6 months ago.">
+			>
+			["ac1"] = <
+				text = <"Readiness to change (synthesised)">
+				description = <"Record current status for behaviour change. (synthesised)">
+			>
+		>
+		["nb"] = <
+			["id1"] = <
+				text = <"*Readiness for change(en)">
+				description = <"*Record details about readiness to change current status.(en)">
+			>
+			["id2"] = <
+				text = <"*Readiness to change(en)">
+				description = <"*Record current status for behaviour change.(en)">
+			>
+			["id3"] = <
+				text = <"*Reasons(en)">
+				description = <"*Narrative descriptions about the individual's reasons for the current behaviour.(en)">
+			>
+			["id4"] = <
+				text = <"*Triggers(en)">
+				description = <"*Identify triggers for the behaviour.(en)">
+			>
+			["id6"] = <
+				text = <"*Positive aspects of current behaviour(en)">
+				description = <"*Narrative description about positive aspects of the current behaviour that have been identified by the individual.(en)">
+			>
+			["id7"] = <
+				text = <"*Negative aspects of current behaviour(en)">
+				description = <"*Narrative description about negative aspects of the current behaviour that have been identified by the individual.(en)">
+			>
+			["id9"] = <
+				text = <"*Positive aspects of change(en)">
+				description = <"*Narrative description about positive aspects of any change to the current behaviour that have been identified by the individual.(en)">
+			>
+			["id10"] = <
+				text = <"*Negative aspects of change(en)">
+				description = <"*Narrative description about negative aspects of any change to the current behaviour that have been identified by the individual.(en)">
+			>
+			["id11"] = <
+				text = <"*Barriers to change(en)">
+				description = <"*Identify barriers which prevent the individual from changing behaviour.(en)">
+			>
+			["id12"] = <
+				text = <"*Comment(en)">
+				description = <"*Comment about individual's willingness to change behaviour.(en)">
+			>
+			["at13"] = <
+				text = <"*Not ready (Precontemplation)(en)">
+				description = <"*Individual is not seriously considering changing in the next 6 months.(en)">
+			>
+			["at14"] = <
+				text = <"*Unsure (Contemplation)(en)">
+				description = <"*Individual is seriously considering changing in the next 6 months.(en)">
+			>
+			["at15"] = <
+				text = <"*Ready (Preparation)(en)">
+				description = <"*Individual is planning to change in the next 30 days.(en)">
+			>
+			["at16"] = <
+				text = <"*Action(en)">
+				description = <"*Individual who is implementing change; includes those who have implemented change within the last 6 months.(en)">
+			>
+			["at17"] = <
+				text = <"*Maintenance(en)">
+				description = <"*Individual who has implemented change over 6 months ago.(en)">
+			>
+			["ac1"] = <
+				text = <"*Readiness to change(en) (synthesised)">
+				description = <"*Record current status for behaviour change.(en) (synthesised)">
+			>
+		>
+	>
+	value_sets = <
+		["ac1"] = <
+			id = <"ac1">
+			members = <"at13", "at14", "at15", "at16", "at17">
+		>
+	>

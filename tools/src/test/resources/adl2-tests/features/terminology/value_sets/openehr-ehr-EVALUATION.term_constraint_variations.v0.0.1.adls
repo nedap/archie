@@ -17,6 +17,9 @@ description
 			purpose = <"An altered version of the openEHR Adverse Reaction archetype designed to show various kinds of terminology constraint.">
 		>
 	>
+	other_details = <
+		["regression"] = <"PASS">
+	>
 
 definition
 	EVALUATION[id1] matches {	-- Adverse Reaction
@@ -184,11 +187,11 @@ terminology
 	term_bindings = <
 		["snomedct"] = <
 			["ac1"] = <http://snomedct.info/id/123456789>
-			["at10"] = <http://snomed.info/406464007>
-			["at11"] = <http://snomed.info/406470001>
-			["at12"] = <http://snomed.info/406472009>
-			["at13"] = <http://snomed.info/410981007>
-			["at14"] = <http://snomed.info/410980008>
+			["at10"] = <http://snomed.info/id/406464007>
+			["at11"] = <http://snomed.info/id/406470001>
+			["at12"] = <http://snomed.info/id/406472009>
+			["at13"] = <http://snomed.info/id/410981007>
+			["at14"] = <http://snomed.info/id/410980008>
 		>
 	>
 	value_sets = <
