@@ -1,7 +1,9 @@
 package com.nedap.archie.serializer.adl.rules;
 
 import com.nedap.archie.rules.Constant;
+import com.nedap.archie.rules.ExpressionType;
 import com.nedap.archie.serializer.adl.ADLRulesSerializer;
+import com.nedap.archie.rules.ReferenceType;
 
 /**
  * Created by pieter.bos on 15/06/16.
@@ -13,6 +15,12 @@ public class ConstantSerializer extends RuleElementSerializer<Constant> {
 
     @Override
     public void serialize(Constant ruleElement) {
-        builder.append(ruleElement.getValue());//TODO: this works for strings, booleans, doubles and numbers. More needed?
+        if(ruleElement.getType() == ExpressionType.STRING) {
+            builder.append("\"");
+            builder.append(ruleElement.getValue());
+            builder.append("\"");
+        } else {
+            builder.append(ruleElement.getValue());
+        }
     }
 }
