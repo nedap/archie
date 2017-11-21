@@ -1,5 +1,6 @@
 package com.nedap.archie.aom.primitives;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nedap.archie.ArchieLanguageConfiguration;
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.CObject;
@@ -125,9 +126,16 @@ public class CTerminologyCode extends CPrimitiveObject<String, TerminologyCode> 
         //hack for jackson to work
     }
 
+    @JsonIgnore
     public List<String> getValueSetExpanded() {
         List<String> result = new ArrayList<>();
-        ArchetypeTerminology terminology = getArchetype().getTerminology(this);
+        Archetype archetype = getArchetype();
+        if(archetype == null) {
+            //ideally this would not happen, but no reference to archetype exists in leaf constraints in rules so far
+            //so for now fix it so it doesn't throw a NullPointerException
+            return result;
+        }
+        ArchetypeTerminology terminology = archetype.getTerminology(this);
         for(String constraint:getConstraint()) {
             if(constraint.startsWith("at")) {
                 result.add(constraint);
