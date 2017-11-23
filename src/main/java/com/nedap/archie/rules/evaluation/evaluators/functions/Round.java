@@ -21,18 +21,17 @@ public class Round implements FunctionImplementation {
 
     @Override
     public ValueList evaluate(List<ValueList> arguments) throws FunctionCallException {
-        if(arguments.get(0) != null) {
-            ValueList argument = arguments.get(0);
-            if(argument.get(0) != null) {
-                Value valueObject = argument.get(0);
-                if(valueObject != null) {
-                    Long roundedValue = Math.round((Double) valueObject.getValue());
-                    ValueList result = new ValueList(roundedValue);
-                    return result;
-                }
-            }
+        if(arguments.size() != 1) {
+            throw new FunctionCallException("round expects one argument, but got " + arguments.size());
         }
 
-        throw new FunctionCallException("The function round should have one argument with a double value, but got none");
+        ValueList result = new ValueList();
+        result.setType(PrimitiveType.Integer);
+
+        for(Value valueObject : arguments.get(0).getValues()) {
+            result.addValue(new Value(Math.round((Double) valueObject.getValue())));
+        }
+
+        return result;
     }
 }
