@@ -77,6 +77,8 @@ rules
 	    value_when_undefined(10.0, /data[id2]/events[id3]/data[id4]/items[id5]/value/magnitude) +
 	    max(1.0, 2.0)
 
+    $round_up:Integer ::= round(3.0 / 2.0)
+    $round_down:Integer ::= round(4.0 / 3.0)
 
 
 terminology

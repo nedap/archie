@@ -75,4 +75,18 @@ public class FunctionsTest {
         ValueList valueWhenUndefined = ruleEvaluation.getVariableMap().get("value_when_undefined");
         assertEquals("value when undefined should be set to original value", 65d, (double) valueWhenUndefined.getObject(0), 0.00001d);
     }
+
+    @Test
+    public void round() throws Exception {
+        archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("functions.adls"));
+        assertTrue(parser.getErrors().hasNoErrors());
+
+        RuleEvaluation ruleEvaluation = new RuleEvaluation(archetype);
+        Observation root = new Observation();
+        ruleEvaluation.evaluate(root, archetype.getRules().getRules());
+        ValueList roundedUp = ruleEvaluation.getVariableMap().get("round_up");
+        ValueList roundedDown = ruleEvaluation.getVariableMap().get("round_down");
+        assertEquals("round should round up", 2L, (long) roundedUp.getValues().get(0).getValue());
+        assertEquals("round should round down", 1L, (long) roundedDown.getValues().get(0).getValue());
+    }
 }
