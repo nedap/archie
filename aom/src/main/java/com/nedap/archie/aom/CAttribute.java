@@ -126,13 +126,28 @@ public class CAttribute extends ArchetypeConstraint {
         }
     }
 
+    /**
+     * Add a child at the last position of the children list
+     * @param child
+     */
     public void addChild(CObject child) {
-        if(child.getSiblingOrder() != null && child.getSiblingOrder().getSiblingNodeId() != null) {
+        children.add(child);
+        child.setParent(this);
+    }
+
+    /**
+     * Add a child at the given sibling order. Useful in the flattener
+     *
+     * @param child
+     * @param order
+     */
+    public void addChild(CObject child, SiblingOrder order) {
+        if(order != null && order.getSiblingNodeId() != null) {
             //TODO: this can be a specialized sibling node id as well!
-            CObject sibling = getChild(child.getSiblingOrder().getSiblingNodeId());
-            int siblingIndex = children.indexOf(sibling);
+            CObject sibling = getChild(order.getSiblingNodeId());
+            int siblingIndex = getChildren().indexOf(sibling);
             if(siblingIndex > -1) {
-                if (!child.getSiblingOrder().isBefore()) {
+                if (!order.isBefore()) {
                     siblingIndex++;
                 }
                 children.add(siblingIndex, child);

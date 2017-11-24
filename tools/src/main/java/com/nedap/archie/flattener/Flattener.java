@@ -628,14 +628,50 @@ public class Flattener {
                     flattenCObject(parent, parentCObject, matchingChildren);
                 }
 
-                for(CObject newChild:newChildObjects) {
-                    //TODO: check that newChildObjects start with id0. at the correct specialization level
-                    parent.addChild(newChild);
-                }
+                addChildren(parent, newChildObjects);
             }
         }
 
     }
+
+    private void addChildren(CAttribute attribute, Set<CObject> newChildObjects) {
+        //sibling order affects all new elements after the sibling order
+        //until a new sibling order appears. So keep the 'anchor position' where new nodes
+        //will be added in the form of a sibling order and keep updating it
+        //see https://openehr.atlassian.net/projects/SPECPR/issues/SPECPR-245 for more information
+        //
+        //when the anchor is null, nodes will be added at the end of the list
+        //
+        //this has been written for readability, not performance
+
+        SiblingOrder anchor = null; //the current sibling order to add the element to.
+        for(CObject newChild:newChildObjects) {
+            if(newChild.getSiblingOrder() != null && newChild.getSiblingOrder().getSiblingNodeId() != null) {
+                attribute.addChild(newChild, newChild.getSiblingOrder());
+
+                if(newChild.getSiblingOrder().isBefore()) {
+                    //update the anchor to add new elements before the indicated node id
+                    anchor = newChild.getSiblingOrder();
+                } else {
+                    //update the anchor to add new elements after the current position
+                    anchor = new SiblingOrder();
+                    anchor.setBefore(false);
+                    anchor.setSiblingNodeId(newChild.getNodeId());
+                }
+
+            } else if (anchor == null) {
+                attribute.addChild(newChild, anchor);
+            } else {
+                attribute.addChild(newChild, anchor);
+                if(!anchor.isBefore()) {
+                    //update the anchor to add new elements after the current position
+                    anchor.setSiblingNodeId(newChild.getNodeId());
+                }
+            }
+        }
+    }
+
+
 
     private boolean isOverridenCObject(CObject specialized, CObject parent) {
         String specializedNodeId = specialized.getNodeId();
