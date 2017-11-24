@@ -73,7 +73,10 @@ rules
 
 	blood_pressure: /data[id2]/events[id3]/data[id4]/items[id7]/value/magnitude = $systolic - $diastolic
 
-
+    $flattened_path_arguments:Real ::= min(
+        /data[id2]/events[id3]/data[id4]/items[id5]/value/magnitude,
+        /data[id2]/events[id3]/data[id4]/items[id6]/value/magnitude
+    )
 
 terminology
 	term_definitions = <

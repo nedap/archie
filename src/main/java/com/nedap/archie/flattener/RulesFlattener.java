@@ -107,6 +107,13 @@ public class RulesFlattener {
         } else if (expression instanceof VariableReference) {
             VariableReference reference = (VariableReference) expression;
             reference.getDeclaration().setName(variablePrefix + reference.getDeclaration().getName());
+        } else if (expression instanceof Function) {
+            Function function = (Function) expression;
+            if( function.getArguments() != null ) {
+                for(Expression argument : function.getArguments()) {
+                    addVariableAndTagPrefixToExpression(argument, variablePrefix, pathPrefix);
+                }
+            }
         }
 
 
