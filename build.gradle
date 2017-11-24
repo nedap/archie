@@ -37,6 +37,7 @@ subprojects {
   sourceCompatibility = '1.8'
   targetCompatibility = '1.8'
 
+
   def artifactoryUserMethod = hasProperty('artifactoryUser') ? artifactoryUser : ""
   def artifactoryPasswordMethod = hasProperty('artifactoryPassword') ? artifactoryPassword : ""
   def ossrhUsernameSafe = hasProperty('ossrhUsername') ? ossrhUsername : ""

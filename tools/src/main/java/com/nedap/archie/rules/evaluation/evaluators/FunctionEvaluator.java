@@ -8,11 +8,7 @@ import com.nedap.archie.rules.evaluation.FunctionCallException;
 import com.nedap.archie.rules.evaluation.FunctionImplementation;
 import com.nedap.archie.rules.evaluation.RuleEvaluation;
 import com.nedap.archie.rules.evaluation.ValueList;
-import com.nedap.archie.rules.evaluation.evaluators.functions.Max;
-import com.nedap.archie.rules.evaluation.evaluators.functions.Mean;
-import com.nedap.archie.rules.evaluation.evaluators.functions.Min;
-import com.nedap.archie.rules.evaluation.evaluators.functions.Sum;
-import com.nedap.archie.rules.evaluation.evaluators.functions.ValueWhenUndefined;
+import com.nedap.archie.rules.evaluation.evaluators.functions.*;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -37,6 +33,7 @@ public class FunctionEvaluator  implements Evaluator<Function> {
         registerFunction(new Mean());
         registerFunction(new Sum());
         registerFunction(new ValueWhenUndefined());
+        registerFunction(new Round());
     }
 
     @Override

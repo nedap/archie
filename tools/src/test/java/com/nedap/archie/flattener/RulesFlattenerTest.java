@@ -3,10 +3,10 @@ package com.nedap.archie.flattener;
 import com.nedap.archie.adlparser.ADLParser;
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.CObject;
-import com.nedap.archie.rules.Assertion;
-import com.nedap.archie.rules.BinaryOperator;
-import com.nedap.archie.rules.ExpressionVariable;
-import com.nedap.archie.rules.ModelReference;
+
+import com.nedap.archie.query.APathQuery;
+import com.nedap.archie.rules.*;
+
 import com.nedap.archie.serializer.adl.ADLArchetypeSerializer;
 import org.junit.Before;
 import org.junit.Test;
@@ -45,16 +45,18 @@ public class RulesFlattenerTest {
     @Test
     public void specializedRules() {
         Archetype flattened = flattener.flatten(specializedRules);
-        assertEquals(4, flattened.getRules().getRules().size());//two original rules, one overwritten, one added
+        assertEquals(5, flattened.getRules().getRules().size()); //three original rules, one overwritten, one added
 
         ExpressionVariable systolic = (ExpressionVariable) flattened.getRules().getRules().get(0);
         ExpressionVariable diastolic = (ExpressionVariable) flattened.getRules().getRules().get(1);
         Assertion bloodPressure = (Assertion) flattened.getRules().getRules().get(2);
-        Assertion biggerThan90 = (Assertion) flattened.getRules().getRules().get(3);
+        ExpressionVariable flattenedPathArguments = (ExpressionVariable) flattened.getRules().getRules().get(3);
+        Assertion biggerThan90 = (Assertion) flattened.getRules().getRules().get(4);
 
         assertEquals("systolic", systolic.getName());
         assertEquals("diastolic", diastolic.getName());
         assertEquals("blood_pressure", bloodPressure.getTag());
+        assertEquals("flattened_path_arguments", flattenedPathArguments.getName());
         assertEquals(BinaryOperator.class, biggerThan90.getExpression().getClass());
     }
 
@@ -63,18 +65,20 @@ public class RulesFlattenerTest {
         Archetype flattened = flattener.flatten(containingRules);
         CObject systolicCObject = flattened.itemAtPath("/content[id5]/data/events/data/items[id5]");
         assertEquals("systolic", systolicCObject.getTerm().getText());
-        System.out.println(ADLArchetypeSerializer.serialize(flattened));
-        assertEquals(4, flattened.getRules().getRules().size());//specialized rules, prefixed with the content[id5] path
+        assertEquals(5, flattened.getRules().getRules().size()); //specialized rules, prefixed with the content[id5] path
 
         ExpressionVariable systolic = (ExpressionVariable) flattened.getRules().getRules().get(0);
         ExpressionVariable diastolic = (ExpressionVariable) flattened.getRules().getRules().get(1);
         Assertion bloodPressure = (Assertion) flattened.getRules().getRules().get(2);
-        Assertion biggerThan90 = (Assertion) flattened.getRules().getRules().get(3);
+        ExpressionVariable flattenedPathArguments = (ExpressionVariable) flattened.getRules().getRules().get(3);
+        Assertion biggerThan90 = (Assertion) flattened.getRules().getRules().get(4);
 
         assertEquals("specialized_rules_systolic", systolic.getName());
         assertEquals("specialized_rules_diastolic", diastolic.getName());
         assertEquals("specialized_rules_blood_pressure", bloodPressure.getTag());
         assertEquals(BinaryOperator.class, biggerThan90.getExpression().getClass());
+        assertEquals("/content[id5]/data[id2]/events[id3]/data[id4]/items[id5]/value/magnitude", ((ModelReference) ((Function) flattenedPathArguments.getExpression()).getArguments().get(0)).getPath());
+        assertEquals("/content[id5]/data[id2]/events[id3]/data[id4]/items[id6]/value/magnitude", ((ModelReference) ((Function) flattenedPathArguments.getExpression()).getArguments().get(1)).getPath());
         assertEquals("/content[id5]/data[id2]/events[id3]/data[id4]/items[id5]/value/magnitude", ((ModelReference)((BinaryOperator)biggerThan90.getExpression()).getLeftOperand()).getPath());
 
         //test that we can actually parse the output
