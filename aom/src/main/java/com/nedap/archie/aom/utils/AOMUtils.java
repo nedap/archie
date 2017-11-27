@@ -234,15 +234,6 @@ public class AOMUtils {
 
     }
 
-    public static boolean typeNamesConformant(String childType, String parentType, ModelInfoLookup lookup) {
-        RMTypeInfo parentTypeInfo = lookup.getTypeInfo(parentType);
-        RMTypeInfo childTypeInfo = lookup.getTypeInfo(childType);
-        if(childTypeInfo == null || parentTypeInfo == null) {
-            return true;//cannot check with RM types, will validate elsewhere
-        }
-        return childTypeInfo.isDescendantOrEqual(parentTypeInfo);
-    }
-
     public static CAttributeTuple findMatchingTuple(List<CAttributeTuple> attributeTuples, CAttributeTuple specializedTuple) {
         return attributeTuples.stream()
                 .filter((existingTuple) -> existingTuple.getMemberNames().equals(specializedTuple.getMemberNames()))

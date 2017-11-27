@@ -18,6 +18,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiFunction;
 
 /**
  *
@@ -142,8 +143,8 @@ public class CTerminologyCode extends CPrimitiveObject<String, TerminologyCode> 
     }
 
     @Override
-    public boolean cConformsTo(CObject other, ModelInfoLookup lookup) {
-        if(!super.cConformsTo(other, lookup)) {
+    public boolean cConformsTo(CObject other, BiFunction<String, String, Boolean> rmTypesConformant) {
+        if(!super.cConformsTo(other, rmTypesConformant)) {
             return false;
         }
         //now guaranteed to be the same class

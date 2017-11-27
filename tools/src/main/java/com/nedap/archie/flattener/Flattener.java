@@ -22,6 +22,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
+import java.util.function.BiFunction;
 
 /**
  * Flattener. For single use only, create a new flattener for every flatten-action you want to do!
@@ -470,7 +471,7 @@ public class Flattener {
                 return true;
             }
         }
-        MultiplicityInterval occurrences = effectiveOccurrences(parent);
+        MultiplicityInterval occurrences = parent.effectiveOccurrences(lookup::referenceModelPropMultiplicity);
         //isSingle/isMultiple is tricky and not doable just in the parser. Don't use those
         if(isSingle(parent.getParent())) {
             return true;
@@ -478,7 +479,7 @@ public class Flattener {
             //REFINE the parent node case 1, the parent has occurrences upper == 1
             return true;
         } else if (differentialNodes.size() == 1
-                && effectiveOccurrences(differentialNodes.get(0)).upperIsOne()) {
+                && differentialNodes.get(0).effectiveOccurrences(lookup::referenceModelPropMultiplicity).upperIsOne()) {
             //REFINE the parent node case 2, only one child with occurrences upper == 1
             return true;
         }
@@ -491,46 +492,6 @@ public class Flattener {
             return attributeInfo != null && !attributeInfo.isMultipleValued();
         }
         return false;
-    }
-
-    private MultiplicityInterval effectiveOccurrences(CObject object) {
-        if(object.getOccurrences() != null) {
-            return object.getOccurrences();
-        }
-        int occurrencesLower = 0;
-        CAttribute parent = object.getParent();
-        if(parent != null) {
-            if(parent.getExistence() != null) {
-                occurrencesLower = parent.getExistence().getLower();
-            }
-            if(parent.getCardinality() != null) {
-                if(parent.getCardinality().getInterval().isUpperUnbounded()) {
-                    return MultiplicityInterval.createUpperUnbounded(occurrencesLower);
-                } else {
-                    return MultiplicityInterval.createBounded(occurrencesLower, parent.getCardinality().getInterval().getUpper());
-                }
-            } else if(parent.getParent() != null) {
-                //TODO: this can be a (differential) path, but we don't support that yet.
-                return referenceModelPropMultiplicity(parent.getParent().getRmTypeName(), parent.getRmAttributeName());
-            } else {
-                return MultiplicityInterval.createUpperUnbounded(occurrencesLower);
-            }
-        } else {
-            return MultiplicityInterval.createOpen();
-        }
-    }
-
-    private MultiplicityInterval referenceModelPropMultiplicity(String rmTypeName, String rmAttributeName) {
-        RMAttributeInfo attributeInfo = lookup.getAttributeInfo(rmTypeName, rmAttributeName);
-        if(attributeInfo.isMultipleValued()) {
-            return MultiplicityInterval.createUpperUnbounded(0);
-        } else {
-            if(attributeInfo.isNullable()) {
-                return MultiplicityInterval.createBounded(0, 1);
-            } else {
-                return MultiplicityInterval.createBounded(1, 1);
-            }
-        }
     }
 
     private void flattenArchetypeSlot(ArchetypeSlot parent, ArchetypeSlot specialized) {

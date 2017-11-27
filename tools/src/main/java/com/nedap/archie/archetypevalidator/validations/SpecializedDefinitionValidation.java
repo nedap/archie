@@ -99,8 +99,8 @@ public class SpecializedDefinitionValidation extends ValidatingVisitor {
 
     private void validateConformsTo(CObject cObject, CObject parentCObject) {
 
-        if(!cObject.cConformsTo(parentCObject, lookup)) {
-            if(!cObject.typeNameConformsTo(parentCObject, lookup)) {
+        if(!cObject.cConformsTo(parentCObject, lookup::rmTypesConformant)) {
+            if(!cObject.typeNameConformsTo(parentCObject, lookup::rmTypesConformant)) {
                 addMessageWithPath(ErrorType.VSONCT, cObject.path());
             } else if (!cObject.occurrencesConformsTo(parentCObject)) {
                 addMessageWithPath(ErrorType.VSONCO, cObject.path());
@@ -118,7 +118,7 @@ public class SpecializedDefinitionValidation extends ValidatingVisitor {
                 if(cComplexObject.getAttributeTuples() != null && parentCComplexObject.getAttributeTuples() != null) {
                     for(CAttributeTuple tuple:cComplexObject.getAttributeTuples()) {
                         CAttributeTuple matchingTuple = AOMUtils.findMatchingTuple(parentCComplexObject.getAttributeTuples(), tuple);
-                        if(matchingTuple != null && ! tuple.cConformsTo(matchingTuple, lookup)) {
+                        if(matchingTuple != null && ! tuple.cConformsTo(matchingTuple, lookup::rmTypesConformant)) {
                             addMessageWithPath(ErrorType.VTPNC, cObject.path());
                         } else {
                             for(CAttribute attribute:tuple.getMembers()) {
