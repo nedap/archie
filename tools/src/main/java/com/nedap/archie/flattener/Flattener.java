@@ -13,10 +13,9 @@ import com.nedap.archie.query.APathQuery;
 import com.nedap.archie.rules.Assertion;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Stack;
 
 /**
@@ -384,16 +383,7 @@ public class Flattener {
     private void flattenCObject(CAttribute attribute, CObject parent, List<CObject> specializedList) {
         List<CObject> newNodes = new ArrayList<>();
         for(CObject specialized:specializedList) {
-            CObject newObject = cloneSpecializedObject(attribute, parent, specialized);
-
-            specializeOccurrences(specialized, newObject);
-            newObject.setSiblingOrder(getPossiblyOverridenValue(newObject.getSiblingOrder(), specialized.getSiblingOrder()));
-
-            newObject.setNodeId(getPossiblyOverridenValue(newObject.getNodeId(), specialized.getNodeId()));
-            newObject.setRmTypeName(getPossiblyOverridenValue(newObject.getRmTypeName(), specialized.getRmTypeName()));
-
-            //now specialize the structure under the specialized node
-            specializeContent(parent, specialized, newObject);
+            CObject newObject = createSpecializeCObject(attribute, parent, specialized);
 
             newNodes.add(newObject);
         }
@@ -402,6 +392,20 @@ public class Flattener {
             boolean shouldReplaceParent = shouldReplaceParent(parent, newNodes);
             attribute.replaceChildren(parent.getNodeId(), newNodes, !shouldReplaceParent /* remove original */);
         }
+    }
+
+    private CObject createSpecializeCObject(CAttribute attribute, CObject parent, CObject specialized) {
+        CObject newObject = cloneSpecializedObject(attribute, parent, specialized);
+
+        specializeOccurrences(specialized, newObject);
+        newObject.setSiblingOrder(getPossiblyOverridenValue(newObject.getSiblingOrder(), specialized.getSiblingOrder()));
+
+        newObject.setNodeId(getPossiblyOverridenValue(newObject.getNodeId(), specialized.getNodeId()));
+        newObject.setRmTypeName(getPossiblyOverridenValue(newObject.getRmTypeName(), specialized.getRmTypeName()));
+
+        //now specialize the structure under the specialized node
+        specializeContent(parent, specialized, newObject);
+        return newObject;
     }
 
     private void specializeContent(CObject parent, CObject specialized, CObject newObject) {
@@ -613,28 +617,60 @@ public class Flattener {
                 //TODO: is this correct? replace all specialized nodes
                 parent.setChildren(specialized.getChildren());
             } else {
+                //whether the children should be added or not
+                Map<CObject, Boolean> newChildren = new LinkedHashMap<>();
+                for(CObject object:specialized.getChildren()) {
+                    newChildren.put(object, true);
+                }
 
-                Set<CObject> newChildObjects = new LinkedHashSet<>(specialized.getChildren());
                 for (CObject parentCObject : new ArrayList<>(parent.getChildren())) {
                     List<CObject> matchingChildren = new ArrayList<>();
                     for (CObject specializedChildCObject : specialized.getChildren()) {
 
                         if (isOverridenCObject(specializedChildCObject, parentCObject)) {
                             matchingChildren.add(specializedChildCObject);
-                            newChildObjects.remove(specializedChildCObject);
+                            newChildren.put(specializedChildCObject, false);
                         }
 
                     }
                     flattenCObject(parent, parentCObject, matchingChildren);
                 }
+                /*
+                Parameters:
+specialized_c_objects:  the list specialized list of c_objects
+parent_c_objects: the list of flat parent c_objects
 
-                addChildren(parent, newChildObjects);
+output_c_objects = clone of parent_c_objects
+specialized_c_objects = clone of specialized_c_objects
+
+check if any of the after/before references a node that is present in specialized_c_objects (before[id3] matching id3 or the first matching element at current specialization level, in this case id3.1, but could have been id3.2 if it was present, before[id3.1] matching id3.1 only, after matching the last matching element). If so, reorder specialized_c_objects so these sibling_orders are no longer needed. Remove the sibling order nodes that are no longer needed.
+
+('insert', 'remove' and 'replace' in next section operate on output_c_objects)
+
+anchor_sibling_order = null
+for all c_object in specialized_c_objects:
+  if c_object.sibling_order is not null
+     if new node is added, insert into position of c_object.sibling_order
+     else if specialized or refined node replaces node in parent, insert into correct position and remove old node
+     set anchor_sibling_order to a new sibling order reflecting the position of the next to be handled c_object
+  else if anchor_sibling_order is not null
+     if new node is added, insert into position of anchor_sibling_order
+     else if specialized or refined node replaces node in parent, insert into correct position and remove old node
+    update anchor_sibling_order to a new sibling order reflecting the position of the next to be handled c_object
+  else
+     if extension node is added, insert it into last position
+     else if node should replace the existing node, replace it
+     else if node should be added, but is a specialization of a parent node, put it directly after the parent node
+
+                 */
+
+                addChildren(parent, newChildren);
             }
         }
 
     }
 
-    private void addChildren(CAttribute attribute, Set<CObject> newChildObjects) {
+    private void addChildren(CAttribute attribute,Map<CObject, Boolean> newChildren) {
         //sibling order affects all new elements after the sibling order
         //until a new sibling order appears. So keep the 'anchor position' where new nodes
         //will be added in the form of a sibling order and keep updating it
@@ -645,10 +681,15 @@ public class Flattener {
         //this has been written for readability, not performance
 
         SiblingOrder anchor = null; //the current sibling order to add the element to.
-        for(CObject newChild:newChildObjects) {
+        for(Map.Entry<CObject, Boolean> newChildEntry:newChildren.entrySet()) {
+            CObject newChild = newChildEntry.getKey();
+            boolean shouldAdd = newChildEntry.getValue();
             if(newChild.getSiblingOrder() != null && newChild.getSiblingOrder().getSiblingNodeId() != null) {
-                attribute.addChild(newChild, newChild.getSiblingOrder());
-
+                if(shouldAdd) {
+                    attribute.addChild(newChild, newChild.getSiblingOrder());
+                } else {
+                    //reorder existing node
+                }
                 if(newChild.getSiblingOrder().isBefore()) {
                     //update the anchor to add new elements before the indicated node id
                     anchor = newChild.getSiblingOrder();
@@ -660,9 +701,17 @@ public class Flattener {
                 }
 
             } else if (anchor == null) {
-                attribute.addChild(newChild, anchor);
+                if(shouldAdd) {
+                    attribute.addChild(newChild, anchor);
+                } else {
+                   //nothing to do
+                }
             } else {
-                attribute.addChild(newChild, anchor);
+                if(shouldAdd) {
+                    attribute.addChild(newChild, anchor);
+                } else {
+                    //reorder existing node
+                }
                 if(!anchor.isBefore()) {
                     //update the anchor to add new elements after the current position
                     anchor.setSiblingNodeId(newChild.getNodeId());
