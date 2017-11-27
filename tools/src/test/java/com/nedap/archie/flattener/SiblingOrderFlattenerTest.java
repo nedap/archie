@@ -32,9 +32,8 @@ public class SiblingOrderFlattenerTest {
     public void setup() throws Exception {
         repository = new InMemoryFullArchetypeRepository();
         parentArchetype = parse("openEHR-EHR-CLUSTER.order-parent.v1.0.0.adls");
-        ReferenceModels models = new ReferenceModels();
-        models.registerModel(ArchieRMInfoLookup.getInstance());
-        ValidationResult validationResult = new ArchetypeValidator(models).validate(parentArchetype);
+        ReferenceModels models = TestUtil.getReferenceModels();
+        ValidationResult validationResult = new ArchetypeValidator(models).validate(parentArchetype, repository);
         assertTrue(validationResult.getErrors().toString(), validationResult.passes());
         repository.addArchetype(parentArchetype);
 
@@ -116,7 +115,7 @@ public class SiblingOrderFlattenerTest {
         Archetype result = parse(fileName);
         ReferenceModels models = new ReferenceModels();
         models.registerModel(ArchieRMInfoLookup.getInstance());
-        ValidationResult validationResult = new ArchetypeValidator(models).validate(result);
+        ValidationResult validationResult = new ArchetypeValidator(models).validate(result, repository);
         assertTrue(validationResult.getErrors().toString(), validationResult.passes());
 
         return new Flattener(repository, TestUtil.getReferenceModels()).flatten(parse(fileName));
