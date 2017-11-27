@@ -23,4 +23,18 @@ public class SiblingOrder extends ArchetypeModelObject {
     public void setSiblingNodeId(String siblingNodeId) {
         this.siblingNodeId = siblingNodeId;
     }
+
+    public static SiblingOrder createAfter(String nodeId) {
+        SiblingOrder result = new SiblingOrder();
+        result.setSiblingNodeId(nodeId);
+        result.setBefore(false);
+        return result;
+    }
+
+    public static SiblingOrder createBefore(String nodeId) {
+        SiblingOrder result = new SiblingOrder();
+        result.setSiblingNodeId(nodeId);
+        result.setBefore(true);
+        return result;
+    }
 }

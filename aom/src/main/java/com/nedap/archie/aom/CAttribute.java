@@ -173,6 +173,13 @@ public class CAttribute extends ArchetypeConstraint {
 
     }
 
+    public void removeChild(String nodeId) {
+        int index = getIndexOfChildWithNodeId(nodeId);
+        if(index > -1) {
+            children.remove(index);
+        }
+    }
+
     /**
      * Replace the child at node nodeId with all the objects from the parameter newChildren.
      * If keepOriginal is true, it will not replace the original, but keep it in place
@@ -198,7 +205,7 @@ public class CAttribute extends ArchetypeConstraint {
 
     }
 
-    private int getIndexOfChildWithNodeId(String nodeId) {
+    public int getIndexOfChildWithNodeId(String nodeId) {
         for(int i = 0; i < children.size(); i++) {
             CObject child = children.get(i);
             if(nodeId.equals(child.getNodeId())) {
@@ -395,4 +402,5 @@ public class CAttribute extends ArchetypeConstraint {
         }
         return result;
     }
+
 }

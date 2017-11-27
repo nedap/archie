@@ -1,7 +1,6 @@
 package com.nedap.archie.flattener;
 
 import com.google.common.collect.Lists;
-import com.nedap.archie.adlparser.modelconstraints.ReflectionConstraintImposer;
 import com.nedap.archie.aom.*;
 import com.nedap.archie.aom.terminology.ArchetypeTerm;
 import com.nedap.archie.aom.terminology.ArchetypeTerminology;
@@ -22,7 +21,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
-import java.util.function.BiFunction;
 
 /**
  * Flattener. For single use only, create a new flattener for every flatten-action you want to do!
@@ -357,10 +355,6 @@ public class Flattener {
 
     }
 
-
-
-
-
     private static OperationalTemplate createOperationalTemplate(Archetype archetype) {
         Archetype toClone = archetype.clone(); //clone so we do not overwrite the parent archetype. never
         OperationalTemplate result = new OperationalTemplate();
@@ -408,6 +402,9 @@ public class Flattener {
     }
 
     private CObject createSpecializeCObject(CAttribute attribute, CObject parent, CObject specialized) {
+        if(parent == null) {
+            return specialized;//TODO: clone?
+        }
         CObject newObject = cloneSpecializedObject(attribute, parent, specialized);
 
         specializeOccurrences(specialized, newObject);
@@ -636,113 +633,162 @@ public class Flattener {
             parent.setCardinality(getPossiblyOverridenValue(parent.getCardinality(), specialized.getCardinality()));
 
             if (specialized.getChildren().size() > 0 && specialized.getChildren().get(0) instanceof CPrimitiveObject) {
-                //TODO: is this correct? replace all specialized nodes
+                //in case of a primitive object, just replace all nodes
                 parent.setChildren(specialized.getChildren());
             } else {
-                //whether the children should be added or not
-                Map<CObject, Boolean> newChildren = new LinkedHashMap<>();
-                for(CObject object:specialized.getChildren()) {
-                    newChildren.put(object, true);
-                }
 
-                for (CObject parentCObject : new ArrayList<>(parent.getChildren())) {
-                    List<CObject> matchingChildren = new ArrayList<>();
-                    for (CObject specializedChildCObject : specialized.getChildren()) {
+                //ordering the children correctly is tricky.
+                // First reorder parentCObjects if necessary, in the case that a sibling order refers to a redefined node
+                // in the specialized archetype
+                reorderSiblingOrdersReferringToSameLevel(specialized);
 
-                        if (isOverridenCObject(specializedChildCObject, parentCObject)) {
-                            matchingChildren.add(specializedChildCObject);
-                            newChildren.put(specializedChildCObject, false);
+                //Now maintain an insertion anchor
+                //for when a sibling node has been set somewhere.
+                // insert everything after/before the anchor if it is set,
+                // at the defined position from the spec if it is null
+                SiblingOrder anchor = null;
+
+                List<CObject> parentCObjects = parent.getChildren();
+
+                for (CObject specializedChildCObject : specialized.getChildren()) {
+
+                    //find matching parent and create the child node with it
+                    CObject matchingParentObject = findMatchingParentCObject(specializedChildCObject, parentCObjects);
+                    CObject specializedObject = createSpecializeCObject(parent, matchingParentObject, specializedChildCObject);
+
+                    if(specializedChildCObject.getSiblingOrder() != null) {
+                        //this node has a sibling order, insert in correct place
+                        if(!shouldAddNewNode(specializedChildCObject, matchingParentObject, specialized.getChildren())) {
+                            parent.removeChild(matchingParentObject.getNodeId());
                         }
+                        parent.addChild(specializedObject, specializedChildCObject.getSiblingOrder());
+                        if(specializedChildCObject.getSiblingOrder().isBefore()) {
+                            anchor = specializedChildCObject.getSiblingOrder();
+                        } else {
+                            anchor = SiblingOrder.createAfter(specializedChildCObject.getNodeId());
+                        }
+                    } else if (anchor != null) {
 
+                        if(!shouldAddNewNode(specializedChildCObject, matchingParentObject, specialized.getChildren())) {
+                            parent.removeChild(matchingParentObject.getNodeId());
+
+                        }
+                        parent.addChild(specializedObject, anchor);
+
+                        if(!anchor.isBefore()) {
+                            anchor.setSiblingNodeId(specializedChildCObject.getNodeId());
+                        }
+                    } else { //no sibling order
+
+                        if(matchingParentObject == null) {
+                            //extension nodes should be added to the last position
+                            parent.addChild(specializedObject);
+                        } else {
+                            parent.addChild(specializedObject, SiblingOrder.createAfter(findLastSpecializedChildDirectlyAfter(parent, matchingParentObject)));
+                            if(!shouldAddNewNode(specializedChildCObject, matchingParentObject, specialized.getChildren())) {
+                                //we should remove the parent
+                                parent.removeChild(matchingParentObject.getNodeId());
+                            }
+                        }
                     }
-                    flattenCObject(parent, parentCObject, matchingChildren);
-                }
-                /*
-                Parameters:
-specialized_c_objects:  the list specialized list of c_objects
-parent_c_objects: the list of flat parent c_objects
-
-output_c_objects = clone of parent_c_objects
-specialized_c_objects = clone of specialized_c_objects
-
-check if any of the after/before references a node that is present in specialized_c_objects (before[id3] matching id3 or the first matching element at current specialization level, in this case id3.1, but could have been id3.2 if it was present, before[id3.1] matching id3.1 only, after matching the last matching element). If so, reorder specialized_c_objects so these sibling_orders are no longer needed. Remove the sibling order nodes that are no longer needed.
-
-('insert', 'remove' and 'replace' in next section operate on output_c_objects)
-
-anchor_sibling_order = null
-for all c_object in specialized_c_objects:
-  if c_object.sibling_order is not null
-     if new node is added, insert into position of c_object.sibling_order
-     else if specialized or refined node replaces node in parent, insert into correct position and remove old node
-     set anchor_sibling_order to a new sibling order reflecting the position of the next to be handled c_object
-  else if anchor_sibling_order is not null
-     if new node is added, insert into position of anchor_sibling_order
-     else if specialized or refined node replaces node in parent, insert into correct position and remove old node
-    update anchor_sibling_order to a new sibling order reflecting the position of the next to be handled c_object
-  else
-     if extension node is added, insert it into last position
-     else if node should replace the existing node, replace it
-     else if node should be added, but is a specialization of a parent node, put it directly after the parent node
-
-                 */
-
-                addChildren(parent, newChildren);
-            }
-        }
-
-    }
-
-    private void addChildren(CAttribute attribute,Map<CObject, Boolean> newChildren) {
-        //sibling order affects all new elements after the sibling order
-        //until a new sibling order appears. So keep the 'anchor position' where new nodes
-        //will be added in the form of a sibling order and keep updating it
-        //see https://openehr.atlassian.net/projects/SPECPR/issues/SPECPR-245 for more information
-        //
-        //when the anchor is null, nodes will be added at the end of the list
-        //
-        //this has been written for readability, not performance
-
-        SiblingOrder anchor = null; //the current sibling order to add the element to.
-        for(Map.Entry<CObject, Boolean> newChildEntry:newChildren.entrySet()) {
-            CObject newChild = newChildEntry.getKey();
-            boolean shouldAdd = newChildEntry.getValue();
-            if(newChild.getSiblingOrder() != null && newChild.getSiblingOrder().getSiblingNodeId() != null) {
-                if(shouldAdd) {
-                    attribute.addChild(newChild, newChild.getSiblingOrder());
-                } else {
-                    //reorder existing node
-                }
-                if(newChild.getSiblingOrder().isBefore()) {
-                    //update the anchor to add new elements before the indicated node id
-                    anchor = newChild.getSiblingOrder();
-                } else {
-                    //update the anchor to add new elements after the current position
-                    anchor = new SiblingOrder();
-                    anchor.setBefore(false);
-                    anchor.setSiblingNodeId(newChild.getNodeId());
-                }
-
-            } else if (anchor == null) {
-                if(shouldAdd) {
-                    attribute.addChild(newChild, anchor);
-                } else {
-                   //nothing to do
-                }
-            } else {
-                if(shouldAdd) {
-                    attribute.addChild(newChild, anchor);
-                } else {
-                    //reorder existing node
-                }
-                if(!anchor.isBefore()) {
-                    //update the anchor to add new elements after the current position
-                    anchor.setSiblingNodeId(newChild.getNodeId());
                 }
             }
         }
     }
 
+    /**
+     * If the following occurs:
+     *
+     * after[id3]
+     * ELEMENT[id2]
+     * ELEMENT[id3.1]
+     *
+     * Reorder it and remove sibling orders:
+     *
+     * ELEMENT[id3.1]
+     * ELEMENT[id2]
+     *
+     * If sibling order do not refer to specialized nodes at this level, leaves them alone
+     * @param parent the attribute to reorder the child nodes for
+     */
+    private void reorderSiblingOrdersReferringToSameLevel(CAttribute parent) {
+        for(CObject cObject:new ArrayList<>(parent.getChildren())) {
+            if(cObject.getSiblingOrder() != null) {
+                String matchingNodeId = findCObjectMatchingSiblingOrder(cObject.getSiblingOrder(), parent.getChildren());
+                if(matchingNodeId != null) {
+                    parent.removeChild(cObject.getNodeId());
+                    SiblingOrder siblingOrder = new SiblingOrder();
+                    siblingOrder.setSiblingNodeId(matchingNodeId);
+                    siblingOrder.setBefore(cObject.getSiblingOrder().isBefore());
+                    parent.addChild(cObject, siblingOrder);
+                    cObject.setSiblingOrder(null);//unset sibling order, it has been processed already
+                }
+            }
+        }
+    }
 
+    private String findCObjectMatchingSiblingOrder(SiblingOrder siblingOrder, List<CObject> cObjectList) {
+        for(CObject object:cObjectList) {
+            if(isOverriddenIdCode(object.getNodeId(), siblingOrder.getSiblingNodeId())) {
+                return object.getNodeId();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Give an attribute and a CObject that is a child of that attribute, find the node id of the last object that is
+     * in the list of nodes directly after the child attribute that specialize the matching parent. If the parent
+     * has not yet been specialized, returns the parent node id
+     *
+     * @param parent
+     * @param matchingParentObject
+     * @return
+     */
+    private String findLastSpecializedChildDirectlyAfter(CAttribute parent, CObject matchingParentObject) {
+        int matchingIndex = parent.getIndexOfChildWithNodeId(matchingParentObject.getNodeId());
+        String result = matchingParentObject.getNodeId();
+        for(int i = matchingIndex+1; i < parent.getChildren().size(); i++) {
+            if(isOverriddenIdCode(parent.getChildren().get(i).getNodeId(), matchingParentObject.getNodeId())) {
+                result = parent.getChildren().get(i).getNodeId();
+            }
+        }
+        return result;
+    }
+
+    private boolean shouldAddNewNode(CObject specializedChildCObject, CObject matchingParentObject, List<CObject> specializedChildren) {
+        if(matchingParentObject == null) {
+            return true;
+        }
+        List<CObject> allMatchingChildren = new ArrayList<>();
+        for (CObject specializedChild : specializedChildren) {
+            if (isOverridenCObject(specializedChild, matchingParentObject)) {
+                allMatchingChildren.add(specializedChild);
+            }
+
+        }
+        //the last matching child should possibly replace the parent, the rest should just add
+        //if there is just one child, that's fine, it should still work
+        if(allMatchingChildren.get(allMatchingChildren.size()-1).getNodeId().equalsIgnoreCase(specializedChildCObject.getNodeId())) {
+            return !shouldReplaceParent(matchingParentObject, allMatchingChildren);
+        }
+        return true;
+    }
+
+    /**
+     * Find the matching parent CObject given a specialized child. REturns null if not found.
+     * @param specializedChildCObject
+     * @param parentCObjects
+     * @return
+     */
+    private CObject findMatchingParentCObject(CObject specializedChildCObject, List<CObject> parentCObjects) {
+        for (CObject parentCObject : parentCObjects) {
+            if (isOverridenCObject(specializedChildCObject, parentCObject)) {
+                return parentCObject;
+            }
+        }
+        return null;
+    }
 
     private boolean isOverridenCObject(CObject specialized, CObject parent) {
         String specializedNodeId = specialized.getNodeId();
