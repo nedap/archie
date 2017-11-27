@@ -232,7 +232,8 @@ public class SpecializedDefinitionValidation extends ValidatingVisitor {
                     if(parentAttribute != null) { //null check is handled by VDIFP
                         //TODO: although this is a bit strange, nodeid could be unspecialized, parent can be specialized
                         CObject child = parentAttribute.getChild(cObject.getSiblingOrder().getSiblingNodeId());
-                        if (child == null) {
+                        CObject child2 = parentAttribute.getChild(AOMUtils.codeAtLevel(cObject.getSiblingOrder().getSiblingNodeId(), flatParent.specializationDepth()));
+                        if (child == null && child2 == null) {
                             addMessage(ErrorType.VSSM, cObject.path());
                         }
                     }

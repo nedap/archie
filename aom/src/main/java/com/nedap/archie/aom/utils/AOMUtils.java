@@ -74,7 +74,7 @@ public class AOMUtils {
         return PathUtil.getPath(pathSegments);
     }
 
-    private static String codeAtLevel(String nodeId, int level) {
+    public static String codeAtLevel(String nodeId, int level) {
         NodeIdUtil nodeIdUtil = new NodeIdUtil(nodeId);
         List<Integer> codes = new ArrayList<>();
         for(int i = 0; i <= level;i++) {

@@ -107,6 +107,21 @@ public class SiblingOrderFlattenerTest {
         );
     }
 
+    /**
+     * Same edge case as trickyEdgeCase, but with id3.1 in the reference instead of id3 :)
+     * @throws Exception
+     */
+    @Test
+    public void trickyEdgeCase2() throws Exception {
+        Archetype flat =  parseAndFlatten("openEHR-EHR-CLUSTER.sibling_order_redefined_node_id.v1.0.0.adls");
+        List<CObject> children = flat.getDefinition().getAttribute("items").getChildren();
+        List<String> nodeIds = children.stream().map((cobject) -> cobject.getNodeId()).collect(Collectors.toList());
+        assertEquals(
+                Lists.newArrayList("id0.6", "id3.1", "id0.5", "id0.7", "id2", "id4", "id5"),
+                nodeIds
+        );
+    }
+
     private Archetype parse(String fileName) throws IOException {
         return FlattenerTestUtil.parse("/com/nedap/archie/flattener/siblingorder/" + fileName);
     }
