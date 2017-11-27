@@ -5,9 +5,11 @@ import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.CObject;
 
 import com.nedap.archie.query.APathQuery;
+import com.nedap.archie.rminfo.ReferenceModels;
 import com.nedap.archie.rules.*;
 
 import com.nedap.archie.serializer.adl.ADLArchetypeSerializer;
+import com.nedap.archie.testutil.TestUtil;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -26,9 +28,11 @@ public class RulesFlattenerTest {
     private Flattener flattener;
     private SimpleArchetypeRepository repository;
 
+    private ReferenceModels models;
+
     @Before
     public void setup() throws Exception {
-
+        models = TestUtil.getReferenceModels();
 
         withRules = new ADLParser().parse(FlattenerTest.class.getResourceAsStream("openEHR-EHR-OBSERVATION.with_rules.v1.adls"));
         specializedRules = new ADLParser().parse(FlattenerTest.class.getResourceAsStream("openEHR-EHR-OBSERVATION.specialized_rules.v1.adls"));
@@ -39,7 +43,7 @@ public class RulesFlattenerTest {
         repository.addArchetype(specializedRules);
         repository.addArchetype(containingRules);
 
-        flattener = new Flattener(repository).createOperationalTemplate(true);
+        flattener = new Flattener(repository, models).createOperationalTemplate(true);
     }
 
     @Test

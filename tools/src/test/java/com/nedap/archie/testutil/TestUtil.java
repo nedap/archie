@@ -6,8 +6,10 @@ import com.nedap.archie.aom.CComplexObject;
 import com.nedap.archie.aom.CObject;
 import com.nedap.archie.aom.CPrimitiveObject;
 import com.nedap.archie.creation.RMObjectCreator;
+import com.nedap.archie.openehrtestrm.TestRMInfoLookup;
 import com.nedap.archie.rm.RMObject;
 import com.nedap.archie.rminfo.ArchieRMInfoLookup;
+import com.nedap.archie.rminfo.ReferenceModels;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +25,7 @@ import static org.junit.Assert.*;
 public class TestUtil {
 
     private RMObjectCreator creator = new RMObjectCreator(ArchieRMInfoLookup.getInstance());
+
     /**
      * Creates an empty RM Object, fully nested, one object per CObject found.
      * For those familiar to the old java libs: this is a simple skeleton generator.
@@ -121,5 +124,12 @@ public class TestUtil {
     private static boolean primitiveObjectMatches(CPrimitiveObject o1, CObject o2) {
         return (o2 instanceof CPrimitiveObject) && Objects.equals(((CPrimitiveObject) o2).getConstraint(), o1.getConstraint());
 
+    }
+
+    public static ReferenceModels getReferenceModels() {
+        ReferenceModels models = new ReferenceModels();
+        models.registerModel(ArchieRMInfoLookup.getInstance());
+        models.registerModel(TestRMInfoLookup.getInstance());
+        return models;
     }
 }

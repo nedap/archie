@@ -1,15 +1,20 @@
 package com.nedap.archie.flattener;
 
 import com.google.common.collect.Lists;
+import com.nedap.archie.adlparser.modelconstraints.ReflectionConstraintImposer;
 import com.nedap.archie.aom.*;
 import com.nedap.archie.aom.terminology.ArchetypeTerm;
 import com.nedap.archie.aom.terminology.ArchetypeTerminology;
 import com.nedap.archie.aom.utils.AOMUtils;
 import com.nedap.archie.aom.utils.ArchetypeParsePostProcesser;
+import com.nedap.archie.base.MultiplicityInterval;
 import com.nedap.archie.paths.PathSegment;
 import com.nedap.archie.paths.PathUtil;
 import com.nedap.archie.query.AOMPathQuery;
 import com.nedap.archie.query.APathQuery;
+import com.nedap.archie.rminfo.ModelInfoLookup;
+import com.nedap.archie.rminfo.RMAttributeInfo;
+import com.nedap.archie.rminfo.ReferenceModels;
 import com.nedap.archie.rules.Assertion;
 
 import java.util.ArrayList;
@@ -28,6 +33,7 @@ import java.util.Stack;
  */
 public class Flattener {
 
+    private final ReferenceModels referenceModels;
     //to be able to store Template Overlays transparently during flattening
     private OverridingArchetypeRepository repository;
 
@@ -41,11 +47,14 @@ public class Flattener {
 
     private String[] languagesToKeep = null;
 
+    private ModelInfoLookup lookup;
+
     private RulesFlattener rulesFlattener = new RulesFlattener();
 
 
-    public Flattener(ArchetypeRepository repository) {
+    public Flattener(ArchetypeRepository repository, ReferenceModels models) {
         this.repository = new OverridingArchetypeRepository(repository);
+        this.referenceModels = models;
     }
 
     public Flattener createOperationalTemplate(boolean makeTemplate) {
@@ -73,6 +82,9 @@ public class Flattener {
         if(parent != null) {
             throw new IllegalStateException("You've used this flattener before - single use instance, please create a new one!");
         }
+
+        lookup = referenceModels.getModel(toFlatten);
+       // new ReflectionConstraintImposer(lookup).setSingleOrMultiple(toFlatten.getDefinition());
         //validate that we can legally flatten first
         String parentId = toFlatten.getParentArchetypeId();
         if(parentId == null) {
@@ -458,18 +470,67 @@ public class Flattener {
                 return true;
             }
         }
-        if(parent.getParent().isSingle()) {
+        MultiplicityInterval occurrences = effectiveOccurrences(parent);
+        //isSingle/isMultiple is tricky and not doable just in the parser. Don't use those
+        if(isSingle(parent.getParent())) {
             return true;
-        } else if(parent.getOccurrences() != null && parent.getOccurrences().upperIsOne()) {
+        } else if(occurrences != null && occurrences.upperIsOne()) {
             //REFINE the parent node case 1, the parent has occurrences upper == 1
             return true;
         } else if (differentialNodes.size() == 1
-                && differentialNodes.get(0).getOccurrences() != null
-                && differentialNodes.get(0).getOccurrences().upperIsOne()) {
+                && effectiveOccurrences(differentialNodes.get(0)).upperIsOne()) {
             //REFINE the parent node case 2, only one child with occurrences upper == 1
             return true;
         }
         return false;
+    }
+
+    private boolean isSingle(CAttribute attribute) {
+        if(attribute != null && attribute.getParent() != null && attribute.getDifferentialPath() == null) {
+            RMAttributeInfo attributeInfo = lookup.getAttributeInfo(attribute.getParent().getRmTypeName(), attribute.getRmAttributeName());
+            return attributeInfo != null && !attributeInfo.isMultipleValued();
+        }
+        return false;
+    }
+
+    private MultiplicityInterval effectiveOccurrences(CObject object) {
+        if(object.getOccurrences() != null) {
+            return object.getOccurrences();
+        }
+        int occurrencesLower = 0;
+        CAttribute parent = object.getParent();
+        if(parent != null) {
+            if(parent.getExistence() != null) {
+                occurrencesLower = parent.getExistence().getLower();
+            }
+            if(parent.getCardinality() != null) {
+                if(parent.getCardinality().getInterval().isUpperUnbounded()) {
+                    return MultiplicityInterval.createUpperUnbounded(occurrencesLower);
+                } else {
+                    return MultiplicityInterval.createBounded(occurrencesLower, parent.getCardinality().getInterval().getUpper());
+                }
+            } else if(parent.getParent() != null) {
+                //TODO: this can be a (differential) path, but we don't support that yet.
+                return referenceModelPropMultiplicity(parent.getParent().getRmTypeName(), parent.getRmAttributeName());
+            } else {
+                return MultiplicityInterval.createUpperUnbounded(occurrencesLower);
+            }
+        } else {
+            return MultiplicityInterval.createOpen();
+        }
+    }
+
+    private MultiplicityInterval referenceModelPropMultiplicity(String rmTypeName, String rmAttributeName) {
+        RMAttributeInfo attributeInfo = lookup.getAttributeInfo(rmTypeName, rmAttributeName);
+        if(attributeInfo.isMultipleValued()) {
+            return MultiplicityInterval.createUpperUnbounded(0);
+        } else {
+            if(attributeInfo.isNullable()) {
+                return MultiplicityInterval.createBounded(0, 1);
+            } else {
+                return MultiplicityInterval.createBounded(1, 1);
+            }
+        }
     }
 
     private void flattenArchetypeSlot(ArchetypeSlot parent, ArchetypeSlot specialized) {
@@ -593,7 +654,7 @@ public class Flattener {
     }
 
     private Flattener getNewFlattener() {
-        return new Flattener(repository)
+        return new Flattener(repository, referenceModels)
                 .createOperationalTemplate(false) //do not create operational template except at the end.
                 .useComplexObjectForArchetypeSlotReplacement(useComplexObjectForArchetypeSlotReplacement);
     }
@@ -729,6 +790,9 @@ for all c_object in specialized_c_objects:
     }
 
     public static boolean isOverriddenIdCode(String specializedNodeId, String parentNodeId) {
+        if(specializedNodeId.equalsIgnoreCase(parentNodeId)) {
+            return true;
+        }
         if(specializedNodeId.lastIndexOf('.') > 0) {
             specializedNodeId = specializedNodeId.substring(0, specializedNodeId.lastIndexOf('.'));//-1?
         }

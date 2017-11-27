@@ -6,7 +6,12 @@ import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.CAttribute;
 import com.nedap.archie.aom.CComplexObject;
 import com.nedap.archie.aom.CObject;
+import com.nedap.archie.archetypevalidator.ArchetypeValidator;
+import com.nedap.archie.archetypevalidator.ValidationResult;
 import com.nedap.archie.flattener.specexamples.FlattenerTestUtil;
+import com.nedap.archie.rminfo.ArchieRMInfoLookup;
+import com.nedap.archie.rminfo.ReferenceModels;
+import com.nedap.archie.testutil.TestUtil;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,6 +20,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class SiblingOrderFlattenerTest {
 
@@ -26,6 +32,10 @@ public class SiblingOrderFlattenerTest {
     public void setup() throws Exception {
         repository = new InMemoryFullArchetypeRepository();
         parentArchetype = parse("openEHR-EHR-CLUSTER.order-parent.v1.0.0.adls");
+        ReferenceModels models = new ReferenceModels();
+        models.registerModel(ArchieRMInfoLookup.getInstance());
+        ValidationResult validationResult = new ArchetypeValidator(models).validate(parentArchetype);
+        assertTrue(validationResult.getErrors().toString(), validationResult.passes());
         repository.addArchetype(parentArchetype);
 
     }
@@ -103,6 +113,12 @@ public class SiblingOrderFlattenerTest {
     }
 
     private Archetype parseAndFlatten(String fileName) throws IOException {
-        return new Flattener(repository).flatten(parse(fileName));
+        Archetype result = parse(fileName);
+        ReferenceModels models = new ReferenceModels();
+        models.registerModel(ArchieRMInfoLookup.getInstance());
+        ValidationResult validationResult = new ArchetypeValidator(models).validate(result);
+        assertTrue(validationResult.getErrors().toString(), validationResult.passes());
+
+        return new Flattener(repository, TestUtil.getReferenceModels()).flatten(parse(fileName));
     }
 }

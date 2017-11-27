@@ -13,7 +13,7 @@ import static org.junit.Assert.fail;
 public class FlattenerTestUtil {
 
     public static Archetype parse(String filename) throws IOException {
-        ADLParser parser = new ADLParser(new RMConstraintImposer());
+        ADLParser parser = new ADLParser();
         InputStream stream = FlattenerTestUtil.class.getResourceAsStream(filename);
         if(stream == null) {
             fail("cannot find file: " + filename);
