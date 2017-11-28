@@ -85,7 +85,7 @@ public class TerminologyFlattener {
 
     private static ValueSet findMatchingValueSet(Map<String, ValueSet> resultValueSets, String specializedId) {
         return resultValueSets.values().stream()
-                .filter((valueSet) -> Flattener.isOverriddenIdCode(specializedId, valueSet.getId()))
+                .filter((valueSet) -> FlattenerUtil.isOverriddenIdCode(specializedId, valueSet.getId()))
                 .findAny().orElse(null);
     }
 
