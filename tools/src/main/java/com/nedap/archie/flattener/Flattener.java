@@ -1,25 +1,14 @@
 package com.nedap.archie.flattener;
 
-import com.google.common.collect.Lists;
 import com.nedap.archie.aom.*;
-import com.nedap.archie.aom.terminology.ArchetypeTerm;
-import com.nedap.archie.aom.terminology.ArchetypeTerminology;
-import com.nedap.archie.aom.utils.AOMUtils;
 import com.nedap.archie.aom.utils.ArchetypeParsePostProcesser;
-import com.nedap.archie.base.MultiplicityInterval;
-import com.nedap.archie.paths.PathSegment;
-import com.nedap.archie.paths.PathUtil;
-import com.nedap.archie.query.AOMPathQuery;
-import com.nedap.archie.query.APathQuery;
 import com.nedap.archie.rminfo.ModelInfoLookup;
-import com.nedap.archie.rminfo.RMAttributeInfo;
 import com.nedap.archie.rminfo.ReferenceModels;
-import com.nedap.archie.rules.Assertion;
+
+import static com.nedap.archie.flattener.FlattenerUtil.*;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Stack;
 
 /**
@@ -49,6 +38,11 @@ public class Flattener {
     private ModelInfoLookup lookup;
 
     private RulesFlattener rulesFlattener = new RulesFlattener();
+
+    CAttributeFlattener cAttributeFlattener = new CAttributeFlattener(this);
+    private TupleFlattener tupleFlattener = new TupleFlattener();
+
+    private OperationalTemplateCreator optCreator = new OperationalTemplateCreator(this);
 
 
     public Flattener(ArchetypeRepository repository, ReferenceModels models) {
@@ -88,10 +82,10 @@ public class Flattener {
         String parentId = toFlatten.getParentArchetypeId();
         if(parentId == null) {
             if(createOperationalTemplate) {
-                OperationalTemplate template = createOperationalTemplate(toFlatten);
+                OperationalTemplate template = optCreator.createOperationalTemplate(toFlatten);
                 result = template;
                 //make an operational template by just filling complex object proxies and archetype slots
-                fillSlots(template);
+                optCreator.fillSlots(template);
                 TerminologyFlattener.filterLanguages(template, removeLanguagesFromMetaData, languagesToKeep);
                 result = template;
             } else {
@@ -125,8 +119,8 @@ public class Flattener {
 
         this.result = null;
         if(createOperationalTemplate) {
-            result = createOperationalTemplate(parent);
-            overrideArchetypeId(result, child);
+            result = optCreator.createOperationalTemplate(parent);
+            optCreator.overrideArchetypeId(result, child);
         } else {
             result = parent.clone();
         }
@@ -135,14 +129,14 @@ public class Flattener {
         //2. fill archetype slots if we are creating an operational template
         flattenDefinition(result, child);
         if(createOperationalTemplate) {
-            removeZeroOccurrencesConstraints(result);
+            optCreator.removeZeroOccurrencesConstraints(result);
         } else {
             prohibitZeroOccurrencesConstraints(result);
         }
 
         rulesFlattener.combineRules(child, result, "prefix", "", "", true /* override statements with same tag */);//TODO: actually set a unique prefix
         if(createOperationalTemplate) {
-            fillSlots(result);
+            optCreator.fillSlots((OperationalTemplate) result);
 
         }
         TerminologyFlattener.flattenTerminology(result, child);
@@ -164,39 +158,6 @@ public class Flattener {
         } //else as well, but is done elsewhere. needs refactor.
         ArchetypeParsePostProcesser.fixArchetype(result);
         return result;
-    }
-
-
-    public void fillSlots(Archetype archetype) { //should this be OperationalTemplate?
-        closeArchetypeSlots(archetype);
-        fillArchetypeRoots(archetype);
-        fillComplexObjectProxies(archetype);
-    }
-
-    /** Zero occurrences and existence constraint processing when creating OPT templates. Removes attributes */
-    private void removeZeroOccurrencesConstraints(Archetype archetype) {
-        Stack<CObject> workList = new Stack<>();
-        workList.push(archetype.getDefinition());
-        while(!workList.isEmpty()) {
-            CObject object = workList.pop();
-            List<CAttribute> attributesToRemove = new ArrayList<>();
-            for(CAttribute attribute:object.getAttributes()) {
-                if(attribute.getExistence() != null && attribute.getExistence().getUpper() == 0 && !attribute.getExistence().isUpperUnbounded()) {
-                    attributesToRemove.add(attribute);
-                } else {
-                    List<CObject> objectsToRemove = new ArrayList<>();
-                    for (CObject child : attribute.getChildren()) {
-                        if (!child.isAllowed()) {
-                            objectsToRemove.add(child);
-                        }
-                        workList.push(child);
-                    }
-                    attribute.getChildren().removeAll(objectsToRemove);
-                }
-
-            }
-            object.getAttributes().removeAll(attributesToRemove);
-        }
     }
 
     /** Zero occurrences and existence constraint processing when flattening. Does not remove attributes*/
@@ -225,183 +186,14 @@ public class Flattener {
         }
     }
 
-    private void closeArchetypeSlots(Archetype archetype) {
-        Stack<CObject> workList = new Stack<>();
-        workList.push(archetype.getDefinition());
-        while(!workList.isEmpty()) {
-            CObject object = workList.pop();
-            for(CAttribute attribute:object.getAttributes()) {
-                List<CObject> toRemove = new ArrayList<>();
-                for(CObject child:attribute.getChildren()) {
-                    if(child instanceof ArchetypeSlot) { //use_archetype
-                        if(((ArchetypeSlot) child).isClosed()) {
-                            toRemove.add(child);
-                        }
-                    }
-                    workList.push(child);
-                }
-                attribute.getChildren().removeAll(toRemove);
-            }
-        }
-    }
-
-    private void fillArchetypeRoots(Archetype result) {
-
-        Stack<CObject> workList = new Stack<>();
-        workList.push(result.getDefinition());
-        while(!workList.isEmpty()) {
-            CObject object = workList.pop();
-            for(CAttribute attribute:object.getAttributes()) {
-                for(CObject child:attribute.getChildren()) {
-                    if(child instanceof CArchetypeRoot) { //use_archetype
-                        fillArchetypeRoot((CArchetypeRoot) child);
-                    }
-                    workList.push(child);
-                }
-            }
-        }
-    }
-
-    private void fillComplexObjectProxies(Archetype result) {
-
-        Stack<CObject> workList = new Stack<>();
-        workList.push(result.getDefinition());
-        List<ComplexObjectProxyReplacement> replacements = new ArrayList<>();
-        while(!workList.isEmpty()) {
-            CObject object = workList.pop();
-            for(CAttribute attribute:object.getAttributes()) {
-                for(CObject child:attribute.getChildren()) {
-                    if(child instanceof CComplexObjectProxy) { //use_node
-                        ComplexObjectProxyReplacement possibleReplacement =
-                                ComplexObjectProxyReplacement.getComplexObjectProxyReplacement((CComplexObjectProxy) child);
-                        if(possibleReplacement != null) {
-                            replacements.add(possibleReplacement);
-                        } else {
-                            throw new RuntimeException("cannot find target in CComplexObjectProxy");
-                        }
-
-                    }
-                    workList.push(child);
-                }
-            }
-        }
-        for(ComplexObjectProxyReplacement replacement:replacements) {
-            replacement.replace();
-        }
-    }
-
-    private void fillArchetypeRoot(CArchetypeRoot root) {
-        if(createOperationalTemplate) {
-            String archetypeRef = root.getArchetypeRef();
-            String newArchetypeRef = archetypeRef;
-            Archetype archetype = this.repository.getArchetype(archetypeRef);
-            if(archetype instanceof TemplateOverlay){
-                //we want to be able to check which archetype this is in the UI. If it's an overlay, that means retrieving the non-operational template
-                //which is a hassle.
-                //That's a problem. Is this the way to fix is?
-                newArchetypeRef = archetype.getParentArchetypeId();
-            }
-            if (archetype == null) {
-                throw new IllegalArgumentException("Archetype with reference :" + archetypeRef + " not found.");
-            }
-
-            archetype = getNewFlattener().flatten(archetype);
-
-            //
-            CComplexObject rootToFill = root;
-            if(useComplexObjectForArchetypeSlotReplacement) {
-                rootToFill = archetype.getDefinition();
-                root.getParent().replaceChild(root.getNodeId(), rootToFill);
-            } else {
-                rootToFill.setAttributes(archetype.getDefinition().getAttributes());
-                rootToFill.setAttributeTuples(archetype.getDefinition().getAttributeTuples());
-                rootToFill.setDefaultValue(archetype.getDefinition().getDefaultValue());
-            }
-            String newNodeId = archetype.getArchetypeId().getFullId();
-
-            ArchetypeTerminology terminology = archetype.getTerminology();
-
-            //The node id will be replaced from "id1" to something like "openEHR-EHR-COMPOSITION.template_overlay.v1.0.0
-            //so store it in the terminology as well
-            Map<String, Map<String, ArchetypeTerm>> termDefinitions = terminology.getTermDefinitions();
-
-            for(String language: termDefinitions.keySet()) {
-                Map<String, ArchetypeTerm> translations = termDefinitions.get(language);
-                translations.put(newNodeId, TerminologyFlattener.getTerm(terminology.getTermDefinitions(), language, archetype.getDefinition().getNodeId()));
-            }
-
-            //rootToFill.setNodeId(newNodeId);
-            if(!useComplexObjectForArchetypeSlotReplacement) {
-                root.setArchetypeRef(newNodeId);
-            }
-            OperationalTemplate templateResult = (OperationalTemplate) result;
-
-            //todo: should we filter this?
-            if(archetype instanceof OperationalTemplate) {
-                OperationalTemplate template = (OperationalTemplate) archetype;
-                //add all the component terminologies, otherwise we lose translation
-                for(String subarchetypeId:template.getComponentTerminologies().keySet()) {
-                    templateResult.addComponentTerminology(subarchetypeId, template.getComponentTerminologies().get(subarchetypeId));
-                }
-            }
-
-            templateResult.addComponentTerminology(newNodeId, terminology);
-
-            String prefix = archetype.getArchetypeId().getConceptId() + "_";
-            rulesFlattener.combineRules(archetype, root.getArchetype(), prefix, prefix, rootToFill.getPath(), false); //TODO: add prefixes to make them unique, or some other way of making unique
-            //todo: do we have to put something in the terminology extracts?
-            //templateResult.addTerminologyExtract(child.getNodeId(), archetype.getTerminology().);
-        }
-
-    }
-
-    private static OperationalTemplate createOperationalTemplate(Archetype archetype) {
-        Archetype toClone = archetype.clone(); //clone so we do not overwrite the parent archetype. never
-        OperationalTemplate result = new OperationalTemplate();
-        result.setArchetypeId((ArchetypeHRID) archetype.getArchetypeId().clone());
-        result.setDefinition(toClone.getDefinition());
-        result.setDifferential(false);
-
-        result.setRmRelease(toClone.getRmRelease());
-        result.setAdlVersion(toClone.getAdlVersion());
-        result.setTerminology(toClone.getTerminology());
-        result.setGenerated(true);
-        result.setOtherMetaData(toClone.getOtherMetaData());
-        result.setRules(toClone.getRules());
-        result.setBuildUid(toClone.getBuildUid());
-        result.setDescription(toClone.getDescription());
-        result.setOriginalLanguage(toClone.getOriginalLanguage());
-        result.setTranslations(toClone.getTranslations());
-
-        return result;
-    }
-
-    private static void overrideArchetypeId(Archetype result, Archetype override) {
-        result.setArchetypeId(override.getArchetypeId());
-        result.setParentArchetypeId(override.getParentArchetypeId());
-    }
-
     private void flattenDefinition(Archetype parent, Archetype specialized) {
         parent.setArchetypeId(specialized.getArchetypeId()); //TODO: override all metadata?
-        flattenCObject(null, parent.getDefinition(), Lists.newArrayList(specialized.getDefinition()));
+        createSpecializeCObject(null, parent.getDefinition(), specialized.getDefinition());
 
     }
 
-    private void flattenCObject(CAttribute attribute, CObject parent, List<CObject> specializedList) {
-        List<CObject> newNodes = new ArrayList<>();
-        for(CObject specialized:specializedList) {
-            CObject newObject = createSpecializeCObject(attribute, parent, specialized);
 
-            newNodes.add(newObject);
-        }
-
-        if(attribute != null && !newNodes.isEmpty()) {
-            boolean shouldReplaceParent = shouldReplaceParent(parent, newNodes);
-            attribute.replaceChildren(parent.getNodeId(), newNodes, !shouldReplaceParent /* remove original */);
-        }
-    }
-
-    private CObject createSpecializeCObject(CAttribute attribute, CObject parent, CObject specialized) {
+    protected CObject createSpecializeCObject(CAttribute attribute, CObject parent, CObject specialized) {
         if(parent == null) {
             return specialized;//TODO: clone?
         }
@@ -461,35 +253,9 @@ public class Flattener {
         return newObject;
     }
 
-    private boolean shouldReplaceParent(CObject parent, List<CObject> differentialNodes) {
-        for(CObject differentialNode: differentialNodes) {
-            if(differentialNode.getNodeId().equals(parent.getNodeId())) {
-                //same node id, so no specialization
-                return true;
-            }
-        }
-        MultiplicityInterval occurrences = parent.effectiveOccurrences(lookup::referenceModelPropMultiplicity);
-        //isSingle/isMultiple is tricky and not doable just in the parser. Don't use those
-        if(isSingle(parent.getParent())) {
-            return true;
-        } else if(occurrences != null && occurrences.upperIsOne()) {
-            //REFINE the parent node case 1, the parent has occurrences upper == 1
-            return true;
-        } else if (differentialNodes.size() == 1
-                && differentialNodes.get(0).effectiveOccurrences(lookup::referenceModelPropMultiplicity).upperIsOne()) {
-            //REFINE the parent node case 2, only one child with occurrences upper == 1
-            return true;
-        }
-        return false;
-    }
 
-    private boolean isSingle(CAttribute attribute) {
-        if(attribute != null && attribute.getParent() != null && attribute.getDifferentialPath() == null) {
-            RMAttributeInfo attributeInfo = lookup.getAttributeInfo(attribute.getParent().getRmTypeName(), attribute.getRmAttributeName());
-            return attributeInfo != null && !attributeInfo.isMultipleValued();
-        }
-        return false;
-    }
+
+
 
     private void flattenArchetypeSlot(ArchetypeSlot parent, ArchetypeSlot specialized) {
         if(specialized.isClosed()) {
@@ -524,94 +290,14 @@ public class Flattener {
         }
 
         for(CAttribute attribute:specialized.getAttributes()) {
-            flattenSingleAttribute(newObject, attribute);
+            cAttributeFlattener.flattenSingleAttribute(newObject, attribute);
         }
         for(CAttributeTuple tuple:specialized.getAttributeTuples()) {
-            flattenTuple(newObject, tuple);
+            tupleFlattener.flattenTuple(newObject, tuple);
         }
     }
 
-    private void flattenTuple(CComplexObject newObject, CAttributeTuple tuple) {
-        CAttributeTuple matchingTuple = AOMUtils.findMatchingTuple(newObject.getAttributeTuples(), tuple);
-
-
-        CAttributeTuple tupleClone = (CAttributeTuple) tuple.clone();
-        if(matchingTuple == null) {
-            //add
-            newObject.addAttributeTuple(tupleClone);
-        } else {
-            //replace
-            newObject.getAttributeTuples().remove(matchingTuple);
-            newObject.addAttributeTuple(tupleClone);
-        }
-        for(CAttribute attribute:tupleClone.getMembers()){
-            //replace the entire attribute with the attribute from the new tuple
-            //this should be all there is to do.
-            newObject.replaceAttribute(attribute);
-        }
-        //update all parent references
-        for(CPrimitiveTuple primitiveTuple:tupleClone.getTuples()) {
-            int i = 0;
-            for(CPrimitiveObject object:primitiveTuple.getMembers()) {
-                object.setSocParent(primitiveTuple);
-                object.setParent((tupleClone.getMembers().get(i)));
-                i++;
-            }
-        }
-    }
-
-
-    private void flattenSingleAttribute(CComplexObject newObject, CAttribute attribute) {
-        if(attribute.getDifferentialPath() != null) {
-            //this overrides a specific path
-            ArchetypeModelObject object = newObject.itemAtPath(attribute.getDifferentialPath());
-            if(object == null) {
-                //it is possible that the object points to a reference, in which case we need to clone the referenced node, then try again
-                //AOM spec paragraph 7.2: 'proxy reference targets are expanded inline if the child archetype overrides them.'
-                //also examples in ADL2 spec about internal references
-                //so find the internal references here!
-                //TODO: AOMUtils.pathAtSpecializationLevel(pathSegments.subList(0, pathSegments.size()-1), flatParent.specializationDepth());
-                CComplexObjectProxy internalReference = new AOMPathQuery(attribute.getDifferentialPath()).findAnyInternalReference(newObject);
-                if(internalReference != null) {
-                    //in theory this can be a use node within a use node.
-                    ComplexObjectProxyReplacement complexObjectProxyReplacement =
-                            ComplexObjectProxyReplacement.getComplexObjectProxyReplacement(internalReference);
-                    if(complexObjectProxyReplacement != null) {
-                        complexObjectProxyReplacement.replace();
-                        //and again!
-                        flattenSingleAttribute(newObject, attribute);
-                    } else {
-                        throw new RuntimeException("cannot find target in CComplexObjectProxy");
-                    }
-                } else {
-                    //lookup the parent and try to add the last attribute if it does not exist
-                    List<PathSegment> pathSegments = new APathQuery(attribute.getDifferentialPath()).getPathSegments();
-                    String pathMinusLastNode = PathUtil.getPath(pathSegments.subList(0, pathSegments.size()-1));
-                    CObject parentObject = newObject.itemAtPath(pathMinusLastNode);
-                    if(parentObject != null && parentObject instanceof CComplexObject) {
-                        //attribute does not exist, but does exist in RM (or it would not have passed the ArchetypeValidator, or the person using
-                        //this flattener does not care
-                        CAttribute realAttribute = new CAttribute(pathSegments.get(pathSegments.size()-1).getNodeName());
-                        ((CComplexObject) parentObject).addAttribute(realAttribute);
-                        flattenAttribute(newObject, realAttribute, attribute);
-                    }
-
-                }
-            }
-            else if(object instanceof CAttribute) {
-                CAttribute realAttribute = (CAttribute) object;
-                flattenAttribute(newObject, realAttribute, attribute);
-            } else if (object instanceof CObject) {
-                //TODO: what does this mean?
-            }
-
-        } else {
-            //this overrides the same path
-            flattenAttribute(newObject, newObject.getAttribute(attribute.getRmAttributeName()), attribute);
-        }
-    }
-
-    private Flattener getNewFlattener() {
+    protected Flattener getNewFlattener() {
         return new Flattener(repository, referenceModels)
                 .createOperationalTemplate(false) //do not create operational template except at the end.
                 .useComplexObjectForArchetypeSlotReplacement(useComplexObjectForArchetypeSlotReplacement);
@@ -622,203 +308,24 @@ public class Flattener {
         return this;
     }
 
-
-    private void flattenAttribute(CComplexObject root, CAttribute parent, CAttribute specialized) {
-        if(parent == null) {
-            CAttribute childCloned = specialized.clone();
-            root.addAttribute(childCloned);
-        } else {
-
-            parent.setExistence(getPossiblyOverridenValue(parent.getExistence(), specialized.getExistence()));
-            parent.setCardinality(getPossiblyOverridenValue(parent.getCardinality(), specialized.getCardinality()));
-
-            if (specialized.getChildren().size() > 0 && specialized.getChildren().get(0) instanceof CPrimitiveObject) {
-                //in case of a primitive object, just replace all nodes
-                parent.setChildren(specialized.getChildren());
-            } else {
-
-                //ordering the children correctly is tricky.
-                // First reorder parentCObjects if necessary, in the case that a sibling order refers to a redefined node
-                // in the specialized archetype
-                reorderSiblingOrdersReferringToSameLevel(specialized);
-
-                //Now maintain an insertion anchor
-                //for when a sibling node has been set somewhere.
-                // insert everything after/before the anchor if it is set,
-                // at the defined position from the spec if it is null
-                SiblingOrder anchor = null;
-
-                List<CObject> parentCObjects = parent.getChildren();
-
-                for (CObject specializedChildCObject : specialized.getChildren()) {
-
-                    //find matching parent and create the child node with it
-                    CObject matchingParentObject = findMatchingParentCObject(specializedChildCObject, parentCObjects);
-                    CObject specializedObject = createSpecializeCObject(parent, matchingParentObject, specializedChildCObject);
-
-                    if(specializedChildCObject.getSiblingOrder() != null) {
-                        //this node has a sibling order, insert in correct place
-                        if(!shouldAddNewNode(specializedChildCObject, matchingParentObject, specialized.getChildren())) {
-                            parent.removeChild(matchingParentObject.getNodeId());
-                        }
-                        parent.addChild(specializedObject, specializedChildCObject.getSiblingOrder());
-                        if(specializedChildCObject.getSiblingOrder().isBefore()) {
-                            anchor = specializedChildCObject.getSiblingOrder();
-                        } else {
-                            anchor = SiblingOrder.createAfter(specializedChildCObject.getNodeId());
-                        }
-                    } else if (anchor != null) {
-
-                        if(!shouldAddNewNode(specializedChildCObject, matchingParentObject, specialized.getChildren())) {
-                            parent.removeChild(matchingParentObject.getNodeId());
-
-                        }
-                        parent.addChild(specializedObject, anchor);
-
-                        if(!anchor.isBefore()) {
-                            anchor.setSiblingNodeId(specializedChildCObject.getNodeId());
-                        }
-                    } else { //no sibling order
-
-                        if(matchingParentObject == null) {
-                            //extension nodes should be added to the last position
-                            parent.addChild(specializedObject);
-                        } else {
-                            parent.addChild(specializedObject, SiblingOrder.createAfter(findLastSpecializedChildDirectlyAfter(parent, matchingParentObject)));
-                            if(!shouldAddNewNode(specializedChildCObject, matchingParentObject, specialized.getChildren())) {
-                                //we should remove the parent
-                                parent.removeChild(matchingParentObject.getNodeId());
-                            }
-                        }
-                    }
-                }
-            }
-        }
+    public boolean isUseComplexObjectForArchetypeSlotReplacement() {
+        return useComplexObjectForArchetypeSlotReplacement;
     }
 
-    /**
-     * If the following occurs:
-     *
-     * after[id3]
-     * ELEMENT[id2]
-     * ELEMENT[id3.1]
-     *
-     * Reorder it and remove sibling orders:
-     *
-     * ELEMENT[id3.1]
-     * ELEMENT[id2]
-     *
-     * If sibling order do not refer to specialized nodes at this level, leaves them alone
-     * @param parent the attribute to reorder the child nodes for
-     */
-    private void reorderSiblingOrdersReferringToSameLevel(CAttribute parent) {
-        for(CObject cObject:new ArrayList<>(parent.getChildren())) {
-            if(cObject.getSiblingOrder() != null) {
-                String matchingNodeId = findCObjectMatchingSiblingOrder(cObject.getSiblingOrder(), parent.getChildren());
-                if(matchingNodeId != null) {
-                    parent.removeChild(cObject.getNodeId());
-                    SiblingOrder siblingOrder = new SiblingOrder();
-                    siblingOrder.setSiblingNodeId(matchingNodeId);
-                    siblingOrder.setBefore(cObject.getSiblingOrder().isBefore());
-                    parent.addChild(cObject, siblingOrder);
-                    cObject.setSiblingOrder(null);//unset sibling order, it has been processed already
-                }
-            }
-        }
-    }
-
-    private String findCObjectMatchingSiblingOrder(SiblingOrder siblingOrder, List<CObject> cObjectList) {
-        for(CObject object:cObjectList) {
-            if(isOverriddenIdCode(object.getNodeId(), siblingOrder.getSiblingNodeId())) {
-                return object.getNodeId();
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Give an attribute and a CObject that is a child of that attribute, find the node id of the last object that is
-     * in the list of nodes directly after the child attribute that specialize the matching parent. If the parent
-     * has not yet been specialized, returns the parent node id
-     *
-     * @param parent
-     * @param matchingParentObject
-     * @return
-     */
-    private String findLastSpecializedChildDirectlyAfter(CAttribute parent, CObject matchingParentObject) {
-        int matchingIndex = parent.getIndexOfChildWithNodeId(matchingParentObject.getNodeId());
-        String result = matchingParentObject.getNodeId();
-        for(int i = matchingIndex+1; i < parent.getChildren().size(); i++) {
-            if(isOverriddenIdCode(parent.getChildren().get(i).getNodeId(), matchingParentObject.getNodeId())) {
-                result = parent.getChildren().get(i).getNodeId();
-            }
-        }
-        return result;
-    }
-
-    private boolean shouldAddNewNode(CObject specializedChildCObject, CObject matchingParentObject, List<CObject> specializedChildren) {
-        if(matchingParentObject == null) {
-            return true;
-        }
-        List<CObject> allMatchingChildren = new ArrayList<>();
-        for (CObject specializedChild : specializedChildren) {
-            if (isOverridenCObject(specializedChild, matchingParentObject)) {
-                allMatchingChildren.add(specializedChild);
-            }
-
-        }
-        //the last matching child should possibly replace the parent, the rest should just add
-        //if there is just one child, that's fine, it should still work
-        if(allMatchingChildren.get(allMatchingChildren.size()-1).getNodeId().equalsIgnoreCase(specializedChildCObject.getNodeId())) {
-            return !shouldReplaceParent(matchingParentObject, allMatchingChildren);
-        }
-        return true;
-    }
-
-    /**
-     * Find the matching parent CObject given a specialized child. REturns null if not found.
-     * @param specializedChildCObject
-     * @param parentCObjects
-     * @return
-     */
-    private CObject findMatchingParentCObject(CObject specializedChildCObject, List<CObject> parentCObjects) {
-        for (CObject parentCObject : parentCObjects) {
-            if (isOverridenCObject(specializedChildCObject, parentCObject)) {
-                return parentCObject;
-            }
-        }
-        return null;
-    }
-
-    private boolean isOverridenCObject(CObject specialized, CObject parent) {
-        String specializedNodeId = specialized.getNodeId();
-        String parentNodeId = parent.getNodeId();
-        return isOverriddenIdCode(specializedNodeId, parentNodeId);
-    }
-
-    public static boolean isOverriddenIdCode(String specializedNodeId, String parentNodeId) {
-        if(specializedNodeId.equalsIgnoreCase(parentNodeId)) {
-            return true;
-        }
-        if(specializedNodeId.lastIndexOf('.') > 0) {
-            specializedNodeId = specializedNodeId.substring(0, specializedNodeId.lastIndexOf('.'));//-1?
-        }
-        return specializedNodeId.equals(parentNodeId) || specializedNodeId.startsWith(parentNodeId + ".");
-    }
-
-    private List<Assertion> getPossiblyOverridenListValue(List<Assertion> parent, List<Assertion> child) {
-        if(child != null && !child.isEmpty()) {
-            return child;
-        }
-        return parent;
-    }
-
-    public <T> T getPossiblyOverridenValue(T parent, T specialized) {
-        if(specialized != null) {
-            return specialized;
-        }
-        return parent;
+    protected ModelInfoLookup getLookup() {
+        return lookup;
     }
 
 
+    public boolean getCreateOperationalTemplate() {
+        return createOperationalTemplate;
+    }
+
+    protected RulesFlattener getRulesFlattener() {
+        return rulesFlattener;
+    }
+
+    public OverridingArchetypeRepository getRepository() {
+        return repository;
+    }
 }
