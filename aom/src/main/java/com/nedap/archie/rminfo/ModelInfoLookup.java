@@ -3,6 +3,7 @@ package com.nedap.archie.rminfo;
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.CObject;
 import com.nedap.archie.aom.CPrimitiveObject;
+import com.nedap.archie.base.MultiplicityInterval;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
@@ -161,4 +162,38 @@ public interface ModelInfoLookup {
     boolean validatePrimitiveType(String rmTypeName, String rmAttributeName, CPrimitiveObject cObject);
 
     Collection<RMPackageId> getId();
+
+    /**
+     * Pass this method to cObject.effectiveOccurrences to get the reference model property multiplicity
+     * @param rmTypeName
+     * @param rmAttributeName
+     * @return
+     */
+    default MultiplicityInterval referenceModelPropMultiplicity(String rmTypeName, String rmAttributeName) {
+        RMAttributeInfo attributeInfo = getAttributeInfo(rmTypeName, rmAttributeName);
+        if(attributeInfo.isMultipleValued()) {
+            return MultiplicityInterval.createUpperUnbounded(0);
+        } else {
+            if(attributeInfo.isNullable()) {
+                return MultiplicityInterval.createBounded(0, 1);
+            } else {
+                return MultiplicityInterval.createBounded(1, 1);
+            }
+        }
+    }
+
+    /**
+     * Pass this method to cObject.cConformsTo to enable it to check if the two type names are conformant
+     * @param childType
+     * @param parentType
+     * @return
+     */
+    default Boolean rmTypesConformant(String childType, String parentType) {
+        RMTypeInfo parentTypeInfo = getTypeInfo(parentType);
+        RMTypeInfo childTypeInfo = getTypeInfo(childType);
+        if (childTypeInfo == null || parentTypeInfo == null) {
+            return true;//cannot check with RM types, will validate elsewhere
+        }
+        return childTypeInfo.isDescendantOrEqual(parentTypeInfo);
+    }
 }

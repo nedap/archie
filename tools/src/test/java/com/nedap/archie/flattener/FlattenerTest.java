@@ -12,8 +12,10 @@ import com.nedap.archie.aom.CObject;
 import com.nedap.archie.aom.OperationalTemplate;
 import com.nedap.archie.archetypevalidator.ArchetypeValidator;
 import com.nedap.archie.archetypevalidator.ValidationResult;
+import com.nedap.archie.openehrtestrm.TestRMInfoLookup;
 import com.nedap.archie.rminfo.ArchieRMInfoLookup;
 import com.nedap.archie.rminfo.ReferenceModels;
+import com.nedap.archie.testutil.TestUtil;
 import com.nedap.archie.xml.JAXBUtil;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -43,11 +45,15 @@ public class FlattenerTest {
     private static Archetype bloodPressureWithSynopsis;
     private static SimpleArchetypeRepository repository;
 
+    private ReferenceModels models;
+
 
     private Flattener flattener;
 
     @Before
     public void setup() throws Exception {
+
+        models = TestUtil.getReferenceModels();
 
         // reportresult specializes report.
         // blood pressure composition specializes report result.
@@ -82,7 +88,7 @@ public class FlattenerTest {
         repository.addArchetype(reportWithSynopsis);
         repository.addArchetype(clinicalSynopsis);
         repository.addArchetype(bloodPressureWithSynopsis);
-        flattener = new Flattener(repository).createOperationalTemplate(true);
+        flattener = new Flattener(repository, models).createOperationalTemplate(true);
     }
 
     @Test
@@ -232,7 +238,7 @@ data matches {
     public void removeLanguagesFromComponentTerminologies() throws Exception {
         OperationalTemplate flattenedWithLanguages = (OperationalTemplate) flattener.flatten(bloodPressureComposition);
 
-        flattener = new Flattener(repository).createOperationalTemplate(true).keepLanguages("en", "nl");
+        flattener = new Flattener(repository, models).createOperationalTemplate(true).keepLanguages("en", "nl");
         OperationalTemplate flattenedWithoutLanguages = (OperationalTemplate) flattener.flatten(bloodPressureComposition);
 
         for(String key:flattenedWithoutLanguages.getComponentTerminologies().keySet()) {

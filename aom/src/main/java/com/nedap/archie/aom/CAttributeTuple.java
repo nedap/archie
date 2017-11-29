@@ -9,6 +9,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
 /**
@@ -162,8 +163,8 @@ public class CAttributeTuple extends CSecondOrder<CAttribute> {
         return getMembers().stream().map((attr) -> attr.getRmAttributeName()).collect(Collectors.toList());
     }
 
-    public boolean cConformsTo(CAttributeTuple otherTuple, ModelInfoLookup lookup) {
-        return allTuplesConform(otherTuple, lookup) ||  isSubset(otherTuple);
+    public boolean cConformsTo(CAttributeTuple otherTuple, BiFunction<String, String, Boolean> rmTypesConformant) {
+        return allTuplesConform(otherTuple, rmTypesConformant) ||  isSubset(otherTuple);
     }
 
     /**
@@ -181,11 +182,11 @@ public class CAttributeTuple extends CSecondOrder<CAttribute> {
     /**
      * Return true if all of the tuples of this object conform to the tuples of the other object
      * @param otherTuple
-     * @param lookup
+     * @param rmTypesConformant function that returns whether to rm type names are conformant or not
      * @return
      */
-    private boolean allTuplesConform(CAttributeTuple otherTuple, ModelInfoLookup lookup) {
+    private boolean allTuplesConform(CAttributeTuple otherTuple, BiFunction<String, String, Boolean> rmTypesConformant) {
         return this.getTuples().stream().allMatch((primitiveTuple) ->
-                otherTuple.getTuples().stream().anyMatch((otherPrimitiveTuple) -> otherPrimitiveTuple.cConformsTo(primitiveTuple, lookup)));
+                otherTuple.getTuples().stream().anyMatch((otherPrimitiveTuple) -> otherPrimitiveTuple.cConformsTo(primitiveTuple, rmTypesConformant)));
     }
 }

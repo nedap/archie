@@ -6,17 +6,20 @@ import com.nedap.archie.aom.terminology.ArchetypeTerm;
 import com.nedap.archie.aom.terminology.ArchetypeTerminology;
 import com.nedap.archie.aom.utils.AOMUtils;
 import com.nedap.archie.aom.utils.ArchetypeParsePostProcesser;
+import com.nedap.archie.base.MultiplicityInterval;
 import com.nedap.archie.paths.PathSegment;
 import com.nedap.archie.paths.PathUtil;
 import com.nedap.archie.query.AOMPathQuery;
 import com.nedap.archie.query.APathQuery;
+import com.nedap.archie.rminfo.ModelInfoLookup;
+import com.nedap.archie.rminfo.RMAttributeInfo;
+import com.nedap.archie.rminfo.ReferenceModels;
 import com.nedap.archie.rules.Assertion;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Stack;
 
 /**
@@ -29,6 +32,7 @@ import java.util.Stack;
  */
 public class Flattener {
 
+    private final ReferenceModels referenceModels;
     //to be able to store Template Overlays transparently during flattening
     private OverridingArchetypeRepository repository;
 
@@ -42,11 +46,14 @@ public class Flattener {
 
     private String[] languagesToKeep = null;
 
+    private ModelInfoLookup lookup;
+
     private RulesFlattener rulesFlattener = new RulesFlattener();
 
 
-    public Flattener(ArchetypeRepository repository) {
+    public Flattener(ArchetypeRepository repository, ReferenceModels models) {
         this.repository = new OverridingArchetypeRepository(repository);
+        this.referenceModels = models;
     }
 
     public Flattener createOperationalTemplate(boolean makeTemplate) {
@@ -74,6 +81,9 @@ public class Flattener {
         if(parent != null) {
             throw new IllegalStateException("You've used this flattener before - single use instance, please create a new one!");
         }
+
+        lookup = referenceModels.getModel(toFlatten);
+       // new ReflectionConstraintImposer(lookup).setSingleOrMultiple(toFlatten.getDefinition());
         //validate that we can legally flatten first
         String parentId = toFlatten.getParentArchetypeId();
         if(parentId == null) {
@@ -345,10 +355,6 @@ public class Flattener {
 
     }
 
-
-
-
-
     private static OperationalTemplate createOperationalTemplate(Archetype archetype) {
         Archetype toClone = archetype.clone(); //clone so we do not overwrite the parent archetype. never
         OperationalTemplate result = new OperationalTemplate();
@@ -384,16 +390,7 @@ public class Flattener {
     private void flattenCObject(CAttribute attribute, CObject parent, List<CObject> specializedList) {
         List<CObject> newNodes = new ArrayList<>();
         for(CObject specialized:specializedList) {
-            CObject newObject = cloneSpecializedObject(attribute, parent, specialized);
-
-            specializeOccurrences(specialized, newObject);
-            newObject.setSiblingOrder(getPossiblyOverridenValue(newObject.getSiblingOrder(), specialized.getSiblingOrder()));
-
-            newObject.setNodeId(getPossiblyOverridenValue(newObject.getNodeId(), specialized.getNodeId()));
-            newObject.setRmTypeName(getPossiblyOverridenValue(newObject.getRmTypeName(), specialized.getRmTypeName()));
-
-            //now specialize the structure under the specialized node
-            specializeContent(parent, specialized, newObject);
+            CObject newObject = createSpecializeCObject(attribute, parent, specialized);
 
             newNodes.add(newObject);
         }
@@ -402,6 +399,23 @@ public class Flattener {
             boolean shouldReplaceParent = shouldReplaceParent(parent, newNodes);
             attribute.replaceChildren(parent.getNodeId(), newNodes, !shouldReplaceParent /* remove original */);
         }
+    }
+
+    private CObject createSpecializeCObject(CAttribute attribute, CObject parent, CObject specialized) {
+        if(parent == null) {
+            return specialized;//TODO: clone?
+        }
+        CObject newObject = cloneSpecializedObject(attribute, parent, specialized);
+
+        specializeOccurrences(specialized, newObject);
+        newObject.setSiblingOrder(getPossiblyOverridenValue(newObject.getSiblingOrder(), specialized.getSiblingOrder()));
+
+        newObject.setNodeId(getPossiblyOverridenValue(newObject.getNodeId(), specialized.getNodeId()));
+        newObject.setRmTypeName(getPossiblyOverridenValue(newObject.getRmTypeName(), specialized.getRmTypeName()));
+
+        //now specialize the structure under the specialized node
+        specializeContent(parent, specialized, newObject);
+        return newObject;
     }
 
     private void specializeContent(CObject parent, CObject specialized, CObject newObject) {
@@ -454,16 +468,25 @@ public class Flattener {
                 return true;
             }
         }
-        if(parent.getParent().isSingle()) {
+        MultiplicityInterval occurrences = parent.effectiveOccurrences(lookup::referenceModelPropMultiplicity);
+        //isSingle/isMultiple is tricky and not doable just in the parser. Don't use those
+        if(isSingle(parent.getParent())) {
             return true;
-        } else if(parent.getOccurrences() != null && parent.getOccurrences().upperIsOne()) {
+        } else if(occurrences != null && occurrences.upperIsOne()) {
             //REFINE the parent node case 1, the parent has occurrences upper == 1
             return true;
         } else if (differentialNodes.size() == 1
-                && differentialNodes.get(0).getOccurrences() != null
-                && differentialNodes.get(0).getOccurrences().upperIsOne()) {
+                && differentialNodes.get(0).effectiveOccurrences(lookup::referenceModelPropMultiplicity).upperIsOne()) {
             //REFINE the parent node case 2, only one child with occurrences upper == 1
             return true;
+        }
+        return false;
+    }
+
+    private boolean isSingle(CAttribute attribute) {
+        if(attribute != null && attribute.getParent() != null && attribute.getDifferentialPath() == null) {
+            RMAttributeInfo attributeInfo = lookup.getAttributeInfo(attribute.getParent().getRmTypeName(), attribute.getRmAttributeName());
+            return attributeInfo != null && !attributeInfo.isMultipleValued();
         }
         return false;
     }
@@ -589,7 +612,7 @@ public class Flattener {
     }
 
     private Flattener getNewFlattener() {
-        return new Flattener(repository)
+        return new Flattener(repository, referenceModels)
                 .createOperationalTemplate(false) //do not create operational template except at the end.
                 .useComplexObjectForArchetypeSlotReplacement(useComplexObjectForArchetypeSlotReplacement);
     }
@@ -610,31 +633,161 @@ public class Flattener {
             parent.setCardinality(getPossiblyOverridenValue(parent.getCardinality(), specialized.getCardinality()));
 
             if (specialized.getChildren().size() > 0 && specialized.getChildren().get(0) instanceof CPrimitiveObject) {
-                //TODO: is this correct? replace all specialized nodes
+                //in case of a primitive object, just replace all nodes
                 parent.setChildren(specialized.getChildren());
             } else {
 
-                Set<CObject> newChildObjects = new LinkedHashSet<>(specialized.getChildren());
-                for (CObject parentCObject : new ArrayList<>(parent.getChildren())) {
-                    List<CObject> matchingChildren = new ArrayList<>();
-                    for (CObject specializedChildCObject : specialized.getChildren()) {
+                //ordering the children correctly is tricky.
+                // First reorder parentCObjects if necessary, in the case that a sibling order refers to a redefined node
+                // in the specialized archetype
+                reorderSiblingOrdersReferringToSameLevel(specialized);
 
-                        if (isOverridenCObject(specializedChildCObject, parentCObject)) {
-                            matchingChildren.add(specializedChildCObject);
-                            newChildObjects.remove(specializedChildCObject);
+                //Now maintain an insertion anchor
+                //for when a sibling node has been set somewhere.
+                // insert everything after/before the anchor if it is set,
+                // at the defined position from the spec if it is null
+                SiblingOrder anchor = null;
+
+                List<CObject> parentCObjects = parent.getChildren();
+
+                for (CObject specializedChildCObject : specialized.getChildren()) {
+
+                    //find matching parent and create the child node with it
+                    CObject matchingParentObject = findMatchingParentCObject(specializedChildCObject, parentCObjects);
+                    CObject specializedObject = createSpecializeCObject(parent, matchingParentObject, specializedChildCObject);
+
+                    if(specializedChildCObject.getSiblingOrder() != null) {
+                        //this node has a sibling order, insert in correct place
+                        if(!shouldAddNewNode(specializedChildCObject, matchingParentObject, specialized.getChildren())) {
+                            parent.removeChild(matchingParentObject.getNodeId());
                         }
+                        parent.addChild(specializedObject, specializedChildCObject.getSiblingOrder());
+                        if(specializedChildCObject.getSiblingOrder().isBefore()) {
+                            anchor = specializedChildCObject.getSiblingOrder();
+                        } else {
+                            anchor = SiblingOrder.createAfter(specializedChildCObject.getNodeId());
+                        }
+                    } else if (anchor != null) {
 
+                        if(!shouldAddNewNode(specializedChildCObject, matchingParentObject, specialized.getChildren())) {
+                            parent.removeChild(matchingParentObject.getNodeId());
+
+                        }
+                        parent.addChild(specializedObject, anchor);
+
+                        if(!anchor.isBefore()) {
+                            anchor.setSiblingNodeId(specializedChildCObject.getNodeId());
+                        }
+                    } else { //no sibling order
+
+                        if(matchingParentObject == null) {
+                            //extension nodes should be added to the last position
+                            parent.addChild(specializedObject);
+                        } else {
+                            parent.addChild(specializedObject, SiblingOrder.createAfter(findLastSpecializedChildDirectlyAfter(parent, matchingParentObject)));
+                            if(!shouldAddNewNode(specializedChildCObject, matchingParentObject, specialized.getChildren())) {
+                                //we should remove the parent
+                                parent.removeChild(matchingParentObject.getNodeId());
+                            }
+                        }
                     }
-                    flattenCObject(parent, parentCObject, matchingChildren);
-                }
-
-                for(CObject newChild:newChildObjects) {
-                    //TODO: check that newChildObjects start with id0. at the correct specialization level
-                    parent.addChild(newChild);
                 }
             }
         }
+    }
 
+    /**
+     * If the following occurs:
+     *
+     * after[id3]
+     * ELEMENT[id2]
+     * ELEMENT[id3.1]
+     *
+     * Reorder it and remove sibling orders:
+     *
+     * ELEMENT[id3.1]
+     * ELEMENT[id2]
+     *
+     * If sibling order do not refer to specialized nodes at this level, leaves them alone
+     * @param parent the attribute to reorder the child nodes for
+     */
+    private void reorderSiblingOrdersReferringToSameLevel(CAttribute parent) {
+        for(CObject cObject:new ArrayList<>(parent.getChildren())) {
+            if(cObject.getSiblingOrder() != null) {
+                String matchingNodeId = findCObjectMatchingSiblingOrder(cObject.getSiblingOrder(), parent.getChildren());
+                if(matchingNodeId != null) {
+                    parent.removeChild(cObject.getNodeId());
+                    SiblingOrder siblingOrder = new SiblingOrder();
+                    siblingOrder.setSiblingNodeId(matchingNodeId);
+                    siblingOrder.setBefore(cObject.getSiblingOrder().isBefore());
+                    parent.addChild(cObject, siblingOrder);
+                    cObject.setSiblingOrder(null);//unset sibling order, it has been processed already
+                }
+            }
+        }
+    }
+
+    private String findCObjectMatchingSiblingOrder(SiblingOrder siblingOrder, List<CObject> cObjectList) {
+        for(CObject object:cObjectList) {
+            if(isOverriddenIdCode(object.getNodeId(), siblingOrder.getSiblingNodeId())) {
+                return object.getNodeId();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Give an attribute and a CObject that is a child of that attribute, find the node id of the last object that is
+     * in the list of nodes directly after the child attribute that specialize the matching parent. If the parent
+     * has not yet been specialized, returns the parent node id
+     *
+     * @param parent
+     * @param matchingParentObject
+     * @return
+     */
+    private String findLastSpecializedChildDirectlyAfter(CAttribute parent, CObject matchingParentObject) {
+        int matchingIndex = parent.getIndexOfChildWithNodeId(matchingParentObject.getNodeId());
+        String result = matchingParentObject.getNodeId();
+        for(int i = matchingIndex+1; i < parent.getChildren().size(); i++) {
+            if(isOverriddenIdCode(parent.getChildren().get(i).getNodeId(), matchingParentObject.getNodeId())) {
+                result = parent.getChildren().get(i).getNodeId();
+            }
+        }
+        return result;
+    }
+
+    private boolean shouldAddNewNode(CObject specializedChildCObject, CObject matchingParentObject, List<CObject> specializedChildren) {
+        if(matchingParentObject == null) {
+            return true;
+        }
+        List<CObject> allMatchingChildren = new ArrayList<>();
+        for (CObject specializedChild : specializedChildren) {
+            if (isOverridenCObject(specializedChild, matchingParentObject)) {
+                allMatchingChildren.add(specializedChild);
+            }
+
+        }
+        //the last matching child should possibly replace the parent, the rest should just add
+        //if there is just one child, that's fine, it should still work
+        if(allMatchingChildren.get(allMatchingChildren.size()-1).getNodeId().equalsIgnoreCase(specializedChildCObject.getNodeId())) {
+            return !shouldReplaceParent(matchingParentObject, allMatchingChildren);
+        }
+        return true;
+    }
+
+    /**
+     * Find the matching parent CObject given a specialized child. REturns null if not found.
+     * @param specializedChildCObject
+     * @param parentCObjects
+     * @return
+     */
+    private CObject findMatchingParentCObject(CObject specializedChildCObject, List<CObject> parentCObjects) {
+        for (CObject parentCObject : parentCObjects) {
+            if (isOverridenCObject(specializedChildCObject, parentCObject)) {
+                return parentCObject;
+            }
+        }
+        return null;
     }
 
     private boolean isOverridenCObject(CObject specialized, CObject parent) {
@@ -644,6 +797,9 @@ public class Flattener {
     }
 
     public static boolean isOverriddenIdCode(String specializedNodeId, String parentNodeId) {
+        if(specializedNodeId.equalsIgnoreCase(parentNodeId)) {
+            return true;
+        }
         if(specializedNodeId.lastIndexOf('.') > 0) {
             specializedNodeId = specializedNodeId.substring(0, specializedNodeId.lastIndexOf('.'));//-1?
         }

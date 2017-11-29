@@ -2,7 +2,6 @@ package com.nedap.archie.aom.primitives;
 
 import com.nedap.archie.aom.CObject;
 import com.nedap.archie.aom.CPrimitiveObject;
-import com.nedap.archie.rminfo.ModelInfoLookup;
 
 import javax.annotation.Nullable;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -11,6 +10,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiFunction;
 
 /**
  * Created by pieter.bos on 15/10/15.
@@ -50,8 +50,8 @@ public class CBoolean extends CPrimitiveObject<Boolean, Boolean> {
     }
 
     @Override
-    public boolean cConformsTo(CObject other, ModelInfoLookup lookup) {
-        if(!super.cConformsTo(other, lookup)) {
+    public boolean cConformsTo(CObject other, BiFunction<String, String, Boolean> rmTypeNamesConformant) {
+        if(!super.cConformsTo(other, rmTypeNamesConformant)) {
             return false;
         }
         //now guaranteed to be the same class

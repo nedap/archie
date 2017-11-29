@@ -74,7 +74,7 @@ public class AOMUtils {
         return PathUtil.getPath(pathSegments);
     }
 
-    private static String codeAtLevel(String nodeId, int level) {
+    public static String codeAtLevel(String nodeId, int level) {
         NodeIdUtil nodeIdUtil = new NodeIdUtil(nodeId);
         List<Integer> codes = new ArrayList<>();
         for(int i = 0; i <= level;i++) {
@@ -232,15 +232,6 @@ public class AOMUtils {
         return isValidCode(childNodeId) && childNodeId.startsWith(parentNodeId) &&
                 (childNodeId.length() == parentNodeId.length() || (childNodeId.length() > parentNodeId.length() && childNodeId.charAt(parentNodeId.length()) == AdlCodeDefinitions.SPECIALIZATION_SEPARATOR));
 
-    }
-
-    public static boolean typeNamesConformant(String childType, String parentType, ModelInfoLookup lookup) {
-        RMTypeInfo parentTypeInfo = lookup.getTypeInfo(parentType);
-        RMTypeInfo childTypeInfo = lookup.getTypeInfo(childType);
-        if(childTypeInfo == null || parentTypeInfo == null) {
-            return true;//cannot check with RM types, will validate elsewhere
-        }
-        return childTypeInfo.isDescendantOrEqual(parentTypeInfo);
     }
 
     public static CAttributeTuple findMatchingTuple(List<CAttributeTuple> attributeTuples, CAttributeTuple specializedTuple) {

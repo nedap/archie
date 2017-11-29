@@ -10,11 +10,11 @@ import java.io.InputStream;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-class FlattenerTestUtil {
+public class FlattenerTestUtil {
 
-    protected static Archetype parse(String filename) throws IOException {
-        ADLParser parser = new ADLParser(new RMConstraintImposer());
-        InputStream stream = FlattenerExamplesFromSpecTest.class.getResourceAsStream(filename);
+    public static Archetype parse(String filename) throws IOException {
+        ADLParser parser = new ADLParser();
+        InputStream stream = FlattenerTestUtil.class.getResourceAsStream(filename);
         if(stream == null) {
             fail("cannot find file: " + filename);
         }

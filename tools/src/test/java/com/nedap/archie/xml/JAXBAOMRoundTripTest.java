@@ -92,7 +92,7 @@ public class JAXBAOMRoundTripTest {
         repository.addArchetype(height);
         repository.addArchetype(heightTemplate);
 
-        Flattener flattener = new Flattener(repository).createOperationalTemplate(true);
+        Flattener flattener = new Flattener(repository, TestUtil.getReferenceModels()).createOperationalTemplate(true);
         Archetype operationalTemplate = flattener.flatten(bloodPressureComposition);
         String xml = marshal(operationalTemplate);
         System.out.println(xml);

@@ -5,10 +5,7 @@ import com.nedap.archie.ArchieLanguageConfiguration;
 import com.nedap.archie.aom.terminology.ArchetypeTerm;
 import com.nedap.archie.aom.utils.AOMUtils;
 import com.nedap.archie.base.MultiplicityInterval;
-import com.nedap.archie.definitions.AdlCodeDefinitions;
 import com.nedap.archie.paths.PathSegment;
-import com.nedap.archie.rminfo.ModelInfoLookup;
-import org.apache.commons.lang.StringUtils;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -19,6 +16,7 @@ import javax.xml.bind.annotation.XmlType;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.BiFunction;
 
 /**
  * Constraint on an object.
@@ -265,22 +263,21 @@ public abstract class CObject extends ArchetypeConstraint {
      * @param lookup
      * @return
      */
-    public boolean cConformsTo(CObject other, ModelInfoLookup lookup) {
+    public boolean cConformsTo(CObject other, BiFunction<String, String, Boolean> rmTypesConformant) {
         return nodeIdConformsTo(other) &&
                 occurrencesConformsTo(other)
-                && typeNameConformsTo(other, lookup);
+                && typeNameConformsTo(other, rmTypesConformant);
 
     }
 
-    public boolean typeNameConformsTo(CObject other, ModelInfoLookup lookup) {
+    public boolean typeNameConformsTo(CObject other, BiFunction<String, String, Boolean> rmTypesConformant) {
         if(other.getRmTypeName() == null || getRmTypeName() == null) {
             return true;//these are not nullable, but we're not throwing exceptions here
         }
         if(other.getRmTypeName().equalsIgnoreCase(getRmTypeName())) {
             return true;
         }
-        return AOMUtils.typeNamesConformant(getRmTypeName(), other.getRmTypeName(), lookup);
-
+        return rmTypesConformant.apply(getRmTypeName(), other.getRmTypeName());
     }
 
     /**
@@ -297,6 +294,41 @@ public abstract class CObject extends ArchetypeConstraint {
             return other.occurrences.contains(occurrences);
         } else {
             return true;
+        }
+    }
+
+
+    /**
+     * Calculate the effective occurrences of this CObject. If occurrences has not been set explicitly, get it from the
+     * reference model using the supplied function
+     *
+     * @param referenceModelPropMultiplicity a function to retrieve the reference model multiplicity from the rm model, given the type name and the attribute path
+     * @return
+     */
+    public MultiplicityInterval effectiveOccurrences(BiFunction<String, String, MultiplicityInterval> referenceModelPropMultiplicity) {
+        if(getOccurrences() != null) {
+            return getOccurrences();
+        }
+        int occurrencesLower = 0;
+        CAttribute parent = getParent();
+        if(parent != null) {
+            if(parent.getExistence() != null) {
+                occurrencesLower = parent.getExistence().getLower();
+            }
+            if(parent.getCardinality() != null) {
+                if(parent.getCardinality().getInterval().isUpperUnbounded()) {
+                    return MultiplicityInterval.createUpperUnbounded(occurrencesLower);
+                } else {
+                    return MultiplicityInterval.createBounded(occurrencesLower, parent.getCardinality().getInterval().getUpper());
+                }
+            } else if(parent.getParent() != null) {
+                //TODO: this can be a (differential) path, but we don't support that yet.
+                return referenceModelPropMultiplicity.apply(parent.getParent().getRmTypeName(), parent.getRmAttributeName());
+            } else {
+                return MultiplicityInterval.createUpperUnbounded(occurrencesLower);
+            }
+        } else {
+            return MultiplicityInterval.createOpen();
         }
     }
 

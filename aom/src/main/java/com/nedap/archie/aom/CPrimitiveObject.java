@@ -9,6 +9,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.BiFunction;
 
 /**
  * Primitive object. Parameterized with a Constraint type and AssumedAndDefault value type, to be able to override
@@ -110,7 +111,7 @@ public abstract class CPrimitiveObject<Constraint, ValueType> extends CDefinedOb
     }
 
     @Override
-    public boolean cConformsTo(CObject other, ModelInfoLookup lookup) {
+    public boolean cConformsTo(CObject other, BiFunction<String, String, Boolean> rmTypesConformant) {
         if(other instanceof CPrimitiveObject && other.getClass().equals(getClass())) {
             if(other == null) {
                 return false;

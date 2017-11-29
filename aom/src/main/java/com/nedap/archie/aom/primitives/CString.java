@@ -3,7 +3,6 @@ package com.nedap.archie.aom.primitives;
 import com.google.common.collect.Lists;
 import com.nedap.archie.aom.CObject;
 import com.nedap.archie.aom.CPrimitiveObject;
-import com.nedap.archie.rminfo.ModelInfoLookup;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -12,6 +11,7 @@ import javax.xml.bind.annotation.XmlType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.BiFunction;
 
 /**
  * Created by pieter.bos on 15/10/15.
@@ -82,8 +82,8 @@ public class CString extends CPrimitiveObject<String, String> {
     }
 
     @Override
-    public boolean cConformsTo(CObject other, ModelInfoLookup lookup) {
-        if(!super.cConformsTo(other, lookup)) {
+    public boolean cConformsTo(CObject other, BiFunction<String, String, Boolean> rmTypesConformant) {
+        if(!super.cConformsTo(other, rmTypesConformant)) {
             return false;
         }
         //now guaranteed to be the same class

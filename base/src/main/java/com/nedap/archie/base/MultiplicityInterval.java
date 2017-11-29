@@ -94,6 +94,13 @@ public class MultiplicityInterval extends Interval<Integer> {
         return new MultiplicityInterval(0, true, false, 0, true, false);
     }
 
+    public static MultiplicityInterval createUpperUnbounded(Integer lower) {
+        return new MultiplicityInterval(lower, true, false, 0, true, true);
+    }
+
+    public static MultiplicityInterval createBounded(int lower, int upper) {
+        return new MultiplicityInterval(lower, true, false, upper, true, false);
+    }
 
     public boolean upperIsOne() {
         return has(1) && !has(2);
@@ -106,5 +113,6 @@ public class MultiplicityInterval extends Interval<Integer> {
             return getLower() + MULTIPLICITY_RANGE_MARKER + getUpper();
         }
     }
+
 
 }
