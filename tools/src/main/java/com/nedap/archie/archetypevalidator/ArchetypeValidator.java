@@ -159,6 +159,7 @@ public class ArchetypeValidator {
                 messages.addAll(runValidations(lookup, flattened, repository, flatParent, validationsPhase3));
             } catch (Exception e) {
                 messages.add(new ValidationMessage(ErrorType.OTHER, "flattening failed with exception " + e));
+                logger.error("error during validation", e);
             }
         }
         if(archetype instanceof Template) {

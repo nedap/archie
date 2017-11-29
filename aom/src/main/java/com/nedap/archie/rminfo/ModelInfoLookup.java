@@ -4,6 +4,8 @@ import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.CObject;
 import com.nedap.archie.aom.CPrimitiveObject;
 import com.nedap.archie.base.MultiplicityInterval;
+import com.nedap.archie.paths.PathSegment;
+import com.nedap.archie.query.APathQuery;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
@@ -169,8 +171,19 @@ public interface ModelInfoLookup {
      * @param rmAttributeName
      * @return
      */
-    default MultiplicityInterval referenceModelPropMultiplicity(String rmTypeName, String rmAttributeName) {
-        RMAttributeInfo attributeInfo = getAttributeInfo(rmTypeName, rmAttributeName);
+    default MultiplicityInterval referenceModelPropMultiplicity(String rmTypeName, String rmAttributeNameOrPath) {
+        RMTypeInfo typeInfo = this.getTypeInfo(rmTypeName);
+        String rmAttributeName = rmAttributeNameOrPath;
+        if(rmAttributeNameOrPath.contains("[") || rmAttributeNameOrPath.contains("/")) {
+            APathQuery aPathQuery = new APathQuery(rmAttributeNameOrPath);
+            for(int i = 0; i < aPathQuery.getPathSegments().size()-1; i++) {
+                PathSegment segment = aPathQuery.getPathSegments().get(i);
+                RMAttributeInfo attributeInfo = typeInfo.getAttribute(segment.getNodeName());
+                typeInfo = this.getTypeInfo(attributeInfo.getTypeNameInCollection());
+            }
+            rmAttributeName = aPathQuery.getPathSegments().get(aPathQuery.getPathSegments().size()-1).getNodeName();
+        }
+        RMAttributeInfo attributeInfo = typeInfo.getAttribute(rmAttributeName);
         if(attributeInfo.isMultipleValued()) {
             return MultiplicityInterval.createUpperUnbounded(0);
         } else {
