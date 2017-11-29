@@ -17,6 +17,7 @@ public class RMAttributeInfo {
     private final Method setMethod;
     private final Method addMethod;
     private final boolean nullable;
+    private final boolean computed;
 
     public RMAttributeInfo(String name, Field field, Class type, Class typeInCollection, boolean nullable, Method getMethod, Method setMethod, Method addMethod) {
         this.name = name;
@@ -26,6 +27,7 @@ public class RMAttributeInfo {
         this.getMethod = getMethod;
         this.setMethod = setMethod;
         this.addMethod = addMethod;
+        this.computed = this.setMethod == null && this.addMethod == null;
         this.isMultipleValued = type instanceof Class && Collection.class.isAssignableFrom(type);
         this.typeInCollection = typeInCollection;
     }
@@ -69,4 +71,10 @@ public class RMAttributeInfo {
     public Class getTypeInCollection() {
         return typeInCollection;
     }
+
+    public boolean isComputed() {
+        return computed;
+    }
+
+
 }

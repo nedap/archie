@@ -1,12 +1,11 @@
 package com.nedap.archie.aom;
 
 import com.nedap.archie.ArchieLanguageConfiguration;
-import com.nedap.archie.adlparser.ADLParser;
+import com.nedap.archie.testutil.TestUtil;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 
 /**
  * Created by pieter.bos on 20/04/16.
@@ -17,7 +16,7 @@ public class CObjectTest {
 
     @Before
     public void setup() throws Exception {
-        archetype = new ADLParser().parse(getClass().getResourceAsStream("/basic.adl"));
+        archetype = TestUtil.parseFailOnErrors("/basic.adl");
     }
 
     @Test

@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import javax.annotation.Nullable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.*;
@@ -146,9 +147,16 @@ public abstract class ReflectionModelInfoLookup implements ModelInfoLookup {
         if(addAttributesWithoutField) {
             Set<Method> getters = ReflectionUtils.getAllMethods(clazz, (method) -> method.getName().startsWith("get") || method.getName().startsWith("is"));
             for (Method method : getters) {
-                addRMAttributeInfo(clazz, typeInfo, typeToken, method, fieldsByName);
+                if(shouldAdd(method)) {
+                    addRMAttributeInfo(clazz, typeInfo, typeToken, method, fieldsByName);
+                }
             }
         }
+    }
+
+    protected boolean shouldAdd(Method method) {
+        //do not add private or protected properties, they will result in errors
+        return Modifier.isPublic(method.getModifiers());
     }
 
     private void addRMAttributeInfo(Class clazz, RMTypeInfo typeInfo, TypeToken typeToken, Method getMethod, Map<String, Field> fieldsByName) {
@@ -183,7 +191,7 @@ public abstract class ReflectionModelInfoLookup implements ModelInfoLookup {
                     field,
                     rawFieldType,
                     typeInCollection,
-                    getMethod.getAnnotation(Nullable.class) != null,
+                    (field != null && field.getAnnotation(Nullable.class) != null) || getMethod.getAnnotation(Nullable.class) != null,
                     getMethod,
                     setMethod,
                     addMethod
@@ -222,7 +230,7 @@ public abstract class ReflectionModelInfoLookup implements ModelInfoLookup {
 
         Class rawFieldType = fieldType.getRawType();
         Class typeInCollection = getTypeInCollection(fieldType);
-        if (setMethod != null) {
+        if (setMethod != null && shouldAdd(setMethod)) {
             RMAttributeInfo attributeInfo = new RMAttributeInfo(
                     attributeName,
                     field,

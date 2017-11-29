@@ -2,6 +2,8 @@ package com.nedap.archie.adlparser;
 
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.terminology.ArchetypeTerm;
+import com.nedap.archie.testutil.TestUtil;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.net.URI;
@@ -14,10 +16,16 @@ import static org.junit.Assert.assertNull;
  */
 public class TerminologyTest {
 
+    private Archetype archetype;
+
+    @Before
+    public void setup() throws Exception {
+        archetype = TestUtil.parseFailOnErrors("/basic.adl");;
+    }
+
 
     @Test
     public void termDefinitions() throws Exception {
-        Archetype archetype = new ADLParser().parse(getClass().getResourceAsStream("/basic.adl"));
         ArchetypeTerm term = archetype.getTerminology().getTermDefinition("en", "id7");
         assertEquals("Comment", term.getText());
         assertEquals("Comment on any qualification.", term.getDescription());
@@ -35,7 +43,6 @@ public class TerminologyTest {
 		>
 	>
          */
-        Archetype archetype = new ADLParser().parse(getClass().getResourceAsStream("/basic.adl"));
         URI uri = archetype.getTerminology().getTermBinding("openehr", "at1");
         assertEquals(new URI("http://openehr.org/id/433"), uri);
         assertNull(archetype.getTerminology().getTermBinding("openehr", "at2"));

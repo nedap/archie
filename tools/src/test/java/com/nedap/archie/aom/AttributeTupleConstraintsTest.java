@@ -1,8 +1,8 @@
 package com.nedap.archie.aom;
 
-import com.nedap.archie.adlparser.ADLParser;
 import com.nedap.archie.rm.datavalues.quantity.DvQuantity;
 import com.nedap.archie.rminfo.ArchieRMInfoLookup;
+import com.nedap.archie.testutil.TestUtil;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -19,7 +19,7 @@ public class AttributeTupleConstraintsTest {
 
     @BeforeClass
     public static void setup() throws Exception {
-        Archetype archetype = new ADLParser().parse(AttributeTupleConstraintsTest.class.getResourceAsStream("/basic.adl"));
+        Archetype archetype = TestUtil.parseFailOnErrors("/basic.adl");
         CComplexObject valueObject = archetype.getDefinition().itemAtPath("/context[id11]/other_context[id2]/items[id3]/items[id7]/value[id16]");
         attributeTuple = valueObject.getAttributeTuples().get(0);
     }

@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * In memory ConcurrentHashMap-based archetyperepository. Thread-safe
  * Created by pieter.bos on 21/10/15.
  */
-public class SimpleArchetypeRepository implements ArchetypeRepository {
+public class SimpleArchetypeRepository implements ArchetypeRepository, MutableArchetypeRepository {
 
     private Map<String, Archetype> archetypes = new ConcurrentHashMap<>();
 
