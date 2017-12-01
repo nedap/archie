@@ -12,17 +12,17 @@ import java.net.URI;
 @XmlType(name = "DV_URI", propOrder = {
         "value"
 })
-public class DvURI extends DataValue implements SingleValuedDataValue<URI>{
+public class DvURI extends DataValue implements SingleValuedDataValue<String> {
 
     private URI value; //supposed to be a string, but this is better. Let's see how far we get with this
 
     @Override
-    public URI getValue() {
-        return value;
+    public String getValue() {
+        return value.toString();
     }
 
     @Override
-    public void setValue(URI value) {
-        this.value = value;
+    public void setValue(String value) {
+        this.value = URI.create(value);
     }
 }
