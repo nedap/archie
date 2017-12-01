@@ -1,0 +1,66 @@
+archetype (adl_version=2.0.6; rm_release=2.0.2; generated)
+	CIMI-CORE-StatementContext.statement_context_bindings.v1.0.0
+
+specialize
+	CIMI-CORE-StatementContext.statement_context.v1
+
+language
+  original_language = <[ISO_639-1::en]>
+
+description
+  original_author = <
+    ["name"] = <"Claude Nanjo">
+    ["organisation"] = <"Cognitive Medical Systems">
+    ["email"] = <"cnanjo@cognitivemedicine.com">
+    ["date"] = <"11/24/2016">
+  >
+  details = <
+    ["en"] = <
+      language = <[ISO_639-1::en]>
+      purpose = <"Top-level reference archetype for CIMI 'clinical statement' pattern">
+      use = <"Use as a specialisation precursor for other high-level reference archetypes.">
+      keywords = <"statement","context">
+    >
+  >
+  other_details = <["model_level"] = <"reference">>
+  lifecycle_state = <"unmanaged">
+  other_contributors = <"Linda Bird <lbi@ihtsdo.org>","Joey Coyle <joey@xcoyle.com>","Stan Huff <Stan.Huff@imail.org>","Harold Solbrig <Solbrig.Harold@mayo.edu>","Thomas Beale <thomas.beale@oceaninformatics.com>">
+  custodian_namespace = <"org.opencimi">
+  custodian_organisation = <"Clinical Information Modeling Initiative <http://opencimi.org>">
+  licence = <"Creative Commons CC-BY <https://creativecommons.org/licenses/by/3.0/>">
+  copyright = <"Copyright (c) Clinical Information Modelling Initiative <http://opencimi.org>">
+  ip_acknowledgements = <
+    ["loinc"] = <"This content from LOINC® is copyright © 1995 Regenstrief Institute, Inc. and the LOINC Committee, and available at no cost under the license at http://loinc.org/terms-of-use">
+    ["snomed"] = <"This specification includes SNOMED Clinical Terms® (SNOMED CT®) which is used by permission of the International Health Terminology Standards Development Organization (IHTSDO). All rights reserved. SNOMED CT® was originally created by the College of American Pathologists. 'SNOMED' and 'SNOMED CT' are registered trademarks of the IHTSDO (www.ihtsdo.org). Use of any SNOMED CT content (including codes, identifiers, terms, expressions or derivatives) in any operational system (including any Data Creation System or Data Analysis System as defined in the SNOMED CT Affiliate License Agreement) is subject to the terms and conditions of the SNOMED CT Affiliate License (www.ihtsdo.org/license.pdf) or to a written variation to that agreement that has been agreed and formally executed between the IHTSDO and the Affiliate Licensee.">
+  >
+
+definition
+  StatementContext[id1.1] matches {
+  	-- /context matches {[ac0.1]}
+  	/temporalContext matches {[ac0.3]}
+  }
+
+terminology
+  term_definitions = <
+    ["en"] = <
+      ["id1.1"] = <
+        text = <"Statement context bindings">
+        description = <"Value set bindings for top level archetype statement_context_struct">
+      >
+      ["ac0.1"] = <
+        text = <"Statement context range">
+        description = <"Allowed values for the SNOMED CT Situation with Explicit Context context attribute (either 'finding context' or 'procedure context' values">
+      >
+      ["ac0.3"] = <
+        text = <"Temporal context range">
+        description = <"Allowed values for the SNOMED CT Situation with Explicit Context - 'temporal context' attribute">
+      >
+    >
+  >
+
+  term_bindings = <
+    ["cimi"] = <
+      ["ac0.1"] = <http://example.com/valueset/statement_context_range_vs.v0.0.1>
+      ["ac0.3"] = <http://example.com/valueset/temporal_context_range_vs.v0.0.1>
+    >
+  >

@@ -8,6 +8,7 @@ import com.nedap.archie.rm.composition.Composition;
 import com.nedap.archie.rm.datavalues.DvText;
 import com.nedap.archie.rminfo.ArchieRMInfoLookup;
 import com.nedap.archie.rminfo.ModelInfoLookup;
+import com.nedap.archie.rminfo.ReflectionModelInfoLookup;
 import com.nedap.archie.testutil.TestUtil;
 import org.junit.Before;
 import org.junit.Test;

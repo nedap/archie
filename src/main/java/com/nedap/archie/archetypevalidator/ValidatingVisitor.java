@@ -7,7 +7,7 @@ import com.nedap.archie.aom.CComplexObject;
 import com.nedap.archie.aom.CComplexObjectProxy;
 import com.nedap.archie.aom.CObject;
 import com.nedap.archie.aom.CPrimitiveObject;
-import com.nedap.archie.rminfo.ModelInfoLookup;
+import com.nedap.archie.rminfo.ReflectionModelInfoLookup;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -18,12 +18,6 @@ import java.util.List;
  * Created by pieter.bos on 31/03/2017.
  */
 public abstract class ValidatingVisitor implements ArchetypeValidation {
-
-    protected ModelInfoLookup lookup;
-
-    public ValidatingVisitor(ModelInfoLookup lookup) {
-        this.lookup = lookup;
-    }
 
     public ValidatingVisitor() {
 

@@ -10,6 +10,7 @@ import com.nedap.archie.archetypevalidator.validations.TerminologyValidation;
 import com.nedap.archie.archetypevalidator.validations.ValueSetValidation;
 import com.nedap.archie.rminfo.ArchieRMInfoLookup;
 import com.nedap.archie.rminfo.ModelInfoLookup;
+import com.nedap.archie.rminfo.ReflectionModelInfoLookup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

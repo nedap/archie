@@ -2,6 +2,7 @@ package com.nedap.archie.aom;
 
 import com.nedap.archie.rminfo.ArchieRMInfoLookup;
 import com.nedap.archie.rminfo.ModelInfoLookup;
+import com.nedap.archie.rminfo.ReflectionModelInfoLookup;
 import com.nedap.archie.rminfo.RMAttributeInfo;
 
 import javax.xml.bind.annotation.XmlType;

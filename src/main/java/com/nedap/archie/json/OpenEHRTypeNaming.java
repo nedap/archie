@@ -9,9 +9,8 @@ import com.nedap.archie.base.OpenEHRBase;
 import com.nedap.archie.rminfo.ArchieAOMInfoLookup;
 import com.nedap.archie.rminfo.ArchieRMInfoLookup;
 import com.nedap.archie.rminfo.ModelInfoLookup;
+import com.nedap.archie.rminfo.ReflectionModelInfoLookup;
 import com.nedap.archie.rminfo.RMTypeInfo;
-
-import java.io.IOException;
 
 /**
  * Class that handles naming of Archie RM and AOM objects for use in Jackson.
