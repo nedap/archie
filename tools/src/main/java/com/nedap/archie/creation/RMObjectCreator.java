@@ -7,6 +7,7 @@ import com.nedap.archie.rminfo.RMAttributeInfo;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashSet;
@@ -97,8 +98,13 @@ public class RMObjectCreator {
     }
 
     private void setField(Object object, RMAttributeInfo field, Object value) throws InvocationTargetException, IllegalAccessException {
-        field.getSetMethod().invoke(object, value);
-
+        Method setMethod = field.getSetMethod();
+        try {
+            setMethod.invoke(object, value);
+        } catch (Exception e) {
+            Class<?> valueType = value == null ? null : value.getClass();
+            throw new RuntimeException("Error setting value '" + value + "' of type '" + valueType + "' using method '" + setMethod + "'", e);
+        }
     }
 
     public void addElementToList(Object object, RMAttributeInfo attributeInfo, Object element) {
