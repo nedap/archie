@@ -323,7 +323,7 @@ public abstract class CObject extends ArchetypeConstraint {
                 }
             } else if(parent.getParent() != null) {
                 //TODO: this can be a (differential) path, but we don't support that yet.
-                return referenceModelPropMultiplicity.apply(parent.getParent().getRmTypeName(), parent.getRmAttributeName());
+                return referenceModelPropMultiplicity.apply(parent.getParent().getRmTypeName(), parent.getDifferentialPath() == null ? parent.getRmAttributeName() : parent.getDifferentialPath());
             } else {
                 return MultiplicityInterval.createUpperUnbounded(occurrencesLower);
             }

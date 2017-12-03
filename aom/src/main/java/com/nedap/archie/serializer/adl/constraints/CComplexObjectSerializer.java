@@ -85,7 +85,7 @@ public class CComplexObjectSerializer<T extends CComplexObject> extends Constrai
 
     private void buildAttribute(CAttribute cattr) {
         builder.tryNewLine();
-        if (cattr.getRmAttributeName() != null) {
+        if (cattr.getDifferentialPath() == null) {
             builder.append(cattr.getRmAttributeName());
         } else {
             builder.append(cattr.getDifferentialPath());

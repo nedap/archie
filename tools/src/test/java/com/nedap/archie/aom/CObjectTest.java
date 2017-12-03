@@ -1,9 +1,13 @@
 package com.nedap.archie.aom;
 
 import com.nedap.archie.ArchieLanguageConfiguration;
+import com.nedap.archie.base.Cardinality;
+import com.nedap.archie.base.MultiplicityInterval;
 import com.nedap.archie.testutil.TestUtil;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.function.BiFunction;
 
 import static org.junit.Assert.assertEquals;
 
@@ -53,6 +57,132 @@ public class CObjectTest {
 
     }
 
+    @Test
+    public void effectiveOccurrencesReturnsOccurrencesWhenPresent() {
+        CComplexObject parentCObject = new CComplexObject();
+        parentCObject.setRmTypeName("COMPOSITION");
+        CAttribute parentAttribute = new CAttribute();
+        parentAttribute.setRmAttributeName("content");
+        parentCObject.addAttribute(parentAttribute);
+        CComplexObject object = new CComplexObject();
+        object.setRmTypeName("OBSERVATION");
+        object.setOccurrences(MultiplicityInterval.createBounded(3,5));
+        parentAttribute.addChild(object);
+
+        assertEquals(MultiplicityInterval.createBounded(3, 5), object.effectiveOccurrences(new BiFunction<String, String, MultiplicityInterval>() {
+            @Override
+            public MultiplicityInterval apply(String s, String s2) {
+                return new MultiplicityInterval(1,2);
+            }
+        }));
+    }
+
+    @Test
+    public void effectiveOccurrencesReturnsDefaultOccurrences() {
+        CComplexObject parentCObject = new CComplexObject();
+        parentCObject.setRmTypeName("COMPOSITION");
+        CAttribute parentAttribute = new CAttribute();
+        parentAttribute.setRmAttributeName("content");
+        parentCObject.addAttribute(parentAttribute);
+        CComplexObject object = new CComplexObject();
+        object.setRmTypeName("OBSERVATION");
+        parentAttribute.addChild(object);
+
+        assertEquals(MultiplicityInterval.createBounded(1, 2), object.effectiveOccurrences(new BiFunction<String, String, MultiplicityInterval>() {
+            @Override
+            public MultiplicityInterval apply(String s, String s2) {
+                return new MultiplicityInterval(1,2);
+            }
+        }));
+    }
+
+    @Test
+    public void effectiveOccurrencesCardinalityUnboundedDefinesUnboundedUpper() {
+        CComplexObject parentCObject = new CComplexObject();
+        parentCObject.setRmTypeName("COMPOSITION");
+        CAttribute parentAttribute = new CAttribute();
+        parentAttribute.setCardinality(Cardinality.mandatoryAndUnbounded());
+        parentAttribute.setRmAttributeName("content");
+        parentCObject.addAttribute(parentAttribute);
+        CComplexObject object = new CComplexObject();
+        object.setRmTypeName("OBSERVATION");
+        parentAttribute.addChild(object);
+
+        //even though it's mandatory, doesn't have to be _this_ element, so 0.
+        assertEquals(MultiplicityInterval.createUpperUnbounded(0), object.effectiveOccurrences(new BiFunction<String, String, MultiplicityInterval>() {
+            @Override
+            public MultiplicityInterval apply(String s, String s2) {
+                return new MultiplicityInterval(1,2);
+            }
+        }));
+    }
+
+    @Test
+    public void effectiveOccurrencesCardinalityBoundedDefinesUpper() {
+        CComplexObject parentCObject = new CComplexObject();
+        parentCObject.setRmTypeName("COMPOSITION");
+        CAttribute parentAttribute = new CAttribute();
+        parentAttribute.setRmAttributeName("content");
+        Cardinality cardinality = new Cardinality();
+        cardinality.setInterval(MultiplicityInterval.createBounded(3, 4));
+        parentAttribute.setCardinality(cardinality);
+        parentCObject.addAttribute(parentAttribute);
+        CComplexObject object = new CComplexObject();
+        object.setRmTypeName("OBSERVATION");
+        parentAttribute.addChild(object);
+
+        //even though it's mandatory, doesn't have to be _this_ element, so 0.
+        assertEquals(MultiplicityInterval.createBounded(0, 4), object.effectiveOccurrences(new BiFunction<String, String, MultiplicityInterval>() {
+            @Override
+            public MultiplicityInterval apply(String s, String s2) {
+                return new MultiplicityInterval(1,2);
+            }
+        }));
+    }
+    
+    @Test
+    public void effectiveOccurrencesExistenceDefinesLower() {
+        CComplexObject parentCObject = new CComplexObject();
+        parentCObject.setRmTypeName("ELEMENT");
+        CAttribute parentAttribute = new CAttribute();
+        parentAttribute.setRmAttributeName("value");
+        Cardinality cardinality = new Cardinality();
+        cardinality.setInterval(MultiplicityInterval.createBounded(3, 4));
+        parentAttribute.setCardinality(cardinality);
+        parentCObject.addAttribute(parentAttribute);
+        parentAttribute.setExistence(MultiplicityInterval.createMandatory());
+        CComplexObject object = new CComplexObject();
+        object.setRmTypeName("DV_CODED_TEXT");
+        parentAttribute.addChild(object);
+
+        assertEquals(MultiplicityInterval.createBounded(1, 4), object.effectiveOccurrences(new BiFunction<String, String, MultiplicityInterval>() {
+            @Override
+            public MultiplicityInterval apply(String s, String s2) {
+                return new MultiplicityInterval(0,5);
+            }
+        }));
+    }
+
+    @Test
+    public void effectiveOccurrencesExistenceIgnoredWhenDefaultOccurrencesUsed() {
+        CComplexObject parentCObject = new CComplexObject();
+        parentCObject.setRmTypeName("ELEMENT");
+        CAttribute parentAttribute = new CAttribute();
+        parentAttribute.setRmAttributeName("value");
+
+        parentCObject.addAttribute(parentAttribute);
+        parentAttribute.setExistence(MultiplicityInterval.createMandatory());
+        CComplexObject object = new CComplexObject();
+        object.setRmTypeName("DV_CODED_TEXT");
+        parentAttribute.addChild(object);
+
+        assertEquals(MultiplicityInterval.createBounded(0, 5), object.effectiveOccurrences(new BiFunction<String, String, MultiplicityInterval>() {
+            @Override
+            public MultiplicityInterval apply(String s, String s2) {
+                return new MultiplicityInterval(0,5);
+            }
+        }));
+    }
 
 
 
