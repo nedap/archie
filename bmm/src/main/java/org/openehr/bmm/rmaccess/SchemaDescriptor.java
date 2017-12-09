@@ -427,10 +427,10 @@ public class SchemaDescriptor {
     public void validateIncludes(List<String> allSchemas) {
         if(persistentSchema.getIncludes() != null && persistentSchema.getIncludes().size() > 0) {
             persistentSchema.getIncludes().keySet().forEach(include -> {
-                if(!allSchemas.contains(include)) {
+                if(!allSchemas.contains(include.toLowerCase())) {
                     schemaValidator.addError(BmmMessageIds.ec_BMM_INC, schemaId, include);
                } else {
-                    includes.add(include);
+                    includes.add(include.toLowerCase());
                 }
             });
         }

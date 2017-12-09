@@ -1,4 +1,4 @@
-description = "A basic metadata model implementation"
+ description = "A basic metadata model implementation"
 
 dependencies {
   compile project(':base')

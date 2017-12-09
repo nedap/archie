@@ -21,11 +21,9 @@ package org.openehr.bmm.core;
  * Author: Claude Nanjo
  */
 
-import org.openehr.bmm.BmmConstants;
-import org.openehr.odin.utils.OdinSerializationUtils;
-
 import java.io.Serializable;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Definition of a generic class in an object model.
@@ -121,7 +119,10 @@ public class BmmGenericClass extends BmmClass implements Serializable {
      */
     @Override
     public String getTypeName() {
-        return "Class<T>";//throw new UnsupportedOperationException("Not yet implemented");
+        List<BmmGenericParameter> params = getGenericParameters();
+        String paramString = params.stream().map(i -> i.getName()).collect(Collectors.joining(", "));
+        StringBuilder builder = new StringBuilder(getName()).append("<").append(paramString).append(">");
+        return builder.toString();
     }
 
     /**

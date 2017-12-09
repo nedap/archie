@@ -5,10 +5,7 @@ import freemarker.template.Template;
 import freemarker.template.TemplateExceptionHandler;
 import org.apache.commons.io.FileUtils;
 import org.openehr.bmm.core.*;
-import org.openehr.docgen.model.ClassDetails;
-import org.openehr.docgen.model.ClassListItem;
-import org.openehr.docgen.model.PackageListItem;
-import org.openehr.docgen.model.PropertyDetails;
+import org.openehr.docgen.model.*;
 import org.openehr.utils.file.FileAndDirUtils;
 
 import java.io.File;
@@ -154,18 +151,25 @@ public class DocumentGenerator {
 
     public void populateAllPackagesList(BmmModel schema) throws Exception {
         Template allPackages = retrieveAllPackagesTemplate();
-        Map<String, Object> root = new HashMap<>();
+        Map<String, Object> root = new LinkedHashMap<>();
         root.put("stylesheet", getStylesheetPath(0));
         Map<String, BmmPackage> packages = collectPackages(schema);
         List<PackageListItem> packageList = new ArrayList<>();
         packages.forEach( (K, V) -> {
-            PackageListItem item = new PackageListItem(V.getName(), buildPackageContentPagePath(K, V), K);
-            item.setPackageInfoPath(buildPackageInfoPagePath(K,V));
+            PackageListItem item = buildPackageListItemFromPackage(K, V);
             packageList.add(item);
             generateFolderStructureFromPath(schema, K, V, item);
         });
+        PackageTreeNode node = buildPackageTree(schema);
         root.put("packages", packageList);
+        root.put("packagetree", node);
         populateTemplate(allPackages, root, "overview-frame.html");
+    }
+
+    private PackageListItem buildPackageListItemFromPackage(String path, BmmPackage bmmPackage) {
+        PackageListItem item = new PackageListItem(bmmPackage.getName(), buildPackageContentPagePath(path, bmmPackage), path);
+        item.setPackageInfoPath(buildPackageInfoPagePath(path,bmmPackage));
+        return item;
     }
 
     public void populateClassDetails(BmmModel schema, BmmClass bmmClass, ClassListItem item, String classPath) {
@@ -250,6 +254,38 @@ public class DocumentGenerator {
                 packages.put(newpath, ((BmmPackage)bmmPackage));
                 if(((BmmPackage)bmmPackage).getPackages() != null && ((BmmPackage)bmmPackage).getPackages().size() > 0) {
                     collectPackages((BmmPackage)bmmPackage, packages, newpath, level + 1);
+                }
+            });
+        }
+    }
+
+    public PackageTreeNode buildPackageTree(BmmModel model) {
+        PackageTreeNode tree = new PackageTreeNode();
+        PackageListItem root = new PackageListItem();
+        root.setName("model");
+        root.setPath("");
+        tree.setPackageItem(root);
+        buildTree(model, tree, "", 0);
+        return tree;
+    }
+
+    protected void buildTree(BmmPackageContainer packageContainer, PackageTreeNode tree, String path, int level) {
+        Map<String, BmmPackage> bmmPackageMap = packageContainer.getPackages();
+        if(bmmPackageMap != null && bmmPackageMap.size() > 0) {
+            Collection bmmPackages = bmmPackageMap.values();
+            bmmPackages.forEach(bmmPackage -> {
+                String newpath = "";
+                if(level == 0) {
+                    newpath = ((BmmPackage)bmmPackage).getName();
+                } else {
+                    newpath = path + "." + ((BmmPackage)bmmPackage).getName();
+                }
+                PackageTreeNode node = new PackageTreeNode();
+                PackageListItem item = buildPackageListItemFromPackage(newpath, (BmmPackage)bmmPackage);
+                node.setPackageItem(item);
+                tree.addChildNode(node);
+                if(((BmmPackage)bmmPackage).getPackages() != null && ((BmmPackage)bmmPackage).getPackages().size() > 0) {
+                    buildTree((BmmPackage)bmmPackage, node, newpath, level + 1);
                 }
             });
         }

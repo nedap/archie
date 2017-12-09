@@ -1035,6 +1035,24 @@ public class PersistedBmmSchema extends PersistedBmmPackageContainer implements 
         });
     }
 
+    public boolean caseInsensitiveIncludeRemoval(String aSchemaId) {
+        if(includes == null || includes.size() == 0) {
+            return false;
+        } else {
+            String includeToRemove = null;
+            List<String> includeList = new ArrayList<>(includes.keySet());
+            for (int i = 0; i < includeList.size(); i++) {
+                if(includeList.get(i).equalsIgnoreCase(aSchemaId)) {
+                    includeToRemove = includeList.get(i);
+                }
+            }
+            if(includeToRemove != null) {
+                includes.remove(includeToRemove);
+            }
+            return true;
+        }
+    }
+
     /*******************************************************************
      * Validation framework
      *******************************************************************/
