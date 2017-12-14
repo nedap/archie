@@ -35,7 +35,9 @@ if (location.href.indexOf('is-external=true') == -1) {
         <li><a href="help-doc.html">Help</a></li>
         -->
     </ul>
-    <div class="aboutLanguage"><em><strong>HL7&trade;&nbsp;Clinical&nbsp;Information&nbsp;Model&nbsp;Initiative</strong></em></div>
+    <div class="aboutLanguage">
+        <#include "supplementalFiles/*/branding.ftlh"/> <!-- Looks for branding.ftlh in supplemental files and, if not found, defaults to generic branding.ftlh -->
+    </div>
 </div>
 <div class="subNav">
     <ul class="navList">
@@ -66,7 +68,7 @@ if (location.href.indexOf('is-external=true') == -1) {
     </a></div>
 <!-- ========= END OF TOP NAVBAR ========= -->
 <#assign timestamp = "${currentDate}">
-<#include "introduction.ftl"> <!-- Implementations must provide this class -->
+<#include "supplementalFiles/*/introduction.ftl" ignore_missing=true> <!-- Implementations can provide this class in the supplemental files folder-->
 <div class="contentContainer">
     <table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Classes and definitions">
         <caption><span>Classes</span><span class="tabEnd">&nbsp;</span></caption>

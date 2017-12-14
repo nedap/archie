@@ -77,7 +77,9 @@ if (location.href.indexOf('is-external=true') == -1) {
         <li><a href="../../../help-doc.html">Help</a></li>
         -->
     </ul>
-    <div class="aboutLanguage"><em><strong>Reference Model Viewer</strong></em></div>
+    <div class="aboutLanguage">
+        <#include "supplementalFiles/*/branding.ftlh"/> <!-- Looks for branding.ftlh in supplemental files and, if not found, defaults to generic branding.ftlh -->
+    </div>
 </div>
 <div class="subNav">
 <!--
