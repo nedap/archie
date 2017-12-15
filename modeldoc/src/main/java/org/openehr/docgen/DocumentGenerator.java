@@ -5,6 +5,7 @@ import freemarker.template.Template;
 import freemarker.template.TemplateExceptionHandler;
 import org.apache.commons.io.FileUtils;
 import org.openehr.bmm.core.*;
+import org.openehr.bmm.persistence.PersistedBmmModelElement;
 import org.openehr.docgen.model.*;
 import org.openehr.utils.file.FileAndDirUtils;
 
@@ -15,6 +16,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.*;
+
+import static org.openehr.bmm.persistence.PersistedBmmModelElement.revertSafeString;
 
 /**
  * Copyright 2017 Cognitive Medical Systems, Inc (http://www.cognitivemedicine.com).
@@ -116,7 +119,7 @@ public class DocumentGenerator {
         schema.getClassDefinitions().forEach( (bmmClassName, bmmClass) -> {
             String classDetailUri = bmmClass.getPackage().getPath().replaceAll("\\.", "/") + "/" + bmmClass.getName() + ".html";
             ClassDetails details = new ClassDetails(classDetailUri, bmmClass.getPackagePath(), bmmClass.getName());
-            details.setDocumentation(((BmmClass) bmmClass).getDocumentation());
+            details.setDocumentation(revertSafeString(((BmmClass) bmmClass).getDocumentation()));
             details.setFlagClass(false);
             bmmClass.getProperties().forEach((propName, property) ->{
                 if(property.getDocumentation() == null) {
@@ -177,7 +180,7 @@ public class DocumentGenerator {
             Template classDetails = retrieveClassDetailsTemplate();
             Map<String, Object> root = new HashMap<>();
             ClassDetails details = new ClassDetails(item);
-            details.setDocumentation(bmmClass.getDocumentation());
+            details.setDocumentation(revertSafeString(bmmClass.getDocumentation()));
             List<ClassDetails> ancestors = new ArrayList<>();
             Map<String, BmmClass> ancestorMap = schema.getAllAncestorClassObjects(bmmClass);
             ancestors.add(details);
@@ -194,7 +197,7 @@ public class DocumentGenerator {
             bmmClass.getProperties().forEach((K,V) ->{
                 PropertyDetails property = new PropertyDetails(V.getName());
                 property.setType(V.getType().toDisplayString());
-                property.setDocumentation(V.getDocumentation());
+                property.setDocumentation(revertSafeString(V.getDocumentation()));
                 property.setExistence(V.getExistence().toString());
                 if(V instanceof BmmContainerProperty) {
                     if(((BmmContainerProperty)V).getCardinality().getLower() != null) {
