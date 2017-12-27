@@ -51,8 +51,11 @@ public class BmmSchemaDeserializerTest1 {
         CompositeOdinObject root = visitor.getAstRootNode();
         BmmSchemaDeserializer deserializer = new BmmSchemaDeserializer();
         persistedBmmSchema = deserializer.deserialize(root);
+        persistedBmmSchema.getBmmSchemaValidator().validateCreated();
+
         persistedBmmSchema.loadFinalize();
         persistedBmmSchema.validate();
+
         MessageLogger errorCache = persistedBmmSchema.getBmmSchemaValidator().getMessageLogger();
         System.out.println(errorCache);
     }

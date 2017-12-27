@@ -65,7 +65,7 @@ public class BmmSchemaDeserializerTest {
         assertEquals(7, bmmPackage.getClasses().size());
         bmmPackage = packages.get("DATA_VALUE_TYPES");
         assertEquals("Data_Value_Types", bmmPackage.getName());
-        assertEquals(26, bmmPackage.getClasses().size());
+        assertEquals(24, bmmPackage.getClasses().size());
         bmmPackage = packages.get("PARTY");
         assertEquals("Party", bmmPackage.getName());
         assertEquals(4, bmmPackage.getClasses().size());
@@ -75,7 +75,7 @@ public class BmmSchemaDeserializerTest {
     }
 
     public void testClassDefinitions(PersistedBmmSchema model) {
-        assertEquals(37, model.getClassDefinitions().size());
+        assertEquals(35, model.getClassDefinitions().size());
         assertEquals(10, model.getPrimitives().size());
         testLocatable(model);
         testIntervalValue(model);
@@ -125,7 +125,7 @@ public class BmmSchemaDeserializerTest {
         PersistedBmmGenericParameter genericParameter = intervalValue.getGenericParameterDefinitions().get("T");
         assertNotNull(genericParameter);
         assertEquals("T", genericParameter.getName());
-        assertEquals("ORDERED_VALUE", genericParameter.getConformsToType());
+        assertEquals(null, genericParameter.getConformsToType());
 
         PersistedBmmSinglePropertyOpen lower = (PersistedBmmSinglePropertyOpen)intervalValue.getPropertyByName("lower");
         assertEquals("lower", lower.getName());

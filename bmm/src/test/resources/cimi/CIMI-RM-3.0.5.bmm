@@ -35,7 +35,7 @@ packages = <
             >
             ["Data_Value_Types"] = <
                 name = <"Data_Value_Types">
-                classes = <"CRAZY_TYPE", "DOSE_RANGE", "AMOUNT", "CODED_TEXT", "COUNT", "DATA_VALUE", "DATE", "DATE_TIME", "DURATION", "EHR_URI", "ENCAPSULATED", "IDENTIFIER", "INTERVAL_VALUE", "MULTIMEDIA", "ORDERED_VALUE", "ORDINAL", "PARSABLE", "PLAIN_TEXT", "PROPORTION", "QUANTIFIED", "QUANTITY", "TERM_MAPPING", "TEXT", "TIME", "URI_VALUE", "YESNO">
+                classes = <"AMOUNT", "CODED_TEXT", "COUNT", "DATA_VALUE", "DATE", "DATE_TIME", "DURATION", "EHR_URI", "ENCAPSULATED", "IDENTIFIER", "INTERVAL_VALUE", "MULTIMEDIA", "ORDERED_VALUE", "ORDINAL", "PARSABLE", "PLAIN_TEXT", "PROPORTION", "QUANTIFIED", "QUANTITY", "TERM_MAPPING", "TEXT", "TIME", "URI_VALUE", "YESNO">
             >
             ["Party"] = <
                 name = <"Party">
@@ -180,7 +180,7 @@ class_definitions = <
         name = <"PARTICIPATION">
         ancestors = <"LOCATABLE", ...>
         properties = <
-            ["bmmType"] = (P_BMM_SINGLE_PROPERTY) <
+            ["type"] = (P_BMM_SINGLE_PROPERTY) <
                 name = <"bmmType">
                 type = <"CODED_TEXT">
                 is_mandatory = <True>
@@ -332,7 +332,6 @@ class_definitions = <
         generic_parameter_defs = <
             ["T"] = <
                 name = <"T">
-                conforms_to_type = <"ORDERED_VALUE">
             >
         >
         properties = <
@@ -366,55 +365,6 @@ class_definitions = <
             >
         >
     >
-
-    ["DOSE_RANGE"] = <
-            name = <"DOSE_RANGE">
-            ancestors = <"DATA_VALUE", ...>
-            properties = <
-                ["value"] = (P_BMM_GENERIC_PROPERTY) <
-                    name = <"value">
-                    type_def = <
-                        root_type = <"INTERVAL_VALUE">
-                        generic_parameters = <"QUANTITY">
-                    >
-                >
-            >
-        >
-
-    ["CRAZY_TYPE"] = <
-            documentation = <"A crazy type that does not really do anything except help me test my code">
-            name = <"CRAZY_TYPE">
-            ancestors = <"Any", ...>
-            properties = <
-                ["range"] = (P_BMM_GENERIC_PROPERTY) <
-                    documentation = <"The range for crazy. Four flavors are presented here!">
-                    name = <"range">
-                    type_def = <
-                        root_type = <"REFERENCE_RANGE">
-                        generic_parameter_defs = <
-                            ["T"] = (P_BMM_GENERIC_TYPE) <
-                                root_type = <"DV_INTERVAL">
-                                generic_parameters = <"DV_QUANTITY">
-                            >
-                            ["U"] = (P_BMM_SIMPLE_TYPE) <
-                                type = <"Integer">
-                            >
-                            ["V"] = (P_BMM_CONTAINER_TYPE) <
-                                type = <"DV_QUANTITY">
-                                container_type = <"List">
-                            >
-                            ["W"] = (P_BMM_CONTAINER_TYPE) <
-                                type_def = (P_BMM_GENERIC_TYPE) <
-                                    root_type = <"DV_INTERVAL">
-                                    generic_parameters = <"DV_QUANTITY">
-                                >
-                                container_type = <"List">
-                            >
-                        >
-                    >
-                >
-            >
-        >
 
     ["MULTIMEDIA"] = <
         name = <"MULTIMEDIA">
@@ -721,7 +671,6 @@ primitive_types = <
         generic_parameter_defs = <
             ["T"] = <
                 name = <"T">
-                conforms_to_type = <"Any">
             >
         >
     >
@@ -731,7 +680,6 @@ primitive_types = <
         generic_parameter_defs = <
             ["T"] = <
                 name = <"T">
-                conforms_to_type = <"Any">
             >
         >
     >

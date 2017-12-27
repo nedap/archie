@@ -519,7 +519,7 @@ public class ReferenceModelAccess {
 
             boolean finished = false;
             //Now we process the include relations on the P_BMM top-level schemas, creating fully populated schemas
-            for (int index = 0; index < MAXIMUM_INCLUSION_DEPTH; index++) {
+            for (int index = 0; index < MAXIMUM_INCLUSION_DEPTH && !finished; index++) {
                 finished = true;
                 for (String key : schemaInclusionMap.keySet()) {
                     List<String> includeList = schemaInclusionMap.get(key);
@@ -629,7 +629,7 @@ public class ReferenceModelAccess {
             loadCount += 1;
         } catch (Exception e) {
             exceptionEncountered = true;
-            validator.addError(BmmMessageIds.ec_bmm_schema_assertion_violation, e.getMessage());
+            validator.addError(BmmMessageIds.ec_bmm_schema_assertion_violation, e.getClass() + ": " + e.getMessage());
 
             e.printStackTrace();
         }

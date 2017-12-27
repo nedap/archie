@@ -74,7 +74,7 @@ public class PersistedBmmClass extends PersistedBmmModelElement implements Seria
     /**
      * BMM_CLASS object build by create_bmm_class_definition and populate_bmm_class_definition.
      */
-    private BmmClass bmmClass;
+    private transient BmmClass bmmClass;
     /**
      * Unique id generated for later comparison during merging, in order to detect if two classes are the same.
      * Assigned in post-load processing.

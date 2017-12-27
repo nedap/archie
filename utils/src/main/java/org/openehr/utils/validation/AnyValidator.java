@@ -90,12 +90,22 @@ public abstract class AnyValidator {
 
     /**
      * Returns 'True' if error cache is non-empty and has errors.
-     *
-     * @return
-     */
+            *
+            * @return
+            */
     public boolean hasErrors() {
         return messageLogger.hasErrors();
     }
+
+    /**
+     * Returns 'True' if error cache is non-empty and has errors.
+     *
+     * @return
+     */
+    public boolean hasWarnings() {
+        return messageLogger.hasWarnings();
+    }
+
 
     /**
      * Returns true if error cache has no errors.
@@ -211,7 +221,7 @@ public abstract class AnyValidator {
     public void validate() {
         if(readyToValidate()) {
             doValidation();
-            if(messageLogger.hasErrorsOrWarnings()) {
+            if(messageLogger.hasErrors()) { //this used to not pass on warnings. not a good idea because other things don't continue when this is false!
                 passed = false;
             }
         } else {

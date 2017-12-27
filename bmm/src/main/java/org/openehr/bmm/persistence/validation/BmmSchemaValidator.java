@@ -139,7 +139,7 @@ public class BmmSchemaValidator extends AnyValidator {
                 Map<String, PersistedBmmGenericParameter> genericParameterDefinitions = persistedBmmClass.getGenericParameterDefinitions();
                 genericParameterDefinitions.forEach((name, persistedBmmGenericParameter) -> {
                     String conformsToType = persistedBmmGenericParameter.getConformsToType();
-                    if(!schema.hasClassOrPrimitiveDefinition(conformsToType)) {
+                    if(conformsToType != null && !schema.hasClassOrPrimitiveDefinition(conformsToType)) {
                         addValidityError(persistedBmmClass.getSourceSchemaId(), BmmMessageIds.ec_BMM_GPCT,
                                 persistedBmmClass.getSourceSchemaId(),
                                 persistedBmmClass.getName(),
