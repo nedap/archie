@@ -137,7 +137,7 @@ public class RMObjectCreator {
     }
 
     public void addElementToListOrSetSingleValues(Object object, String rmAttributeName, Object element) {
-        RMAttributeInfo attributeInfo = this.modelInfoLookup.getAttributeInfo(object.getClass(), attribute);
+        RMAttributeInfo attributeInfo = this.modelInfoLookup.getAttributeInfo(object.getClass(), rmAttributeName);
         if(attributeInfo == null) {
             throw new IllegalArgumentException(String.format("Attribute %s not known for object %s", rmAttributeName, object.getClass().getSimpleName()));
         }
