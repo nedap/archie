@@ -99,11 +99,14 @@ public class RMObjectCreator {
 
     private void setField(Object object, RMAttributeInfo field, Object value) throws InvocationTargetException, IllegalAccessException {
         Method setMethod = field.getSetMethod();
+        if(setMethod == null) {
+            throw new IllegalArgumentException(String.format("field %s of class %s is not a settable field - it has no set method", field.getRmName(), object.getClass().getSimpleName()));
+        }
         try {
             setMethod.invoke(object, value);
-        } catch (Exception e) {
+        } catch (InvocationTargetException e) {
             Class<?> valueType = value == null ? null : value.getClass();
-            throw new RuntimeException("Error setting value '" + value + "' of type '" + valueType + "' using method '" + setMethod + "'", e);
+            throw new InvocationTargetException(e.getTargetException(), "Error setting value '" + value + "' of type '" + valueType + "' using method '" + setMethod + "'");
         }
     }
 
@@ -133,13 +136,16 @@ public class RMObjectCreator {
         }
     }
 
-    public void addElementToListOrSetSingleValues(Object object, String attribute, Object element) {
+    public void addElementToListOrSetSingleValues(Object object, String rmAttributeName, Object element) {
         RMAttributeInfo attributeInfo = this.modelInfoLookup.getAttributeInfo(object.getClass(), attribute);
+        if(attributeInfo == null) {
+            throw new IllegalArgumentException(String.format("Attribute %s not known for object %s", rmAttributeName, object.getClass().getSimpleName()));
+        }
         if(!attributeInfo.isMultipleValued()) {
             if(element instanceof Collection) {
-                set(object, attribute, new ArrayList((Collection) element));
+                set(object, rmAttributeName, new ArrayList((Collection) element));
             } else {
-                set(object, attribute, Lists.newArrayList(element));
+                set(object, rmAttributeName, Lists.newArrayList(element));
             }
         } else {
             if(element instanceof Collection) {
