@@ -8,6 +8,7 @@ import com.nedap.archie.rm.RMObject;
 import com.nedap.archie.rm.composition.Composition;
 import com.nedap.archie.rm.datastructures.Cluster;
 import com.nedap.archie.rm.datavalues.DvText;
+import com.nedap.archie.rm.datavalues.DvURI;
 import com.nedap.archie.rm.datavalues.quantity.DvQuantity;
 import com.nedap.archie.rm.datavalues.quantity.datetime.DvDate;
 import com.nedap.archie.rm.datavalues.quantity.datetime.DvDateTime;
@@ -18,6 +19,7 @@ import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.*;
 
+import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -61,6 +63,9 @@ public class JacksonRMRoundTripTest {
         DvTime time = queryContext.find("/items['Time']/value");
         time.setValue(LocalTime.of(12, 0));
 
+        DvURI uri = queryContext.find("/items['Uri']/value");
+        uri.setValue(URI.create("http://test.example.com"));
+
         String json = JacksonUtil.getObjectMapper().writeValueAsString(cluster);
         System.out.println(json);
         Cluster parsedCluster = (Cluster) JacksonUtil.getObjectMapper().readValue(json, RMObject.class);
@@ -71,6 +76,7 @@ public class JacksonRMRoundTripTest {
         assertThat(parsedQueryContext.<DvDate>find("/items['Date']/value").getValue(), is(LocalDate.of(2016, 1, 1)));
         assertThat(parsedQueryContext.<DvDateTime>find("/items['Datetime']/value").getValue(), is(LocalDateTime.of(2016, 1, 1, 12, 00)));
         assertThat(parsedQueryContext.<DvTime>find("/items['Time']/value").getValue(), is(LocalTime.of(12, 0)));
+        assertThat(parsedQueryContext.<DvURI>find("/items['Uri']/value").getValue(), is(URI.create("http://test.example.com")));
 
     }
 
