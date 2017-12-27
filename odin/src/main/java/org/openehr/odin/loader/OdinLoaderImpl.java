@@ -21,10 +21,10 @@ package org.openehr.odin.loader;
  * Author: Claude Nanjo
  */
 
+import com.nedap.archie.adlparser.antlr.odinLexer;
+import com.nedap.archie.adlparser.antlr.odinParser;
 import org.apache.commons.io.IOUtils;
 import org.openehr.odin.antlr.OdinVisitorImpl;
-import org.openehr.odin.antlr.odinLexer;
-import org.openehr.odin.antlr.odinParser;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;

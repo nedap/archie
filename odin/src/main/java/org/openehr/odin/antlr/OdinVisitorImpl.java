@@ -21,6 +21,9 @@ package org.openehr.odin.antlr;
  * Author: Claude Nanjo
  */
 
+import com.nedap.archie.adlparser.antlr.odinBaseVisitor;
+import com.nedap.archie.adlparser.antlr.odinParser;
+import com.nedap.archie.adlparser.antlr.odinVisitor;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
@@ -439,7 +442,10 @@ public class OdinVisitorImpl<T> extends odinBaseVisitor<T> implements odinVisito
      */
     @Override
     public T visitObject_reference_block(odinParser.Object_reference_blockContext ctx) {
-        return visitChildren(ctx);
+        OdinReferenceObject result = new OdinReferenceObject();
+        stack.push(result);
+        T retVal = visitChildren(ctx);
+        return retVal;
     }
 
     /**
@@ -461,28 +467,14 @@ public class OdinVisitorImpl<T> extends odinBaseVisitor<T> implements odinVisito
      */
     @Override
     public T visitOdin_path(odinParser.Odin_pathContext ctx) {
-        return visitChildren(ctx);
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * <p>The default implementation returns the result of calling
-     * {@link #visitChildren} on {@code ctx}.</p>
-     */
-    @Override
-    public T visitOdin_path_segment(odinParser.Odin_path_segmentContext ctx) {
-        return visitChildren(ctx);
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * <p>The default implementation returns the result of calling
-     * {@link #visitChildren} on {@code ctx}.</p>
-     */
-    @Override
-    public T visitOdin_path_element(odinParser.Odin_path_elementContext ctx) {
+        OdinReferenceObject referenceObject = (OdinReferenceObject) stack.peek();
+        if(ctx.ADL_PATH() != null) {
+            //we have an actual path
+            referenceObject.getPaths().add(ctx.ADL_PATH().getText());
+        } else {
+            referenceObject.getPaths().add("/");
+            //path = '/'
+        }
         return visitChildren(ctx);
     }
 
@@ -1119,7 +1111,7 @@ public class OdinVisitorImpl<T> extends odinBaseVisitor<T> implements odinVisito
      * {@link #visitChildren} on {@code ctx}.</p>
      */
     @Override
-    public T visitRm_type_id(odinParser.Rm_type_idContext ctx) {
+    public T visitType_id(odinParser.Type_idContext ctx) {
         String value = ctx.getText();
         CompositeOdinObject complexObject = (CompositeOdinObject) stack.peek();
         if(complexObject.getType() == null) {
@@ -1135,7 +1127,7 @@ public class OdinVisitorImpl<T> extends odinBaseVisitor<T> implements odinVisito
      * {@link #visitChildren} on {@code ctx}.</p>
      */
     @Override
-    public T visitRm_attribute_id(odinParser.Rm_attribute_idContext ctx) {
+    public T visitAttribute_id(odinParser.Attribute_idContext ctx) {
         return visitChildren(ctx);
     }
 

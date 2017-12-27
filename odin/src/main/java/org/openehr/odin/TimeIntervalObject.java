@@ -22,7 +22,7 @@ package org.openehr.odin;
  */
 
 
-import org.openehr.odin.antlr.odinParser;
+import com.nedap.archie.adlparser.antlr.odinParser;
 
 import java.io.Serializable;
 
