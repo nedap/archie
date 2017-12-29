@@ -9,16 +9,16 @@ rm_publisher = <"CIMI">
 schema_name = <"RM_CLINICAL">
 rm_release = <"0.0.1">
 
--- ----------------------------------
+-------------------------------------
 -- schema documentation
--- ----------------------------------
+-------------------------------------
 schema_revision = <"Tue Nov 29 21:02:12 PST 2016">
 schema_lifecycle_state = <"dstu">
 schema_description = <"CIMI_RM_CLINICAL.v0.0.1.mdzip - Schema generated from UML">
 
--- ----------------------------------
+-------------------------------------
 -- schema inclusion
--- ----------------------------------
+-------------------------------------
 includes = <
 	["1"] = <
 		id = <"cimi_rm_core_0.0.1">
@@ -28,14 +28,14 @@ includes = <
 	>
 >
 
--- ----------------------------------
+-------------------------------------
 -- archetyping
--- ----------------------------------
-archetype_rm_closure_packages = <"CIMI_Clinical.ClinicalStatement", "CIMI_Clinical.Data_Structure", "CIMI_Clinical.Party", "CIMI_Clinical.Relationship", "CIMI_Clinical.Participation", ...>
+-------------------------------------
+archetype_rm_closure_packages = <"CIMI_Clinical.ClinicalStatement", "CIMI_Clinical.Data_Structure", "CIMI_Clinical.Party", "CIMI_Clinical.Relationship", "CIMI_Clinical.Participation">
 
--- ----------------------------------
+-------------------------------------
 -- packages
--- ----------------------------------
+-------------------------------------
 
 packages = <
 	["CIMI_Clinical"] = <
@@ -65,15 +65,15 @@ packages = <
 	>
 >
 
--- ----------------------------------
+-------------------------------------
 -- classes
--- ----------------------------------
+-------------------------------------
 
 class_definitions = <
 	
-	-- ----------------------------------
+	-------------------------------------
 	-- Participation
-	-- ----------------------------------
+	-------------------------------------
 
 	["SubjectOfInformation"] = <
 		name = <"SubjectOfInformation">
@@ -88,9 +88,9 @@ class_definitions = <
 	>
 
 	
-	-- ----------------------------------
+	-------------------------------------
 	-- Party
-	-- ----------------------------------
+	-------------------------------------
 
 	["Organization"] = <
 		name = <"Organization">
@@ -326,9 +326,9 @@ class_definitions = <
 	>
 
 	
-	-- ----------------------------------
+	-------------------------------------
 	-- Relationship
-	-- ----------------------------------
+	-------------------------------------
 
 	["PartyRelationship"] = <
 		name = <"PartyRelationship">
@@ -448,18 +448,18 @@ class_definitions = <
 	>
 
 	
-	-- ----------------------------------
+	-------------------------------------
 	-- ClinicalStatement
-	-- ----------------------------------
+	-------------------------------------
 
 	["CompoundClinicalStatement"] = <
 		name = <"CompoundClinicalStatement">
-		ancestors = <"ClinicalStatement", "COMPOUND_ENTRY", ...>
+		ancestors = <"ClinicalStatement", "COMPOUND_ENTRY">
 	>
 
 	["IndivisibleClinicalStatement"] = <
 		name = <"IndivisibleClinicalStatement">
-		ancestors = <"ClinicalStatement", "INDIVISIBLE_ENTRY", ...>
+		ancestors = <"ClinicalStatement", "INDIVISIBLE_ENTRY">
 	>
 
 	["ClinicalStatement"] = <
@@ -543,9 +543,9 @@ class_definitions = <
 	>
 
 	
-	-- ----------------------------------
+	-------------------------------------
 	-- Data_Structure
-	-- ----------------------------------
+	-------------------------------------
 
 	["BiometricData"] = <
 		name = <"BiometricData">

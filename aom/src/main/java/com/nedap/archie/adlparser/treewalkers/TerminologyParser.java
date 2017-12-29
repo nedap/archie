@@ -1,13 +1,9 @@
 package com.nedap.archie.adlparser.treewalkers;
 
-import com.nedap.archie.adlparser.ADLParserErrors;
+import com.nedap.archie.antlr.errors.ANTLRParserErrors;
 import com.nedap.archie.adlparser.antlr.AdlParser.*;
-import com.nedap.archie.aom.utils.ArchetypeParsePostProcesser;
 import com.nedap.archie.serializer.odin.OdinObjectParser;
-import com.nedap.archie.aom.terminology.ArchetypeTerm;
 import com.nedap.archie.aom.terminology.ArchetypeTerminology;
-
-import java.util.Map;
 
 /**
  * Parser for the terminology section of an archetype
@@ -16,7 +12,7 @@ import java.util.Map;
  */
 public class TerminologyParser extends BaseTreeWalker {
 
-    public TerminologyParser(ADLParserErrors errors) {
+    public TerminologyParser(ANTLRParserErrors errors) {
         super(errors);
     }
 

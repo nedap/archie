@@ -1,6 +1,6 @@
 package com.nedap.archie.adlparser.treewalkers;
 
-import com.nedap.archie.adlparser.ADLParserErrors;
+import com.nedap.archie.antlr.errors.ANTLRParserErrors;
 import com.nedap.archie.adlparser.antlr.ContainedRegexLexer;
 import com.nedap.archie.adlparser.antlr.ContainedRegexParser;
 import com.nedap.archie.adlparser.antlr.AdlLexer;
@@ -41,7 +41,7 @@ public class PrimitivesConstraintParser extends BaseTreeWalker {
     private final NumberConstraintParser numberConstraintParser;
     private final TemporalConstraintParser temporalConstraintParser;
 
-    public PrimitivesConstraintParser(ADLParserErrors errors) {
+    public PrimitivesConstraintParser(ANTLRParserErrors errors) {
         super(errors);
         numberConstraintParser = new NumberConstraintParser(errors);
         temporalConstraintParser = new TemporalConstraintParser(errors);

@@ -1,4 +1,4 @@
-package com.nedap.archie.adlparser;
+package com.nedap.archie.antlr.errors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,43 +9,43 @@ import java.util.List;
 /**
  * Created by pieter.bos on 19/10/15.
  */
-public class ADLParserErrors {
+public class ANTLRParserErrors {
 
-    private static final Logger logger = LoggerFactory.getLogger(ADLParserErrors.class);
+    private static final Logger logger = LoggerFactory.getLogger(ANTLRParserErrors.class);
 
-    private List<ADLParserMessage> errors = new ArrayList<>();
-    private List<ADLParserMessage> warnings = new ArrayList<>();
+    private List<ANTLRParserMessage> errors = new ArrayList<>();
+    private List<ANTLRParserMessage> warnings = new ArrayList<>();
 
     public void addError(String error) {
-        errors.add(new ADLParserMessage(error));
+        errors.add(new ANTLRParserMessage(error));
     }
 
     public void addWarning(String error) {
-        warnings.add(new ADLParserMessage(error));
+        warnings.add(new ANTLRParserMessage(error));
     }
 
     public void logToLogger() {
-        for(ADLParserMessage message:warnings) {
+        for(ANTLRParserMessage message:warnings) {
             logger.warn(message.getMessage());
         }
-        for(ADLParserMessage message:errors) {
+        for(ANTLRParserMessage message:errors) {
             logger.error(message.getMessage());
         }
     }
 
-    public List<ADLParserMessage> getErrors() {
+    public List<ANTLRParserMessage> getErrors() {
         return errors;
     }
 
-    public void setErrors(List<ADLParserMessage> errors) {
+    public void setErrors(List<ANTLRParserMessage> errors) {
         this.errors = errors;
     }
 
-    public List<ADLParserMessage> getWarnings() {
+    public List<ANTLRParserMessage> getWarnings() {
         return warnings;
     }
 
-    public void setWarnings(List<ADLParserMessage> warnings) {
+    public void setWarnings(List<ANTLRParserMessage> warnings) {
         this.warnings = warnings;
     }
 
@@ -68,8 +68,8 @@ public class ADLParserErrors {
         return result.toString();
     }
 
-    private void append(StringBuilder result, String level, List<ADLParserMessage> messages) {
-        for(ADLParserMessage message:messages) {
+    private void append(StringBuilder result, String level, List<ANTLRParserMessage> messages) {
+        for(ANTLRParserMessage message:messages) {
             result.append(level);
             result.append(": ");
             result.append(message.getMessage());

@@ -1,6 +1,6 @@
 package com.nedap.archie.adlparser.treewalkers;
 
-import com.nedap.archie.adlparser.ADLParserErrors;
+import com.nedap.archie.antlr.errors.ANTLRParserErrors;
 import com.nedap.archie.adlparser.antlr.AdlParser.*;
 import com.nedap.archie.serializer.odin.OdinValueParser;
 import com.nedap.archie.aom.CPrimitiveObject;
@@ -17,7 +17,7 @@ public class RulesParser extends BaseTreeWalker {
 
     private PrimitivesConstraintParser primitivesConstraintParser;
 
-    public RulesParser(ADLParserErrors errors) {
+    public RulesParser(ANTLRParserErrors errors) {
         super(errors);
         primitivesConstraintParser = new PrimitivesConstraintParser(errors);
     }

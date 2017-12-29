@@ -37,11 +37,11 @@ template:
     rules_section?
     terminology_section
     annotations_section?
-    (H_CMT_LINE template_overlay)*
+    (template_overlay)*
     ;
 
 template_overlay: 
-    SYM_TEMPLATE_OVERLAY 
+    SYM_TEMPLATE_OVERLAY //this token includes the horizontal comment line
     ARCHETYPE_HRID
     specialization_section
     definition_section

@@ -1,6 +1,6 @@
 package com.nedap.archie.adlparser.treewalkers;
 
-import com.nedap.archie.adlparser.ADLParserErrors;
+import com.nedap.archie.antlr.errors.ANTLRParserErrors;
 import com.nedap.archie.adlparser.antlr.AdlParser.*;
 import com.nedap.archie.aom.*;
 import com.nedap.archie.base.Cardinality;
@@ -20,7 +20,7 @@ public class CComplexObjectParser extends BaseTreeWalker {
 
     private final PrimitivesConstraintParser primitivesConstraintParser;
 
-    public CComplexObjectParser(ADLParserErrors errors) {
+    public CComplexObjectParser(ANTLRParserErrors errors) {
         super(errors);
         primitivesConstraintParser = new PrimitivesConstraintParser(errors);
     }
