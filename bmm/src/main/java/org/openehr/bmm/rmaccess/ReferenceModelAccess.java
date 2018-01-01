@@ -23,6 +23,7 @@ package org.openehr.bmm.rmaccess;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
+import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.openehr.bmm.core.BmmModel;
 import org.openehr.bmm.persistence.BmmIncludeSpecification;
 import org.openehr.bmm.persistence.PersistedBmmSchema;
@@ -365,22 +366,29 @@ public class ReferenceModelAccess {
         try {
             if (hasSchemaDirectory() && !exceptionEncountered) {
                 allSchemas.clear();
-                schemaDirectories.forEach(directory -> {
+                for(String directory:schemaDirectories) {
                     File directoryFile = new File(directory);
                     if (!directoryFile.exists() || !directoryFile.isDirectory() || !directoryFile.canRead()) {
                         validator.addError(BmmMessageIds.ec_bmm_schema_dir_not_valid, directory);
                     } else if (!(directoryFile.listFiles().length > 0)) {
                         validator.addError(BmmMessageIds.ec_bmm_schema_dir_contains_no_schemas, directory);
                     } else {
-                        Collection<File> bmmFiles = FileUtils.listFiles(directoryFile, bmmFileFilter, null);
-                        bmmFiles.forEach(bmmFile -> {
-                            processSchemaFile(bmmFile);
-                        });
-                        if (allSchemas.isEmpty()) {
-                            validator.addError(BmmMessageIds.ec_bmm_schema_dir_contains_no_schemas, directory);
+                        Collection<File> bmmFiles = FileUtils.listFiles(directoryFile, bmmFileFilter, TrueFileFilter.INSTANCE);
+                        for (File bmmFile : bmmFiles) {
+                            if (!bmmFile.isDirectory()) {
+                                try {
+                                    processSchemaFile(bmmFile);
+                                } catch (Exception e) {
+                                    validator.addError(BmmMessageIds.ec_bmm_schema_load_error, e.getMessage());
+                                    log.error("error loading schema {}", bmmFile.getName(), e);
+                                }
+                            }
+                            if (allSchemas.isEmpty()) {
+                                validator.addError(BmmMessageIds.ec_bmm_schema_dir_contains_no_schemas, directory);
+                            }
                         }
                     }
-                });
+                }
             }
         } catch (Exception e) {
             exceptionEncountered = true;
@@ -390,6 +398,7 @@ public class ReferenceModelAccess {
     }
 
     protected void processSchemaFile(File bmmFile) {
+        log.info("loading {}", bmmFile);
         SchemaDescriptor schemaDescriptor = new SchemaDescriptor(bmmFile);
         schemaDescriptor.initialize();
         //check for two schema files purporting to be the exact same schema (including release)

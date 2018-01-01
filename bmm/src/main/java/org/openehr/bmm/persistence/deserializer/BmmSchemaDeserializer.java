@@ -101,13 +101,19 @@ public class BmmSchemaDeserializer {
     }
 
     protected void deserializePackages(CompositeOdinObject modelNode, PersistedBmmSchema schema) {
-        CompositeOdinObject packages = modelNode.getAttribute("packages").getSoleCompositeObjectBody();
-        processPackages(schema, packages);
+        OdinAttribute packagesAttribute = modelNode.getAttribute("packages");
+        if(packagesAttribute != null) {
+            CompositeOdinObject packages = packagesAttribute.getSoleCompositeObjectBody();
+            processPackages(schema, packages);
+        }
     }
 
     protected void deserializeClassDefinitions(CompositeOdinObject modelNode, PersistedBmmSchema schema) {
-        CompositeOdinObject classDefinitions = modelNode.getAttribute("class_definitions").getSoleCompositeObjectBody();
-        processClassDefinitions(schema, classDefinitions);
+        OdinAttribute classDefinitionsAttribute = modelNode.getAttribute("class_definitions");
+        if(classDefinitionsAttribute != null) {
+            CompositeOdinObject classDefinitions = classDefinitionsAttribute.getSoleCompositeObjectBody();
+            processClassDefinitions(schema, classDefinitions);
+        }
     }
 
     protected void deserializePrimitives(CompositeOdinObject modelNode, PersistedBmmSchema schema) {

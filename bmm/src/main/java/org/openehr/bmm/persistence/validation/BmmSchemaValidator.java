@@ -158,13 +158,13 @@ public class BmmSchemaValidator extends AnyValidator {
 
     public void validateProperty(PersistedBmmClass persistedBmmClass, PersistedBmmProperty persistedBmmProperty) {
         //first check if any property replicates a property from a parent class
-        persistedBmmClass.getAncestors().forEach(ancestorName -> {
+        for(String ancestorName:persistedBmmClass.getAncestors()) {
             PersistedBmmClass ancestor = schema.findClassOrPrimitiveDefinition(ancestorName);
             PersistedBmmProperty ancestorProperty = ancestor.getPropertyByName(persistedBmmProperty.getName());
             if(ancestor != null && ancestorProperty != null && !propertyConformsTo(persistedBmmProperty, ancestorProperty)){
                 addValidityError(persistedBmmClass.getSourceSchemaId(), BmmMessageIds.ec_BMM_PRNCF, persistedBmmClass.getSourceSchemaId(), persistedBmmClass.getName(), persistedBmmProperty.getName(), ancestorName);
             }
-        });
+        }
 
         //For single properties, check if property type is empty or not defined in the schema
         if(persistedBmmProperty instanceof PersistedBmmSingleProperty) {

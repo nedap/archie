@@ -127,7 +127,7 @@ public class OdinVisitorImpl<T> extends odinBaseVisitor<T> implements odinVisito
      * @param ctx
      */
     private void visitOdin_text_post(odinParser.Odin_textContext ctx) {
-        log.info("Final Stack: " + stack);
+        log.debug("Final Stack: " + stack);
     }
 
     /**
@@ -174,7 +174,7 @@ public class OdinVisitorImpl<T> extends odinBaseVisitor<T> implements odinVisito
                 stack.pop();
             }
         } else {
-            log.info("Done processing");
+            log.debug("Done processing");
         }
     }
 

@@ -64,19 +64,15 @@ public class OdinAttribute implements Serializable {
     }
 
     public boolean isPrimitiveList() {
-        boolean primitiveList = true;
-        if(children.size() < 2) {
-            primitiveList = false;
-        } else {
-            String type = children.get(0).getClass().getName();
-            for(OdinObject child : children) {
-                if(!(child instanceof PrimitiveObject) && !child.getClass().getName().equals(type)) {
-                    primitiveList = false;
-                    break;
-                }
+
+        String type = children.get(0).getClass().getName();
+        for(OdinObject child : children) {
+            if(!(child instanceof PrimitiveObject) && !child.getClass().getName().equals(type)) {
+                return false;
             }
         }
-        return primitiveList;
+
+        return true;
     }
 
     /**
