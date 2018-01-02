@@ -160,9 +160,11 @@ public class BmmSchemaValidator extends AnyValidator {
         //first check if any property replicates a property from a parent class
         for(String ancestorName:persistedBmmClass.getAncestors()) {
             PersistedBmmClass ancestor = schema.findClassOrPrimitiveDefinition(ancestorName);
-            PersistedBmmProperty ancestorProperty = ancestor.getPropertyByName(persistedBmmProperty.getName());
-            if(ancestor != null && ancestorProperty != null && !propertyConformsTo(persistedBmmProperty, ancestorProperty)){
-                addValidityError(persistedBmmClass.getSourceSchemaId(), BmmMessageIds.ec_BMM_PRNCF, persistedBmmClass.getSourceSchemaId(), persistedBmmClass.getName(), persistedBmmProperty.getName(), ancestorName);
+            if(ancestor != null) {
+                PersistedBmmProperty ancestorProperty = ancestor.getPropertyByName(persistedBmmProperty.getName());
+                if (ancestor != null && ancestorProperty != null && !propertyConformsTo(persistedBmmProperty, ancestorProperty)) {
+                    addValidityError(persistedBmmClass.getSourceSchemaId(), BmmMessageIds.ec_BMM_PRNCF, persistedBmmClass.getSourceSchemaId(), persistedBmmClass.getName(), persistedBmmProperty.getName(), ancestorName);
+                }
             }
         }
 
@@ -300,9 +302,7 @@ public class BmmSchemaValidator extends AnyValidator {
         if(sourceSchemaId.equals(schema.getSchemaId())) {
             addError(aKey, arguments);
         } else {
-            if(!schemaErrorTableCache.containsKey(sourceSchemaId)) {
-                schemaErrorTableCache.put(sourceSchemaId, new MessageLogger());
-            }
+            addSchemaErrorTableIfNotExists(sourceSchemaId);
             schemaErrorTableCache.get(sourceSchemaId).addErrorWithLocation(aKey, "", arguments);
             addError(BmmMessageIds.ec_BMM_INCERR, schema.getSchemaId(), sourceSchemaId);
         }
@@ -319,10 +319,14 @@ public class BmmSchemaValidator extends AnyValidator {
         if(sourceSchemaId.equals(schema.getSchemaId())) {
             addWarning(aKey, arguments);
         } else {
-            if(!schemaErrorTableCache.containsKey(sourceSchemaId)) {
-                schemaErrorTableCache.put(sourceSchemaId, new MessageLogger());
-            }
+            addSchemaErrorTableIfNotExists(sourceSchemaId);
             schemaErrorTableCache.get(sourceSchemaId).addWarningWithLocation(aKey, "", arguments);
+        }
+    }
+
+    private void addSchemaErrorTableIfNotExists(String sourceSchemaId) {
+        if(!schemaErrorTableCache.containsKey(sourceSchemaId)) {
+            schemaErrorTableCache.put(sourceSchemaId, new MessageLogger());
         }
     }
 
@@ -337,9 +341,7 @@ public class BmmSchemaValidator extends AnyValidator {
         if(sourceSchemaId.equals(schema.getSchemaId())) {
             addInfo(aKey, arguments);
         } else {
-            if(!schemaErrorTableCache.containsKey(sourceSchemaId)) {
-                schemaErrorTableCache.put(sourceSchemaId, new MessageLogger());
-            }
+            addSchemaErrorTableIfNotExists(sourceSchemaId);
             schemaErrorTableCache.get(sourceSchemaId).addInfoWithLocation(aKey, "", arguments);
         }
     }
@@ -494,7 +496,7 @@ public class BmmSchemaValidator extends AnyValidator {
                 });
             });
 
-            if(passed) {
+            if(hasPassed()) {
                 addInfo(new UnknownMessageCode(),schema.getSchemaId(),
                     ""+schema.getPrimitives().size(),
                     ""+schema.getClassDefinitions().size());

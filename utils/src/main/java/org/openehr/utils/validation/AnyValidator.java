@@ -28,34 +28,15 @@ import org.openehr.utils.message.MessageLogger;
  * Base class for OpenEHR model validators
  */
 public abstract class AnyValidator {
-    /**
-     * True if validation succeeded
-     */
-    protected boolean passed = true;
 
     /**
      * Error output of validator - things that must be corrected
      */
     private MessageLogger messageLogger = new MessageLogger();
 
-    /**
-     * Flag indicating that all validation passed. This flag is set to true in two cases:
-     * 1. validation() was invoked and resulted in no messages with a severity of ERROR_TYPE_ERROR.
-     * 2. merge() was invoked and the merged content contained no errors.
-     *
-     * @return
-     */
-    public boolean hasPassed() {
-        return passed;
-    }
 
-    /**
-     * Sets flag to indicate that all validation has passed.
-     *
-     * @param passed
-     */
-    public void setPassed(boolean passed) {
-        this.passed = passed;
+    public boolean hasPassed() {
+        return !messageLogger.hasErrors();
     }
 
     /**
@@ -84,7 +65,6 @@ public abstract class AnyValidator {
      * Resets the state of this validator for a new run.
      */
     public void reset() {
-        passed = true;
         messageLogger = new MessageLogger();
     }
 
@@ -151,7 +131,6 @@ public abstract class AnyValidator {
      */
     public void mergeErrors(MessageLogger other) {
         messageLogger.append(other);
-        passed = passed && !(other.hasErrors());
     }
 
     /**
@@ -212,7 +191,7 @@ public abstract class AnyValidator {
     }
 
     public boolean readyToValidate() {
-        return passed;
+        return hasPassed();
     }
 
     /**
@@ -221,9 +200,6 @@ public abstract class AnyValidator {
     public void validate() {
         if(readyToValidate()) {
             doValidation();
-            if(messageLogger.hasErrors()) { //this used to not pass on warnings. not a good idea because other things don't continue when this is false!
-                passed = false;
-            }
         } else {
             throw new IllegalStateException("Error - not ready to validate");
         }

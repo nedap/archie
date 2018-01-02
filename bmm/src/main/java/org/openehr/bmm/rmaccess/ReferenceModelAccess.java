@@ -158,10 +158,6 @@ public class ReferenceModelAccess {
         return validator;
     }
 
-    public void setValidator(BasicValidator validator) {
-        this.validator = validator;
-    }
-
     public Map<String, SchemaDescriptor> getCandidateSchemas() {
         return candidateSchemas;
     }
@@ -334,7 +330,6 @@ public class ReferenceModelAccess {
      */
     public void initializeAll(List<String> aSchemaDirectories) {
         initializeWithLoadList(aSchemaDirectories, new ArrayList<String>());
-        validator.validate();
     }
 
     /**
@@ -411,7 +406,7 @@ public class ReferenceModelAccess {
             validator.addWarning(BmmMessageIds.ec_bmm_schema_duplicate_schema_found, schemaDescriptor.getSchemaId(), schemaDescriptor.getSchemaPath());
             log.warn("No schema descriptor created for " + bmmFile + ": Duplicate schema");
         } else {
-            allSchemas.put(schemaDescriptor.getSchemaId(), schemaDescriptor);
+            addSchema(schemaDescriptor);
         }
     }
 
@@ -572,25 +567,30 @@ public class ReferenceModelAccess {
                 SchemaDescriptor aSchemaDescriptor = candidateSchemas.get(aKey);
                 if (aSchemaDescriptor.isTopLevel() && schemaLoadList.contains(aSchemaDescriptor.getSchemaId())) {
                     if (aSchemaDescriptor.getSchemaValidator().hasPassed() && aSchemaDescriptor.getPersistentSchema().getState() == PersistedBmmSchemaState.STATE_INCLUDES_PROCESSED) {
-                        //validate the schema & if passed, put it into `top_level_schemas'
-                        aSchemaDescriptor.validate();
-                        mergeValidationErrors(aSchemaDescriptor);
-                        if (aSchemaDescriptor.getSchemaValidator().hasPassed()) {
-                            //now we create a BMM_SCHEMA from a fully merged P_BMM_SCHEMA
-                            aSchemaDescriptor.createSchema();
-                            if (aSchemaDescriptor.getSchema() != null) {
-                                topLevelSchema = aSchemaDescriptor.getSchema();
-                            }
-                            validModels.put(aSchemaDescriptor.getSchemaId(), topLevelSchema);
-                            if (aSchemaDescriptor.getSchemaValidator().getMessageLogger().hasWarnings()) {
-                                validator.addWarning(BmmMessageIds.ec_bmm_schema_passed_with_warnings,
+                        try {
+                            //validate the schema & if passed, put it into `top_level_schemas'
+                            aSchemaDescriptor.validate();
+                            mergeValidationErrors(aSchemaDescriptor);
+                            if (aSchemaDescriptor.getSchemaValidator().hasPassed()) {
+                                //now we create a BMM_SCHEMA from a fully merged P_BMM_SCHEMA
+                                aSchemaDescriptor.createSchema();
+                                if (aSchemaDescriptor.getSchema() != null) {
+                                    topLevelSchema = aSchemaDescriptor.getSchema();
+                                }
+                                validModels.put(aSchemaDescriptor.getSchemaId(), topLevelSchema);
+                                if (aSchemaDescriptor.getSchemaValidator().getMessageLogger().hasWarnings()) {
+                                    validator.addWarning(BmmMessageIds.ec_bmm_schema_passed_with_warnings,
+                                            aSchemaDescriptor.getSchemaId(),
+                                            aSchemaDescriptor.getSchemaValidator().getErrorStrings());
+                                }
+                            } else {
+                                validator.addError(BmmMessageIds.ec_bmm_schema_post_merge_validate_fail,
                                         aSchemaDescriptor.getSchemaId(),
                                         aSchemaDescriptor.getSchemaValidator().getErrorStrings());
                             }
-                        } else {
-                            validator.addError(BmmMessageIds.ec_bmm_schema_post_merge_validate_fail,
-                                    aSchemaDescriptor.getSchemaId(),
-                                    aSchemaDescriptor.getSchemaValidator().getErrorStrings());
+                        } catch (Exception e) {
+                            validator.addError(BmmMessageIds.ec_bmm_schema_post_merge_validate_fail, aSchemaDescriptor.getSchemaId(), e.getClass().getSimpleName() + ": " + e.getMessage());
+                            log.error("error validating schema", e);
                         }
                     }
                 }
@@ -706,7 +706,8 @@ public class ReferenceModelAccess {
             PersistedBmmSchema persistedSchema = aSchemaDescriptor.getPersistentSchema();
             errorTable = persistedSchema.getBmmSchemaValidator().getSchemaErrorTableCache();
             errorTable.forEach((aSchemaId, anErrorAccumulator) -> {
-                allSchemas.get(aSchemaId).getSchemaValidator().mergeErrors(anErrorAccumulator);
+                SchemaDescriptor schemaDescriptor = allSchemas.get(aSchemaId);
+                schemaDescriptor.getSchemaValidator().mergeErrors(anErrorAccumulator);
                 //iterate through all schemas including err_table.key_for_iteration, except for `sd' since it will already have been marked
                 //Note that there will be an entry in err_table for warnings as well as errors, so we have to process these properly
                 if (schemaInclusionMap.containsKey(aSchemaId)) {
@@ -714,11 +715,11 @@ public class ReferenceModelAccess {
                     //TODO Verify logic works
                     for (String include : includes) {
                         if (anErrorAccumulator.hasErrors()) {
-                            allSchemas.get(aSchemaId).getSchemaValidator().addError(BmmMessageIds.ec_BMM_INCERR,
+                            schemaDescriptor.getSchemaValidator().addError(BmmMessageIds.ec_BMM_INCERR,
                                     include,
                                     aSchemaId);
                         } else {
-                            allSchemas.get(aSchemaId).getSchemaValidator().addWarning(BmmMessageIds.ec_BMM_INCWARN,
+                            schemaDescriptor.getSchemaValidator().addWarning(BmmMessageIds.ec_BMM_INCWARN,
                                     include,
                                     aSchemaId);
                         }

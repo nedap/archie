@@ -159,7 +159,7 @@ public class PersistedBmmContainerType extends PersistedBmmType<BmmContainerType
      */
     @Override
     public String asTypeString() {
-        return containerType + "<" + typeDefinition.asTypeString() + ">";
+        return containerType + "<" + getTypeReference().asTypeString() + ">";
     }
 
     public List<String> flattenedTypeList() {
