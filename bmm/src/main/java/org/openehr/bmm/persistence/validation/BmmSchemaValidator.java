@@ -354,38 +354,33 @@ public class BmmSchemaValidator extends AnyValidator {
      * @return
      */
     public boolean propertyConformsTo(PersistedBmmProperty aChildProperty, PersistedBmmProperty aParentProperty) {
-        boolean retVal = false;
-        if(aParentProperty instanceof PersistedBmmSingleProperty) {
-            PersistedBmmSingleProperty bmmSingleParentProperty = (PersistedBmmSingleProperty) aParentProperty;
-            //True if `a_parent_prop' type is Any
-            if (bmmSingleParentProperty.getTypeDefinition().getType().equalsIgnoreCase(BmmDefinitions.ANY_TYPE)) {
-                retVal = true;
-            }
+        if(aParentProperty instanceof PersistedBmmSingleProperty && ((PersistedBmmSingleProperty) aParentProperty).getTypeDefinition().getType().equalsIgnoreCase(BmmDefinitions.ANY_TYPE)) {
+            return true;
         } else if(aChildProperty.getName().equalsIgnoreCase(aParentProperty.getName())) {
             //Properties names are the same
             if(aChildProperty instanceof PersistedBmmSingleProperty && aParentProperty instanceof PersistedBmmSingleProperty) {
                 PersistedBmmSingleProperty aChildSingleProperty = (PersistedBmmSingleProperty)aChildProperty;
                 PersistedBmmSingleProperty aParentSingleProperty = (PersistedBmmSingleProperty)aParentProperty;
-                retVal = typeStrictlyConformsTo(aChildSingleProperty.getTypeDefinition().getType(), aParentSingleProperty.getTypeDefinition().getType());
+                return typeStrictlyConformsTo(aChildSingleProperty.getTypeDefinition().getType(), aParentSingleProperty.getTypeDefinition().getType());
             } else if(aParentProperty instanceof PersistedBmmSinglePropertyOpen) {
                 if(aChildProperty instanceof  PersistedBmmSinglePropertyOpen) {
                     //If both properties have the same name and are both open properties, then they do not conform.
-                    retVal = false;
+                    return false;
                 } else if(aChildProperty instanceof PersistedBmmSingleProperty) {
-                    retVal = true;
+                    return true;
                     //TODO FIXME: proper type conformance to constraining generic type needs to be checked here
                 }
             } else if(aChildProperty instanceof PersistedBmmContainerProperty && aParentProperty instanceof PersistedBmmContainerProperty) {
                 PersistedBmmContainerProperty aChildContainerProperty = (PersistedBmmContainerProperty)aChildProperty;
                 PersistedBmmContainerProperty aParentContainerProperty = (PersistedBmmContainerProperty)aParentProperty;
-                retVal = typeStrictlyConformsTo(aChildContainerProperty.getTypeDefinition().asTypeString(), aParentContainerProperty.getTypeDefinition().asTypeString());
+                return typeStrictlyConformsTo(aChildContainerProperty.getTypeDefinition().asTypeString(), aParentContainerProperty.getTypeDefinition().asTypeString());
             } else if(aChildProperty instanceof PersistedBmmGenericProperty && aParentProperty instanceof PersistedBmmGenericProperty) {
                 PersistedBmmGenericProperty aChildGenericProperty = (PersistedBmmGenericProperty)aChildProperty;
                 PersistedBmmGenericProperty aParentGenericProperty = (PersistedBmmGenericProperty)aParentProperty;
-                retVal = typeStrictlyConformsTo(aChildGenericProperty.getTypeDefinition().asTypeString(), aParentGenericProperty.getTypeDefinition().asTypeString());
+                return typeStrictlyConformsTo(aChildGenericProperty.getTypeDefinition().asTypeString(), aParentGenericProperty.getTypeDefinition().asTypeString());
             }
         }
-        return retVal;
+        return false;
     }
 
     /**
