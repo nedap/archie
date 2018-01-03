@@ -1,15 +1,15 @@
 package com.nedap.archie.adlparser.treewalkers;
 
-import com.nedap.archie.adlparser.ADLParserErrors;
+import com.nedap.archie.antlr.errors.ANTLRParserErrors;
 
 /**
  * Created by pieter.bos on 29/10/15.
  */
 public class BaseTreeWalker {
 
-    private ADLParserErrors errors;
+    private ANTLRParserErrors errors;
 
-    public BaseTreeWalker(ADLParserErrors errors) {
+    public BaseTreeWalker(ANTLRParserErrors errors) {
         this.errors = errors;
     }
 
@@ -21,7 +21,7 @@ public class BaseTreeWalker {
         errors.addError(warning);
     }
 
-    public ADLParserErrors getErrors() {
+    public ANTLRParserErrors getErrors() {
         return errors;
     }
 }

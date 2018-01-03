@@ -21,7 +21,7 @@ package org.openehr.odin;
  * Author: Claude Nanjo
  */
 
-import org.openehr.odin.antlr.odinParser;
+import com.nedap.archie.adlparser.antlr.odinParser;
 
 import java.io.Serializable;
 

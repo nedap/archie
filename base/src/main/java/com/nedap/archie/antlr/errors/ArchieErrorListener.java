@@ -1,4 +1,4 @@
-package com.nedap.archie.adlparser;
+package com.nedap.archie.antlr.errors;
 
 import org.antlr.v4.runtime.ANTLRErrorListener;
 import org.antlr.v4.runtime.Parser;
@@ -16,14 +16,14 @@ import org.slf4j.LoggerFactory;
 /**
  * Created by pieter.bos on 19/10/15.
  */
-public class ADLErrorListener implements ANTLRErrorListener {
+public class ArchieErrorListener implements ANTLRErrorListener {
 
     private boolean logEnabled = true;
 
-    private static final Logger logger = LoggerFactory.getLogger(ADLErrorListener.class);
-    private final ADLParserErrors errors;
+    private static final Logger logger = LoggerFactory.getLogger(ArchieErrorListener.class);
+    private final ANTLRParserErrors errors;
 
-    public ADLErrorListener(ADLParserErrors errors) {
+    public ArchieErrorListener(ANTLRParserErrors errors) {
         this.errors = errors;
     }
 
@@ -69,7 +69,7 @@ public class ADLErrorListener implements ANTLRErrorListener {
         }
     }
 
-    public ADLParserErrors getErrors() {
+    public ANTLRParserErrors getErrors() {
         return errors;
     }
 }

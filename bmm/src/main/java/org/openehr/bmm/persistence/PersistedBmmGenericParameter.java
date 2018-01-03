@@ -59,10 +59,11 @@ public class PersistedBmmGenericParameter extends PersistedBmmModelElement imple
      * parameter must conform.
      */
     private String conformsToType;
+
     /**
      * BMM_GENERIC_PARAMETER created by create_bmm_generic_parameter.
      */
-    private BmmGenericParameter bmmGenericParameter;
+    private transient BmmGenericParameter bmmGenericParameter;
 
     /**
      * Returns the name of the parameter, e.g. 'T' etc.
@@ -129,7 +130,11 @@ public class PersistedBmmGenericParameter extends PersistedBmmModelElement imple
             bmmGenericParameter.setDocumentation(getDocumentation());
             bmmGenericParameter.setConformsToType(conformsToTypeClass);
         } else {
-            throw new RuntimeException("No conform_to_type found. If type is completely open, specify parent type such as 'Any'");
+            bmmGenericParameter = new BmmGenericParameter();
+            bmmGenericParameter.setName(name);
+            bmmGenericParameter.setDocumentation(getDocumentation());
+            bmmGenericParameter.setBaseClass(bmmSchema.getAnyClassDefinition());
+            bmmGenericParameter.setConformsToType(null);
         }
     }
 }

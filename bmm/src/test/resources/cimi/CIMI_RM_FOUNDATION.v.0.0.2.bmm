@@ -1,25 +1,25 @@
 -- Basic Metamodel Syntax Version
 bmm_version = <"2.1">
 
--- ----------------------------------
+-------------------------------------
 -- schema identification
 -- (schema_id computed as <rm_publisher>_<schema_name>_<rm_release>)
--- ----------------------------------
+-------------------------------------
 rm_publisher = <"CIMI">
 schema_name = <"RM_FOUNDATION">
 rm_release = <"0.0.2">
 
--- ----------------------------------
+-------------------------------------
 -- schema documentation
--- ----------------------------------
+-------------------------------------
 schema_revision = <"Tue Mar 07 00:47:54 PST 2017">
 schema_lifecycle_state = <"dstu">
 schema_description = <"CIMI_RM_FOUNDATION.v0.0.2.mdzip - Schema generated from UML">
 
 
--- ----------------------------------
+-------------------------------------
 -- archetyping
--- ----------------------------------
+-------------------------------------
 archetype_rm_closure_packages = <"CIMI_Foundation_RM.Foundation", "CIMI_Foundation_RM.Party">
 includes = <
 	["1"] = <

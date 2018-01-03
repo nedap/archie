@@ -4,9 +4,8 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.io.Resources;
 import com.nedap.archie.adlparser.ADLParser;
-import com.nedap.archie.adlparser.ADLParserErrors;
+import com.nedap.archie.antlr.errors.ANTLRParserErrors;
 import com.nedap.archie.aom.Archetype;
-import com.nedap.archie.flattener.ArchetypeRepository;
 import com.nedap.archie.flattener.FullArchetypeRepository;
 import com.nedap.archie.flattener.InMemoryFullArchetypeRepository;
 import com.nedap.archie.flattener.SimpleArchetypeRepository;
@@ -106,7 +105,7 @@ public class BigArchetypeValidatorTest {
             }
             Archetype archetype = null;
             Exception exception = null;
-            ADLParserErrors errors = null;
+            ANTLRParserErrors errors = null;
             try (InputStream stream = getClass().getResourceAsStream("/" + file)) {
                 ADLParser parser = new ADLParser();
                 parser.setLogEnabled(false);
@@ -147,7 +146,7 @@ public class BigArchetypeValidatorTest {
             }
             Archetype archetype = null;
             Exception exception = null;
-            ADLParserErrors errors = null;
+            ANTLRParserErrors errors = null;
             try (InputStream stream = getClass().getResourceAsStream("/" + file)) {
                 ADLParser parser = new ADLParser();
                 parser.setLogEnabled(false);

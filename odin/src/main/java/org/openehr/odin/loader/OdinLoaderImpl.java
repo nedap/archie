@@ -21,10 +21,12 @@ package org.openehr.odin.loader;
  * Author: Claude Nanjo
  */
 
+import com.nedap.archie.adlparser.antlr.odinLexer;
+import com.nedap.archie.adlparser.antlr.odinParser;
+import com.nedap.archie.antlr.errors.ANTLRParserErrors;
+import com.nedap.archie.antlr.errors.ArchieErrorListener;
 import org.apache.commons.io.IOUtils;
 import org.openehr.odin.antlr.OdinVisitorImpl;
-import org.openehr.odin.antlr.odinLexer;
-import org.openehr.odin.antlr.odinParser;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -60,8 +62,14 @@ public class OdinLoaderImpl {
             odinLexer lexer = new odinLexer(input);
             CommonTokenStream tokens = new CommonTokenStream(lexer);
             odinParser parser = new odinParser(tokens);
+            ANTLRParserErrors errors = new ANTLRParserErrors();
+            ArchieErrorListener listener = new ArchieErrorListener(errors);
+            parser.addErrorListener(listener);
             ParseTree tree = parser.odin_text();
             visitor.visit(tree);
+            if(errors.hasErrors()) {
+                throw new RuntimeException("errors parsing ODIN file: " + errors);
+            }
         } catch (IOException ioe) {
             ioe.printStackTrace();
             log.error("Error loading odin file", ioe);

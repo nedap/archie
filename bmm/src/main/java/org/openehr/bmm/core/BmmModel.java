@@ -1,5 +1,7 @@
 package org.openehr.bmm.core;
 
+import org.openehr.bmm.persistence.validation.BasicDefinitions;
+
 import java.io.Serializable;
 import java.util.*;
 
@@ -196,6 +198,16 @@ public class BmmModel extends BmmPackageContainer implements IBmmSchemaCore, IBm
             }
         });
         return descendants;
+    }
+
+    public BmmClass getAnyClassDefinition() {
+        if(getClassDefinition(BasicDefinitions.ANY_TYPE) != null) {
+            return getClassDefinition(BasicDefinitions.ANY_TYPE);
+        }
+        BmmClass result = new BmmClass(BasicDefinitions.ANY_TYPE);
+        result.setAbstract(true);
+        result.setDocumentation("Root class of type system");
+        return result;
     }
 
     /**

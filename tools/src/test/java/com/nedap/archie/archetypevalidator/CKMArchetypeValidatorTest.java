@@ -1,7 +1,7 @@
 package com.nedap.archie.archetypevalidator;
 
 import com.nedap.archie.adlparser.ADLParser;
-import com.nedap.archie.adlparser.ADLParserErrors;
+import com.nedap.archie.antlr.errors.ANTLRParserErrors;
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.flattener.FullArchetypeRepository;
 import com.nedap.archie.flattener.InMemoryFullArchetypeRepository;
@@ -12,7 +12,6 @@ import org.reflections.Reflections;
 import org.reflections.scanners.ResourcesScanner;
 
 import java.io.InputStream;
-import java.lang.ref.Reference;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -75,7 +74,7 @@ public class CKMArchetypeValidatorTest {
         for(String file:adlFiles) {
             Archetype archetype = null;
             Exception exception = null;
-            ADLParserErrors errors = null;
+            ANTLRParserErrors errors = null;
             try (InputStream stream = getClass().getResourceAsStream("/" + file)) {
                 ADLParser parser = new ADLParser();
                 parser.setLogEnabled(false);

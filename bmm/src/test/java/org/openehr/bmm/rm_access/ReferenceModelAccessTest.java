@@ -21,17 +21,18 @@ package org.openehr.bmm.rm_access;
  * Author: Claude Nanjo
  */
 
+import com.google.common.collect.Sets;
 import org.junit.Before;
 import org.junit.Test;
 import org.openehr.bmm.core.BmmModel;
 import org.openehr.bmm.rmaccess.ReferenceModelAccess;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class ReferenceModelAccessTest {
 
@@ -50,9 +51,11 @@ public class ReferenceModelAccessTest {
         ReferenceModelAccess access = new ReferenceModelAccess();
         access.initializeAll(schemaDirectories);
         Map<String, BmmModel> models = access.getValidModels();
-        assertTrue(access.getValidator().hasErrors());
-        assertFalse(access.getValidator().hasPassed());
-        System.out.println("DONE");
+        assertFalse(access.getValidator().hasErrors());
+        //if we don't set the top level schema, it has warnings, apparently
+        assertTrue(access.getValidator().hasWarnings());
+        assertEquals(2, models.size());
+        assertEquals(Sets.newHashSet("cimi_rm_3.0.5", "cimi_rm_clinical_0.0.2"), models.keySet());
     }
 
 }

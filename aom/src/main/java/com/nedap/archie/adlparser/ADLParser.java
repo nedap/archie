@@ -3,6 +3,8 @@ package com.nedap.archie.adlparser;
 import com.nedap.archie.adlparser.antlr.*;
 import com.nedap.archie.adlparser.modelconstraints.ModelConstraintImposer;
 import com.nedap.archie.adlparser.treewalkers.ADLListener;
+import com.nedap.archie.antlr.errors.ArchieErrorListener;
+import com.nedap.archie.antlr.errors.ANTLRParserErrors;
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.utils.ArchetypeParsePostProcesser;
 import org.antlr.v4.runtime.ANTLRInputStream;
@@ -22,14 +24,14 @@ import java.io.InputStream;
 public class ADLParser {
 
     private ModelConstraintImposer modelConstraintImposer;
-    private ADLParserErrors errors;
+    private ANTLRParserErrors errors;
 
     private Lexer lexer;
     private AdlParser parser;
     private ADLListener listener;
     private ParseTreeWalker walker;
     private AdlParser.AdlContext tree;
-    public ADLErrorListener errorListener;
+    public ArchieErrorListener errorListener;
 
     /**
      * If true, write errors to the console, if false, do not
@@ -55,8 +57,8 @@ public class ADLParser {
 
     public Archetype parse(CharStream stream) {
 
-        errors = new ADLParserErrors();
-        errorListener = new ADLErrorListener(errors);
+        errors = new ANTLRParserErrors();
+        errorListener = new ArchieErrorListener(errors);
         errorListener.setLogEnabled(logEnabled);
 
         lexer = new AdlLexer(stream);
@@ -79,7 +81,7 @@ public class ADLParser {
 
     }
 
-    public ADLParserErrors getErrors() {
+    public ANTLRParserErrors getErrors() {
         return errors;
     }
 

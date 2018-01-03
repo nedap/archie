@@ -64,7 +64,7 @@ public enum BmmMessageIds implements MessageCode {
     ec_BMM_GPCT(I18n.register("Schema {0} class definition {1} generic parameter {2} constraint type {3} does not exist in schema")),
     ec_BMM_CPT(I18n.register("Schema {0} class definition {1} container property {2} target type not defined")),
     ec_BMM_CPTV(I18n.register("Schema {0} class definition {1} container property {2} target type {3} not found in schema")),
-    ec_BMM_CPTNC(I18n.register("Schema {0} class definition {1} container property {2} cardinality not defined (assuming {0..*})")),
+    ec_BMM_CPTNC(I18n.register("Schema {0} class definition {1} container property {2} cardinality not defined (assuming '{0..*}')")),
     ec_BMM_CPCT(I18n.register("Schema {0} class definition {1} container property {2} container type {3} not found in schema")),
     ec_BMM_GPT(I18n.register("Schema {0} class definition {1} generic property {2} not defined")),
     ec_BMM_GPRT(I18n.register("Schema {0} class definition {1} generic property {2} root type {3} not found in schema")),

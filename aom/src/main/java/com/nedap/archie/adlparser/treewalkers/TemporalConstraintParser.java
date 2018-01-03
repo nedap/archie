@@ -1,6 +1,6 @@
 package com.nedap.archie.adlparser.treewalkers;
 
-import com.nedap.archie.adlparser.ADLParserErrors;
+import com.nedap.archie.antlr.errors.ANTLRParserErrors;
 import com.nedap.archie.adlparser.antlr.AdlParser.*;
 import com.nedap.archie.aom.primitives.CDate;
 import com.nedap.archie.aom.primitives.CDateTime;
@@ -8,11 +8,6 @@ import com.nedap.archie.aom.primitives.CDuration;
 import com.nedap.archie.aom.primitives.CTime;
 import com.nedap.archie.base.Interval;
 
-import java.time.*;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
-import java.time.format.DateTimeParseException;
-import java.time.temporal.ChronoField;
 import java.time.temporal.Temporal;
 import java.time.temporal.TemporalAccessor;
 import java.time.temporal.TemporalAmount;
@@ -23,7 +18,7 @@ import static com.nedap.archie.datetime.DateTimeParsers.*;
  */
 public class TemporalConstraintParser extends BaseTreeWalker {
 
-    public TemporalConstraintParser(ADLParserErrors errors) {
+    public TemporalConstraintParser(ANTLRParserErrors errors) {
         super(errors);
     }
 

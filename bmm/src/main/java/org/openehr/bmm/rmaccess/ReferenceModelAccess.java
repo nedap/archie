@@ -23,6 +23,7 @@ package org.openehr.bmm.rmaccess;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
+import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.openehr.bmm.core.BmmModel;
 import org.openehr.bmm.persistence.BmmIncludeSpecification;
 import org.openehr.bmm.persistence.PersistedBmmSchema;
@@ -155,10 +156,6 @@ public class ReferenceModelAccess {
 
     public BasicValidator getValidator() {
         return validator;
-    }
-
-    public void setValidator(BasicValidator validator) {
-        this.validator = validator;
     }
 
     public Map<String, SchemaDescriptor> getCandidateSchemas() {
@@ -333,7 +330,6 @@ public class ReferenceModelAccess {
      */
     public void initializeAll(List<String> aSchemaDirectories) {
         initializeWithLoadList(aSchemaDirectories, new ArrayList<String>());
-        validator.validate();
     }
 
     /**
@@ -365,22 +361,29 @@ public class ReferenceModelAccess {
         try {
             if (hasSchemaDirectory() && !exceptionEncountered) {
                 allSchemas.clear();
-                schemaDirectories.forEach(directory -> {
+                for(String directory:schemaDirectories) {
                     File directoryFile = new File(directory);
                     if (!directoryFile.exists() || !directoryFile.isDirectory() || !directoryFile.canRead()) {
                         validator.addError(BmmMessageIds.ec_bmm_schema_dir_not_valid, directory);
                     } else if (!(directoryFile.listFiles().length > 0)) {
                         validator.addError(BmmMessageIds.ec_bmm_schema_dir_contains_no_schemas, directory);
                     } else {
-                        Collection<File> bmmFiles = FileUtils.listFiles(directoryFile, bmmFileFilter, null);
-                        bmmFiles.forEach(bmmFile -> {
-                            processSchemaFile(bmmFile);
-                        });
-                        if (allSchemas.isEmpty()) {
-                            validator.addError(BmmMessageIds.ec_bmm_schema_dir_contains_no_schemas, directory);
+                        Collection<File> bmmFiles = FileUtils.listFiles(directoryFile, bmmFileFilter, TrueFileFilter.INSTANCE);
+                        for (File bmmFile : bmmFiles) {
+                            if (!bmmFile.isDirectory()) {
+                                try {
+                                    processSchemaFile(bmmFile);
+                                } catch (Exception e) {
+                                    validator.addError(BmmMessageIds.ec_bmm_schema_load_error, e.getMessage());
+                                    log.error("error loading schema {}", bmmFile.getName(), e);
+                                }
+                            }
+                            if (allSchemas.isEmpty()) {
+                                validator.addError(BmmMessageIds.ec_bmm_schema_dir_contains_no_schemas, directory);
+                            }
                         }
                     }
-                });
+                }
             }
         } catch (Exception e) {
             exceptionEncountered = true;
@@ -390,6 +393,7 @@ public class ReferenceModelAccess {
     }
 
     protected void processSchemaFile(File bmmFile) {
+        log.info("loading {}", bmmFile);
         SchemaDescriptor schemaDescriptor = new SchemaDescriptor(bmmFile);
         schemaDescriptor.initialize();
         //check for two schema files purporting to be the exact same schema (including release)
@@ -402,7 +406,7 @@ public class ReferenceModelAccess {
             validator.addWarning(BmmMessageIds.ec_bmm_schema_duplicate_schema_found, schemaDescriptor.getSchemaId(), schemaDescriptor.getSchemaPath());
             log.warn("No schema descriptor created for " + bmmFile + ": Duplicate schema");
         } else {
-            allSchemas.put(schemaDescriptor.getSchemaId(), schemaDescriptor);
+            addSchema(schemaDescriptor);
         }
     }
 
@@ -519,7 +523,7 @@ public class ReferenceModelAccess {
 
             boolean finished = false;
             //Now we process the include relations on the P_BMM top-level schemas, creating fully populated schemas
-            for (int index = 0; index < MAXIMUM_INCLUSION_DEPTH; index++) {
+            for (int index = 0; index < MAXIMUM_INCLUSION_DEPTH && !finished; index++) {
                 finished = true;
                 for (String key : schemaInclusionMap.keySet()) {
                     List<String> includeList = schemaInclusionMap.get(key);
@@ -563,25 +567,30 @@ public class ReferenceModelAccess {
                 SchemaDescriptor aSchemaDescriptor = candidateSchemas.get(aKey);
                 if (aSchemaDescriptor.isTopLevel() && schemaLoadList.contains(aSchemaDescriptor.getSchemaId())) {
                     if (aSchemaDescriptor.getSchemaValidator().hasPassed() && aSchemaDescriptor.getPersistentSchema().getState() == PersistedBmmSchemaState.STATE_INCLUDES_PROCESSED) {
-                        //validate the schema & if passed, put it into `top_level_schemas'
-                        aSchemaDescriptor.validate();
-                        mergeValidationErrors(aSchemaDescriptor);
-                        if (aSchemaDescriptor.getSchemaValidator().hasPassed()) {
-                            //now we create a BMM_SCHEMA from a fully merged P_BMM_SCHEMA
-                            aSchemaDescriptor.createSchema();
-                            if (aSchemaDescriptor.getSchema() != null) {
-                                topLevelSchema = aSchemaDescriptor.getSchema();
-                            }
-                            validModels.put(aSchemaDescriptor.getSchemaId(), topLevelSchema);
-                            if (aSchemaDescriptor.getSchemaValidator().getMessageLogger().hasWarnings()) {
-                                validator.addWarning(BmmMessageIds.ec_bmm_schema_passed_with_warnings,
+                        try {
+                            //validate the schema & if passed, put it into `top_level_schemas'
+                            aSchemaDescriptor.validate();
+                            mergeValidationErrors(aSchemaDescriptor);
+                            if (aSchemaDescriptor.getSchemaValidator().hasPassed()) {
+                                //now we create a BMM_SCHEMA from a fully merged P_BMM_SCHEMA
+                                aSchemaDescriptor.createSchema();
+                                if (aSchemaDescriptor.getSchema() != null) {
+                                    topLevelSchema = aSchemaDescriptor.getSchema();
+                                }
+                                validModels.put(aSchemaDescriptor.getSchemaId(), topLevelSchema);
+                                if (aSchemaDescriptor.getSchemaValidator().getMessageLogger().hasWarnings()) {
+                                    validator.addWarning(BmmMessageIds.ec_bmm_schema_passed_with_warnings,
+                                            aSchemaDescriptor.getSchemaId(),
+                                            aSchemaDescriptor.getSchemaValidator().getErrorStrings());
+                                }
+                            } else {
+                                validator.addError(BmmMessageIds.ec_bmm_schema_post_merge_validate_fail,
                                         aSchemaDescriptor.getSchemaId(),
                                         aSchemaDescriptor.getSchemaValidator().getErrorStrings());
                             }
-                        } else {
-                            validator.addError(BmmMessageIds.ec_bmm_schema_post_merge_validate_fail,
-                                    aSchemaDescriptor.getSchemaId(),
-                                    aSchemaDescriptor.getSchemaValidator().getErrorStrings());
+                        } catch (Exception e) {
+                            validator.addError(BmmMessageIds.ec_bmm_schema_post_merge_validate_fail, aSchemaDescriptor.getSchemaId(), e.getClass().getSimpleName() + ": " + e.getMessage());
+                            log.error("error validating schema", e);
                         }
                     }
                 }
@@ -629,7 +638,7 @@ public class ReferenceModelAccess {
             loadCount += 1;
         } catch (Exception e) {
             exceptionEncountered = true;
-            validator.addError(BmmMessageIds.ec_bmm_schema_assertion_violation, e.getMessage());
+            validator.addError(BmmMessageIds.ec_bmm_schema_assertion_violation, e.getClass() + ": " + e.getMessage());
 
             e.printStackTrace();
         }
@@ -697,7 +706,8 @@ public class ReferenceModelAccess {
             PersistedBmmSchema persistedSchema = aSchemaDescriptor.getPersistentSchema();
             errorTable = persistedSchema.getBmmSchemaValidator().getSchemaErrorTableCache();
             errorTable.forEach((aSchemaId, anErrorAccumulator) -> {
-                allSchemas.get(aSchemaId).getSchemaValidator().mergeErrors(anErrorAccumulator);
+                SchemaDescriptor schemaDescriptor = allSchemas.get(aSchemaId);
+                schemaDescriptor.getSchemaValidator().mergeErrors(anErrorAccumulator);
                 //iterate through all schemas including err_table.key_for_iteration, except for `sd' since it will already have been marked
                 //Note that there will be an entry in err_table for warnings as well as errors, so we have to process these properly
                 if (schemaInclusionMap.containsKey(aSchemaId)) {
@@ -705,11 +715,11 @@ public class ReferenceModelAccess {
                     //TODO Verify logic works
                     for (String include : includes) {
                         if (anErrorAccumulator.hasErrors()) {
-                            allSchemas.get(aSchemaId).getSchemaValidator().addError(BmmMessageIds.ec_BMM_INCERR,
+                            schemaDescriptor.getSchemaValidator().addError(BmmMessageIds.ec_BMM_INCERR,
                                     include,
                                     aSchemaId);
                         } else {
-                            allSchemas.get(aSchemaId).getSchemaValidator().addWarning(BmmMessageIds.ec_BMM_INCWARN,
+                            schemaDescriptor.getSchemaValidator().addWarning(BmmMessageIds.ec_BMM_INCWARN,
                                     include,
                                     aSchemaId);
                         }

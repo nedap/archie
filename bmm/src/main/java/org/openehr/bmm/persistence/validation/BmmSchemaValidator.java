@@ -139,7 +139,7 @@ public class BmmSchemaValidator extends AnyValidator {
                 Map<String, PersistedBmmGenericParameter> genericParameterDefinitions = persistedBmmClass.getGenericParameterDefinitions();
                 genericParameterDefinitions.forEach((name, persistedBmmGenericParameter) -> {
                     String conformsToType = persistedBmmGenericParameter.getConformsToType();
-                    if(!schema.hasClassOrPrimitiveDefinition(conformsToType)) {
+                    if(conformsToType != null && !schema.hasClassOrPrimitiveDefinition(conformsToType)) {
                         addValidityError(persistedBmmClass.getSourceSchemaId(), BmmMessageIds.ec_BMM_GPCT,
                                 persistedBmmClass.getSourceSchemaId(),
                                 persistedBmmClass.getName(),
@@ -158,13 +158,15 @@ public class BmmSchemaValidator extends AnyValidator {
 
     public void validateProperty(PersistedBmmClass persistedBmmClass, PersistedBmmProperty persistedBmmProperty) {
         //first check if any property replicates a property from a parent class
-        persistedBmmClass.getAncestors().forEach(ancestorName -> {
+        for(String ancestorName:persistedBmmClass.getAncestors()) {
             PersistedBmmClass ancestor = schema.findClassOrPrimitiveDefinition(ancestorName);
-            PersistedBmmProperty ancestorProperty = ancestor.getPropertyByName(persistedBmmProperty.getName());
-            if(ancestor != null && ancestorProperty != null && !propertyConformsTo(persistedBmmProperty, ancestorProperty)){
-                addValidityError(persistedBmmClass.getSourceSchemaId(), BmmMessageIds.ec_BMM_PRNCF, persistedBmmClass.getSourceSchemaId(), persistedBmmClass.getName(), persistedBmmProperty.getName(), ancestorName);
+            if(ancestor != null) {
+                PersistedBmmProperty ancestorProperty = ancestor.getPropertyByName(persistedBmmProperty.getName());
+                if (ancestor != null && ancestorProperty != null && !propertyConformsTo(persistedBmmProperty, ancestorProperty)) {
+                    addValidityError(persistedBmmClass.getSourceSchemaId(), BmmMessageIds.ec_BMM_PRNCF, persistedBmmClass.getSourceSchemaId(), persistedBmmClass.getName(), persistedBmmProperty.getName(), ancestorName);
+                }
             }
-        });
+        }
 
         //For single properties, check if property type is empty or not defined in the schema
         if(persistedBmmProperty instanceof PersistedBmmSingleProperty) {
@@ -300,9 +302,7 @@ public class BmmSchemaValidator extends AnyValidator {
         if(sourceSchemaId.equals(schema.getSchemaId())) {
             addError(aKey, arguments);
         } else {
-            if(!schemaErrorTableCache.containsKey(sourceSchemaId)) {
-                schemaErrorTableCache.put(sourceSchemaId, new MessageLogger());
-            }
+            addSchemaErrorTableIfNotExists(sourceSchemaId);
             schemaErrorTableCache.get(sourceSchemaId).addErrorWithLocation(aKey, "", arguments);
             addError(BmmMessageIds.ec_BMM_INCERR, schema.getSchemaId(), sourceSchemaId);
         }
@@ -319,10 +319,14 @@ public class BmmSchemaValidator extends AnyValidator {
         if(sourceSchemaId.equals(schema.getSchemaId())) {
             addWarning(aKey, arguments);
         } else {
-            if(!schemaErrorTableCache.containsKey(sourceSchemaId)) {
-                schemaErrorTableCache.put(sourceSchemaId, new MessageLogger());
-            }
+            addSchemaErrorTableIfNotExists(sourceSchemaId);
             schemaErrorTableCache.get(sourceSchemaId).addWarningWithLocation(aKey, "", arguments);
+        }
+    }
+
+    private void addSchemaErrorTableIfNotExists(String sourceSchemaId) {
+        if(!schemaErrorTableCache.containsKey(sourceSchemaId)) {
+            schemaErrorTableCache.put(sourceSchemaId, new MessageLogger());
         }
     }
 
@@ -337,9 +341,7 @@ public class BmmSchemaValidator extends AnyValidator {
         if(sourceSchemaId.equals(schema.getSchemaId())) {
             addInfo(aKey, arguments);
         } else {
-            if(!schemaErrorTableCache.containsKey(sourceSchemaId)) {
-                schemaErrorTableCache.put(sourceSchemaId, new MessageLogger());
-            }
+            addSchemaErrorTableIfNotExists(sourceSchemaId);
             schemaErrorTableCache.get(sourceSchemaId).addInfoWithLocation(aKey, "", arguments);
         }
     }
@@ -352,38 +354,33 @@ public class BmmSchemaValidator extends AnyValidator {
      * @return
      */
     public boolean propertyConformsTo(PersistedBmmProperty aChildProperty, PersistedBmmProperty aParentProperty) {
-        boolean retVal = false;
-        if(aParentProperty instanceof PersistedBmmSingleProperty) {
-            PersistedBmmSingleProperty bmmSingleParentProperty = (PersistedBmmSingleProperty) aParentProperty;
-            //True if `a_parent_prop' type is Any
-            if (bmmSingleParentProperty.getTypeDefinition().getType().equalsIgnoreCase(BmmDefinitions.ANY_TYPE)) {
-                retVal = true;
-            }
+        if(aParentProperty instanceof PersistedBmmSingleProperty && ((PersistedBmmSingleProperty) aParentProperty).getTypeDefinition().getType().equalsIgnoreCase(BmmDefinitions.ANY_TYPE)) {
+            return true;
         } else if(aChildProperty.getName().equalsIgnoreCase(aParentProperty.getName())) {
             //Properties names are the same
             if(aChildProperty instanceof PersistedBmmSingleProperty && aParentProperty instanceof PersistedBmmSingleProperty) {
                 PersistedBmmSingleProperty aChildSingleProperty = (PersistedBmmSingleProperty)aChildProperty;
                 PersistedBmmSingleProperty aParentSingleProperty = (PersistedBmmSingleProperty)aParentProperty;
-                retVal = typeStrictlyConformsTo(aChildSingleProperty.getTypeDefinition().getType(), aParentSingleProperty.getTypeDefinition().getType());
+                return typeStrictlyConformsTo(aChildSingleProperty.getTypeDefinition().getType(), aParentSingleProperty.getTypeDefinition().getType());
             } else if(aParentProperty instanceof PersistedBmmSinglePropertyOpen) {
                 if(aChildProperty instanceof  PersistedBmmSinglePropertyOpen) {
                     //If both properties have the same name and are both open properties, then they do not conform.
-                    retVal = false;
+                    return false;
                 } else if(aChildProperty instanceof PersistedBmmSingleProperty) {
-                    retVal = true;
+                    return true;
                     //TODO FIXME: proper type conformance to constraining generic type needs to be checked here
                 }
             } else if(aChildProperty instanceof PersistedBmmContainerProperty && aParentProperty instanceof PersistedBmmContainerProperty) {
                 PersistedBmmContainerProperty aChildContainerProperty = (PersistedBmmContainerProperty)aChildProperty;
                 PersistedBmmContainerProperty aParentContainerProperty = (PersistedBmmContainerProperty)aParentProperty;
-                retVal = typeStrictlyConformsTo(aChildContainerProperty.getTypeDefinition().asTypeString(), aParentContainerProperty.getTypeDefinition().asTypeString());
+                return typeStrictlyConformsTo(aChildContainerProperty.getTypeDefinition().asTypeString(), aParentContainerProperty.getTypeDefinition().asTypeString());
             } else if(aChildProperty instanceof PersistedBmmGenericProperty && aParentProperty instanceof PersistedBmmGenericProperty) {
                 PersistedBmmGenericProperty aChildGenericProperty = (PersistedBmmGenericProperty)aChildProperty;
                 PersistedBmmGenericProperty aParentGenericProperty = (PersistedBmmGenericProperty)aParentProperty;
-                retVal = typeStrictlyConformsTo(aChildGenericProperty.getTypeDefinition().asTypeString(), aParentGenericProperty.getTypeDefinition().asTypeString());
+                return typeStrictlyConformsTo(aChildGenericProperty.getTypeDefinition().asTypeString(), aParentGenericProperty.getTypeDefinition().asTypeString());
             }
         }
-        return retVal;
+        return false;
     }
 
     /**
@@ -494,7 +491,7 @@ public class BmmSchemaValidator extends AnyValidator {
                 });
             });
 
-            if(passed) {
+            if(hasPassed()) {
                 addInfo(new UnknownMessageCode(),schema.getSchemaId(),
                     ""+schema.getPrimitives().size(),
                     ""+schema.getClassDefinitions().size());

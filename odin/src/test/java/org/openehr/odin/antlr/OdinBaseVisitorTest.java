@@ -242,9 +242,8 @@ public class OdinBaseVisitorTest {
         assertEquals(1, root.getAttributeAtIndex(6).getChildCount());
         assertEquals("CIMI_Reference_Model v3.0.5 schema generated from UML", root.getAttributeAtIndex(6).getStringObject().getValue());
         assertEquals("archetype_rm_closure_packages", root.getAttributeAtIndex(7).getName());
-        assertEquals(2, root.getAttributeAtIndex(7).getChildCount());
+        assertEquals(1, root.getAttributeAtIndex(7).getChildCount());
         assertEquals("CIMI_Reference_Model.Core", ((StringObject) root.getAttributeAtIndex(7).getChildren().get(0)).getValue());
-        assertEquals("...", ((StringObject) root.getAttributeAtIndex(7).getChildren().get(1)).getValue());
         assertEquals("packages", root.getAttributeAtIndex(8).getName());
         assertEquals(1, root.getAttributeAtIndex(8).getChildCount());
         assertTrue(root.getAttributeAtIndex(8).getChildren().get(0) instanceof CompositeOdinObject);
@@ -358,9 +357,8 @@ public class OdinBaseVisitorTest {
 
         //Validate ancestors
         assertEquals("ancestors", itemGroupKO.getAttributeAtIndex(1).getName());
-        assertEquals(2, itemGroupKO.getAttributeAtIndex(1).getChildren().size());
+        assertEquals(1, itemGroupKO.getAttributeAtIndex(1).getChildren().size());
         assertEquals("ITEM", itemGroupKO.getAttributeAtIndex(1).getStringValueAt(0));
-        assertEquals("...", itemGroupKO.getAttributeAtIndex(1).getStringValueAt(1));
 
         //Validate properties
         OdinAttribute properties = itemGroupKO.getAttributeAtIndex(2);
@@ -514,7 +512,6 @@ public class OdinBaseVisitorTest {
         OdinAttribute ancestors = element.getAttributeAtIndex(1);
         assertEquals("ancestors", ancestors.getName());
         assertEquals("ITEM", ancestors.getStringValueAt(0));
-        assertEquals("...", ancestors.getStringValueAt(1));
 
         OdinAttribute properties = element.getAttributeAtIndex(2);
         CompositeOdinObject nullFlavor = (CompositeOdinObject) properties.getSoleCompositeObjectBody().getKeyedObject("null_flavor");

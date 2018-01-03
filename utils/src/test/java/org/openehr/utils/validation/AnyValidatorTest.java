@@ -20,8 +20,6 @@ public class AnyValidatorTest {
     public void hasPassed1() throws Exception {
         assertTrue(validator.hasPassed());
         validator.addError(TestErrorCode.ErrorKey,"argument 1");
-        assertTrue(validator.hasPassed());
-        validator.validate();
         assertFalse(validator.hasPassed());
         assertEquals(1, validator.getMessageLogger().getMessageList().size());
     }
@@ -49,8 +47,6 @@ public class AnyValidatorTest {
     public void reset() throws Exception {
         assertTrue(validator.hasPassed());
         validator.addError(TestErrorCode.ErrorKey, "argument 1");
-        
-        validator.validate();
         assertFalse(validator.hasPassed());
         validator.reset();
         assertTrue(validator.hasPassed());
@@ -187,14 +183,12 @@ public class AnyValidatorTest {
     @Test
     public void readyToValidate2() throws Exception {
         validator.addErrorWithLocation(TestErrorCode.ErrorKey, null, "argument 1");
-        validator.validate();
         assertFalse(validator.readyToValidate());
     }
 
     @Test
     public void readyToValidate3() throws Exception {
         validator.addErrorWithLocation(TestErrorCode.ErrorKey, null, "argument 1");
-        validator.validate();
         assertFalse(validator.readyToValidate());
         validator.reset();
         assertTrue(validator.readyToValidate());
@@ -203,7 +197,7 @@ public class AnyValidatorTest {
     @Test
     public void validate() throws Exception {
         try {
-            validator.setPassed(false);
+            validator.addErrorWithLocation(TestErrorCode.ErrorKey, null, "argument 1");
             validator.validate();
             fail();
         } catch(Exception e) {

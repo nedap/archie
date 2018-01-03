@@ -21,6 +21,8 @@ package org.openehr.bmm.core;
  * Author: Claude Nanjo
  */
 
+import org.openehr.bmm.persistence.validation.BmmDefinitions;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -388,6 +390,6 @@ public class BmmSchemaCore implements IBmmSchemaCore, Serializable {
      * @return
      */
     public String getSchemaId() {
-        return getRmPublisher() + getSchemaName() + getRmRelease();
+        return BmmDefinitions.createSchemaId(getRmPublisher(), getSchemaName(), getRmRelease());
     }
 }

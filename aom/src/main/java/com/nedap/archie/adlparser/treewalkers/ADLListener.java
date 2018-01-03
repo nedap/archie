@@ -2,7 +2,7 @@ package com.nedap.archie.adlparser.treewalkers;
 
 import com.fasterxml.jackson.databind.type.MapType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
-import com.nedap.archie.adlparser.ADLParserErrors;
+import com.nedap.archie.antlr.errors.ANTLRParserErrors;
 import com.nedap.archie.adlparser.antlr.AdlBaseListener;
 import com.nedap.archie.adlparser.antlr.AdlParser;
 import com.nedap.archie.adlparser.antlr.AdlParser.*;
@@ -22,7 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class ADLListener extends AdlBaseListener {
 
-    private ADLParserErrors errors;
+    private ANTLRParserErrors errors;
 
     private Archetype rootArchetype;
 
@@ -30,7 +30,7 @@ public class ADLListener extends AdlBaseListener {
     private CComplexObjectParser subTreeWalker;
     private TerminologyParser terminologyParser;
 
-    public ADLListener(ADLParserErrors errors) {
+    public ADLListener(ANTLRParserErrors errors) {
         this.errors = errors;
         subTreeWalker = new CComplexObjectParser(errors);
         terminologyParser = new TerminologyParser(errors);
@@ -191,7 +191,7 @@ public class ADLListener extends AdlBaseListener {
         return rootArchetype;
     }
 
-    public ADLParserErrors getErrors() {
+    public ANTLRParserErrors getErrors() {
         return errors;
     }
 

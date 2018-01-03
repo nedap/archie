@@ -1,5 +1,6 @@
 package com.nedap.archie.adlparser;
 
+import com.nedap.archie.antlr.errors.ANTLRParserErrors;
 import org.junit.Test;
 import org.reflections.Reflections;
 import org.reflections.scanners.ResourcesScanner;
@@ -28,7 +29,7 @@ public class LargeSetOfADLsTest {
         List<String> adlFiles = new ArrayList(reflections.getResources(Pattern.compile(".*\\.adls")));
 
         Map<String, Exception> exceptions = new LinkedHashMap<>();
-        Map<String, ADLParserErrors> parseErrors = new LinkedHashMap<>();
+        Map<String, ANTLRParserErrors> parseErrors = new LinkedHashMap<>();
 
         for(String file:adlFiles) {
             try (InputStream stream = getClass().getResourceAsStream("/" + file)) {
