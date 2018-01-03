@@ -4,13 +4,13 @@
 <head>
     <title>Overview (CIMI Reference Model )</title>
     <meta name="date" content="2016-01-11">
-    <meta name="keywords" content="Clinical Information Model Initiative (CIMI)">
+    <meta name="keywords" content="Overview summary">
     <link rel="stylesheet" type="text/css" href="${stylesheet}" title="Style">
 </head>
 <body>
 <script type="text/javascript"><!--
 if (location.href.indexOf('is-external=true') == -1) {
-    parent.document.title="Overview (CIMI Reference Model)";
+    parent.document.title="Overview";
 }
 //-->
 </script>
@@ -35,7 +35,9 @@ if (location.href.indexOf('is-external=true') == -1) {
         <li><a href="help-doc.html">Help</a></li>
         -->
     </ul>
-    <div class="aboutLanguage"><em><strong>HL7&trade;&nbsp;Clinical&nbsp;Information&nbsp;Model&nbsp;Initiative</strong></em></div>
+    <div class="aboutLanguage">
+        <#include "supplementalFiles/*/branding.ftlh"/> <!-- Looks for branding.ftlh in supplemental files and, if not found, defaults to generic branding.ftlh -->
+    </div>
 </div>
 <div class="subNav">
     <ul class="navList">
@@ -65,19 +67,8 @@ if (location.href.indexOf('is-external=true') == -1) {
         <!--   -->
     </a></div>
 <!-- ========= END OF TOP NAVBAR ========= -->
-<div class="header">
-    <h1 class="title">Clinical Information Model Initiative (CIMI) Reference Model Specification</h1>
-</div>
-<div class="header">
-    <div class="subTitle">
-        <div class="block">Welcome to the HL7 CIMI Reference Model Documentation Version 0.0.3 generated on ${currentDate}.</div>
-    </div>
-    <p>Please click <a href="overview.html">here</a> for a high level UML view of the core model.</p>
-    <p>Please click <a href="CIMIArchitectureGuide/CIMIArchitectureGuide.html">here</a> to view the CIMI Architecture Guide</p>
-    <p>Please click <a href="CIMIStyleGuide/CIMIStyleGuide.html">here</a> to view the CIMI Style Guide</p>
-    <p>Please click <a href="CIMIClinicalExample/CIMIClinicalExample.html">here</a> to view a clinical example on the use of CIMI models for the development of Detailed Clinical Models</p>
-    <p>An archetype viewer has been made available <a href="http://models.opencimi.org/may_ballot_2017" target="_blank">here</a></p>
-</div>
+<#assign timestamp = "${currentDate}">
+<#include "supplementalFiles/*/introduction.ftl" ignore_missing=true> <!-- Implementations can provide this class in the supplemental files folder-->
 <div class="contentContainer">
     <table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Classes and definitions">
         <caption><span>Classes</span><span class="tabEnd">&nbsp;</span></caption>

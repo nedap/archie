@@ -55,12 +55,31 @@ public abstract class PersistedBmmModelElement implements Serializable {
         }
     }
 
-    public String generateSafeString(String documentation) {
+    /**
+     * Required to escape special BMM characters
+     * @param documentation
+     * @return
+     */
+    public static String generateSafeString(String documentation) {
         String safeString = documentation;
-        safeString = safeString.replaceAll("\"", "'");
+        safeString = safeString.replaceAll("\"", "&quot;");
         safeString = safeString.replaceAll("<", "&lt;");
         safeString = safeString.replaceAll(">", "&gt;");
         safeString = safeString.replaceAll("/", "&#47;");
+        return safeString;
+    }
+
+    /**
+     * Required to escape special BMM characters
+     * @param documentation
+     * @return
+     */
+    public static String revertSafeString(String documentation) {
+        String safeString = documentation;
+        safeString = safeString.replaceAll("&quot;","\"");
+        safeString = safeString.replaceAll("&lt;", "<");
+        safeString = safeString.replaceAll("&gt;", ">");
+        safeString = safeString.replaceAll("&#47;", "/");
         return safeString;
     }
 }

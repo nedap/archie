@@ -77,7 +77,9 @@ if (location.href.indexOf('is-external=true') == -1) {
         <li><a href="../../../help-doc.html">Help</a></li>
         -->
     </ul>
-    <div class="aboutLanguage"><em><strong>HL7 CIMI Reference Model Version 0.0.2</strong></em></div>
+    <div class="aboutLanguage">
+        <#include "supplementalFiles/*/branding.ftlh"/> <!-- Looks for branding.ftlh in supplemental files and, if not found, defaults to generic branding.ftlh -->
+    </div>
 </div>
 <div class="subNav">
 <!--

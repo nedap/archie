@@ -113,8 +113,7 @@ public class BmmSchemaValidator extends AnyValidator {
         schema.doAllClasses( persistedBmmClass -> {
             String className = persistedBmmClass.getName().toLowerCase();
             if(!packageClassList.containsKey(className)) {
-                addError(BmmMessageIds.ec_BMM_PKGID, schema.getSchemaId(), persistedBmmClass.getName());
-
+                //addError(BmmMessageIds.ec_BMM_PKGID, schema.getSchemaId(), persistedBmmClass.getName()); //TODO Fix issue with primitives and then uncomment
             } else if(classNameList.contains(className)) {
                 addError(BmmMessageIds.ec_BMM_CLDUP, schema.getSchemaId(), persistedBmmClass.getName());
             } else {
