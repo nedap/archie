@@ -22,14 +22,25 @@ package org.openehr.bmm.persistence;
  */
 
 import org.apache.commons.lang.StringUtils;
-import org.openehr.bmm.core.*;
+import org.openehr.bmm.core.BmmClass;
+import org.openehr.bmm.core.BmmModel;
+import org.openehr.bmm.core.BmmPackage;
+import org.openehr.bmm.core.BmmSchemaCore;
+import org.openehr.bmm.core.IBmmSchemaCore;
 import org.openehr.bmm.persistence.serializer.BmmSchemaSerializer;
 import org.openehr.bmm.persistence.validation.BmmDefinitions;
 import org.openehr.bmm.persistence.validation.BmmSchemaValidator;
 import org.openehr.utils.common.Counter;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Queue;
 import java.util.function.Consumer;
 
 /**
@@ -873,7 +884,7 @@ public class PersistedBmmSchema extends PersistedBmmPackageContainer implements 
             model.setSchemaRevision(getSchemaRevision());
             model.setSchemaDescription(getSchemaDescription());
             //Add packages first
-            getPackages().values().forEach(p -> {
+            getCanonicalPackages().values().forEach(p -> {
                 p.createBmmPackageDefinition(null);
                 BmmPackage packageDef = p.getBmmPackageDefinition();
                 if (packageDef != null) {
@@ -881,7 +892,7 @@ public class PersistedBmmSchema extends PersistedBmmPackageContainer implements 
                 }
             });
             //then add classes starting from the highest ancestor down to leaf-level classes
-            getPackages().values().forEach(persistedBmmPackage -> {
+            getCanonicalPackages().values().forEach(persistedBmmPackage -> {
                 persistedBmmPackage.doRecursiveClasses((p, s) -> {
                     PersistedBmmClass persistedBmmClass = findClassOrPrimitiveDefinition(s);
                     if (persistedBmmClass != null) {
@@ -903,7 +914,7 @@ public class PersistedBmmSchema extends PersistedBmmPackageContainer implements 
             model.setArchetypeParentClass(getArchetypeParentClass());
             model.setArchetypeDataValueParentClass(getArchetypeDataValueParentClass());
             model.setArchetypeVisualizeDescendantsOf(getArchetypeVisualizeDescendantsOf());
-            //model.setArchetypeRmClosurePackages(getArchetypeRmClosurePackages().clone());//Support deep clone. Investigating.
+            model.setArchetypeRmClosurePackages(new ArrayList<>(getArchetypeRmClosurePackages()));
             /******* Pass 2 *******/
             doAllClassesInOrder(bmmClass -> {
                 bmmClass.populateBmmClass(model);
@@ -958,15 +969,33 @@ public class PersistedBmmSchema extends PersistedBmmPackageContainer implements 
     }
 
     public void merge(PersistedBmmSchema toBeMerged) {
-        //Handle packages
-        toBeMerged.getPackages().forEach((packageName, bmmPackage) -> {
-            PersistedBmmPackage sourcePackage = getPackage(packageName);
-            if (sourcePackage == null) { ////If a package is new at that level, add it and its children.
-                addPackage(bmmPackage.deepClone());
+
+        //archetype parent class: only merge if nothing already in the higher-level schema
+        if(toBeMerged.getArchetypeParentClass() != null &&  getArchetypeParentClass() == null) {
+            setArchetypeParentClass(toBeMerged.getArchetypeParentClass());
+        }
+
+        //archetype data value parent class: only merge if nothing already in the higher-level schema
+        if(toBeMerged.getArchetypeDataValueParentClass() != null && getArchetypeDataValueParentClass() == null) {
+            setArchetypeDataValueParentClass(toBeMerged.getArchetypeDataValueParentClass());
+        }
+
+        //archetype closures
+        LinkedHashSet<String> newClosurePackages = new LinkedHashSet<>();
+        newClosurePackages.addAll(getArchetypeRmClosurePackages());
+        newClosurePackages.addAll(toBeMerged.getArchetypeRmClosurePackages());
+        setArchetypeRmClosurePackages(new ArrayList<>(newClosurePackages));
+
+        //handle canonical packages.
+        for(Map.Entry<String, PersistedBmmPackage> packageEntry:toBeMerged.getCanonicalPackages().entrySet()) {
+            if(canonicalPackages.containsKey(packageEntry.getKey())) {
+                PersistedBmmPackage persistedBmmPackage = canonicalPackages.get(packageEntry.getKey());
+                persistedBmmPackage.merge(packageEntry.getValue());
             } else {
-                sourcePackage.merge(bmmPackage);
+                canonicalPackages.put(packageEntry.getKey(), packageEntry.getValue().deepClone());
             }
-        });
+        }
+
         //If a package already exist, merge its classes, for each child package repeat...
         //Merge class definitions first. If you see a class with the same name, log it (complain) - OpenEHR has no notion of namespaces. Need to fix spec to support them.
         toBeMerged.getClassDefinitions().forEach(classDef -> {

@@ -23,6 +23,7 @@ package org.openehr.bmm.persistence;
 
 import org.openehr.bmm.BmmConstants;
 import org.openehr.bmm.core.*;
+import org.openehr.bmm.persistence.validation.BmmDefinitions;
 import org.openehr.odin.CompositeOdinObject;
 import org.openehr.odin.OdinAttribute;
 import org.openehr.odin.OdinObject;
@@ -369,8 +370,8 @@ public class PersistedBmmClass extends PersistedBmmModelElement implements Seria
                     }
                 });
             }
-        } else {
-            throw new RuntimeException("The class " + getName() + " is null. It may have been defined as a class or a primitive but not included in a package");
+        } else if (!this.getName().equalsIgnoreCase(BmmDefinitions.ANY_TYPE)) {
+        //    throw new RuntimeException("The class " + getName() + " is null. It may have been defined as a class or a primitive but not included in a package");
         }
     }
 

@@ -27,6 +27,7 @@ import org.openehr.utils.common.CloneUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.function.BiConsumer;
 
@@ -143,9 +144,11 @@ public class PersistedBmmPackage extends PersistedBmmPackageContainer implements
     }
 
     public void merge(PersistedBmmPackage other) {
-        classes.addAll(other.classes);
+        LinkedHashSet<String> newClasses = new LinkedHashSet<>(classes);
+        newClasses.addAll(other.classes);
+        setClasses(new ArrayList<>(newClasses));
         other.getPackages().values().forEach(p -> {
-            PersistedBmmPackage sourcePackage = getPackages().get(p.getName());
+            PersistedBmmPackage sourcePackage = this.getPackage(p.getName());
             if(sourcePackage != null) {
                 sourcePackage.merge(p);
             } else {

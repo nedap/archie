@@ -614,7 +614,7 @@ public class ReferenceModelAccess {
                                 schema.getSchemaId(),
                                 aSchemaId);
                     } else {
-                        modelsByClosure.put(qualifiedRmClosureName.toLowerCase(), model);
+                        addModelForClosure(qualifiedRmClosureName, model);
                     }
                 }
             }
