@@ -2,18 +2,15 @@ package com.nedap.archie.archetypevalidator.validations;
 
 import com.nedap.archie.aom.CAttribute;
 import com.nedap.archie.aom.CObject;
-import com.nedap.archie.aom.CPrimitiveObject;
 import com.nedap.archie.aom.primitives.CTerminologyCode;
 import com.nedap.archie.aom.terminology.ValueSet;
 import com.nedap.archie.aom.utils.AOMUtils;
 import com.nedap.archie.archetypevalidator.ErrorType;
 import com.nedap.archie.archetypevalidator.ValidatingVisitor;
-import com.nedap.archie.archetypevalidator.ValidationMessage;
-import com.nedap.archie.rminfo.ModelInfoLookup;
 import com.nedap.archie.rminfo.RMAttributeInfo;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.openehr.bmm.core.BmmClass;
+import org.openehr.bmm.core.BmmContainerProperty;
+import org.openehr.bmm.core.BmmProperty;
 
 public class CodeValidation extends ValidatingVisitor {
 
@@ -52,8 +49,26 @@ public class CodeValidation extends ValidatingVisitor {
 
             }
             if(owningObject != null) {
-                RMAttributeInfo attributeInfo = lookup.getAttributeInfo(owningObject.getRmTypeName(), parent.getRmAttributeName());
-                return attributeInfo != null && attributeInfo.isMultipleValued();
+                if(combinedModels.getSelectedBmmModel() != null) {
+                    BmmClass classDefinition = combinedModels.getSelectedBmmModel().getClassDefinition(owningObject.getRmTypeName());
+                    if (classDefinition != null) {
+                        //TODO: don't flatten on request, create a flattened properties cache just like the eiffel code for much better performance
+                        BmmClass flatClassDefinition = classDefinition.flattenBmmClass();
+                        BmmProperty bmmProperty = flatClassDefinition.getProperties().get(parent.getRmAttributeName());
+                        if(bmmProperty == null) {
+                            return false;
+                        } else if(bmmProperty instanceof BmmContainerProperty) {
+                            return bmmProperty != null && ((BmmContainerProperty) bmmProperty).getCardinality().has(2);
+                        } else {
+                            return false;
+                        }
+
+
+                    }
+                } else {
+                    RMAttributeInfo attributeInfo = lookup.getAttributeInfo(owningObject.getRmTypeName(), parent.getRmAttributeName());
+                    return attributeInfo != null && attributeInfo.isMultipleValued();
+                }
             }
         }
         return false;

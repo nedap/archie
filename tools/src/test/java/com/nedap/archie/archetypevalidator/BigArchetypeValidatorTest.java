@@ -14,6 +14,7 @@ import com.nedap.archie.rminfo.ReferenceModels;
 import org.apache.commons.io.FilenameUtils;
 import org.junit.Assert;
 import org.junit.Test;
+import org.openehr.bmm.rmaccess.ReferenceModelAccess;
 import org.reflections.Reflections;
 import org.reflections.scanners.ResourcesScanner;
 import org.slf4j.Logger;
@@ -129,6 +130,13 @@ public class BigArchetypeValidatorTest {
         models.registerModel(ArchieRMInfoLookup.getInstance());
         models.registerModel(com.nedap.archie.openehrtestrm.TestRMInfoLookup.getInstance());
 
+        List<String> schemaDirectories = new ArrayList<>();
+        String path = getClass().getResource("/bmm/placeholder.txt").getFile();
+        path = path.substring(0, path.lastIndexOf('/'));
+        schemaDirectories.add(path);
+        ReferenceModelAccess access = new ReferenceModelAccess();
+        access.initializeAll(schemaDirectories);
+
         Reflections reflections = new Reflections("adl2-tests.validity", new ResourcesScanner());
         List<String> adlFiles = new ArrayList(reflections.getResources(Pattern.compile(".*\\.adls")));
 
@@ -138,7 +146,7 @@ public class BigArchetypeValidatorTest {
         int shouldBeFineButWasinvalid = 0;
         int notImplemented = 0;
         int unexpectedParseErrors = 0;
-        ArchetypeValidator validator = new ArchetypeValidator(models);
+        ArchetypeValidator validator = new ArchetypeValidator(models, access);
         SimpleArchetypeRepository repository = new SimpleArchetypeRepository();
         for(String file:adlFiles) {
             if(file.contains("legacy_adl_1.4")){
