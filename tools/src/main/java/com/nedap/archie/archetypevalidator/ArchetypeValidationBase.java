@@ -14,16 +14,18 @@ public abstract class ArchetypeValidationBase implements ArchetypeValidation {
     protected ArchetypeRepository repository;
     protected List<ValidationMessage> messages;
     protected ModelInfoLookup lookup;
+    protected MetaModel combinedModels;
 
     public ArchetypeValidationBase() {
     }
 
     @Override
-    public List<ValidationMessage> validate(ModelInfoLookup lookup, Archetype archetype, Archetype flatParent, ArchetypeRepository repository) {
+    public List<ValidationMessage> validate(MetaModel models, Archetype archetype, Archetype flatParent, ArchetypeRepository repository) {
         this.archetype = archetype;
         this.flatParent = flatParent;
         this.repository = repository;
-        this.lookup = lookup;
+        this.lookup = models.getSelectedModel();
+        this.combinedModels = models;
         messages = new ArrayList<>();
         validate();
         return messages;

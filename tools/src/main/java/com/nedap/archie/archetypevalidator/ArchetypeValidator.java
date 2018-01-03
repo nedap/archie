@@ -13,6 +13,7 @@ import com.nedap.archie.flattener.InMemoryFullArchetypeRepository;
 import com.nedap.archie.flattener.OverridingInMemFullArchetypeRepository;
 import com.nedap.archie.rminfo.ModelInfoLookup;
 import com.nedap.archie.rminfo.ReferenceModels;
+import org.openehr.bmm.rmaccess.ReferenceModelAccess;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,7 +26,8 @@ import java.util.List;
  */
 public class ArchetypeValidator {
     private static final Logger logger = LoggerFactory.getLogger(ArchetypeValidator.class);
-    private final ReferenceModels models;
+
+    private MetaModel combinedModels;
 
     //see comment on why there is a phase 0
     private List<ArchetypeValidation> validationsPhase0;
@@ -38,7 +40,11 @@ public class ArchetypeValidator {
 
 
     public ArchetypeValidator(ReferenceModels models) {
-        this.models = models;
+        this(models, null);
+    }
+
+    public ArchetypeValidator(ReferenceModels models, ReferenceModelAccess bmmModels) {
+        combinedModels = new MetaModel(models, bmmModels);
 
         validationsPhase0 = new ArrayList<>();
         //defined in spec, but not in three phase validator and not in grammar
@@ -117,7 +123,9 @@ public class ArchetypeValidator {
         }
 
 
-        ModelInfoLookup lookup = models.getModel(archetype);
+        combinedModels.selectModel(archetype);
+        ModelInfoLookup lookup = combinedModels.getSelectedModel();
+
         if(lookup == null) {
             throw new UnsupportedOperationException("reference model unknown for archetype " + archetype.getArchetypeId());
         }
@@ -140,23 +148,23 @@ public class ArchetypeValidator {
             repository = new InMemoryFullArchetypeRepository();
         }
 
-        List<ValidationMessage> messages = runValidations(lookup, archetype, repository, flatParent, validationsPhase0);
-        messages.addAll(runValidations(lookup, archetype, repository, flatParent, validationsPhase1));
+        List<ValidationMessage> messages = runValidations(archetype, repository, flatParent, validationsPhase0);
+        messages.addAll(runValidations(archetype, repository, flatParent, validationsPhase1));
 
         //the separate validations will check if the archtype is specialized and if they need this in phase 2
         //because the RM validations are technically phase 2 and required to run
         //also the separate validations are implemented so that they can run with errors in phase 1 without exceptions
         //plus exceptions will nicely be logged as an OTHER error type - we can safely run it and you will get
         //more errors in one go - could be useful
-        messages.addAll(runValidations(lookup, archetype, repository, flatParent, validationsPhase2));
+        messages.addAll(runValidations(archetype, repository, flatParent, validationsPhase2));
 
         ValidationResult result = new ValidationResult(archetype);
         result.setErrors(messages);
         if(messages.isEmpty()) {
             try {
-                Archetype flattened = new Flattener(repository, models).flatten(archetype);
+                Archetype flattened = new Flattener(repository, combinedModels.getReferenceModels()).flatten(archetype);
                 result.setFlattened(flattened);
-                messages.addAll(runValidations(lookup, flattened, repository, flatParent, validationsPhase3));
+                messages.addAll(runValidations(flattened, repository, flatParent, validationsPhase3));
             } catch (Exception e) {
                 messages.add(new ValidationMessage(ErrorType.OTHER, "flattening failed with exception " + e));
                 logger.error("error during validation", e);
@@ -216,12 +224,12 @@ public class ArchetypeValidator {
         return preprocessed;
     }
 
-    private List<ValidationMessage> runValidations(ModelInfoLookup lookup, Archetype archetype, ArchetypeRepository repository, Archetype flatParent, List<ArchetypeValidation> validations) {
+    private List<ValidationMessage> runValidations(Archetype archetype, ArchetypeRepository repository, Archetype flatParent, List<ArchetypeValidation> validations) {
 
         List<ValidationMessage> messages = new ArrayList<>();
         for(ArchetypeValidation validation: validations) {
             try {
-                messages.addAll(validation.validate(lookup, archetype, flatParent, repository));
+                messages.addAll(validation.validate(combinedModels, archetype, flatParent, repository));
             } catch (Exception e) {
                 logger.error("error running validation processor", e);
                 e.printStackTrace();

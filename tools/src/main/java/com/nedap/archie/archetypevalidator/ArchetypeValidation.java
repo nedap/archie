@@ -11,6 +11,6 @@ import java.util.List;
  */
 public interface ArchetypeValidation {
 
-    public List<ValidationMessage> validate(ModelInfoLookup lookup, Archetype archetype, Archetype flatParent, ArchetypeRepository repository);
+    public List<ValidationMessage> validate(MetaModel models, Archetype archetype, Archetype flatParent, ArchetypeRepository repository);
 
 }
