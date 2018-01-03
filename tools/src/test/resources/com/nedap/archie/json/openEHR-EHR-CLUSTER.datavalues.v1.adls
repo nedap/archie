@@ -64,6 +64,11 @@ definition
                     DV_ORDINAL[id91]
                 }
             }
+            ELEMENT[id10] occurrences matches {1} matches {
+                value matches {
+                    DV_URI[id101]
+                }
+            }
         }
     }
 terminology
@@ -104,6 +109,10 @@ terminology
             ["id9"] = <
                 text = <"Ordinal">
                 description = <"Ordinal">
+            >
+            ["id10"] = <
+                text = <"Uri">
+                description = <"Uri">
             >
 		>
     >
