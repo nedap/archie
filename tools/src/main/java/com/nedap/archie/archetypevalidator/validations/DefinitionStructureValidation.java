@@ -1,6 +1,5 @@
 package com.nedap.archie.archetypevalidator.validations;
 
-import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.ArchetypeModelObject;
 import com.nedap.archie.aom.CAttribute;
 import com.nedap.archie.aom.CComplexObject;
@@ -8,14 +7,9 @@ import com.nedap.archie.aom.CObject;
 import com.nedap.archie.aom.utils.AOMUtils;
 import com.nedap.archie.archetypevalidator.ErrorType;
 import com.nedap.archie.archetypevalidator.ValidatingVisitor;
-import com.nedap.archie.archetypevalidator.ValidationMessage;
-import com.nedap.archie.flattener.ArchetypeRepository;
 import com.nedap.archie.paths.PathSegment;
-import com.nedap.archie.query.AOMPathQuery;
 import com.nedap.archie.query.APathQuery;
-import com.nedap.archie.rminfo.ModelInfoLookup;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class DefinitionStructureValidation extends ValidatingVisitor {

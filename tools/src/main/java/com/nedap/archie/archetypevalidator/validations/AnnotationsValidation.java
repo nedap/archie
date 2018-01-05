@@ -6,7 +6,6 @@ import com.nedap.archie.aom.ResourceAnnotations;
 import com.nedap.archie.aom.utils.AOMUtils;
 import com.nedap.archie.archetypevalidator.ArchetypeValidationBase;
 import com.nedap.archie.archetypevalidator.ErrorType;
-import com.nedap.archie.rminfo.ModelInfoLookup;
 
 import java.util.Map;
 

@@ -49,26 +49,7 @@ public class CodeValidation extends ValidatingVisitor {
 
             }
             if(owningObject != null) {
-                if(combinedModels.getSelectedBmmModel() != null) {
-                    BmmClass classDefinition = combinedModels.getSelectedBmmModel().getClassDefinition(owningObject.getRmTypeName());
-                    if (classDefinition != null) {
-                        //TODO: don't flatten on request, create a flattened properties cache just like the eiffel code for much better performance
-                        BmmClass flatClassDefinition = classDefinition.flattenBmmClass();
-                        BmmProperty bmmProperty = flatClassDefinition.getProperties().get(parent.getRmAttributeName());
-                        if(bmmProperty == null) {
-                            return false;
-                        } else if(bmmProperty instanceof BmmContainerProperty) {
-                            return bmmProperty != null && ((BmmContainerProperty) bmmProperty).getCardinality().has(2);
-                        } else {
-                            return false;
-                        }
-
-
-                    }
-                } else {
-                    RMAttributeInfo attributeInfo = lookup.getAttributeInfo(owningObject.getRmTypeName(), parent.getRmAttributeName());
-                    return attributeInfo != null && attributeInfo.isMultipleValued();
-                }
+                return combinedModels.isMultiple(owningObject.getRmTypeName(), parent.getRmAttributeName());
             }
         }
         return false;
