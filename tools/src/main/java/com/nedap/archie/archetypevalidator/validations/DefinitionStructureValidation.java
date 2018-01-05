@@ -57,7 +57,7 @@ public class DefinitionStructureValidation extends ValidatingVisitor {
                             addPathNotFoundInParentError(cAttribute);
                         } else {
                             PathSegment terminalNode = pathSegments.get(pathSegments.size() - 1);
-                            if (lookup.getAttributeInfo(parent.getRmTypeName(), terminalNode.getNodeName()) == null) {
+                            if (!combinedModels.attributeExists(parent.getRmTypeName(), terminalNode.getNodeName())) {
                                 addPathNotFoundInParentError(cAttribute);
                             }
                         }

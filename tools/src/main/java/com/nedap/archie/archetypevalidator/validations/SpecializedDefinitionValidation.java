@@ -6,7 +6,6 @@ import com.nedap.archie.aom.utils.NodeIdUtil;
 import com.nedap.archie.aom.utils.RedefinitionStatus;
 import com.nedap.archie.archetypevalidator.ErrorType;
 import com.nedap.archie.archetypevalidator.ValidatingVisitor;
-import com.nedap.archie.rminfo.RMTypeInfo;
 import com.nedap.archie.rules.Assertion;
 
 import java.util.List;
@@ -98,8 +97,8 @@ public class SpecializedDefinitionValidation extends ValidatingVisitor {
 
     private void validateConformsTo(CObject cObject, CObject parentCObject) {
 
-        if(!cObject.cConformsTo(parentCObject, lookup::rmTypesConformant)) {
-            if(!cObject.typeNameConformsTo(parentCObject, lookup::rmTypesConformant)) {
+        if(!cObject.cConformsTo(parentCObject, combinedModels::rmTypesConformant)) {
+            if(!cObject.typeNameConformsTo(parentCObject, combinedModels::rmTypesConformant)) {
                 addMessageWithPath(ErrorType.VSONCT, cObject.path());
             } else if (!cObject.occurrencesConformsTo(parentCObject)) {
                 addMessageWithPath(ErrorType.VSONCO, cObject.path());
@@ -117,7 +116,7 @@ public class SpecializedDefinitionValidation extends ValidatingVisitor {
                 if(cComplexObject.getAttributeTuples() != null && parentCComplexObject.getAttributeTuples() != null) {
                     for(CAttributeTuple tuple:cComplexObject.getAttributeTuples()) {
                         CAttributeTuple matchingTuple = AOMUtils.findMatchingTuple(parentCComplexObject.getAttributeTuples(), tuple);
-                        if(matchingTuple != null && ! tuple.cConformsTo(matchingTuple, lookup::rmTypesConformant)) {
+                        if(matchingTuple != null && ! tuple.cConformsTo(matchingTuple, combinedModels::rmTypesConformant)) {
                             addMessageWithPath(ErrorType.VTPNC, cObject.path());
                         } else {
                             for(CAttribute attribute:tuple.getMembers()) {
@@ -184,9 +183,9 @@ public class SpecializedDefinitionValidation extends ValidatingVisitor {
         if(!combinedModels.typeNameExists(rootRmTypeName) || !combinedModels.typeNameExists(rootReferenceRmTypeName)) {
             return false;
         }
-        else if(!combinedModels.isDescendantOf(slotRmTypeName, rootRmTypeName)) {
+        else if(!combinedModels.rmTypesConformant(rootRmTypeName, slotRmTypeName)) {
             return false;
-        } else if (!combinedModels.isDescendantOf(slotRmTypeName, rootReferenceRmTypeName)) {
+        } else if (!combinedModels.rmTypesConformant(rootReferenceRmTypeName, slotRmTypeName)) {
             return false;
         }
         return true;
