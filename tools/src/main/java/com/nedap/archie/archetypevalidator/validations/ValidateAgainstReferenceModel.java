@@ -30,7 +30,7 @@ public class ValidateAgainstReferenceModel extends ValidatingVisitor {
     protected void validate(CComplexObject cObject) {
 
         RMTypeInfo typeInfo = lookup.getTypeInfo(cObject.getRmTypeName());
-        if (typeInfo == null) {
+        if (!combinedModels.typeNameExists(cObject.getRmTypeName())) {
             addMessageWithPath(ErrorType.VCORM, cObject.getPath(), cObject.getRmTypeName());
         } else {
             CAttribute owningAttribute = cObject.getParent();
@@ -95,8 +95,7 @@ public class ValidateAgainstReferenceModel extends ValidatingVisitor {
             owningObject =  differentialPathFromParent == null ? null : differentialPathFromParent.getParent();
         }
         if(owningObject != null) {
-            RMAttributeInfo attributeInfo = lookup.getAttributeInfo(owningObject.getRmTypeName(), cAttribute.getRmAttributeName());
-            if (attributeInfo == null) {
+            if (!combinedModels.attributeExists(owningObject.getRmTypeName(), cAttribute.getRmAttributeName())) {
                 addMessageWithPath(ErrorType.VCARM, cAttribute.getPath(), cAttribute.getRmAttributeName() + " is not a known attribute of " + owningObject.getRmTypeName() + " or it is has not been implemented in Archie");
             } else {
                 CAttribute defaultAttribute = new ReflectionConstraintImposer(lookup).getDefaultAttribute(owningObject.getRmTypeName(), cAttribute.getRmAttributeName());
@@ -104,8 +103,6 @@ public class ValidateAgainstReferenceModel extends ValidatingVisitor {
                     if(cAttribute.getExistence() != null) {
                         if(!defaultAttribute.getExistence().contains(cAttribute.getExistence())) {
                             if(!archetype.isSpecialized() && defaultAttribute.getExistence().equals(cAttribute.getExistence())) {
-
-
                                 if(strictValidation) {
                                     addMessageWithPath(ErrorType.VCAEX, cAttribute.path());
                                 } else {

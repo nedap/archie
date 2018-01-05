@@ -11,6 +11,7 @@ import com.nedap.archie.flattener.Flattener;
 import com.nedap.archie.flattener.FullArchetypeRepository;
 import com.nedap.archie.flattener.InMemoryFullArchetypeRepository;
 import com.nedap.archie.flattener.OverridingInMemFullArchetypeRepository;
+import com.nedap.archie.rminfo.MetaModels;
 import com.nedap.archie.rminfo.ModelInfoLookup;
 import com.nedap.archie.rminfo.ReferenceModels;
 import org.openehr.bmm.rmaccess.ReferenceModelAccess;
@@ -27,7 +28,7 @@ import java.util.List;
 public class ArchetypeValidator {
     private static final Logger logger = LoggerFactory.getLogger(ArchetypeValidator.class);
 
-    private MetaModel combinedModels;
+    private MetaModels combinedModels;
 
     //see comment on why there is a phase 0
     private List<ArchetypeValidation> validationsPhase0;
@@ -44,7 +45,7 @@ public class ArchetypeValidator {
     }
 
     public ArchetypeValidator(ReferenceModels models, ReferenceModelAccess bmmModels) {
-        combinedModels = new MetaModel(models, bmmModels);
+        combinedModels = new MetaModels(models, bmmModels);
 
         validationsPhase0 = new ArrayList<>();
         //defined in spec, but not in three phase validator and not in grammar

@@ -8,7 +8,6 @@ import com.nedap.archie.aom.CComplexObject;
 import com.nedap.archie.archetypevalidator.ErrorType;
 import com.nedap.archie.archetypevalidator.ValidatingVisitor;
 import com.nedap.archie.flattener.ArchetypeRepository;
-import com.nedap.archie.rminfo.RMTypeInfo;
 import com.nedap.archie.rules.Assertion;
 
 import java.util.List;
@@ -59,7 +58,7 @@ public class VariousStructureValidation extends ValidatingVisitor {
                 //if parent type info not found will be checked later in phase 2
                 if(!combinedModels.typeNameExists(archetypeReferenceTypeName)) {
                     addMessageWithPath(ErrorType.VCORM, cComplexObject.getPath(), cComplexObject.getRmTypeName());
-                } else if(!combinedModels.isDescendantOf(archetypeRootTypeName, archetypeReferenceTypeName)) {
+                } else if(!combinedModels.rmTypesConformant(archetypeReferenceTypeName, archetypeRootTypeName)) {
                     addMessageWithPath(ErrorType.VARXTV, cComplexObject.getPath(), cComplexObject.getRmTypeName());
                 }
             }

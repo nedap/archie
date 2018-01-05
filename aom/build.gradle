@@ -5,4 +5,5 @@ dependencies {
   compile project(':base')
   compile project(':odin')
   compile project(':utils')
+  compile project(':bmm')
 }
