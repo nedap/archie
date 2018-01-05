@@ -1,17 +1,11 @@
 package com.nedap.archie.archetypevalidator.validations;
 
-import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.CObject;
 import com.nedap.archie.aom.CPrimitiveObject;
 import com.nedap.archie.archetypevalidator.ErrorType;
 import com.nedap.archie.archetypevalidator.ValidatingVisitor;
-import com.nedap.archie.archetypevalidator.ValidationMessage;
-import com.nedap.archie.flattener.ArchetypeRepository;
-import com.nedap.archie.rminfo.ModelInfoLookup;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Validated uniqueness of node ids (VCOSU) and presence of node ids (VCOID)

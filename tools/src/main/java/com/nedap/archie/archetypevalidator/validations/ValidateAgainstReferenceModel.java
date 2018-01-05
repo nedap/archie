@@ -9,14 +9,8 @@ import com.nedap.archie.aom.CPrimitiveObject;
 import com.nedap.archie.aom.utils.AOMUtils;
 import com.nedap.archie.archetypevalidator.ErrorType;
 import com.nedap.archie.archetypevalidator.ValidatingVisitor;
-import com.nedap.archie.archetypevalidator.ValidationMessage;
-import com.nedap.archie.rminfo.ModelInfoLookup;
 import com.nedap.archie.rminfo.RMAttributeInfo;
 import com.nedap.archie.rminfo.RMTypeInfo;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * TODO: check that enumeration type constraints use valid literal values (VCORMENV, VCORMENU, VCORMEN);

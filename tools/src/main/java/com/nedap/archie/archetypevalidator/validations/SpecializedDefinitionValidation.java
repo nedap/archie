@@ -6,7 +6,6 @@ import com.nedap.archie.aom.utils.NodeIdUtil;
 import com.nedap.archie.aom.utils.RedefinitionStatus;
 import com.nedap.archie.archetypevalidator.ErrorType;
 import com.nedap.archie.archetypevalidator.ValidatingVisitor;
-import com.nedap.archie.rminfo.ModelInfoLookup;
 import com.nedap.archie.rminfo.RMTypeInfo;
 import com.nedap.archie.rules.Assertion;
 
@@ -181,15 +180,13 @@ public class SpecializedDefinitionValidation extends ValidatingVisitor {
         String slotRmTypeName = slot.getRmTypeName();
         String rootRmTypeName = root.getRmTypeName();
         String rootReferenceRmTypeName = new ArchetypeHRID(root.getArchetypeRef()).getRmClass();
-        RMTypeInfo typeInfo = lookup.getTypeInfo(slotRmTypeName);
-        RMTypeInfo rootTypeInfo = lookup.getTypeInfo(rootRmTypeName);
-        RMTypeInfo rootReferenceTypeInfo = lookup.getTypeInfo(rootReferenceRmTypeName);
-        if(rootTypeInfo == null || rootReferenceTypeInfo == null) {
+
+        if(!combinedModels.typeNameExists(rootRmTypeName) || !combinedModels.typeNameExists(rootReferenceRmTypeName)) {
             return false;
         }
-        else if(!typeInfo.isDescendantOrEqual(rootTypeInfo)) {
+        else if(!combinedModels.isDescendantOf(slotRmTypeName, rootRmTypeName)) {
             return false;
-        } else if (!typeInfo.isDescendantOrEqual(rootReferenceTypeInfo)) {
+        } else if (!combinedModels.isDescendantOf(slotRmTypeName, rootReferenceRmTypeName)) {
             return false;
         }
         return true;

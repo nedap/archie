@@ -7,6 +7,11 @@ import com.nedap.archie.archetypevalidator.ErrorType;
 import com.nedap.archie.archetypevalidator.ValidatingVisitor;
 import com.nedap.archie.base.Cardinality;
 import com.nedap.archie.flattener.ComplexObjectProxyReplacement;
+import org.openehr.bmm.core.BmmModel;
+
+import java.util.List;
+
+import static org.openehr.bmm.persistence.validation.BmmDefinitions.typeNameToClassKey;
 
 public class FlatFormValidation extends ValidatingVisitor {
 
@@ -18,7 +23,7 @@ public class FlatFormValidation extends ValidatingVisitor {
             addMessageWithPath(ErrorType.VUNP, cObject.path());
         } else {
             CComplexObject replacement = complexObjectProxyReplacement.getReplacement();
-            if(!lookup.getTypeInfo(cObject.getRmTypeName()).isDescendantOrEqual(lookup.getTypeInfo(replacement.getRmTypeName()))) {
+            if(!combinedModels.isDescendantOf(cObject.getRmTypeName(), replacement.getRmTypeName())) {
                 addMessageWithPath(ErrorType.VUNT, cObject.path());
             }
         }

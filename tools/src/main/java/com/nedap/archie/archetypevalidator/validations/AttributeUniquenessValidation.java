@@ -4,12 +4,8 @@ import com.nedap.archie.aom.CAttribute;
 import com.nedap.archie.aom.CComplexObject;
 import com.nedap.archie.archetypevalidator.ErrorType;
 import com.nedap.archie.archetypevalidator.ValidatingVisitor;
-import com.nedap.archie.archetypevalidator.ValidationMessage;
-import com.nedap.archie.rminfo.ModelInfoLookup;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 
 /**
  * Created by pieter.bos on 31/03/2017.

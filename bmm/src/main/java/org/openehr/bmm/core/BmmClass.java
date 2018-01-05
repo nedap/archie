@@ -300,7 +300,13 @@ public class BmmClass extends BmmClassifier implements Serializable {
      * @return
      */
     public List<String> findAllAncestors() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        List<String> allAncestors = new ArrayList<String>();
+        Map<String, BmmClass> ancestors = getAncestors();
+        allAncestors.addAll(ancestors.keySet());
+        for(BmmClass ancestor:ancestors.values()) {
+            allAncestors.addAll(ancestor.findAllAncestors());
+        }
+        return allAncestors;
     }
 
     /**
@@ -425,7 +431,7 @@ public class BmmClass extends BmmClassifier implements Serializable {
 
     protected void handleFlattenedProperty(BmmProperty property, BmmClass target) {
         if (target.hasPropertyWithName(property.getName())) {
-            //this is fine, it has been validated to be conformant and just overrides the ancestor property
+            //this is fine, it has been validated to be conformant and just overrides the od property
             //throw new RuntimeException("Property with name " + property.getName() + " already defined in type " + target.getName() + " or one of its ancestors");
         } else {
             target.addProperty(property);

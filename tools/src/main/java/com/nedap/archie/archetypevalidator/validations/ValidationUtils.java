@@ -3,8 +3,6 @@ package com.nedap.archie.archetypevalidator.validations;
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.flattener.ArchetypeRepository;
 
-import java.util.regex.Pattern;
-
 public class ValidationUtils {
 
 

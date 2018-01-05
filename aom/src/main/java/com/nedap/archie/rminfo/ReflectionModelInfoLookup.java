@@ -353,7 +353,7 @@ public abstract class ReflectionModelInfoLookup implements ModelInfoLookup {
     }
 
     @Override
-    public RMTypeInfo getTypeInfo(String rmTypeName) {
+    public RMTypeInfo   getTypeInfo(String rmTypeName) {
         String strippedRmTypeName = getTypeWithoutGenericType(rmTypeName);
         return this.rmTypeNamesToRmTypeInfo.get(strippedRmTypeName);
     }
