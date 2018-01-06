@@ -44,8 +44,6 @@ public class ValidateAgainstReferenceModel extends ValidatingVisitor {
                     if(!combinedModels.typeConformant(owningObject.getRmTypeName(), owningAttribute.getRmAttributeName(), cObject.getRmTypeName())) {
                         addMessageWithPath(ErrorType.VCORMT, cObject.getPath(),
                                 owningObject.getRmTypeName()  + "." + owningAttribute.getRmAttributeName()+ " cannot contain type " + cObject.getRmTypeName());
-                    } else {
-                        System.out.println("correct");
                     }
 
                 }

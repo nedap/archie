@@ -8,6 +8,7 @@ import com.nedap.archie.flattener.InMemoryFullArchetypeRepository;
 import com.nedap.archie.rminfo.ArchieRMInfoLookup;
 import com.nedap.archie.rminfo.ReferenceModels;
 import org.junit.Test;
+import org.openehr.bmm.rmaccess.ReferenceModelAccess;
 import org.reflections.Reflections;
 import org.reflections.scanners.ResourcesScanner;
 
@@ -46,11 +47,36 @@ public class CKMArchetypeValidatorTest {
 
     @Test
     public void fullCKMTest() {
+
         FullArchetypeRepository repository = parseCKM();
         ReferenceModels models = new ReferenceModels();
         models.registerModel(ArchieRMInfoLookup.getInstance());
         repository.compile(models);
 
+        runTest(repository);
+
+    }
+
+    @Test
+    public void fullCKMTestBmm() {
+
+        List<String> schemaDirectories = new ArrayList<>();
+        String path = getClass().getResource("/bmm/placeholder.txt").getFile();
+        path = path.substring(0, path.lastIndexOf('/'));
+        schemaDirectories.add(path);
+        ReferenceModelAccess access = new ReferenceModelAccess();
+        access.initializeAll(schemaDirectories);
+
+        FullArchetypeRepository repository = parseCKM();
+        ReferenceModels models = new ReferenceModels();
+        models.registerModel(ArchieRMInfoLookup.getInstance());
+        repository.compile(models, access);
+
+        runTest(repository);
+
+    }
+
+    private void runTest(FullArchetypeRepository repository) {
         List<ValidationResult> allValidationResults = repository.getAllValidationResults();
         List<ValidationResult> resultWithErrors = allValidationResults.stream()
                 .filter(r -> !r.passes())
@@ -64,7 +90,6 @@ public class CKMArchetypeValidatorTest {
         }
 
         assertTrue(error.toString(), resultWithErrors.isEmpty());
-
     }
 
     private FullArchetypeRepository parseCKM() {
