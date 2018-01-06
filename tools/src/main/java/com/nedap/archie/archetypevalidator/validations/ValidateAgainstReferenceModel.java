@@ -29,11 +29,11 @@ public class ValidateAgainstReferenceModel extends ValidatingVisitor {
     @Override
     protected void validate(CComplexObject cObject) {
 
-        RMTypeInfo typeInfo = lookup.getTypeInfo(cObject.getRmTypeName());
         if (!combinedModels.typeNameExists(cObject.getRmTypeName())) {
             addMessageWithPath(ErrorType.VCORM, cObject.getPath(), cObject.getRmTypeName());
         } else {
             CAttribute owningAttribute = cObject.getParent();
+
             if (owningAttribute != null) { //at path "/" there will be no owning attribute
                 CObject owningObject = owningAttribute.getParent();
                 if(owningAttribute.getDifferentialPath() != null && flatParent != null) {
@@ -41,16 +41,13 @@ public class ValidateAgainstReferenceModel extends ValidatingVisitor {
                     owningObject =  differentialPathFromParent == null ? null : differentialPathFromParent.getParent();
                 }
                 if (owningObject != null) {
-                    RMAttributeInfo owningAttributeInfo = lookup.getAttributeInfo(owningObject.getRmTypeName(), owningAttribute.getRmAttributeName());
-                    if (owningAttributeInfo != null) {//this case is another validation, see the validate(cattribute) method of this class
-                        //TODO: make this work with metadata, not directly with classes
-                        Class typeInCollection = owningAttributeInfo.getTypeInCollection();
-                        if (!typeInCollection.isAssignableFrom(typeInfo.getJavaClass())) {
-                            addMessageWithPath(ErrorType.VCORMT, cObject.getPath(),
-                                    owningAttributeInfo.getTypeInCollection() + " is not assignable from " + typeInfo.getRmName() +
-                                            ", at type.attributeName: " + owningObject.getRmTypeName() + "." + owningAttribute.getRmAttributeName());
-                        }
+                    if(!combinedModels.typeConformant(owningObject.getRmTypeName(), owningAttribute.getRmAttributeName(), cObject.getRmTypeName())) {
+                        addMessageWithPath(ErrorType.VCORMT, cObject.getPath(),
+                                owningObject.getRmTypeName()  + "." + owningAttribute.getRmAttributeName()+ " cannot contain type " + cObject.getRmTypeName());
+                    } else {
+                        System.out.println("correct");
                     }
+
                 }
 
             }
@@ -98,7 +95,7 @@ public class ValidateAgainstReferenceModel extends ValidatingVisitor {
             if (!combinedModels.attributeExists(owningObject.getRmTypeName(), cAttribute.getRmAttributeName())) {
                 addMessageWithPath(ErrorType.VCARM, cAttribute.getPath(), cAttribute.getRmAttributeName() + " is not a known attribute of " + owningObject.getRmTypeName() + " or it is has not been implemented in Archie");
             } else {
-                CAttribute defaultAttribute = new ReflectionConstraintImposer(lookup).getDefaultAttribute(owningObject.getRmTypeName(), cAttribute.getRmAttributeName());
+                CAttribute defaultAttribute = new ReflectionConstraintImposer(combinedModels.getSelectedModel()).getDefaultAttribute(owningObject.getRmTypeName(), cAttribute.getRmAttributeName());
                 if(defaultAttribute != null) {
                     if(cAttribute.getExistence() != null) {
                         if(!defaultAttribute.getExistence().contains(cAttribute.getExistence())) {

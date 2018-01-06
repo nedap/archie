@@ -25,7 +25,7 @@ public abstract class ArchetypeValidationBase implements ArchetypeValidation {
         this.archetype = archetype;
         this.flatParent = flatParent;
         this.repository = repository;
-        this.lookup = models.getSelectedModel();
+        this.lookup = models.getSelectedModelInfoLookup();
         this.combinedModels = models;
         messages = new ArrayList<>();
         validate();

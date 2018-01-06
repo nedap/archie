@@ -66,4 +66,9 @@ public class BmmOpenType extends BmmType implements Serializable {
 
     @Override
     public String toDisplayString() {return genericConstraint.getName();}
+
+    @Override
+    public BmmClass getBaseClass() {
+        return getGenericConstraint().getConformsToType();
+    }
 }

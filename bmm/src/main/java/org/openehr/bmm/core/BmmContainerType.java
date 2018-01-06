@@ -58,6 +58,11 @@ public class BmmContainerType extends BmmType {
         this.containerType = containerType;
     }
 
+
+    @Override
+    public BmmClass getBaseClass() {
+        return baseType.getBaseClass();
+    }
     /**
      * Returns the target type; this converts to the first parameter in generic_parameters in BMM_GENERIC_TYPE.
      *

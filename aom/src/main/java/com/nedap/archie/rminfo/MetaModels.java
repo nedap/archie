@@ -8,6 +8,7 @@ import org.openehr.bmm.core.BmmClass;
 import org.openehr.bmm.core.BmmContainerProperty;
 import org.openehr.bmm.core.BmmModel;
 import org.openehr.bmm.core.BmmProperty;
+import org.openehr.bmm.core.BmmType;
 import org.openehr.bmm.persistence.validation.BmmDefinitions;
 import org.openehr.bmm.rmaccess.ReferenceModelAccess;
 
@@ -46,12 +47,16 @@ public class MetaModels {
 
     }
 
-    public ModelInfoLookup getSelectedModel() {
+    public ModelInfoLookup getSelectedModelInfoLookup() {
         return selectedModel == null ? null : selectedModel.getSelectedModel();
     }
 
     public BmmModel getSelectedBmmModel() {
         return selectedModel == null ? null : selectedModel.getSelectedBmmModel();
+    }
+
+    public MetaModel getSelectedModel() {
+        return selectedModel;
     }
 
     public ReferenceModels getReferenceModels() {
@@ -74,4 +79,10 @@ public class MetaModels {
     public boolean attributeExists(String rmTypeName, String propertyName) {
         return selectedModel == null ? false : selectedModel.attributeExists(rmTypeName, propertyName);
    }
+
+
+    public boolean typeConformant(String rmTypeName, String rmAttributeName, String childConstraintTypeName) {
+        return selectedModel == null ? false : selectedModel.typeConformant(rmTypeName, rmAttributeName, childConstraintTypeName);
+
+    }
 }
