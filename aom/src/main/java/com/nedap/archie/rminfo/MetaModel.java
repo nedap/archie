@@ -7,6 +7,7 @@ import org.openehr.bmm.core.BmmProperty;
 import org.openehr.bmm.persistence.validation.BmmDefinitions;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class MetaModel {
 
@@ -59,6 +60,7 @@ public class MetaModel {
                 return true;//will be checked elsewhere
             }
             List<String> allAncestors = childClass.findAllAncestors();
+            allAncestors = allAncestors.stream().map((s) -> s.toUpperCase()).collect(Collectors.toList());
             if(!parentClassName.equalsIgnoreCase(childClassName) && !allAncestors.contains(parentClassName)) {
                 return false;
             }
@@ -70,7 +72,7 @@ public class MetaModel {
 
     public boolean typeNameExists(String typeName) {
         if(getSelectedBmmModel() != null) {
-            return selectedBmmModel.getClassDefinition(typeName) != null;
+            return selectedBmmModel.getClassDefinition(BmmDefinitions.typeNameToClassKey(typeName)) != null;
         } else {
             return selectedModel.getTypeInfo(typeName) != null;
         }
@@ -117,8 +119,8 @@ public class MetaModel {
     public boolean typeConformant(String rmTypeName, String rmAttributeName, String childConstraintTypeName) {
         if(getSelectedBmmModel() != null) {
             String propertyType = selectedBmmModel.effectivePropertyType(rmTypeName, rmAttributeName);
-            BmmClass parentClass = selectedBmmModel.getClassDefinition(rmTypeName);
-            BmmClass childClass = selectedBmmModel.getClassDefinition(childConstraintTypeName);
+            BmmClass parentClass = selectedBmmModel.getClassDefinition(BmmDefinitions.typeNameToClassKey(rmTypeName));
+            BmmClass childClass = selectedBmmModel.getClassDefinition(BmmDefinitions.typeNameToClassKey(childConstraintTypeName));
             if(childClass != null && parentClass != null) {
                 BmmClass flatParentClass = parentClass.flattenBmmClass();
                 BmmProperty property = flatParentClass.getProperties().get(rmAttributeName);
