@@ -125,7 +125,7 @@ public class ArchetypeValidator {
 
 
         combinedModels.selectModel(archetype);
-        ModelInfoLookup lookup = combinedModels.getSelectedModel();
+        ModelInfoLookup lookup = combinedModels.getSelectedModelInfoLookup();
 
         if(lookup == null) {
             throw new UnsupportedOperationException("reference model unknown for archetype " + archetype.getArchetypeId());

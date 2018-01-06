@@ -106,4 +106,46 @@ public class MetaModel {
             return selectedModel.getAttributeInfo(typeId, attributeName).isNullable();
         }
     }
+
+    /**
+     * return whether the attribute identified by rmTypeName.rmAttributeName can contain the type childConstraintTypeName
+     * @param rmTypeName
+     * @param rmAttributeName
+     * @param childConstraintTypeName
+     * @return
+     */
+    public boolean typeConformant(String rmTypeName, String rmAttributeName, String childConstraintTypeName) {
+        if(getSelectedBmmModel() != null) {
+            String propertyType = selectedBmmModel.effectivePropertyType(rmTypeName, rmAttributeName);
+            BmmClass parentClass = selectedBmmModel.getClassDefinition(rmTypeName);
+            BmmClass childClass = selectedBmmModel.getClassDefinition(childConstraintTypeName);
+            if(childClass != null && parentClass != null) {
+                BmmClass flatParentClass = parentClass.flattenBmmClass();
+                BmmProperty property = flatParentClass.getProperties().get(rmAttributeName);
+                if(property != null) {
+                    String propertyConfTypeName = property.getType().getBaseClass().getTypeName();
+                   // if(BmmDefinitions.validGenericTypeName(propertyConfTypeName) &&
+                   //         !BmmDefinitions.validGenericTypeName(childConstraintTypeName)) {
+
+                    //}
+                    return rmTypesConformant(childConstraintTypeName, propertyConfTypeName);
+                }
+
+
+            }
+            return false;
+        } else {
+            RMTypeInfo typeInfo = selectedModel.getTypeInfo(childConstraintTypeName);
+            RMAttributeInfo owningAttributeInfo = selectedModel.getAttributeInfo(rmTypeName, rmAttributeName);
+            if (owningAttributeInfo != null) {//this case is another validation, see the validate(cattribute) method of this class
+                //TODO: make this work with metadata, not directly with classes
+                //TODO: generics other than 'typeincollection' might be nice :)
+                Class typeInCollection = owningAttributeInfo.getTypeInCollection();
+                if (!typeInCollection.isAssignableFrom(typeInfo.getJavaClass())) {
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
 }

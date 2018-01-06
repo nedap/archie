@@ -1,6 +1,7 @@
 package org.openehr.bmm.core;
 
 import org.openehr.bmm.persistence.validation.BasicDefinitions;
+import org.openehr.bmm.persistence.validation.BmmDefinitions;
 
 import java.io.Serializable;
 import java.util.*;
@@ -508,5 +509,9 @@ public class BmmModel extends BmmPackageContainer implements IBmmSchemaCore, IBm
      */
     public String getSchemaId() {
         return bmmSchemaCore.getSchemaId();
+    }
+
+    public String effectivePropertyType(String typeName, String propertyName) {
+        return getClassDefinition(BmmDefinitions.typeNameToClassKey(typeName)).effectivePropertyType(propertyName);
     }
 }

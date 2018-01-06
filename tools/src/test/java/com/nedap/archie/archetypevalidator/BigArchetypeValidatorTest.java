@@ -124,7 +124,7 @@ public class BigArchetypeValidatorTest {
 
 
     @Test
-    public void testFullValidityPackage() {
+    public void testFullValidityPackageBmm() {
 
         models = new ReferenceModels();
         models.registerModel(ArchieRMInfoLookup.getInstance());
@@ -136,6 +136,27 @@ public class BigArchetypeValidatorTest {
         schemaDirectories.add(path);
         ReferenceModelAccess access = new ReferenceModelAccess();
         access.initializeAll(schemaDirectories);
+        testInner(models, access);
+
+    }
+
+    @Test
+    public void testFullValidityPackageModelInfoLookup() {
+
+        models = new ReferenceModels();
+        models.registerModel(ArchieRMInfoLookup.getInstance());
+        models.registerModel(com.nedap.archie.openehrtestrm.TestRMInfoLookup.getInstance());
+
+        ReferenceModelAccess access = new ReferenceModelAccess();
+//        access.initializeAll(schemaDirectories);
+        testInner(models, null);
+
+    }
+
+    public void testInner(ReferenceModels models, ReferenceModelAccess access) {
+
+
+
 
         Reflections reflections = new Reflections("adl2-tests.validity", new ResourcesScanner());
         List<String> adlFiles = new ArrayList(reflections.getResources(Pattern.compile(".*\\.adls")));

@@ -23,6 +23,7 @@ package org.openehr.bmm.core;
 
 import org.openehr.bmm.BmmConstants;
 import org.openehr.bmm.persistence.serializer.Serialize;
+import org.openehr.bmm.persistence.validation.BmmDefinitions;
 import org.openehr.odin.CompositeOdinObject;
 import org.openehr.odin.OdinAttribute;
 import org.openehr.odin.OdinObject;
@@ -420,6 +421,15 @@ public class BmmClass extends BmmClassifier implements Serializable {
             target.setAncestors(new HashMap<String, BmmClass>());//Clear out ancestors since we are flattening the hierarchy.
             ancestorMap.forEach( (ancestorName, ancestor) -> { populateTarget(ancestor, target); });
             return target;
+        }
+    }
+
+    public String effectivePropertyType(String propertyName) {
+        BmmProperty property = flattenBmmClass().getProperties().get(propertyName);
+        if(property != null) {
+            return property.getType().getTypeName();
+        } else {
+            return BmmDefinitions.UNKNOWN_TYPE_NAME;
         }
     }
 
