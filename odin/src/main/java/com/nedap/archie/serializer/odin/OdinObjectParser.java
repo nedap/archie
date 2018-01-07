@@ -7,6 +7,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ANTLRInputStream;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Created by pieter.bos on 02/11/15.
@@ -27,6 +28,12 @@ public class OdinObjectParser {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static <T> T convert(InputStream odin, Class<T> clazz) throws IOException {
+        AdlLexer adlLexer = new AdlLexer(new ANTLRInputStream(odin));
+        AdlParser parser = new AdlParser(new CommonTokenStream(adlLexer));
+        return convert(parser.odin_text(), clazz);
     }
 
     public static <T> T convert(String odin, Class<T> clazz) {

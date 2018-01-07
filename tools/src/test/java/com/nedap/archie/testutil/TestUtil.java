@@ -14,12 +14,15 @@ import com.nedap.archie.rminfo.ArchieRMInfoLookup;
 import com.nedap.archie.rminfo.MetaModels;
 import com.nedap.archie.rminfo.ReferenceModels;
 import org.openehr.bmm.rmaccess.ReferenceModelAccess;
+import org.reflections.Reflections;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.*;
@@ -39,7 +42,24 @@ public class TestUtil {
         schemaDirectories.add(path);
         ReferenceModelAccess access = new ReferenceModelAccess();
         access.initializeAll(schemaDirectories);
-        return new MetaModels(null, access);
+        MetaModels models = new MetaModels(getReferenceModels(), access);
+
+        //now parse the AOM profiles
+        String[] resourceNames = {"/aom_profiles/openehr_aom_profile.arp",
+                "/aom_profiles/cdisc_aom_profile.arp",
+                "/aom_profiles/cimi_aom_profile.arp",
+                "/aom_profiles/fhir_aom_profile.arp",
+                "/aom_profiles/iso13606_aom_profile.arp",
+        };
+        for(String resource:resourceNames) {
+            try(InputStream odin = TestUtil.class.getResourceAsStream(resource)){
+                models.getAomProfiles().add(odin);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        return models;
     }
 
     /**

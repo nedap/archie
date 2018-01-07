@@ -6,7 +6,9 @@ import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.flattener.FullArchetypeRepository;
 import com.nedap.archie.flattener.InMemoryFullArchetypeRepository;
 import com.nedap.archie.rminfo.ArchieRMInfoLookup;
+import com.nedap.archie.rminfo.MetaModels;
 import com.nedap.archie.rminfo.ReferenceModels;
+import com.nedap.archie.testutil.TestUtil;
 import org.junit.Test;
 import org.openehr.bmm.rmaccess.ReferenceModelAccess;
 import org.reflections.Reflections;
@@ -59,18 +61,11 @@ public class CKMArchetypeValidatorTest {
 
     @Test
     public void fullCKMTestBmm() {
-
         List<String> schemaDirectories = new ArrayList<>();
-        String path = getClass().getResource("/bmm/placeholder.txt").getFile();
-        path = path.substring(0, path.lastIndexOf('/'));
-        schemaDirectories.add(path);
-        ReferenceModelAccess access = new ReferenceModelAccess();
-        access.initializeAll(schemaDirectories);
+        MetaModels bmmReferenceModels = TestUtil.getBMMReferenceModels();
 
         FullArchetypeRepository repository = parseCKM();
-        ReferenceModels models = new ReferenceModels();
-        models.registerModel(ArchieRMInfoLookup.getInstance());
-        repository.compile(models, access);
+        repository.compile(bmmReferenceModels.getReferenceModels(), bmmReferenceModels.getReferenceModelAccess());
 
         runTest(repository);
 

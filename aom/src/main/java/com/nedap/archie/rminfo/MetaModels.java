@@ -1,6 +1,8 @@
 package com.nedap.archie.rminfo;
 
 import com.nedap.archie.aom.Archetype;
+import com.nedap.archie.aom.profile.AomProfile;
+import com.nedap.archie.aom.profile.AomProfiles;
 import com.nedap.archie.base.MultiplicityInterval;
 import com.nedap.archie.rminfo.ModelInfoLookup;
 import com.nedap.archie.rminfo.RMAttributeInfo;
@@ -25,13 +27,16 @@ public class MetaModels {
 
     private final ReferenceModels models;
     private final ReferenceModelAccess bmmModels;
+    private AomProfiles aomProfiles;
 
     private MetaModel selectedModel;
+    private AomProfile selectedAomProfile;
 
 
     public MetaModels(ReferenceModels models, ReferenceModelAccess bmmModels) {
         this.models = models;
         this.bmmModels = bmmModels;
+        aomProfiles = new AomProfiles();
     }
 
     public void selectModel(Archetype archetype) {
@@ -45,6 +50,12 @@ public class MetaModels {
         }
 
         this.selectedModel = new MetaModel(selectedModel, selectedBmmModel);
+
+        for(AomProfile profile:aomProfiles.getProfiles()) {
+            if(profile.getProfileName().equalsIgnoreCase(archetype.getArchetypeId().getRmPublisher())) {
+                this.selectedAomProfile = profile;
+            }
+        }
 
     }
 
@@ -62,6 +73,10 @@ public class MetaModels {
 
     public ReferenceModels getReferenceModels() {
         return models;
+    }
+
+    public ReferenceModelAccess getReferenceModelAccess() {
+        return bmmModels;
     }
 
     public boolean isMultiple(String typeName, String attributeName) {
@@ -93,5 +108,13 @@ public class MetaModels {
 
     public MultiplicityInterval referenceModelPropMultiplicity(String rmTypeName, String rmAttributeName) {
         return selectedModel == null ? MultiplicityInterval.unbounded() : selectedModel.referenceModelPropMultiplicity(rmTypeName, rmAttributeName);
+    }
+
+    public AomProfiles getAomProfiles() {
+        return aomProfiles;
+    }
+
+    public AomProfile getSelectedAomProfile() {
+        return selectedAomProfile;
     }
 }
