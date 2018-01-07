@@ -12,7 +12,6 @@ import com.nedap.archie.flattener.FullArchetypeRepository;
 import com.nedap.archie.flattener.InMemoryFullArchetypeRepository;
 import com.nedap.archie.flattener.OverridingInMemFullArchetypeRepository;
 import com.nedap.archie.rminfo.MetaModels;
-import com.nedap.archie.rminfo.ModelInfoLookup;
 import com.nedap.archie.rminfo.ReferenceModels;
 import org.openehr.bmm.rmaccess.ReferenceModelAccess;
 import org.slf4j.Logger;
@@ -125,14 +124,13 @@ public class ArchetypeValidator {
 
 
         combinedModels.selectModel(archetype);
-        ModelInfoLookup lookup = combinedModels.getSelectedModelInfoLookup();
 
-        if(lookup == null) {
+        if(combinedModels.getSelectedModelInfoLookup() == null && combinedModels.getSelectedBmmModel() == null) {
             throw new UnsupportedOperationException("reference model unknown for archetype " + archetype.getArchetypeId());
         }
         //we assume we always want a new validation to be run, for example because the archetype
         //has been updated. Therefore, do not retrieve the old result from the repository
-        archetype = cloneAndPreprocess(lookup, archetype);//this clones the actual archetype so the source does not get changed
+        archetype = cloneAndPreprocess(combinedModels, archetype);//this clones the actual archetype so the source does not get changed
         ValidationResult parentValidationResult = null;
         Archetype flatParent = null;
         if(archetype.isSpecialized()) {
@@ -218,9 +216,9 @@ public class ArchetypeValidator {
         return validationResult;
     }
 
-    private Archetype cloneAndPreprocess(ModelInfoLookup lookup, Archetype archetype) {
+    private Archetype cloneAndPreprocess(MetaModels models, Archetype archetype) {
         Archetype preprocessed = archetype.clone();
-        new ReflectionConstraintImposer(lookup).setSingleOrMultiple(preprocessed.getDefinition());
+        new ReflectionConstraintImposer(models.getSelectedModel()).setSingleOrMultiple(preprocessed.getDefinition());
         return preprocessed;
     }
 

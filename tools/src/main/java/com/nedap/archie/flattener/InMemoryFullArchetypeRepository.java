@@ -3,11 +3,7 @@ package com.nedap.archie.flattener;
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.ArchetypeHRID;
 import com.nedap.archie.aom.OperationalTemplate;
-import com.nedap.archie.archetypevalidator.ArchetypeValidator;
-import com.nedap.archie.archetypevalidator.ValidationMessage;
 import com.nedap.archie.archetypevalidator.ValidationResult;
-import com.nedap.archie.rminfo.ModelInfoLookup;
-import com.nedap.archie.rminfo.ReferenceModels;
 
 import java.util.ArrayList;
 import java.util.List;

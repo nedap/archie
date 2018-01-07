@@ -11,6 +11,8 @@ import com.nedap.archie.paths.PathSegment;
 import com.nedap.archie.paths.PathUtil;
 import com.nedap.archie.query.AOMPathQuery;
 import com.nedap.archie.query.APathQuery;
+import com.nedap.archie.rminfo.MetaModel;
+import com.nedap.archie.rminfo.MetaModels;
 import com.nedap.archie.rminfo.ModelInfoLookup;
 import com.nedap.archie.rminfo.RMAttributeInfo;
 import com.nedap.archie.rminfo.ReferenceModels;
@@ -32,7 +34,7 @@ import java.util.Stack;
  */
 public class Flattener {
 
-    private final ReferenceModels referenceModels;
+    private final MetaModels metaModels;
     //to be able to store Template Overlays transparently during flattening
     private OverridingArchetypeRepository repository;
 
@@ -46,14 +48,17 @@ public class Flattener {
 
     private String[] languagesToKeep = null;
 
-    private ModelInfoLookup lookup;
-
     private RulesFlattener rulesFlattener = new RulesFlattener();
 
 
     public Flattener(ArchetypeRepository repository, ReferenceModels models) {
         this.repository = new OverridingArchetypeRepository(repository);
-        this.referenceModels = models;
+        this.metaModels = new MetaModels(models, null);
+    }
+
+    public Flattener(ArchetypeRepository repository, MetaModels models) {
+        this.repository = new OverridingArchetypeRepository(repository);
+        this.metaModels = models;
     }
 
     public Flattener createOperationalTemplate(boolean makeTemplate) {
@@ -82,7 +87,7 @@ public class Flattener {
             throw new IllegalStateException("You've used this flattener before - single use instance, please create a new one!");
         }
 
-        lookup = referenceModels.getModel(toFlatten);
+        metaModels.selectModel(toFlatten);
        // new ReflectionConstraintImposer(lookup).setSingleOrMultiple(toFlatten.getDefinition());
         //validate that we can legally flatten first
         String parentId = toFlatten.getParentArchetypeId();
@@ -468,7 +473,7 @@ public class Flattener {
                 return true;
             }
         }
-        MultiplicityInterval occurrences = parent.effectiveOccurrences(lookup::referenceModelPropMultiplicity);
+        MultiplicityInterval occurrences = parent.effectiveOccurrences(metaModels::referenceModelPropMultiplicity);
         //isSingle/isMultiple is tricky and not doable just in the parser. Don't use those
         if(isSingle(parent.getParent())) {
             return true;
@@ -476,7 +481,7 @@ public class Flattener {
             //REFINE the parent node case 1, the parent has occurrences upper == 1
             return true;
         } else if (differentialNodes.size() == 1
-                && differentialNodes.get(0).effectiveOccurrences(lookup::referenceModelPropMultiplicity).upperIsOne()) {
+                && differentialNodes.get(0).effectiveOccurrences(metaModels::referenceModelPropMultiplicity).upperIsOne()) {
             //REFINE the parent node case 2, only one child with occurrences upper == 1
             return true;
         }
@@ -485,8 +490,7 @@ public class Flattener {
 
     private boolean isSingle(CAttribute attribute) {
         if(attribute != null && attribute.getParent() != null && attribute.getDifferentialPath() == null) {
-            RMAttributeInfo attributeInfo = lookup.getAttributeInfo(attribute.getParent().getRmTypeName(), attribute.getRmAttributeName());
-            return attributeInfo != null && !attributeInfo.isMultipleValued();
+            return metaModels.isMultiple(attribute.getParent().getRmTypeName(), attribute.getRmAttributeName());
         }
         return false;
     }
@@ -612,7 +616,7 @@ public class Flattener {
     }
 
     private Flattener getNewFlattener() {
-        return new Flattener(repository, referenceModels)
+        return new Flattener(repository, metaModels)
                 .createOperationalTemplate(false) //do not create operational template except at the end.
                 .useComplexObjectForArchetypeSlotReplacement(useComplexObjectForArchetypeSlotReplacement);
     }
