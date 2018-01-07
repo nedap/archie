@@ -1,6 +1,7 @@
 package com.nedap.archie.rminfo;
 
 import com.nedap.archie.aom.Archetype;
+import com.nedap.archie.aom.CPrimitiveObject;
 import com.nedap.archie.aom.profile.AomProfile;
 import com.nedap.archie.aom.profile.AomProfiles;
 import com.nedap.archie.base.MultiplicityInterval;
@@ -49,13 +50,16 @@ public class MetaModels {
              selectedBmmModel = bmmModels.getReferenceModelForClosure(BmmDefinitions.publisherQualifiedRmClosureName(archetype.getArchetypeId().getRmPublisher(), archetype.getArchetypeId().getRmPackage()));
         }
 
-        this.selectedModel = new MetaModel(selectedModel, selectedBmmModel);
-
         for(AomProfile profile:aomProfiles.getProfiles()) {
             if(profile.getProfileName().equalsIgnoreCase(archetype.getArchetypeId().getRmPublisher())) {
                 this.selectedAomProfile = profile;
+                break;
             }
         }
+
+        this.selectedModel = new MetaModel(selectedModel, selectedBmmModel, selectedAomProfile);
+
+
 
     }
 
@@ -108,6 +112,10 @@ public class MetaModels {
 
     public MultiplicityInterval referenceModelPropMultiplicity(String rmTypeName, String rmAttributeName) {
         return selectedModel == null ? MultiplicityInterval.unbounded() : selectedModel.referenceModelPropMultiplicity(rmTypeName, rmAttributeName);
+    }
+
+    public boolean validatePrimitiveType(String rmTypeName, String rmAttributeName, CPrimitiveObject cObject) {
+        return selectedModel == null ? true : selectedModel.validatePrimitiveType(rmTypeName, rmAttributeName, cObject);
     }
 
     public AomProfiles getAomProfiles() {

@@ -1,5 +1,7 @@
 package com.nedap.archie.rminfo;
 
+import com.nedap.archie.aom.CPrimitiveObject;
+import com.nedap.archie.aom.profile.AomProfile;
 import com.nedap.archie.base.MultiplicityInterval;
 import com.nedap.archie.paths.PathSegment;
 import com.nedap.archie.query.APathQuery;
@@ -16,10 +18,16 @@ public class MetaModel {
 
     private ModelInfoLookup selectedModel;
     private BmmModel selectedBmmModel;
+    private AomProfile selectedAomProfile;
 
     public MetaModel(ModelInfoLookup selectedModel, BmmModel selectedBmmModel) {
+        this(selectedModel, selectedBmmModel, null);
+    }
+
+    public MetaModel(ModelInfoLookup selectedModel, BmmModel selectedBmmModel, AomProfile selectedAomProfile) {
         this.selectedModel = selectedModel;
         this.selectedBmmModel = selectedBmmModel;
+        this.selectedAomProfile = selectedAomProfile;
     }
 
     public ModelInfoLookup getSelectedModel() {
@@ -28,6 +36,10 @@ public class MetaModel {
 
     public BmmModel getSelectedBmmModel() {
         return selectedBmmModel;
+    }
+
+    public AomProfile getSelectedAomProfile() {
+        return selectedAomProfile;
     }
 
     public boolean isMultiple(String typeName, String attributeName) {
@@ -220,6 +232,14 @@ public class MetaModel {
                     return MultiplicityInterval.createBounded(1, 1);
                 }
             }
+        }
+    }
+
+    public boolean validatePrimitiveType(String rmTypeName, String rmAttributeName, CPrimitiveObject cObject) {
+        if(selectedAomProfile == null) {
+            return selectedModel.validatePrimitiveType(rmTypeName, rmAttributeName, cObject);
+        } else {
+            return true;
         }
     }
 }

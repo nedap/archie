@@ -61,11 +61,10 @@ public class CKMArchetypeValidatorTest {
 
     @Test
     public void fullCKMTestBmm() {
-        List<String> schemaDirectories = new ArrayList<>();
         MetaModels bmmReferenceModels = TestUtil.getBMMReferenceModels();
 
         FullArchetypeRepository repository = parseCKM();
-        repository.compile(bmmReferenceModels.getReferenceModels(), bmmReferenceModels.getReferenceModelAccess());
+        repository.compile(bmmReferenceModels);
 
         runTest(repository);
 
