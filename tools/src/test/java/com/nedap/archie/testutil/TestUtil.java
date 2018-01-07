@@ -11,7 +11,9 @@ import com.nedap.archie.creation.RMObjectCreator;
 import com.nedap.archie.openehrtestrm.TestRMInfoLookup;
 import com.nedap.archie.rm.RMObject;
 import com.nedap.archie.rminfo.ArchieRMInfoLookup;
+import com.nedap.archie.rminfo.MetaModels;
 import com.nedap.archie.rminfo.ReferenceModels;
+import org.openehr.bmm.rmaccess.ReferenceModelAccess;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,6 +31,16 @@ import static org.junit.Assert.*;
 public class TestUtil {
 
     private RMObjectCreator creator = new RMObjectCreator(ArchieRMInfoLookup.getInstance());
+
+    public static MetaModels getBMMReferenceModels() {
+        List<String> schemaDirectories = new ArrayList<>();
+        String path = TestUtil.class.getResource("/bmm/placeholder.txt").getFile();
+        path = path.substring(0, path.lastIndexOf('/'));
+        schemaDirectories.add(path);
+        ReferenceModelAccess access = new ReferenceModelAccess();
+        access.initializeAll(schemaDirectories);
+        return new MetaModels(null, access);
+    }
 
     /**
      * Creates an empty RM Object, fully nested, one object per CObject found.
