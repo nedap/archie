@@ -39,13 +39,18 @@ public class ArchetypeValidator {
     private List<ArchetypeValidation> validationsPhase3;
 
 
+
+
     public ArchetypeValidator(ReferenceModels models) {
         this(models, null);
     }
 
     public ArchetypeValidator(ReferenceModels models, ReferenceModelAccess bmmModels) {
-        combinedModels = new MetaModels(models, bmmModels);
+        this(new MetaModels(models, bmmModels));
+    }
 
+    public ArchetypeValidator(MetaModels models) {
+        this.combinedModels = models;
         validationsPhase0 = new ArrayList<>();
         //defined in spec, but not in three phase validator and not in grammar
         //eiffel checks these in the parser

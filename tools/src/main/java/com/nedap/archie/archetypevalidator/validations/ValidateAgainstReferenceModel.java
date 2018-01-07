@@ -57,7 +57,7 @@ public class ValidateAgainstReferenceModel extends ValidatingVisitor {
         CAttribute attribute = cObject.getParent();
         if(attribute.getDifferentialPath() == null) {
             CObject parentConstraint = attribute.getParent();
-            if(!lookup.validatePrimitiveType(parentConstraint.getRmTypeName(), attribute.getRmAttributeName(), cObject)) {
+            if(!combinedModels.validatePrimitiveType(parentConstraint.getRmTypeName(), attribute.getRmAttributeName(), cObject)) {
                 addMessage(ErrorType.VCORMT, cObject.path());
             }
 
@@ -68,7 +68,7 @@ public class ValidateAgainstReferenceModel extends ValidatingVisitor {
                 if(differentialPathFromParent instanceof CAttribute) {
                     CAttribute parentAttribute = (CAttribute) differentialPathFromParent;
                     CObject parentConstraint = parentAttribute.getParent();
-                    if(!lookup.validatePrimitiveType(parentConstraint.getRmTypeName(), parentAttribute.getRmAttributeName(), cObject)) {
+                    if(!combinedModels.validatePrimitiveType(parentConstraint.getRmTypeName(), parentAttribute.getRmAttributeName(), cObject)) {
                         addMessage(ErrorType.VCORMT, cObject.path());
                     }
                 }
