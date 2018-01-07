@@ -490,7 +490,7 @@ public class Flattener {
 
     private boolean isSingle(CAttribute attribute) {
         if(attribute != null && attribute.getParent() != null && attribute.getDifferentialPath() == null) {
-            return metaModels.isMultiple(attribute.getParent().getRmTypeName(), attribute.getRmAttributeName());
+            return !metaModels.isMultiple(attribute.getParent().getRmTypeName(), attribute.getRmAttributeName());
         }
         return false;
     }
