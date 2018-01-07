@@ -276,7 +276,7 @@ class CAttributeFlattener {
                 return true;
             }
         }
-        MultiplicityInterval occurrences = parent.effectiveOccurrences(flattener.getLookup()::referenceModelPropMultiplicity);
+        MultiplicityInterval occurrences = parent.effectiveOccurrences(flattener.getMetaModels()::referenceModelPropMultiplicity);
         //isSingle/isMultiple is tricky and not doable just in the parser. Don't use those
         if(isSingle(parent.getParent())) {
             return true;
@@ -284,7 +284,7 @@ class CAttributeFlattener {
             //REFINE the parent node case 1, the parent has occurrences upper == 1
             return true;
         } else if (differentialNodes.size() == 1
-                && differentialNodes.get(0).effectiveOccurrences(flattener.getLookup()::referenceModelPropMultiplicity).upperIsOne()) {
+                && differentialNodes.get(0).effectiveOccurrences(flattener.getMetaModels()::referenceModelPropMultiplicity).upperIsOne()) {
             //REFINE the parent node case 2, only one child with occurrences upper == 1
             return true;
         }
@@ -293,11 +293,10 @@ class CAttributeFlattener {
 
     private boolean isSingle(CAttribute attribute) {
         if(attribute != null && attribute.getParent() != null && attribute.getDifferentialPath() == null) {
-            RMAttributeInfo attributeInfo = flattener.getLookup().getAttributeInfo(attribute.getParent().getRmTypeName(), attribute.getRmAttributeName());
-            return attributeInfo != null && !attributeInfo.isMultipleValued();
+            return flattener.getMetaModels().isMultiple(attribute.getParent().getRmTypeName(), attribute.getRmAttributeName());
         }
         return false;
-    }
+    }   
 
     /**
      * Find the matching parent CObject given a specialized child. REturns null if not found.

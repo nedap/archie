@@ -1,5 +1,8 @@
 package com.nedap.archie.rminfo;
 
+import com.nedap.archie.base.MultiplicityInterval;
+import com.nedap.archie.paths.PathSegment;
+import com.nedap.archie.query.APathQuery;
 import org.openehr.bmm.core.BmmClass;
 import org.openehr.bmm.core.BmmContainerProperty;
 import org.openehr.bmm.core.BmmModel;
@@ -34,19 +37,23 @@ public class MetaModel {
                 //TODO: don't flatten on request, create a flattened properties cache just like the eiffel code for much better performance
                 BmmClass flatClassDefinition = classDefinition.flattenBmmClass();
                 BmmProperty bmmProperty = flatClassDefinition.getProperties().get(attributeName);
-                if(bmmProperty == null) {
-                    return false;
-                } else if(bmmProperty instanceof BmmContainerProperty) {
-                    return bmmProperty != null && ((BmmContainerProperty) bmmProperty).getCardinality().has(2);
-                } else {
-                    return false;
-                }
+                return isMultiple(bmmProperty);
             }
         } else {
             RMAttributeInfo attributeInfo = selectedModel.getAttributeInfo(typeName, attributeName);
             return attributeInfo != null && attributeInfo.isMultipleValued();
         }
         return false;
+    }
+
+    private boolean isMultiple(BmmProperty bmmProperty) {
+        if(bmmProperty == null) {
+            return false;
+        } else if(bmmProperty instanceof BmmContainerProperty) {
+            return bmmProperty != null && ((BmmContainerProperty) bmmProperty).getCardinality().has(2);
+        } else {
+            return false;
+        }
     }
 
     public boolean rmTypesConformant(String childTypeName, String parentTypeName) {
@@ -148,6 +155,71 @@ public class MetaModel {
                 }
             }
             return true;
+        }
+    }
+
+    public boolean hasReferenceModelPath(String rmTypeName, String path) {
+        if (!path.startsWith("/")) {
+            return false;
+        }
+        APathQuery query = new APathQuery(path);
+
+        if(selectedBmmModel != null) {
+            BmmClass classDefinition = selectedBmmModel.getClassDefinition(BmmDefinitions.typeNameToClassKey(rmTypeName));
+            for (PathSegment segment : query.getPathSegments()) {
+                if (classDefinition == null) {
+                    return false;
+                }
+                BmmProperty bmmProperty = classDefinition.flattenBmmClass().getProperties().get(segment.getNodeName());
+                if(bmmProperty == null) {
+                    return false;
+                }
+                classDefinition = bmmProperty.getType().getBaseClass();
+            }
+            return true;
+        } else {
+
+
+            RMTypeInfo typeInfo = selectedModel.getTypeInfo(rmTypeName);
+
+            for (PathSegment segment : query.getPathSegments()) {
+                if (typeInfo == null) {
+                    return false;
+                }
+                RMAttributeInfo attribute = typeInfo.getAttribute(segment.getNodeName());
+                if (attribute == null) {
+                    return false;
+                }
+                typeInfo = selectedModel.getTypeInfo(attribute.getTypeInCollection());
+            }
+            return true;
+        }
+    }
+
+    public MultiplicityInterval referenceModelPropMultiplicity(String rmTypeName, String rmAttributeName) {
+        if(selectedBmmModel != null) {
+            BmmClass classDefinition = selectedBmmModel.getClassDefinition(BmmDefinitions.typeNameToClassKey(rmTypeName));
+            BmmProperty bmmProperty = classDefinition.flattenBmmClass().getProperties().get(rmAttributeName);
+            if(isMultiple(bmmProperty)) {
+                return MultiplicityInterval.createUpperUnbounded(0);
+            } else {
+                if(!bmmProperty.getMandatory()) {
+                    return MultiplicityInterval.createBounded(0, 1);
+                } else {
+                    return MultiplicityInterval.createBounded(1, 1);
+                }
+            }
+        } else {
+            RMAttributeInfo attributeInfo = selectedModel.getAttributeInfo(rmTypeName, rmAttributeName);
+            if (attributeInfo.isMultipleValued()) {
+                return MultiplicityInterval.createUpperUnbounded(0);
+            } else {
+                if (attributeInfo.isNullable()) {
+                    return MultiplicityInterval.createBounded(0, 1);
+                } else {
+                    return MultiplicityInterval.createBounded(1, 1);
+                }
+            }
         }
     }
 }

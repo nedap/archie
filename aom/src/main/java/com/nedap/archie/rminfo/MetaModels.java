@@ -1,6 +1,7 @@
 package com.nedap.archie.rminfo;
 
 import com.nedap.archie.aom.Archetype;
+import com.nedap.archie.base.MultiplicityInterval;
 import com.nedap.archie.rminfo.ModelInfoLookup;
 import com.nedap.archie.rminfo.RMAttributeInfo;
 import com.nedap.archie.rminfo.ReferenceModels;
@@ -84,5 +85,13 @@ public class MetaModels {
     public boolean typeConformant(String rmTypeName, String rmAttributeName, String childConstraintTypeName) {
         return selectedModel == null ? false : selectedModel.typeConformant(rmTypeName, rmAttributeName, childConstraintTypeName);
 
+    }
+
+    public boolean hasReferenceModelPath(String rmTypeName, String path) {
+        return selectedModel == null ? false : selectedModel.hasReferenceModelPath(rmTypeName, path);
+    }
+
+    public MultiplicityInterval referenceModelPropMultiplicity(String rmTypeName, String rmAttributeName) {
+        return selectedModel == null ? MultiplicityInterval.unbounded() : selectedModel.referenceModelPropMultiplicity(rmTypeName, rmAttributeName);
     }
 }

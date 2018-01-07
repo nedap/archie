@@ -30,7 +30,7 @@ public class AnnotationsValidation extends ArchetypeValidationBase {
                                 addMessage(ErrorType.VRANP, String.format("annotation with path %s does not exist in flat archetype", path));
                             }
                         } else { //TODO: this can also be referencemodel.has_path, but that's not implemented yet
-                            if(!AOMUtils.hasReferenceModelPath(lookup, archetype.getDefinition().getRmTypeName(), path)) {
+                            if(!combinedModels.hasReferenceModelPath(archetype.getDefinition().getRmTypeName(), path)) {
                                 addMessage(ErrorType.VRANP, String.format("annotation with path %s does not exist in flat archetype", path));
                             }
                         }

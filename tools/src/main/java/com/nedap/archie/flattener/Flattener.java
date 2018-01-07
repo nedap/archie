@@ -2,7 +2,15 @@ package com.nedap.archie.flattener;
 
 import com.nedap.archie.aom.*;
 import com.nedap.archie.aom.utils.ArchetypeParsePostProcesser;
-import com.nedap.archie.rminfo.ModelInfoLookup;
+
+import com.nedap.archie.base.MultiplicityInterval;
+import com.nedap.archie.paths.PathSegment;
+import com.nedap.archie.paths.PathUtil;
+import com.nedap.archie.query.AOMPathQuery;
+import com.nedap.archie.query.APathQuery;
+import com.nedap.archie.rminfo.MetaModel;
+import com.nedap.archie.rminfo.MetaModels;
+
 import com.nedap.archie.rminfo.ReferenceModels;
 
 import static com.nedap.archie.flattener.FlattenerUtil.*;
@@ -21,7 +29,7 @@ import java.util.Stack;
  */
 public class Flattener {
 
-    private final ReferenceModels referenceModels;
+    private final MetaModels metaModels;
     //to be able to store Template Overlays transparently during flattening
     private OverridingArchetypeRepository repository;
 
@@ -35,8 +43,6 @@ public class Flattener {
 
     private String[] languagesToKeep = null;
 
-    private ModelInfoLookup lookup;
-
     private RulesFlattener rulesFlattener = new RulesFlattener();
 
     CAttributeFlattener cAttributeFlattener = new CAttributeFlattener(this);
@@ -47,7 +53,12 @@ public class Flattener {
 
     public Flattener(ArchetypeRepository repository, ReferenceModels models) {
         this.repository = new OverridingArchetypeRepository(repository);
-        this.referenceModels = models;
+        this.metaModels = new MetaModels(models, null);
+    }
+
+    public Flattener(ArchetypeRepository repository, MetaModels models) {
+        this.repository = new OverridingArchetypeRepository(repository);
+        this.metaModels = models;
     }
 
     public Flattener createOperationalTemplate(boolean makeTemplate) {
@@ -76,7 +87,7 @@ public class Flattener {
             throw new IllegalStateException("You've used this flattener before - single use instance, please create a new one!");
         }
 
-        lookup = referenceModels.getModel(toFlatten);
+        metaModels.selectModel(toFlatten);
        // new ReflectionConstraintImposer(lookup).setSingleOrMultiple(toFlatten.getDefinition());
         //validate that we can legally flatten first
         String parentId = toFlatten.getParentArchetypeId();
@@ -253,10 +264,6 @@ public class Flattener {
         return newObject;
     }
 
-
-
-
-
     private void flattenArchetypeSlot(ArchetypeSlot parent, ArchetypeSlot specialized) {
         if(specialized.isClosed()) {
             parent.setClosed(true);
@@ -298,7 +305,7 @@ public class Flattener {
     }
 
     protected Flattener getNewFlattener() {
-        return new Flattener(repository, referenceModels)
+        return new Flattener(repository, metaModels)
                 .createOperationalTemplate(false) //do not create operational template except at the end.
                 .useComplexObjectForArchetypeSlotReplacement(useComplexObjectForArchetypeSlotReplacement);
     }
@@ -312,8 +319,8 @@ public class Flattener {
         return useComplexObjectForArchetypeSlotReplacement;
     }
 
-    protected ModelInfoLookup getLookup() {
-        return lookup;
+    public MetaModels getMetaModels() {
+        return metaModels;
     }
 
 
