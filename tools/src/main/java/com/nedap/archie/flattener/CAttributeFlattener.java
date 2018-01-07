@@ -293,10 +293,10 @@ class CAttributeFlattener {
 
     private boolean isSingle(CAttribute attribute) {
         if(attribute != null && attribute.getParent() != null && attribute.getDifferentialPath() == null) {
-            return flattener.getMetaModels().isMultiple(attribute.getParent().getRmTypeName(), attribute.getRmAttributeName());
+            return !flattener.getMetaModels().isMultiple(attribute.getParent().getRmTypeName(), attribute.getRmAttributeName());
         }
         return false;
-    }   
+    }
 
     /**
      * Find the matching parent CObject given a specialized child. REturns null if not found.
