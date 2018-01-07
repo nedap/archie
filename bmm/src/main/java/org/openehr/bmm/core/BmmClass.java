@@ -81,6 +81,7 @@ public class BmmClass extends BmmClassifier implements Serializable {
      * True if this definition overrides a class of the same name in an included schema.
      */
     private boolean isOverride;
+    private BmmClass flattenedClassCache;
 
     public BmmClass() {
         properties = new LinkedHashMap<String, BmmProperty>();
@@ -413,15 +414,19 @@ public class BmmClass extends BmmClassifier implements Serializable {
      *
      */
     public BmmClass flattenBmmClass() {
+        if(this.flattenedClassCache != null) {
+            return flattenedClassCache;
+        }
         Map<String, BmmClass> ancestorMap = this.getAncestors();
         if (ancestorMap.size() == 0) {
-            return duplicate();
+            flattenedClassCache = duplicate();
         } else {
             final BmmClass target = this.duplicate();
             target.setAncestors(new HashMap<String, BmmClass>());//Clear out ancestors since we are flattening the hierarchy.
             ancestorMap.forEach( (ancestorName, ancestor) -> { populateTarget(ancestor, target); });
-            return target;
+            flattenedClassCache = target;
         }
+        return flattenedClassCache;
     }
 
     public String effectivePropertyType(String propertyName) {
