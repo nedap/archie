@@ -1,12 +1,18 @@
 package com.nedap.archie.rminfo;
 
 import com.nedap.archie.aom.CPrimitiveObject;
+import com.nedap.archie.aom.primitives.CInteger;
+import com.nedap.archie.aom.primitives.CString;
 import com.nedap.archie.aom.profile.AomProfile;
+import com.nedap.archie.aom.profile.AomTypeMapping;
 import com.nedap.archie.base.MultiplicityInterval;
 import com.nedap.archie.paths.PathSegment;
 import com.nedap.archie.query.APathQuery;
 import org.openehr.bmm.core.BmmClass;
 import org.openehr.bmm.core.BmmContainerProperty;
+import org.openehr.bmm.core.BmmEnumeration;
+import org.openehr.bmm.core.BmmEnumerationInteger;
+import org.openehr.bmm.core.BmmEnumerationString;
 import org.openehr.bmm.core.BmmModel;
 import org.openehr.bmm.core.BmmProperty;
 import org.openehr.bmm.persistence.validation.BmmDefinitions;
@@ -44,7 +50,7 @@ public class MetaModel {
 
     public boolean isMultiple(String typeName, String attributeName) {
         if(getSelectedBmmModel() != null) {
-            BmmClass classDefinition = getSelectedBmmModel().getClassDefinition(typeName);
+            BmmClass classDefinition = getSelectedBmmModel().getClassDefinition(BmmDefinitions.typeNameToClassKey(typeName));
             if (classDefinition != null) {
                 //TODO: don't flatten on request, create a flattened properties cache just like the eiffel code for much better performance
                 BmmClass flatClassDefinition = classDefinition.flattenBmmClass();
@@ -239,7 +245,61 @@ public class MetaModel {
         if(selectedAomProfile == null) {
             return selectedModel.validatePrimitiveType(rmTypeName, rmAttributeName, cObject);
         } else {
-            return true;
+            String cRmTypeName = cObject.getRmTypeName();
+            AomTypeMapping aomTypeMapping = selectedAomProfile.getAomRmTypeMappings().get(cRmTypeName.toUpperCase());
+            if(aomTypeMapping != null) {
+                //found a type mapping, replace effective type name
+                cRmTypeName = aomTypeMapping.getTargetClassName();
+            }
+            String modelTypeName = selectedBmmModel.effectivePropertyType(rmTypeName, rmAttributeName);
+            BmmClass bmmClass = selectedBmmModel.getClassDefinition(BmmDefinitions.typeNameToClassKey(rmTypeName));
+            if(bmmClass != null) {
+                BmmProperty bmmProperty = bmmClass.flattenBmmClass().getProperties().get(rmAttributeName);
+                if(bmmProperty != null) {
+                    //check enumerated properties
+                    BmmClass propertyClass = bmmProperty.getType().getBaseClass();
+                    if(propertyClass instanceof BmmEnumeration) {
+                        //enumeration. This should probably an integer.
+                        //TODO: check if we should check the actual type as well as the string values of the enumeration?
+                        modelTypeName = ((BmmEnumeration) propertyClass).getUnderlyingTypeName();
+                        if(!modelTypeName.equalsIgnoreCase(cRmTypeName)) {
+                            return false;//TODO: this should be a different error code/message
+                        }
+                        else if(cObject instanceof CString && propertyClass instanceof BmmEnumerationString) {
+                            BmmEnumerationString enumerationString = (BmmEnumerationString) propertyClass;
+                            CString cString = (CString) cObject;
+                            if(!cString.getConstraint().stream().allMatch(item -> enumerationString.getItemValues().contains(item))) {
+                                return false;
+                            }
+                        } else if (cObject instanceof CInteger && propertyClass instanceof BmmEnumerationInteger) {
+                            BmmEnumerationInteger enumerationInteger = (BmmEnumerationInteger) propertyClass;
+                            CInteger cInteger = (CInteger) cObject;
+                            //TODO: BMM uses Integers instead of long, that could be aproblem as it can be Integer64 in models!
+                            if(!cInteger.getConstraintValues().stream().allMatch(item -> enumerationInteger.getItemValues().contains(item.intValue()))) {
+                                return false;
+                            }
+                        } else {
+                            //this isn't right, unless we have some very fancy type substition going on.
+                            //TODO: add an error message, not just a boolean
+                            return false;
+                        }
+                    }
+                }
+            }
+            if(modelTypeName.equalsIgnoreCase(cRmTypeName)) {
+                return true;//done :)
+            }
+
+            String equivalentType = selectedAomProfile.getRmPrimitiveTypeEquivalences().get(modelTypeName);
+            if(equivalentType != null && equivalentType.equalsIgnoreCase(cRmTypeName)) {
+                return true;
+            }
+            String substitutedType = selectedAomProfile.getAomRmTypeSubstitutions().get(cRmTypeName.toUpperCase());
+            if(substitutedType != null && substitutedType.equalsIgnoreCase(modelTypeName)) {
+                return true;
+            }
+
+            return false;
         }
     }
 }

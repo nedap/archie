@@ -26,6 +26,8 @@ import org.openehr.bmm.core.BmmEnumerationInteger;
 import org.openehr.bmm.core.BmmModel;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Integer-based enumeration type.
@@ -55,8 +57,18 @@ public class PersistedBmmEnumerationInteger extends PersistedBmmEnumeration<Inte
     public void populateBmmClass(BmmModel schema) {
         super.populateBmmClass(schema);
         if(getBmmClass() != null) {
-            ((BmmEnumerationInteger)getBmmClass()).setItemNames(getItemNames());
-            ((BmmEnumerationInteger)getBmmClass()).setItemValues(getItemValues());
+            BmmEnumerationInteger bmmEnumerationInteger = (BmmEnumerationInteger) getBmmClass();
+            bmmEnumerationInteger.setItemNames(getItemNames());
+            bmmEnumerationInteger.setItemValues(getItemValues());
+            if(getItemValues() == null || getItemValues().isEmpty()) {
+                //documentation says: for integers, the values 0, 1, 2, etc are assumed. I'm adding 'unless otherwise specified' here
+                List<Integer> itemValues = new ArrayList<>();
+                for(int i = 0; i < getItemNames().size(); i++) {
+                    itemValues.add(i);
+                }
+                bmmEnumerationInteger.setItemValues(itemValues);
+
+            }
         }
     }
 }

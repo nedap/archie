@@ -7,6 +7,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -42,5 +43,26 @@ public class CInteger extends COrdered<Long> {
     @Override
     public void addConstraint(Interval<Long> constraint) {
         this.constraint.add(constraint);
+    }
+
+    public List<Long> getConstraintValues() {
+        List<Long> result = new ArrayList<>();
+        for(Interval<Long> singleConstraint:constraint) {
+            if(singleConstraint.isLowerUnbounded() || singleConstraint.isUpperUnbounded()) {
+                throw new RuntimeException("cannot get the constraint values of an unbounded Integer64 constraint");
+            }
+            long constraintLower = singleConstraint.getLower();
+            if(!singleConstraint.isLowerIncluded()) {
+                constraintLower++;
+            }
+            long constraintUpper = singleConstraint.getUpper();
+            if(singleConstraint.isUpperIncluded()) {
+                constraintUpper++;
+            }
+            for(long i = constraintLower; i < constraintUpper; i++) {
+                result.add(i);
+            }
+        }
+        return result;
     }
 }
