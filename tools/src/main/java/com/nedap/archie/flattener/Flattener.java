@@ -8,7 +8,7 @@ import com.nedap.archie.paths.PathSegment;
 import com.nedap.archie.paths.PathUtil;
 import com.nedap.archie.query.AOMPathQuery;
 import com.nedap.archie.query.APathQuery;
-import com.nedap.archie.rminfo.MetaModel;
+import com.nedap.archie.query.ComplexObjectProxyReplacement;
 import com.nedap.archie.rminfo.MetaModels;
 
 import com.nedap.archie.rminfo.ReferenceModels;
