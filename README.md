@@ -8,6 +8,8 @@ It uses the ANTLR adl-grammar written by Thomas Beale at https://github.com/open
 
 It is licensed under the Apache license.
 
+**Note: active Archie development has moved to the openehr github at https://github.com/openehr/archie . The next version will likely be released from there. There will be some backwards incompatibilities to better adhere to the OpenEHR specifications and to introduce some new concepts, but it should be relatively easy to migrate. It is possible there will still be some bugfix releases from this project.**
+
 ## dependency
 
 In gradle, include this dependency in your build.gradle:
