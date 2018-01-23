@@ -173,15 +173,23 @@ public class ADLListener extends AdlBaseListener {
     }
 
     public void enterComponent_terminologies_section(AdlParser.Component_terminologies_sectionContext ctx) {
-        if(archetype instanceof OperationalTemplate) {
+        if (!(archetype instanceof OperationalTemplate)) {
+            throw new IllegalArgumentException("cannot add component terminologies to anything but an operational template");
+        }
+        if(ctx.odin_text().attr_vals() != null) {
+            //this is 'component_terminologies = <...>'
+            OperationalTemplate template = (OperationalTemplate) archetype;
+
+            ComponentTerminologiesHelper helper = OdinObjectParser.convert(ctx.odin_text(), ComponentTerminologiesHelper.class);
+            template.setComponentTerminologies(helper.getComponentTerminologies());
+        } else {
+            //this is a direct <["archetype_id"] = ...> syntax
             OperationalTemplate template = (OperationalTemplate) archetype;
 
             TypeFactory typeFactory = OdinToJsonConverter.getObjectMapper().getTypeFactory();
             MapType mapType = typeFactory.constructMapType(ConcurrentHashMap.class, String.class, ArchetypeTerminology.class);
 
             template.setComponentTerminologies(OdinObjectParser.convert(ctx.odin_text(), mapType));
-        } else {
-            throw new IllegalArgumentException("cannot add component terminologies to anything but an operational template");
         }
     }
 
