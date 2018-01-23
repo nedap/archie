@@ -18,7 +18,7 @@ class ADLOperationalTemplateSerializer extends ADLAuthoredArchetypeSerializer<Op
     protected String serialize() {
         super.serialize();
         builder.newline().append("component_terminologies").newIndentedLine()
-                .append("< ") //todo: this should perhaps be in the ODIN serializer?
+                .append("component_terminologies = < ") //todo: this should perhaps be in the ODIN serializer?
                 .indent()
                 .odin(archetype.getComponentTerminologies())
                 .unindent()
