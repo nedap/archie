@@ -16,6 +16,7 @@ import odin_values;
 odin_text :
       attr_vals
     | object_value_block
+    | keyed_object+
 	;
 
 attr_vals : ( attr_val ';'? )+ ;

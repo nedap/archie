@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.nedap.archie.adlparser.antlr.AdlParser;
 import com.nedap.archie.adlparser.antlr.AdlParser.*;
 
 import java.util.List;
@@ -44,6 +45,8 @@ public class OdinToJsonConverter {
             output(context.attr_vals().attr_val());
         } else if(context.object_value_block() != null){
             output(context.object_value_block());
+        } else if (context.keyed_object() != null && context.keyed_object().size() > 0) {
+            outputKeyedObjects(context.keyed_object());
         } else {
             //empty
             return "{}";
@@ -86,21 +89,7 @@ public class OdinToJsonConverter {
         if (valueBlockContext.attr_vals() != null) {
             output(valueBlockContext.attr_vals().attr_val());
         } else if (keyedObjectContexts != null && !keyedObjectContexts.isEmpty()) {
-            output.append("{");
-            boolean first = true;
-            for (Keyed_objectContext keyedObjectContext : keyedObjectContexts) {
-                if(!first) {
-                    output.append(',');
-                }
-                first = false;
-                //output.append('"');
-                output(keyedObjectContext.primitive_value());
-                //output.append('"');
-                output.append(':');
-                output(keyedObjectContext.object_block());
-
-            }
-            output.append("}");
+            outputKeyedObjects(keyedObjectContexts);
         } else if (primitiveObjectContext != null) {
             if(primitiveObjectContext.primitive_value() != null) {
                 output(primitiveObjectContext.primitive_value());
@@ -115,6 +104,24 @@ public class OdinToJsonConverter {
         } else {
             output.append("{}");
         }
+    }
+
+    private void outputKeyedObjects(List<Keyed_objectContext> keyedObjectContexts) {
+        output.append("{");
+        boolean first = true;
+        for (Keyed_objectContext keyedObjectContext : keyedObjectContexts) {
+            if(!first) {
+                output.append(',');
+            }
+            first = false;
+            //output.append('"');
+            output(keyedObjectContext.primitive_value());
+            //output.append('"');
+            output.append(':');
+            output(keyedObjectContext.object_block());
+
+        }
+        output.append("}");
     }
 
     private void output(Primitive_list_valueContext listContext) {
