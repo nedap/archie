@@ -1,15 +1,9 @@
 package com.nedap.archie.archetypevalidator.validations;
 
 import com.nedap.archie.aom.Archetype;
-import com.nedap.archie.archetypevalidator.ArchetypeValidation;
 import com.nedap.archie.archetypevalidator.ArchetypeValidationBase;
 import com.nedap.archie.archetypevalidator.ErrorType;
-import com.nedap.archie.archetypevalidator.ValidationMessage;
-import com.nedap.archie.flattener.ArchetypeRepository;
-import com.nedap.archie.rminfo.ModelInfoLookup;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class BasicChecks extends ArchetypeValidationBase {

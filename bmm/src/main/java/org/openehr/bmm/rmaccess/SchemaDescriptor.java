@@ -474,4 +474,8 @@ public class SchemaDescriptor {
         }
         return retVal;
     }
+
+    public String toString() {
+        return schemaId;
+    }
 }

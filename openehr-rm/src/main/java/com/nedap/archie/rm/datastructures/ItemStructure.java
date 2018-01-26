@@ -13,6 +13,7 @@ import java.util.List;
 public abstract class ItemStructure<Type extends Item> extends DataStructure {
 
     /** In the default model it's in the subclasses, but defined here as well because it has a lot of uses */
+    //TODO: add a @MetaModelIgnore annotation - this should be ignored by the ModelInfoLookup
     public abstract List<Type> getItems();
 
 }

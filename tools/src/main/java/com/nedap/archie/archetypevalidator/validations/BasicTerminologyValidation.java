@@ -6,7 +6,6 @@ import com.nedap.archie.aom.terminology.ValueSet;
 import com.nedap.archie.aom.utils.AOMUtils;
 import com.nedap.archie.archetypevalidator.ArchetypeValidationBase;
 import com.nedap.archie.archetypevalidator.ErrorType;
-import com.nedap.archie.rminfo.ModelInfoLookup;
 
 import java.net.URI;
 import java.util.List;
@@ -74,8 +73,7 @@ public class BasicTerminologyValidation extends ArchetypeValidationBase {
                     //if not a valid path, fine
                 }
                 if(!AOMUtils.isValidCode(constraintCodeOrPath) && !(
-                        archetypeHasPath ||
-                        AOMUtils.hasReferenceModelPath(lookup, archetype.getDefinition().getRmTypeName(), constraintCodeOrPath)
+                        archetypeHasPath || combinedModels.hasReferenceModelPath(archetype.getDefinition().getRmTypeName(), constraintCodeOrPath)
                         )
                     ) {
                     addMessage(ErrorType.VTTBK, String.format("Term binding key %s in path format is not present in archetype", constraintCodeOrPath));

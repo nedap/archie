@@ -33,15 +33,6 @@ import java.util.List;
  * Created by cnanjo on 4/11/16.
  */
 public class BmmSchemaCore implements IBmmSchemaCore, Serializable {
-
-    private String DEFAULT_SCHEMA_OPTION_CLASS_NAME = "Any";
-    private String DEFAULT_SCHEMA_LIFECYCLE_STATE = "Initial";
-    private String DEFAULT_SCHEMA_NAME = "Unknown";
-    private String DEFAULT_SCHEMA_RELEASE = "Unknown";
-    private String DEFAULT_SCHEMA_REVISION = "Unknown";
-    private String DEFAULT_SCHEMA_AUTHOR = "Unknown";
-    private String DEFAULT_SCHEMA_DESCRIPTION = "(none)";
-
     /**
      * Publisher of model expressed in the schema. Persisted attribute.
      */

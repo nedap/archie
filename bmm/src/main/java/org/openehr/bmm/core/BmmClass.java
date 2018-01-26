@@ -23,6 +23,7 @@ package org.openehr.bmm.core;
 
 import org.openehr.bmm.BmmConstants;
 import org.openehr.bmm.persistence.serializer.Serialize;
+import org.openehr.bmm.persistence.validation.BmmDefinitions;
 import org.openehr.odin.CompositeOdinObject;
 import org.openehr.odin.OdinAttribute;
 import org.openehr.odin.OdinObject;
@@ -80,6 +81,7 @@ public class BmmClass extends BmmClassifier implements Serializable {
      * True if this definition overrides a class of the same name in an included schema.
      */
     private boolean isOverride;
+    private BmmClass flattenedClassCache;
 
     public BmmClass() {
         properties = new LinkedHashMap<String, BmmProperty>();
@@ -300,7 +302,13 @@ public class BmmClass extends BmmClassifier implements Serializable {
      * @return
      */
     public List<String> findAllAncestors() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        List<String> allAncestors = new ArrayList<String>();
+        Map<String, BmmClass> ancestors = getAncestors();
+        allAncestors.addAll(ancestors.keySet());
+        for(BmmClass ancestor:ancestors.values()) {
+            allAncestors.addAll(ancestor.findAllAncestors());
+        }
+        return allAncestors;
     }
 
     /**
@@ -406,14 +414,27 @@ public class BmmClass extends BmmClassifier implements Serializable {
      *
      */
     public BmmClass flattenBmmClass() {
+        if(this.flattenedClassCache != null) {
+            return flattenedClassCache;
+        }
         Map<String, BmmClass> ancestorMap = this.getAncestors();
         if (ancestorMap.size() == 0) {
-            return duplicate();
+            flattenedClassCache = duplicate();
         } else {
             final BmmClass target = this.duplicate();
             target.setAncestors(new HashMap<String, BmmClass>());//Clear out ancestors since we are flattening the hierarchy.
             ancestorMap.forEach( (ancestorName, ancestor) -> { populateTarget(ancestor, target); });
-            return target;
+            flattenedClassCache = target;
+        }
+        return flattenedClassCache;
+    }
+
+    public String effectivePropertyType(String propertyName) {
+        BmmProperty property = flattenBmmClass().getProperties().get(propertyName);
+        if(property != null) {
+            return property.getType().getTypeName();
+        } else {
+            return BmmDefinitions.UNKNOWN_TYPE_NAME;
         }
     }
 
@@ -425,7 +446,7 @@ public class BmmClass extends BmmClassifier implements Serializable {
 
     protected void handleFlattenedProperty(BmmProperty property, BmmClass target) {
         if (target.hasPropertyWithName(property.getName())) {
-            throw new RuntimeException("Property with name " + property.getName() + " already defined in type " + target.getName() + " or one of its ancestors");
+            //this is fine, it has been validated to be conformant and just overrides the old property
         } else {
             target.addProperty(property);
         }

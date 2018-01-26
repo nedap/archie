@@ -1,9 +1,14 @@
 package org.openehr.bmm.core;
 
 import org.openehr.bmm.persistence.validation.BasicDefinitions;
+import org.openehr.bmm.persistence.validation.BmmDefinitions;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Copyright 2017 Cognitive Medical Systems, Inc (http://www.cognitivemedicine.com).
@@ -508,5 +513,13 @@ public class BmmModel extends BmmPackageContainer implements IBmmSchemaCore, IBm
      */
     public String getSchemaId() {
         return bmmSchemaCore.getSchemaId();
+    }
+
+    public String effectivePropertyType(String typeName, String propertyName) {
+        BmmClass bmmClass = getClassDefinition(BmmDefinitions.typeNameToClassKey(typeName));
+        if(bmmClass == null) {
+            return BmmDefinitions.UNKNOWN_TYPE_NAME;
+        }
+        return bmmClass.effectivePropertyType(propertyName);
     }
 }

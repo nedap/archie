@@ -119,26 +119,6 @@ public class AOMUtils {
         return false;
     }
 
-    public static boolean hasReferenceModelPath(ModelInfoLookup lookup, String rmTypeName, String path) {
-        //cannot find the implementation in the eiffel ADL-tools, but I think it should be this:
-        if(!path.startsWith("/")) {
-            return false;
-        }
-        RMTypeInfo typeInfo = lookup.getTypeInfo(rmTypeName);
-        APathQuery query = new APathQuery(path);
-        for(PathSegment segment:query.getPathSegments()) {
-            if(typeInfo == null) {
-                return false;
-            }
-            RMAttributeInfo attribute = typeInfo.getAttribute(segment.getNodeName());
-            if(attribute == null) {
-                return false;
-            }
-            typeInfo = lookup.getTypeInfo(attribute.getTypeInCollection());//TODO: this should not work on class objects
-        }
-        return true;
-    }
-
     //check if the last node id in the path has a bigger specialization level than the specialization level of the parent
     //but it does a little loop to check if it happens somewhere else as well. ok...
     public static boolean isPhantomPathAtLevel(List<PathSegment> pathSegments, int specializationDepth) {

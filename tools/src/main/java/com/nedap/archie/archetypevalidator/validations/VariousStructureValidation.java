@@ -7,15 +7,9 @@ import com.nedap.archie.aom.CArchetypeRoot;
 import com.nedap.archie.aom.CComplexObject;
 import com.nedap.archie.archetypevalidator.ErrorType;
 import com.nedap.archie.archetypevalidator.ValidatingVisitor;
-import com.nedap.archie.archetypevalidator.ValidationMessage;
-import com.nedap.archie.archetypevalidator.ValidationResult;
 import com.nedap.archie.flattener.ArchetypeRepository;
-import com.nedap.archie.rminfo.ModelInfoLookup;
-import com.nedap.archie.rminfo.RMTypeInfo;
 import com.nedap.archie.rules.Assertion;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class VariousStructureValidation extends ValidatingVisitor {
@@ -60,13 +54,11 @@ public class VariousStructureValidation extends ValidatingVisitor {
             String archetypeRootTypeName = cComplexObject.getRmTypeName();
             String archetypeReferenceTypeName = hrId.getRmClass();
 
-            RMTypeInfo parentTypeInfo = lookup.getTypeInfo(archetypeRootTypeName);
-            RMTypeInfo specializedTypeInfo = lookup.getTypeInfo(archetypeReferenceTypeName);
-            if(parentTypeInfo != null) {
+            if(combinedModels.typeNameExists(archetypeRootTypeName)) {
                 //if parent type info not found will be checked later in phase 2
-                if(specializedTypeInfo == null) {
+                if(!combinedModels.typeNameExists(archetypeReferenceTypeName)) {
                     addMessageWithPath(ErrorType.VCORM, cComplexObject.getPath(), cComplexObject.getRmTypeName());
-                } else if(!parentTypeInfo.isDescendantOrEqual(specializedTypeInfo)){
+                } else if(!combinedModels.rmTypesConformant(archetypeReferenceTypeName, archetypeRootTypeName)) {
                     addMessageWithPath(ErrorType.VARXTV, cComplexObject.getPath(), cComplexObject.getRmTypeName());
                 }
             }

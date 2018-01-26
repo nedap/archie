@@ -3,6 +3,8 @@ package com.nedap.archie.adlparser.modelconstraints;
 import com.nedap.archie.aom.CAttribute;
 import com.nedap.archie.base.Cardinality;
 import com.nedap.archie.base.MultiplicityInterval;
+import com.nedap.archie.rminfo.MetaModel;
+import com.nedap.archie.rminfo.MetaModelInterface;
 import com.nedap.archie.rminfo.ModelInfoLookup;
 import com.nedap.archie.rminfo.RMAttributeInfo;
 
@@ -18,26 +20,31 @@ public class ReflectionConstraintImposer implements ModelConstraintImposer {
 
     /** Contains complex object structure of the specified model. Attributes NEVER will have children. Sorry bout that :)*/
 
-    private ModelInfoLookup lookup;
+    private MetaModelInterface lookup;
 
     public ReflectionConstraintImposer(ModelInfoLookup classLookup) {
-        this.lookup = classLookup;
+        this.lookup = new MetaModel(classLookup, null);
     }
 
-    private CAttribute createCAttribute(RMAttributeInfo attributeInfo) {
+    public ReflectionConstraintImposer(MetaModelInterface metaModel) {
+        this.lookup = metaModel;
+    }
+
+    private CAttribute createCAttribute(String typeId, String attributeName) {
         CAttribute attribute = new CAttribute();
 
         attribute.setMultiple(false);
-        attribute.setRmAttributeName(attributeInfo.getRmName());
+        attribute.setRmAttributeName(attributeName);
 
-        if(attributeInfo.isNullable()) {
+        boolean nullable = lookup.isNullable(typeId, attributeName);
+        if(nullable) {
             attribute.setExistence(new MultiplicityInterval(0, 1));
         } else {
             attribute.setExistence(new MultiplicityInterval(1, 1));
         }
 
-        if(attributeInfo.isMultipleValued()) {
-            if(attributeInfo.isNullable()) {
+        if(lookup.isMultiple(typeId, attributeName)) {
+            if(nullable) {
                 attribute.setCardinality(Cardinality.unbounded());
             } else {
                 attribute.setCardinality(Cardinality.mandatoryAndUnbounded());
@@ -54,11 +61,10 @@ public class ReflectionConstraintImposer implements ModelConstraintImposer {
 
     @Override
     public CAttribute getDefaultAttribute(String typeId, String attribute) {
-        RMAttributeInfo info = lookup.getAttributeInfo(typeId, attribute);
-        if(info == null) {
+        if(!lookup.attributeExists(typeId, attribute)) {
             return null;
         }
-        return createCAttribute(info);
+        return createCAttribute(typeId, attribute);
     }
 
 

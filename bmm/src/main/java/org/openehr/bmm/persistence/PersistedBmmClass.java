@@ -23,6 +23,7 @@ package org.openehr.bmm.persistence;
 
 import org.openehr.bmm.BmmConstants;
 import org.openehr.bmm.core.*;
+import org.openehr.bmm.persistence.validation.BmmDefinitions;
 import org.openehr.odin.CompositeOdinObject;
 import org.openehr.odin.OdinAttribute;
 import org.openehr.odin.OdinObject;

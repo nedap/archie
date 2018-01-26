@@ -18,7 +18,7 @@ public class FlatFormValidation extends ValidatingVisitor {
             addMessageWithPath(ErrorType.VUNP, cObject.path());
         } else {
             CComplexObject replacement = complexObjectProxyReplacement.getReplacement();
-            if(!lookup.getTypeInfo(cObject.getRmTypeName()).isDescendantOrEqual(lookup.getTypeInfo(replacement.getRmTypeName()))) {
+            if(!combinedModels.rmTypesConformant(replacement.getRmTypeName(), cObject.getRmTypeName())) {
                 addMessageWithPath(ErrorType.VUNT, cObject.path());
             }
         }

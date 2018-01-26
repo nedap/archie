@@ -6,7 +6,6 @@ import com.nedap.archie.archetypevalidator.ErrorType;
 import com.nedap.archie.archetypevalidator.ValidatingVisitor;
 import com.nedap.archie.base.Cardinality;
 import com.nedap.archie.base.MultiplicityInterval;
-import com.nedap.archie.rminfo.ModelInfoLookup;
 
 /**
  * Phase 0 validator on existence
