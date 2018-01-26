@@ -15,6 +15,7 @@ import com.nedap.archie.paths.PathSegment;
 import com.nedap.archie.paths.PathUtil;
 import com.nedap.archie.query.AOMPathQuery;
 import com.nedap.archie.query.APathQuery;
+import com.nedap.archie.query.ComplexObjectProxyReplacement;
 import com.nedap.archie.rminfo.RMAttributeInfo;
 
 import java.util.ArrayList;
