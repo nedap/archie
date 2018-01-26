@@ -33,7 +33,7 @@ public class AOMPathQuery {
     public AOMPathQuery(String query) {
         APathQuery apathQuery = new APathQuery(query);
         this.pathSegments = apathQuery.getPathSegments();
-        findThroughCComplexObjectProxies = false;
+        findThroughCComplexObjectProxies = true;
     }
 
     private AOMPathQuery(List<PathSegment> pathSegments, boolean findThroughCComplexObjectProxies) {
@@ -56,8 +56,8 @@ public class AOMPathQuery {
      * Return a new AOMPathQuery with the same query, but that finds through CComplexObjectProxy replacements as well
      * @return
      */
-    public AOMPathQuery findThroughCComplexObjectProxies() {
-        return new AOMPathQuery(pathSegments, true);
+    public AOMPathQuery dontFindThroughCComplexObjectProxies() {
+        return new AOMPathQuery(pathSegments, false);
     }
 
     public <T extends ArchetypeModelObject> List<T> findList(CComplexObject root) {

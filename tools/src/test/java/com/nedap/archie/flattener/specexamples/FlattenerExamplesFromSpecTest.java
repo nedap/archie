@@ -2,6 +2,7 @@ package com.nedap.archie.flattener.specexamples;
 
 import com.google.common.collect.Lists;
 import com.nedap.archie.aom.Archetype;
+import com.nedap.archie.aom.ArchetypeModelObject;
 import com.nedap.archie.aom.CAttribute;
 import com.nedap.archie.aom.CAttributeTuple;
 import com.nedap.archie.aom.CComplexObject;
@@ -234,11 +235,9 @@ public class FlattenerExamplesFromSpecTest {
         Archetype specialized = parse("openEHR-EHR-ENTRY.reference_redefinition_no_replacement.v1.0.0.adls");
         Archetype flat = new Flattener(repository, models).flatten(specialized);
 
-        assertNull(flat.itemAtPath("/data[id3]/items[id4]"));
-        assertNull(flat.itemAtPath("/data[id3]/items[id0.1]"));
-        assertNotNull(flat.itemAtPath("/data[id2]/items[id0.1]"));
-        CObject id3 = flat.itemAtPath("/data[id3]");
-        assertEquals("the complex object proxy should not have been replaced with a regular complex object", CComplexObjectProxy.class, id3.getClass());
+        ArchetypeModelObject cluster = flat.itemAtPath("/data[id3]");
+        assertEquals(CComplexObjectProxy.class, cluster.getClass());
+
     }
 
 

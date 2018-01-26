@@ -69,7 +69,7 @@ public class BasicTerminologyValidation extends ArchetypeValidationBase {
             for(String constraintCodeOrPath: termBindings.get(terminologyId).keySet()) {
                 boolean archetypeHasPath = false;
                 try {
-                    archetypeHasPath = !new AOMPathQuery(constraintCodeOrPath).findThroughCComplexObjectProxies().findList(archetype.getDefinition()).isEmpty();//archetype.hasPath(constraintCodeOrPath);
+                    archetypeHasPath = !new AOMPathQuery(constraintCodeOrPath).findList(archetype.getDefinition()).isEmpty();//archetype.hasPath(constraintCodeOrPath);
                 } catch (Exception e) {
                     //if not a valid path, fine
                 }
