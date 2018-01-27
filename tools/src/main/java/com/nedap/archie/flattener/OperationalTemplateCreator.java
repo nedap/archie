@@ -3,6 +3,7 @@ package com.nedap.archie.flattener;
 import com.nedap.archie.aom.*;
 import com.nedap.archie.aom.terminology.ArchetypeTerm;
 import com.nedap.archie.aom.terminology.ArchetypeTerminology;
+import com.nedap.archie.query.ComplexObjectProxyReplacement;
 
 import java.util.ArrayList;
 import java.util.List;

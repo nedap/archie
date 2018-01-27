@@ -6,6 +6,7 @@ import com.nedap.archie.aom.terminology.ValueSet;
 import com.nedap.archie.aom.utils.AOMUtils;
 import com.nedap.archie.archetypevalidator.ArchetypeValidationBase;
 import com.nedap.archie.archetypevalidator.ErrorType;
+import com.nedap.archie.query.AOMPathQuery;
 
 import java.net.URI;
 import java.util.List;
@@ -68,7 +69,7 @@ public class BasicTerminologyValidation extends ArchetypeValidationBase {
             for(String constraintCodeOrPath: termBindings.get(terminologyId).keySet()) {
                 boolean archetypeHasPath = false;
                 try {
-                    archetypeHasPath = archetype.hasPath(constraintCodeOrPath);
+                    archetypeHasPath = !new AOMPathQuery(constraintCodeOrPath).findList(archetype.getDefinition()).isEmpty();
                 } catch (Exception e) {
                     //if not a valid path, fine
                 }

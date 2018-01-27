@@ -15,6 +15,7 @@ import com.nedap.archie.paths.PathSegment;
 import com.nedap.archie.paths.PathUtil;
 import com.nedap.archie.query.AOMPathQuery;
 import com.nedap.archie.query.APathQuery;
+import com.nedap.archie.query.ComplexObjectProxyReplacement;
 import com.nedap.archie.rminfo.RMAttributeInfo;
 
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ class CAttributeFlattener {
     protected void flattenSingleAttribute(CComplexObject newObject, CAttribute attribute) {
         if(attribute.getDifferentialPath() != null) {
             //this overrides a specific path
-            ArchetypeModelObject object = newObject.itemAtPath(attribute.getDifferentialPath());
+            ArchetypeModelObject object = new AOMPathQuery(attribute.getDifferentialPath()).dontFindThroughCComplexObjectProxies().find(newObject);
             if(object == null) {
                 //it is possible that the object points to a reference, in which case we need to clone the referenced node, then try again
                 //AOM spec paragraph 7.2: 'proxy reference targets are expanded inline if the child archetype overrides them.'
