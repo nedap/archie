@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.nedap.archie.adlparser.antlr.AdlParser;
 import com.nedap.archie.adlparser.antlr.AdlParser.*;
 
 import java.util.List;
@@ -41,9 +42,11 @@ public class OdinToJsonConverter {
             return "{}";
         }
         if (context.attr_vals() != null) {
-            output(context.attr_vals().attr_val());
+            output(context.attr_vals().attr_val(), null /* no type id here */);
         } else if(context.object_value_block() != null){
             output(context.object_value_block());
+        } else if (context.keyed_object() != null && context.keyed_object().size() > 0) {
+            outputKeyedObjects(context.keyed_object(), null /* no type id here */);
         } else {
             //empty
             return "{}";
@@ -52,9 +55,13 @@ public class OdinToJsonConverter {
 
     }
 
-    private void output(List<Attr_valContext> context) {
+    private void output(List<Attr_valContext> context, Type_idContext type_idContext) {
         output.append("{");
         boolean first = true;
+        if(type_idContext != null) {
+            first = false;
+            outputTypeId(type_idContext);
+        }
         for (Attr_valContext attrValContext : context) {
             if(!first) {
                 output.append(',');
@@ -67,6 +74,12 @@ public class OdinToJsonConverter {
             output(attrValContext.object_block());
         }
         output.append("}");
+    }
+
+    private void outputTypeId(Type_idContext type_idContext) {
+        outputEscaped("@type");
+        output.append(":");
+        outputEscaped(type_idContext.getText());//we might need to remove the generics from the type id if present
     }
 
     private void output(Object_blockContext context) {
@@ -84,23 +97,9 @@ public class OdinToJsonConverter {
         List<Keyed_objectContext> keyedObjectContexts = valueBlockContext.keyed_object();
         Primitive_objectContext primitiveObjectContext = valueBlockContext.primitive_object();
         if (valueBlockContext.attr_vals() != null) {
-            output(valueBlockContext.attr_vals().attr_val());
+            output(valueBlockContext.attr_vals().attr_val(), valueBlockContext.type_id());
         } else if (keyedObjectContexts != null && !keyedObjectContexts.isEmpty()) {
-            output.append("{");
-            boolean first = true;
-            for (Keyed_objectContext keyedObjectContext : keyedObjectContexts) {
-                if(!first) {
-                    output.append(',');
-                }
-                first = false;
-                //output.append('"');
-                output(keyedObjectContext.primitive_value());
-                //output.append('"');
-                output.append(':');
-                output(keyedObjectContext.object_block());
-
-            }
-            output.append("}");
+            outputKeyedObjects(keyedObjectContexts, valueBlockContext.type_id());
         } else if (primitiveObjectContext != null) {
             if(primitiveObjectContext.primitive_value() != null) {
                 output(primitiveObjectContext.primitive_value());
@@ -115,6 +114,28 @@ public class OdinToJsonConverter {
         } else {
             output.append("{}");
         }
+    }
+
+    private void outputKeyedObjects(List<Keyed_objectContext> keyedObjectContexts, Type_idContext type_idContext) {
+        output.append("{");
+        boolean first = true;
+        if(type_idContext != null) {
+            first = false;
+            outputTypeId(type_idContext);
+        }
+        for (Keyed_objectContext keyedObjectContext : keyedObjectContexts) {
+            if(!first) {
+                output.append(',');
+            }
+            first = false;
+            //output.append('"');
+            output(keyedObjectContext.primitive_value());
+            //output.append('"');
+            output.append(':');
+            output(keyedObjectContext.object_block());
+
+        }
+        output.append("}");
     }
 
     private void output(Primitive_list_valueContext listContext) {
