@@ -24,8 +24,13 @@ import static org.openehr.bmm.persistence.validation.BmmDefinitions.typeNameToCl
 /**
  * MetaModel class that provides some opertaions for archetype validation and flattener that is either based on
  * an implementation-derived model (ModelInfoLookup) or BMM
+ *
+ * To use, select a model first using the selectModel() method. Then you can use any of the methods from MetaModelInterface
+ * or obtain the underlying models directly. Trying to use the MetaModelInterface methods without selecting a model will
+ * result in a NoModelSelectedException being thrown.
+ *
  */
-public class MetaModels implements MetaModelInterface{
+public class MetaModels implements MetaModelInterface {
 
     private final ReferenceModels models;
     private final ReferenceModelAccess bmmModels;
@@ -44,9 +49,9 @@ public class MetaModels implements MetaModelInterface{
     /**
      * Select a meta model based on an archetype
      * @param archetype the archetype to find the model for
-     * @throws NoModelSelectedException when no BMM and no ModelInfoLookup model has been found matching the archetype
+     * @throws ModelNotFoundException when no BMM and no ModelInfoLookup model has been found matching the archetype
      */
-    public void selectModel(Archetype archetype) throws NoModelSelectedException {
+    public void selectModel(Archetype archetype) throws ModelNotFoundException {
         ModelInfoLookup selectedModel = null;
         BmmModel selectedBmmModel = null;
         if(models != null) {
@@ -130,13 +135,6 @@ public class MetaModels implements MetaModelInterface{
         return selectedModel.hasReferenceModelPath(rmTypeName, path);
     }
 
-    private void checkThatModelHasBeenSelected() throws NoModelSelectedException {
-        if(selectedModel == null) {
-            throw new NoModelSelectedException("Please call the selectModel() method before trying to use MetaModels");
-        }
-
-    }
-
     public MultiplicityInterval referenceModelPropMultiplicity(String rmTypeName, String rmAttributeName) {
         checkThatModelHasBeenSelected();
         return selectedModel.referenceModelPropMultiplicity(rmTypeName, rmAttributeName);
@@ -145,6 +143,13 @@ public class MetaModels implements MetaModelInterface{
     public boolean validatePrimitiveType(String rmTypeName, String rmAttributeName, CPrimitiveObject cObject) {
         checkThatModelHasBeenSelected();
         return selectedModel.validatePrimitiveType(rmTypeName, rmAttributeName, cObject);
+    }
+
+    private void checkThatModelHasBeenSelected() throws NoModelSelectedException {
+        if(selectedModel == null) {
+            throw new NoModelSelectedException("Please call the selectModel() method before trying to use MetaModels");
+        }
+
     }
 
     public AomProfiles getAomProfiles() {
