@@ -16,6 +16,7 @@ import org.openehr.bmm.core.BmmType;
 import org.openehr.bmm.persistence.validation.BmmDefinitions;
 import org.openehr.bmm.rmaccess.ReferenceModelAccess;
 
+import java.text.MessageFormat;
 import java.util.List;
 
 import static org.openehr.bmm.persistence.validation.BmmDefinitions.typeNameToClassKey;
@@ -23,8 +24,13 @@ import static org.openehr.bmm.persistence.validation.BmmDefinitions.typeNameToCl
 /**
  * MetaModel class that provides some opertaions for archetype validation and flattener that is either based on
  * an implementation-derived model (ModelInfoLookup) or BMM
+ *
+ * To use, select a model first using the selectModel() method. Then you can use any of the methods from MetaModelInterface
+ * or obtain the underlying models directly. Trying to use the MetaModelInterface methods without selecting a model will
+ * result in a NoModelSelectedException being thrown.
+ *
  */
-public class MetaModels implements MetaModelInterface{
+public class MetaModels implements MetaModelInterface {
 
     private final ReferenceModels models;
     private final ReferenceModelAccess bmmModels;
@@ -40,7 +46,12 @@ public class MetaModels implements MetaModelInterface{
         aomProfiles = new AomProfiles();
     }
 
-    public void selectModel(Archetype archetype) {
+    /**
+     * Select a meta model based on an archetype
+     * @param archetype the archetype to find the model for
+     * @throws ModelNotFoundException when no BMM and no ModelInfoLookup model has been found matching the archetype
+     */
+    public void selectModel(Archetype archetype) throws ModelNotFoundException {
         ModelInfoLookup selectedModel = null;
         BmmModel selectedBmmModel = null;
         if(models != null) {
@@ -57,6 +68,9 @@ public class MetaModels implements MetaModelInterface{
             }
         }
 
+        if(selectedModel == null && selectedBmmModel == null) {
+            throw new ModelNotFoundException(String.format("model for %s not found", archetype.getArchetypeId().toString()));
+        }
         this.selectedModel = new MetaModel(selectedModel, selectedBmmModel, selectedAomProfile);
 
 
@@ -84,43 +98,58 @@ public class MetaModels implements MetaModelInterface{
     }
 
     public boolean isMultiple(String typeName, String attributeName) {
-        return selectedModel == null ? false : selectedModel.isMultiple(typeName, attributeName);
+        checkThatModelHasBeenSelected();
+        return selectedModel.isMultiple(typeName, attributeName);
     }
 
     public boolean rmTypesConformant(String childTypeName, String parentTypeName) {
-        return selectedModel == null ? false : selectedModel.rmTypesConformant(childTypeName, parentTypeName);
-
+        checkThatModelHasBeenSelected();
+        return selectedModel.rmTypesConformant(childTypeName, parentTypeName);
     }
 
     public boolean typeNameExists(String typeName) {
-        return selectedModel == null ? false : selectedModel.typeNameExists(typeName);
+        checkThatModelHasBeenSelected();
+        return selectedModel.typeNameExists(typeName);
     }
 
     public boolean attributeExists(String rmTypeName, String propertyName) {
-        return selectedModel == null ? false : selectedModel.attributeExists(rmTypeName, propertyName);
+        checkThatModelHasBeenSelected();
+        return selectedModel.attributeExists(rmTypeName, propertyName);
    }
 
     @Override
     public boolean isNullable(String typeId, String attributeName) {
-        return selectedModel == null ? false : selectedModel.isNullable(typeId, attributeName);
+        checkThatModelHasBeenSelected();
+        return selectedModel.isNullable(typeId, attributeName);
     }
 
 
     public boolean typeConformant(String rmTypeName, String rmAttributeName, String childConstraintTypeName) {
-        return selectedModel == null ? false : selectedModel.typeConformant(rmTypeName, rmAttributeName, childConstraintTypeName);
+        checkThatModelHasBeenSelected();
+        return selectedModel.typeConformant(rmTypeName, rmAttributeName, childConstraintTypeName);
 
     }
 
     public boolean hasReferenceModelPath(String rmTypeName, String path) {
-        return selectedModel == null ? false : selectedModel.hasReferenceModelPath(rmTypeName, path);
+        checkThatModelHasBeenSelected();
+        return selectedModel.hasReferenceModelPath(rmTypeName, path);
     }
 
     public MultiplicityInterval referenceModelPropMultiplicity(String rmTypeName, String rmAttributeName) {
-        return selectedModel == null ? MultiplicityInterval.unbounded() : selectedModel.referenceModelPropMultiplicity(rmTypeName, rmAttributeName);
+        checkThatModelHasBeenSelected();
+        return selectedModel.referenceModelPropMultiplicity(rmTypeName, rmAttributeName);
     }
 
     public boolean validatePrimitiveType(String rmTypeName, String rmAttributeName, CPrimitiveObject cObject) {
-        return selectedModel == null ? true : selectedModel.validatePrimitiveType(rmTypeName, rmAttributeName, cObject);
+        checkThatModelHasBeenSelected();
+        return selectedModel.validatePrimitiveType(rmTypeName, rmAttributeName, cObject);
+    }
+
+    private void checkThatModelHasBeenSelected() throws NoModelSelectedException {
+        if(selectedModel == null) {
+            throw new NoModelSelectedException("Please call the selectModel() method before trying to use MetaModels");
+        }
+
     }
 
     public AomProfiles getAomProfiles() {
