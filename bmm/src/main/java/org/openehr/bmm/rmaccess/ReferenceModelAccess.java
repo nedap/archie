@@ -130,7 +130,7 @@ public class ReferenceModelAccess {
      * schemas keyed by lower-case qualified package name, i.e. model_publisher '-' package_name, e.g. "openehr-ehr";
      * this matches the qualified package name part of an ARCHETYPE_ID
      */
-    private Map<String, BmmModel> modelsByClosure;
+    private Map<String, BmmModel> modelsByClosureAndVersion;
 
     private int numberOfTries = DEFAULT_NUMBER_OF_TRIES;
 
@@ -152,7 +152,7 @@ public class ReferenceModelAccess {
         topLevelSchemasByPublisher = new HashMap<>();
         schemaInclusionMap = new LinkedHashMap<>();
         schemaLoadList = new ArrayList<>();
-        modelsByClosure = new LinkedHashMap<>();
+        modelsByClosureAndVersion = new LinkedHashMap<>();
     }
 
     public BasicValidator getValidator() {
@@ -195,20 +195,20 @@ public class ReferenceModelAccess {
         this.schemaInclusionMap = schemaInclusionMap;
     }
 
-    public Map<String, BmmModel> getModelsByClosure() {
-        return modelsByClosure;
+    public Map<String, BmmModel> getModelsByClosureAndVersion() {
+        return modelsByClosureAndVersion;
     }
 
-    public void setModelsByClosure(Map<String, BmmModel> modelsByClosure) {
-        this.modelsByClosure = modelsByClosure;
+    public void setModelsByClosureAndVersion(Map<String, BmmModel> modelsByClosureAndVersion) {
+        this.modelsByClosureAndVersion = modelsByClosureAndVersion;
     }
 
     public void addModelForClosure(String aQualifiedRmClosureName, BmmModel aModel) {
-        this.modelsByClosure.put(aQualifiedRmClosureName.toLowerCase(), aModel);
+        this.modelsByClosureAndVersion.put(aQualifiedRmClosureName.toLowerCase() + '_' + aModel.getRmRelease().toLowerCase(), aModel);
     }
 
-    public boolean hasReferenceModelForClosure(String aQualifiedRmClosureName) {
-        return modelsByClosure.containsKey(aQualifiedRmClosureName.toLowerCase());
+    public boolean hasReferenceModelForClosure(String aQualifiedRmClosureName, String rmRelease) {
+        return modelsByClosureAndVersion.containsKey(aQualifiedRmClosureName.toLowerCase() + '_' + rmRelease);
     }
 
     /**
@@ -217,8 +217,8 @@ public class ReferenceModelAccess {
      * @param aQualifiedRmClosureName
      * @return
      */
-    public BmmModel getReferenceModelForClosure(String aQualifiedRmClosureName) {
-        return modelsByClosure.get(aQualifiedRmClosureName.toLowerCase());
+    public BmmModel getReferenceModelForClosure(String aQualifiedRmClosureName, String rmRelease) {
+        return modelsByClosureAndVersion.get(aQualifiedRmClosureName.toLowerCase() + '_' + rmRelease);
     }
 
     /**
@@ -617,7 +617,7 @@ public class ReferenceModelAccess {
             }
 
             //now populate the `models_by_closure' table
-            modelsByClosure.clear();
+            modelsByClosureAndVersion.clear();
             List<String> rmClosures = new ArrayList<>();
             String modelPublisher = null;
             for (String aSchemaId : validModels.keySet()) {
@@ -627,11 +627,11 @@ public class ReferenceModelAccess {
                 rmClosures = model.getArchetypeRmClosurePackages();
                 for (String rmClosure : rmClosures) {
                     String qualifiedRmClosureName = BmmDefinitions.publisherQualifiedRmClosureName(modelPublisher, rmClosure);
-                    if (modelsByClosure.containsKey(qualifiedRmClosureName)) {
-                        BmmModel schema = modelsByClosure.get(qualifiedRmClosureName);
+                    BmmModel existingSchema = getReferenceModelForClosure(qualifiedRmClosureName,  model.getRmRelease());
+                    if (existingSchema != null) {
                         validator.addInfo(BmmMessageIds.ec_bmm_schema_duplicate_found,
                                 qualifiedRmClosureName,
-                                schema.getSchemaId(),
+                                existingSchema.getSchemaId(),
                                 aSchemaId);
                     } else {
                         addModelForClosure(qualifiedRmClosureName, model);

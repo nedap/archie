@@ -10,11 +10,13 @@ import com.nedap.archie.flattener.FullArchetypeRepository;
 import com.nedap.archie.flattener.InMemoryFullArchetypeRepository;
 import com.nedap.archie.flattener.SimpleArchetypeRepository;
 import com.nedap.archie.rminfo.ArchieRMInfoLookup;
+import com.nedap.archie.rminfo.MetaModels;
 import com.nedap.archie.rminfo.ReferenceModels;
 import org.apache.commons.io.FilenameUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openehr.bmm.rmaccess.ReferenceModelAccess;
+import org.openehr.referencemodels.BuiltinReferenceModels;
 import org.reflections.Reflections;
 import org.reflections.scanners.ResourcesScanner;
 import org.slf4j.Logger;
@@ -94,8 +96,6 @@ public class BigArchetypeValidatorTest {
 
     }
 
-    private ReferenceModels models;
-
     private FullArchetypeRepository parseAll() {
         InMemoryFullArchetypeRepository result = new InMemoryFullArchetypeRepository();
         Reflections reflections = new Reflections("adl2-tests", new ResourcesScanner());
@@ -125,38 +125,24 @@ public class BigArchetypeValidatorTest {
 
     @Test
     public void testFullValidityPackageBmm() {
-
-        models = new ReferenceModels();
-        models.registerModel(ArchieRMInfoLookup.getInstance());
-        models.registerModel(com.nedap.archie.openehrtestrm.TestRMInfoLookup.getInstance());
-
-        List<String> schemaDirectories = new ArrayList<>();
-        String path = getClass().getResource("/bmm/placeholder.txt").getFile();
-        path = path.substring(0, path.lastIndexOf('/'));
-        schemaDirectories.add(path);
-        ReferenceModelAccess access = new ReferenceModelAccess();
-        access.initializeAll(schemaDirectories);
-        testInner(models, access);
+        testInner(BuiltinReferenceModels.getMetaModels());
 
     }
 
     @Test
     public void testFullValidityPackageModelInfoLookup() {
 
-        models = new ReferenceModels();
+        ReferenceModels models = new ReferenceModels();
         models.registerModel(ArchieRMInfoLookup.getInstance());
         models.registerModel(com.nedap.archie.openehrtestrm.TestRMInfoLookup.getInstance());
 
         ReferenceModelAccess access = new ReferenceModelAccess();
 //        access.initializeAll(schemaDirectories);
-        testInner(models, null);
+        testInner(new MetaModels(models, null));
 
     }
 
-    public void testInner(ReferenceModels models, ReferenceModelAccess access) {
-
-
-
+    public void testInner(MetaModels metaModels) {
 
         Reflections reflections = new Reflections("adl2-tests.validity", new ResourcesScanner());
         List<String> adlFiles = new ArrayList(reflections.getResources(Pattern.compile(".*\\.adls")));
@@ -167,7 +153,7 @@ public class BigArchetypeValidatorTest {
         int shouldBeFineButWasinvalid = 0;
         int notImplemented = 0;
         int unexpectedParseErrors = 0;
-        ArchetypeValidator validator = new ArchetypeValidator(models, access);
+        ArchetypeValidator validator = new ArchetypeValidator(metaModels);
         SimpleArchetypeRepository repository = new SimpleArchetypeRepository();
         for(String file:adlFiles) {
             if(file.contains("legacy_adl_1.4")){

@@ -58,7 +58,7 @@ public class MetaModels implements MetaModelInterface {
              selectedModel = models.getModel(archetype);
         }
         if(bmmModels != null) {
-             selectedBmmModel = bmmModels.getReferenceModelForClosure(BmmDefinitions.publisherQualifiedRmClosureName(archetype.getArchetypeId().getRmPublisher(), archetype.getArchetypeId().getRmPackage()));
+             selectedBmmModel = bmmModels.getReferenceModelForClosure(BmmDefinitions.publisherQualifiedRmClosureName(archetype.getArchetypeId().getRmPublisher(), archetype.getArchetypeId().getRmPackage()), archetype.getRmRelease());
         }
 
         for(AomProfile profile:aomProfiles.getProfiles()) {
