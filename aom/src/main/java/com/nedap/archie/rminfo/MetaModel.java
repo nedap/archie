@@ -5,6 +5,7 @@ import com.nedap.archie.aom.primitives.CInteger;
 import com.nedap.archie.aom.primitives.CString;
 import com.nedap.archie.aom.profile.AomProfile;
 import com.nedap.archie.aom.profile.AomTypeMapping;
+import com.nedap.archie.aom.utils.AOMUtils;
 import com.nedap.archie.base.MultiplicityInterval;
 import com.nedap.archie.paths.PathSegment;
 import com.nedap.archie.query.APathQuery;
@@ -171,8 +172,6 @@ public class MetaModel implements MetaModelInterface {
             RMTypeInfo typeInfo = selectedModel.getTypeInfo(childConstraintTypeName);
             RMAttributeInfo owningAttributeInfo = selectedModel.getAttributeInfo(rmTypeName, rmAttributeName);
             if (owningAttributeInfo != null) {//this case is another validation, see the validate(cattribute) method of this class
-                //TODO: make this work with metadata, not directly with classes
-                //TODO: generics other than 'typeincollection' might be nice :)
                 Class typeInCollection = owningAttributeInfo.getTypeInCollection();
                 if (!typeInCollection.isAssignableFrom(typeInfo.getJavaClass())) {
                     return false;
@@ -187,45 +186,18 @@ public class MetaModel implements MetaModelInterface {
         if (!path.startsWith("/")) {
             return false;
         }
-        APathQuery query = new APathQuery(path);
 
         if(selectedBmmModel != null) {
-            BmmClass classDefinition = selectedBmmModel.getClassDefinition(BmmDefinitions.typeNameToClassKey(rmTypeName));
-            for (PathSegment segment : query.getPathSegments()) {
-                if (classDefinition == null) {
-                    return false;
-                }
-                BmmProperty bmmProperty = classDefinition.flattenBmmClass().getProperties().get(segment.getNodeName());
-                if(bmmProperty == null) {
-                    return false;
-                }
-                classDefinition = bmmProperty.getType().getBaseClass();
-            }
-            return true;
+            return AOMUtils.getPropertyAtPath(selectedBmmModel, rmTypeName, path) != null;
         } else {
-
-
-            RMTypeInfo typeInfo = selectedModel.getTypeInfo(rmTypeName);
-
-            for (PathSegment segment : query.getPathSegments()) {
-                if (typeInfo == null) {
-                    return false;
-                }
-                RMAttributeInfo attribute = typeInfo.getAttribute(segment.getNodeName());
-                if (attribute == null) {
-                    return false;
-                }
-                typeInfo = selectedModel.getTypeInfo(attribute.getTypeInCollection());
-            }
-            return true;
+            return AOMUtils.getAttributeInfoAtPath(selectedModel, rmTypeName, path) != null;
         }
     }
 
     @Override
-    public MultiplicityInterval referenceModelPropMultiplicity(String rmTypeName, String rmAttributeName) {
+    public MultiplicityInterval referenceModelPropMultiplicity(String rmTypeName, String rmAttributeNameOrPath) {
         if(selectedBmmModel != null) {
-            BmmClass classDefinition = selectedBmmModel.getClassDefinition(BmmDefinitions.typeNameToClassKey(rmTypeName));
-            BmmProperty bmmProperty = classDefinition.flattenBmmClass().getProperties().get(rmAttributeName);
+            BmmProperty bmmProperty =  AOMUtils.getPropertyAtPath(selectedBmmModel, rmTypeName, rmAttributeNameOrPath);
             if(isMultiple(bmmProperty)) {
                 return MultiplicityInterval.createUpperUnbounded(0);
             } else {
@@ -236,7 +208,7 @@ public class MetaModel implements MetaModelInterface {
                 }
             }
         } else {
-            RMAttributeInfo attributeInfo = selectedModel.getAttributeInfo(rmTypeName, rmAttributeName);
+            RMAttributeInfo attributeInfo = AOMUtils.getAttributeInfoAtPath(selectedModel, rmTypeName, rmAttributeNameOrPath);
             if (attributeInfo.isMultipleValued()) {
                 return MultiplicityInterval.createUpperUnbounded(0);
             } else {

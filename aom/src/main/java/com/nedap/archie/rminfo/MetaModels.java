@@ -52,13 +52,25 @@ public class MetaModels implements MetaModelInterface {
      * @throws ModelNotFoundException when no BMM and no ModelInfoLookup model has been found matching the archetype
      */
     public void selectModel(Archetype archetype) throws ModelNotFoundException {
+        selectModel(archetype, null);
+    }
+
+
+    /**
+     * Select a model based on an archetype, but override the RM Release with the given rm release version
+     * @param archetype the archetype to find the model for
+     * @param overridenRmRelease the version of the reference model you want to check with.
+     * @throws ModelNotFoundException
+     */
+    public void selectModel(Archetype archetype, String overridenRmRelease) throws ModelNotFoundException {
         ModelInfoLookup selectedModel = null;
         BmmModel selectedBmmModel = null;
         if(models != null) {
              selectedModel = models.getModel(archetype);
         }
         if(bmmModels != null) {
-             selectedBmmModel = bmmModels.getReferenceModelForClosure(BmmDefinitions.publisherQualifiedRmClosureName(archetype.getArchetypeId().getRmPublisher(), archetype.getArchetypeId().getRmPackage()));
+            String rmRelease = overridenRmRelease == null ? archetype.getRmRelease() : overridenRmRelease;
+             selectedBmmModel = bmmModels.getReferenceModelForClosure(BmmDefinitions.publisherQualifiedRmClosureName(archetype.getArchetypeId().getRmPublisher(), archetype.getArchetypeId().getRmPackage()), rmRelease);
         }
 
         for(AomProfile profile:aomProfiles.getProfiles()) {
