@@ -22,6 +22,10 @@ import com.nedap.archie.rules.Constraint;
 import com.nedap.archie.rules.Expression;
 import com.nedap.archie.rules.OperatorKind;
 import org.apache.commons.lang.StringUtils;
+import org.openehr.bmm.core.BmmClass;
+import org.openehr.bmm.core.BmmModel;
+import org.openehr.bmm.core.BmmProperty;
+import org.openehr.bmm.persistence.validation.BmmDefinitions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -221,4 +225,54 @@ public class AOMUtils {
     }
 
 
+    public static BmmProperty getPropertyAtPath(BmmModel bmmModel, String rmTypeName, String path) {
+        if(!path.contains("/")) {
+            BmmClass classDefinition = bmmModel.getClassDefinition(BmmDefinitions.typeNameToClassKey(rmTypeName));
+            return classDefinition.flattenBmmClass().getProperties().get(path);
+            //this is not a path
+        } else if (path.equals("/")) {
+            throw new IllegalArgumentException("cannot retrieve attribute information for path '/'");
+        }
+
+        APathQuery query = new APathQuery(path);
+
+        BmmClass classDefinition = bmmModel.getClassDefinition(BmmDefinitions.typeNameToClassKey(rmTypeName));
+        BmmProperty property = null;
+        for (PathSegment segment : query.getPathSegments()) {
+            if (classDefinition == null) {
+                return null;
+            }
+            property = classDefinition.flattenBmmClass().getProperties().get(segment.getNodeName());
+            if(property == null) {
+                return null;
+            }
+            classDefinition = property.getType().getBaseClass();
+        }
+        return property;
+
+    }
+    public static RMAttributeInfo getAttributeInfoAtPath(ModelInfoLookup selectedModel, String rmTypeName, String path) {
+        if(!path.contains("/")) {
+            //this is not a path
+            return selectedModel.getAttributeInfo(rmTypeName, path);
+        } else if (path.equals("/")) {
+            throw new IllegalArgumentException("cannot retrieve attribute information for path '/'");
+        }
+        APathQuery query = new APathQuery(path);
+
+        RMTypeInfo typeInfo = selectedModel.getTypeInfo(rmTypeName);
+
+        RMAttributeInfo attribute = null;
+        for (PathSegment segment : query.getPathSegments()) {
+            if (typeInfo == null) {
+                return null;
+            }
+            attribute = typeInfo.getAttribute(segment.getNodeName());
+            if (attribute == null) {
+                return null;
+            }
+            typeInfo = selectedModel.getTypeInfo(attribute.getTypeInCollection());
+        }
+        return attribute;
+    }
 }

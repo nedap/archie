@@ -260,7 +260,7 @@ public abstract class CObject extends ArchetypeConstraint {
     /**
      * True if constraints represented by this node, ignoring any sub-parts, are narrower or the same as other. Typically used during validation of special-ised archetype nodes.
      * @param other
-     * @param lookup
+     * @param rmTypesConformant
      * @return
      */
     public boolean cConformsTo(CObject other, BiFunction<String, String, Boolean> rmTypesConformant) {
@@ -322,7 +322,6 @@ public abstract class CObject extends ArchetypeConstraint {
                     return MultiplicityInterval.createBounded(occurrencesLower, parent.getCardinality().getInterval().getUpper());
                 }
             } else if(parent.getParent() != null) {
-                //TODO: this can be a (differential) path, but we don't support that yet.
                 return referenceModelPropMultiplicity.apply(parent.getParent().getRmTypeName(), parent.getDifferentialPath() == null ? parent.getRmAttributeName() : parent.getDifferentialPath());
             } else {
                 return MultiplicityInterval.createUpperUnbounded(occurrencesLower);
