@@ -1,7 +1,7 @@
 package com.nedap.archie.adlchecker;
 
 import com.nedap.archie.adlparser.ADLParser;
-import com.nedap.archie.adlparser.ADLParserMessage;
+import com.nedap.archie.antlr.errors.ANTLRParserMessage;
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.archetypevalidator.ArchetypeValidator;
 import com.nedap.archie.archetypevalidator.ValidationMessage;
@@ -74,25 +74,31 @@ public class AdlChecker {
         System.out.println("step 2: validations");
 
         for(ValidationResult result:repository.getAllValidationResults()) {
-            System.out.println();
-            System.out.print("============= ");
-            System.out.print(result.getArchetypeId());
-            System.out.print("      ");
-            if(result.passes()) {
-                System.out.print("PASSED");
-            } else {
-                System.out.print("FAILED");
-            }
-            System.out.print(" =============");
-            System.out.println();
-            for(ValidationMessage error:result.getErrors()) {
-                System.out.println(error.toString());
-            }
-
+            printValidationResult(result);
             if(printFlatAdl && result.passes()) {
                 System.out.println(ADLArchetypeSerializer.serialize(result.getFlattened()));
             }
 
+        }
+    }
+
+    private static void printValidationResult(ValidationResult result) {
+        System.out.println();
+        System.out.print("============= ");
+        System.out.print(result.getArchetypeId());
+        System.out.print("      ");
+        if(result.passes()) {
+            System.out.print("PASSED");
+        } else {
+            System.out.print("FAILED");
+        }
+        System.out.print(" =============");
+        System.out.println();
+        for(ValidationMessage error:result.getErrors()) {
+            System.out.println(error.toString());
+        }
+        for(ValidationResult overlayResult:result.getOverlayValidations()) {
+            printValidationResult(overlayResult);
         }
     }
 
@@ -113,10 +119,10 @@ public class AdlChecker {
                 } else {
                     System.out.println("errors found for " + path.getFileName());
 
-                    for(ADLParserMessage message:adlParser.getErrors().getWarnings()) {
+                    for(ANTLRParserMessage message:adlParser.getErrors().getWarnings()) {
                         System.err.println("warning: " + message.getMessage());
                     }
-                    for(ADLParserMessage message:adlParser.getErrors().getErrors()) {
+                    for(ANTLRParserMessage message:adlParser.getErrors().getErrors()) {
                         System.err.println("error: " + message.getMessage());
                     }
                 }

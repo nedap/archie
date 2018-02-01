@@ -40,6 +40,12 @@ public class MetaModels implements MetaModelInterface {
     private AomProfile selectedAomProfile;
 
 
+    public MetaModels(ReferenceModels models, ReferenceModelAccess bmmModels, AomProfiles profiles) {
+        this.models = models;
+        this.bmmModels = bmmModels;
+        this.aomProfiles = profiles;
+    }
+
     public MetaModels(ReferenceModels models, ReferenceModelAccess bmmModels) {
         this.models = models;
         this.bmmModels = bmmModels;

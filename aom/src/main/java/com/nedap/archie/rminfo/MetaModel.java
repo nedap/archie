@@ -223,7 +223,9 @@ public class MetaModel implements MetaModelInterface {
 
     @Override
     public boolean validatePrimitiveType(String rmTypeName, String rmAttributeName, CPrimitiveObject cObject) {
-        if(selectedAomProfile == null) {
+        if(selectedAomProfile == null && selectedModel == null) {
+            throw new IllegalStateException("no AOM profile and no selected ModelInfoLookup, cannot validate primitive type");
+        } else if (selectedAomProfile == null) {
             return selectedModel.validatePrimitiveType(rmTypeName, rmAttributeName, cObject);
         } else {
             String cRmTypeName = cObject.getRmTypeName();

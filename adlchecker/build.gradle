@@ -7,14 +7,14 @@ repositories {
 }
 
 dependencies {
-    compile 'com.nedap.healthcare.archie:tools:0.4.0-SNAPSHOT'
-    compile 'com.nedap.healthcare.archie:openehr-rm:0.4.0-SNAPSHOT'
-    compile 'com.nedap.healthcare.archie:test-rm:0.4.0-SNAPSHOT'
+    compile 'com.nedap.healthcare.archie:tools:0.4.1'
+    compile 'com.nedap.healthcare.archie:openehr-rm:0.4.1'
+    compile 'com.nedap.healthcare.archie:test-rm:0.4.1'
     compile 'net.sourceforge.argparse4j:argparse4j:0.7.0'
 }
 
 run {
-    args = ['archetypes', '--outputFlat']
+    args = ['archetypes']//, '--outputFlat']
 }
 
 mainClassName='com.nedap.archie.adlchecker.AdlChecker'

@@ -46,20 +46,26 @@ public class VariousStructureValidation extends ValidatingVisitor {
     protected void validate(CComplexObject cComplexObject) {
         if(cComplexObject instanceof CArchetypeRoot) {
             CArchetypeRoot archetypeRoot = (CArchetypeRoot) cComplexObject;
-            if(repository.getArchetype(archetypeRoot.getArchetypeRef()) == null) {
-                addMessageWithPath(ErrorType.VARXRA, cComplexObject.path(), String.format("archetype with id %s not found", archetypeRoot.getArchetypeRef()));
-            }
+            if(archetypeRoot.getArchetypeRef() != null) {
+                if (repository.getArchetype(archetypeRoot.getArchetypeRef()) == null) {
+                    addMessageWithPath(ErrorType.VARXRA, cComplexObject.path(), String.format("archetype with id %s not found", archetypeRoot.getArchetypeRef()));
+                }
 
-            ArchetypeHRID hrId = new ArchetypeHRID(archetypeRoot.getArchetypeRef());
-            String archetypeRootTypeName = cComplexObject.getRmTypeName();
-            String archetypeReferenceTypeName = hrId.getRmClass();
+                ArchetypeHRID hrId = new ArchetypeHRID(archetypeRoot.getArchetypeRef());
+                String archetypeRootTypeName = cComplexObject.getRmTypeName();
+                String archetypeReferenceTypeName = hrId.getRmClass();
 
-            if(combinedModels.typeNameExists(archetypeRootTypeName)) {
-                //if parent type info not found will be checked later in phase 2
-                if(!combinedModels.typeNameExists(archetypeReferenceTypeName)) {
-                    addMessageWithPath(ErrorType.VCORM, cComplexObject.getPath(), cComplexObject.getRmTypeName());
-                } else if(!combinedModels.rmTypesConformant(archetypeReferenceTypeName, archetypeRootTypeName)) {
-                    addMessageWithPath(ErrorType.VARXTV, cComplexObject.getPath(), cComplexObject.getRmTypeName());
+                if (combinedModels.typeNameExists(archetypeRootTypeName)) {
+                    //if parent type info not found will be checked later in phase 2
+                    if (!combinedModels.typeNameExists(archetypeReferenceTypeName)) {
+                        addMessageWithPath(ErrorType.VCORM, cComplexObject.getPath(), cComplexObject.getRmTypeName());
+                    } else if (!combinedModels.rmTypesConformant(archetypeReferenceTypeName, archetypeRootTypeName)) {
+                        addMessageWithPath(ErrorType.VARXTV, cComplexObject.getPath(), cComplexObject.getRmTypeName());
+                    }
+                }
+            } else {
+                if(!(archetypeRoot.getOccurrences() != null && archetypeRoot.getOccurrences().isProhibited())) {
+                    addMessageWithPath(ErrorType.VARXR, archetypeRoot.getPath(), "archetype root must have an archetype reference or be prohibited (occurrences matches {0})");
                 }
             }
         }

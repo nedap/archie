@@ -38,10 +38,17 @@ public class CArchetypeRootSerializer extends CComplexObjectSerializer<CArchetyp
         builder.append("use_archetype");
         builder.append(" ").append(cobj.getRmTypeName());
         builder.append("[");
+        boolean nodeIdAppended = false;
         if (cobj.getNodeId() != null) {
-            builder.append(cobj.getNodeId()).append(", ");
+            nodeIdAppended = true;
+            builder.append(cobj.getNodeId());
         }
-        builder.append(cobj.getArchetypeRef());
+        if(cobj.getArchetypeRef() != null) {
+            if(nodeIdAppended) {
+                builder.append(", ");
+            }
+            builder.append(cobj.getArchetypeRef());
+        }
         builder.append("]");
 
         appendOccurrences(cobj);

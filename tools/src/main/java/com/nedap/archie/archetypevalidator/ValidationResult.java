@@ -26,6 +26,7 @@ public class ValidationResult {
     public ValidationResult(Archetype archetype) {
         this.sourceArchetype = archetype;
         this.archetypeId = archetype.getArchetypeId().toString();
+        this.overlayValidations = new ArrayList<>();
     }
 
     /**
