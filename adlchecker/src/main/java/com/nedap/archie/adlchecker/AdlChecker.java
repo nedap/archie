@@ -15,6 +15,7 @@ import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;
 import net.sourceforge.argparse4j.inf.Namespace;
+import org.openehr.referencemodels.BuiltinReferenceModels;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -65,11 +66,8 @@ public class AdlChecker {
                 e.printStackTrace();
             }
         }
-        ReferenceModels referenceModels = new ReferenceModels();
-        referenceModels.registerModel(ArchieRMInfoLookup.getInstance());
-        referenceModels.registerModel(com.nedap.archie.openehrtestrm.TestRMInfoLookup.getInstance());
 
-        repository.compile(referenceModels);
+        repository.compile(BuiltinReferenceModels.getMetaModels());
 
         System.out.println("step 2: validations");
 
