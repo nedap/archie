@@ -1,6 +1,7 @@
 package com.nedap.archie.flattener.specexamples;
 
 import com.nedap.archie.flattener.SimpleArchetypeRepository;
+import com.nedap.archie.rminfo.MetaModels;
 import org.junit.Before;
 import org.openehr.referencemodels.BuiltinReferenceModels;
 
@@ -9,6 +10,6 @@ public class FlattenerExamplesFromSpecBMMTest extends FlattenerExamplesFromSpecT
     @Before
     public void setup() throws Exception {
         repository = new SimpleArchetypeRepository();
-        models = BuiltinReferenceModels.getMetaModels();
+        models = new MetaModels(null, BuiltinReferenceModels.getBMMReferenceModels(), BuiltinReferenceModels.getAomProfiles());
     }
 }
