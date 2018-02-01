@@ -4,5 +4,7 @@ dependencies {
 	compile project(':aom')
   	compile project(':openehr-rm')
   	compile project(':archie-utils')
+  	compile project(':tools')
+  	compile project(':referencemodels')
   	compile project(':i18n')
 }

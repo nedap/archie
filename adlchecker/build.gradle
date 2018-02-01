@@ -7,9 +7,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.nedap.healthcare.archie:tools:0.4.1'
-    compile 'com.nedap.healthcare.archie:openehr-rm:0.4.1'
-    compile 'com.nedap.healthcare.archie:test-rm:0.4.1'
+    compile 'com.nedap.healthcare.archie:archie-all:0.4.2'
     compile 'net.sourceforge.argparse4j:argparse4j:0.7.0'
 }
 
