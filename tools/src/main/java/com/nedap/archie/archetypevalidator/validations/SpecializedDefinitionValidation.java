@@ -135,17 +135,21 @@ public class SpecializedDefinitionValidation extends ValidatingVisitor {
     }
 
     private boolean validateRootSpecializedWithRoot(CArchetypeRoot parentCObject, CArchetypeRoot cObject) {
-        Archetype usedArchetype = repository.getArchetype(cObject.getArchetypeRef());
-        if(usedArchetype != null) {
-            if(!repository.isChildOf(repository.getArchetype(parentCObject.getArchetypeRef()), usedArchetype)) {
-                addMessage(ErrorType.VARXAV, cObject.path());
+        if(cObject.getArchetypeRef() == null && cObject.getOccurrences() != null && cObject.getOccurrences().isProhibited()) {
+            return true;//prohibiting archetype roots with another archetype root does not require the archetype ref
+        } else {
+            Archetype usedArchetype = repository.getArchetype(cObject.getArchetypeRef());
+            if (usedArchetype != null) {
+                if (!repository.isChildOf(repository.getArchetype(parentCObject.getArchetypeRef()), usedArchetype)) {
+                    addMessage(ErrorType.VARXAV, cObject.path());
+                    return false;
+                }
+            } else {
+                addMessageWithPath(ErrorType.VARXRA, cObject.path());
                 return false;
             }
-        } else {
-            addMessageWithPath(ErrorType.VARXRA, cObject.path());
-            return false;
+            return true;
         }
-        return true;
     }
 
     private boolean validateSlotSpecializedWithSlot(ArchetypeSlot parentCObject, ArchetypeSlot cObject) {
