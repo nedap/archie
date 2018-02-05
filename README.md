@@ -8,7 +8,7 @@ It uses the ANTLR adl-grammar written by Thomas Beale at https://github.com/open
 
 It is licensed under the Apache license.
 
-**Note: active Archie development has moved to the openehr github at https://github.com/openehr/archie . The next version will likely be released from there. There will be some backwards incompatibilities to better adhere to the OpenEHR specifications and to introduce some new concepts, but it should be relatively easy to migrate. It is possible there will still be some bugfix releases from this project.**
+**Note: active Archie development has moved to the openehr github at https://github.com/openehr/archie . Starting from the 0.4 release, released have been moved to the OpenEHR archie repository. You can still find information about the 0.3 releases here, but no more 0.3 released will be released.**
 
 ## dependency
 
