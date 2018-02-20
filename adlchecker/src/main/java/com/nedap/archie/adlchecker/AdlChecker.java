@@ -1,5 +1,6 @@
 package com.nedap.archie.adlchecker;
 
+import com.google.common.io.CharStreams;
 import com.nedap.archie.adlparser.ADLParser;
 import com.nedap.archie.antlr.errors.ANTLRParserMessage;
 import com.nedap.archie.aom.Archetype;
@@ -10,6 +11,7 @@ import com.nedap.archie.flattener.InMemoryFullArchetypeRepository;
 import com.nedap.archie.rminfo.ArchieRMInfoLookup;
 import com.nedap.archie.rminfo.ReferenceModels;
 import com.nedap.archie.serializer.adl.ADLArchetypeSerializer;
+import com.nedap.archie.serializer.adl.ADLDefinitionSerializer;
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
@@ -19,7 +21,10 @@ import org.openehr.referencemodels.BuiltinReferenceModels;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -39,6 +44,10 @@ public class AdlChecker {
                 .action(Arguments.storeTrue())
                 .help("if the --outputFlat flag is present, also output the flat ADL");
 
+        parser.addArgument("-l", "--lint")
+                .action(Arguments.storeTrue())
+                .help("if the --lint flag is present, also output the linted ADL, which formats and adds missing id codes");
+
         Namespace ns = null;
         try {
             ns = parser.parseArgs(args);
@@ -51,11 +60,12 @@ public class AdlChecker {
             parser.printUsage();
             parser.printHelp();
         } else {
-            validateArchetypes(ns.getList("path"), ns.getBoolean("outputFlat"));
+            validateArchetypes(ns.getList("path"), ns.getBoolean("outputFlat"), ns.getBoolean("lint"));
         }
     }
 
-    private static void validateArchetypes(List<String> directories, boolean printFlatAdl) {
+    private static void validateArchetypes(List<String> directories, boolean printFlatAdl, boolean lint) {
+
         InMemoryFullArchetypeRepository repository = new InMemoryFullArchetypeRepository();
         for (String directory : directories) {
             System.out.println("step 1: parsing archetypes");
@@ -78,6 +88,38 @@ public class AdlChecker {
             }
 
         }
+
+        if(lint) {
+            System.out.println("step 1: running archetypes through linter");
+            System.out.println();
+            for (String directory : directories) {
+                try {
+                    Files.walk(Paths.get(directory)).forEach((path) -> lint(path));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private static void lint(Path path) {
+        File file = path.toFile();
+        if(file.isDirectory()) {
+            return;
+        }
+        try (FileInputStream stream = new FileInputStream(file)) {
+            String fileContent = CharStreams.toString(new InputStreamReader(stream));
+            System.out.println("linting " + file.getAbsolutePath());
+            System.out.println();
+            TerminologyContentGenerator generator = new TerminologyContentGenerator(BuiltinReferenceModels.getMetaModels());
+            Archetype resultingArchetype = generator.addTerms(fileContent);
+            System.out.println(ADLArchetypeSerializer.serialize(resultingArchetype));
+            System.out.println();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     private static void printValidationResult(ValidationResult result) {
