@@ -115,7 +115,6 @@ public class TerminologyContentGenerator {
         for(String line:lines) {
             Matcher matcher = commentPattern.matcher(line);
             if(matcher.matches()) {
-                System.out.println("we have a match!");
                 String idcode = matcher.group("idcode");
                 String comment = matcher.group("comment");
                 if(idcode.equalsIgnoreCase(nodeId)) {
