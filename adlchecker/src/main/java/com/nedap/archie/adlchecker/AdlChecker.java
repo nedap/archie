@@ -140,6 +140,7 @@ public class AdlChecker {
         System.out.print(status);
         System.out.print(" =============");
         System.out.println();
+        System.out.println();
     }
 
     private static void parseArchetype(Path path, InMemoryFullArchetypeRepository repository) {
@@ -155,22 +156,38 @@ public class AdlChecker {
                     repository.addArchetype(parsed);
                 }
                 if(!adlParser.getErrors().hasNoMessages()){
-                    printHeader(path.getFileName().toString(), "PARSING FAILED");
-                    System.out.println("errors found for " + path.getFileName());
-
-                    for(ANTLRParserMessage message:adlParser.getErrors().getWarnings()) {
-                        System.err.println("warning: " + message.getMessage());
-                    }
-                    for(ANTLRParserMessage message:adlParser.getErrors().getErrors()) {
-                        System.err.println("error: " + message.getMessage());
-                    }
+                    printParseErrors(path, adlParser);
                 }
             } catch (Exception e) {
+                printParseErrors(path, adlParser);
                 e.printStackTrace();
             }
         } catch (IOException e) {
             System.err.println("error opening file");
             e.printStackTrace();
+        }
+    }
+
+    private static void printParseErrors(Path path, ADLParser adlParser) {
+        if(adlParser.getErrors() == null) {
+            printHeader(path.getFileName().toString(), "PARSING FAILED");
+            return;
+        }
+        else if(adlParser.getErrors().hasNoErrors()) {
+            printHeader(path.getFileName().toString(), "PARSING GENERATED WARNINGS");
+        } else {
+            printHeader(path.getFileName().toString(), "PARSING FAILED");
+        }
+        System.out.println("errors found for " + path.getFileName());
+
+        if(adlParser.getErrors() != null) {
+            for (ANTLRParserMessage message : adlParser.getErrors().getWarnings()) {
+                System.err.println("warning: " + message.getMessage());
+            }
+            for (ANTLRParserMessage message : adlParser.getErrors().getErrors()) {
+                System.err.println("error: " + message.getMessage());
+            }
+
         }
     }
 
