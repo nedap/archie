@@ -149,6 +149,7 @@ public class AdlChecker {
             return;
         }
         ADLParser adlParser = new ADLParser();
+        adlParser.setLogEnabled(false);
         try (FileInputStream stream = new FileInputStream(file)) {
             try {
                 Archetype parsed = adlParser.parse(stream);
