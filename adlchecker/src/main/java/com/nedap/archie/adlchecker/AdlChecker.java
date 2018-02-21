@@ -123,23 +123,23 @@ public class AdlChecker {
     }
 
     private static void printValidationResult(ValidationResult result) {
-        System.out.println();
-        System.out.print("============= ");
-        System.out.print(result.getArchetypeId());
-        System.out.print("      ");
-        if(result.passes()) {
-            System.out.print("PASSED");
-        } else {
-            System.out.print("FAILED");
-        }
-        System.out.print(" =============");
-        System.out.println();
+        printHeader(result.getArchetypeId(), result.passes() ? "PASSED" : "FAILED");
         for(ValidationMessage error:result.getErrors()) {
             System.out.println(error.toString());
         }
         for(ValidationResult overlayResult:result.getOverlayValidations()) {
             printValidationResult(overlayResult);
         }
+    }
+
+    private static void printHeader(String archetypeId, String status) {
+        System.out.println();
+        System.out.print("============= ");
+        System.out.print(archetypeId);
+        System.out.print("      ");
+        System.out.print(status);
+        System.out.print(" =============");
+        System.out.println();
     }
 
     private static void parseArchetype(Path path, InMemoryFullArchetypeRepository repository) {
@@ -154,9 +154,8 @@ public class AdlChecker {
                 if(adlParser.getErrors().hasNoErrors()) {
                     repository.addArchetype(parsed);
                 }
-                if(adlParser.getErrors().hasNoMessages()){
-                    System.out.println(path.getFileName() + " has no messages, ok!");
-                } else {
+                if(!adlParser.getErrors().hasNoMessages()){
+                    printHeader(path.getFileName().toString(), "PARSING FAILED");
                     System.out.println("errors found for " + path.getFileName());
 
                     for(ANTLRParserMessage message:adlParser.getErrors().getWarnings()) {
