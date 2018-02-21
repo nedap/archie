@@ -4,12 +4,15 @@ import com.nedap.archie.adlparser.ADLParser;
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.CAttribute;
 import com.nedap.archie.aom.CObject;
+import com.nedap.archie.aom.primitives.CTerminologyCode;
 import com.nedap.archie.aom.terminology.ArchetypeTerm;
+import com.nedap.archie.aom.terminology.ValueSet;
 import com.nedap.archie.aom.utils.AOMUtils;
 import com.nedap.archie.rminfo.MetaModels;
 
 import java.io.IOException;
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
@@ -43,10 +46,26 @@ public class TerminologyContentGenerator {
             }
             Archetype resultingArchetype = parser.parse(adlContent); //instantiate twice
             walkArchetype(adlContent, archetype, resultingArchetype);
+            visitValueSets(adlContent, resultingArchetype);
+
             sortTerminology(resultingArchetype);
             return resultingArchetype;
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private void visitValueSets(String adlContent, Archetype resultingArchetype) {
+        Map<String, ValueSet> valueSets = resultingArchetype.getTerminology().getValueSets();
+        for(String acCode:valueSets.keySet()) {
+            if(!terminologyHasCodeForAllLanguages(resultingArchetype, acCode)) {
+                addCodeToTerminology(adlContent, resultingArchetype, acCode);
+            }
+            for(String atCode:valueSets.get(acCode).getMembers()) {
+                if(!terminologyHasCodeForAllLanguages(resultingArchetype, atCode)) {
+                    addCodeToTerminology(adlContent, resultingArchetype, atCode);
+                }
+            }
         }
     }
 
@@ -67,7 +86,7 @@ public class TerminologyContentGenerator {
                         return code2.compareTo(code1);
                     }
                 }
-            });//TODO: comparator!
+            });
             sortedArchetypeTermMap.putAll(stringArchetypeTermMap);
             termDefinitions.put(language, sortedArchetypeTermMap);
 
@@ -75,37 +94,48 @@ public class TerminologyContentGenerator {
     }
 
     private void walkArchetype(String sourceFile, Archetype archetype, Archetype resultingArchetype) {
-        Stack<CObject> workList = new Stack<>();
+        LinkedList<CObject> workList = new LinkedList<>();
         workList.push(archetype.getDefinition());
         List<CObject> cObjects = new ArrayList<>();
-        while(!workList.empty()) {
+        while(!workList.isEmpty()) {
             CObject next = workList.pop();
-            if(!terminologyHasCode(archetype, next)) {
+            if(!terminologyHasCodeForAllLanguages(archetype, next)) {
                 cObjects.add(next);
-                addCodeToTerminology(sourceFile, resultingArchetype, next);
+                addCodeToTerminology(sourceFile, resultingArchetype, next.getNodeId());
             }
             for(CAttribute attribute:next.getAttributes()) {
                 for(CObject child:attribute.getChildren()) {
                     workList.push(child);
+                    if(child instanceof CTerminologyCode) {
+                        checkTerminologyCode(sourceFile, resultingArchetype, (CTerminologyCode) child);
+                    }
                 }
             }
         }
     }
 
-    private void addCodeToTerminology(String sourceFile, Archetype resultingArchetype, CObject next) {
-        String text = getCommentName(sourceFile, next.getNodeId());
+    private void checkTerminologyCode(String sourceFile, Archetype archetype, CTerminologyCode child) {
+        for(String constraint:child.getConstraint()) {
+            if(!terminologyHasCodeForAllLanguages(archetype, constraint)) {
+                addCodeToTerminology(sourceFile, archetype, constraint);
+            }
+        }
+    }
+
+    private void addCodeToTerminology(String sourceFile, Archetype resultingArchetype, String code) {
+        String text = getCommentName(sourceFile, code);
         if(text == null) {
-            text = "X";
+            text = "Add term for me!";
         }
         String description = text; //TODO: grep comment from sourcefile!
         Map<String, Map<String, ArchetypeTerm>> termDefinitions = resultingArchetype.getTerminology().getTermDefinitions();
         for(String language: termDefinitions.keySet()) {
-            if(termDefinitions.get(language).get(next.getNodeId()) == null) {
+            if(termDefinitions.get(language).get(code) == null) {
                 ArchetypeTerm newCode = new ArchetypeTerm();
-                newCode.setCode(next.getNodeId());
+                newCode.setCode(code);
                 newCode.setText(text);
                 newCode.setDescription(description);
-                termDefinitions.get(language).put(next.getNodeId(), newCode);
+                termDefinitions.get(language).put(code, newCode);
             }
         }
     }
@@ -126,7 +156,7 @@ public class TerminologyContentGenerator {
         return null;
     }
 
-    public boolean terminologyHasCode(Archetype archetype, CObject cObject) {
+    public boolean terminologyHasCodeForAllLanguages(Archetype archetype, CObject cObject) {
         String nodeId = cObject.getNodeId();
         int codeSpecializationDepth = AOMUtils.getSpecializationDepthFromCode(nodeId);
         int archetypeSpecializationDepth = archetype.specializationDepth();
@@ -134,6 +164,28 @@ public class TerminologyContentGenerator {
             return true;//not exactly, this is a validation failure that needs to be fixed. log?
         } else if (cObject.isRoot() || parentIsMultiple(cObject)) {
             if( codeSpecializationDepth == archetypeSpecializationDepth &&  !archetype.getTerminology().hasIdCodeInAllLanguages(nodeId)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Check if terminology has a code. Use only for at- and ac-codes, NOT For id codes!!
+     * @param archetype
+     * @param code
+     * @return
+     */
+    public boolean terminologyHasCodeForAllLanguages(Archetype archetype, String code) {
+        if(AOMUtils.isIdCode(code)) {
+            throw new IllegalArgumentException("this method only checks at- and ac- codes, not id codes");
+        }
+        int codeSpecializationDepth = AOMUtils.getSpecializationDepthFromCode(code);
+        int archetypeSpecializationDepth = archetype.specializationDepth();
+        if (codeSpecializationDepth > archetypeSpecializationDepth) {
+            return true;//not exactly, this is a validation failure that needs to be fixed. log?
+        } else {
+            if (codeSpecializationDepth == archetypeSpecializationDepth && !archetype.getTerminology().hasCodeInAllLanguages(code)) {
                 return false;
             }
         }
