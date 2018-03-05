@@ -104,8 +104,6 @@ public class FlattenerTest {
         assertTrue(child2 instanceof CArchetypeRoot);
         assertEquals(2, child1.getAttributes().size());
         assertEquals(1, child2.getAttributes().size());
-
-
     }
 
     @Test
@@ -113,7 +111,6 @@ public class FlattenerTest {
         Archetype flattened = flattener.flatten(reportResult);
         //TODO: nice to know there are no exceptions. Now add assertions
     }
-
 
     @Test
     public void checkParentReplacement() throws Exception {
@@ -139,9 +136,7 @@ public class FlattenerTest {
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
 
         System.out.println(objectMapper.writeValueAsString(flattened));
-
     }
-
 
     @Test
     public void useNodeReplacement() throws Exception {
@@ -180,6 +175,16 @@ public class FlattenerTest {
     }
 
     @Test
+    public void testTermForArchetypeRoot() {
+        Archetype flattened = flattener.flatten(reportWithSynopsis);
+
+        CComplexObject definition = flattened.getDefinition();
+        CObject object = (CObject) flattened.itemAtPath("/content[id0.0.3]");
+        assertEquals("Summary or evaluation", flattened.getTerm(object, "en").getText());
+        assertEquals("Summary or evaluation for the measurement", flattened.getTerm(object, "en").getDescription());
+    }
+
+    @Test
     public void height() throws Exception {
         assertTrue(heightTemplate.isDifferential());
         Archetype flattened = flattener.flatten(heightTemplate);
@@ -203,7 +208,6 @@ data matches {
  */
         CObject quantity = flattened.itemAtPath("/content[openEHR-EHR-OBSERVATION.ovl-length-height-001.v1.0.0]/data[id2]/events[id3]/data[id4]/items[id5]/value[id21]");
         assertEquals("DV_QUANTITY", quantity.getRmTypeName());
-
     }
 
     @Test
@@ -226,9 +230,7 @@ data matches {
         assertTrue(bloodPressureObservation.getTerminology().getTermDefinitions().containsKey("ru"));
         assertTrue(bloodPressureObservation.getTerminology().getTermDefinitions().containsKey("nl"));
         assertTrue(bloodPressureObservation.getTerminology().getTermDefinitions().containsKey("en"));
-
     }
-
 
     @Test
     public void removeLanguagesFromComponentTerminologies() throws Exception {
@@ -262,7 +264,6 @@ data matches {
         assertTrue(bloodPressureObservation.getTerminology().getTermDefinitions().containsKey("ru"));
         assertTrue(bloodPressureObservation.getTerminology().getTermDefinitions().containsKey("nl"));
         assertTrue(bloodPressureObservation.getTerminology().getTermDefinitions().containsKey("en"));
-
     }
 
     @Test

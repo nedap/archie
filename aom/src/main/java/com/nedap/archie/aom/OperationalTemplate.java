@@ -92,6 +92,9 @@ public class OperationalTemplate extends AuthoredArchetype {
             if(terminology != null) {
                 ArchetypeTerm term = terminology.getTermDefinition(language, code);
                 if(term == null && object instanceof CArchetypeRoot) {
+                    if(object.getParent() != null && object.getParent().getParent() != null) {
+                        return getTerm(object.getParent().getParent(), code, language);
+                    }
                     return terminology.getTermDefinition(language, ((CArchetypeRoot) object).getArchetypeRef());
                 }
                 return term;
