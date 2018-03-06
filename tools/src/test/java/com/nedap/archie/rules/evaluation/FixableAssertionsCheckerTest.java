@@ -1,5 +1,6 @@
 package com.nedap.archie.rules.evaluation;
 
+import com.nedap.archie.ArchieLanguageConfiguration;
 import com.nedap.archie.adlparser.ADLParser;
 import com.nedap.archie.adlparser.modelconstraints.RMConstraintImposer;
 import com.nedap.archie.aom.Archetype;
@@ -8,6 +9,7 @@ import com.nedap.archie.rm.archetyped.Pathable;
 import com.nedap.archie.rminfo.ArchieRMInfoLookup;
 import com.nedap.archie.testutil.TestUtil;
 import com.nedap.archie.xml.JAXBUtil;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -30,6 +32,14 @@ public class FixableAssertionsCheckerTest {
         testUtil = new TestUtil();
         emptyRMObjectConstructor = new EmptyRMObjectConstructor(ArchieRMInfoLookup.getInstance());
         parser = new ADLParser(new RMConstraintImposer());
+        ArchieLanguageConfiguration.setThreadLocalLogicalPathLanguage("en");
+        ArchieLanguageConfiguration.setThreadLocalDescriptiongAndMeaningLanguage("en");
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        ArchieLanguageConfiguration.setThreadLocalLogicalPathLanguage(null);
+        ArchieLanguageConfiguration.setThreadLocalDescriptiongAndMeaningLanguage(null);
     }
 
     @Test

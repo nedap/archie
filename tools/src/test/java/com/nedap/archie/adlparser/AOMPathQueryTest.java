@@ -1,5 +1,6 @@
 package com.nedap.archie.adlparser;
 
+import com.nedap.archie.ArchieLanguageConfiguration;
 import com.nedap.archie.adlparser.modelconstraints.RMConstraintImposer;
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.ArchetypeModelObject;
@@ -7,6 +8,7 @@ import com.nedap.archie.aom.CAttribute;
 import com.nedap.archie.aom.CComplexObject;
 import com.nedap.archie.query.AOMPathQuery;
 import com.nedap.archie.testutil.TestUtil;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -25,6 +27,14 @@ public class AOMPathQueryTest {
     @Before
     public void setup() throws Exception {
         archetype = TestUtil.parseFailOnErrors("/basic.adl");
+        ArchieLanguageConfiguration.setThreadLocalLogicalPathLanguage("en");
+        ArchieLanguageConfiguration.setThreadLocalDescriptiongAndMeaningLanguage("en");
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        ArchieLanguageConfiguration.setThreadLocalLogicalPathLanguage(null);
+        ArchieLanguageConfiguration.setThreadLocalDescriptiongAndMeaningLanguage(null);
     }
 
 
