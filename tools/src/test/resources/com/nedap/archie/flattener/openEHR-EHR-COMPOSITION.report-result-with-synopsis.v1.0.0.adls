@@ -50,4 +50,18 @@ terminology
                 description = <"Opmerkingen bij de metingen">
             >
 		>
+        ["en"] = <
+            ["id1.1.1"] = <
+                text = <"Report with result of a measurement with a summary">
+                description = <"Report with result of a measurement with a summary">
+            >
+            ["id0.0.2"] = <
+                text = <"An observation">
+                description = <"An observation">
+            >
+            ["id0.0.3"] = <
+                text = <"Summary or evaluation">
+                description = <"Summary or evaluation for the measurement">
+            >
+        >
 	>
