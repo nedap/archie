@@ -1,5 +1,7 @@
 package com.nedap.archie.base;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * Created by pieter.bos on 15/10/15.
  */
@@ -42,18 +44,22 @@ public class MultiplicityInterval extends Interval<Integer> {
         return result;
     }
 
+    @JsonIgnore
     public boolean isOpen() {
         return Integer.valueOf(0).equals(getLower()) && isUpperUnbounded() && isLowerIncluded();
     }
 
+    @JsonIgnore
     public boolean isOptional() {
         return Integer.valueOf(0).equals(getLower()) && Integer.valueOf(1).equals(getUpper()) && !isUpperUnbounded() && isLowerIncluded() && isUpperIncluded();
     }
 
+    @JsonIgnore
     public boolean isMandatory() {
         return !isLowerUnbounded() && getLower() >= 1 ;
     }
 
+    @JsonIgnore
     public boolean isProhibited() {
         return Integer.valueOf(0).equals(getLower()) && Integer.valueOf(0).equals(getUpper()) && !isUpperUnbounded();
     }
@@ -102,6 +108,7 @@ public class MultiplicityInterval extends Interval<Integer> {
         return new MultiplicityInterval(lower, true, false, upper, true, false);
     }
 
+    @JsonIgnore
     public boolean upperIsOne() {
         return has(1) && !has(2);
     }

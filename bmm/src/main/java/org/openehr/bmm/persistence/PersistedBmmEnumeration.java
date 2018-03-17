@@ -35,6 +35,15 @@ import java.util.List;
  */
 public abstract class PersistedBmmEnumeration<T> extends PersistedBmmClass implements Serializable {
 
+    /**
+     * Names of enumeration elements.
+     */
+    private List<String> itemNames;
+    /**
+     * Values associated with enumeration elements.
+     */
+    private List<T> itemValues;
+
     public PersistedBmmEnumeration() {
         super();
         this.itemNames = new ArrayList<>();
@@ -46,15 +55,6 @@ public abstract class PersistedBmmEnumeration<T> extends PersistedBmmClass imple
         this.itemNames = new ArrayList<>();
         this.itemValues = new ArrayList<>();
     }
-
-    /**
-     * Names of enumeration elements.
-     */
-    private List<String> itemNames;
-    /**
-     * Values associated with enumeration elements.
-     */
-    private List<T> itemValues;
 
     /**
      * Returns list of enumeration element names.

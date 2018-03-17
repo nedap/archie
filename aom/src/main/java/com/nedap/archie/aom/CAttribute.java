@@ -301,6 +301,7 @@ public class CAttribute extends ArchetypeConstraint {
 
 
     @Override
+    @JsonIgnore
     public boolean isLeaf() {
         return children != null && children.size() > 0;
     }
@@ -369,6 +370,7 @@ public class CAttribute extends ArchetypeConstraint {
         }
     }
 
+    @JsonIgnore
     public boolean isSecondOrderConstrained() {
         return getSocParent() != null || (getParent() != null && getParent().getSocParent() != null);
     }
@@ -379,6 +381,7 @@ public class CAttribute extends ArchetypeConstraint {
      * calculates sum of all occurrences lower bounds; where no occurrences are stated, 0 is assumed
      * @return
      */
+    @JsonIgnore
     public int getAggregateOccurrencesLowerSum() {
         int sum = 0;
         for(CObject cObject:getChildren()) {
@@ -394,6 +397,7 @@ public class CAttribute extends ArchetypeConstraint {
      *  object, and 1 for all optional objects
      * @return
      */
+    @JsonIgnore
     public int getMinimumChildCount() {
         int result = 0;
         boolean foundOptional = false;
