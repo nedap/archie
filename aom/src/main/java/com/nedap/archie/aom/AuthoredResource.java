@@ -1,6 +1,7 @@
 package com.nedap.archie.aom;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.nedap.archie.base.terminology.TerminologyCode;
 import com.nedap.archie.xml.adapters.ResourceDescriptionAdapter;
 import com.nedap.archie.xml.adapters.TranslationDetailsAdapter;
@@ -99,6 +100,7 @@ public abstract class AuthoredResource extends ArchetypeModelObject {
 
     @XmlElement(name="translations")
     @XmlJavaTypeAdapter(TranslationDetailsAdapter.class)
+    @JsonIgnore
     public List<TranslationDetails> getTranslationList() { return new ArrayList(content.getTranslations().values());}
 
     public void setTranslationList(List<TranslationDetails> translationList) {

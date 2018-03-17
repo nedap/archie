@@ -1,5 +1,6 @@
 package com.nedap.archie.aom;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nedap.archie.aom.primitives.CTerminologyCode;
 import com.nedap.archie.aom.terminology.ArchetypeTerm;
 import com.nedap.archie.aom.terminology.ArchetypeTerminology;
@@ -227,6 +228,7 @@ public class Archetype extends AuthoredResource {
         return parentArchetypeId != null;
     }
 
+    @JsonIgnore
     public int specializationDepth() {
         return AOMUtils.getSpecializationDepthFromCode(definition.getNodeId());
     }
@@ -236,6 +238,7 @@ public class Archetype extends AuthoredResource {
      * ac codes references in C_TERMINOLOGY_CODE objects and ac codes from value sets keys
      * @return
      */
+    @JsonIgnore
     public Set<String> getAllUsedCodes() {
         Stack<CObject> workList = new Stack();
         Set<String> result = new LinkedHashSet<>();
@@ -258,6 +261,7 @@ public class Archetype extends AuthoredResource {
         return result;
     }
 
+    @JsonIgnore
     public Set<String> getUsedAtCodes() {
         Stack<CObject> workList = new Stack();
         Set<String> result = new LinkedHashSet<>();

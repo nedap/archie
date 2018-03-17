@@ -39,6 +39,12 @@ public class PersistedBmmSimpleType extends PersistedBmmType<BmmSimpleType> impl
 
     public static final String P_BMM_SIMPLE_TYPE = "P_BMM_SIMPLE_TYPE";
 
+    /**
+     * Name of type - must be a simple class name.
+     */
+    private String type;
+
+
     public PersistedBmmSimpleType() {
     }
 
@@ -46,10 +52,7 @@ public class PersistedBmmSimpleType extends PersistedBmmType<BmmSimpleType> impl
         this.type = type;
     }
 
-    /**
-     * Name of type - must be a simple class name.
-     */
-    private String type;
+
 
     /**
      * Returns the name of type - must be a simple class name.

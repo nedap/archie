@@ -1,5 +1,6 @@
 package com.nedap.archie.base;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.Joiner;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -79,6 +80,7 @@ public class Cardinality extends OpenEHRBase {
      *
      * @return
      */
+    @JsonIgnore
     public Boolean isBag() {
         return !isOrdered && !isUnique;
     }
@@ -88,6 +90,7 @@ public class Cardinality extends OpenEHRBase {
      *
      * @return
      */
+    @JsonIgnore
     public Boolean isList() {
         return isOrdered && !isUnique;
     }
@@ -97,6 +100,7 @@ public class Cardinality extends OpenEHRBase {
      *
      * @return
      */
+    @JsonIgnore
     public Boolean isSet() {
         return !isOrdered && isUnique;
     }
