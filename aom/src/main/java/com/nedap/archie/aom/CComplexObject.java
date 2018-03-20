@@ -104,6 +104,34 @@ public class CComplexObject extends CDefinedObject<ArchetypeModelObject> {
         attributes.add(attribute);
     }
 
+    public void removeAttribute(CAttribute attribute) {
+        int indexOfAttribute = -1;
+
+        for(int i = 0; i < attributes.size(); i++) {
+            CAttribute existingAttribute = attributes.get(i);
+            if(existingAttribute.getDifferentialPath() != null) {
+
+                if(existingAttribute.getDifferentialPath().equals(attribute.getDifferentialPath())) {
+                    indexOfAttribute = i;
+                    break;
+                }
+            }
+            if(existingAttribute.getDifferentialPath() == null) {
+                if(existingAttribute.getRmAttributeName().equals(attribute.getRmAttributeName())) {
+                    indexOfAttribute = i;
+                }
+            }
+        }
+        if(indexOfAttribute >= 0) {
+            CAttribute foundAttribute = attributes.get(indexOfAttribute);
+            if(foundAttribute.getSocParent() != null) {
+                throw new IllegalArgumentException("cannot remove a tuple attribute with removeAttribute, remove the tuple attribute instead and rebuild tuple attributes.");
+            } else {
+                attributes.remove(indexOfAttribute);
+            }
+        }
+    }
+
     public List<CAttributeTuple> getAttributeTuples() {
         return attributeTuples;
     }
