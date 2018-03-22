@@ -1,6 +1,8 @@
 package com.nedap.archie.aom.utils;
 
+import com.google.common.base.CharMatcher;
 import com.google.common.base.Joiner;
+import com.google.common.base.Strings;
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.ArchetypeHRID;
 import com.nedap.archie.aom.ArchetypeModelObject;
@@ -28,7 +30,9 @@ import org.openehr.bmm.core.BmmProperty;
 import org.openehr.bmm.persistence.validation.BmmDefinitions;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 public class AOMUtils {
@@ -274,5 +278,21 @@ public class AOMUtils {
             typeInfo = selectedModel.getTypeInfo(attribute.getTypeInCollection());
         }
         return attribute;
+    }
+
+    /** Get the maximum code used at the given specialization level. useful for generating new codes*/
+    public static int getMaximumIdCode(int specializationLevel, Collection<String> usedIdCodes) {
+
+        int maximumIdCode = 1;
+        for(String code:usedIdCodes) {
+            if (code.length() > 2) {
+                int numberOfDots = CharMatcher.is(AdlCodeDefinitions.SPECIALIZATION_SEPARATOR).countIn(code);
+                if(specializationLevel == numberOfDots) {
+                    int numericCode = numberOfDots == 0 ? Integer.parseInt(code.substring(2)) : Integer.parseInt(code.substring(code.lastIndexOf('.')+1));
+                    maximumIdCode = Math.max(numericCode, maximumIdCode);
+                }
+            }
+        }
+        return maximumIdCode;
     }
 }
