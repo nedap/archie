@@ -323,7 +323,7 @@ public class BmmClass extends BmmClassifier implements Serializable {
         for(String descendant:descendants) {
             BmmClass classDefinition = this.getBmmModel().getClassDefinition(descendant);
             if(classDefinition != null) {
-                allDescendants.addAll(classDefinition.getImmediateDescendants());
+                allDescendants.addAll(classDefinition.findAllDescendants());
             }
         }
         return allDescendants;
