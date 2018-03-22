@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.nedap.archie.base.Cardinality;
 import com.nedap.archie.base.MultiplicityInterval;
+import com.nedap.archie.definitions.AdlCodeDefinitions;
 import com.nedap.archie.paths.PathSegment;
 import com.nedap.archie.query.APathQuery;
 
@@ -187,6 +188,15 @@ public class CAttribute extends ArchetypeConstraint {
         }
     }
 
+    public void removeChild(CObject child) {
+        int index = getIndexOfMatchingCObjectChild(child);
+        if(index > -1) {
+            children.remove(index);
+        }
+    }
+
+
+
     /**
      * Replace the child at node nodeId with all the objects from the parameter newChildren.
      * If keepOriginal is true, it will not replace the original, but keep it in place
@@ -210,6 +220,24 @@ public class CAttribute extends ArchetypeConstraint {
             }
         }
 
+    }
+
+    public int getIndexOfMatchingCObjectChild(CObject child) {
+        if(child instanceof CPrimitiveObject) {
+            return getIndexOfChildWithMatchingRmTypeName(child.getRmTypeName());
+        } else {
+            return getIndexOfChildWithNodeId(child.getNodeId());
+        }
+    }
+
+    public int getIndexOfChildWithMatchingRmTypeName(String rmTypeName) {
+        for(int i = 0; i < children.size(); i++) {
+            CObject child = children.get(i);
+            if(rmTypeName.equals(child.getRmTypeName())) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     public int getIndexOfChildWithNodeId(String nodeId) {
