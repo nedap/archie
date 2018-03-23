@@ -301,11 +301,11 @@ public class Archetype extends AuthoredResource {
     }
 
     public String generateNextValueCode() {
-        return generateNextCode(AdlCodeDefinitions.VALUE_CODE_LEADER, getUsedIdCodes());
+        return generateNextCode(AdlCodeDefinitions.VALUE_CODE_LEADER, getUsedValueCodes());
     }
 
     public String generateNextValueSetCode() {
-        return generateNextCode(AdlCodeDefinitions.VALUE_SET_CODE_LEADER, getUsedIdCodes());
+        return generateNextCode(AdlCodeDefinitions.VALUE_SET_CODE_LEADER, getUsedValueSetCodes());
 
     }
 
