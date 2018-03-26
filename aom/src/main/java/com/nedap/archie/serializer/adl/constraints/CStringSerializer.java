@@ -21,6 +21,7 @@
 package com.nedap.archie.serializer.adl.constraints;
 
 
+import com.nedap.archie.aom.primitives.CBoolean;
 import com.nedap.archie.aom.primitives.CString;
 import com.nedap.archie.serializer.adl.ADLDefinitionSerializer;
 
@@ -65,5 +66,10 @@ public class CStringSerializer extends ConstraintSerializer<CString> {
 
         if (str.charAt(str.length()-1)!=c) return false;
         return c=='/' || c=='^';
+    }
+
+    @Override
+    public boolean isEmpty(CString cobj) {
+        return cobj.getConstraint() == null || cobj.getConstraint().isEmpty();
     }
 }
