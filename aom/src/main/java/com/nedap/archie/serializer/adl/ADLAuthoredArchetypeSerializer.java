@@ -34,11 +34,13 @@ public class ADLAuthoredArchetypeSerializer<T extends AuthoredArchetype> extends
 
     @Override
     protected void appendDescription() {
-        if (archetype.getDescription() == null) return;
-
-        builder.newline().append("description").newIndentedLine()
-                .odin(archetype.getDescription())
-                .unindent();
+        if (archetype.getDescription() == null) {
+            builder.newline().append("description");
+        } else {
+            builder.newline().append("description").newIndentedLine()
+                    .odin(archetype.getDescription())
+                    .unindent();
+        }
     }
 
     @Override

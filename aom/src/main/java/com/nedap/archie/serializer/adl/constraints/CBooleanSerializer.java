@@ -71,4 +71,9 @@ public class CBooleanSerializer extends ConstraintSerializer<CBoolean> {
 
     }
 
+    @Override
+    public boolean isEmpty(CBoolean cobj) {
+        return cobj.getConstraint() == null || cobj.getConstraint().isEmpty();
+    }
+
 }

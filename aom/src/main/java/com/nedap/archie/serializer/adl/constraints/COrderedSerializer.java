@@ -21,7 +21,8 @@ public abstract class COrderedSerializer<T extends COrdered<?>> extends Constrai
         serializeAssumedValue(cobj);
 
         if (original == builder.mark()) {
-            builder.append("*");
+            builder.append("*");//TODO: this is deprecated ADL. Should be fixed, but hard to check, so left in for now
+            //because leaving it out would mean invalid instead of deprecated ADL
         }
     }
 
@@ -68,5 +69,10 @@ public abstract class COrderedSerializer<T extends COrdered<?>> extends Constrai
         if (cobj.getConstraint().size() != 1) return false;
         Interval<?> interval = cobj.getConstraint().get(0);
         return isSingleValueInterval(interval);
+    }
+
+    @Override
+    public boolean isEmpty(T object) {
+        return object.getConstraint() == null || object.getConstraint().isEmpty();
     }
 }
