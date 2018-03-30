@@ -164,7 +164,7 @@ public class ArchetypeValidator {
 
         ValidationResult result = new ValidationResult(archetype);
         result.setErrors(messages);
-        if(messages.isEmpty()) {
+        if(result.passes()) {
             try {
                 Archetype flattened = new Flattener(repository, combinedModels).flatten(archetype);
                 result.setFlattened(flattened);
