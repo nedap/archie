@@ -24,7 +24,8 @@ public class MultiplicitiesValidation extends ValidatingVisitor {
         if(cObject.getParent() != null) {
             CAttribute attribute = cObject.getParent();
             if(attribute.getDifferentialPath() == null) {
-                //we cannot validate differential paths here becaue we do not know the type
+                //we cannot validate differential paths here because we do not know the type
+                //TODO: lookup differential path types to validate as well?
                 if(attribute.isSingle()) {
                     if(cObject.getOccurrences() != null &&
                         (cObject.getOccurrences().isUpperUnbounded() || cObject.getOccurrences().getUpper() > 1)) {

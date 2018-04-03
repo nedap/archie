@@ -84,6 +84,15 @@ public class CAttribute extends ArchetypeConstraint {
     }
 
     public CObject getChild(String nodeId) {
+        //first don't look through CComplexObject proxies, then if no result, do lookup through the proxies
+        CObject result = getChild(nodeId, false);
+        if(result == null) {
+            result = getChild(nodeId, true);
+        }
+        return result;
+    }
+
+    private CObject getChild(String nodeId, boolean lookThroughProxies) {
         for(CObject child:children) {
             if(nodeId.equals(child.getNodeId())) {
                 return child;
@@ -91,7 +100,7 @@ public class CAttribute extends ArchetypeConstraint {
                 if (((CArchetypeRoot) child).getArchetypeRef().equals(nodeId)) {
                     return child;
                 }
-            } else if(child instanceof CComplexObjectProxy) {
+            } else if(lookThroughProxies && child instanceof CComplexObjectProxy) {
                 String targetPath = ((CComplexObjectProxy) child).getTargetPath();
                 APathQuery aPathQuery = new APathQuery(targetPath);
                 PathSegment lastPathSegment = aPathQuery.getPathSegments().get(aPathQuery.getPathSegments().size() - 1);

@@ -283,7 +283,7 @@ public class AOMUtils {
     /** Get the maximum code used at the given specialization level. useful for generating new codes*/
     public static int getMaximumIdCode(int specializationLevel, Collection<String> usedIdCodes) {
 
-        int maximumIdCode = 1;
+        int maximumIdCode = 0;
         for(String code:usedIdCodes) {
             if (code.length() > 2) {
                 int numberOfDots = CharMatcher.is(AdlCodeDefinitions.SPECIALIZATION_SEPARATOR).countIn(code);

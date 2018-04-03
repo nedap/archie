@@ -57,12 +57,15 @@ public class ArchetypeValidator {
         //but there's no reason this cannot be parsed, so check them here
         validationsPhase0.add(new AttributeUniquenessValidation());
         validationsPhase0.add(new NodeIdValidation());
-        validationsPhase0.add(new MultiplicitiesValidation());
 
+        validationsPhase0.add(new AttributeTupleValidation());
 
         validationsPhase1 = new ArrayList<>();
         //conforms to spec
         validationsPhase1.add(new BasicChecks());
+        //MultiplicitiesValidation is a phase 0 (parser) validation in the archetype editor. However, that would just prevent too many checks, including one of the example checks
+        //so it has been moved to phase 1
+        validationsPhase1.add(new MultiplicitiesValidation());
         validationsPhase1.add(new AuthoredArchetypeMetadataChecks());
         validationsPhase1.add(new DefinitionStructureValidation());
         validationsPhase1.add(new BasicTerminologyValidation());
@@ -153,7 +156,9 @@ public class ArchetypeValidator {
         }
 
         List<ValidationMessage> messages = runValidations(archetype, repository, flatParent, validationsPhase0);
-        if(messages.isEmpty()) {
+        ValidationResult result = new ValidationResult(archetype);
+        result.setErrors(messages);
+        if(result.passes()) {
             //continue running only if the basic phase 0 validation run, otherwise we get annoying exceptions
             messages.addAll(runValidations(archetype, repository, flatParent, validationsPhase1));
 
@@ -165,7 +170,6 @@ public class ArchetypeValidator {
             messages.addAll(runValidations(archetype, repository, flatParent, validationsPhase2));
         }
 
-        ValidationResult result = new ValidationResult(archetype);
         result.setErrors(messages);
         if(result.passes()) {
             try {

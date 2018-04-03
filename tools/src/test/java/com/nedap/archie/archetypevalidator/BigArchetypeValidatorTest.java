@@ -1,5 +1,6 @@
 package com.nedap.archie.archetypevalidator;
 
+import com.google.common.base.Joiner;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.io.Resources;
@@ -29,6 +30,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -153,6 +155,7 @@ public class BigArchetypeValidatorTest {
         int shouldBeFineButWasinvalid = 0;
         int notImplemented = 0;
         int unexpectedParseErrors = 0;
+        List<String> errorStrings = new ArrayList<>();
         ArchetypeValidator validator = new ArchetypeValidator(metaModels);
         SimpleArchetypeRepository repository = new SimpleArchetypeRepository();
         for(String file:adlFiles) {
@@ -178,8 +181,10 @@ public class BigArchetypeValidatorTest {
                         if(exception != null) {
                             if(errors != null) {
                                 log.error(errors.toString());
+                                errorStrings.add(archetype.getArchetypeId() + " has unexpected parse errors: " + errors.toString());
                             }
                             log.error("exception:", exception);
+                            errorStrings.add(archetype.getArchetypeId() + " has exception: " + exception.getMessage());
                         } else {
                             log.error(errors.toString());
                         }
@@ -192,8 +197,10 @@ public class BigArchetypeValidatorTest {
                         log.info("{} has parse errors, but we don't know if it's fine:", file);
                         if(errors != null) {
                             log.error(errors.toString());
+                            errorStrings.add(archetype.getArchetypeId() + " has unknown parse errors: " + errors.toString());
                         }
                         log.error("exception:", exception);
+                        errorStrings.add(archetype.getArchetypeId() + " has exception: " + exception.getMessage());
                         unexpectedParseErrors++;
                     }
                 } catch (IOException e) {
@@ -214,19 +221,29 @@ public class BigArchetypeValidatorTest {
                     notImplemented++;
                 } else {
                     if (!validation.hasWarningsOrErrors()) {
+
                         log.error("test failed: archetype {} considered valid, it should not", archetype.getArchetypeId());
+                        errorStrings.add("test failed: archetype " + archetype.getArchetypeId() + " considered valid, it should not");
                         errorCount++;
                     } else {
                         boolean found = false;
+                        Set<ErrorType> errorTypes = new LinkedHashSet<>();
                         List<ValidationMessage> errors = validation.getErrors();
                         for (ValidationMessage message : errors) {
+                            errorTypes.add(message.getType());
                             if (errorMatches(message.getType(), regression)) {
                                 found = true;
                                 correctCount++;
                             }
                         }
                         if (!found) {
-                            log.error("validation failed: archetype {} invalid but with wrong message", archetype.getArchetypeId());
+                            log.error("validation failed: archetype {} invalid but with wrong message, was {} but should be {}",
+                                    archetype.getArchetypeId(),
+                                    Joiner.on(", ").join(errorTypes),
+                                    regression);
+                            errorStrings.add("validation failed: archetype " + archetype.getArchetypeId() + " invalid but with wrong message, was " +
+                                    Joiner.on(", ").join(errorTypes) + " but should be " +
+                                    regression);
                             printErrors(validation);
                             errorCount++;
                         }
@@ -236,6 +253,7 @@ public class BigArchetypeValidatorTest {
             } else {
                 if(validation.hasWarningsOrErrors()) {
                     log.error("Validation should pass, but it failed for archetype {}, {}", archetype.getArchetypeId(), regression);
+                    errorStrings.add("Validation should pass, but it failed for archetype " + archetype.getArchetypeId() + ", " + regression);
                     printErrors(validation);
                     shouldBeFineButWasinvalid++;
                 } else {
@@ -244,7 +262,7 @@ public class BigArchetypeValidatorTest {
             }
         }
         if(errorCount > 0) {
-            Assert.fail(String.format("%s validated but should not, %s correct, %s did not validate but should, %s not yet implemented, %s unexpected parser errors", errorCount, correctCount, shouldBeFineButWasinvalid, notImplemented, unexpectedParseErrors));
+            Assert.fail(String.format("%s validated but should not, %s correct, %s did not validate but should, %s not yet implemented, %s unexpected parser errors: \n%s", errorCount, correctCount, shouldBeFineButWasinvalid, notImplemented, unexpectedParseErrors, Joiner.on(", ").join(errorStrings)));
         }
         log.info("{} not implemented yet", notImplemented);
 
