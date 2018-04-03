@@ -82,6 +82,37 @@ public class ArchetypeValidatorTest {
 
     }
 
+    @Test
+    public void tupleMemberSizeMismatch() throws Exception {
+        archetype = parse("openEHR-EHR-CLUSTER.invalid_tuple_1.v1.0.0.adls");
+        ValidationResult validationResult = new ArchetypeValidator(models).validate(archetype);
+        List<ValidationMessage> messages = validationResult.getErrors();
+        System.out.println(messages);
+        assertEquals(2, messages.size());
+        assertEquals(ErrorType.OTHER, messages.get(0).getType());
+        assertTrue("message should complain about tuple members being incorrect", messages.get(0).getMessage().contains("There should be 3 tuple members"));
+    }
+
+    @Test
+    public void tupleMemberTypeMismatch() throws Exception {
+        archetype = parse("openEHR-EHR-CLUSTER.invalid_tuple_2.v1.0.0.adls");
+        ValidationResult validationResult = new ArchetypeValidator(models).validate(archetype);
+        List<ValidationMessage> messages = validationResult.getErrors();
+        System.out.println(messages);
+        assertEquals(1, messages.size());
+        assertEquals(ErrorType.VCARM, messages.get(0).getType());
+    }
+
+    @Test
+    public void tuplePrimitiveTypeMismatch() throws Exception {
+        archetype = parse("openEHR-EHR-CLUSTER.invalid_tuple_3.v1.0.0.adls");
+        ValidationResult validationResult = new ArchetypeValidator(models).validate(archetype);
+        List<ValidationMessage> messages = validationResult.getErrors();
+        System.out.println(messages);
+        assertEquals(1, messages.size());
+        assertEquals(ErrorType.VCORMT, messages.get(0).getType());
+    }
+
 
     private Archetype parse(String filename) throws IOException {
         archetype = parser.parse(ArchetypeValidatorTest.class.getResourceAsStream(filename));
