@@ -90,7 +90,7 @@ public class AdlChecker {
         }
 
         if(lint) {
-            System.out.println("step 1: running archetypes through linter");
+            System.out.println("step 3: running archetypes through linter");
             System.out.println();
             for (String directory : directories) {
                 try {

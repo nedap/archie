@@ -40,11 +40,14 @@ public class TerminologyContentGenerator {
             Archetype archetype = parser.parse(adlContent);
             models.selectModel(archetype);
 
-            //TODO: just run the CodeValidation in the context of an archetype repository, and process the error messages?
+            //We could just run the CodeValidation in the context of an archetype repository, and process the error messages?
+            //however, these cannot yet be automatically processed because they do not generate an easily readable id-code
+            //in a separate field, so for now it has been added here
             if(parser.getErrors().hasErrors()) {
                 throw new RuntimeException("parse errors!" + parser.getErrors().toString());
             }
             Archetype resultingArchetype = parser.parse(adlContent); //instantiate twice
+
             walkArchetype(adlContent, archetype, resultingArchetype);
             visitValueSets(adlContent, resultingArchetype);
 
@@ -96,11 +99,9 @@ public class TerminologyContentGenerator {
     private void walkArchetype(String sourceFile, Archetype archetype, Archetype resultingArchetype) {
         LinkedList<CObject> workList = new LinkedList<>();
         workList.push(archetype.getDefinition());
-        List<CObject> cObjects = new ArrayList<>();
         while(!workList.isEmpty()) {
             CObject next = workList.pop();
             if(!terminologyHasCodeForAllLanguages(archetype, next)) {
-                cObjects.add(next);
                 addCodeToTerminology(sourceFile, resultingArchetype, next.getNodeId());
             }
             for(CAttribute attribute:next.getAttributes()) {
@@ -127,7 +128,7 @@ public class TerminologyContentGenerator {
         if(text == null) {
             text = "Add term for me!";
         }
-        String description = text; //TODO: grep comment from sourcefile!
+        String description = text;
         Map<String, Map<String, ArchetypeTerm>> termDefinitions = resultingArchetype.getTerminology().getTermDefinitions();
         for(String language: termDefinitions.keySet()) {
             if(termDefinitions.get(language).get(code) == null) {
@@ -140,6 +141,10 @@ public class TerminologyContentGenerator {
         }
     }
 
+    /**
+     * Gets the comment text for the given nodeId.
+     * Walks through the entire source file each time, so a bit inefficient, but that's fine for now
+     */
     private String getCommentName(String sourceFile, String nodeId) {
         String[] lines = sourceFile.split("\n");
         for(String line:lines) {
@@ -161,7 +166,9 @@ public class TerminologyContentGenerator {
         int codeSpecializationDepth = AOMUtils.getSpecializationDepthFromCode(nodeId);
         int archetypeSpecializationDepth = archetype.specializationDepth();
         if(codeSpecializationDepth > archetypeSpecializationDepth) {
-            return true;//not exactly, this is a validation failure that needs to be fixed. log?
+            //this is a validation failure that needs to be fixed. But it's impossible to fix in this archetype.
+            // It will be logged by the archetype validator
+            return true;
         } else if (cObject.isRoot() || parentIsMultiple(cObject)) {
             if( codeSpecializationDepth == archetypeSpecializationDepth &&  !archetype.getTerminology().hasIdCodeInAllLanguages(nodeId)) {
                 return false;
