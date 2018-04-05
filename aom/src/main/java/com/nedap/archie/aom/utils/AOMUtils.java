@@ -248,7 +248,15 @@ public class AOMUtils {
             }
             property = classDefinition.flattenBmmClass().getProperties().get(segment.getNodeName());
             if(property == null) {
-                return null;
+                for(String descendant: classDefinition.findAllDescendants()) {
+                    BmmProperty bmmProperty = bmmModel.getClassDefinition(descendant).flattenBmmClass().getProperties().get(segment.getNodeName());
+                    if(bmmProperty != null) {
+                        property = bmmProperty;
+                    }
+                }
+                if(property == null) {
+                    return null;
+                }
             }
             classDefinition = property.getType().getBaseClass();
         }
@@ -281,13 +289,13 @@ public class AOMUtils {
     }
 
     /** Get the maximum code used at the given specialization level. useful for generating new codes*/
-    public static int getMaximumIdCode(int specializationLevel, Collection<String> usedIdCodes) {
+    public static int getMaximumIdCode(int specializationDepth, Collection<String> usedIdCodes) {
 
         int maximumIdCode = 0;
         for(String code:usedIdCodes) {
             if (code.length() > 2) {
-                int numberOfDots = CharMatcher.is(AdlCodeDefinitions.SPECIALIZATION_SEPARATOR).countIn(code);
-                if(specializationLevel == numberOfDots) {
+                int numberOfDots = getSpecializationDepthFromCode(code);
+                if(specializationDepth == numberOfDots) {
                     int numericCode = numberOfDots == 0 ? Integer.parseInt(code.substring(2)) : Integer.parseInt(code.substring(code.lastIndexOf('.')+1));
                     maximumIdCode = Math.max(numericCode, maximumIdCode);
                 }
@@ -295,4 +303,23 @@ public class AOMUtils {
         }
         return maximumIdCode;
     }
+
+    /** Get the maximum code used at the given specialization level. useful for generating new codes*/
+    public static int getMaximumIdCode(int specializationDepth, String prefix, Collection<String> usedIdCodes) {
+        if(specializationDepth == 0) {
+            throw new IllegalArgumentException("can only get the maximum code with prefix at a specialization depth > 0");
+        }
+        int maximumIdCode = 0;
+        for(String code:usedIdCodes) {
+            if(code.startsWith(prefix + ".")) {
+                int numberOfDots = CharMatcher.is(AdlCodeDefinitions.SPECIALIZATION_SEPARATOR).countIn(code);
+                if(specializationDepth == numberOfDots) {
+                    int numericCode = Integer.parseInt(code.substring(code.lastIndexOf('.')+1));
+                    maximumIdCode = Math.max(numericCode, maximumIdCode);
+                }
+            }
+        }
+        return maximumIdCode;
+    }
+
 }

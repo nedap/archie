@@ -293,7 +293,7 @@ public class Archetype extends AuthoredResource {
     private String generateNextCode(String prefix, Set<String> usedCodes) {
         int specializationDepth = this.specializationDepth();
         int maximumIdCode = AOMUtils.getMaximumIdCode(specializationDepth, usedCodes);
-        return prefix + generateSpecializationDepthCodePrefix() + (maximumIdCode+1);
+        return prefix + generateSpecializationDepthCodePrefix(specializationDepth()) + (maximumIdCode+1);
     }
 
     public String generateNextIdCode() {
@@ -309,13 +309,12 @@ public class Archetype extends AuthoredResource {
 
     }
 
-    private String generateSpecializationDepthCodePrefix() {
+    private String generateSpecializationDepthCodePrefix (int specializationDepth) {
         String prefix = "";
-        for(int i = 0; i < specializationDepth(); i++) {
-            prefix += "0.";
+        for(int i = 0; i < specializationDepth; i++) {
+            prefix += "0" + AdlCodeDefinitions.SPECIALIZATION_SEPARATOR;
         }
         return prefix;
     }
-
 
 }

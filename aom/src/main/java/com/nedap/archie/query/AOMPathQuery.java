@@ -1,6 +1,7 @@
 package com.nedap.archie.query;
 
 
+import com.google.common.collect.Lists;
 import com.nedap.archie.aom.ArchetypeModelObject;
 import com.nedap.archie.aom.CAttribute;
 import com.nedap.archie.aom.CComplexObject;
@@ -63,16 +64,80 @@ public class AOMPathQuery {
     public <T extends ArchetypeModelObject> List<T> findList(CComplexObject root) {
         List<ArchetypeModelObject> result = new ArrayList<>();
         result.add(root);
-        for(PathSegment segment:this.pathSegments) {
+        for(int i = 0; i < pathSegments.size(); i++) {
+            PathSegment segment = pathSegments.get(i);
             if (result.size() == 0) {
                 return Collections.emptyList();
             }
-            result = findOneSegment(segment, result);
+
+
+            CAttribute differentialAttribute = findMatchingDifferentialPath(pathSegments.subList(i, pathSegments.size()), result);
+            if(differentialAttribute != null) {
+                //skip a few pathsegments for this differential path match
+                i = i + new APathQuery(differentialAttribute.getDifferentialPath()).getPathSegments().size()-1;
+                PathSegment lastPathSegment = pathSegments.get(i);
+                ArchetypeModelObject oneMatchingObject = findOneMatchingObject(differentialAttribute, lastPathSegment);
+                if(oneMatchingObject != null) {
+                    result = Lists.newArrayList(oneMatchingObject);
+                } else {
+                    result = findOneSegment(segment, result);
+                }
+
+
+            } else {
+                result = findOneSegment(segment, result);
+            }
         }
         return (List<T>)result.stream().filter((object) -> object != null).collect(Collectors.toList());
     }
 
-    private List<ArchetypeModelObject> findOneSegment(PathSegment pathSegment, List<ArchetypeModelObject> objects) {
+    protected CAttribute findMatchingDifferentialPath(List<PathSegment> pathSegments, List<ArchetypeModelObject> objects) {
+        if(pathSegments.size() < 2) {
+            return null;
+        }
+        List<ArchetypeModelObject> result = new ArrayList<>();
+        for(ArchetypeModelObject object:objects) {
+            if (object instanceof CObject) {
+                for(CAttribute attribute:((CObject) object).getAttributes()) {
+                    if(attribute.getDifferentialPath() != null) {
+                        List<PathSegment> differentialPathSegments = new APathQuery(attribute.getDifferentialPath()).getPathSegments();
+                        if(checkDifferentialMatch(pathSegments, differentialPathSegments)) {
+                            return attribute;
+                        }
+                    }
+
+                }
+            }
+        }
+        return null;
+    }
+
+    private boolean checkDifferentialMatch(List<PathSegment> pathSegments, List<PathSegment> differentialPathSegments) {
+        if(differentialPathSegments.size() <= pathSegments.size()) {
+            for(int i = 0; i < differentialPathSegments.size(); i++) {
+                PathSegment segment = pathSegments.get(i);
+                PathSegment differentialPathSegment = differentialPathSegments.get(i);
+                if(!matches(segment, differentialPathSegment)) {
+                    return true;
+                }
+            }
+            return true;
+        }
+        return true;
+
+    }
+
+    private boolean matches(PathSegment segment, PathSegment differentialPathSegment) {
+        if(differentialPathSegment.getNodeId() == null) {
+            return segment.getNodeName().equalsIgnoreCase(differentialPathSegment.getNodeName());
+        } else {
+            return segment.getNodeName().equalsIgnoreCase(differentialPathSegment.getNodeName()) &&
+                    segment.getNodeId().equals(differentialPathSegment.getNodeId());
+        }
+    }
+
+
+    protected List<ArchetypeModelObject> findOneSegment(PathSegment pathSegment, List<ArchetypeModelObject> objects) {
         List<ArchetypeModelObject> result = new ArrayList<>();
 
         List<ArchetypeModelObject> preProcessedObjects = new ArrayList<>();
@@ -99,19 +164,26 @@ public class AOMPathQuery {
                 CObject cobject = (CObject) object;
                 CAttribute attribute = cobject.getAttribute(pathSegment.getNodeName());
                 if(attribute != null) {
-                    if (pathSegment.hasIdCode() || pathSegment.hasArchetypeRef()) {
-                        result.add(attribute.getChild(pathSegment.getNodeId()));
-                    } else if (pathSegment.hasNumberIndex()) {
-                        result.add(attribute.getChildren().get(pathSegment.getIndex() - 1));//APath path numbers start at 1 instead of 0
-                    } else if (pathSegment.getNodeId() != null) {
-                        result.add(attribute.getChildByMeaning(pathSegment.getNodeId()));//TODO: the ANTLR grammar removes all whitespace. what to do here?
-                    } else {
-                        result.add(attribute);
+                    ArchetypeModelObject r = findOneMatchingObject(attribute, pathSegment);
+                    if(r != null) {
+                        result.add(r);
                     }
                 }
             }
         }
         return result;
+    }
+
+    protected ArchetypeModelObject findOneMatchingObject(CAttribute attribute, PathSegment pathSegment) {
+        if (pathSegment.hasIdCode() || pathSegment.hasArchetypeRef()) {
+            return attribute.getChild(pathSegment.getNodeId());
+        } else if (pathSegment.hasNumberIndex()) {
+            return attribute.getChildren().get(pathSegment.getIndex() - 1);//APath path numbers start at 1 instead of 0
+        } else if (pathSegment.getNodeId() != null) {
+            return attribute.getChildByMeaning(pathSegment.getNodeId());//TODO: the ANTLR grammar removes all whitespace. what to do here?
+        } else {
+            return attribute;
+        }
     }
 
     //TODO: get diagnostic information about where the finder stopped in the path - could be very useful!
