@@ -82,8 +82,6 @@ public class ArchetypeValidator {
         validationsPhase3 = new ArrayList<>();
         validationsPhase3.add(new FlatFormValidation());
 
-
-
     }
 
     public ValidationResult validate(Archetype archetype) {
@@ -108,6 +106,10 @@ public class ArchetypeValidator {
      * @return
      */
     public ValidationResult validate(Archetype archetype, FullArchetypeRepository repository) {
+        ArchetypeValidationSettings settings = repository.getArchetypeValidationSettings();
+        if(settings == null) {
+            settings = new ArchetypeValidationSettings();
+        }
         if(archetype instanceof Template) {
             //in the case of a template, add a repository that can store the overlays separate from the rest of the archetypes
             //later they can be retrieved and handled as extra archetypes, that are not top level archetypes usable in other
@@ -155,27 +157,29 @@ public class ArchetypeValidator {
             repository = new InMemoryFullArchetypeRepository();
         }
 
-        List<ValidationMessage> messages = runValidations(archetype, repository, flatParent, validationsPhase0);
+        List<ValidationMessage> messages = runValidations(archetype, repository, settings, flatParent, validationsPhase0);
         ValidationResult result = new ValidationResult(archetype);
         result.setErrors(messages);
         if(result.passes()) {
             //continue running only if the basic phase 0 validation run, otherwise we get annoying exceptions
-            messages.addAll(runValidations(archetype, repository, flatParent, validationsPhase1));
+            messages.addAll(runValidations(archetype, repository, settings, flatParent, validationsPhase1));
 
             //the separate validations will check if the archtype is specialized and if they need this in phase 2
             //because the RM validations are technically phase 2 and required to run
             //also the separate validations are implemented so that they can run with errors in phase 1 without exceptions
             //plus exceptions will nicely be logged as an OTHER error type - we can safely run it and you will get
             //more errors in one go - could be useful
-            messages.addAll(runValidations(archetype, repository, flatParent, validationsPhase2));
+            messages.addAll(runValidations(archetype, repository, settings, flatParent, validationsPhase2));
         }
 
         result.setErrors(messages);
-        if(result.passes()) {
+        if(result.passes() || settings.isAlwaysTryToFlatten()) {
             try {
                 Archetype flattened = new Flattener(repository, combinedModels).flatten(archetype);
                 result.setFlattened(flattened);
-                messages.addAll(runValidations(flattened, repository, flatParent, validationsPhase3));
+                if(result.passes()) {
+                    messages.addAll(runValidations(flattened, repository, settings, flatParent, validationsPhase3));
+                }
             } catch (Exception e) {
                 messages.add(new ValidationMessage(ErrorType.OTHER, "flattening failed with exception " + e));
                 logger.error("error during validation", e);
@@ -235,12 +239,12 @@ public class ArchetypeValidator {
         return preprocessed;
     }
 
-    private List<ValidationMessage> runValidations(Archetype archetype, ArchetypeRepository repository, Archetype flatParent, List<ArchetypeValidation> validations) {
+    private List<ValidationMessage> runValidations(Archetype archetype, ArchetypeRepository repository, ArchetypeValidationSettings settings, Archetype flatParent, List<ArchetypeValidation> validations) {
 
         List<ValidationMessage> messages = new ArrayList<>();
         for(ArchetypeValidation validation: validations) {
             try {
-                messages.addAll(validation.validate(combinedModels, archetype, flatParent, repository));
+                messages.addAll(validation.validate(combinedModels, archetype, flatParent, repository, settings));
             } catch (Exception e) {
                 logger.error("error running validation processor", e);
                 e.printStackTrace();

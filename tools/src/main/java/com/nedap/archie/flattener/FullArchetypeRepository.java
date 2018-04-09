@@ -3,6 +3,7 @@ package com.nedap.archie.flattener;
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.ArchetypeHRID;
 import com.nedap.archie.aom.OperationalTemplate;
+import com.nedap.archie.archetypevalidator.ArchetypeValidationSettings;
 import com.nedap.archie.archetypevalidator.ArchetypeValidator;
 import com.nedap.archie.archetypevalidator.ValidationMessage;
 import com.nedap.archie.archetypevalidator.ValidationResult;
@@ -26,26 +27,24 @@ public interface FullArchetypeRepository extends ArchetypeRepository {
 
     List<ValidationResult> getAllValidationResults();
 
+    ArchetypeValidationSettings getArchetypeValidationSettings();
+
     default void compile(ReferenceModels models) {
         ArchetypeValidator validator = new ArchetypeValidator(models);
-        for(Archetype archetype:getAllArchetypes()) {
-            if(getValidationResult(archetype.getArchetypeId().toString()) == null) {
-                validator.validate(archetype, this);
-            }
-        }
+        compile(validator);
     }
 
     default void compile(MetaModels models) {
         ArchetypeValidator validator = new ArchetypeValidator(models);
-        for(Archetype archetype:getAllArchetypes()) {
-            if(getValidationResult(archetype.getArchetypeId().toString()) == null) {
-                validator.validate(archetype, this);
-            }
-        }
+        compile(validator);
     }
 
     default void compile(ReferenceModels models, ReferenceModelAccess bmmModels) {
         ArchetypeValidator validator = new ArchetypeValidator(models, bmmModels);
+        compile(validator);
+    }
+
+    default void compile(ArchetypeValidator validator) {
         for(Archetype archetype:getAllArchetypes()) {
             if(getValidationResult(archetype.getArchetypeId().toString()) == null) {
                 validator.validate(archetype, this);

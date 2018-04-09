@@ -19,9 +19,6 @@ import com.nedap.archie.rminfo.RMTypeInfo;
  */
 public class ValidateAgainstReferenceModel extends ValidatingVisitor {
 
-    //TODO: what is this?
-    boolean strictValidation = true;
-
     public ValidateAgainstReferenceModel() {
         super();
     }
@@ -98,7 +95,7 @@ public class ValidateAgainstReferenceModel extends ValidatingVisitor {
                     if(cAttribute.getExistence() != null) {
                         if(!defaultAttribute.getExistence().contains(cAttribute.getExistence())) {
                             if(!archetype.isSpecialized() && defaultAttribute.getExistence().equals(cAttribute.getExistence())) {
-                                if(strictValidation) {
+                                if(settings.isStrictMultiplicitiesSpecializationValidation()) {
                                     addMessageWithPath(ErrorType.VCAEX, cAttribute.path());
                                 } else {
                                     //TODO: warn
@@ -112,7 +109,7 @@ public class ValidateAgainstReferenceModel extends ValidatingVisitor {
                     if(defaultAttribute.isMultiple()) {
                         if(defaultAttribute.getCardinality() != null && cAttribute.getCardinality() != null && !defaultAttribute.getCardinality().contains(cAttribute.getCardinality())){
                             if(defaultAttribute.getCardinality().equals(cAttribute.getCardinality())) {
-                                if(strictValidation) {
+                                if(settings.isStrictMultiplicitiesSpecializationValidation()) {
                                     addMessageWithPath(ErrorType.VCACA, cAttribute.path());
                                 } else {
                                     //TODO: warning

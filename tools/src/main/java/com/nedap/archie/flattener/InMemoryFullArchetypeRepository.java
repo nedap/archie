@@ -3,6 +3,7 @@ package com.nedap.archie.flattener;
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.ArchetypeHRID;
 import com.nedap.archie.aom.OperationalTemplate;
+import com.nedap.archie.archetypevalidator.ArchetypeValidationSettings;
 import com.nedap.archie.archetypevalidator.ValidationResult;
 
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ public class InMemoryFullArchetypeRepository extends SimpleArchetypeRepository i
 
     private Map<String, Archetype> flattenedArchetypes = new ConcurrentHashMap<>();
     private Map<String, Archetype> operationalTemplates = new ConcurrentHashMap<>();
+    private ArchetypeValidationSettings archetypeValidationSettings;
 
     @Override
     public Archetype getFlattenedArchetype(String archetypeId) {
@@ -47,5 +49,12 @@ public class InMemoryFullArchetypeRepository extends SimpleArchetypeRepository i
         return new ArrayList<>(validationResult.values());
     }
 
+    @Override
+    public ArchetypeValidationSettings getArchetypeValidationSettings() {
+        return archetypeValidationSettings;
+    }
 
+    public void setArchetypeValidationSettings(ArchetypeValidationSettings settings) {
+        this.archetypeValidationSettings = settings;
+    }
 }
