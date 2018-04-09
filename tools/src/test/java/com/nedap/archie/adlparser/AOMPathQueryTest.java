@@ -14,6 +14,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 /**
  * Test APath queries with archetype model objects
@@ -53,6 +54,22 @@ public class AOMPathQueryTest {
         query = new AOMPathQuery("/context[id11]/other_context[id2]");
         archetypeModelObject = query.find(archetype.getDefinition());
         assertEquals("ITEM_TREE", ((CComplexObject) archetypeModelObject).getRmTypeName());
+    }
+
+    @Test
+    public void differentialPaths() throws Exception {
+        Archetype archetype = TestUtil.parseFailOnErrors("/adl2-tests/features/specialisation/openEHR-EHR-OBSERVATION.redefine_1_value.v1.0.0.adls");
+
+        //query with a differential path halfway
+        AOMPathQuery query = new AOMPathQuery("/data/events[id3]/data/items[id4.1]/value[id0.6]");
+        ArchetypeModelObject archetypeModelObject = query.find(archetype.getDefinition());
+        assertEquals("id0.6", ((CComplexObject) archetypeModelObject).getNodeId());
+
+        //partial match of differential path should not return result
+        query = new AOMPathQuery("/data/events[id3]");
+        archetypeModelObject = query.find(archetype.getDefinition());
+        assertNull(archetypeModelObject);
+
     }
 
     @Test
