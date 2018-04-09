@@ -198,6 +198,9 @@ public class MetaModel implements MetaModelInterface {
     public MultiplicityInterval referenceModelPropMultiplicity(String rmTypeName, String rmAttributeNameOrPath) {
         if(selectedBmmModel != null) {
             BmmProperty bmmProperty =  AOMUtils.getPropertyAtPath(selectedBmmModel, rmTypeName, rmAttributeNameOrPath);
+            if(bmmProperty == null) {
+                return null;
+            }
             if(isMultiple(bmmProperty)) {
                 return MultiplicityInterval.createUpperUnbounded(0);
             } else {
@@ -209,6 +212,9 @@ public class MetaModel implements MetaModelInterface {
             }
         } else {
             RMAttributeInfo attributeInfo = AOMUtils.getAttributeInfoAtPath(selectedModel, rmTypeName, rmAttributeNameOrPath);
+            if(attributeInfo == null) {
+                return null;
+            }
             if (attributeInfo.isMultipleValued()) {
                 return MultiplicityInterval.createUpperUnbounded(0);
             } else {
