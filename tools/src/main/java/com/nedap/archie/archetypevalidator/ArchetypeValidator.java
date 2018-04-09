@@ -106,7 +106,7 @@ public class ArchetypeValidator {
      * @return
      */
     public ValidationResult validate(Archetype archetype, FullArchetypeRepository repository) {
-        ArchetypeValidationSettings settings = repository.getArchetypeValidationSettings();
+        ArchetypeValidationSettings settings = repository == null ? null : repository.getArchetypeValidationSettings();
         if(settings == null) {
             settings = new ArchetypeValidationSettings();
         }

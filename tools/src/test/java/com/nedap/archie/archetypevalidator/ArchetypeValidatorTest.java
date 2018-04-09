@@ -2,6 +2,7 @@ package com.nedap.archie.archetypevalidator;
 
 import com.nedap.archie.adlparser.ADLParser;
 import com.nedap.archie.aom.Archetype;
+import com.nedap.archie.flattener.InMemoryFullArchetypeRepository;
 import com.nedap.archie.openehrtestrm.TestRMInfoLookup;
 import com.nedap.archie.rminfo.ArchieRMInfoLookup;
 import com.nedap.archie.rminfo.ReferenceModels;
@@ -11,8 +12,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Created by pieter.bos on 05/04/2017.
@@ -48,6 +48,23 @@ public class ArchetypeValidatorTest {
         System.out.println(messages);
         assertEquals(1, messages.size());
         assertEquals(ErrorType.VCARM, messages.get(0).getType());
+        assertNull(validationResult.getFlattened());
+    }
+
+    @Test
+    public void VCARMNonExistantTypeAlwaysFlatten() throws Exception {
+        archetype = parse("/adl2-tests/validity/rm_checking/openEHR-EHR-EVALUATION.VCARM_rm_non_existent_attribute.v1.0.0.adls");
+        InMemoryFullArchetypeRepository repository = new InMemoryFullArchetypeRepository();
+        repository.addArchetype(archetype);
+        ArchetypeValidationSettings settings = new ArchetypeValidationSettings();
+        settings.setAlwaysTryToFlatten(true);
+        repository.setArchetypeValidationSettings(settings);
+        ValidationResult validationResult = new ArchetypeValidator(models).validate(archetype, repository);
+        List<ValidationMessage> messages = validationResult.getErrors();
+        System.out.println(messages);
+        assertEquals(1, messages.size());
+        assertEquals(ErrorType.VCARM, messages.get(0).getType());
+        assertNotNull(validationResult.getFlattened());
     }
 
     @Test
