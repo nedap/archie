@@ -31,6 +31,8 @@ public class AOMPathQuery {
     /** If true, extend the search through C_COMPLEX_OBJECT_PROXY objects by looking up the replacement first.*/
     private final boolean findThroughCComplexObjectProxies;
 
+    private boolean findThroughDifferentialPaths = true;
+
     public AOMPathQuery(String query) {
         APathQuery apathQuery = new APathQuery(query);
         this.pathSegments = apathQuery.getPathSegments();
@@ -61,6 +63,10 @@ public class AOMPathQuery {
         return new AOMPathQuery(pathSegments, false);
     }
 
+    public void setFindThroughDifferentialPaths(boolean find) {
+        this.findThroughDifferentialPaths = find;
+    }
+
     public <T extends ArchetypeModelObject> List<T> findList(CComplexObject root) {
         List<ArchetypeModelObject> result = new ArrayList<>();
         result.add(root);
@@ -71,7 +77,10 @@ public class AOMPathQuery {
             }
 
 
-            CAttribute differentialAttribute = findMatchingDifferentialPath(pathSegments.subList(i, pathSegments.size()), result);
+            CAttribute differentialAttribute = null;
+            if(findThroughDifferentialPaths) {
+                differentialAttribute = findMatchingDifferentialPath(pathSegments.subList(i, pathSegments.size()), result);
+            }
             if(differentialAttribute != null) {
                 //skip a few pathsegments for this differential path match
                 i = i + new APathQuery(differentialAttribute.getDifferentialPath()).getPathSegments().size()-1;
@@ -118,12 +127,12 @@ public class AOMPathQuery {
                 PathSegment segment = pathSegments.get(i);
                 PathSegment differentialPathSegment = differentialPathSegments.get(i);
                 if(!matches(segment, differentialPathSegment)) {
-                    return true;
+                    return false;
                 }
             }
             return true;
         }
-        return true;
+        return false;
 
     }
 
