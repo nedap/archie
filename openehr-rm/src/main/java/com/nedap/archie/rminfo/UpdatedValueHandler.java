@@ -2,13 +2,7 @@ package com.nedap.archie.rminfo;
 
 import com.google.common.base.Joiner;
 import com.nedap.archie.ArchieLanguageConfiguration;
-import com.nedap.archie.aom.Archetype;
-import com.nedap.archie.aom.ArchetypeModelObject;
-import com.nedap.archie.aom.CAttribute;
-import com.nedap.archie.aom.CAttributeTuple;
-import com.nedap.archie.aom.CObject;
-import com.nedap.archie.aom.CPrimitiveTuple;
-import com.nedap.archie.aom.OperationalTemplate;
+import com.nedap.archie.aom.*;
 import com.nedap.archie.aom.primitives.CTerminologyCode;
 import com.nedap.archie.aom.terminology.ArchetypeTerm;
 import com.nedap.archie.aom.terminology.ArchetypeTerminology;
@@ -27,35 +21,42 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.xml.xpath.XPathExpressionException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class UpdatedValueHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(UpdatedValueHandler.class);
 
-    public static void pathHasBeenUpdated(Object rmObject, Archetype archetype, String pathOfParent, Object parent) {
+    public static Map<String, Long> pathHasBeenUpdated(Object rmObject, Archetype archetype, String pathOfParent, Object parent) {
         if(parent instanceof CodePhrase) {
-            fixCodePhrase(rmObject, archetype, pathOfParent);
+            return fixCodePhrase(rmObject, archetype, pathOfParent);
         }
+
+        return new HashMap<>();
     }
 
-    private static void fixCodePhrase(Object rmObject, Archetype archetype, String pathOfParent) {
+    private static Map<String, Long> fixCodePhrase(Object rmObject, Archetype archetype, String pathOfParent) {
         try {
             //special case: if at-code has been set, we need to do more!
             if (pathOfParent.endsWith("value/defining_code")) {
                 fixDvCodedText(rmObject, archetype, pathOfParent);
             } else if (pathOfParent.endsWith("symbol/defining_code")) {
-                fixDvOrdinal(rmObject, archetype, pathOfParent);
+                return fixDvOrdinal(rmObject, archetype, pathOfParent);
             } else {
             }
         } catch (Exception e) {
             logger.warn("cannot fix codephrase", e);
         }
+
+        return new HashMap<>();
     }
 
-    private static void fixDvOrdinal(Object rmObject, Archetype archetype, String pathOfParent) throws XPathExpressionException {
+    private static Map<String, Long> fixDvOrdinal(Object rmObject, Archetype archetype, String pathOfParent) throws XPathExpressionException {
         RMPathQuery rmPathQuery = new RMPathQuery(pathOfParent.replace("/symbol/defining_code", ""));
         DvOrdinal ordinal = rmPathQuery.find(ArchieRMInfoLookup.getInstance(), rmObject);
+        Long value = null;
         CAttribute symbolAttribute = archetype.itemAtPath(pathOfParent.replace("/symbol/defining_code", "/symbol"));//TODO: remove all numeric indices from path!
         if (symbolAttribute != null) {
             CAttributeTuple socParent = (CAttributeTuple) symbolAttribute.getSocParent();
@@ -69,7 +70,8 @@ public class UpdatedValueHandler {
                             if(valueConstraint.size() == 1) {
                                 Interval<Long> interval  = valueConstraint.get(0);
                                 if(interval.getLower().equals(interval.getUpper()) && !interval.isLowerUnbounded() && !interval.isUpperUnbounded()) {
-                                    ordinal.setValue(interval.getLower());
+                                    value = interval.getLower();
+                                    ordinal.setValue(value);
                                 }
 
                             }
@@ -79,6 +81,12 @@ public class UpdatedValueHandler {
                 }
             }
         }
+
+        Map<String, Long> result = new HashMap<>();
+        String pathToValue = pathOfParent.replace("/symbol/defining_code", "/value");
+        result.put(pathToValue, value);
+
+        return result;
     }
 
     private static void fixDvCodedText(Object rmObject, Archetype archetype, String pathOfParent) throws XPathExpressionException {
