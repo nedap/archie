@@ -150,7 +150,7 @@ public class RuleEvaluation<T> {
         Map<String, Long> valuesToUpdate = assertionsFixer.fixAssertions(archetype, assertionResult);
         for (String path : valuesToUpdate.keySet()) {
             Long value = valuesToUpdate.get(path);
-            assertionResult.setSetPathValue(path, new ValueList(new Value(value)));
+            assertionResult.setSetPathValue(path, new ValueList(value));
         }
 
         //before re-evaluation, reset any overridden existence from evaluation?
