@@ -141,6 +141,11 @@ public interface ModelInfoLookup {
      * Perform any actions necessary if the value at the given path has just been updated
      * For example, if an ordinal value has been set, this method should also set the symbol.
      *
+     * In addition to changing the actual values, it returns which additional paths have been updated as well.
+     * For example, if an ordinal's symbol was updated, it will update both the value and the symbol of that ordinal
+     * and return the value's path and updated value. This is done to obtain a full set of instructions of what must be
+     * changed due to the rule evaluation.
+     *
      * This can be the most complex operation of this entire class to implement. If you just throw an exception instead of implementing it
      * everything will work fine except for the rule evaluation.
      *
@@ -150,8 +155,10 @@ public interface ModelInfoLookup {
      * @param archetype
      * @param pathOfParent
      * @param parent
+     * @return Each key is a path that was updated as a result of the previously updated path and each corresponding
+     * value is this path's updated value
      */
-    void pathHasBeenUpdated(Object rmObject, Archetype archetype, String pathOfParent, Object parent);
+    Map<String, Object> pathHasBeenUpdated(Object rmObject, Archetype archetype, String pathOfParent, Object parent);
 
     /**
      * True if the given attribute at given type is ok for given CPrimitiveObject, false otherwise

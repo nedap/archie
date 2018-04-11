@@ -3,24 +3,15 @@ package com.nedap.archie.rminfo;
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.CObject;
 import com.nedap.archie.aom.CPrimitiveObject;
-import com.nedap.archie.aom.primitives.CBoolean;
-import com.nedap.archie.aom.primitives.CDate;
-import com.nedap.archie.aom.primitives.CDateTime;
-import com.nedap.archie.aom.primitives.CDuration;
-import com.nedap.archie.aom.primitives.CInteger;
-import com.nedap.archie.aom.primitives.CReal;
-import com.nedap.archie.aom.primitives.CString;
-import com.nedap.archie.aom.primitives.CTerminologyCode;
-import com.nedap.archie.aom.primitives.CTime;
+import com.nedap.archie.aom.primitives.*;
 import com.nedap.archie.base.Interval;
 import com.nedap.archie.base.terminology.TerminologyCode;
-import com.nedap.archie.rm.archetyped.Locatable;
-import com.nedap.archie.rm.datavalues.DvBoolean;
-import com.nedap.archie.rm.support.identification.TerminologyId;
 import com.nedap.archie.rm.RMObject;
+import com.nedap.archie.rm.archetyped.Locatable;
 import com.nedap.archie.rm.datastructures.PointEvent;
 import com.nedap.archie.rm.datatypes.CodePhrase;
 import com.nedap.archie.rm.datavalues.DvCodedText;
+import com.nedap.archie.rm.support.identification.TerminologyId;
 
 import java.lang.reflect.Method;
 import java.time.temporal.Temporal;
@@ -29,6 +20,7 @@ import java.time.temporal.TemporalAmount;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by pieter.bos on 02/02/16.
@@ -149,8 +141,8 @@ public class ArchieRMInfoLookup extends ReflectionModelInfoLookup {
      * @param parent
      */
     @Override
-    public void pathHasBeenUpdated(Object rmObject, Archetype archetype, String pathOfParent, Object parent) {
-        UpdatedValueHandler.pathHasBeenUpdated(rmObject, archetype, pathOfParent, parent);
+    public Map<String, Object> pathHasBeenUpdated(Object rmObject, Archetype archetype, String pathOfParent, Object parent) {
+        return UpdatedValueHandler.pathHasBeenUpdated(rmObject, archetype, pathOfParent, parent);
     }
 
     @Override

@@ -8,9 +8,10 @@ import com.nedap.archie.base.Cardinality;
 import com.nedap.archie.base.Interval;
 import com.nedap.archie.base.terminology.TerminologyCode;
 
-import java.util.List;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by pieter.bos on 06/07/16.
@@ -71,7 +72,7 @@ public class ArchieAOMInfoLookup extends ReflectionModelInfoLookup {
     }
 
     @Override
-    public void pathHasBeenUpdated(Object rmObject, Archetype archetype, String pathOfParent, Object parent) {
+    public Map<String, Object> pathHasBeenUpdated(Object rmObject, Archetype archetype, String pathOfParent, Object parent) {
         throw new UnsupportedOperationException("not supported");//TODO: split this to different classes
     }
 

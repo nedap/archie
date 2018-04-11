@@ -8,15 +8,7 @@ import com.nedap.archie.rminfo.ModelInfoLookup;
 import com.nedap.archie.rules.Expression;
 import com.nedap.archie.rules.RuleElement;
 import com.nedap.archie.rules.RuleStatement;
-import com.nedap.archie.rules.evaluation.evaluators.AssertionEvaluator;
-import com.nedap.archie.rules.evaluation.evaluators.BinaryOperatorEvaluator;
-import com.nedap.archie.rules.evaluation.evaluators.ConstantEvaluator;
-import com.nedap.archie.rules.evaluation.evaluators.ForAllEvaluator;
-import com.nedap.archie.rules.evaluation.evaluators.FunctionEvaluator;
-import com.nedap.archie.rules.evaluation.evaluators.ModelReferenceEvaluator;
-import com.nedap.archie.rules.evaluation.evaluators.UnaryOperatorEvaluator;
-import com.nedap.archie.rules.evaluation.evaluators.VariableDeclarationEvaluator;
-import com.nedap.archie.rules.evaluation.evaluators.VariableReferenceEvaluator;
+import com.nedap.archie.rules.evaluation.evaluators.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,6 +16,7 @@ import javax.xml.bind.JAXBContext;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by pieter.bos on 31/03/16.
@@ -154,8 +147,11 @@ public class RuleEvaluation<T> {
         //Fix any assertions that should be fixed before processing the next rule
         //this means we can calculate a score, then use that score in the next rule
         //otherwise this would mean several passes through the evaluator
-        assertionsFixer.fixAssertions(archetype, assertionResult);
-
+        Map<String, Object> valuesToUpdate = assertionsFixer.fixAssertions(archetype, assertionResult);
+        for (String path : valuesToUpdate.keySet()) {
+            Object value = valuesToUpdate.get(path);
+            assertionResult.setSetPathValue(path, new ValueList(value));
+        }
 
         //before re-evaluation, reset any overridden existence from evaluation?
     }
