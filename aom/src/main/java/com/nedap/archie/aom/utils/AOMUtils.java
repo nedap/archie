@@ -252,6 +252,7 @@ public class AOMUtils {
                     BmmProperty bmmProperty = bmmModel.getClassDefinition(descendant).flattenBmmClass().getProperties().get(segment.getNodeName());
                     if(bmmProperty != null) {
                         property = bmmProperty;
+                        break;
                     }
                 }
                 if(property == null) {

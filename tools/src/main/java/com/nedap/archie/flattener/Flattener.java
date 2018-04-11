@@ -182,9 +182,13 @@ public class Flattener {
                     List<CObject> objectsToRemove = new ArrayList<>();
                     for (CObject child : attribute.getChildren()) {
                         if (!child.isAllowed()) {
-                            objectsToRemove.add(child);
+                            if(child instanceof CComplexObject) {
+                                ((CComplexObject) child).setAttributes(new ArrayList<>());
+                            }
+                            //objectsToRemove.add(child);
+                        } else {
+                            workList.push(child);
                         }
-                        workList.push(child);
                     }
                     attribute.getChildren().removeAll(objectsToRemove);
                 }
