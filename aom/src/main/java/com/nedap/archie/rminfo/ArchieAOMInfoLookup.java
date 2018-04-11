@@ -72,7 +72,7 @@ public class ArchieAOMInfoLookup extends ReflectionModelInfoLookup {
     }
 
     @Override
-    public Map<String, Long> pathHasBeenUpdated(Object rmObject, Archetype archetype, String pathOfParent, Object parent) {
+    public Map<String, Object> pathHasBeenUpdated(Object rmObject, Archetype archetype, String pathOfParent, Object parent) {
         throw new UnsupportedOperationException("not supported");//TODO: split this to different classes
     }
 

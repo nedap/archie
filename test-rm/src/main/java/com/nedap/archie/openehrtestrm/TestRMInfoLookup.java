@@ -88,7 +88,7 @@ public class TestRMInfoLookup extends ReflectionModelInfoLookup {
      * @param parent
      */
     @Override
-    public Map<String, Long> pathHasBeenUpdated(Object rmObject, Archetype archetype, String pathOfParent, Object parent) {
+    public Map<String, Object> pathHasBeenUpdated(Object rmObject, Archetype archetype, String pathOfParent, Object parent) {
         return new HashMap<>();
     }
 

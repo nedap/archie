@@ -158,7 +158,7 @@ public interface ModelInfoLookup {
      * @return Each key is a path that was updated as a result of the previously updated path and each corresponding
      * value is this path's updated value
      */
-    Map<String, Long> pathHasBeenUpdated(Object rmObject, Archetype archetype, String pathOfParent, Object parent);
+    Map<String, Object> pathHasBeenUpdated(Object rmObject, Archetype archetype, String pathOfParent, Object parent);
 
     /**
      * True if the given attribute at given type is ok for given CPrimitiveObject, false otherwise

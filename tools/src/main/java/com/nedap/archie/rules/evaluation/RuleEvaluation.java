@@ -147,9 +147,9 @@ public class RuleEvaluation<T> {
         //Fix any assertions that should be fixed before processing the next rule
         //this means we can calculate a score, then use that score in the next rule
         //otherwise this would mean several passes through the evaluator
-        Map<String, Long> valuesToUpdate = assertionsFixer.fixAssertions(archetype, assertionResult);
+        Map<String, Object> valuesToUpdate = assertionsFixer.fixAssertions(archetype, assertionResult);
         for (String path : valuesToUpdate.keySet()) {
-            Long value = valuesToUpdate.get(path);
+            Object value = valuesToUpdate.get(path);
             assertionResult.setSetPathValue(path, new ValueList(value));
         }
 

@@ -33,8 +33,8 @@ public class AssertionsFixer {
         emptyRMObjectConstructor = new EmptyRMObjectConstructor(evaluation.getModelInfoLookup());
     }
 
-    public Map<String, Long> fixAssertions(Archetype archetype, AssertionResult assertionResult) {
-        Map<String, Long> result = new HashMap<>();
+    public Map<String, Object> fixAssertions(Archetype archetype, AssertionResult assertionResult) {
+        Map<String, Object> result = new HashMap<>();
 
         try {
             Map<String, Value> setPathValues = assertionResult.getSetPathValues();

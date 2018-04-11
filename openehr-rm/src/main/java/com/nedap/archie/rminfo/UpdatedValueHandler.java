@@ -29,7 +29,7 @@ public class UpdatedValueHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(UpdatedValueHandler.class);
 
-    public static Map<String, Long> pathHasBeenUpdated(Object rmObject, Archetype archetype, String pathOfParent, Object parent) {
+    public static Map<String, Object> pathHasBeenUpdated(Object rmObject, Archetype archetype, String pathOfParent, Object parent) {
         if(parent instanceof CodePhrase) {
             return fixCodePhrase(rmObject, archetype, pathOfParent);
         }
@@ -37,11 +37,11 @@ public class UpdatedValueHandler {
         return new HashMap<>();
     }
 
-    private static Map<String, Long> fixCodePhrase(Object rmObject, Archetype archetype, String pathOfParent) {
+    private static Map<String, Object> fixCodePhrase(Object rmObject, Archetype archetype, String pathOfParent) {
         try {
             //special case: if at-code has been set, we need to do more!
             if (pathOfParent.endsWith("value/defining_code")) {
-                fixDvCodedText(rmObject, archetype, pathOfParent);
+                return fixDvCodedText(rmObject, archetype, pathOfParent);
             } else if (pathOfParent.endsWith("symbol/defining_code")) {
                 return fixDvOrdinal(rmObject, archetype, pathOfParent);
             } else {
@@ -53,8 +53,8 @@ public class UpdatedValueHandler {
         return new HashMap<>();
     }
 
-    private static Map<String, Long> fixDvOrdinal(Object rmObject, Archetype archetype, String pathOfParent) throws XPathExpressionException {
-        Map<String, Long> result = new HashMap<>();
+    private static Map<String, Object> fixDvOrdinal(Object rmObject, Archetype archetype, String pathOfParent) throws XPathExpressionException {
+        Map<String, Object> result = new HashMap<>();
 
         RMPathQuery rmPathQuery = new RMPathQuery(pathOfParent.replace("/symbol/defining_code", ""));
         DvOrdinal ordinal = rmPathQuery.find(ArchieRMInfoLookup.getInstance(), rmObject);
@@ -89,23 +89,30 @@ public class UpdatedValueHandler {
         return result;
     }
 
-    private static void fixDvCodedText(Object rmObject, Archetype archetype, String pathOfParent) throws XPathExpressionException {
-        RMPathQuery rmPathQuery = new RMPathQuery(pathOfParent.replace("/defining_code", ""));
+    private static Map<String, Object> fixDvCodedText(Object rmObject, Archetype archetype, String pathOfParent) throws XPathExpressionException {
+        Map<String, Object> result = new HashMap<>();
+
+        String path = pathOfParent.replace("/defining_code", "");
+        RMPathQuery rmPathQuery = new RMPathQuery(path);
         DvCodedText codedText = rmPathQuery.find(ArchieRMInfoLookup.getInstance(), rmObject);
         Archetyped details = findLastArchetypeDetails(rmObject, pathOfParent);
-        if(details == null) {
-            setDefaultTermDefinitionInCodedText(archetype, codedText);
-        } else if(archetype instanceof OperationalTemplate) {
+        if(details != null && archetype instanceof OperationalTemplate) {
 
             OperationalTemplate template = (OperationalTemplate) archetype;
 
             String archetypePath = convertRMObjectPathToArchetypePath(pathOfParent);
-            setTerminologyFromArchetype(archetype, codedText, archetypePath);
+            result.putAll(setTerminologyFromArchetype(archetype, codedText, archetypePath, path));
 
-            setValueFromTermDefinition(codedText, details, template);
+            ArchetypeTerm termDefinition = getTermDefinition(template, details, codedText);
+            result.putAll(setDvCodedTextValue(codedText, termDefinition, path));
+            //setValueFromTermDefinition(codedText, details, template);
         } else {
-            setDefaultTermDefinitionInCodedText(archetype, codedText);
+            //result.putAll(setDefaultTermDefinitionInCodedText(archetype, codedText, pathOfParent));
+            ArchetypeTerm termDefinition = archetype.getTerminology().getTermDefinition(ArchieLanguageConfiguration.getMeaningAndDescriptionLanguage(), codedText.getDefiningCode().getCodeString());
+            result.putAll(setDvCodedTextValue(codedText, termDefinition, path));
         }
+
+        return result;
     }
 
     private static ArchetypeTerm getTermDefinition(OperationalTemplate template, Archetyped details, DvCodedText codedText) {
@@ -119,32 +126,32 @@ public class UpdatedValueHandler {
         return template.getTerminology().getTermDefinition(ArchieLanguageConfiguration.getMeaningAndDescriptionLanguage(), codedText.getDefiningCode().getCodeString());
     }
 
-    private static void setValueFromTermDefinition(DvCodedText codedText, Archetyped details, OperationalTemplate template) {
-        ArchetypeTerm termDefinition = getTermDefinition(template, details, codedText);
+    private static Map<String, Object> setDvCodedTextValue(DvCodedText codedText, ArchetypeTerm termDefinition, String path) {
+        Map<String, Object> result = new HashMap<>();
         if(termDefinition != null) {
-            codedText.setValue(termDefinition.getText());
+            String value = termDefinition.getText();
+            codedText.setValue(value);
+            result.put(path + "/value", value);
         }
+        return result;
     }
 
-    private static void setDefaultTermDefinitionInCodedText(Archetype archetype, DvCodedText codedText) {
-        ArchetypeTerm termDefinition = archetype.getTerminology().getTermDefinition(ArchieLanguageConfiguration.getMeaningAndDescriptionLanguage(), codedText.getDefiningCode().getCodeString());
-        if(termDefinition != null) {
-            codedText.setValue(termDefinition.getText());
-        }
-    }
-
-    private static void setTerminologyFromArchetype(Archetype archetype, DvCodedText codedText, String s) {
+    private static Map<String, Object> setTerminologyFromArchetype(Archetype archetype, DvCodedText codedText, String s, String path) {
+        Map<String, Object> result = new HashMap<>();
         ArchetypeModelObject archetypeModelObject = archetype.itemAtPath(s);
         if(archetypeModelObject instanceof CAttribute) {
             CAttribute definingCodeConstraint = (CAttribute) archetypeModelObject;
             for(CObject child:definingCodeConstraint.getChildren()) {
                 if(child instanceof CTerminologyCode) {
-                    if(((CTerminologyCode) child).getConstraint().get(0).startsWith("ac")) {
-                        codedText.getDefiningCode().setTerminologyId(new TerminologyId(((CTerminologyCode) child).getConstraint().get(0)));
+                    String value = ((CTerminologyCode) child).getConstraint().get(0);
+                    if(value.startsWith("ac")) {
+                        codedText.getDefiningCode().setTerminologyId(new TerminologyId(value));
+                        result.put(path + "/defining_code/terminology_id/value", value);
                     }
                 }
             }
         }
+        return result;
     }
 
     public static Archetyped findLastArchetypeDetails(Object rmObject, String path) throws XPathExpressionException {

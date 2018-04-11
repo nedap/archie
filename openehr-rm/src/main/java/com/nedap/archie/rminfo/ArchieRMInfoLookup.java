@@ -141,7 +141,7 @@ public class ArchieRMInfoLookup extends ReflectionModelInfoLookup {
      * @param parent
      */
     @Override
-    public Map<String, Long> pathHasBeenUpdated(Object rmObject, Archetype archetype, String pathOfParent, Object parent) {
+    public Map<String, Object> pathHasBeenUpdated(Object rmObject, Archetype archetype, String pathOfParent, Object parent) {
         return UpdatedValueHandler.pathHasBeenUpdated(rmObject, archetype, pathOfParent, parent);
     }
 
