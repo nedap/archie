@@ -54,6 +54,8 @@ public class UpdatedValueHandler {
     }
 
     private static Map<String, Long> fixDvOrdinal(Object rmObject, Archetype archetype, String pathOfParent) throws XPathExpressionException {
+        Map<String, Long> result = new HashMap<>();
+
         RMPathQuery rmPathQuery = new RMPathQuery(pathOfParent.replace("/symbol/defining_code", ""));
         DvOrdinal ordinal = rmPathQuery.find(ArchieRMInfoLookup.getInstance(), rmObject);
         Long value = null;
@@ -72,6 +74,8 @@ public class UpdatedValueHandler {
                                 if(interval.getLower().equals(interval.getUpper()) && !interval.isLowerUnbounded() && !interval.isUpperUnbounded()) {
                                     value = interval.getLower();
                                     ordinal.setValue(value);
+                                    String pathToValue = pathOfParent.replace("/symbol/defining_code", "/value");
+                                    result.put(pathToValue, value);
                                 }
 
                             }
@@ -81,10 +85,6 @@ public class UpdatedValueHandler {
                 }
             }
         }
-
-        Map<String, Long> result = new HashMap<>();
-        String pathToValue = pathOfParent.replace("/symbol/defining_code", "/value");
-        result.put(pathToValue, value);
 
         return result;
     }
