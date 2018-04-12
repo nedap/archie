@@ -85,6 +85,16 @@ public class OverridingInMemFullArchetypeRepository implements FullArchetypeRepo
     }
 
     @Override
+    public void removeValidationResult(String archetypeId) {
+        ValidationResult result = extraArchetypes.getValidationResult(archetypeId);
+        if(result != null) {
+            extraArchetypes.removeValidationResult(archetypeId);
+        } else {
+            originalRepository.removeValidationResult(archetypeId);
+        }
+    }
+
+    @Override
     public List<ValidationResult> getAllValidationResults() {
         List<ValidationResult> result = new ArrayList<>(extraArchetypes.getAllValidationResults());
         result.addAll(originalRepository.getAllValidationResults());

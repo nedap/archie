@@ -1,11 +1,9 @@
 package com.nedap.archie.flattener;
 
 import com.nedap.archie.aom.Archetype;
-import com.nedap.archie.aom.ArchetypeHRID;
 import com.nedap.archie.aom.OperationalTemplate;
 import com.nedap.archie.archetypevalidator.ArchetypeValidationSettings;
 import com.nedap.archie.archetypevalidator.ArchetypeValidator;
-import com.nedap.archie.archetypevalidator.ValidationMessage;
 import com.nedap.archie.archetypevalidator.ValidationResult;
 import com.nedap.archie.rminfo.MetaModels;
 import com.nedap.archie.rminfo.ReferenceModels;
@@ -25,6 +23,13 @@ public interface FullArchetypeRepository extends ArchetypeRepository {
 
     void setOperationalTemplate(OperationalTemplate template);
 
+    /**
+     * Removes the validation result and the operational template of the given archetype id. Keeps the archetype
+     *
+     * @param archetypeId
+     */
+    void removeValidationResult(String archetypeId);
+
     List<ValidationResult> getAllValidationResults();
 
     ArchetypeValidationSettings getArchetypeValidationSettings();
@@ -37,6 +42,25 @@ public interface FullArchetypeRepository extends ArchetypeRepository {
     default void compile(MetaModels models) {
         ArchetypeValidator validator = new ArchetypeValidator(models);
         compile(validator);
+    }
+
+    /**
+     * validate the validation result if necessary, and return either the newly validated one or
+     * the existing validation result
+     * @param models
+     * @return
+     */
+    default ValidationResult compileAndRetrieveValidationResult(String archetypeId, MetaModels models) {
+        ValidationResult validationResult = getValidationResult(archetypeId);
+        if(validationResult != null) {
+            return validationResult;
+        }
+        Archetype archetype = getArchetype(archetypeId);
+        if(archetype == null) {
+            return null;
+        }
+        ArchetypeValidator validator = new ArchetypeValidator(models);
+        return validator.validate(archetype, this);
     }
 
     default void compile(ReferenceModels models, ReferenceModelAccess bmmModels) {

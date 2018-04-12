@@ -45,6 +45,12 @@ public class InMemoryFullArchetypeRepository extends SimpleArchetypeRepository i
     }
 
     @Override
+    public void removeValidationResult(String archetypeId) {
+        operationalTemplates.remove(new ArchetypeHRID(archetypeId).getSemanticId());
+        validationResult.remove(new ArchetypeHRID(archetypeId).getSemanticId());
+    }
+
+    @Override
     public List<ValidationResult> getAllValidationResults() {
         return new ArrayList<>(validationResult.values());
     }
