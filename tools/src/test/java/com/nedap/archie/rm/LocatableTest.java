@@ -52,7 +52,7 @@ public class LocatableTest {
         assertEquals(event, composition.itemAtPath("/content[id1]/data[id2]/events[id3]"));
         assertEquals(itemTree, composition.itemAtPath("/content[id1]/data[id2]/events[id3]/data[id4]"));
         assertEquals(itemTree, composition.itemAtPath("/content[id1]/data[id2]/events[1]/data[id4]"));
-        assertEquals(itemTree, composition.itemAtPath("/content[id1]/data[id2]/events[custom event]/data[id4]"));
+        assertEquals(itemTree, composition.itemAtPath("/content[id1]/data[id2]/events[\"custom event\"]/data[id4]"));
         assertEquals(element, composition.itemAtPath("/content[id1]/data[id2]/events[id3]/data[id4]/items[id5]"));
         assertEquals(text, composition.itemAtPath("/content[id1]/data[id2]/events[id3]/data[id4]/items[id5]/value"));
 
@@ -93,7 +93,7 @@ public class LocatableTest {
         assertEquals(Lists.newArrayList(event), composition.itemsAtPath("/content[id1]/data[id2]/events[id3]"));
         assertEquals(Lists.newArrayList(itemTree), composition.itemsAtPath("/content[id1]/data[id2]/events[id3]/data[id4]"));
         assertEquals(Lists.newArrayList(itemTree), composition.itemsAtPath("/content[id1]/data[id2]/events[1]/data[id4]"));
-        assertEquals(Lists.newArrayList(itemTree), composition.itemsAtPath("/content[id1]/data[id2]/events[custom event]/data[id4]"));
+        assertEquals(Lists.newArrayList(itemTree), composition.itemsAtPath("/content[id1]/data[id2]/events[\"custom event\"]/data[id4]"));
         assertEquals(Lists.newArrayList(element), composition.itemsAtPath("/content[id1]/data[id2]/events[id3]/data[id4]/items[id5]"));
         assertEquals(Lists.newArrayList(text), composition.itemsAtPath("/content[id1]/data[id2]/events[id3]/data[id4]/items[id5]/value"));
 

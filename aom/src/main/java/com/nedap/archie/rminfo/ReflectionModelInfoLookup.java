@@ -178,7 +178,7 @@ public abstract class ReflectionModelInfoLookup implements ModelInfoLookup {
             setMethod = getMethod(clazz, "set" + javaFieldNameUpperCased, getMethod.getReturnType());
             addMethod = getAddMethod(clazz, typeToken, attributeName, javaFieldNameUpperCased, getMethod);
         } else {
-            logger.warn("No get method found for attribute {} on class {}", attributeName, clazz.getSimpleName());
+            logger.debug("No get method found for attribute {} on class {}", attributeName, clazz.getSimpleName());
         }
 
         TypeToken fieldType = typeToken.resolveType(getMethod.getGenericReturnType());;
@@ -219,7 +219,7 @@ public abstract class ReflectionModelInfoLookup implements ModelInfoLookup {
             setMethod = getMethod(clazz, "set" + javaFieldNameUpperCased, getMethod.getReturnType());
             addMethod = getAddMethod(clazz, typeToken, attributeName, javaFieldNameUpperCased, getMethod);
         } else {
-            logger.warn("No get method found for field {} on class {}", field.getName(), clazz.getSimpleName());
+            logger.debug("No get method found for field {} on class {}", field.getName(), clazz.getSimpleName());
         }
 
         TypeToken fieldType = null;
@@ -245,7 +245,7 @@ public abstract class ReflectionModelInfoLookup implements ModelInfoLookup {
             );
             typeInfo.addAttribute(attributeInfo);
         } else {
-            logger.info("property without a set method ignored for field {} on class {}", field.getName(), clazz.getSimpleName());
+            logger.debug("property without a set method ignored for field {} on class {}", field.getName(), clazz.getSimpleName());
         }
     }
 
@@ -283,7 +283,7 @@ public abstract class ReflectionModelInfoLookup implements ModelInfoLookup {
                     if (allAddMethods.size() == 1) {
                         addMethod = allAddMethods.iterator().next();
                     } else {
-                        logger.warn("strange number of add methods for field {} on class {}", name, clazz.getSimpleName());
+                        logger.debug("strange number of add methods for field {} on class {}", name, clazz.getSimpleName());
                     }
                 }
             }
