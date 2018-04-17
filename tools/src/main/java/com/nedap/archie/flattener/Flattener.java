@@ -185,7 +185,7 @@ public class Flattener {
                             if(child instanceof CComplexObject) {
                                 ((CComplexObject) child).setAttributes(new ArrayList<>());
                             }
-                            //objectsToRemove.add(child);
+                            objectsToRemove.add(child);
                         } else {
                             workList.push(child);
                         }
