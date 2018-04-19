@@ -251,6 +251,8 @@ public class CComplexObjectParser extends BaseTreeWalker {
         for(Multiplicity_modContext modContext:modContexts) {
             if(modContext.ordering_mod() != null) {
                 cardinality.setOrdered(modContext.ordering_mod().SYM_ORDERED() != null);
+            } else {
+                cardinality.setOrdered(true);//TODO: this should retrieve it from the RM. This now matches the serializer, but both should be fixed!
             }
             if(modContext.unique_mod() != null) {
                 cardinality.setUnique(true);
