@@ -89,6 +89,11 @@ def customizePom(pom, gradleProject) {
           name = "Pieter Bos"
           email = "pieter.bos@nedap.com"
         }
+        developer {
+          id = "tanja.dejong"
+          name = "Tanja de Jong"
+          email = "tanja.dejong@nedap.com"
+        }
       }
       issueManagement {
         system = "Github"
