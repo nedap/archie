@@ -41,7 +41,7 @@ public class ArchieErrorListener implements ANTLRErrorListener {
         if(logEnabled) {
             logger.warn(error);
         }
-        errors.addError(error);
+        errors.addError(error, line, charPositionInLine);
     }
 
     @Override
