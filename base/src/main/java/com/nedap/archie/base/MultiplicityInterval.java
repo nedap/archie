@@ -43,23 +43,19 @@ public class MultiplicityInterval extends Interval<Integer> {
         result.setUpperUnbounded(true);
         return result;
     }
-
-    @JsonIgnore
+    
     public boolean isOpen() {
         return Integer.valueOf(0).equals(getLower()) && isUpperUnbounded() && isLowerIncluded();
     }
 
-    @JsonIgnore
     public boolean isOptional() {
         return Integer.valueOf(0).equals(getLower()) && Integer.valueOf(1).equals(getUpper()) && !isUpperUnbounded() && isLowerIncluded() && isUpperIncluded();
     }
 
-    @JsonIgnore
     public boolean isMandatory() {
         return !isLowerUnbounded() && getLower() >= 1 ;
     }
 
-    @JsonIgnore
     public boolean isProhibited() {
         return Integer.valueOf(0).equals(getLower()) && Integer.valueOf(0).equals(getUpper()) && !isUpperUnbounded();
     }
