@@ -199,7 +199,6 @@ public abstract class CObject extends ArchetypeConstraint {
         return (CAttribute) super.getParent();
     }
 
-    @JsonIgnore
     public boolean isRequired() {
         if(occurrences == null) {
             return false;
@@ -254,7 +253,6 @@ public abstract class CObject extends ArchetypeConstraint {
         return "CObject: " + getRmTypeName() + "[" + getNodeId() + "]";
     }
 
-    @JsonIgnore
     public boolean isProhibited() {
         return occurrences != null && occurrences.isProhibited();
     }
