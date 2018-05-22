@@ -44,6 +44,7 @@ public class FlattenerExamplesFromSpecTest {
         repository.addArchetype(labTest);
         Archetype specializationPaths = parse("specialization_paths.adls");
         Archetype flattened = new Flattener(repository, models).flatten(specializationPaths);
+        assertEquals(specializationPaths.getParentArchetypeId(), flattened.getParentArchetypeId());
 
         CObject originalConstraint = flattened.itemAtPath("/data[id2]/events[id3]/data[id4]/items[id79]");
         CObject firstAddedConstraint = flattened.itemAtPath("/data[id2]/events[id3]/data[id4]/items[id79.2]");
