@@ -37,6 +37,7 @@ public class Flattener {
     private boolean createOperationalTemplate = false;
     private boolean removeLanguagesFromMetaData = false;
     private boolean useComplexObjectForArchetypeSlotReplacement = false;
+    private boolean removeZeroOccurrencesObjects = false;
 
     private String[] languagesToKeep = null;
 
@@ -46,6 +47,7 @@ public class Flattener {
     private TupleFlattener tupleFlattener = new TupleFlattener();
 
     private OperationalTemplateCreator optCreator = new OperationalTemplateCreator(this);
+
 
 
     public Flattener(ArchetypeRepository repository, ReferenceModels models) {
@@ -58,8 +60,25 @@ public class Flattener {
         this.metaModels = models;
     }
 
+    /**
+     * Create operational templates in addition to flattening. Default is false;
+     * @param makeTemplate
+     * @return
+     */
     public Flattener createOperationalTemplate(boolean makeTemplate) {
         this.createOperationalTemplate = makeTemplate;
+        return this;
+    }
+
+    /**
+     * Remove zero occurrences constraints, instead of leaving them but removing all of their children
+     *
+     * Default is false
+     * @param remove
+     * @return
+     */
+    public Flattener removeZeroOccurrencesConstraints(boolean remove) {
+        this.removeZeroOccurrencesObjects = remove;
         return this;
     }
 
@@ -163,6 +182,7 @@ public class Flattener {
             result.setControlled(child.getControlled());
             result.setBuildUid(child.getBuildUid());
             result.setTranslations(child.getTranslations());
+            result.setParentArchetypeId(child.getParentArchetypeId());
         } //else as well, but is done elsewhere. needs refactor.
         ArchetypeParsePostProcesser.fixArchetype(result);
         return result;
@@ -185,7 +205,9 @@ public class Flattener {
                             if(child instanceof CComplexObject) {
                                 ((CComplexObject) child).setAttributes(new ArrayList<>());
                             }
-                            objectsToRemove.add(child);
+                            if(this.removeZeroOccurrencesObjects) {
+                                objectsToRemove.add(child);
+                            }
                         } else {
                             workList.push(child);
                         }
