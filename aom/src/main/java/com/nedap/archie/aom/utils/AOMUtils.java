@@ -85,8 +85,20 @@ public class AOMUtils {
     public static String codeAtLevel(String nodeId, int level) {
         NodeIdUtil nodeIdUtil = new NodeIdUtil(nodeId);
         List<Integer> codes = new ArrayList<>();
-        for(int i = 0; i <= level;i++) {
+        for(int i = 0; i <= level && i < nodeIdUtil.getCodes().size();i++) {
             codes.add(nodeIdUtil.getCodes().get(i));
+        }
+        //remove leading .0 codes - they are not present in the code at the given level
+        int numberOfCodesToRemove = 0;
+        for(int i = codes.size()-1; i >= 0 ; i--) {
+            if(codes.get(i).intValue() == 0) {
+                numberOfCodesToRemove++;
+            } else {
+                break;
+            }
+        }
+        if(numberOfCodesToRemove > 0) {
+            codes = codes.subList(0, codes.size()-numberOfCodesToRemove);
         }
         return nodeIdUtil.getPrefix() + Joiner.on(AdlCodeDefinitions.SPECIALIZATION_SEPARATOR).join(codes);
 
@@ -132,7 +144,7 @@ public class AOMUtils {
     public static boolean isPhantomPathAtLevel(List<PathSegment> pathSegments, int specializationDepth) {
         for(int i = pathSegments.size()-1; i >=0; i--) {
             String nodeId = pathSegments.get(i).getNodeId();
-            if(nodeId != null && AOMUtils.isValidCode(nodeId) && specializationDepth < AOMUtils.getSpecializationDepthFromCode(nodeId)) {
+            if(nodeId != null && AOMUtils.isValidCode(nodeId) && specializationDepth > AOMUtils.getSpecializationDepthFromCode(nodeId)) {
                 return codeExistsAtLevel(nodeId, specializationDepth);
             }
         }
@@ -142,7 +154,7 @@ public class AOMUtils {
     public static boolean codeExistsAtLevel(String nodeId, int specializationDepth) {
         NodeIdUtil nodeIdUtil = new NodeIdUtil(nodeId);
         int specializationDepthOfCode = AOMUtils.getSpecializationDepthFromCode(nodeId);
-        if(specializationDepth > specializationDepthOfCode) {
+        if(specializationDepth < specializationDepthOfCode) {
             String code = "";
             for(int i = 0; i <= specializationDepth; i++) {
                 code += nodeIdUtil.getCodes().get(i);

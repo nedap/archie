@@ -168,7 +168,24 @@ public class FlattenerExamplesFromSpecTest {
 
 
     @Test
-    public void exclusion() throws Exception {
+    public void exclusionRemoval() throws Exception {
+        Archetype occurrencesParent = parse("openEHR-EHR-CLUSTER.occurrences_parent.v1.0.0.adls");
+        repository.addArchetype(occurrencesParent);
+
+        Archetype occurrencesSpecialized = parse("openEHR-EHR-CLUSTER.occurrences_specialized.v1.0.0.adls");
+
+        Archetype flat = new Flattener(repository, models).removeZeroOccurrencesConstraints(true).flatten(occurrencesSpecialized);
+        CAttribute attribute = flat.itemAtPath("/items[id3]/value");
+        assertNotNull(flat.itemAtPath("/items[id3]/value[id5]"));
+        assertNotNull(flat.itemAtPath("/items[id3]/value[id6]"));
+        assertNull(flat.itemAtPath("/items[id3]/value[id4]"));
+        assertNull(flat.itemAtPath("/items[id3]/value[id7]"));
+        assertEquals(2, attribute.getChildren().size());
+
+    }
+
+    @Test
+    public void exclusionDefault() throws Exception {
         Archetype occurrencesParent = parse("openEHR-EHR-CLUSTER.occurrences_parent.v1.0.0.adls");
         repository.addArchetype(occurrencesParent);
 
@@ -178,9 +195,14 @@ public class FlattenerExamplesFromSpecTest {
         CAttribute attribute = flat.itemAtPath("/items[id3]/value");
         assertNotNull(flat.itemAtPath("/items[id3]/value[id5]"));
         assertNotNull(flat.itemAtPath("/items[id3]/value[id6]"));
-        assertNull(flat.itemAtPath("/items[id3]/value[id4]"));
-        assertNull(flat.itemAtPath("/items[id3]/value[id7]"));
-        assertEquals(2, attribute.getChildren().size());
+        assertNotNull(flat.itemAtPath("/items[id3]/value[id4]"));
+        assertTrue(((CComplexObject) flat.itemAtPath("/items[id3]/value[id4]")).getOccurrences().isProhibited());
+        assertEquals(0, ((CComplexObject) flat.itemAtPath("/items[id3]/value[id4]")).getAttributes().size());
+
+        assertNotNull(flat.itemAtPath("/items[id3]/value[id7]"));
+        assertEquals(0, ((CComplexObject) flat.itemAtPath("/items[id3]/value[id7]")).getAttributes().size());
+        assertTrue(((CComplexObject) flat.itemAtPath("/items[id3]/value[id7]")).getOccurrences().isProhibited());
+        assertEquals(4, attribute.getChildren().size());
 
     }
 
