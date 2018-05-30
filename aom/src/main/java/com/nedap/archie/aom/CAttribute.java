@@ -2,6 +2,7 @@ package com.nedap.archie.aom;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.nedap.archie.aom.utils.AOMUtils;
 import com.nedap.archie.base.Cardinality;
 import com.nedap.archie.base.MultiplicityInterval;
 import com.nedap.archie.definitions.AdlCodeDefinitions;
@@ -90,6 +91,32 @@ public class CAttribute extends ArchetypeConstraint {
             result = getChild(nodeId, true);
         }
         return result;
+    }
+
+    /**
+     * Get the child cobject with the given nodeid. If it does not exist but a specialized version
+     * does exist, returns that one.
+     * If multiple specialized children exist, returns the first it can find. TODO: this should probably be better defined :)
+     * @param nodeId
+     * @return
+     */
+    public CObject getPossiblySpecializedChild(String nodeId) {
+        //if there's an exact node id match, return that first
+        CObject result = getChild(nodeId, false);
+        if(result != null) {
+            return result;
+        }
+        for(CObject child:children) {
+            if(nodeId.equals(child.getNodeId()) || AOMUtils.codesConformant(child.getNodeId(), nodeId)) {
+                return child;
+            } else if(child instanceof CArchetypeRoot) {
+                //TODO: Should we look for specialized archetype roots as well? :)
+                if (((CArchetypeRoot) child).getArchetypeRef().equals(nodeId)) {
+                    return child;
+                }
+            }
+        }
+        return null;
     }
 
     private CObject getChild(String nodeId, boolean lookThroughProxies) {

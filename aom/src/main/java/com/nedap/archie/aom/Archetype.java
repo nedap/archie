@@ -179,7 +179,8 @@ public class Archetype extends AuthoredResource {
      * @return the ArchetypeTerm corresponding to the given CObject in the given language
      */
     public ArchetypeTerm getTerm(CObject object, String language) {
-        return getTerminology().getTermDefinition(language, object.getNodeId());
+        ArchetypeTerminology terminology = getTerminology();
+        return terminology == null ? null : terminology.getTermDefinition(language, object.getNodeId());
     }
 
     /**

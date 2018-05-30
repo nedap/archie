@@ -108,6 +108,10 @@ public class CComplexObject extends CDefinedObject<ArchetypeModelObject> {
     }
 
     public void removeAttribute(CAttribute attribute) {
+        removeAttribute(attribute, false);
+    }
+
+    private void removeAttribute(CAttribute attribute, boolean allowRemovingTupleMembers) {
         int indexOfAttribute = -1;
 
         for(int i = 0; i < attributes.size(); i++) {
@@ -127,7 +131,7 @@ public class CComplexObject extends CDefinedObject<ArchetypeModelObject> {
         }
         if(indexOfAttribute >= 0) {
             CAttribute foundAttribute = attributes.get(indexOfAttribute);
-            if(foundAttribute.getSocParent() != null) {
+            if(!allowRemovingTupleMembers && foundAttribute.getSocParent() != null) {
                 throw new IllegalArgumentException("cannot remove a tuple attribute with removeAttribute, remove the tuple attribute instead and rebuild tuple attributes.");
             } else {
                 attributes.remove(indexOfAttribute);
@@ -180,7 +184,11 @@ public class CComplexObject extends CDefinedObject<ArchetypeModelObject> {
     public void removeAttributeTuple(List<String> parameterMemberNames) {
         int index = getIndexOfMatchingAttributeTuple(parameterMemberNames);
         if(index >= 0) {
+            CAttributeTuple tuple = attributeTuples.get(index);
             attributeTuples.remove(index);
+            for(CAttribute attribute:tuple.getMembers()) {
+                this.removeAttribute(attribute, true);
+            }
         }
     }
 

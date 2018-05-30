@@ -68,6 +68,18 @@ public class AOMPathQuery {
     }
 
     public <T extends ArchetypeModelObject> List<T> findList(CComplexObject root) {
+        return findList(root, false);
+    }
+
+    /**
+     * Find a list of matching objects to the path. If matchSpecializedNodes is true, [id6] in the query will first try to
+     * find a node with id id6. If not, it will find specialized nodes like id6.1 or id6.0.0.3.1
+     * @param root
+     * @param matchSpecializedNodes
+     * @param <T>
+     * @return
+     */
+    public <T extends ArchetypeModelObject> List<T> findList(CComplexObject root, boolean matchSpecializedNodes) {
         List<ArchetypeModelObject> result = new ArrayList<>();
         result.add(root);
         for(int i = 0; i < pathSegments.size(); i++) {
@@ -85,16 +97,16 @@ public class AOMPathQuery {
                 //skip a few pathsegments for this differential path match
                 i = i + new APathQuery(differentialAttribute.getDifferentialPath()).getPathSegments().size()-1;
                 PathSegment lastPathSegment = pathSegments.get(i);
-                ArchetypeModelObject oneMatchingObject = findOneMatchingObject(differentialAttribute, lastPathSegment);
+                ArchetypeModelObject oneMatchingObject = findOneMatchingObject(differentialAttribute, lastPathSegment, matchSpecializedNodes);
                 if(oneMatchingObject != null) {
                     result = Lists.newArrayList(oneMatchingObject);
                 } else {
-                    result = findOneSegment(segment, result);
+                    result = findOneSegment(segment, result, matchSpecializedNodes);
                 }
 
 
             } else {
-                result = findOneSegment(segment, result);
+                result = findOneSegment(segment, result, matchSpecializedNodes);
             }
         }
         return (List<T>)result.stream().filter((object) -> object != null).collect(Collectors.toList());
@@ -146,7 +158,7 @@ public class AOMPathQuery {
     }
 
 
-    protected List<ArchetypeModelObject> findOneSegment(PathSegment pathSegment, List<ArchetypeModelObject> objects) {
+    protected List<ArchetypeModelObject> findOneSegment(PathSegment pathSegment, List<ArchetypeModelObject> objects, boolean matchSpecializedNodes) {
         List<ArchetypeModelObject> result = new ArrayList<>();
 
         List<ArchetypeModelObject> preProcessedObjects = new ArrayList<>();
@@ -173,7 +185,7 @@ public class AOMPathQuery {
                 CObject cobject = (CObject) object;
                 CAttribute attribute = cobject.getAttribute(pathSegment.getNodeName());
                 if(attribute != null) {
-                    ArchetypeModelObject r = findOneMatchingObject(attribute, pathSegment);
+                    ArchetypeModelObject r = findOneMatchingObject(attribute, pathSegment, matchSpecializedNodes);
                     if(r != null) {
                         result.add(r);
                     }
@@ -183,8 +195,11 @@ public class AOMPathQuery {
         return result;
     }
 
-    protected ArchetypeModelObject findOneMatchingObject(CAttribute attribute, PathSegment pathSegment) {
+    protected ArchetypeModelObject findOneMatchingObject(CAttribute attribute, PathSegment pathSegment, boolean matchSpecializedNodes) {
         if (pathSegment.hasIdCode() || pathSegment.hasArchetypeRef()) {
+            if(matchSpecializedNodes) {
+                return attribute.getPossiblySpecializedChild(pathSegment.getNodeId());
+            }
             return attribute.getChild(pathSegment.getNodeId());
         } else if (pathSegment.hasNumberIndex()) {
             return attribute.getChildren().get(pathSegment.getIndex() - 1);//APath path numbers start at 1 instead of 0
@@ -214,7 +229,7 @@ public class AOMPathQuery {
             if (result.size() == 0) {
                 return null;
             }
-            result = findOneSegment(segment, result);
+            result = findOneSegment(segment, result, false);
             if(result.size() == 1 && result.get(0) instanceof CComplexObjectProxy) {
                 return (CComplexObjectProxy) result.get(0);
             }
