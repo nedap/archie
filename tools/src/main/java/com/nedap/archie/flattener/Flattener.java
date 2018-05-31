@@ -185,10 +185,19 @@ public class Flattener {
 
         if(child instanceof Template && !createOperationalTemplate) {
             Template resultTemplate = (Template) result;
+            resultTemplate.setTemplateOverlays(new ArrayList<>());
             Template childTemplate = (Template) child;
             //we need to add the flattened template overlays. For operational template these have been added to the archetype structure, so not needed
             for(TemplateOverlay overlay:((Template) child).getTemplateOverlays()){
-                resultTemplate.getTemplateOverlays().add((TemplateOverlay) getNewFlattener().flatten(overlay));
+                TemplateOverlay flatOverlay = (TemplateOverlay) getNewFlattener().flatten(overlay);
+                ResourceDescription description = (ResourceDescription) result.getDescription().clone();
+                //not sure whether to do this or to implement these methods using the owningTemplate param.
+                //in many cases you do want this information...
+                flatOverlay.setDescription(description);
+                flatOverlay.setOriginalLanguage(result.getOriginalLanguage());
+                flatOverlay.setTranslationList(result.getTranslationList());
+                ArchetypeParsePostProcesser.fixArchetype(flatOverlay);
+                resultTemplate.getTemplateOverlays().add(flatOverlay);
             }
         }
 
