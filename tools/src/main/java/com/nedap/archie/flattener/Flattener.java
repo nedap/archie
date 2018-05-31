@@ -149,7 +149,16 @@ public class Flattener {
             result = optCreator.createOperationalTemplate(parent);
             optCreator.overrideArchetypeId(result, child);
         } else {
-            result = parent.clone();
+            result = child.clone();
+
+            Archetype clonedParent = parent.clone();
+            //definition, terminology and rules will be replaced later, but must be set to that of the parent
+            // for this flattener to work correctly. I would not write it this way when creating another flattener, but
+            //it's the way it is :)
+            //parent needs to be cloned because this updates references to parent archetype as well
+            result.setDefinition(clonedParent.getDefinition());
+            result.setTerminology(clonedParent.getTerminology());
+            result.setRules(clonedParent.getRules());
         }
 
         //1. redefine structure
@@ -173,17 +182,16 @@ public class Flattener {
         }
         result.getDefinition().setArchetype(result);
         result.setDifferential(false);//note this archetype as being flat
-        if(!createOperationalTemplate) {
-            //set metadata to specialized archetype
-            result.setOriginalLanguage(child.getOriginalLanguage());
-            result.setDescription(child.getDescription());
-            result.setOtherMetaData(child.getOtherMetaData());
-            result.setGenerated(child.getGenerated());
-            result.setControlled(child.getControlled());
-            result.setBuildUid(child.getBuildUid());
-            result.setTranslations(child.getTranslations());
-            result.setParentArchetypeId(child.getParentArchetypeId());
-        } //else as well, but is done elsewhere. needs refactor.
+
+        if(child instanceof Template && !createOperationalTemplate) {
+            Template resultTemplate = (Template) result;
+            Template childTemplate = (Template) child;
+            //we need to add the flattened template overlays. For operational template these have been added to the archetype structure, so not needed
+            for(TemplateOverlay overlay:((Template) child).getTemplateOverlays()){
+                resultTemplate.getTemplateOverlays().add((TemplateOverlay) getNewFlattener().flatten(overlay));
+            }
+        }
+
         ArchetypeParsePostProcesser.fixArchetype(result);
         return result;
     }
