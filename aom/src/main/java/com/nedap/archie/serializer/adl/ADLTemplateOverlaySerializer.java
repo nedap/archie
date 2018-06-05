@@ -26,4 +26,9 @@ class ADLTemplateOverlaySerializer extends ADLArchetypeSerializer<TemplateOverla
     @Override
     protected void appendDescription() {
     }
+
+    @Override
+    protected void appendRules() {
+
+    }
 }

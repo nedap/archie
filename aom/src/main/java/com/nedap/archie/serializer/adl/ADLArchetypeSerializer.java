@@ -56,6 +56,8 @@ abstract public class ADLArchetypeSerializer<T extends Archetype> {
 
     protected void appendRules() {
         if(archetype.getRules() == null) return;
+        if(archetype.getRules().getRules().isEmpty()) return;
+
         builder.newline().append("rules").newIndentedLine();
         rulesSerializer.appendRules(archetype.getRules());
         builder.newUnindentedLine();
