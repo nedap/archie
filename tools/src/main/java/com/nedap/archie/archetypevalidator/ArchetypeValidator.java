@@ -220,15 +220,15 @@ public class ArchetypeValidator {
      * @return
      */
     private ValidationResult getValidationResult(String archetypeId, FullArchetypeRepository repository) {
-        Archetype parent = repository.getArchetype(archetypeId);
-        if(parent == null) {
+        Archetype archetype = repository.getArchetype(archetypeId);
+        if(archetype == null) {
             return null; //this situation will trigger the correct message later
         }
 
         ValidationResult validationResult = repository.getValidationResult(archetypeId);
         if(validationResult == null) {
-            //parent not yet validated. do it now.
-            validationResult = validate(parent, repository);
+            //archetype not yet validated. do it now.
+            validationResult = validate(archetype, repository);
         }
         return validationResult;
     }
