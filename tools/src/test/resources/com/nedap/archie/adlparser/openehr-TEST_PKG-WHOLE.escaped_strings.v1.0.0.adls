@@ -28,6 +28,7 @@ definition
 	WHOLE[id1] matches {	-- test entry
 		string_attr1 matches {"something"}
 		string_attr2 matches {"something with a \"-mark"}
+		string_attr3 matches {"something with a \\-mark"}
 	}
 
 terminology

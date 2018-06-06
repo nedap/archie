@@ -70,6 +70,28 @@ public class ADLArchetypeSerializerParserRoundtripTest {
         Assert.assertThat(parsed.getDescription().getLicence(), is("license with a \"-mark" ));
     }
 
+    @Test
+    public void escapeQuotes2() throws Exception {
+        Archetype archetype = load("openEHR-EHR-COMPOSITION.report.v1.adls");
+        archetype.getDescription().setLicence("license with a \\-mark");
+        String serialized = ADLArchetypeSerializer.serialize(archetype);
+
+        Assert.assertThat(serialized, containsString("license with a \\\\-mark" ));
+        Archetype parsed = new ADLParser().parse(serialized);
+        Assert.assertThat(parsed.getDescription().getLicence(), is("license with a \\-mark" ));
+    }
+
+    @Test
+    public void escapeQuotes3() throws Exception {
+        Archetype archetype = load("openEHR-EHR-COMPOSITION.report.v1.adls");
+        archetype.getDescription().setLicence("license with a \\\"-mark");
+        String serialized = ADLArchetypeSerializer.serialize(archetype);
+
+        Assert.assertThat(serialized, containsString("license with a \\\\\\\"-mark" ));
+        Archetype parsed = new ADLParser().parse(serialized);
+        Assert.assertThat(parsed.getDescription().getLicence(), is("license with a \\\"-mark" ));
+    }
+
     private Archetype roundtrip(Archetype archetype) throws IOException {
         String serialized = ADLArchetypeSerializer.serialize(archetype);
         logger.info(serialized);

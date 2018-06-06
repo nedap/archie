@@ -12,7 +12,7 @@ import static org.junit.Assert.assertFalse;
 /**
  * Test CString parsing. Does not test regexpes, see @RegexTest for that
  */
-public class CStringParserText {
+public class CStringParserTest {
 
     @Test
     public void testStringWithQuotes() throws Exception {
@@ -22,11 +22,15 @@ public class CStringParserText {
         assertFalse(parser.getErrors().hasErrors());
         CAttribute attributeWithoutQuotes = archetype.getDefinition().getAttribute("string_attr1");
         CAttribute attributeWithQuotes = archetype.getDefinition().getAttribute("string_attr2");
+        CAttribute attributeWithBackslash = archetype.getDefinition().getAttribute("string_attr3");
+
         CString cStringWithoutQuotes = (CString) attributeWithoutQuotes.getChildren().get(0);
         CString cStringWithQuotes = (CString) attributeWithQuotes.getChildren().get(0);
+        CString cStringWithBlackslash = (CString) attributeWithBackslash.getChildren().get(0);
 
         assertEquals(Lists.newArrayList("something"), cStringWithoutQuotes.getConstraint());
         assertEquals(Lists.newArrayList("something with a \"-mark"), cStringWithQuotes.getConstraint());
+        assertEquals(Lists.newArrayList("something with a \\-mark"), cStringWithBlackslash.getConstraint());
     }
 
 
