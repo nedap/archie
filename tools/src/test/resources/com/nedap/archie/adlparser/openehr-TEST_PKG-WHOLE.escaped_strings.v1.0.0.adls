@@ -1,0 +1,41 @@
+archetype (adl_version=2.0.5; rm_release=1.0.2)
+	openehr-TEST_PKG-WHOLE.escaped_strings.v1.0.0
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	original_author = <
+		["name"] = <"Pieter Bos">
+		["email"] = <"pieter.bos@nedap.com">
+		["organisation"] = <"N.V. Nederlandsche Apparatenfabriek (Nedap)>">
+		["date"] = <"2018-06-06">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"Test escaped string values in a CString">
+			keywords = <"ADL", "test">
+		>
+	>
+	lifecycle_state = <"published">
+	other_details = <
+		["regression"] = <"PASS">
+	>
+	copyright = <"copyright © 2004 openEHR Foundation <http://www.openEHR.org>">
+
+definition
+	WHOLE[id1] matches {	-- test entry
+		string_attr1 matches {"something"}
+		string_attr2 matches {"something with a \"-mark"}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"test entry">
+				description = <"test entry">
+			>
+		>
+	>

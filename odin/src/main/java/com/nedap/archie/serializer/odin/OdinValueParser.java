@@ -27,6 +27,6 @@ public class OdinValueParser {
         if(text.length() == 2) { // empty string, ""
             return "";
         }
-        return text.substring(1, text.length() - 1);
+        return text.substring(1, text.length() - 1).replace("\\\"", "\"");
     }
 }
