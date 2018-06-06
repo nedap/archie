@@ -9,6 +9,7 @@ import com.nedap.archie.flattener.Flattener;
 import com.nedap.archie.flattener.FlattenerTest;
 import com.nedap.archie.flattener.SimpleArchetypeRepository;
 import com.nedap.archie.testutil.TestUtil;
+import org.junit.Assert;
 import org.junit.Test;
 import org.openehr.referencemodels.BuiltinReferenceModels;
 import org.slf4j.Logger;
@@ -56,6 +57,17 @@ public class ADLArchetypeSerializerParserRoundtripTest {
         assertThat(dvDeviceId.getRmTypeName(), equalTo("DV_IDENTIFIER"));
 
         assertThat(archetype.getDescription().getOriginalAuthor().get("name"), equalTo("Heather Leslie"));
+    }
+
+    @Test
+    public void escapeQuotes() throws Exception {
+        Archetype archetype = load("openEHR-EHR-COMPOSITION.report.v1.adls");
+        archetype.getDescription().setLicence("license with a \"-mark");
+        String serialized = ADLArchetypeSerializer.serialize(archetype);
+
+        Assert.assertThat(serialized, containsString("license with a \\\"-mark" ));
+        Archetype parsed = new ADLParser().parse(serialized);
+        Assert.assertThat(parsed.getDescription().getLicence(), is("license with a \"-mark" ));
     }
 
     private Archetype roundtrip(Archetype archetype) throws IOException {

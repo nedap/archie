@@ -185,9 +185,10 @@ public class OdinToJsonConverter {
             //strip " if present, all the other "-characters will have to be escaped
             if(text.startsWith("\"") && text.endsWith("\"")) {
                 String textWithoutQuotationMarks = text.substring(1, text.length()-1);
-                output.append(objectMapper.writeValueAsString(textWithoutQuotationMarks));
+                String textQuotesReplaced = textWithoutQuotationMarks.replace("\\\"", "\"");
+                output.append(objectMapper.writeValueAsString(textQuotesReplaced));
             } else {
-                output.append(text);
+                output.append(objectMapper.writeValueAsString(text));
             }
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
