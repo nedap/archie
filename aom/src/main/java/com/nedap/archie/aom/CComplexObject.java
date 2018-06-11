@@ -122,8 +122,7 @@ public class CComplexObject extends CDefinedObject<ArchetypeModelObject> {
                     indexOfAttribute = i;
                     break;
                 }
-            }
-            if(existingAttribute.getDifferentialPath() == null) {
+            } else {
                 if(existingAttribute.getRmAttributeName().equals(attribute.getRmAttributeName())) {
                     indexOfAttribute = i;
                 }
