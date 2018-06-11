@@ -284,10 +284,12 @@ class CAttributeFlattener {
         } else if(occurrences != null && occurrences.upperIsOne()) {
             //REFINE the parent node case 1, the parent has occurrences upper == 1
             return true;
-        } else if (differentialNodes.size() == 1
-                && differentialNodes.get(0).effectiveOccurrences(flattener.getMetaModels()::referenceModelPropMultiplicity).upperIsOne()) {
-            //REFINE the parent node case 2, only one child with occurrences upper == 1
-            return true;
+        } else if (differentialNodes.size() == 1) {
+            MultiplicityInterval effectiveOccurrences = differentialNodes.get(0).effectiveOccurrences(flattener.getMetaModels()::referenceModelPropMultiplicity);
+            if(effectiveOccurrences != null && effectiveOccurrences.upperIsOne()) {
+                //REFINE the parent node case 2, only one child with occurrences upper == 1
+                return true;
+            }
         }
         return false;
     }

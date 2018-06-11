@@ -317,7 +317,16 @@ public class BmmClass extends BmmClassifier implements Serializable {
      * @return
      */
     public List<String> findAllDescendants() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        List<String> allDescendants = new ArrayList<String>();
+        List<String> descendants = getImmediateDescendants();
+        allDescendants.addAll(descendants);
+        for(String descendant:descendants) {
+            BmmClass classDefinition = this.getBmmModel().getClassDefinition(descendant);
+            if(classDefinition != null) {
+                allDescendants.addAll(classDefinition.findAllDescendants());
+            }
+        }
+        return allDescendants;
     }
 
     /**
@@ -422,7 +431,7 @@ public class BmmClass extends BmmClassifier implements Serializable {
             flattenedClassCache = duplicate();
         } else {
             final BmmClass target = this.duplicate();
-            target.setAncestors(new HashMap<String, BmmClass>());//Clear out ancestors since we are flattening the hierarchy.
+            //add all properties from all ancestors the new flattened class
             ancestorMap.forEach( (ancestorName, ancestor) -> { populateTarget(ancestor, target); });
             flattenedClassCache = target;
         }
@@ -469,9 +478,11 @@ public class BmmClass extends BmmClassifier implements Serializable {
         target.setAbstract(this.isAbstract);
         target.setSourceSchemaId(this.getSourceSchemaId());
         target.getAncestors().putAll(this.getAncestors());
+        target.setImmediateDescendants(this.getImmediateDescendants());
         target.setOverride(this.isOverride);
         target.setPrimitiveType(this.isPrimitiveType);
         target.setPackage(this.getPackage());
+        target.setBmmModel(this.getBmmModel());
         return target;
     }
 

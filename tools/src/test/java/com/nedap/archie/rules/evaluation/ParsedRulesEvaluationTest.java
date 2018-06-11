@@ -49,13 +49,13 @@ public class ParsedRulesEvaluationTest {
 
         ExpressionVariable booleanExtendedTest = (ExpressionVariable) getVariableDeclarationByName(archetype, "boolean_extended_test");
         BinaryOperator operator = (BinaryOperator) booleanExtendedTest.getExpression();
-        assertTrue(operator.getLeftOperand().isPrecedenceOverriden());
-        assertFalse(operator.getRightOperand().isPrecedenceOverriden());
+        assertTrue(operator.getLeftOperand().isPrecedenceOverridden());
+        assertFalse(operator.getRightOperand().isPrecedenceOverridden());
 
         ExpressionVariable arithmeticParentheses = (ExpressionVariable) getVariableDeclarationByName(archetype, "arithmetic_parentheses");
         BinaryOperator arithmeticOperator = (BinaryOperator) arithmeticParentheses.getExpression();
-        assertTrue(arithmeticOperator.getLeftOperand().isPrecedenceOverriden());
-        assertFalse(arithmeticOperator.getRightOperand().isPrecedenceOverriden());
+        assertTrue(arithmeticOperator.getLeftOperand().isPrecedenceOverridden());
+        assertFalse(arithmeticOperator.getRightOperand().isPrecedenceOverridden());
 
     }
 

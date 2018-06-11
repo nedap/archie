@@ -1,9 +1,11 @@
 package com.nedap.archie.archetypevalidator;
 
 import com.nedap.archie.aom.Archetype;
+import com.nedap.archie.aom.TemplateOverlay;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The result of a validation. Contains:
@@ -110,6 +112,8 @@ public class ValidationResult {
     public List<ValidationResult> getOverlayValidations() {
         return overlayValidations;
     }
+
+
 
     public String toString() {
         StringBuilder result = new StringBuilder();

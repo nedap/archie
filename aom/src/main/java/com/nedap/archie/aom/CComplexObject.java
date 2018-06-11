@@ -10,6 +10,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by pieter.bos on 15/10/15.
@@ -70,14 +71,16 @@ public class CComplexObject extends CDefinedObject<ArchetypeModelObject> {
     }
 
     /**
-     * get attribute by name.
-     * @param name
+     * get attribute by name or differential path
+     * @param nameOrDifferentialpath name of the attribute, or the full differential path of the attribute
      * @return
      */
     @Override
-    public CAttribute getAttribute(String name) {
+    public CAttribute getAttribute(String nameOrDifferentialpath) {
         for(CAttribute attribute:attributes) {
-            if(attribute.getRmAttributeName().equals(name)) {
+            if(attribute.getRmAttributeName().equals(nameOrDifferentialpath) && attribute.getDifferentialPath() == null) {
+                return attribute;
+            } else if(attribute.getDifferentialPath() != null && attribute.getDifferentialPath().equals(nameOrDifferentialpath)) {
                 return attribute;
             }
         }
@@ -102,6 +105,37 @@ public class CComplexObject extends CDefinedObject<ArchetypeModelObject> {
     public void addAttribute(CAttribute attribute) {
         attribute.setParent(this);
         attributes.add(attribute);
+    }
+
+    public void removeAttribute(CAttribute attribute) {
+        removeAttribute(attribute, false);
+    }
+
+    private void removeAttribute(CAttribute attribute, boolean allowRemovingTupleMembers) {
+        int indexOfAttribute = -1;
+
+        for(int i = 0; i < attributes.size(); i++) {
+            CAttribute existingAttribute = attributes.get(i);
+            if(existingAttribute.getDifferentialPath() != null) {
+
+                if(existingAttribute.getDifferentialPath().equals(attribute.getDifferentialPath())) {
+                    indexOfAttribute = i;
+                    break;
+                }
+            } else {
+                if(existingAttribute.getRmAttributeName().equals(attribute.getRmAttributeName())) {
+                    indexOfAttribute = i;
+                }
+            }
+        }
+        if(indexOfAttribute >= 0) {
+            CAttribute foundAttribute = attributes.get(indexOfAttribute);
+            if(!allowRemovingTupleMembers && foundAttribute.getSocParent() != null) {
+                throw new IllegalArgumentException("cannot remove a tuple attribute with removeAttribute, remove the tuple attribute instead and rebuild tuple attributes.");
+            } else {
+                attributes.remove(indexOfAttribute);
+            }
+        }
     }
 
     public List<CAttributeTuple> getAttributeTuples() {
@@ -140,5 +174,32 @@ public class CComplexObject extends CDefinedObject<ArchetypeModelObject> {
     @Override
     public boolean isLeaf() {
         return (attributes == null || attributes.isEmpty()) && (attributeTuples == null || attributeTuples.isEmpty());
+    }
+
+    /**
+     * Remove the attribute tuple with the given member names from this CComplexObject
+     * @param parameterMemberNames the name of the attribute tuple members to remove
+     */
+    public void removeAttributeTuple(List<String> parameterMemberNames) {
+        int index = getIndexOfMatchingAttributeTuple(parameterMemberNames);
+        if(index >= 0) {
+            CAttributeTuple tuple = attributeTuples.get(index);
+            attributeTuples.remove(index);
+            for(CAttribute attribute:tuple.getMembers()) {
+                this.removeAttribute(attribute, true);
+            }
+        }
+    }
+
+    public int getIndexOfMatchingAttributeTuple(List<String> parameterMemberNames) {
+        for(int i = 0; i < this.getAttributeTuples().size(); i++) {
+            CAttributeTuple cAttributeTuple = getAttributeTuples().get(i);
+            cAttributeTuple.getMemberNames();
+            List<String> memberNames = cAttributeTuple.getMemberNames();
+            if(memberNames.equals(parameterMemberNames)) {
+                return i;
+            }
+        }
+        return -1;
     }
 }

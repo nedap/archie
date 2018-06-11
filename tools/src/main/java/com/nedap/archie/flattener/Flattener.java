@@ -37,6 +37,7 @@ public class Flattener {
     private boolean createOperationalTemplate = false;
     private boolean removeLanguagesFromMetaData = false;
     private boolean useComplexObjectForArchetypeSlotReplacement = false;
+    private boolean removeZeroOccurrencesObjects = false;
 
     private String[] languagesToKeep = null;
 
@@ -46,6 +47,7 @@ public class Flattener {
     private TupleFlattener tupleFlattener = new TupleFlattener();
 
     private OperationalTemplateCreator optCreator = new OperationalTemplateCreator(this);
+
 
 
     public Flattener(ArchetypeRepository repository, ReferenceModels models) {
@@ -58,8 +60,25 @@ public class Flattener {
         this.metaModels = models;
     }
 
+    /**
+     * Create operational templates in addition to flattening. Default is false;
+     * @param makeTemplate
+     * @return
+     */
     public Flattener createOperationalTemplate(boolean makeTemplate) {
         this.createOperationalTemplate = makeTemplate;
+        return this;
+    }
+
+    /**
+     * Remove zero occurrences constraints, instead of leaving them but removing all of their children
+     *
+     * Default is false
+     * @param remove
+     * @return
+     */
+    public Flattener removeZeroOccurrencesConstraints(boolean remove) {
+        this.removeZeroOccurrencesObjects = remove;
         return this;
     }
 
@@ -130,7 +149,16 @@ public class Flattener {
             result = optCreator.createOperationalTemplate(parent);
             optCreator.overrideArchetypeId(result, child);
         } else {
-            result = parent.clone();
+            result = child.clone();
+
+            Archetype clonedParent = parent.clone();
+            //definition, terminology and rules will be replaced later, but must be set to that of the parent
+            // for this flattener to work correctly. I would not write it this way when creating another flattener, but
+            //it's the way it is :)
+            //parent needs to be cloned because this updates references to parent archetype as well
+            result.setDefinition(clonedParent.getDefinition());
+            result.setTerminology(clonedParent.getTerminology());
+            result.setRules(clonedParent.getRules());
         }
 
         //1. redefine structure
@@ -154,16 +182,25 @@ public class Flattener {
         }
         result.getDefinition().setArchetype(result);
         result.setDifferential(false);//note this archetype as being flat
-        if(!createOperationalTemplate) {
-            //set metadata to specialized archetype
-            result.setOriginalLanguage(child.getOriginalLanguage());
-            result.setDescription(child.getDescription());
-            result.setOtherMetaData(child.getOtherMetaData());
-            result.setGenerated(child.getGenerated());
-            result.setControlled(child.getControlled());
-            result.setBuildUid(child.getBuildUid());
-            result.setTranslations(child.getTranslations());
-        } //else as well, but is done elsewhere. needs refactor.
+
+        if(child instanceof Template && !createOperationalTemplate) {
+            Template resultTemplate = (Template) result;
+            resultTemplate.setTemplateOverlays(new ArrayList<>());
+            Template childTemplate = (Template) child;
+            //we need to add the flattened template overlays. For operational template these have been added to the archetype structure, so not needed
+            for(TemplateOverlay overlay:((Template) child).getTemplateOverlays()){
+                TemplateOverlay flatOverlay = (TemplateOverlay) getNewFlattener().flatten(overlay);
+                ResourceDescription description = (ResourceDescription) result.getDescription().clone();
+                //not sure whether to do this or to implement these methods using the owningTemplate param.
+                //in many cases you do want this information...
+                flatOverlay.setDescription(description);
+                flatOverlay.setOriginalLanguage(result.getOriginalLanguage());
+                flatOverlay.setTranslationList(result.getTranslationList());
+                ArchetypeParsePostProcesser.fixArchetype(flatOverlay);
+                resultTemplate.getTemplateOverlays().add(flatOverlay);
+            }
+        }
+
         ArchetypeParsePostProcesser.fixArchetype(result);
         return result;
     }
@@ -182,9 +219,15 @@ public class Flattener {
                     List<CObject> objectsToRemove = new ArrayList<>();
                     for (CObject child : attribute.getChildren()) {
                         if (!child.isAllowed()) {
-                            objectsToRemove.add(child);
+                            if(child instanceof CComplexObject) {
+                                ((CComplexObject) child).setAttributes(new ArrayList<>());
+                            }
+                            if(this.removeZeroOccurrencesObjects) {
+                                objectsToRemove.add(child);
+                            }
+                        } else {
+                            workList.push(child);
                         }
-                        workList.push(child);
                     }
                     attribute.getChildren().removeAll(objectsToRemove);
                 }

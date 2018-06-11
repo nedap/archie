@@ -7,13 +7,13 @@ public class Expression extends RuleElement {
     /**
      * If true, this statement originally was placed between ()-signs
      */
-    private boolean precedenceOverriden = false;
+    private boolean precedenceOverridden = false;
 
-    public boolean isPrecedenceOverriden() {
-        return precedenceOverriden;
+    public boolean isPrecedenceOverridden() {
+        return precedenceOverridden;
     }
 
-    public void setPrecedenceOverridden(boolean precedenceOverriden) {
-        this.precedenceOverriden = precedenceOverriden;
+    public void setPrecedenceOverridden(boolean precedenceOverridden) {
+        this.precedenceOverridden = precedenceOverridden;
     }
 }

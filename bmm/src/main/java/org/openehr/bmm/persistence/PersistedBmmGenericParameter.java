@@ -36,20 +36,6 @@ import java.io.Serializable;
  */
 public class PersistedBmmGenericParameter extends PersistedBmmModelElement implements Serializable {
 
-    public PersistedBmmGenericParameter() {
-        super();
-    }
-
-    public PersistedBmmGenericParameter(String name) {
-        this();
-        this.name = name;
-    }
-
-    public PersistedBmmGenericParameter(String name, String conformsToType) {
-        this(name);
-        this.conformsToType = conformsToType;
-    }
-
     /**
      * Name of the parameter, e.g. 'T' etc. Persisted attribute.
      */
@@ -64,6 +50,21 @@ public class PersistedBmmGenericParameter extends PersistedBmmModelElement imple
      * BMM_GENERIC_PARAMETER created by create_bmm_generic_parameter.
      */
     private transient BmmGenericParameter bmmGenericParameter;
+
+
+    public PersistedBmmGenericParameter() {
+        super();
+    }
+
+    public PersistedBmmGenericParameter(String name) {
+        this();
+        this.name = name;
+    }
+
+    public PersistedBmmGenericParameter(String name, String conformsToType) {
+        this(name);
+        this.conformsToType = conformsToType;
+    }
 
     /**
      * Returns the name of the parameter, e.g. 'T' etc.

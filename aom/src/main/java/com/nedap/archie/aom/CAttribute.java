@@ -2,8 +2,10 @@ package com.nedap.archie.aom;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.nedap.archie.aom.utils.AOMUtils;
 import com.nedap.archie.base.Cardinality;
 import com.nedap.archie.base.MultiplicityInterval;
+import com.nedap.archie.definitions.AdlCodeDefinitions;
 import com.nedap.archie.paths.PathSegment;
 import com.nedap.archie.query.APathQuery;
 
@@ -83,6 +85,41 @@ public class CAttribute extends ArchetypeConstraint {
     }
 
     public CObject getChild(String nodeId) {
+        //first don't look through CComplexObject proxies, then if no result, do lookup through the proxies
+        CObject result = getChild(nodeId, false);
+        if(result == null) {
+            result = getChild(nodeId, true);
+        }
+        return result;
+    }
+
+    /**
+     * Get the child cobject with the given nodeid. If it does not exist but a specialized version
+     * does exist, returns that one.
+     * If multiple specialized children exist, returns the first it can find. TODO: this should probably be better defined :)
+     * @param nodeId
+     * @return
+     */
+    public CObject getPossiblySpecializedChild(String nodeId) {
+        //if there's an exact node id match, return that first
+        CObject result = getChild(nodeId, false);
+        if(result != null) {
+            return result;
+        }
+        for(CObject child:children) {
+            if(nodeId.equals(child.getNodeId()) || AOMUtils.codesConformant(child.getNodeId(), nodeId)) {
+                return child;
+            } else if(child instanceof CArchetypeRoot) {
+                //TODO: Should we look for specialized archetype roots as well? :)
+                if (((CArchetypeRoot) child).getArchetypeRef().equals(nodeId)) {
+                    return child;
+                }
+            }
+        }
+        return null;
+    }
+
+    private CObject getChild(String nodeId, boolean lookThroughProxies) {
         for(CObject child:children) {
             if(nodeId.equals(child.getNodeId())) {
                 return child;
@@ -90,7 +127,7 @@ public class CAttribute extends ArchetypeConstraint {
                 if (((CArchetypeRoot) child).getArchetypeRef().equals(nodeId)) {
                     return child;
                 }
-            } else if(child instanceof CComplexObjectProxy) {
+            } else if(lookThroughProxies && child instanceof CComplexObjectProxy) {
                 String targetPath = ((CComplexObjectProxy) child).getTargetPath();
                 APathQuery aPathQuery = new APathQuery(targetPath);
                 PathSegment lastPathSegment = aPathQuery.getPathSegments().get(aPathQuery.getPathSegments().size() - 1);
@@ -187,6 +224,15 @@ public class CAttribute extends ArchetypeConstraint {
         }
     }
 
+    public void removeChild(CObject child) {
+        int index = getIndexOfMatchingCObjectChild(child);
+        if(index > -1) {
+            children.remove(index);
+        }
+    }
+
+
+
     /**
      * Replace the child at node nodeId with all the objects from the parameter newChildren.
      * If keepOriginal is true, it will not replace the original, but keep it in place
@@ -210,6 +256,24 @@ public class CAttribute extends ArchetypeConstraint {
             }
         }
 
+    }
+
+    public int getIndexOfMatchingCObjectChild(CObject child) {
+        if(child instanceof CPrimitiveObject) {
+            return getIndexOfChildWithMatchingRmTypeName(child.getRmTypeName());
+        } else {
+            return getIndexOfChildWithNodeId(child.getNodeId());
+        }
+    }
+
+    public int getIndexOfChildWithMatchingRmTypeName(String rmTypeName) {
+        for(int i = 0; i < children.size(); i++) {
+            CObject child = children.get(i);
+            if(rmTypeName.equals(child.getRmTypeName())) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     public int getIndexOfChildWithNodeId(String nodeId) {
@@ -301,6 +365,7 @@ public class CAttribute extends ArchetypeConstraint {
 
 
     @Override
+    @JsonIgnore
     public boolean isLeaf() {
         return children != null && children.size() > 0;
     }
@@ -369,6 +434,7 @@ public class CAttribute extends ArchetypeConstraint {
         }
     }
 
+    @JsonIgnore
     public boolean isSecondOrderConstrained() {
         return getSocParent() != null || (getParent() != null && getParent().getSocParent() != null);
     }
@@ -379,6 +445,7 @@ public class CAttribute extends ArchetypeConstraint {
      * calculates sum of all occurrences lower bounds; where no occurrences are stated, 0 is assumed
      * @return
      */
+    @JsonIgnore
     public int getAggregateOccurrencesLowerSum() {
         int sum = 0;
         for(CObject cObject:getChildren()) {
@@ -394,6 +461,7 @@ public class CAttribute extends ArchetypeConstraint {
      *  object, and 1 for all optional objects
      * @return
      */
+    @JsonIgnore
     public int getMinimumChildCount() {
         int result = 0;
         boolean foundOptional = false;

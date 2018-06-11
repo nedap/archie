@@ -24,6 +24,7 @@ package org.openehr.bmm.rmaccess;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
+import org.openehr.bmm.core.BmmClass;
 import org.openehr.bmm.core.BmmModel;
 import org.openehr.bmm.persistence.BmmIncludeSpecification;
 import org.openehr.bmm.persistence.PersistedBmmSchema;
@@ -486,47 +487,20 @@ public class ReferenceModelAccess {
             }
 
             //set list of schemas to load; used later to determine what to put in `top_level_schemas'
-            List<String> itemsToRemove = new ArrayList<String>();
-            if (!schemaLoadList.isEmpty()) {
-                for (String listItem : schemaLoadList) {
-                    if (!allSchemas.containsKey(listItem)) {
-                        validator.addWarning(BmmMessageIds.ec_bmm_schema_invalid_load_list, listItem);
-                        itemsToRemove.add(listItem);
-                    }
-                }
-                schemaLoadList.removeAll(itemsToRemove);
-            } else {
-                schemaLoadList = new ArrayList<>();
-                populateLoadListInDependencyOrder();
-                validator.addWarning(BmmMessageIds.ec_bmm_schemas_no_load_list_found);
-            }
+            fillSchemaLoadList();
 
             //initial load of all schemas, which populates `schema_inclusion_map';
-            schemaLoadList.forEach((aSchemaId) -> {
-                SchemaDescriptor aSchemaDescriptor = allSchemas.get(aSchemaId);
-                if (aSchemaDescriptor.getSchemaValidator().hasPassed()) {
-                    loadSchemaIncludeClosure(aSchemaId);
-                    if (aSchemaDescriptor.getSchemaValidator().getMessageLogger().hasWarnings()) {
-                        validator.addWarning(BmmMessageIds.ec_bmm_schema_passed_with_warnings, aSchemaDescriptor.getSchemaValidator().getErrorStrings());
-                    }
-
-                } else {
-                    validator.addError(BmmMessageIds.ec_bmm_schema_basic_validation_failed, aSchemaId, aSchemaDescriptor.getSchemaValidator().getErrorStrings());
-
-                    if (!aSchemaDescriptor.isBmmCompatible()) {
-                        validator.addError(BmmMessageIds.ec_bmm_schema_version_incompatible_with_tool,
-                                aSchemaId,
-                                BmmDefinitions.BMM_INTERNAL_VERSION);
-                    }
-                }
-            });
+            loadSchemasOrAddValidationErrors();
 
             //propagate errors found so far
-            //Also here: mark the 'top-level' schemas, inferred from the inclusion maps in each schema
             allSchemas.forEach((aSchemaId, aSchemaDescriptor) -> {
                 if (!aSchemaDescriptor.getSchemaValidator().hasPassed()) {
                     mergeValidationErrors(aSchemaDescriptor);
                 }
+            });
+
+            //mark the 'top-level' schemas, inferred from the inclusion maps in each schema
+            allSchemas.forEach((aSchemaId, aSchemaDescriptor) -> {
                 if (!schemaInclusionMap.containsKey(aSchemaDescriptor.getSchemaId())) {
                     aSchemaDescriptor.setTopLevel(true);
                 }
@@ -541,126 +515,202 @@ public class ReferenceModelAccess {
                 }
             });
 
-            boolean finished = false;
+
             //Now we process the include relations on the P_BMM top-level schemas, creating fully populated schemas
-            for (int index = 0; index < MAXIMUM_INCLUSION_DEPTH && !finished; index++) {
-                finished = true;
-                for (String key : schemaInclusionMap.keySet()) {
-                    List<String> includeList = schemaInclusionMap.get(key);
-                    if (candidateSchemas.containsKey(key)) {
-                        PersistedBmmSchema includedSchema = candidateSchemas.get(key).getPersistentSchema();
-                        //only process current schema if its lower level includes have already been copied into it,
-                        //or if it had no includes, since only then is it ready to be itself included in the next one up the chain
-                        //If this included schema is in this state, merge its contents into each schema that includes it
-                        if (includedSchema.getState() == PersistedBmmSchemaState.STATE_INCLUDES_PROCESSED) {
-                            //Iterate over the schemas that include `included_schema' and process the inclusion
-                            for (String includeItem : includeList) {
-                                if (candidateSchemas.containsKey(includeItem)) {
-                                    PersistedBmmSchema includingSchema = candidateSchemas.get(includeItem).getPersistentSchema();
-                                    if (includingSchema.getState() == PersistedBmmSchemaState.STATE_INCLUDES_PENDING) {
-                                        includingSchema.merge(includedSchema);
-                                        includingSchema.caseInsensitiveIncludeRemoval(key);
-                                        if(includingSchema.getIncludes().size() == 0) {
-                                            includingSchema.setState(PersistedBmmSchemaState.STATE_INCLUDES_PROCESSED);
-                                        }
-                                        validator.addInfo(BmmMessageIds.ec_bmm_schema_merged_schema,
-                                                includedSchema.getSchemaId(),
-                                                candidateSchemas.get(includeItem).getSchemaId());
-                                        finished = false;
-                                    }
-                                } else {
-                                    validator.addError(BmmMessageIds.ec_bmm_schema_including_schema_not_valid, includeItem);
-                                }
-                            }
-                        }
-                    } else {
-                        validator.addError(BmmMessageIds.ec_bmm_schema_included_schema_not_found, key);
-                    }
-                }
-            }
+            processIncludeRelations();
 
             //By this point the P_BMM schemas have been merged, and the top-level P_BMM schemas can be validated
             //This will cause each schema to potentially create errors to do with included schemas as well as itself
             //These errors then need to be integrated with the original schemas, so as to be reported correctly
-            BmmModel topLevelSchema = null;
-            for (String aKey : candidateSchemas.keySet()) {
-                SchemaDescriptor aSchemaDescriptor = candidateSchemas.get(aKey);
-                if (aSchemaDescriptor.isTopLevel() && schemaLoadList.contains(aSchemaDescriptor.getSchemaId())) {
-                    if (aSchemaDescriptor.getSchemaValidator().hasPassed() && aSchemaDescriptor.getPersistentSchema().getState() == PersistedBmmSchemaState.STATE_INCLUDES_PROCESSED) {
-                        try {
-                            //validate the schema & if passed, put it into `top_level_schemas'
-                            aSchemaDescriptor.validate();
-                            mergeValidationErrors(aSchemaDescriptor);
-                            if (aSchemaDescriptor.getSchemaValidator().hasPassed()) {
-                                //now we create a BMM_SCHEMA from a fully merged P_BMM_SCHEMA
-                                aSchemaDescriptor.createSchema();
-                                if (aSchemaDescriptor.getSchema() != null) {
-                                    topLevelSchema = aSchemaDescriptor.getSchema();
-                                }
-                                validModels.put(aSchemaDescriptor.getSchemaId(), topLevelSchema);
-                                if (aSchemaDescriptor.getSchemaValidator().getMessageLogger().hasWarnings()) {
-                                    validator.addWarning(BmmMessageIds.ec_bmm_schema_passed_with_warnings,
-                                            aSchemaDescriptor.getSchemaId(),
-                                            aSchemaDescriptor.getSchemaValidator().getErrorStrings());
-                                }
-                            } else {
-                                validator.addError(BmmMessageIds.ec_bmm_schema_post_merge_validate_fail,
-                                        aSchemaDescriptor.getSchemaId(),
-                                        aSchemaDescriptor.getSchemaValidator().getErrorStrings());
-                            }
-                        } catch (Exception e) {
-                            validator.addError(BmmMessageIds.ec_bmm_schema_post_merge_validate_fail, aSchemaDescriptor.getSchemaId(), e.getClass().getSimpleName() + ": " + e.getMessage());
-                            log.error("error validating schema", e);
-                        }
-                    }
-                }
-            }
+            validateAndSetTopLevelSchema();
 
-            //now populate the `models_by_closure' table
-            modelsByClosureAndVersion.clear();
-            List<String> rmClosures = new ArrayList<>();
-            String modelPublisher = null;
-            for (String aSchemaId : validModels.keySet()) {
-                BmmModel model = validModels.get(aSchemaId);
-                modelPublisher = model.getRmPublisher();
-                //put a ref to schema, keyed by the model_publisher-package_name key (lower-case) for later lookup by compiler
-                rmClosures = model.getArchetypeRmClosurePackages();
-                for (String rmClosure : rmClosures) {
-                    String qualifiedRmClosureName = BmmDefinitions.publisherQualifiedRmClosureName(modelPublisher, rmClosure);
-                    BmmModel existingSchema = getReferenceModelForClosure(qualifiedRmClosureName,  model.getRmRelease());
-                    if (existingSchema != null) {
-                        validator.addInfo(BmmMessageIds.ec_bmm_schema_duplicate_found,
-                                qualifiedRmClosureName,
-                                existingSchema.getSchemaId(),
-                                aSchemaId);
-                    } else {
-                        addModelForClosure(qualifiedRmClosureName, model);
-                    }
-                }
-            }
+            createModelsByClosureAndVersion();
 
-            //add entry to top_level_schemas_by_publisher
-            List<SchemaDescriptor> publisherSchemas = null;
-            for (String aSchemaId : allSchemas.keySet()) {
-                SchemaDescriptor aSchemaDescriptor = allSchemas.get(aSchemaId);
-                if (aSchemaDescriptor.isTopLevel()) {
-                    modelPublisher = aSchemaDescriptor.getMetadata().get(BmmDefinitions.METADATA_RM_PUBLISHER);
-                    if (!topLevelSchemasByPublisher.containsKey(modelPublisher)) {
-                        publisherSchemas = new ArrayList<>();
-                        topLevelSchemasByPublisher.put(modelPublisher, publisherSchemas);
-                    } else {
-                        publisherSchemas = topLevelSchemasByPublisher.get(modelPublisher);
-                    }
-                    publisherSchemas.add(aSchemaDescriptor);
-                }
-            }
+            createSchemasByPublisher();
+
+            calculateDescendants();
 
             loadCount += 1;
+
+
         } catch (Exception e) {
             exceptionEncountered = true;
             validator.addError(BmmMessageIds.ec_bmm_schema_assertion_violation, e.getClass() + ": " + e.getMessage());
 
             e.printStackTrace();
+        }
+    }
+
+
+    private void fillSchemaLoadList() {
+        List<String> itemsToRemove = new ArrayList<String>();
+        if (!schemaLoadList.isEmpty()) {
+            for (String listItem : schemaLoadList) {
+                if (!allSchemas.containsKey(listItem)) {
+                    validator.addWarning(BmmMessageIds.ec_bmm_schema_invalid_load_list, listItem);
+                    itemsToRemove.add(listItem);
+                }
+            }
+            schemaLoadList.removeAll(itemsToRemove);
+        } else {
+            schemaLoadList = new ArrayList<>();
+            populateLoadListInDependencyOrder();
+            validator.addWarning(BmmMessageIds.ec_bmm_schemas_no_load_list_found);
+        }
+    }
+
+    private void loadSchemasOrAddValidationErrors() {
+        schemaLoadList.forEach((aSchemaId) -> {
+            SchemaDescriptor aSchemaDescriptor = allSchemas.get(aSchemaId);
+            if (aSchemaDescriptor.getSchemaValidator().hasPassed()) {
+                loadSchemaIncludeClosure(aSchemaId);
+                if (aSchemaDescriptor.getSchemaValidator().getMessageLogger().hasWarnings()) {
+                    validator.addWarning(BmmMessageIds.ec_bmm_schema_passed_with_warnings, aSchemaDescriptor.getSchemaValidator().getErrorStrings());
+                }
+
+            } else {
+                validator.addError(BmmMessageIds.ec_bmm_schema_basic_validation_failed, aSchemaId, aSchemaDescriptor.getSchemaValidator().getErrorStrings());
+
+                if (!aSchemaDescriptor.isBmmCompatible()) {
+                    validator.addError(BmmMessageIds.ec_bmm_schema_version_incompatible_with_tool,
+                            aSchemaId,
+                            BmmDefinitions.BMM_INTERNAL_VERSION);
+                }
+            }
+        });
+    }
+
+    private void processIncludeRelations() {
+        boolean finished = false;
+        for (int index = 0; index < MAXIMUM_INCLUSION_DEPTH && !finished; index++) {
+            finished = true;
+            for (String key : schemaInclusionMap.keySet()) {
+                List<String> includeList = schemaInclusionMap.get(key);
+                if (candidateSchemas.containsKey(key)) {
+                    PersistedBmmSchema includedSchema = candidateSchemas.get(key).getPersistentSchema();
+                    //only process current schema if its lower level includes have already been copied into it,
+                    //or if it had no includes, since only then is it ready to be itself included in the next one up the chain
+                    //If this included schema is in this state, merge its contents into each schema that includes it
+                    if (includedSchema.getState() == PersistedBmmSchemaState.STATE_INCLUDES_PROCESSED) {
+                        //Iterate over the schemas that include `included_schema' and process the inclusion
+                        for (String includeItem : includeList) {
+                            if (candidateSchemas.containsKey(includeItem)) {
+                                PersistedBmmSchema includingSchema = candidateSchemas.get(includeItem).getPersistentSchema();
+                                if (includingSchema.getState() == PersistedBmmSchemaState.STATE_INCLUDES_PENDING) {
+                                    includingSchema.merge(includedSchema);
+                                    includingSchema.caseInsensitiveIncludeRemoval(key);
+                                    if(includingSchema.getIncludes().size() == 0) {
+                                        includingSchema.setState(PersistedBmmSchemaState.STATE_INCLUDES_PROCESSED);
+                                    }
+                                    validator.addInfo(BmmMessageIds.ec_bmm_schema_merged_schema,
+                                            includedSchema.getSchemaId(),
+                                            candidateSchemas.get(includeItem).getSchemaId());
+                                    finished = false;
+                                }
+                            } else {
+                                validator.addError(BmmMessageIds.ec_bmm_schema_including_schema_not_valid, includeItem);
+                            }
+                        }
+                    }
+                } else {
+                    validator.addError(BmmMessageIds.ec_bmm_schema_included_schema_not_found, key);
+                }
+            }
+        }
+    }
+
+    private void validateAndSetTopLevelSchema() {
+        BmmModel topLevelSchema = null;
+        for (String aKey : candidateSchemas.keySet()) {
+            SchemaDescriptor aSchemaDescriptor = candidateSchemas.get(aKey);
+            if (aSchemaDescriptor.isTopLevel() && schemaLoadList.contains(aSchemaDescriptor.getSchemaId())) {
+                if (aSchemaDescriptor.getSchemaValidator().hasPassed() && aSchemaDescriptor.getPersistentSchema().getState() == PersistedBmmSchemaState.STATE_INCLUDES_PROCESSED) {
+                    try {
+                        //validate the schema & if passed, put it into `top_level_schemas'
+                        aSchemaDescriptor.validate();
+                        mergeValidationErrors(aSchemaDescriptor);
+                        if (aSchemaDescriptor.getSchemaValidator().hasPassed()) {
+                            //now we create a BMM_SCHEMA from a fully merged P_BMM_SCHEMA
+                            aSchemaDescriptor.createSchema();
+                            if (aSchemaDescriptor.getSchema() != null) {
+                                topLevelSchema = aSchemaDescriptor.getSchema();
+                            }
+                            validModels.put(aSchemaDescriptor.getSchemaId(), topLevelSchema);
+                            if (aSchemaDescriptor.getSchemaValidator().getMessageLogger().hasWarnings()) {
+                                validator.addWarning(BmmMessageIds.ec_bmm_schema_passed_with_warnings,
+                                        aSchemaDescriptor.getSchemaId(),
+                                        aSchemaDescriptor.getSchemaValidator().getErrorStrings());
+                            }
+                        } else {
+                            validator.addError(BmmMessageIds.ec_bmm_schema_post_merge_validate_fail,
+                                    aSchemaDescriptor.getSchemaId(),
+                                    aSchemaDescriptor.getSchemaValidator().getErrorStrings());
+                        }
+                    } catch (Exception e) {
+                        validator.addError(BmmMessageIds.ec_bmm_schema_post_merge_validate_fail, aSchemaDescriptor.getSchemaId(), e.getClass().getSimpleName() + ": " + e.getMessage());
+                        log.error("error validating schema", e);
+                    }
+                }
+            }
+        }
+    }
+
+    private void createModelsByClosureAndVersion() {
+        //now populate the `models_by_closure' table
+        modelsByClosureAndVersion.clear();
+        List<String> rmClosures = new ArrayList<>();
+        String modelPublisher = null;
+        for (String aSchemaId : validModels.keySet()) {
+            BmmModel model = validModels.get(aSchemaId);
+            modelPublisher = model.getRmPublisher();
+            //put a ref to schema, keyed by the model_publisher-package_name key (lower-case) for later lookup by compiler
+            rmClosures = model.getArchetypeRmClosurePackages();
+            for (String rmClosure : rmClosures) {
+                String qualifiedRmClosureName = BmmDefinitions.publisherQualifiedRmClosureName(modelPublisher, rmClosure);
+                BmmModel existingSchema = getReferenceModelForClosure(qualifiedRmClosureName,  model.getRmRelease());
+                if (existingSchema != null) {
+                    validator.addInfo(BmmMessageIds.ec_bmm_schema_duplicate_found,
+                            qualifiedRmClosureName,
+                            existingSchema.getSchemaId(),
+                            aSchemaId);
+                } else {
+                    addModelForClosure(qualifiedRmClosureName, model);
+                }
+            }
+        }
+    }
+
+    private void createSchemasByPublisher() {
+        String modelPublisher;//add entry to top_level_schemas_by_publisher
+        List<SchemaDescriptor> publisherSchemas = null;
+        for (String aSchemaId : allSchemas.keySet()) {
+            SchemaDescriptor aSchemaDescriptor = allSchemas.get(aSchemaId);
+            if (aSchemaDescriptor.isTopLevel()) {
+                modelPublisher = aSchemaDescriptor.getMetadata().get(BmmDefinitions.METADATA_RM_PUBLISHER);
+                if (!topLevelSchemasByPublisher.containsKey(modelPublisher)) {
+                    publisherSchemas = new ArrayList<>();
+                    topLevelSchemasByPublisher.put(modelPublisher, publisherSchemas);
+                } else {
+                    publisherSchemas = topLevelSchemasByPublisher.get(modelPublisher);
+                }
+                publisherSchemas.add(aSchemaDescriptor);
+            }
+        }
+    }
+
+    /**
+     * Calculate the descendants of each bmmClass and set it into the immediateDescendants property
+     */
+    private void calculateDescendants() {
+        //calculate descendants
+        for(BmmModel model:this.getValidModels().values()) {
+            final Map<String, BmmClass> classDefinitions = model.getClassDefinitions();
+
+            for(BmmClass bmmClass:classDefinitions.values()) {
+                for(BmmClass ancestor:bmmClass.getAncestors().values()) {
+                    ancestor.addImmediateDescendant(bmmClass.getName());
+                }
+            }
         }
     }
 

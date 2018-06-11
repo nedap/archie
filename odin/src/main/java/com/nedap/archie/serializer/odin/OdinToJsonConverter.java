@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.nedap.archie.adlparser.antlr.AdlParser;
 import com.nedap.archie.adlparser.antlr.AdlParser.*;
+import org.apache.commons.lang.StringEscapeUtils;
 
 import java.util.List;
 
@@ -185,9 +186,11 @@ public class OdinToJsonConverter {
             //strip " if present, all the other "-characters will have to be escaped
             if(text.startsWith("\"") && text.endsWith("\"")) {
                 String textWithoutQuotationMarks = text.substring(1, text.length()-1);
-                output.append(objectMapper.writeValueAsString(textWithoutQuotationMarks));
+
+                String textQuotesReplaced = StringEscapeUtils.unescapeJava(textWithoutQuotationMarks);
+                output.append(objectMapper.writeValueAsString(textQuotesReplaced));
             } else {
-                output.append(text);
+                output.append(objectMapper.writeValueAsString(text));
             }
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);

@@ -1,15 +1,14 @@
 package com.nedap.archie.adlparser.treewalkers;
 
-import com.nedap.archie.antlr.errors.ANTLRParserErrors;
-import com.nedap.archie.adlparser.antlr.ContainedRegexLexer;
-import com.nedap.archie.adlparser.antlr.ContainedRegexParser;
 import com.nedap.archie.adlparser.antlr.AdlLexer;
 import com.nedap.archie.adlparser.antlr.AdlParser;
 import com.nedap.archie.adlparser.antlr.AdlParser.Boolean_list_valueContext;
 import com.nedap.archie.adlparser.antlr.AdlParser.Boolean_valueContext;
 import com.nedap.archie.adlparser.antlr.AdlParser.String_list_valueContext;
 import com.nedap.archie.adlparser.antlr.AdlParser.String_valueContext;
-import com.nedap.archie.serializer.odin.OdinValueParser;
+import com.nedap.archie.adlparser.antlr.ContainedRegexLexer;
+import com.nedap.archie.adlparser.antlr.ContainedRegexParser;
+import com.nedap.archie.antlr.errors.ANTLRParserErrors;
 import com.nedap.archie.aom.CPrimitiveObject;
 import com.nedap.archie.aom.primitives.CBoolean;
 import com.nedap.archie.aom.primitives.CDate;
@@ -19,7 +18,8 @@ import com.nedap.archie.aom.primitives.CString;
 import com.nedap.archie.aom.primitives.CTerminologyCode;
 import com.nedap.archie.aom.primitives.CTime;
 import com.nedap.archie.base.terminology.TerminologyCode;
-import org.antlr.v4.runtime.ANTLRInputStream;
+import com.nedap.archie.serializer.odin.OdinValueParser;
+import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
@@ -168,7 +168,7 @@ public class PrimitivesConstraintParser extends BaseTreeWalker {
     }
 
     public CPrimitiveObject parseRegex(TerminalNode terminalNode) {
-        ContainedRegexLexer lexer = new ContainedRegexLexer(new ANTLRInputStream(terminalNode.getText()));
+        ContainedRegexLexer lexer = new ContainedRegexLexer(CharStreams.fromString(terminalNode.getText()));
         ContainedRegexParser parser = new ContainedRegexParser(new CommonTokenStream(lexer));
         ContainedRegexParser.RegexContext regex = parser.regex();
         CString result = new CString();

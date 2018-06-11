@@ -322,6 +322,7 @@ public class RMPathQuery {
             return false;
         }
         name = name.replaceAll("( |\\t|\\n|\\r)+", "");
+        nameFromQuery = nameFromQuery.replaceAll("( |\\t|\\n|\\r)+", "");
         return name.equalsIgnoreCase(nameFromQuery);
 
     }

@@ -28,7 +28,7 @@ public class ResourceDescription extends ArchetypeModelObject {
     private Map<String, String> conversionDetails = new ConcurrentHashMap<>();
     private Map<String, String> otherDetails = new ConcurrentHashMap<>();
 
-    private Map<String, ResourceDescriptionItem>  details;
+    private Map<String, ResourceDescriptionItem>  details = new ConcurrentHashMap<>();
 
     public Map<String, String> getOriginalAuthor() {
         return originalAuthor;

@@ -1,6 +1,8 @@
 package com.nedap.archie.aom.utils;
 
+import com.google.common.base.CharMatcher;
 import com.google.common.base.Joiner;
+import com.google.common.base.Strings;
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.ArchetypeHRID;
 import com.nedap.archie.aom.ArchetypeModelObject;
@@ -28,7 +30,9 @@ import org.openehr.bmm.core.BmmProperty;
 import org.openehr.bmm.persistence.validation.BmmDefinitions;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 public class AOMUtils {
@@ -81,8 +85,20 @@ public class AOMUtils {
     public static String codeAtLevel(String nodeId, int level) {
         NodeIdUtil nodeIdUtil = new NodeIdUtil(nodeId);
         List<Integer> codes = new ArrayList<>();
-        for(int i = 0; i <= level;i++) {
+        for(int i = 0; i <= level && i < nodeIdUtil.getCodes().size();i++) {
             codes.add(nodeIdUtil.getCodes().get(i));
+        }
+        //remove leading .0 codes - they are not present in the code at the given level
+        int numberOfCodesToRemove = 0;
+        for(int i = codes.size()-1; i >= 0 ; i--) {
+            if(codes.get(i).intValue() == 0) {
+                numberOfCodesToRemove++;
+            } else {
+                break;
+            }
+        }
+        if(numberOfCodesToRemove > 0) {
+            codes = codes.subList(0, codes.size()-numberOfCodesToRemove);
         }
         return nodeIdUtil.getPrefix() + Joiner.on(AdlCodeDefinitions.SPECIALIZATION_SEPARATOR).join(codes);
 
@@ -128,7 +144,7 @@ public class AOMUtils {
     public static boolean isPhantomPathAtLevel(List<PathSegment> pathSegments, int specializationDepth) {
         for(int i = pathSegments.size()-1; i >=0; i--) {
             String nodeId = pathSegments.get(i).getNodeId();
-            if(nodeId != null && AOMUtils.isValidCode(nodeId) && specializationDepth < AOMUtils.getSpecializationDepthFromCode(nodeId)) {
+            if(nodeId != null && AOMUtils.isValidCode(nodeId) && specializationDepth > AOMUtils.getSpecializationDepthFromCode(nodeId)) {
                 return codeExistsAtLevel(nodeId, specializationDepth);
             }
         }
@@ -138,7 +154,7 @@ public class AOMUtils {
     public static boolean codeExistsAtLevel(String nodeId, int specializationDepth) {
         NodeIdUtil nodeIdUtil = new NodeIdUtil(nodeId);
         int specializationDepthOfCode = AOMUtils.getSpecializationDepthFromCode(nodeId);
-        if(specializationDepth > specializationDepthOfCode) {
+        if(specializationDepth < specializationDepthOfCode) {
             String code = "";
             for(int i = 0; i <= specializationDepth; i++) {
                 code += nodeIdUtil.getCodes().get(i);
@@ -244,7 +260,16 @@ public class AOMUtils {
             }
             property = classDefinition.flattenBmmClass().getProperties().get(segment.getNodeName());
             if(property == null) {
-                return null;
+                for(String descendant: classDefinition.findAllDescendants()) {
+                    BmmProperty bmmProperty = bmmModel.getClassDefinition(descendant).flattenBmmClass().getProperties().get(segment.getNodeName());
+                    if(bmmProperty != null) {
+                        property = bmmProperty;
+                        break;
+                    }
+                }
+                if(property == null) {
+                    return null;
+                }
             }
             classDefinition = property.getType().getBaseClass();
         }
@@ -275,4 +300,39 @@ public class AOMUtils {
         }
         return attribute;
     }
+
+    /** Get the maximum code used at the given specialization level. useful for generating new codes*/
+    public static int getMaximumIdCode(int specializationDepth, Collection<String> usedIdCodes) {
+
+        int maximumIdCode = 0;
+        for(String code:usedIdCodes) {
+            if (code.length() > 2) {
+                int numberOfDots = getSpecializationDepthFromCode(code);
+                if(specializationDepth == numberOfDots) {
+                    int numericCode = numberOfDots == 0 ? Integer.parseInt(code.substring(2)) : Integer.parseInt(code.substring(code.lastIndexOf('.')+1));
+                    maximumIdCode = Math.max(numericCode, maximumIdCode);
+                }
+            }
+        }
+        return maximumIdCode;
+    }
+
+    /** Get the maximum code used at the given specialization level. useful for generating new codes*/
+    public static int getMaximumIdCode(int specializationDepth, String prefix, Collection<String> usedIdCodes) {
+        if(specializationDepth == 0) {
+            throw new IllegalArgumentException("can only get the maximum code with prefix at a specialization depth > 0");
+        }
+        int maximumIdCode = 0;
+        for(String code:usedIdCodes) {
+            if(code.startsWith(prefix + ".")) {
+                int numberOfDots = CharMatcher.is(AdlCodeDefinitions.SPECIALIZATION_SEPARATOR).countIn(code);
+                if(specializationDepth == numberOfDots) {
+                    int numericCode = Integer.parseInt(code.substring(code.lastIndexOf('.')+1));
+                    maximumIdCode = Math.max(numericCode, maximumIdCode);
+                }
+            }
+        }
+        return maximumIdCode;
+    }
+
 }

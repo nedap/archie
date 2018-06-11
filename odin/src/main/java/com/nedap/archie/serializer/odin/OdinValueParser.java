@@ -1,6 +1,7 @@
 package com.nedap.archie.serializer.odin;
 
 import com.nedap.archie.adlparser.antlr.AdlParser;
+import org.apache.commons.lang.StringEscapeUtils;
 
 /**
  * Created by pieter.bos on 15/10/15.
@@ -27,6 +28,6 @@ public class OdinValueParser {
         if(text.length() == 2) { // empty string, ""
             return "";
         }
-        return text.substring(1, text.length() - 1);
+        return StringEscapeUtils.unescapeJava(text.substring(1, text.length() - 1));
     }
 }

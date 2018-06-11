@@ -8,7 +8,7 @@ import com.nedap.archie.adlparser.antlr.XPathParser.FilterExprContext;
 import com.nedap.archie.adlparser.antlr.XPathParser.MainContext;
 import com.nedap.archie.adlparser.antlr.XPathParser.PredicateContext;
 import com.nedap.archie.adlparser.antlr.XPathParser.RelativeLocationPathContext;
-import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
@@ -49,7 +49,7 @@ public class APathToXPathConverter {
     public static String convertWithAntlr(String query) {
 
 
-        XPathLexer lexer = new XPathLexer(new ANTLRInputStream(query));
+        XPathLexer lexer = new XPathLexer(CharStreams.fromString(query));
         XPathParser parser = new XPathParser(new CommonTokenStream(lexer));
         MainContext mainCtx = parser.main();
         StringBuilder output = new StringBuilder();

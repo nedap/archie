@@ -1,5 +1,6 @@
 package com.nedap.archie.base;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.Joiner;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -24,7 +25,7 @@ public class Cardinality extends OpenEHRBase {
     private MultiplicityInterval interval;
 
     @XmlElement(name="is_ordered")
-    private boolean isOrdered = false;
+    private boolean isOrdered = true;
     @XmlElement(name="is_unique")
     private boolean isUnique = false;
 
@@ -33,8 +34,8 @@ public class Cardinality extends OpenEHRBase {
     }
 
     public Cardinality(int lower, int higher) {
-        isOrdered = false;
-        isUnique = lower == 1 && higher == 1;
+        isOrdered = true;//default: list semantics
+        isUnique = false;
         interval = new MultiplicityInterval(lower, higher);
     }
 
@@ -79,6 +80,7 @@ public class Cardinality extends OpenEHRBase {
      *
      * @return
      */
+    @JsonIgnore
     public Boolean isBag() {
         return !isOrdered && !isUnique;
     }
@@ -88,6 +90,7 @@ public class Cardinality extends OpenEHRBase {
      *
      * @return
      */
+    @JsonIgnore
     public Boolean isList() {
         return isOrdered && !isUnique;
     }
@@ -97,6 +100,7 @@ public class Cardinality extends OpenEHRBase {
      *
      * @return
      */
+    @JsonIgnore
     public Boolean isSet() {
         return !isOrdered && isUnique;
     }

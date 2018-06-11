@@ -8,6 +8,10 @@ public class TerminologyCodeWithArchetypeTerm {
     private String code;
     private ArchetypeTerm term;
 
+    public TerminologyCodeWithArchetypeTerm() {
+
+    }
+
     public TerminologyCodeWithArchetypeTerm(String code, ArchetypeTerm term) {
         this.code = code;
         this.term = term;

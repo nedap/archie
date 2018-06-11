@@ -1,8 +1,11 @@
 package com.nedap.archie.aom;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.common.base.Strings;
 import com.nedap.archie.aom.primitives.CTerminologyCode;
 import com.nedap.archie.aom.terminology.ArchetypeTerm;
 import com.nedap.archie.aom.terminology.ArchetypeTerminology;
+import com.nedap.archie.aom.terminology.ValueSet;
 import com.nedap.archie.aom.utils.AOMUtils;
 import com.nedap.archie.aom.utils.ArchetypeParsePostProcesser;
 import com.nedap.archie.definitions.AdlCodeDefinitions;
@@ -23,6 +26,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.Stack;
+import java.util.stream.Collectors;
 
 /**
  * Note: this Archetype does not conform to the UML model completely:
@@ -175,7 +179,8 @@ public class Archetype extends AuthoredResource {
      * @return the ArchetypeTerm corresponding to the given CObject in the given language
      */
     public ArchetypeTerm getTerm(CObject object, String language) {
-        return getTerminology().getTermDefinition(language, object.getNodeId());
+        ArchetypeTerminology terminology = getTerminology();
+        return terminology == null ? null : terminology.getTermDefinition(language, object.getNodeId());
     }
 
     /**
@@ -227,6 +232,7 @@ public class Archetype extends AuthoredResource {
         return parentArchetypeId != null;
     }
 
+    @JsonIgnore
     public int specializationDepth() {
         return AOMUtils.getSpecializationDepthFromCode(definition.getNodeId());
     }
@@ -236,6 +242,7 @@ public class Archetype extends AuthoredResource {
      * ac codes references in C_TERMINOLOGY_CODE objects and ac codes from value sets keys
      * @return
      */
+    @JsonIgnore
     public Set<String> getAllUsedCodes() {
         Stack<CObject> workList = new Stack();
         Set<String> result = new LinkedHashSet<>();
@@ -254,25 +261,61 @@ public class Archetype extends AuthoredResource {
                 workList.addAll(attribute.getChildren());
             }
         }
-        result.addAll(terminology.getValueSets().keySet());
-        return result;
-    }
+        if(terminology != null && terminology.getValueSets() != null) {
+            for (ValueSet set : terminology.getValueSets().values()) {
+                result.add(set.getId());
+                for (String code : set.getMembers()) {
+                    result.add(code);
+                }
 
-    public Set<String> getUsedAtCodes() {
-        Stack<CObject> workList = new Stack();
-        Set<String> result = new LinkedHashSet<>();
-        workList.add(definition);
-        while(!workList.isEmpty()) {
-            CObject cObject = workList.pop();
-            if(!Objects.equals(cObject.getNodeId(), AdlCodeDefinitions.PRIMITIVE_NODE_ID)){
-                result.add(cObject.getNodeId());
-            }
-            for(CAttribute attribute:cObject.getAttributes()) {
-                workList.addAll(attribute.getChildren());
             }
         }
+
         return result;
     }
 
+    @JsonIgnore
+    public Set<String> getUsedIdCodes() {
+        return getAllUsedCodes().stream().filter(code -> AOMUtils.isIdCode(code)).collect(Collectors.toSet());
+    }
+
+    @JsonIgnore
+    public Set<String> getUsedValueCodes() {
+        return getAllUsedCodes().stream().filter(code -> AOMUtils.isValueCode(code)).collect(Collectors.toSet());
+
+    }
+
+    @JsonIgnore
+    public Set<String> getUsedValueSetCodes() {
+        return getAllUsedCodes().stream().filter(code -> AOMUtils.isValidValueSetCode(code)).collect(Collectors.toSet());
+    }
+
+
+    private String generateNextCode(String prefix, Set<String> usedCodes) {
+        int specializationDepth = this.specializationDepth();
+        int maximumIdCode = AOMUtils.getMaximumIdCode(specializationDepth, usedCodes);
+        return prefix + generateSpecializationDepthCodePrefix(specializationDepth()) + (maximumIdCode+1);
+    }
+
+    public String generateNextIdCode() {
+        return generateNextCode(AdlCodeDefinitions.ID_CODE_LEADER, getUsedIdCodes());
+    }
+
+    public String generateNextValueCode() {
+        return generateNextCode(AdlCodeDefinitions.VALUE_CODE_LEADER, getUsedValueCodes());
+    }
+
+    public String generateNextValueSetCode() {
+        return generateNextCode(AdlCodeDefinitions.VALUE_SET_CODE_LEADER, getUsedValueSetCodes());
+
+    }
+
+    private String generateSpecializationDepthCodePrefix (int specializationDepth) {
+        String prefix = "";
+        for(int i = 0; i < specializationDepth; i++) {
+            prefix += "0" + AdlCodeDefinitions.SPECIALIZATION_SEPARATOR;
+        }
+        return prefix;
+    }
 
 }

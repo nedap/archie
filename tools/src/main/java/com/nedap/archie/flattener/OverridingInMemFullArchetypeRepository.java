@@ -2,6 +2,7 @@ package com.nedap.archie.flattener;
 
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.OperationalTemplate;
+import com.nedap.archie.archetypevalidator.ArchetypeValidationSettings;
 import com.nedap.archie.archetypevalidator.ValidationResult;
 import org.apache.commons.lang.mutable.Mutable;
 
@@ -84,10 +85,25 @@ public class OverridingInMemFullArchetypeRepository implements FullArchetypeRepo
     }
 
     @Override
+    public void removeValidationResult(String archetypeId) {
+        ValidationResult result = extraArchetypes.getValidationResult(archetypeId);
+        if(result != null) {
+            extraArchetypes.removeValidationResult(archetypeId);
+        } else {
+            originalRepository.removeValidationResult(archetypeId);
+        }
+    }
+
+    @Override
     public List<ValidationResult> getAllValidationResults() {
         List<ValidationResult> result = new ArrayList<>(extraArchetypes.getAllValidationResults());
         result.addAll(originalRepository.getAllValidationResults());
         return result;
+    }
+
+    @Override
+    public ArchetypeValidationSettings getArchetypeValidationSettings() {
+        return originalRepository.getArchetypeValidationSettings();
     }
 
     @Override

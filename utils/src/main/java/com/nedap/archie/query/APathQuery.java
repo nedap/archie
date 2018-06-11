@@ -65,6 +65,8 @@ public class APathQuery {
                             String expression = equalityExprContext.getText();
                             if (isDigit.matcher(expression).matches()) {
                                 pathSegment.setIndex(Integer.parseInt(expression));
+                            } else if(expression.matches("\".*\"") || expression.matches("'.*'")) {
+                                pathSegment.setNodeId(expression.substring(1, expression.length()-1));
                             } else {
                                 pathSegment.setNodeId(expression);
                             }

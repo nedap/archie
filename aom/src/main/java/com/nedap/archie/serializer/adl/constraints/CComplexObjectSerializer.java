@@ -101,7 +101,6 @@ public class CComplexObjectSerializer<T extends CComplexObject> extends Constrai
             builder.append("}");
         }
         if (!cattr.getChildren().isEmpty()) {
-            builder.append(" matches ");
             buildAttributeChildConstraints(cattr);
         }
     }
@@ -140,14 +139,15 @@ public class CComplexObjectSerializer<T extends CComplexObject> extends Constrai
 
     private void buildAttributeChildConstraints(CAttribute cattr) {
         List<CObject> children = filterNonEmptyChildren(cattr.getChildren());
+        if(children.isEmpty()) {
+            return;
+        }
 
+        builder.append(" matches ");
         boolean indent = !children.isEmpty() &&
                 (children.size() > 1 || !(children.get(0) instanceof CPrimitiveObject));
         builder.append("{");
         children.forEach(serializer::appendCObject);
-        if (children.isEmpty()) {
-            builder.append("*");
-        }
 
         if (indent) {
             builder.newline();

@@ -1,6 +1,7 @@
 package com.nedap.archie.query;
 
 
+import com.google.common.collect.Lists;
 import com.nedap.archie.aom.ArchetypeModelObject;
 import com.nedap.archie.aom.CAttribute;
 import com.nedap.archie.aom.CComplexObject;
@@ -29,6 +30,8 @@ public class AOMPathQuery {
 
     /** If true, extend the search through C_COMPLEX_OBJECT_PROXY objects by looking up the replacement first.*/
     private final boolean findThroughCComplexObjectProxies;
+
+    private boolean findThroughDifferentialPaths = true;
 
     public AOMPathQuery(String query) {
         APathQuery apathQuery = new APathQuery(query);
@@ -60,19 +63,102 @@ public class AOMPathQuery {
         return new AOMPathQuery(pathSegments, false);
     }
 
+    public void setFindThroughDifferentialPaths(boolean find) {
+        this.findThroughDifferentialPaths = find;
+    }
+
     public <T extends ArchetypeModelObject> List<T> findList(CComplexObject root) {
+        return findList(root, false);
+    }
+
+    /**
+     * Find a list of matching objects to the path. If matchSpecializedNodes is true, [id6] in the query will first try to
+     * find a node with id id6. If not, it will find specialized nodes like id6.1 or id6.0.0.3.1
+     * @param root
+     * @param matchSpecializedNodes
+     * @param <T>
+     * @return
+     */
+    public <T extends ArchetypeModelObject> List<T> findList(CComplexObject root, boolean matchSpecializedNodes) {
         List<ArchetypeModelObject> result = new ArrayList<>();
         result.add(root);
-        for(PathSegment segment:this.pathSegments) {
+        for(int i = 0; i < pathSegments.size(); i++) {
+            PathSegment segment = pathSegments.get(i);
             if (result.size() == 0) {
                 return Collections.emptyList();
             }
-            result = findOneSegment(segment, result);
+
+
+            CAttribute differentialAttribute = null;
+            if(findThroughDifferentialPaths) {
+                differentialAttribute = findMatchingDifferentialPath(pathSegments.subList(i, pathSegments.size()), result);
+            }
+            if(differentialAttribute != null) {
+                //skip a few pathsegments for this differential path match
+                i = i + new APathQuery(differentialAttribute.getDifferentialPath()).getPathSegments().size()-1;
+                PathSegment lastPathSegment = pathSegments.get(i);
+                ArchetypeModelObject oneMatchingObject = findOneMatchingObject(differentialAttribute, lastPathSegment, matchSpecializedNodes);
+                if(oneMatchingObject != null) {
+                    result = Lists.newArrayList(oneMatchingObject);
+                } else {
+                    result = findOneSegment(segment, result, matchSpecializedNodes);
+                }
+
+
+            } else {
+                result = findOneSegment(segment, result, matchSpecializedNodes);
+            }
         }
         return (List<T>)result.stream().filter((object) -> object != null).collect(Collectors.toList());
     }
 
-    private List<ArchetypeModelObject> findOneSegment(PathSegment pathSegment, List<ArchetypeModelObject> objects) {
+    protected CAttribute findMatchingDifferentialPath(List<PathSegment> pathSegments, List<ArchetypeModelObject> objects) {
+        if(pathSegments.size() < 2) {
+            return null;
+        }
+        List<ArchetypeModelObject> result = new ArrayList<>();
+        for(ArchetypeModelObject object:objects) {
+            if (object instanceof CObject) {
+                for(CAttribute attribute:((CObject) object).getAttributes()) {
+                    if(attribute.getDifferentialPath() != null) {
+                        List<PathSegment> differentialPathSegments = new APathQuery(attribute.getDifferentialPath()).getPathSegments();
+                        if(checkDifferentialMatch(pathSegments, differentialPathSegments)) {
+                            return attribute;
+                        }
+                    }
+
+                }
+            }
+        }
+        return null;
+    }
+
+    private boolean checkDifferentialMatch(List<PathSegment> pathSegments, List<PathSegment> differentialPathSegments) {
+        if(differentialPathSegments.size() <= pathSegments.size()) {
+            for(int i = 0; i < differentialPathSegments.size(); i++) {
+                PathSegment segment = pathSegments.get(i);
+                PathSegment differentialPathSegment = differentialPathSegments.get(i);
+                if(!matches(segment, differentialPathSegment)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+
+    }
+
+    private boolean matches(PathSegment segment, PathSegment differentialPathSegment) {
+        if(differentialPathSegment.getNodeId() == null) {
+            return segment.getNodeName().equalsIgnoreCase(differentialPathSegment.getNodeName());
+        } else {
+            return segment.getNodeName().equalsIgnoreCase(differentialPathSegment.getNodeName()) &&
+                    segment.getNodeId().equals(differentialPathSegment.getNodeId());
+        }
+    }
+
+
+    protected List<ArchetypeModelObject> findOneSegment(PathSegment pathSegment, List<ArchetypeModelObject> objects, boolean matchSpecializedNodes) {
         List<ArchetypeModelObject> result = new ArrayList<>();
 
         List<ArchetypeModelObject> preProcessedObjects = new ArrayList<>();
@@ -99,19 +185,29 @@ public class AOMPathQuery {
                 CObject cobject = (CObject) object;
                 CAttribute attribute = cobject.getAttribute(pathSegment.getNodeName());
                 if(attribute != null) {
-                    if (pathSegment.hasIdCode() || pathSegment.hasArchetypeRef()) {
-                        result.add(attribute.getChild(pathSegment.getNodeId()));
-                    } else if (pathSegment.hasNumberIndex()) {
-                        result.add(attribute.getChildren().get(pathSegment.getIndex() - 1));//APath path numbers start at 1 instead of 0
-                    } else if (pathSegment.getNodeId() != null) {
-                        result.add(attribute.getChildByMeaning(pathSegment.getNodeId()));//TODO: the ANTLR grammar removes all whitespace. what to do here?
-                    } else {
-                        result.add(attribute);
+                    ArchetypeModelObject r = findOneMatchingObject(attribute, pathSegment, matchSpecializedNodes);
+                    if(r != null) {
+                        result.add(r);
                     }
                 }
             }
         }
         return result;
+    }
+
+    protected ArchetypeModelObject findOneMatchingObject(CAttribute attribute, PathSegment pathSegment, boolean matchSpecializedNodes) {
+        if (pathSegment.hasIdCode() || pathSegment.hasArchetypeRef()) {
+            if(matchSpecializedNodes) {
+                return attribute.getPossiblySpecializedChild(pathSegment.getNodeId());
+            }
+            return attribute.getChild(pathSegment.getNodeId());
+        } else if (pathSegment.hasNumberIndex()) {
+            return attribute.getChildren().get(pathSegment.getIndex() - 1);//APath path numbers start at 1 instead of 0
+        } else if (pathSegment.getNodeId() != null) {
+            return attribute.getChildByMeaning(pathSegment.getNodeId());//TODO: the ANTLR grammar removes all whitespace. what to do here?
+        } else {
+            return attribute;
+        }
     }
 
     //TODO: get diagnostic information about where the finder stopped in the path - could be very useful!
@@ -133,7 +229,7 @@ public class AOMPathQuery {
             if (result.size() == 0) {
                 return null;
             }
-            result = findOneSegment(segment, result);
+            result = findOneSegment(segment, result, false);
             if(result.size() == 1 && result.get(0) instanceof CComplexObjectProxy) {
                 return (CComplexObjectProxy) result.get(0);
             }

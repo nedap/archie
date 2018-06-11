@@ -3,8 +3,8 @@ package com.nedap.archie.serializer.odin;
 import com.fasterxml.jackson.databind.JavaType;
 import com.nedap.archie.adlparser.antlr.AdlLexer;
 import com.nedap.archie.adlparser.antlr.AdlParser;
+import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.ANTLRInputStream;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,19 +31,19 @@ public class OdinObjectParser {
     }
 
     public static <T> T convert(InputStream odin, Class<T> clazz) throws IOException {
-        AdlLexer adlLexer = new AdlLexer(new ANTLRInputStream(odin));
+        AdlLexer adlLexer = new AdlLexer(CharStreams.fromStream(odin));
         AdlParser parser = new AdlParser(new CommonTokenStream(adlLexer));
         return convert(parser.odin_text(), clazz);
     }
 
     public static <T> T convert(String odin, Class<T> clazz) {
-        AdlLexer adlLexer = new AdlLexer(new ANTLRInputStream(odin));
+        AdlLexer adlLexer = new AdlLexer(CharStreams.fromString(odin));
         AdlParser parser = new AdlParser(new CommonTokenStream(adlLexer));
         return convert(parser.odin_text(), clazz);
     }
 
     public static <T> T convert(String odin, JavaType clazz) {
-        AdlLexer adlLexer = new AdlLexer(new ANTLRInputStream(odin));
+        AdlLexer adlLexer = new AdlLexer(CharStreams.fromString(odin));
         AdlParser parser = new AdlParser(new CommonTokenStream(adlLexer));
         return convert(parser.odin_text(), clazz);
     }

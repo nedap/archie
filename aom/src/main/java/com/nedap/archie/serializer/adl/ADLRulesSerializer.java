@@ -58,7 +58,7 @@ public class ADLRulesSerializer {
     }
 
     private boolean isPrecedenceOverride(RuleElement element) {
-        return element instanceof Expression && ((Expression) element).isPrecedenceOverriden();
+        return element instanceof Expression && ((Expression) element).isPrecedenceOverridden();
     }
 
     private RuleElementSerializer getSerializer(RuleElement element) {

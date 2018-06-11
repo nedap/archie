@@ -7,7 +7,6 @@ import com.nedap.archie.antlr.errors.ArchieErrorListener;
 import com.nedap.archie.antlr.errors.ANTLRParserErrors;
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.utils.ArchetypeParsePostProcesser;
-import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
@@ -15,6 +14,7 @@ import org.apache.commons.io.input.BOMInputStream;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 
 
 /**
@@ -48,11 +48,11 @@ public class ADLParser {
 
 
     public Archetype parse(String adl) throws IOException {
-        return parse(new ANTLRInputStream(adl));
+        return parse(CharStreams.fromString(adl));
     }
 
     public Archetype parse(InputStream stream) throws IOException {
-        return parse(new ANTLRInputStream(new BOMInputStream(stream)));
+        return parse(CharStreams.fromStream(new BOMInputStream(stream)));
     }
 
     public Archetype parse(CharStream stream) {

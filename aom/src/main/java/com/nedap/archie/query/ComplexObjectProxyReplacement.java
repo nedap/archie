@@ -5,6 +5,7 @@ import com.nedap.archie.aom.CAttribute;
 import com.nedap.archie.aom.CComplexObject;
 import com.nedap.archie.aom.CComplexObjectProxy;
 import com.nedap.archie.aom.CObject;
+import java.util.List;
 
 /**
  * little class used for a CompelxObjectProxyReplacement because we cannot replace in a collection
@@ -14,9 +15,9 @@ public class ComplexObjectProxyReplacement {
     private final CComplexObject replacement;
     private final CComplexObjectProxy proxy;
 
-    public ComplexObjectProxyReplacement(CComplexObjectProxy proxy, CComplexObject object) {
+    public ComplexObjectProxyReplacement(CComplexObjectProxy proxy, CComplexObject replacement) {
         this.proxy = proxy;
-        this.replacement = object;
+        this.replacement = replacement;
     }
 
     public void replace() {
@@ -24,11 +25,12 @@ public class ComplexObjectProxyReplacement {
     }
 
     public static ComplexObjectProxyReplacement getComplexObjectProxyReplacement(CComplexObjectProxy proxy) {
-        CObject newObject = new AOMPathQuery(proxy.getTargetPath()).find(getNearestArchetypeRoot(proxy));
-        if (newObject == null) {
+        List<CObject> newObjects = new AOMPathQuery(proxy.getTargetPath()).findList(getNearestArchetypeRoot(proxy), true);
+        if (newObjects == null || newObjects.isEmpty()) {
             return null;
         } else {
-            CComplexObject clone = (CComplexObject) newObject.clone();
+            CObject found = newObjects.get(0);
+            CComplexObject clone = (CComplexObject) found.clone();
             clone.setNodeId(proxy.getNodeId());
             if (proxy.getOccurrences() != null) {
                 clone.setOccurrences(proxy.getOccurrences());
