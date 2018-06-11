@@ -19,7 +19,7 @@ task wrapper(type: Wrapper) {
 }
 
 allprojects {
-  version = '0.5.0-snapshot'
+  version = '0.4.5'
   group = 'com.nedap.healthcare.archie'
   ext.gradleScriptDir = "${rootProject.projectDir}/gradle"
   //archivesBaseName = 'archie'
