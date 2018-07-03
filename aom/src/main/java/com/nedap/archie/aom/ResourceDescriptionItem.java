@@ -16,7 +16,6 @@ public class ResourceDescriptionItem extends ArchetypeModelObject {
     private String use;
     private String misuse;
     private String copyright;
-    private String licence;
     private Map<String, URI> originalResourceUri;
     private Map<String, String> otherDetails;//TODO: string -> object?
 
@@ -84,4 +83,5 @@ public class ResourceDescriptionItem extends ArchetypeModelObject {
     public void setCopyright(String copyright) {
         this.copyright = copyright;
     }
+
 }
