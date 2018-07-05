@@ -18,6 +18,7 @@ import com.nedap.archie.xml.JAXBUtil;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
@@ -45,7 +46,7 @@ public class ParsedRulesEvaluationTest {
 
     @Test
     public void precedenceOverride() throws Exception {
-        archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("simplearithmetic.adls"));
+        parse("simplearithmetic.adls");
 
         ExpressionVariable booleanExtendedTest = (ExpressionVariable) getVariableDeclarationByName(archetype, "boolean_extended_test");
         BinaryOperator operator = (BinaryOperator) booleanExtendedTest.getExpression();
@@ -59,9 +60,14 @@ public class ParsedRulesEvaluationTest {
 
     }
 
+    private void parse(String filename) throws IOException {
+        archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream(filename));
+        assertTrue(parser.getErrors().toString(), parser.getErrors().hasNoErrors());
+    }
+
     @Test
     public void simpleArithmetic() throws Exception {
-        archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("simplearithmetic.adls"));
+        parse("simplearithmetic.adls");
         assertTrue(parser.getErrors().hasNoErrors());
         RuleEvaluation ruleEvaluation = getRuleEvaluation();
         Observation root = new Observation();
@@ -114,7 +120,7 @@ public class ParsedRulesEvaluationTest {
 
     @Test
     public void modelReferences() throws Exception {
-        archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("modelreferences.adls"));
+        parse("modelreferences.adls");
         RuleEvaluation ruleEvaluation = getRuleEvaluation();
 
         Pathable root = (Pathable) testUtil.constructEmptyRMObject(archetype.getDefinition());
@@ -139,7 +145,7 @@ public class ParsedRulesEvaluationTest {
 
     @Test
     public void booleanConstraint() throws Exception {
-        archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("matches.adls"));
+        parse("matches.adls");
 
         RuleEvaluation ruleEvaluation = getRuleEvaluation();
 
@@ -163,7 +169,7 @@ public class ParsedRulesEvaluationTest {
 
     @Test
     public void multiValuedExpressions() throws Exception {
-        archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("multiplicity.adls"));
+        parse("multiplicity.adls");
         RuleEvaluation ruleEvaluation = getRuleEvaluation();
 
         Pathable root = constructTwoBloodPressureObservations();
@@ -180,7 +186,7 @@ public class ParsedRulesEvaluationTest {
 
     @Test
     public void forAllExpression() throws Exception {
-        archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("for_all.adls"));
+        parse("for_all.adls");
         RuleEvaluation ruleEvaluation = getRuleEvaluation();
 
         Pathable root = constructTwoBloodPressureObservations();
@@ -274,7 +280,7 @@ public class ParsedRulesEvaluationTest {
 
     @Test
     public void alreadyCorrectCalculatedPathValues() throws Exception {
-        archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("calculated_path_values.adls"));
+        parse("calculated_path_values.adls");
         RuleEvaluation ruleEvaluation = getRuleEvaluation();
 
         Pathable root = (Pathable) testUtil.constructEmptyRMObject(archetype.getDefinition());
@@ -296,7 +302,7 @@ public class ParsedRulesEvaluationTest {
 
     @Test
     public void calculatedPathValues() throws Exception {
-        archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("calculated_path_values.adls"));
+        parse("calculated_path_values.adls");
         RuleEvaluation ruleEvaluation = getRuleEvaluation();
 
         Pathable root = (Pathable) testUtil.constructEmptyRMObject(archetype.getDefinition());
@@ -314,7 +320,7 @@ public class ParsedRulesEvaluationTest {
 
     @Test
     public void calculatedPathValuesWithNulls1() throws Exception {
-        archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("calculated_path_values.adls"));
+        parse("calculated_path_values.adls");
         RuleEvaluation ruleEvaluation = getRuleEvaluation();
 
         Pathable root = (Pathable) testUtil.constructEmptyRMObject(archetype.getDefinition());
@@ -332,7 +338,7 @@ public class ParsedRulesEvaluationTest {
 
     @Test
     public void calculatedPathValuesWithNulls2() throws Exception {
-        archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("calculated_path_values.adls"));
+        parse("calculated_path_values.adls");
         RuleEvaluation ruleEvaluation = getRuleEvaluation();
 
         Pathable root = (Pathable) testUtil.constructEmptyRMObject(archetype.getDefinition());
@@ -350,7 +356,7 @@ public class ParsedRulesEvaluationTest {
 
     @Test
     public void calculatedPathValuesWithNulls3() throws Exception {
-        archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("extended_calculated_path_values.adls"));
+        parse("extended_calculated_path_values.adls");
         RuleEvaluation ruleEvaluation = getRuleEvaluation();
 
         Pathable root = (Pathable) testUtil.constructEmptyRMObject(archetype.getDefinition());
@@ -375,7 +381,7 @@ public class ParsedRulesEvaluationTest {
      */
     @Test
     public void calculatedPathValues2() throws Exception {
-        archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("calculated_path_values_2.adls"));
+        parse("calculated_path_values_2.adls");
         RuleEvaluation ruleEvaluation = getRuleEvaluation();
 
         Pathable root = (Pathable) testUtil.constructEmptyRMObject(archetype.getDefinition());
@@ -397,7 +403,7 @@ public class ParsedRulesEvaluationTest {
 
     @Test
     public void forAllCalculatedValues() throws Exception {
-        archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("for_all_calculated_path_values.adls"));
+        parse("for_all_calculated_path_values.adls");
         RuleEvaluation ruleEvaluation = getRuleEvaluation();
 
         Pathable root = constructTwoBloodPressureObservations();
@@ -415,7 +421,7 @@ public class ParsedRulesEvaluationTest {
 
     @Test
     public void existsSucceeded() throws Exception {
-        archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("exists.adls"));
+        parse("exists.adls");
         RuleEvaluation ruleEvaluation = getRuleEvaluation();
 
         Pathable root = constructTwoBloodPressureObservations();
@@ -457,7 +463,7 @@ public class ParsedRulesEvaluationTest {
 
     @Test
     public void notExistsSucceeded() throws Exception {
-        archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("not_exists.adls"));
+        parse("not_exists.adls");
         RuleEvaluation ruleEvaluation = getRuleEvaluation();
 
         Pathable root = (Pathable) testUtil.constructEmptyRMObject(archetype.getDefinition());
@@ -477,7 +483,7 @@ public class ParsedRulesEvaluationTest {
 
     @Test
     public void notExistsFailed() throws Exception {
-        archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("not_exists.adls"));
+        parse("not_exists.adls");
         RuleEvaluation ruleEvaluation = getRuleEvaluation();
 
         Pathable root = constructTwoBloodPressureObservations();
@@ -496,7 +502,7 @@ public class ParsedRulesEvaluationTest {
 
     @Test
     public void existsMixed() throws Exception {
-        archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("exists.adls"));
+        parse("exists.adls");
         RuleEvaluation ruleEvaluation = getRuleEvaluation();
 
         Pathable root = constructTwoBloodPressureObservationsOneEmptySystolic();
@@ -523,7 +529,7 @@ public class ParsedRulesEvaluationTest {
 
     @Test
     public void notExistsMixed() throws Exception {
-        archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("not_exists.adls"));
+        parse("not_exists.adls");
         RuleEvaluation ruleEvaluation = getRuleEvaluation();
 
         Pathable root = constructTwoBloodPressureObservationsOneEmptySystolic();
@@ -544,7 +550,7 @@ public class ParsedRulesEvaluationTest {
 
     @Test
     public void implies() throws Exception {
-        archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("implies.adls"));
+        parse("implies.adls");
         RuleEvaluation ruleEvaluation = getRuleEvaluation();
 
         Pathable root = constructTwoBloodPressureObservationsOneEmptySystolicNoDiastolic();
@@ -564,7 +570,7 @@ public class ParsedRulesEvaluationTest {
 
     @Test
     public void impliesEvaluatesToNull() throws Exception {
-        archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("implies.adls"));
+        parse("implies.adls");
         RuleEvaluation ruleEvaluation = getRuleEvaluation();
 
         Pathable root = (Pathable) testUtil.constructEmptyRMObject(archetype.getDefinition());
@@ -584,7 +590,7 @@ public class ParsedRulesEvaluationTest {
 
     @Test
     public void booleanOperandRelOps() throws Exception {
-        archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("boolean_operand_relops.adls"));
+        parse("boolean_operand_relops.adls");
         assertTrue(parser.getErrors().hasNoErrors());
         RuleEvaluation ruleEvaluation = getRuleEvaluation();
         Observation root = new Observation();
@@ -603,7 +609,7 @@ public class ParsedRulesEvaluationTest {
 
     @Test
     public void stringLiterals() throws Exception {
-        archetype = parser.parse(ParsedRulesEvaluationTest.class.getResourceAsStream("string_literals.adls"));
+        parse("string_literals.adls");
         assertTrue(parser.getErrors().hasNoErrors());
         RuleEvaluation ruleEvaluation = getRuleEvaluation();
         Observation root = new Observation();

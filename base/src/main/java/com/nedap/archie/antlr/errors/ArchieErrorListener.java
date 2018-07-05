@@ -23,6 +23,10 @@ public class ArchieErrorListener implements ANTLRErrorListener {
     private static final Logger logger = LoggerFactory.getLogger(ArchieErrorListener.class);
     private final ANTLRParserErrors errors;
 
+    public ArchieErrorListener() {
+        errors = new ANTLRParserErrors();
+    }
+
     public ArchieErrorListener(ANTLRParserErrors errors) {
         this.errors = errors;
     }

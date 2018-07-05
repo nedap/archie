@@ -32,8 +32,8 @@ public class AuthoredArchetypeMetadataChecks extends ArchetypeValidationBase {
         if(archetype.getDescription().getDetails() != null) {
             for(String language:archetype.getDescription().getDetails().keySet()) {
                 ResourceDescriptionItem resourceDescriptionItem = archetype.getDescription().getDetails().get(language);
-                if(!Objects.equals(language, resourceDescriptionItem.getLanguage().getCodeString())){
-                    addMessage(ErrorType.VRDLA, String.format("resource description language %s has its key set wrong: %s", language, resourceDescriptionItem.getLanguage().getCodeString()));
+                if(resourceDescriptionItem.getLanguage() == null || !Objects.equals(language, resourceDescriptionItem.getLanguage().getCodeString())){
+                    addMessage(ErrorType.VRDLA, String.format("resource description language %s has its key set wrong: %s", language, resourceDescriptionItem.getLanguage() == null ? null : resourceDescriptionItem.getLanguage().getCodeString()));
                 }
 
             }

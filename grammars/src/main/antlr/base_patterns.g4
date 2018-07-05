@@ -95,12 +95,12 @@ TERM_CODE_REF : '[' NAME_CHAR+ ( '(' NAME_CHAR+ ')' )? '::' NAME_CHAR+ ']' ;  //
 // URIs - simple recogniser based on https://tools.ietf.org/html/rfc3986 and
 // http://www.w3.org/Addressing/URL/5_URI_BNF.html
 URI : URI_SCHEME SYM_COLON URI_HIER_PART ( '?' URI_QUERY )? ;
-fragment URI_HIER_PART : ( '//' URI_AUTHORITY )? URI_PATH ;
+fragment URI_HIER_PART : ( '//' URI_AUTHORITY ) URI_PATH? ;
 fragment URI_AUTHORITY : ( URI_USER '@' )? URI_HOST ( SYM_COLON NATURAL )? ;
 fragment URI_HOST : IP_LITERAL | NAMESPACE ;
 fragment URI_USER : URI_RESERVED+ ;
 fragment URI_SCHEME : ALPHANUM_CHAR URI_XALPHA* ;
-fragment URI_PATH   : ( '/' URI_XPALPHA+ )+ ;
+fragment URI_PATH   : '/' | ( '/' URI_XPALPHA+ )+ ('/')?;
 fragment URI_QUERY  : URI_XALPHA+ ( '+' URI_XALPHA+ )* ;
 
 fragment IP_LITERAL   : IPV4_LITERAL | IPV6_LITERAL ;
