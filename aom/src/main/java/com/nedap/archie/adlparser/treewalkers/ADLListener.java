@@ -46,7 +46,7 @@ public class ADLListener extends AdlBaseListener {
 
     @Override
     public void exitArchetype(ArchetypeContext ctx) {
-        rootArchetype.setDifferential(archetype.getParentArchetypeId() != null);
+        rootArchetype.setDifferential(true); //TODO: not possible to check from the content of the archetype without spec change
     }
 
     @Override
@@ -58,7 +58,7 @@ public class ADLListener extends AdlBaseListener {
 
     @Override
     public void exitTemplate(TemplateContext ctx) {
-        rootArchetype.setDifferential(archetype.getParentArchetypeId() != null);
+        rootArchetype.setDifferential(true); //TODO: not possible to check from the content of the archetype without spec change
     }
 
     @Override

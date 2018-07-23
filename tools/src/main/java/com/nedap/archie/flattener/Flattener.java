@@ -119,6 +119,8 @@ public class Flattener {
                 result = toFlatten.clone();
             }
             result.getDefinition().setArchetype(result);
+            result.setDifferential(false);
+            result.setGenerated(true);
             return result;
         }
 
@@ -181,7 +183,7 @@ public class Flattener {
             TerminologyFlattener.filterLanguages((OperationalTemplate) result, removeLanguagesFromMetaData, languagesToKeep);
         }
         result.getDefinition().setArchetype(result);
-        result.setDifferential(false);//note this archetype as being flat
+
 
         if(child instanceof Template && !createOperationalTemplate) {
             Template resultTemplate = (Template) result;
@@ -200,6 +202,9 @@ public class Flattener {
                 resultTemplate.getTemplateOverlays().add(flatOverlay);
             }
         }
+
+        result.setDifferential(false);//mark this archetype as being flat
+        result.setGenerated(true);
 
         ArchetypeParsePostProcesser.fixArchetype(result);
         return result;
