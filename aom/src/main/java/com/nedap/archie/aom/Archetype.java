@@ -70,7 +70,7 @@ public class Archetype extends AuthoredResource {
     @XmlAttribute(name="rm_release")
     private String rmRelease;
     @XmlAttribute(name="is_generated")
-    private Boolean generated;
+    private Boolean generated = false;
 
     @XmlElement(name="other_meta_data")
     //TODO: this probably requires a custom XmlAdapter
