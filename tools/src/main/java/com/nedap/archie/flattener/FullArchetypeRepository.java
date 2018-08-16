@@ -17,6 +17,8 @@ public interface FullArchetypeRepository extends ArchetypeRepository {
 
     ValidationResult getValidationResult(String archetypeId);
 
+    OperationalTemplate getOperationalTemplate(String archetypeId);
+
     void setValidationResult(ValidationResult result);
 
     void setFlattenedArchetype(Archetype archetype);

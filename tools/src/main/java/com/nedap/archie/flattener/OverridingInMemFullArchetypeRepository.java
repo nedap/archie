@@ -52,6 +52,15 @@ public class OverridingInMemFullArchetypeRepository implements FullArchetypeRepo
     }
 
     @Override
+    public OperationalTemplate getOperationalTemplate(String archetypeId) {
+        OperationalTemplate result = extraArchetypes.getOperationalTemplate(archetypeId);
+        if(result != null) {
+            return result;
+        }
+        return originalRepository.getOperationalTemplate(archetypeId);
+    }
+
+    @Override
     public void setValidationResult(ValidationResult result) {
         if(extraArchetypes.getArchetype(result.getArchetypeId()) != null) {
             extraArchetypes.setValidationResult(result);
