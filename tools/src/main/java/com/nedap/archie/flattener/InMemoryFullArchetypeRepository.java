@@ -31,6 +31,9 @@ public class InMemoryFullArchetypeRepository extends SimpleArchetypeRepository i
 
     @Override
     public void setValidationResult(ValidationResult result) {
+        if(result.getFlattened() != null) {
+            setFlattenedArchetype(result.getFlattened());
+        }
         validationResult.put(new ArchetypeHRID(result.getArchetypeId()).getSemanticId(), result);
     }
 
