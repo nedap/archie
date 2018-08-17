@@ -62,7 +62,7 @@ public class RMObjectValidator extends RMObjectValidatingProcessor {
         return result;
     }
 
-    private void validateObjectWithPath(List<RMObjectValidationMessage> result, CObject cobject, String path, RMObjectWithPath objectWithPath){
+    private void validateObjectWithPath(List<RMObjectValidationMessage> result, CObject cobject, String path, RMObjectWithPath objectWithPath) {
         Class classInConstraint = this.lookup.getClass(cobject.getRmTypeName());
         if (!classInConstraint.isAssignableFrom(objectWithPath.getObject().getClass())) {
             //not a matching constraint. Cannot validate. add error message and stop validating.
