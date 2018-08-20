@@ -6,14 +6,14 @@ import com.nedap.archie.aom.CComplexObjectProxy;
 import com.nedap.archie.aom.terminology.ArchetypeTerminology;
 import com.nedap.archie.aom.utils.AOMUtils;
 import com.nedap.archie.archetypevalidator.ErrorType;
-import com.nedap.archie.archetypevalidator.ArchetypeValidatingVisitor;
+import com.nedap.archie.archetypevalidator.ValidatingVisitor;
 import com.nedap.archie.base.Cardinality;
 import com.nedap.archie.query.ComplexObjectProxyReplacement;
 
 import java.net.URI;
 import java.util.Map;
 
-public class FlatFormValidation extends ArchetypeValidatingVisitor {
+public class FlatFormValidation extends ValidatingVisitor {
 
     @Override
     protected void validate(CComplexObjectProxy cObject) {

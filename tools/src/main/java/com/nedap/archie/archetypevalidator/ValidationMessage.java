@@ -5,22 +5,22 @@ import com.google.common.base.Strings;
 /**
  * Created by pieter.bos on 31/03/2017.
  */
-public class ArchetypeValidationMessage {
+public class ValidationMessage {
     private ErrorType type;
     private String pathInArchetype;
     private String message;
     private boolean warning;//TODO: migrate to severity enum once we merge them
 
-    public ArchetypeValidationMessage(ErrorType type) {
+    public ValidationMessage(ErrorType type) {
         this.type = type;
     }
 
-    public ArchetypeValidationMessage(ErrorType type, String pathInArchetype) {
+    public ValidationMessage(ErrorType type, String pathInArchetype) {
         this.type = type;
         this.pathInArchetype = pathInArchetype;
     }
 
-    public ArchetypeValidationMessage(ErrorType type, String pathInArchetype, String message) {
+    public ValidationMessage(ErrorType type, String pathInArchetype, String message) {
         this.type = type;
         this.pathInArchetype = pathInArchetype;
         this.message = message;

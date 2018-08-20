@@ -2,11 +2,14 @@ package com.nedap.archie.flattener;
 
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.OperationalTemplate;
-import com.nedap.archie.archetypevalidator.ArchetypeValidationResult;
 import com.nedap.archie.archetypevalidator.ArchetypeValidationSettings;
+import com.nedap.archie.archetypevalidator.ValidationResult;
+import org.apache.commons.lang.mutable.Mutable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * repository that stores a few extra archetypes not affecting the regular repository, specifically for template overlays
@@ -40,8 +43,8 @@ public class OverridingInMemFullArchetypeRepository implements FullArchetypeRepo
     }
 
     @Override
-    public ArchetypeValidationResult getValidationResult(String archetypeId) {
-        ArchetypeValidationResult result = extraArchetypes.getValidationResult(archetypeId);
+    public ValidationResult getValidationResult(String archetypeId) {
+        ValidationResult result = extraArchetypes.getValidationResult(archetypeId);
         if(result != null) {
             return result;
         }
@@ -58,7 +61,7 @@ public class OverridingInMemFullArchetypeRepository implements FullArchetypeRepo
     }
 
     @Override
-    public void setValidationResult(ArchetypeValidationResult result) {
+    public void setValidationResult(ValidationResult result) {
         if(extraArchetypes.getArchetype(result.getArchetypeId()) != null) {
             extraArchetypes.setValidationResult(result);
         } else {
@@ -92,7 +95,7 @@ public class OverridingInMemFullArchetypeRepository implements FullArchetypeRepo
 
     @Override
     public void removeValidationResult(String archetypeId) {
-        ArchetypeValidationResult result = extraArchetypes.getValidationResult(archetypeId);
+        ValidationResult result = extraArchetypes.getValidationResult(archetypeId);
         if(result != null) {
             extraArchetypes.removeValidationResult(archetypeId);
         } else {
@@ -101,8 +104,8 @@ public class OverridingInMemFullArchetypeRepository implements FullArchetypeRepo
     }
 
     @Override
-    public List<ArchetypeValidationResult> getAllValidationResults() {
-        List<ArchetypeValidationResult> result = new ArrayList<>(extraArchetypes.getAllValidationResults());
+    public List<ValidationResult> getAllValidationResults() {
+        List<ValidationResult> result = new ArrayList<>(extraArchetypes.getAllValidationResults());
         result.addAll(originalRepository.getAllValidationResults());
         return result;
     }

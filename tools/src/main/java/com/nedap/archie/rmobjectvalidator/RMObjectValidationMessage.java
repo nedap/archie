@@ -14,6 +14,7 @@ public class RMObjectValidationMessage {
 
     private RMObjectValidationMessageType type;
 
+
     public RMObjectValidationMessage(ArchetypeConstraint constraint, String actualPath, String message) {
         this(constraint, actualPath, message, RMObjectValidationMessageType.DEFAULT);
     }

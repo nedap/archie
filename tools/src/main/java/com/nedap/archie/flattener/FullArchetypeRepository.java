@@ -2,9 +2,9 @@ package com.nedap.archie.flattener;
 
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.OperationalTemplate;
-import com.nedap.archie.archetypevalidator.ArchetypeValidationResult;
 import com.nedap.archie.archetypevalidator.ArchetypeValidationSettings;
 import com.nedap.archie.archetypevalidator.ArchetypeValidator;
+import com.nedap.archie.archetypevalidator.ValidationResult;
 import com.nedap.archie.rminfo.MetaModels;
 import com.nedap.archie.rminfo.ReferenceModels;
 import org.openehr.bmm.rmaccess.ReferenceModelAccess;
@@ -15,11 +15,11 @@ public interface FullArchetypeRepository extends ArchetypeRepository {
 
     Archetype getFlattenedArchetype(String archetypeId);
 
-    ArchetypeValidationResult getValidationResult(String archetypeId);
+    ValidationResult getValidationResult(String archetypeId);
 
     OperationalTemplate getOperationalTemplate(String archetypeId);
 
-    void setValidationResult(ArchetypeValidationResult result);
+    void setValidationResult(ValidationResult result);
 
     void setFlattenedArchetype(Archetype archetype);
 
@@ -32,7 +32,7 @@ public interface FullArchetypeRepository extends ArchetypeRepository {
      */
     void removeValidationResult(String archetypeId);
 
-    List<ArchetypeValidationResult> getAllValidationResults();
+    List<ValidationResult> getAllValidationResults();
 
     ArchetypeValidationSettings getArchetypeValidationSettings();
 
@@ -52,10 +52,10 @@ public interface FullArchetypeRepository extends ArchetypeRepository {
      * @param models
      * @return
      */
-    default ArchetypeValidationResult compileAndRetrieveValidationResult(String archetypeId, MetaModels models) {
-        ArchetypeValidationResult archetypeValidationResult = getValidationResult(archetypeId);
-        if(archetypeValidationResult != null) {
-            return archetypeValidationResult;
+    default ValidationResult compileAndRetrieveValidationResult(String archetypeId, MetaModels models) {
+        ValidationResult validationResult = getValidationResult(archetypeId);
+        if(validationResult != null) {
+            return validationResult;
         }
         Archetype archetype = getArchetype(archetypeId);
         if(archetype == null) {

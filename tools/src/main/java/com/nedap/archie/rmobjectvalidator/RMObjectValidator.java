@@ -6,7 +6,6 @@ import com.nedap.archie.aom.*;
 import com.nedap.archie.aom.terminology.ArchetypeTerm;
 import com.nedap.archie.query.RMObjectWithPath;
 import com.nedap.archie.query.RMPathQuery;
-import com.nedap.archie.rminfo.ArchieRMInfoLookup;
 import com.nedap.archie.rminfo.ModelInfoLookup;
 import com.nedap.archie.rminfo.RMAttributeInfo;
 import com.nedap.archie.rminfo.RMTypeInfo;
@@ -27,9 +26,13 @@ import java.util.stream.Collectors;
 public class RMObjectValidator extends RMObjectValidatingProcessor {
 
     private APathQueryCache queryCache = new APathQueryCache();
-    private ModelInfoLookup lookup = ArchieRMInfoLookup.getInstance();
+    private ModelInfoLookup lookup;
+    private ReflectionConstraintImposer constraintImposer;
 
-    private ReflectionConstraintImposer constraintImposer = new ReflectionConstraintImposer(lookup);
+    public RMObjectValidator(ModelInfoLookup lookup) {
+        this.lookup = lookup;
+        constraintImposer = new ReflectionConstraintImposer(lookup);
+    }
 
     public List<RMObjectValidationMessage> validate(Archetype archetype, Object rmObject) {
         clearMessages();
@@ -62,7 +65,7 @@ public class RMObjectValidator extends RMObjectValidatingProcessor {
         return result;
     }
 
-    private void validateObjectWithPath(List<RMObjectValidationMessage> result, CObject cobject, String path, RMObjectWithPath objectWithPath) {
+    private void validateObjectWithPath(List<RMObjectValidationMessage> result, CObject cobject, String path, RMObjectWithPath objectWithPath){
         Class classInConstraint = this.lookup.getClass(cobject.getRmTypeName());
         if (!classInConstraint.isAssignableFrom(objectWithPath.getObject().getClass())) {
             //not a matching constraint. Cannot validate. add error message and stop validating.
@@ -87,7 +90,7 @@ public class RMObjectValidator extends RMObjectValidatingProcessor {
     private void validateAttributes(List<RMObjectValidationMessage> result, CAttribute attribute, CObject cobject, Object rmObject, String pathSoFar) {
         String rmAttributeName = attribute.getRmAttributeName();
         RMPathQuery aPathQuery = queryCache.getApathQuery("/" + attribute.getRmAttributeName());
-        Object attributeValue = aPathQuery.find(ArchieRMInfoLookup.getInstance(), rmObject);
+        Object attributeValue = aPathQuery.find(lookup, rmObject);
         List<RMObjectValidationMessage> emptyObservationErrors = isObservationEmpty(attribute, rmAttributeName, attributeValue, pathSoFar, cobject);
         result.addAll(emptyObservationErrors);
 
@@ -99,7 +102,7 @@ public class RMObjectValidator extends RMObjectValidatingProcessor {
                 for (CObject childCObject : attribute.getChildren()) {
                     String query = "/" + rmAttributeName + "[" + childCObject.getNodeId() + "]";
                     aPathQuery = queryCache.getApathQuery(query);
-                    List<RMObjectWithPath> childRmObjects = aPathQuery.findList(ArchieRMInfoLookup.getInstance(), rmObject);
+                    List<RMObjectWithPath> childRmObjects = aPathQuery.findList(lookup, rmObject);
                     result.addAll(runArchetypeValidations(childRmObjects, pathSoFar + query, childCObject));
                 }
             }
@@ -111,7 +114,7 @@ public class RMObjectValidator extends RMObjectValidatingProcessor {
         for (CObject childCObject : attribute.getChildren()) {
             String query = "/" + attribute.getRmAttributeName() + "[" + childCObject.getNodeId() + "]";
             RMPathQuery aPathQuery = queryCache.getApathQuery(query);
-            List<RMObjectWithPath> childNodes = aPathQuery.findList(ArchieRMInfoLookup.getInstance(), rmObject);
+            List<RMObjectWithPath> childNodes = aPathQuery.findList(lookup, rmObject);
             List<RMObjectValidationMessage> subResult = runArchetypeValidations(childNodes, pathSoFar + query, childCObject);
             subResults.add(subResult);
         }
@@ -144,7 +147,6 @@ public class RMObjectValidator extends RMObjectValidatingProcessor {
      * @param attributeValue  The value of the attribute
      * @param pathSoFar       The path of the attribute
      * @param cobject         The constraints that the attribute is checked against
-     * @return
      */
     private List<RMObjectValidationMessage> isObservationEmpty(CAttribute attribute, String rmAttributeName, Object attributeValue, String pathSoFar, CObject cobject) {
         List<RMObjectValidationMessage> result = new ArrayList<>();

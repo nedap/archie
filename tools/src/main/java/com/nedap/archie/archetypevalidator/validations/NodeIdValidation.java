@@ -3,7 +3,7 @@ package com.nedap.archie.archetypevalidator.validations;
 import com.nedap.archie.aom.CObject;
 import com.nedap.archie.aom.CPrimitiveObject;
 import com.nedap.archie.archetypevalidator.ErrorType;
-import com.nedap.archie.archetypevalidator.ArchetypeValidatingVisitor;
+import com.nedap.archie.archetypevalidator.ValidatingVisitor;
 
 import java.util.HashMap;
 
@@ -12,7 +12,7 @@ import java.util.HashMap;
  *
  * Created by pieter.bos on 31/03/2017.
  */
-public class NodeIdValidation extends ArchetypeValidatingVisitor {
+public class NodeIdValidation extends ValidatingVisitor {
 
     //for every id code, it's path
     private HashMap<String, String> nodeIds = new HashMap<>();

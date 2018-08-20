@@ -3,8 +3,8 @@ package com.nedap.archie.flattener;
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.ArchetypeHRID;
 import com.nedap.archie.aom.OperationalTemplate;
-import com.nedap.archie.archetypevalidator.ArchetypeValidationResult;
 import com.nedap.archie.archetypevalidator.ArchetypeValidationSettings;
+import com.nedap.archie.archetypevalidator.ValidationResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class InMemoryFullArchetypeRepository extends SimpleArchetypeRepository implements FullArchetypeRepository, MutableArchetypeRepository {
 
-    private Map<String, ArchetypeValidationResult> validationResult = new ConcurrentHashMap<>();
+    private Map<String, ValidationResult> validationResult = new ConcurrentHashMap<>();
 
     private Map<String, Archetype> flattenedArchetypes = new ConcurrentHashMap<>();
     private Map<String, OperationalTemplate> operationalTemplates = new ConcurrentHashMap<>();
@@ -25,7 +25,7 @@ public class InMemoryFullArchetypeRepository extends SimpleArchetypeRepository i
     }
 
     @Override
-    public ArchetypeValidationResult getValidationResult(String archetypeId) {
+    public ValidationResult getValidationResult(String archetypeId) {
         return validationResult.get(new ArchetypeHRID(archetypeId).getSemanticId());
     }
 
@@ -35,7 +35,10 @@ public class InMemoryFullArchetypeRepository extends SimpleArchetypeRepository i
     }
 
     @Override
-    public void setValidationResult(ArchetypeValidationResult result) {
+    public void setValidationResult(ValidationResult result) {
+        if(result.getFlattened() != null) {
+            setFlattenedArchetype(result.getFlattened());
+        }
         validationResult.put(new ArchetypeHRID(result.getArchetypeId()).getSemanticId(), result);
     }
 
@@ -56,7 +59,7 @@ public class InMemoryFullArchetypeRepository extends SimpleArchetypeRepository i
     }
 
     @Override
-    public List<ArchetypeValidationResult> getAllValidationResults() {
+    public List<ValidationResult> getAllValidationResults() {
         return new ArrayList<>(validationResult.values());
     }
 
