@@ -154,7 +154,7 @@ public class AOMUtils {
     public static boolean codeExistsAtLevel(String nodeId, int specializationDepth) {
         NodeIdUtil nodeIdUtil = new NodeIdUtil(nodeId);
         int specializationDepthOfCode = AOMUtils.getSpecializationDepthFromCode(nodeId);
-        if(specializationDepth < specializationDepthOfCode) {
+        if(specializationDepth <= specializationDepthOfCode) {
             String code = "";
             for(int i = 0; i <= specializationDepth; i++) {
                 code += nodeIdUtil.getCodes().get(i);
