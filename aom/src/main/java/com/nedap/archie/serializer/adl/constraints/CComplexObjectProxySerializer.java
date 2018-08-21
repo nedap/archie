@@ -13,8 +13,9 @@ public class CComplexObjectProxySerializer extends ConstraintSerializer<CComplex
 
     @Override
     public void serialize(CComplexObjectProxy cobj) {
-        builder.newIndentedLine()
-                .append("use_node ")
+        builder.newIndentedLine();
+        appendSiblingOrder(cobj);
+        builder.append("use_node ")
                 .append(cobj.getRmTypeName())
                 .append(nodeIdString(cobj.getNodeId()));
         appendOccurrences(cobj);

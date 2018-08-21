@@ -45,6 +45,7 @@ public class CBooleanSerializer extends ConstraintSerializer<CBoolean> {
 
     @Override
     public void serialize(CBoolean cobj) {
+
         boolean constrained = false;
 
         List<String> valids = new ArrayList<>();

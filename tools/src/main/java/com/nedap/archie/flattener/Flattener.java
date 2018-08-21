@@ -203,6 +203,8 @@ public class Flattener {
             }
         }
 
+        this.removeSiblingOrder(result);
+
         result.setDifferential(false);//mark this archetype as being flat
         result.setGenerated(true);
 
@@ -239,6 +241,22 @@ public class Flattener {
 
             }
 
+        }
+    }
+
+    private void removeSiblingOrder(Archetype archetype) {
+        Stack<CObject> workList = new Stack<>();
+        workList.push(archetype.getDefinition());
+        while(!workList.isEmpty()) {
+            CObject object = workList.pop();
+            for (CAttribute attribute : object.getAttributes()) {
+                for (CObject child : attribute.getChildren()) {
+                    workList.push(child);
+                    if (child.getSiblingOrder() != null) {
+                        child.setSiblingOrder(nullß);
+                    }
+                }
+            }
         }
     }
 

@@ -44,7 +44,7 @@ public class CComplexObjectSerializer<T extends CComplexObject> extends Constrai
     @Override
     public void serialize(T cobj) {
         builder.indent().newline();
-
+        appendSiblingOrder(cobj);
         builder.append(cobj.getRmTypeName());
         if (cobj.getNodeId() != null) {
             builder.append("[").append(cobj.getNodeId()).append("]");

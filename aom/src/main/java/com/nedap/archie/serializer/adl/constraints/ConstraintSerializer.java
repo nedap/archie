@@ -65,4 +65,16 @@ public abstract class ConstraintSerializer<T extends CObject> {
             builder.append("} ");
         }
     }
+
+    protected void appendSiblingOrder(T cobj) {
+        if(cobj.getSiblingOrder() != null) {
+            builder.ensureSpace();
+            builder.append(cobj.getSiblingOrder().isBefore() ? "before" : "after");
+            builder.append(" ");
+            builder.append("[");
+            builder.append(cobj.getSiblingOrder().getSiblingNodeId());
+            builder.append("]");
+            builder.newline();
+        }
+    }
 }
