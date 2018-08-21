@@ -16,7 +16,7 @@ public class InMemoryFullArchetypeRepository extends SimpleArchetypeRepository i
     private Map<String, ValidationResult> validationResult = new ConcurrentHashMap<>();
 
     private Map<String, Archetype> flattenedArchetypes = new ConcurrentHashMap<>();
-    private Map<String, Archetype> operationalTemplates = new ConcurrentHashMap<>();
+    private Map<String, OperationalTemplate> operationalTemplates = new ConcurrentHashMap<>();
     private ArchetypeValidationSettings archetypeValidationSettings;
 
     @Override
@@ -30,7 +30,15 @@ public class InMemoryFullArchetypeRepository extends SimpleArchetypeRepository i
     }
 
     @Override
+    public OperationalTemplate getOperationalTemplate(String archetypeId) {
+        return operationalTemplates.get(new ArchetypeHRID(archetypeId).getSemanticId());
+    }
+
+    @Override
     public void setValidationResult(ValidationResult result) {
+        if(result.getFlattened() != null) {
+            setFlattenedArchetype(result.getFlattened());
+        }
         validationResult.put(new ArchetypeHRID(result.getArchetypeId()).getSemanticId(), result);
     }
 
