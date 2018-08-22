@@ -10,6 +10,7 @@ import com.nedap.archie.aom.ArchetypeSlot;
 import com.nedap.archie.aom.CAttribute;
 import com.nedap.archie.aom.CAttributeTuple;
 import com.nedap.archie.aom.CComplexObject;
+import com.nedap.archie.aom.CObject;
 import com.nedap.archie.aom.primitives.CString;
 import com.nedap.archie.definitions.AdlCodeDefinitions;
 import com.nedap.archie.paths.PathSegment;
@@ -33,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class AOMUtils {
@@ -104,8 +106,43 @@ public class AOMUtils {
 
     }
 
-    public static RedefinitionStatus getSpecialisationStatusFromCode(String nodeId, int integer) {
-        return RedefinitionStatus.UNDEFINED;//TODO
+//    public static RedefinitionStatus getSpecialisationStatus(CObject child, CObject parent) {
+//
+//    }
+
+    public static RedefinitionStatus getSpecialisationStatusFromCode(String nodeId, int specialisationDepth) {
+
+        if(specialisationDepth > getSpecializationDepthFromCode(nodeId)) {
+            return RedefinitionStatus.INHERITED;
+        } else {
+            boolean codeDefinedAtThisLevel = codeIndexAtLevel(nodeId, specialisationDepth) > 0;
+            if(codeDefinedAtThisLevel) {
+                if(specialisationDepth > 0 && codeExistsAtLevel(nodeId, specialisationDepth-1)) {
+                    return RedefinitionStatus.REDEFINED;
+                } else {
+                    return RedefinitionStatus.ADDED;
+                }
+
+            } else if (specialisationDepth > 0 && codeExistsAtLevel(nodeId, specialisationDepth-1)) {
+                return RedefinitionStatus.INHERITED;
+            } else {
+                return RedefinitionStatus.UNDEFINED;
+            }
+        }
+    }
+
+    public static int codeIndexAtLevel(String nodeId, int specialisationDepth) {
+        Pattern idCodeRegexp = Pattern.compile("[a-zA-Z]+(?<codePart>([0-9]+\\.)*[0-9]+)");
+        Matcher matcher = idCodeRegexp.matcher(nodeId);
+        if(!matcher.matches()) {
+            throw new IllegalArgumentException("Id code is not a valid id code: " + nodeId);
+        }
+        String codePart = matcher.group("codePart");
+        String[] split = codePart.split("\\.");
+        if(specialisationDepth < 0 || specialisationDepth > split.length) {
+            throw new IllegalArgumentException("code is not valid at specialization depth " + specialisationDepth);
+        }
+        return Integer.parseInt(split[specialisationDepth]);
     }
 
     public static ArchetypeModelObject getDifferentialPathFromParent(Archetype flatParent, CAttribute attributeWithDifferentialPath) {

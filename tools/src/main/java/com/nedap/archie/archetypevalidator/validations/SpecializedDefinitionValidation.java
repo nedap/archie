@@ -221,7 +221,6 @@ public class SpecializedDefinitionValidation extends ValidatingVisitor {
                         addMessage(ErrorType.VSONIN, cObject.path());
                     }
                 } else if(AOMUtils.getSpecialisationStatusFromCode(cObject.getNodeId(), cObject.specialisationDepth()) == RedefinitionStatus.REDEFINED) {
-                    //TODO method in if not yet implemented
                     addMessage(ErrorType.VSONIN, cObject.path());
                 }
             } else {
