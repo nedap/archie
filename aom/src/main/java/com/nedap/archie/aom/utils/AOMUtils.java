@@ -2,7 +2,6 @@ package com.nedap.archie.aom.utils;
 
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Joiner;
-import com.google.common.base.Strings;
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.ArchetypeHRID;
 import com.nedap.archie.aom.ArchetypeModelObject;
@@ -31,9 +30,9 @@ import org.openehr.bmm.core.BmmProperty;
 import org.openehr.bmm.persistence.validation.BmmDefinitions;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -106,27 +105,41 @@ public class AOMUtils {
 
     }
 
-//    public static RedefinitionStatus getSpecialisationStatus(CObject child, CObject parent) {
+//    public static CodeRedefinitionStatus getSpecialisationStatus(CObject child, CObject parent, List<CObject> siblingNodesInChild) {
 //
 //    }
 
-    public static RedefinitionStatus getSpecialisationStatusFromCode(String nodeId, int specialisationDepth) {
+    public static boolean isOverridenCObject(CObject specialized, CObject parent) {
+        return isOverriddenIdCode(specialized.getNodeId(), parent.getNodeId());
+    }
+
+    public static boolean isOverriddenIdCode(String specializedNodeId, String parentNodeId) {
+        if(specializedNodeId.equalsIgnoreCase(parentNodeId)) {
+            return true;
+        }
+        if(specializedNodeId.lastIndexOf('.') > 0) {
+            specializedNodeId = specializedNodeId.substring(0, specializedNodeId.lastIndexOf('.'));//-1?
+        }
+        return specializedNodeId.equals(parentNodeId) || specializedNodeId.startsWith(parentNodeId + ".");
+    }
+
+    public static CodeRedefinitionStatus getSpecialisationStatusFromCode(String nodeId, int specialisationDepth) {
 
         if(specialisationDepth > getSpecializationDepthFromCode(nodeId)) {
-            return RedefinitionStatus.INHERITED;
+            return CodeRedefinitionStatus.INHERITED;
         } else {
             boolean codeDefinedAtThisLevel = codeIndexAtLevel(nodeId, specialisationDepth) > 0;
             if(codeDefinedAtThisLevel) {
                 if(specialisationDepth > 0 && codeExistsAtLevel(nodeId, specialisationDepth-1)) {
-                    return RedefinitionStatus.REDEFINED;
+                    return CodeRedefinitionStatus.REDEFINED;
                 } else {
-                    return RedefinitionStatus.ADDED;
+                    return CodeRedefinitionStatus.ADDED;
                 }
 
             } else if (specialisationDepth > 0 && codeExistsAtLevel(nodeId, specialisationDepth-1)) {
-                return RedefinitionStatus.INHERITED;
+                return CodeRedefinitionStatus.INHERITED;
             } else {
-                return RedefinitionStatus.UNDEFINED;
+                return CodeRedefinitionStatus.UNDEFINED;
             }
         }
     }
@@ -372,4 +385,35 @@ public class AOMUtils {
         return maximumIdCode;
     }
 
+    /**
+     * Given a code such as 'id4.1.0.0.1', return the nearest code that exists in a parent. In this example,
+     * returns id4.1, so removes all zeros.
+     * @param nodeId
+     * @return
+     */
+    public static String getCodeInNearestParent(String nodeId) {
+
+        Pattern idCodeRegexp = Pattern.compile("(?<codePrefix>[a-zA-Z]+)(?<codePart>([0-9]+\\.)*[0-9]+)");
+        Matcher matcher = idCodeRegexp.matcher(nodeId);
+        if(!matcher.matches()) {
+            throw new IllegalArgumentException("Id code is not a valid id code: " + nodeId);
+        }
+        String codePart = matcher.group("codePart");
+        String[] split = codePart.split("\\.");
+        if(split.length < 2) {
+            throw new IllegalArgumentException("cannot get the nearest parent of specialization level 0 code");
+        }
+
+        int newDepth = 0;
+        for(int i = split.length-2; i >= 0; i--) {
+            if(!split[i].equals("0")) {
+                newDepth = i;
+                break;
+            }
+
+
+        }
+        return matcher.group("codePrefix") + Joiner.on('.').join(Arrays.copyOfRange(split, 0, newDepth + 1));
+
+    }
 }

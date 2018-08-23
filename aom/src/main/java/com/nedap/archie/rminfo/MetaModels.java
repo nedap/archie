@@ -177,4 +177,9 @@ public class MetaModels implements MetaModelInterface {
     public AomProfile getSelectedAomProfile() {
         return selectedAomProfile;
     }
+
+    public boolean isOrdered(String rmTypeName, String rmAttributeName) {
+        checkThatModelHasBeenSelected();
+        return selectedModel.isOrdered(rmTypeName, rmAttributeName);
+    }
 }
