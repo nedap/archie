@@ -1,0 +1,31 @@
+archetype (adl_version=2.0.4; rm_release=1.0.4)
+    openEHR-EHR-CLUSTER.test_specialized.v0.0.1
+
+specialize
+    openEHR-EHR-CLUSTER.test.v0.0.1
+
+language
+    original_language = <[ISO_639-1::nl]>
+
+description
+    lifecycle_state = <"unmanaged">
+    copyright = <"">
+    details = <
+        ["nl"] = <
+            language = <[ISO_639-1::nl]>
+            purpose = <"to test specialization">
+        >
+    >
+
+definition
+    CLUSTER[id1.1]
+
+terminology
+    term_definitions = <
+        ["nl"] = <
+            ["id1.1"] = <
+                text = <"A specialized test cluster">
+                description = <"A specialized test cluster">
+            >
+        >
+    >
