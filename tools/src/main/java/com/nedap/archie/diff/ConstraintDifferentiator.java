@@ -5,6 +5,7 @@ import com.nedap.archie.aom.*;
 import com.nedap.archie.aom.utils.AOMUtils;
 import com.nedap.archie.base.Cardinality;
 import com.nedap.archie.base.MultiplicityInterval;
+import com.nedap.archie.query.ComplexObjectProxyReplacement;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -38,6 +39,10 @@ public class ConstraintDifferentiator {
     }
 
     public void removeUnspecializedAttributes(CComplexObject cComplexObject, @Nullable CObject cObjectInParent) {
+        if(cObjectInParent instanceof CComplexObjectProxy) {
+            ComplexObjectProxyReplacement replacement = ComplexObjectProxyReplacement.getComplexObjectProxyReplacement((CComplexObjectProxy) cObjectInParent);
+            cObjectInParent = replacement.getReplacement();
+        }
         List<CAttribute> attributesToRemove = new ArrayList<>();
         for(CAttribute attribute:cComplexObject.getAttributes()) {
             //since it is flat, we can ignore differential paths here
