@@ -141,4 +141,9 @@ public class DifferentiatorExamplesFromSpecTest {
     public void addTuple() throws Exception {
         test("openEHR-EHR-ELEMENT.type_refinement_parent.v1.0.0.adls", "openEHR-EHR-ELEMENT.add_tuple.v1.0.0.adls");
     }
+
+    @Test
+    public void valueSets() throws Exception {
+        test("openEHR-EHR-ELEMENT.internal_value_set_parent.v1.0.0.adls", "openEHR-EHR-ELEMENT.interval_value_set_specialized.v1.0.0.adls");
+    }
 }

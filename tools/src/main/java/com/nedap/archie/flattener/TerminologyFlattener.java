@@ -68,6 +68,8 @@ public class TerminologyFlattener {
             if(overriddenValueSet == null) {
                 resultValueSets.put(key, childValueSet);
             } else {
+                String originalId = overriddenValueSet.getId();
+                overriddenValueSet.setId(childValueSet.getId());
                 //we could just set the overridden value set to the new value and remove the old one
                 //but that would mean you could also add codes in a specialized archetype- and you cannot
                 Set<String> newMembers = new LinkedHashSet<>();
@@ -78,7 +80,7 @@ public class TerminologyFlattener {
                     }
                 }
                 overriddenValueSet.setMembers(newMembers);
-                resultValueSets.remove(overriddenValueSet.getId());
+                resultValueSets.remove(originalId);
                 resultValueSets.put(key, overriddenValueSet);
             }
         }

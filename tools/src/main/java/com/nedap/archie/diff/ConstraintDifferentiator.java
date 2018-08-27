@@ -35,6 +35,8 @@ public class ConstraintDifferentiator {
             removeUnspecializedAttributeTuples(cObjectInParent, cComplexObject);
             removeUnspecializedAttributes(cComplexObject, cObjectInParent);
 
+            removeUnspecializedOccurrences(cObject, cObjectInParent);
+
         }
     }
 
