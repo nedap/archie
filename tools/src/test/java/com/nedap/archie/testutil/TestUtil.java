@@ -79,10 +79,16 @@ public class TestUtil {
         assertThat(cobject1.getAttributes().size(), is(cobject2.getAttributes().size()));
         assertThat(cobject1.getOccurrences(), is(cobject2.getOccurrences()));
         for(CAttribute attribute1:cobject1.getAttributes()) {
-            CAttribute attribute2 = cobject2.getAttribute(attribute1.getRmAttributeName());
-            assertThat(attribute2, is(notNullValue()));
-            assertThat(attribute1.getCardinality(), is(attribute2.getCardinality()));
-            assertThat(attribute1.getExistence(), is(attribute2.getExistence()));
+            String path = attribute1.getPath();
+            CAttribute attribute2;
+            if(attribute1.getDifferentialPath() != null) {
+                attribute2 = cobject2.getAttribute(attribute1.getDifferentialPath());
+            } else {
+                attribute2 = cobject2.getAttribute(attribute1.getRmAttributeName());
+            }
+            assertThat(path, attribute2, is(notNullValue()));
+            assertThat(path, attribute1.getCardinality(), is(attribute2.getCardinality()));
+            assertThat(path, attribute1.getExistence(), is(attribute2.getExistence()));
             for(CObject childObject1:attribute1.getChildren()) {
                 if(childObject1 instanceof  CComplexObject) {
                     List<CObject> childObjects2 = attribute2.getChildren().stream()

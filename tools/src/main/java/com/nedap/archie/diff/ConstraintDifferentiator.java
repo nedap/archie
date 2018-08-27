@@ -50,7 +50,9 @@ public class ConstraintDifferentiator {
             } else {
                 CAttribute attributeInParent = cObjectInParent == null ? null : cObjectInParent.getAttribute(attribute.getRmAttributeName());
                 removeUnspecializedCObjects(attribute, attributeInParent);
-                removeDefaultCardinalityAndExistence(cComplexObject, attribute);
+                removeUnspecializedCardinality(attribute, attributeInParent);
+                removeUnspecializedExistence(attribute, attributeInParent);
+                removeDefaultCardinalityAndExistence(cComplexObject, attribute, attributeInParent);
 
                 if(shouldRemoveAttribute(attribute, attributeInParent)) {
                     attributesToRemove.add(attribute);
@@ -61,6 +63,25 @@ public class ConstraintDifferentiator {
         for(CAttribute attribute:attributesToRemove) {
             cComplexObject.removeAttribute(attribute);
         }
+    }
+
+    private void removeUnspecializedExistence(CAttribute attribute, CAttribute attributeInParent) {
+        if(attribute.getExistence() == null || attributeInParent == null || attributeInParent.getExistence() == null) {
+            return;
+        }
+        if(attribute.getExistence().equals(attributeInParent.getExistence())) {
+            attribute.setExistence(null);
+        }
+    }
+
+    public void removeUnspecializedCardinality(CAttribute attribute, CAttribute attributeInParent) {
+        if(attribute.getCardinality() == null || attributeInParent == null || attributeInParent.getCardinality() == null) {
+            return;
+        }
+        if(attribute.getCardinality().equals(attributeInParent.getCardinality())) {
+            attribute.setCardinality(null);
+        }
+
     }
 
     public void removeUnspecializedCObjects(CAttribute attribute, CAttribute attributeInParent) {
@@ -126,8 +147,10 @@ public class ConstraintDifferentiator {
     }
 
     private boolean shouldRemoveAttribute(CAttribute attribute, CAttribute attributeInParent) {
-        return attributeInParent != null && (attribute.getChildren().isEmpty() && attribute.getCardinality() == null && attribute.getExistence() == null);
-
+        return attributeInParent != null
+                && (attribute.getChildren().isEmpty()
+                && attribute.getCardinality() == null
+                && attribute.getExistence() == null);
     }
 
     private boolean shouldRemoveUnspecializedCObject(CObject childCObject, CObject childCObjectInParent, SiblingOrder anchor) {
@@ -204,18 +227,25 @@ public class ConstraintDifferentiator {
     /**
      * Remove the default cardinality and existence, if they are the same as in the reference model
      */
-    private void removeDefaultCardinalityAndExistence(CObject cObject, CAttribute attribute) {
+    private void removeDefaultCardinalityAndExistence(CObject cObject, CAttribute attribute, CAttribute attributeInParent) {
+
         CAttribute defaultAttribute = constraintImposer.getDefaultAttribute(cObject.getRmTypeName(), attribute.getRmAttributeName());
         if(defaultAttribute != null) {
             //if it is null, it will be caught by the validator because the property does not exist
-            if (attribute.getCardinality() != null && defaultAttribute.getCardinality() != null) {
+            if(attributeInParent != null && attributeInParent.getCardinality() != null) {
+                //parent cardinality set, so even if it is default, do not remove cardinality because it would fall back to potentially not default parent cardinality.
+                //It is removed by removeUnspecializedExistence instead
+            }  else if (attribute.getCardinality() != null && defaultAttribute.getCardinality() != null) {
                 Cardinality cardinality = attribute.getCardinality();
                 Cardinality defaultCardinality = defaultAttribute.getCardinality();
                 if (cardinality.getInterval().equals(defaultCardinality.getInterval())) {
                     cardinality.setInterval(null);
                 }
             }
-            if (attribute.getExistence() != null && defaultAttribute.getExistence() != null) {
+            if(attributeInParent != null && attributeInParent.getExistence() != null) {
+                //parent existence set, so even if it is default, do not remove existence because it would fall back to potentially not default parent existence.
+                //It is removed by removeUnspecializedExistence instead
+            } else if (attribute.getExistence() != null && defaultAttribute.getExistence() != null) {
                 MultiplicityInterval existence = attribute.getExistence();
                 MultiplicityInterval defaultExistence = defaultAttribute.getExistence();
                 if(existence.equals(defaultExistence)) {

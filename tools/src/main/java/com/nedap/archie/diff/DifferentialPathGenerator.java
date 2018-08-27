@@ -119,6 +119,8 @@ public class DifferentialPathGenerator {
             root.setChildren(last.getChildren());
             root.setDifferentialPath(getPath());
             root.setRmAttributeName(last.getRmAttributeName());
+            root.setExistence(last.getExistence());
+            root.setCardinality(last.getCardinality());
         }
 
         public String getPath() {

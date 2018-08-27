@@ -116,6 +116,7 @@ public class Cardinality extends OpenEHRBase {
         return getInterval().contains(other.getInterval());
     }
 
+    @Override
     public boolean equals(Object other) {
         if(other instanceof Cardinality) {
             Cardinality otherCardinality = (Cardinality) other;
@@ -124,6 +125,11 @@ public class Cardinality extends OpenEHRBase {
                     Objects.equals(interval, otherCardinality.interval);
         }
         return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(interval, isOrdered, isUnique);
     }
 
     public String toString() {
