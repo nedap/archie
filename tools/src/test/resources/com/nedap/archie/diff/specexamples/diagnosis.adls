@@ -16,6 +16,8 @@ definition
             ELEMENT[id3] matches {
                 /value[id4]/defining_code matches {[ac0.1]}
             }
+            CLUSTER[id0.35] occurrences matches {0..1}     -- Diag. criteria
+            CLUSTER[id0.37] occurrences matches {0..1}     -- Clin. staging
             after [id3]
             ELEMENT[id0.32] occurrences matches {0..1} matches {    -- Status
                 value matches {
@@ -24,9 +26,6 @@ definition
                     }
                 }
             }
-            after [id31]
-            CLUSTER[id0.35] occurrences matches {0..1}     -- Diag. criteria
-            CLUSTER[id0.37] occurrences matches {0..1}     -- Clin. staging
         }
     }
 

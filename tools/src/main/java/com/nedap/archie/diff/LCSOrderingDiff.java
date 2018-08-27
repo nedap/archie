@@ -7,6 +7,7 @@ import com.nedap.archie.aom.CObject;
 import com.nedap.archie.aom.CPrimitiveObject;
 import com.nedap.archie.aom.SiblingOrder;
 import com.nedap.archie.aom.utils.AOMUtils;
+import com.nedap.archie.aom.utils.CodeRedefinitionStatus;
 import com.nedap.archie.rminfo.MetaModels;
 
 import java.util.LinkedHashMap;
@@ -81,15 +82,43 @@ public class LCSOrderingDiff {
 
             if(flatChildAttribute.getChildren().size() > 1) {
                 //step 1: determine sibling orders
-                Map<SiblingOrder, List<CObject>> siblingOrders = createSiblingOrders(parentAttribute, flatChild, flatChildAttribute, resultAttribute);
-                //step 2: apply sibling order to result archetype
+                LinkedHashMap<SiblingOrder, List<CObject>> siblingOrders = createSiblingOrders(parentAttribute, flatChild, flatChildAttribute, resultAttribute);
+                //step 2: sometimes the last sibling order marker in the list can be removed, if it also is the last in the parent archetype and all nodes after it are new nodes
+                //or the same node as the sibling order
+                removeLastSiblingOrderIfPossible(siblingOrders, parentAttribute, flatChild.getArchetype().specializationDepth());
+                //step 3: apply sibling order to result archetype
                 DiffUtil.addOrderToAttribute(siblingOrders);
             }
         }
     }
 
-    private Map<SiblingOrder, List<CObject>> createSiblingOrders(CAttribute parentAttribute, CComplexObject flatChild, CAttribute flatChildAttribute, CAttribute resultAttribute) {
-        Map<SiblingOrder, List<CObject>> siblingOrders = new LinkedHashMap<>();
+    private void removeLastSiblingOrderIfPossible(LinkedHashMap<SiblingOrder, List<CObject>> siblingOrders, CAttribute parentAttribute, int specializationDepth) {
+        SiblingOrder last = null;
+        for(SiblingOrder key:siblingOrders.keySet()) {
+            last = key;
+        }
+        if(last != null) {
+
+            if(!parentAttribute.getChildren().isEmpty() &&
+                    !last.isBefore() &&
+                    parentAttribute.getChildren().get(parentAttribute.getChildren().size()-1).getNodeId().equals(last.getSiblingNodeId())) {
+                List<CObject> cObjects = siblingOrders.get(last);
+                boolean allAdds = true;
+                for(CObject cObject:cObjects) {
+                    if(AOMUtils.getSpecialisationStatusFromCode(cObject.getNodeId(), specializationDepth) == CodeRedefinitionStatus.ADDED
+                        || AOMUtils.isOverriddenIdCode(cObject.getNodeId(), last.getSiblingNodeId())
+                    ) {
+                        siblingOrders.remove(last);
+                    }
+                }
+            }
+
+        }
+
+    }
+
+    private LinkedHashMap<SiblingOrder, List<CObject>> createSiblingOrders(CAttribute parentAttribute, CComplexObject flatChild, CAttribute flatChildAttribute, CAttribute resultAttribute) {
+        LinkedHashMap<SiblingOrder, List<CObject>> siblingOrders = new LinkedHashMap<>();
 
         List<String> parentNodeIds = parentAttribute.getChildren().stream().map(cobject -> cobject.getNodeId()).collect(Collectors.toList());
         List<String> childNodeIds = flatChildAttribute.getChildren().stream().map(cobject -> cobject.getNodeId()).collect(Collectors.toList());

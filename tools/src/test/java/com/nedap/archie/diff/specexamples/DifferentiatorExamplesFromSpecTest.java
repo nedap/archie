@@ -122,7 +122,7 @@ public class DifferentiatorExamplesFromSpecTest {
     @Test
     public void internalReferenceRedefinitionNoReplacement() throws Exception {
         //diff generates an extra after statement for now, so explicit diff result!
-        testWithExplicitExpect("openEHR-EHR-ENTRY.reference_redefinition_parent.v1.0.0.adls", "openEHR-EHR-ENTRY.reference_redefinition_no_replacement.v1.0.0.adls");
+        test("openEHR-EHR-ENTRY.reference_redefinition_parent.v1.0.0.adls", "openEHR-EHR-ENTRY.reference_redefinition_no_replacement.v1.0.0.adls");
     }
 
 

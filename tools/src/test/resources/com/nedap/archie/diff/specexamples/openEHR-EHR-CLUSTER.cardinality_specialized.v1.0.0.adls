@@ -13,7 +13,6 @@ description
 definition
     CLUSTER[id1.1] matches {    -- observation
         /items[id3]/items cardinality matches {3..10} matches {
-            after [id12]
             ELEMENT[id12.1] occurrences matches {1}     -- element
             ELEMENT[id12.2] occurrences matches {1}     -- element
             ELEMENT[id12.3] occurrences matches {1}     -- element
