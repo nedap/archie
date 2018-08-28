@@ -153,7 +153,7 @@ The reflection based metadata contains ModelInfoLookup classes. They are derived
 
 ### Operational templates
 
-You can create operational templates of your archetypes. Think of operational templates as something you generate from an archetype or template to more easily work with it. 
+You can create operational templates of your archetypes. Think of operational templates as something you generate from an archetype or template to more easily work with it. If you are creating an EHR implementation, these will likely be the most useful form of archetypes to work with.
 OpenEHR Archetypes allow you to reuse structures inside your archetypes at several places. It also allows to embed other archetypes inside your archetype. Without operational templates, you would need to build support for these structures into all of your tools. Operational templates fix this for you, by replacing the proxies for structure and embedded archetypes in the archetype with a copy of the actual embedded structure. For more information about operational templates, see (the documentation at the OpenEHR website)[http://openehr.org/releases/AM/latest/docs/OPT2/OPT2.html].
 Note that ADL 2 operational templates is fundamentally different from the ADL 1.4 OET/OPT format. What you used to achieve with OET/OPT is now built into ADL 2 as templates in combination with the operational template creation. See (the OpenEHR specification on templates)[http://openehr.org/releases/AM/latest/docs/ADL2/ADL2.html#_templates] on how to work with them.
 
@@ -211,6 +211,36 @@ or
 ```java
 archetype.getTerm(cTerminologyCode, "at15", "en");
 ```
+
+### Diffing archetypes
+
+The inverse operation of flattening archetypes is diffing. This is useful if you write a tool to edit archetypes. For end users, it's much less complicated to edit flat forms of archetypes instead of differential forms. This operation lets users edit the flat form, after which you can save the output from the differentiator as the differential form. To use the Differentiator:
+
+```
+Archetype flatChild, flatParent; //for how to parse and flatten, see elsewhere in the readme
+
+Differentiator differentiator = new Differentiator(BuiltinReferenceModels.getMetaModels());
+Archetype diffed = differentiator.differentiate(flatChild, flatParent);
+```
+
+Use a flattened archetype both for the parent and the specialized archetype. Do not use OperationalTemplates.
+
+The Differentiator supports differentiating the definition of the archetype, plus the terminology. It performs the following operations:
+
+- adding sibling order markers to preserve the ordering of cObjects in the specialized archetype
+- removing default or unspecialized cardinality, occurrences and existence
+- removing unspecialized CObjects
+- removing unspecialized CAttributes
+- removing unspecialized tuples
+- generating differential paths where possible
+- generating a diff of the terminology, including term definitions, term bindings and value sets
+- removes any translations that exist in the parent archetype, but not in the specialised archetype
+- removing terminology extracts
+
+It returns a new archetype as its result, the input archetypes are never altered. 
+The sibling order algorithm is written so that it creates a very small number of sibling order markers, and only generates them if necessary.
+The diff operation does not diff any template overlays if presented with a Template. However, you can use a flattened TemplateOverlay plus its flat parent as arguments and obtain the differential form of the template overlay. You can then replace the edited template overlay in the template yourself. It is possible that this feature will be added in a later version.
+It also does not yet diff the rules section, this must be manually performed.
 
 ### Serializing to ADL
 
