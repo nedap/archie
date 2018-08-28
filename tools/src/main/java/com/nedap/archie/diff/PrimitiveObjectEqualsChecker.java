@@ -20,7 +20,6 @@ public class PrimitiveObjectEqualsChecker {
         if(!Objects.equals(childCObject.getClass(), childCObjectInParent.getClass())) {
             return false;
         }
-        //TODO: check if this is the only thing needed to check
         return Objects.equals(childCObject.getConstraint(), childCObjectInParent.getConstraint());
 
     }

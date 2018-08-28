@@ -40,7 +40,7 @@ public class LCSOrderingDiff {
             CObject flatParentcObject = findMatchingParentCObject(flatChildcObject.getNodeId(), flatParentAttribute.getChildren());
             CObject resultcObject = findMatchingParentCObject(flatChildcObject.getNodeId(), resultAttribute.getChildren());
             if(flatParentcObject != null) {
-                //TODO: also slots and stuff
+                //TODO: Slots and Archetype roots?
                 if(flatParentcObject instanceof CComplexObject){
                     addSiblingOrder((CComplexObject) resultcObject, (CComplexObject) flatChildcObject, (CComplexObject) flatParentcObject);
                 }
@@ -51,7 +51,7 @@ public class LCSOrderingDiff {
 
     public void addSiblingOrder(CComplexObject result, CComplexObject flatChild, CComplexObject flatParent) {
 
-        //TODO: check if the childAttribute is multiply-valued, and only then perform reordering
+        //check if the childAttribute is multiply-valued, and only then perform reordering
         //do however descend deeper in the tree, even for single valued attributes
 
         for(CAttribute flatChildAttribute:flatChild.getAttributes()) {
@@ -125,8 +125,6 @@ public class LCSOrderingDiff {
         int childSpecializationDepth = flatChild.getArchetype().specializationDepth();
         NodeIdLCS nodeIdLCS = new NodeIdLCS(parentNodeIds, childNodeIds, childSpecializationDepth);
         List<String> lcs = nodeIdLCS.getLCS();
-        //TODO: get the replacements of nodes, when id4 is replaced by id4.1 they should be equal in the NodeIdsLcs
-        //TODO: replace the lcs.contains method with contains the replacement of
 
         if(lcs.size() == 0) {
             //If there's no empty LCS, it's not possible to add sibling markers
@@ -163,21 +161,6 @@ public class LCSOrderingDiff {
         for (int j = i - 1; j >= 0; j--) {
 
             if (nodeIdLCS.contains(childNodeIds.get(j))) {
-//TODO: the code below removes one additional sibling marker. It has bugs, so commented now
-//                if(nodeIdLCS.isLast(childNodeIds.get(j)) &&
-//                        AOMUtils.getSpecializationDepthFromCode(nodeId) == childSpecializationDepth &&
-//                        !AOMUtils.codeExistsAtLevel(nodeId, childSpecializationDepth -1 )) {
-//                    SiblingOrder after = SiblingOrder.createAfter(nodeIdLCS.getLCS().get(nodeIdLCS.getLCS().size() - 1));
-//                    CObject cObjectInResult = resultAttribute.getChild(nodeId);
-//                    List<CObject> cObjects = siblingOrders.get(after);
-//                    if(cObjects != null) {
-//                        //normally this can just be added at the end of the archetype. However, if something else is already explicitly at the end of the archetype, it will now be added after this
-//                        //so manually mark it as really at the end
-//                        DiffUtil.addSiblingOrder(siblingOrders, after, cObjectInResult);
-//                    }
-//                    return true;
-//                }
-                //TODO: add after childNodeIds[j] to sibling orders
                 CObject cObjectInResult = resultAttribute.getChild(nodeId);
                 DiffUtil.addSiblingOrder(siblingOrders, SiblingOrder.createAfter(childNodeIds.get(j)), cObjectInResult);
                 return true;

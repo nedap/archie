@@ -17,7 +17,7 @@ definition
             after[id3]
             ELEMENT[id0.1]
             ELEMENT[id0.2]
-            before[id5]
+            after[id4]
             ELEMENT[id0.3]
             ELEMENT[id0.4]
 

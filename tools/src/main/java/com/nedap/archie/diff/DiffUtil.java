@@ -59,7 +59,6 @@ public class DiffUtil {
                     }
                 }
                 if(addHere) {
-                    //TODO: insert at correct point directly after or before node!
                     siblingOrders.get(key).add(cObjectInResult);
                     return;
                 }

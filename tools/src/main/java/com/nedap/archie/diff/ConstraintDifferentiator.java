@@ -51,7 +51,6 @@ public class ConstraintDifferentiator {
             if(attribute.getDifferentialPath() != null) {
                 throw new IllegalArgumentException("cannot handle differential paths in the differentiator - supply flattened archetype please");
             }
-            //TODO: check tuple specializatin here
             if(attribute.getSocParent() != null) {
                 //part of a tuple. processed by tuples already
             } else {
@@ -114,7 +113,6 @@ public class ConstraintDifferentiator {
     public void removeUnspecializedAttributeTuples(@Nullable CObject cObjectInParent, CComplexObject cComplexObject) {
         List<CAttributeTuple> attributeTuplesToRemove = new ArrayList<>();
         for (CAttributeTuple tuple : cComplexObject.getAttributeTuples()) {
-            //TODO: check if cObjectInParent is instanceof cComplexObject
             if (shouldRemoveUnspecializedTuple(tuple, (CComplexObject) cObjectInParent)) {
                 attributeTuplesToRemove.add(tuple);
             }
