@@ -66,6 +66,7 @@ To install to your local maven repository for use in other gradle or maven proje
     + [Reference model metadata](#reference-model-metadata)
     + [Operational templates](#operational-templates)
     + [Terminology: texts, term bindings and descriptions for your archetypes](#terminology-texts-term-bindings-and-descriptions-for-your-archetypes)
+    + [Diffing archetypes](#diffing-archetypes)
     + [Serializing to ADL](#serializing-to-adl)
     + [JSON and XML (de)serialization](#json-and-xml-deserialization)
     + [ODIN](#odin)
