@@ -21,7 +21,7 @@ public class ConstraintDifferentiator {
         this.constraintImposer = constraintImposer;
     }
 
-    public void removeUnspecializedConstraints(Archetype result, Archetype flatChild, Archetype flatParent) {
+    public void removeUnspecializedConstraints(Archetype result, Archetype flatParent) {
         removeUnspecializedDefinition(result.getDefinition(), flatParent.getDefinition());
 
     }

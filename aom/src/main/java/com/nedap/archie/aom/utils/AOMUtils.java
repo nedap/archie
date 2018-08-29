@@ -105,10 +105,6 @@ public class AOMUtils {
 
     }
 
-//    public static CodeRedefinitionStatus getSpecialisationStatus(CObject child, CObject parent, List<CObject> siblingNodesInChild) {
-//
-//    }
-
     public static boolean isOverridenCObject(CObject specialized, CObject parent) {
         return isOverriddenIdCode(specialized.getNodeId(), parent.getNodeId());
     }
@@ -117,10 +113,8 @@ public class AOMUtils {
         if(specializedNodeId.equalsIgnoreCase(parentNodeId)) {
             return true;
         }
-        if(specializedNodeId.lastIndexOf('.') > 0) {
-            specializedNodeId = specializedNodeId.substring(0, specializedNodeId.lastIndexOf('.'));//-1?
-        }
-        return specializedNodeId.equals(parentNodeId) || specializedNodeId.startsWith(parentNodeId + ".");
+
+        return specializedNodeId.toLowerCase().startsWith(parentNodeId.toLowerCase() + ".");
     }
 
     public static CodeRedefinitionStatus getSpecialisationStatusFromCode(String nodeId, int specialisationDepth) {
@@ -145,17 +139,11 @@ public class AOMUtils {
     }
 
     public static int codeIndexAtLevel(String nodeId, int specialisationDepth) {
-        Pattern idCodeRegexp = Pattern.compile("[a-zA-Z]+(?<codePart>([0-9]+\\.)*[0-9]+)");
-        Matcher matcher = idCodeRegexp.matcher(nodeId);
-        if(!matcher.matches()) {
-            throw new IllegalArgumentException("Id code is not a valid id code: " + nodeId);
-        }
-        String codePart = matcher.group("codePart");
-        String[] split = codePart.split("\\.");
-        if(specialisationDepth < 0 || specialisationDepth > split.length) {
+        NodeIdUtil nodeIdUtil = new NodeIdUtil(nodeId);
+        if(specialisationDepth < 0 || specialisationDepth >= nodeIdUtil.getCodes().size()) {
             throw new IllegalArgumentException("code is not valid at specialization depth " + specialisationDepth);
         }
-        return Integer.parseInt(split[specialisationDepth]);
+        return nodeIdUtil.getCodes().get(specialisationDepth);
     }
 
     public static ArchetypeModelObject getDifferentialPathFromParent(Archetype flatParent, CAttribute attributeWithDifferentialPath) {
@@ -393,27 +381,17 @@ public class AOMUtils {
      */
     public static String getCodeInNearestParent(String nodeId) {
 
-        Pattern idCodeRegexp = Pattern.compile("(?<codePrefix>[a-zA-Z]+)(?<codePart>([0-9]+\\.)*[0-9]+)");
-        Matcher matcher = idCodeRegexp.matcher(nodeId);
-        if(!matcher.matches()) {
-            throw new IllegalArgumentException("Id code is not a valid id code: " + nodeId);
-        }
-        String codePart = matcher.group("codePart");
-        String[] split = codePart.split("\\.");
-        if(split.length < 2) {
-            throw new IllegalArgumentException("cannot get the nearest parent of specialization level 0 code");
-        }
+        NodeIdUtil nodeIdUtil = new NodeIdUtil(nodeId);
 
+        List<Integer> codes = nodeIdUtil.getCodes();
         int newDepth = 0;
-        for(int i = split.length-2; i >= 0; i--) {
-            if(!split[i].equals("0")) {
+        for(int i = codes.size()-2; i >= 0; i--) {
+            if(codes.get(i) != 0) {
                 newDepth = i;
                 break;
             }
-
-
         }
-        return matcher.group("codePrefix") + Joiner.on('.').join(Arrays.copyOfRange(split, 0, newDepth + 1));
+        return nodeIdUtil.getPrefix() + Joiner.on('.').join(codes.subList(0, newDepth+1));
 
     }
 }

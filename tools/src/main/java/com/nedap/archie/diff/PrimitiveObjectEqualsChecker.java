@@ -11,7 +11,7 @@ public class PrimitiveObjectEqualsChecker {
         if(childCObject == null && childCObjectInParent != null) {
             return false;
         }
-        if(childCObjectInParent == null && childCObject == null) {
+        if(childCObjectInParent == null && childCObject != null) {
             return false;
         }
         if(childCObject == null && childCObjectInParent == null) {

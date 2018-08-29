@@ -20,7 +20,7 @@ public class DiffUtil {
      */
     public static CObject findMatchingParentCObject(String specializedNodeId, List<CObject> parentCObjects) {
         for (CObject parentCObject : parentCObjects) {
-            if (specializedNodeId.equals(parentCObject.getNodeId())) {
+            if (specializedNodeId.equalsIgnoreCase(parentCObject.getNodeId())) {
                 return parentCObject;
             }
         }
@@ -50,20 +50,12 @@ public class DiffUtil {
         List<CObject> cObjects = siblingOrders.get(siblingOrder);
         if(cObjects == null) {
             //first, find if we can add it below an existing anchor
-            for(SiblingOrder key:siblingOrders.keySet()) {
-                boolean addHere = false;
-                for(CObject cObject:siblingOrders.get(key)) {
-                    if(cObject.getNodeId().equals(siblingOrder.getSiblingNodeId())) {
-                        addHere = true;
-                        break;
-                    }
-                }
-                if(addHere) {
-                    siblingOrders.get(key).add(cObjectInResult);
-                    return;
-                }
+            SiblingOrder existingSiblingOrder = findSiblingOrder(siblingOrders, siblingOrder.getSiblingNodeId());
+            if(existingSiblingOrder != null) {
+                siblingOrders.get(existingSiblingOrder).add(cObjectInResult);
+                return;
             }
-            //not already found, so
+            //not already found, so create a new sibling order
             cObjects = new ArrayList<>();
             siblingOrders.put(siblingOrder, cObjects);
         }
