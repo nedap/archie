@@ -2,7 +2,6 @@ package com.nedap.archie.aom.utils;
 
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Joiner;
-import com.google.common.base.Strings;
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.ArchetypeHRID;
 import com.nedap.archie.aom.ArchetypeModelObject;
@@ -10,6 +9,7 @@ import com.nedap.archie.aom.ArchetypeSlot;
 import com.nedap.archie.aom.CAttribute;
 import com.nedap.archie.aom.CAttributeTuple;
 import com.nedap.archie.aom.CComplexObject;
+import com.nedap.archie.aom.CObject;
 import com.nedap.archie.aom.primitives.CString;
 import com.nedap.archie.definitions.AdlCodeDefinitions;
 import com.nedap.archie.paths.PathSegment;
@@ -30,9 +30,10 @@ import org.openehr.bmm.core.BmmProperty;
 import org.openehr.bmm.persistence.validation.BmmDefinitions;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class AOMUtils {
@@ -104,8 +105,45 @@ public class AOMUtils {
 
     }
 
-    public static RedefinitionStatus getSpecialisationStatusFromCode(String nodeId, int integer) {
-        return RedefinitionStatus.UNDEFINED;//TODO
+    public static boolean isOverridenCObject(CObject specialized, CObject parent) {
+        return isOverriddenIdCode(specialized.getNodeId(), parent.getNodeId());
+    }
+
+    public static boolean isOverriddenIdCode(String specializedNodeId, String parentNodeId) {
+        if(specializedNodeId.equalsIgnoreCase(parentNodeId)) {
+            return true;
+        }
+
+        return specializedNodeId.toLowerCase().startsWith(parentNodeId.toLowerCase() + ".");
+    }
+
+    public static CodeRedefinitionStatus getSpecialisationStatusFromCode(String nodeId, int specialisationDepth) {
+
+        if(specialisationDepth > getSpecializationDepthFromCode(nodeId)) {
+            return CodeRedefinitionStatus.INHERITED;
+        } else {
+            boolean codeDefinedAtThisLevel = codeIndexAtLevel(nodeId, specialisationDepth) > 0;
+            if(codeDefinedAtThisLevel) {
+                if(specialisationDepth > 0 && codeExistsAtLevel(nodeId, specialisationDepth-1)) {
+                    return CodeRedefinitionStatus.REDEFINED;
+                } else {
+                    return CodeRedefinitionStatus.ADDED;
+                }
+
+            } else if (specialisationDepth > 0 && codeExistsAtLevel(nodeId, specialisationDepth-1)) {
+                return CodeRedefinitionStatus.INHERITED;
+            } else {
+                return CodeRedefinitionStatus.UNDEFINED;
+            }
+        }
+    }
+
+    public static int codeIndexAtLevel(String nodeId, int specialisationDepth) {
+        NodeIdUtil nodeIdUtil = new NodeIdUtil(nodeId);
+        if(specialisationDepth < 0 || specialisationDepth >= nodeIdUtil.getCodes().size()) {
+            throw new IllegalArgumentException("code is not valid at specialization depth " + specialisationDepth);
+        }
+        return nodeIdUtil.getCodes().get(specialisationDepth);
     }
 
     public static ArchetypeModelObject getDifferentialPathFromParent(Archetype flatParent, CAttribute attributeWithDifferentialPath) {
@@ -154,7 +192,7 @@ public class AOMUtils {
     public static boolean codeExistsAtLevel(String nodeId, int specializationDepth) {
         NodeIdUtil nodeIdUtil = new NodeIdUtil(nodeId);
         int specializationDepthOfCode = AOMUtils.getSpecializationDepthFromCode(nodeId);
-        if(specializationDepth < specializationDepthOfCode) {
+        if(specializationDepth <= specializationDepthOfCode) {
             String code = "";
             for(int i = 0; i <= specializationDepth; i++) {
                 code += nodeIdUtil.getCodes().get(i);
@@ -335,4 +373,25 @@ public class AOMUtils {
         return maximumIdCode;
     }
 
+    /**
+     * Given a code such as 'id4.1.0.0.1', return the nearest code that exists in a parent. In this example,
+     * returns id4.1, so removes all zeros.
+     * @param nodeId
+     * @return
+     */
+    public static String getCodeInNearestParent(String nodeId) {
+
+        NodeIdUtil nodeIdUtil = new NodeIdUtil(nodeId);
+
+        List<Integer> codes = nodeIdUtil.getCodes();
+        int newDepth = 0;
+        for(int i = codes.size()-2; i >= 0; i--) {
+            if(codes.get(i) != 0) {
+                newDepth = i;
+                break;
+            }
+        }
+        return nodeIdUtil.getPrefix() + Joiner.on('.').join(codes.subList(0, newDepth+1));
+
+    }
 }

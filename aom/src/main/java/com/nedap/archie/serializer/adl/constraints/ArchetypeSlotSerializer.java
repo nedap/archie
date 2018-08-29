@@ -43,8 +43,9 @@ public class ArchetypeSlotSerializer extends ConstraintSerializer<ArchetypeSlot>
 
     @Override
     public void serialize(ArchetypeSlot cobj) {
-        builder.indent().newline()
-                .append("allow_archetype")
+        builder.indent().newline();
+        appendSiblingOrder(cobj);
+        builder.append("allow_archetype")
                 .append(" ")
                 .append(cobj.getRmTypeName()).append("[").append(cobj.getNodeId()).append("]");
         if (cobj.getOccurrences() != null) {

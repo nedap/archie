@@ -24,7 +24,7 @@ import java.util.Stack;
  *
  * Created by pieter.bos on 21/10/15.
  */
-public class Flattener {
+public class Flattener implements IAttributeFlattenerSupport {
 
     private final MetaModels metaModels;
     //to be able to store Template Overlays transparently during flattening
@@ -203,6 +203,8 @@ public class Flattener {
             }
         }
 
+        this.removeSiblingOrder(result);
+
         result.setDifferential(false);//mark this archetype as being flat
         result.setGenerated(true);
 
@@ -242,6 +244,22 @@ public class Flattener {
         }
     }
 
+    private void removeSiblingOrder(Archetype archetype) {
+        Stack<CObject> workList = new Stack<>();
+        workList.push(archetype.getDefinition());
+        while(!workList.isEmpty()) {
+            CObject object = workList.pop();
+            for (CAttribute attribute : object.getAttributes()) {
+                for (CObject child : attribute.getChildren()) {
+                    workList.push(child);
+                    if (child.getSiblingOrder() != null) {
+                        child.setSiblingOrder(null);
+                    }
+                }
+            }
+        }
+    }
+
     private void flattenDefinition(Archetype parent, Archetype specialized) {
         parent.setArchetypeId(specialized.getArchetypeId()); //TODO: override all metadata?
         createSpecializeCObject(null, parent.getDefinition(), specialized.getDefinition());
@@ -249,7 +267,8 @@ public class Flattener {
     }
 
 
-    protected CObject createSpecializeCObject(CAttribute attribute, CObject parent, CObject specialized) {
+    @Override
+    public CObject createSpecializeCObject(CAttribute attribute, CObject parent, CObject specialized) {
         if(parent == null) {
             return specialized;//TODO: clone?
         }
@@ -364,6 +383,7 @@ public class Flattener {
         return useComplexObjectForArchetypeSlotReplacement;
     }
 
+    @Override
     public MetaModels getMetaModels() {
         return metaModels;
     }

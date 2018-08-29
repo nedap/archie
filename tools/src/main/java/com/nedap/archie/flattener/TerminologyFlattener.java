@@ -6,6 +6,7 @@ import com.nedap.archie.aom.OperationalTemplate;
 import com.nedap.archie.aom.terminology.ArchetypeTerm;
 import com.nedap.archie.aom.terminology.ArchetypeTerminology;
 import com.nedap.archie.aom.terminology.ValueSet;
+import com.nedap.archie.aom.utils.AOMUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -67,6 +68,8 @@ public class TerminologyFlattener {
             if(overriddenValueSet == null) {
                 resultValueSets.put(key, childValueSet);
             } else {
+                String originalId = overriddenValueSet.getId();
+                overriddenValueSet.setId(childValueSet.getId());
                 //we could just set the overridden value set to the new value and remove the old one
                 //but that would mean you could also add codes in a specialized archetype- and you cannot
                 Set<String> newMembers = new LinkedHashSet<>();
@@ -77,7 +80,7 @@ public class TerminologyFlattener {
                     }
                 }
                 overriddenValueSet.setMembers(newMembers);
-                resultValueSets.remove(overriddenValueSet.getId());
+                resultValueSets.remove(originalId);
                 resultValueSets.put(key, overriddenValueSet);
             }
         }
@@ -85,7 +88,7 @@ public class TerminologyFlattener {
 
     private static ValueSet findMatchingValueSet(Map<String, ValueSet> resultValueSets, String specializedId) {
         return resultValueSets.values().stream()
-                .filter((valueSet) -> FlattenerUtil.isOverriddenIdCode(specializedId, valueSet.getId()))
+                .filter((valueSet) -> AOMUtils.isOverriddenIdCode(specializedId, valueSet.getId()))
                 .findAny().orElse(null);
     }
 

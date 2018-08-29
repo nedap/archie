@@ -24,15 +24,15 @@ import java.util.List;
 /**
  * Flattens attributes, taking sibling order into account.
  */
-class CAttributeFlattener {
+public class CAttributeFlattener {
 
-    private final Flattener flattener;
+    private final IAttributeFlattenerSupport flattener;
 
-    public CAttributeFlattener(Flattener flattener) {
+    public CAttributeFlattener(IAttributeFlattenerSupport flattener) {
         this.flattener = flattener;
     }
 
-    protected void flattenSingleAttribute(CComplexObject newObject, CAttribute attribute) {
+    public void flattenSingleAttribute(CComplexObject newObject, CAttribute attribute) {
         if(attribute.getDifferentialPath() != null) {
             //this overrides a specific path
             ArchetypeModelObject object = new AOMPathQuery(attribute.getDifferentialPath()).dontFindThroughCComplexObjectProxies().find(newObject);
@@ -82,10 +82,11 @@ class CAttributeFlattener {
         }
     }
 
-    protected void flattenAttribute(CComplexObject root, CAttribute attributeInParent, CAttribute attributeInSpecialization) {
+    public CAttribute flattenAttribute(CComplexObject root, CAttribute attributeInParent, CAttribute attributeInSpecialization) {
         if(attributeInParent == null) {
             CAttribute childCloned = attributeInSpecialization.clone();
             root.addAttribute(childCloned);
+            return childCloned;
         } else {
 
             attributeInParent.setExistence(FlattenerUtil.getPossiblyOverridenValue(attributeInParent.getExistence(), attributeInSpecialization.getExistence()));
@@ -123,7 +124,8 @@ class CAttributeFlattener {
                     if (anchor != null) {
                         mergeObjectIntoAttribute(attributeInParent, specializedChildCObject, matchingParentObject, attributeInSpecialization.getChildren(), anchor);
                         anchor = nextAnchor(anchor, specializedChildCObject);
-                    } else { //no sibling order
+                    } else { //no sibling order, apply default rules
+                        //add to end
                         CObject specializedObject = flattener.createSpecializeCObject(attributeInParent, matchingParentObject, specializedChildCObject);
                         if(matchingParentObject == null) {
                             //extension nodes should be added to the last position
@@ -137,7 +139,9 @@ class CAttributeFlattener {
                         }
                     }
                 }
+
             }
+            return attributeInParent;
         }
     }
 
@@ -213,7 +217,7 @@ class CAttributeFlattener {
      */
     private String findCObjectMatchingSiblingOrder(SiblingOrder siblingOrder, List<CObject> cObjectList) {
         for(CObject object:cObjectList) {
-            if(FlattenerUtil.isOverriddenIdCode(object.getNodeId(), siblingOrder.getSiblingNodeId())) {
+            if(AOMUtils.isOverriddenIdCode(object.getNodeId(), siblingOrder.getSiblingNodeId())) {
                 return object.getNodeId();
             }
         }
@@ -233,7 +237,7 @@ class CAttributeFlattener {
         int matchingIndex = parent.getIndexOfChildWithNodeId(matchingParentObject.getNodeId());
         String result = matchingParentObject.getNodeId();
         for(int i = matchingIndex+1; i < parent.getChildren().size(); i++) {
-            if(FlattenerUtil.isOverriddenIdCode(parent.getChildren().get(i).getNodeId(), matchingParentObject.getNodeId())) {
+            if(AOMUtils.isOverriddenIdCode(parent.getChildren().get(i).getNodeId(), matchingParentObject.getNodeId())) {
                 result = parent.getChildren().get(i).getNodeId();
             }
         }
@@ -257,7 +261,7 @@ class CAttributeFlattener {
         }
         List<CObject> allMatchingChildren = new ArrayList<>();
         for (CObject specializedChild : allSpecializedChildren) {
-            if (FlattenerUtil.isOverridenCObject(specializedChild, matchingParentObject)) {
+            if (AOMUtils.isOverridenCObject(specializedChild, matchingParentObject)) {
                 allMatchingChildren.add(specializedChild);
             }
 
@@ -309,7 +313,7 @@ class CAttributeFlattener {
      */
     private CObject findMatchingParentCObject(CObject specializedChildCObject, List<CObject> parentCObjects) {
         for (CObject parentCObject : parentCObjects) {
-            if (FlattenerUtil.isOverridenCObject(specializedChildCObject, parentCObject)) {
+            if (AOMUtils.isOverridenCObject(specializedChildCObject, parentCObject)) {
                 return parentCObject;
             }
         }

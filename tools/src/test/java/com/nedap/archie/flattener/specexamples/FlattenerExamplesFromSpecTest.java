@@ -21,6 +21,7 @@ import org.junit.Test;
 import org.openehr.referencemodels.BuiltinReferenceModels;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.nedap.archie.flattener.specexamples.FlattenerTestUtil.*;
 import static org.junit.Assert.*;
@@ -106,6 +107,10 @@ public class FlattenerExamplesFromSpecTest {
         repository.addArchetype(labTestPanel);
         Archetype lipidStudiesPanel = parse("openEHR-EHR-CLUSTER.lipid_studies_panel.adls");
         Archetype flattenedLipidStudies = new Flattener(repository, models).flatten(lipidStudiesPanel);
+
+        List<CObject> itemNodes = flattenedLipidStudies.getDefinition().getAttribute("items").getChildren();
+        List<String> nodeIds = itemNodes.stream().map(cObject -> cObject.getNodeId()).collect(Collectors.toList());
+        assertEquals(Lists.newArrayList("id3", "id3.1", "id3.2", "id3.5", "id14"), nodeIds);
 
         for(String nodeId: Lists.newArrayList("1", "2", "5")) {
 

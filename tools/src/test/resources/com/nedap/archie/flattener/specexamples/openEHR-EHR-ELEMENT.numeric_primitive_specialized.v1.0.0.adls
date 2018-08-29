@@ -12,7 +12,7 @@ description
 
 definition
     ELEMENT[id1] matches {
-        /value matches {
+        value matches {
             DV_QUANTITY[id3] ∈ {
                 magnitude ∈ {|4.0..6.5|}
             }

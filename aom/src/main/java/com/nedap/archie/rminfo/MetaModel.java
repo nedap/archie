@@ -291,4 +291,33 @@ public class MetaModel implements MetaModelInterface {
             return false;
         }
     }
+
+    @Override
+    public boolean isOrdered(String typeName, String attributeName) {
+        if(getSelectedBmmModel() != null) {
+            BmmClass classDefinition = getSelectedBmmModel().getClassDefinition(BmmDefinitions.typeNameToClassKey(typeName));
+            if (classDefinition != null) {
+                //TODO: don't flatten on request, create a flattened properties cache just like the eiffel code for much better performance
+                BmmClass flatClassDefinition = classDefinition.flattenBmmClass();
+                BmmProperty bmmProperty = flatClassDefinition.getProperties().get(attributeName);
+                return isOrdered(bmmProperty);
+            }
+        } else {
+            RMAttributeInfo attributeInfo = selectedModel.getAttributeInfo(typeName, attributeName);
+            return attributeInfo != null && List.class.isAssignableFrom(attributeInfo.getType());
+        }
+        return true;//most collections will be ordered, so safe default
+    }
+
+    private boolean isOrdered(BmmProperty bmmProperty) {
+        if(bmmProperty == null) {
+            return false;
+        } else if(bmmProperty instanceof BmmContainerProperty) {
+            String baseType = BmmDefinitions.typeNameToClassKey(((BmmContainerProperty) bmmProperty).getType().getContainerType().toString());
+
+            return baseType.equalsIgnoreCase("list") || baseType.equalsIgnoreCase("array");//TODO: check Hash
+        } else {
+            return false;
+        }
+    }
 }

@@ -35,6 +35,7 @@ public class CArchetypeRootSerializer extends CComplexObjectSerializer<CArchetyp
     @Override
     public void serialize(CArchetypeRoot cobj) {
         builder.indent().newline();
+        appendSiblingOrder(cobj);
         builder.append("use_archetype");
         builder.append(" ").append(cobj.getRmTypeName());
         builder.append("[");

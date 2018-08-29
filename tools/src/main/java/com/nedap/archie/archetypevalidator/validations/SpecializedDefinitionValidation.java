@@ -3,7 +3,7 @@ package com.nedap.archie.archetypevalidator.validations;
 import com.nedap.archie.aom.*;
 import com.nedap.archie.aom.utils.AOMUtils;
 import com.nedap.archie.aom.utils.NodeIdUtil;
-import com.nedap.archie.aom.utils.RedefinitionStatus;
+import com.nedap.archie.aom.utils.CodeRedefinitionStatus;
 import com.nedap.archie.archetypevalidator.ErrorType;
 import com.nedap.archie.archetypevalidator.ValidatingVisitor;
 import com.nedap.archie.rules.Assertion;
@@ -220,8 +220,7 @@ public class SpecializedDefinitionValidation extends ValidatingVisitor {
                     } else if(!(cObject instanceof CPrimitiveObject)) {
                         addMessage(ErrorType.VSONIN, cObject.path());
                     }
-                } else if(AOMUtils.getSpecialisationStatusFromCode(cObject.getNodeId(), cObject.specialisationDepth()) == RedefinitionStatus.REDEFINED) {
-                    //TODO method in if not yet implemented
+                } else if(AOMUtils.getSpecialisationStatusFromCode(cObject.getNodeId(), cObject.specialisationDepth()) == CodeRedefinitionStatus.REDEFINED) {
                     addMessage(ErrorType.VSONIN, cObject.path());
                 }
             } else {

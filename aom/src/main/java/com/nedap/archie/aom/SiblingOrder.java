@@ -1,5 +1,7 @@
 package com.nedap.archie.aom;
 
+import java.util.Objects;
+
 /**
  * Created by pieter.bos on 22/10/15.
  */
@@ -36,5 +38,25 @@ public class SiblingOrder extends ArchetypeModelObject {
         result.setSiblingNodeId(nodeId);
         result.setBefore(true);
         return result;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof SiblingOrder)) return false;
+        SiblingOrder that = (SiblingOrder) o;
+        return before == that.before &&
+                Objects.equals(siblingNodeId, that.siblingNodeId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(before, siblingNodeId);
+    }
+
+    @Override
+    public String toString() {
+        return (before? "before [" : "after [") +
+                siblingNodeId + "]";
     }
 }
