@@ -75,6 +75,7 @@ To install to your local maven repository for use in other gradle or maven proje
   * [Reference Model tools](#reference-model-tools)
     + [Reference model object creation](#reference-model-object-creation)
     + [Reference model APath queries](#reference-model-apath-queries)
+    + [Validating RM Objects against an archetype](#validating-rm-objects-against-an-archetype)
   * [Full XPath support on reference model](#full-xpath-support-on-reference-model)
   * [Rule evaluation](#rule-evaluation)
   * [Lower level APIs](#lower-level-apis)
@@ -217,7 +218,7 @@ archetype.getTerm(cTerminologyCode, "at15", "en");
 
 The inverse operation of flattening archetypes is diffing. This is useful if you write a tool to edit archetypes. For end users, it's much less complicated to edit flat forms of archetypes instead of differential forms. This operation lets users edit the flat form, after which you can save the output from the differentiator as the differential form. To use the Differentiator:
 
-```
+```java
 Archetype flatChild, flatParent; //for how to parse and flatten, see elsewhere in the readme
 
 Differentiator differentiator = new Differentiator(BuiltinReferenceModels.getMetaModels());
@@ -393,7 +394,7 @@ Cardinality and existence are validated both from the archetype and the underlyi
 
 To use:
 
-```
+```java
 OperationalTemplate operationalTemplate;
 
 RMObjectValidator validator = new RMObjectValidator(ArchieRMInfoLookup.getInstance()); //or a different ModelInfoLookup for other RMs
@@ -454,7 +455,7 @@ Rules are very similar to XPath expressions, with a few exceptions. However, the
 
 After parsing you can check if you archetype is valid. The parser will try to continue parsing as much as possible without throwing Exceptions. This means you will have to check the errors manually. This happens even with some syntax errors, so checking errors is important!
 
-```
+```java
 if(!parser.getErrors().hasNoErrors()) {
     parser.getErrors().logToLogger();
 }
