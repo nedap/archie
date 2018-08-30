@@ -378,9 +378,35 @@ Or if you want apath-expressions resolving to that single item together with eve
 List<RMObjectWithPath> itemsWithUniquePaths = new RMPathQuery("/data[id2]/items").findList(ArchieRMInfoLookup.getInstance(), rmObject);
 ```
 
-#Experimental features
+## Validating RM Objects against an archetype
 
-The following features are experimental. This means its working will likely change somewhat in the near future, but they can already be used.
+The RMObjectValidator validates RMObjects against an archetype. It validates:
+
+- cardinality
+- occurrences
+- existence
+- data types
+- primitive object constraints
+- tuples
+
+Cardinality and existence are validated both from the archetype and the underlying reference model.
+
+To use:
+
+```
+OperationalTemplate operationalTemplate;
+
+RMObjectValidator validator = new RMObjectValidator(ArchieRMInfoLookup.getInstance()); //or a different ModelInfoLookup for other RMs
+List<RMObjectValidationMessage> validationMessages = validator.validate(operationalTemplate, rmObject);
+``
+
+The RM Object validator only works on operational templates, not on differential or flattened forms of archetypes. You can create an operational template from any archetype see [Operational templates](#operational-templates).
+
+Note that it is possible the API of the messages is still unstable and will likely change in future versions.
+
+# Experimental features
+
+The following features are experimental. This means its working or API will likely change somewhat in the near future, but they can already be used.
 
 ## Full XPath support on reference model
 
