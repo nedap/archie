@@ -398,7 +398,7 @@ OperationalTemplate operationalTemplate;
 
 RMObjectValidator validator = new RMObjectValidator(ArchieRMInfoLookup.getInstance()); //or a different ModelInfoLookup for other RMs
 List<RMObjectValidationMessage> validationMessages = validator.validate(operationalTemplate, rmObject);
-``
+```
 
 The RM Object validator only works on operational templates, not on differential or flattened forms of archetypes. You can create an operational template from any archetype see [Operational templates](#operational-templates).
 
