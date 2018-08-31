@@ -23,7 +23,7 @@ public class PathUtil {
                 result.append("[");
                 result.append(segment.getNodeId());
                 if(segment.hasNumberIndex()) {
-                    result.append(", ");
+                    result.append(",");
                     result.append(segment.getIndex().toString());
                 }
                 result.append("]");
