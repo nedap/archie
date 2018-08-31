@@ -103,6 +103,7 @@ public class Composition extends Locatable {
 
     public void setContext(@Nullable EventContext context) {
         this.context = context;
+        setThisAsParent(context, "context");
     }
 
     public List<ContentItem> getContent() {
