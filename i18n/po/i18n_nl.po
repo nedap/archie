@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-03 14:56+0100\n"
+"POT-Creation-Date: 2018-09-07 16:36+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Pieter Bos <pieter.bos@nedap.com>\n"
 "Language-Team: \n"
@@ -21,6 +21,21 @@ msgstr ""
 #, java-format
 msgid "Assertion violation processing RM schemas; original recipient: {0}"
 msgstr ""
+
+#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/RMObjectValidationMessageIds.java:13
+#, java-format
+msgid "Attribute does not match cardinality {0}"
+msgstr "Attribuut moet {0} keer voorkomen"
+
+#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/RMObjectValidationMessageIds.java:15
+#, java-format
+msgid "Attribute has {0} occurrences, but must be {1}"
+msgstr "Attribuut komt {0} keer voor, maar dit moet {1} zijn"
+
+#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/RMObjectValidationMessageIds.java:14
+#, java-format
+msgid "Attribute {0} of class {1} does not match existence {2}"
+msgstr "Attribuut {0} van class {1} komt niet overeen met existence {2}"
 
 #: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:92
 msgid "BMM Schema load error"
@@ -49,6 +64,21 @@ msgstr ""
 msgid "Merged schema {0} into schema {1}"
 msgstr ""
 
+#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/RMObjectValidationMessageIds.java:7
+#, java-format
+msgid "Message at {0} ({1}):  {2}"
+msgstr "Bericht bij {0} ({1}): {2}"
+
+#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/RMObjectValidationMessageIds.java:11
+#, java-format
+msgid "Multiple values for Primitive Object constraint {0}: {1}"
+msgstr "Meerere waarden voor Primitive Object constraint {0}: {1}"
+
+#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/RMObjectValidationMessageIds.java:9
+#, java-format
+msgid "Multiple values for Tuple constraint {0}: {1}"
+msgstr "Meerdere waarden voor Tuple constraint {0}: {1}"
+
 #: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:55
 msgid "No ''rm_schemas_load_list'' config setting found; attempting to load all schemas (change via Tools>Options)"
 msgstr ""
@@ -57,6 +87,21 @@ msgstr ""
 #, java-format
 msgid "No Reference Model schema found for package ''{0}''"
 msgstr ""
+
+#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/RMObjectValidationMessageIds.java:12
+#, java-format
+msgid "Not a valid value for constraint {0}: {1}"
+msgstr "Geen geldige waarde voor beperking {0}: {1}"
+
+#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/RMObjectValidationMessageIds.java:10
+#, java-format
+msgid "Object does not match tuple: {0}"
+msgstr "Object komt niet overeen met tupel: {0}"
+
+#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/RMObjectValidationMessageIds.java:8
+#, java-format
+msgid "Object should be type {0}, but was {1}"
+msgstr "Object moet van type {0} zijn, maar is van type {1}"
 
 #: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:46
 #, java-format
@@ -193,7 +238,8 @@ msgid "Schema {0} class definition {1} ancestor {2} does not exist in schema"
 msgstr ""
 
 #: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:67
-msgid "Schema {0} class definition {1} container property {2} cardinality not defined (assuming {0..*})"
+#, java-format
+msgid "Schema {0} class definition {1} container property {2} cardinality not defined (assuming '{0..*}')"
 msgstr ""
 
 #: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:68
@@ -324,4 +370,3 @@ msgstr ""
 #: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:43
 msgid "Unknown exception processing RM schemas"
 msgstr ""
-
