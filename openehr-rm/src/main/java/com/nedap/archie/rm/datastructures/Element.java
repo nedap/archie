@@ -5,10 +5,7 @@ import com.nedap.archie.rm.datavalues.DvCodedText;
 import com.nedap.archie.rm.datavalues.SingleValuedDataValue;
 
 import javax.annotation.Nullable;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.*;
 
 /**
  * Created by pieter.bos on 04/11/15.
@@ -18,6 +15,7 @@ import javax.xml.bind.annotation.XmlType;
         "value",
         "nullFlavour"
 })
+@XmlRootElement(name="element")
 public class Element extends Item implements SingleValuedDataValue<DataValue> {
 
     @Nullable
