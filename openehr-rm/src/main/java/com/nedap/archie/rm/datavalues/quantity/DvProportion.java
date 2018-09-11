@@ -1,8 +1,11 @@
 package com.nedap.archie.rm.datavalues.quantity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.annotation.Nullable;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
@@ -19,34 +22,34 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class DvProportion extends DvAmount<Double> {
 
-    private double numerator;
-    private double denominator;
-    private long type;
+    private Double numerator;
+    private Double denominator;
+    private Long type;
     @Nullable
     private Long precision;
 
-    public double getNumerator() {
+    public Double getNumerator() {
         return numerator;
     }
 
-    public void setNumerator(double numerator) {
+    public void setNumerator(Double numerator) {
         this.numerator = numerator;
     }
 
 
-    public double getDenominator() {
+    public Double getDenominator() {
         return denominator;
     }
 
-    public void setDenominator(double denominator) {
+    public void setDenominator(Double denominator) {
         this.denominator = denominator;
     }
 
-    public long getType() {
+    public Long getType() {
         return type;
     }
 
-    public void setType(long type) {
+    public void setType(Long type) {
         this.type = type;
     }
 
@@ -59,14 +62,18 @@ public class DvProportion extends DvAmount<Double> {
         this.precision = precision;
     }
 
+    @JsonIgnore
     public boolean isIntegral() {
         return precision != null && precision == 0;
     }
 
     @Override
+    @JsonIgnore
     public Double getMagnitude() {
-        if(denominator != 0.0d) {
+        if(numerator != null && denominator != null && denominator != 0.0d) {
             return numerator / denominator;
+        } else if(numerator == null) {
+            return 0.0;
         } else {
             return Double.MAX_VALUE;//TODO: actually: infinity. Max Double value?
         }
