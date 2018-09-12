@@ -25,7 +25,7 @@ msgstr ""
 #: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/RMObjectValidationMessageIds.java:13
 #, java-format
 msgid "Attribute does not match cardinality {0}"
-msgstr "Attribuut moet {0} keer voorkomen"
+msgstr "Attribuut moet {0} waarden bevatten"
 
 #: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/RMObjectValidationMessageIds.java:15
 #, java-format
@@ -72,7 +72,7 @@ msgstr "Bericht bij {0} ({1}): {2}"
 #: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/RMObjectValidationMessageIds.java:11
 #, java-format
 msgid "Multiple values for Primitive Object constraint {0}: {1}"
-msgstr "Meerere waarden voor Primitive Object constraint {0}: {1}"
+msgstr "Meerdere waarden voor Primitive Object constraint {0}: {1}"
 
 #: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/RMObjectValidationMessageIds.java:9
 #, java-format
