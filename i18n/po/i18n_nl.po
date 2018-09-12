@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-07 16:36+0200\n"
+"POT-Creation-Date: 2018-09-12 16:50+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Pieter Bos <pieter.bos@nedap.com>\n"
 "Language-Team: \n"
@@ -11,6 +11,10 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 1.8.11\n"
+
+#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/ConstraintToStringUtil.java:33
+msgid " or "
+msgstr " of "
 
 #: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:56
 #, java-format
@@ -370,3 +374,48 @@ msgstr ""
 #: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:43
 msgid "Unknown exception processing RM schemas"
 msgstr ""
+
+#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/ConstraintToStringUtil.java:30
+#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/ConstraintToStringUtil.java:66
+msgid "anything"
+msgstr "willekeurig"
+
+#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/ConstraintToStringUtil.java:93
+#, java-format
+msgid "between {0} (excluded) and {1} (included)"
+msgstr "tussen {0} (exclusief) en {1} (inclusief)"
+
+#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/ConstraintToStringUtil.java:90
+#, java-format
+msgid "between {0} (included) and {1} (excluded)"
+msgstr "tussen {0} (inclusief) en {1} (exclusief)"
+
+#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/ConstraintToStringUtil.java:96
+#, java-format
+msgid "between {0} and {1} (excluded)"
+msgstr "tussen {0} en {1} (exclusief)"
+
+#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/ConstraintToStringUtil.java:87
+#, java-format
+msgid "between {0} and {1} (included)"
+msgstr "tussen {0} en {1} (inclusief)"
+
+#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/ConstraintToStringUtil.java:78
+#, java-format
+msgid "greater than or equal to {0}"
+msgstr "groter dan of gelijk aan {0}"
+
+#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/ConstraintToStringUtil.java:81
+#, java-format
+msgid "greater than {0}"
+msgstr "groter dan {0}"
+
+#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/ConstraintToStringUtil.java:70
+#, java-format
+msgid "less than or equal to {0}"
+msgstr "kleiner dan of gelijk aan {0}"
+
+#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/ConstraintToStringUtil.java:73
+#, java-format
+msgid "less than {0}"
+msgstr "kleiner dan {0}"
