@@ -49,12 +49,12 @@ fragment CARET_REGEXP_CHAR: ~[^\n\r] | ESCAPE_SEQ | '\\^';
 // ---------- whitespace & comments ----------
 
 SYM_TEMPLATE_OVERLAY : H_CMT_LINE (WS|LINE)* SYM_TEMPLATE_OVERLAY_ONLY;
-fragment H_CMT_LINE : '--------' '-'*? ('\r' ? '\n' | '\r')  ;  // special type of comment for splitting template overlays
+fragment H_CMT_LINE : '--------' '-'*? ('\n'|'\r''\n'|'\r')  ;  // special type of comment for splitting template overlays
 fragment SYM_TEMPLATE_OVERLAY_ONLY     : [Tt][Ee][Mm][Pp][Ll][Aa][Tt][Ee]'_'[Oo][Vv][Ee][Rr][Ll][Aa][Yy] ;
 
 WS         : [ \t\r]+    -> channel(HIDDEN) ;
-LINE       : ('\r' ? '\n' | '\r')        -> channel(HIDDEN) ;     // increment line count
-CMT_LINE   : '--' .*? '\n'  -> skip ;  // (increment line count)
+LINE       : '\n'        -> channel(HIDDEN) ;     // increment line count
+CMT_LINE   : '--' .*? ('\n'|'\r''\n'|'\r')  -> skip ;  // (increment line count)
 
 // ---------- ISO8601 Date/Time values ----------
 
