@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-12 16:50+0200\n"
+"POT-Creation-Date: 2018-09-14 11:00+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Pieter Bos <pieter.bos@nedap.com>\n"
 "Language-Team: \n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 1.8.11\n"
 
-#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/ConstraintToStringUtil.java:33
+#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/ConstraintToStringUtil.java:35
 msgid " or "
 msgstr ""
 
@@ -90,11 +90,6 @@ msgstr ""
 #: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:37
 #, java-format
 msgid "No Reference Model schema found for package ''{0}''"
-msgstr ""
-
-#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/RMObjectValidationMessageIds.java:12
-#, java-format
-msgid "Not a valid value for constraint {0}: {1}"
 msgstr ""
 
 #: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/RMObjectValidationMessageIds.java:10
@@ -366,6 +361,11 @@ msgstr ""
 msgid "Schema {0} top-level sibling package definitions cannot include a package which is the child of another"
 msgstr ""
 
+#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/RMObjectValidationMessageIds.java:12
+#, java-format
+msgid "The value {1} is not valid for constraint {0}"
+msgstr ""
+
 #: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:54
 #, java-format
 msgid "Unknown Reference Model ''{0}'' mentioned in ''rm_schemas_load_list'' config setting (ignored)"
@@ -375,49 +375,39 @@ msgstr ""
 msgid "Unknown exception processing RM schemas"
 msgstr ""
 
-#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/ConstraintToStringUtil.java:30
-#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/ConstraintToStringUtil.java:66
+#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/ConstraintToStringUtil.java:32
+#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/ConstraintToStringUtil.java:68
 msgid "anything"
-msgstr ""
-
-#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/ConstraintToStringUtil.java:93
-#, java-format
-msgid "between {0} (excluded) and {1} (included)"
-msgstr ""
-
-#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/ConstraintToStringUtil.java:90
-#, java-format
-msgid "between {0} (included) and {1} (excluded)"
-msgstr ""
-
-#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/ConstraintToStringUtil.java:96
-#, java-format
-msgid "between {0} and {1} (excluded)"
-msgstr ""
-
-#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/ConstraintToStringUtil.java:87
-#, java-format
-msgid "between {0} and {1} (included)"
 msgstr ""
 
 #: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/ConstraintToStringUtil.java:78
 #, java-format
+msgid "equal to {0}"
+msgstr ""
+
+#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/ConstraintToStringUtil.java:91
+#, java-format
 msgid "greater than or equal to {0}"
 msgstr ""
 
-#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/ConstraintToStringUtil.java:81
+#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/ConstraintToStringUtil.java:94
 #, java-format
 msgid "greater than {0}"
 msgstr ""
 
-#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/ConstraintToStringUtil.java:70
+#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/ConstraintToStringUtil.java:103
 #, java-format
 msgid "less than or equal to {0}"
 msgstr ""
 
-#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/ConstraintToStringUtil.java:73
+#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/ConstraintToStringUtil.java:106
 #, java-format
 msgid "less than {0}"
+msgstr ""
+
+#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/ConstraintToStringUtil.java:80
+#, java-format
+msgid "{0} and {1}"
 msgstr ""
 
 #~ msgid "'rm_schemas_load_list' config setting mentions non-existent schema {0}"
