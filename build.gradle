@@ -14,8 +14,8 @@ repositories {
 }
 
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '4.3'
+wrapper {
+    gradleVersion = '4.10'
 }
 
 allprojects {
@@ -44,6 +44,9 @@ subprojects {
 
   sourceCompatibility = '1.8'
   targetCompatibility = '1.8'
+
+  compileJava.options.encoding = "UTF-8"
+  compileTestJava.options.encoding = "UTF-8"
 
   repositories {
       mavenCentral()
