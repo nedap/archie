@@ -72,6 +72,12 @@ subprojects {
     }
     compile('commons-lang:commons-lang:2.6')
 
+    //java 10 no longer has these included by default, so explicit dependency is needed.
+    compile 'javax.xml.bind:jaxb-api:2.3.0'
+    compile 'com.sun.xml.bind:jaxb-core:2.3.0'
+    compile 'com.sun.xml.bind:jaxb-impl:2.3.0'
+    compile 'javax.activation:activation:1.1.1'
+
     testCompile 'junit:junit:4.12'
     testCompile 'org.slf4j:slf4j-simple:1.7.25'
   }
