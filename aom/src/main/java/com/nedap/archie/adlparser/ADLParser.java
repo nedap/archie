@@ -52,7 +52,7 @@ public class ADLParser {
     }
 
     public Archetype parse(InputStream stream) throws IOException {
-        return parse(CharStreams.fromStream(new BOMInputStream(stream)));
+        return parse(CharStreams.fromStream(new BOMInputStream(stream), Charset.availableCharsets().get("UTF-8")));
     }
 
     public Archetype parse(CharStream stream) {

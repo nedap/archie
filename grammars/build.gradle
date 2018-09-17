@@ -5,7 +5,7 @@ ext.antlrVersion = '4.7.1'
 
 generateGrammarSource { //antlr4
   outputDirectory = new File("${project.buildDir}/generated-src/antlr/main/com/nedap/archie/adlparser/antlr".toString())
-    arguments = ['-visitor', '-package', 'com.nedap.archie.adlparser.antlr'] + arguments
+    arguments = ['-visitor', '-package', 'com.nedap.archie.adlparser.antlr', '-encoding', 'utf-8'] + arguments
 }
 
 classes {
