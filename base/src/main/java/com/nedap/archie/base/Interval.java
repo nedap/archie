@@ -71,13 +71,13 @@ public class Interval<T>  extends OpenEHRBase {
         this.upperIncluded = upperIncluded;
     }
 
-    public static <T extends Comparable>  Interval lowerUnbounded(T upper, boolean upperIncluded) {
+    public static <T> Interval<T> lowerUnbounded(T upper, boolean upperIncluded) {
         Interval<T> result = new Interval<>(null, upper, true, upperIncluded);
         result.setLowerUnbounded(true);
         return result;
     }
 
-    public static <T extends Comparable>  Interval upperUnbounded(T lower, boolean lowerIncluded) {
+    public static <T> Interval<T> upperUnbounded(T lower, boolean lowerIncluded) {
         Interval<T> result = new Interval<>(lower, null, lowerIncluded, true);
         result.setUpperUnbounded(true);
         return result;
