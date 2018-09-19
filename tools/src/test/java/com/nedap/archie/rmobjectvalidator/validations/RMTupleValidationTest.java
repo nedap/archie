@@ -65,12 +65,12 @@ public class RMTupleValidationTest {
 
         RMObjectValidationMessage magnitudeMessage = result.get(0);
         assertEquals("/path/so/far/magnitude[id9999]", magnitudeMessage.getPath());
-        String magnitudeString = "The value -4.0 is not valid for constraint greater than 0";
+        String magnitudeString = "The value -4.0 must be greater than 0";
         assertEquals(magnitudeString, magnitudeMessage.getMessage());
 
         RMObjectValidationMessage unitsMessage = result.get(1);
         assertEquals("/path/so/far/units[id9999]", unitsMessage.getPath());
-        String unitsString = "The value wr/ong is not valid for constraint \"m/s\"";
+        String unitsString = "The value wr/ong must be \"m/s\"";
         assertEquals(unitsString, unitsMessage.getMessage());
     }
 

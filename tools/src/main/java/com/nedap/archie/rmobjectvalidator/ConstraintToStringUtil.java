@@ -1,48 +1,21 @@
 package com.nedap.archie.rmobjectvalidator;
 
-import com.nedap.archie.aom.CPrimitiveObject;
 import com.nedap.archie.base.Interval;
 import org.openehr.utils.message.I18n;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * Utility class to convert constraints to human readable constraints.
  */
 public class ConstraintToStringUtil {
     /**
-     * Convert constraint of Primitive object to human readable string.
-     * @param cPrimitiveObject Primitive object
-     * @return Human readable constraint
-     */
-    public static String primitiveObjectConstraintToString(CPrimitiveObject cPrimitiveObject) {
-        return constraintListToString(cPrimitiveObject.getConstraint());
-    }
-
-    /**
-     * Convert a constraint list to a human readable string.
-     * @param constraint Constraint list
-     * @return Human readable constraint
-     */
-    private static String constraintListToString(List<?> constraint) {
-        if(constraint.isEmpty()) {
-            return I18n.t("anything");
-        }
-
-        String delimiter = I18n.t(" or ");
-        return constraint.stream()
-            .map(ConstraintToStringUtil::constraintElementToString)
-            .collect(Collectors.joining(delimiter));
-    }
-
-    /**
      * Convert a constraint element to a human readable string.
      * @param element Constraint element.
      * @return Human readable constraint element
      */
-    private static String constraintElementToString(Object element) {
+    public static String constraintElementToString(Object element) {
         String result;
         if (element instanceof Interval) {
             result = intervalToString((Interval<?>) element);
@@ -59,7 +32,7 @@ public class ConstraintToStringUtil {
      * @param interval Interval
      * @return Human readable interval
      */
-    public static String intervalToString(Interval<?> interval) {
+    private static String intervalToString(Interval<?> interval) {
         String result;
 
         if (interval.isLowerUnbounded() && interval.isUpperUnbounded()) {
@@ -87,7 +60,7 @@ public class ConstraintToStringUtil {
         String result;
         if (interval.isLowerIncluded()) {
             // lower <= value
-            result = I18n.t("greater than or equal to {0}", interval.getLower());
+            result = I18n.t("at least {0}", interval.getLower());
         } else {
             // lower < value
             result = I18n.t("greater than {0}", interval.getLower());
@@ -99,7 +72,7 @@ public class ConstraintToStringUtil {
         String result;
         if (interval.isUpperIncluded()) {
             // value <= upper
-            result = I18n.t("less than or equal to {0}", interval.getUpper());
+            result = I18n.t("at most {0}", interval.getUpper());
         } else {
             // value < upper
             result = I18n.t("less than {0}", interval.getUpper());
@@ -107,4 +80,30 @@ public class ConstraintToStringUtil {
         return result;
     }
 
+    /**
+     * Convert a constraint list to a human readable string.
+     * @param constraint Constraint list
+     * @return Human readable constraint
+     */
+    public static String constraintListToString(List<?> constraint) {
+        if(constraint.isEmpty()) {
+            return I18n.t("anything");
+        }
+
+        StringBuilder sb = new StringBuilder();
+        boolean first = true;
+
+        // Make a list of constraint elements.
+        for(Object constraintElement : constraint) {
+            if(first) {
+                first = false;
+            } else {
+                sb.append('\n');
+            }
+            sb.append(" -\t");
+            sb.append(constraintElementToString(constraintElement));
+        }
+
+        return sb.toString();
+    }
 }

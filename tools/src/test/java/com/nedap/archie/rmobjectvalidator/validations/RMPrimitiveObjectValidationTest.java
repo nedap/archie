@@ -43,7 +43,7 @@ public class RMPrimitiveObjectValidationTest {
         RMObjectValidationMessage message = result.get(0);
 
         assertEquals("/path/so/far", message.getPath());
-        String expectedMessage = "The value -4 is not valid for constraint greater than or equal to 0";
+        String expectedMessage = "The value -4 must be at least 0";
         assertEquals(expectedMessage, message.getMessage());
     }
 
@@ -60,7 +60,9 @@ public class RMPrimitiveObjectValidationTest {
         RMObjectValidationMessage message = result.get(0);
 
         assertEquals("/path/so/far", message.getPath());
-        String expectedMessage = "The value -4 is not valid for constraint less than -10 or greater than or equal to 0";
+        String expectedMessage = "The value -4 must be one of:\n" +
+                " -\tless than -10\n" +
+                " -\tat least 0";
         assertEquals(expectedMessage, message.getMessage());
     }
 }

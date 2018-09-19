@@ -35,8 +35,17 @@ public class RMPrimitiveObjectValidation {
     }
 
     private static RMObjectValidationMessage createValidationMessage(Object value, String pathSoFar, CPrimitiveObject cobject) {
-        String constraint = ConstraintToStringUtil.primitiveObjectConstraintToString(cobject);
-        String message = RMObjectValidationMessageIds.rm_INVALID_FOR_CONSTRAINT.getMessage(constraint, value.toString());
+        List constraint = cobject.getConstraint();
+        String message;
+
+        if(constraint.size() == 1) {
+            String constraintStr = ConstraintToStringUtil.constraintElementToString(constraint.get(0));
+            message = RMObjectValidationMessageIds.rm_INVALID_FOR_CONSTRAINT.getMessage(value.toString(), constraintStr);
+        } else {
+            String constraintStr = ConstraintToStringUtil.constraintListToString(constraint);
+            message = RMObjectValidationMessageIds.rm_INVALID_FOR_CONSTRAINT_MULTIPLE.getMessage(value.toString()) + "\n" +
+                    constraintStr;
+        }
         return new RMObjectValidationMessage(cobject, pathSoFar, message);
     }
 }

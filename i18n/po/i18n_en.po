@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-14 11:00+0200\n"
+"POT-Creation-Date: 2018-09-19 12:59+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Pieter Bos <pieter.bos@nedap.com>\n"
 "Language-Team: \n"
@@ -11,10 +11,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 1.8.11\n"
-
-#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/ConstraintToStringUtil.java:35
-msgid " or "
-msgstr ""
 
 #: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:56
 #, java-format
@@ -26,17 +22,17 @@ msgstr ""
 msgid "Assertion violation processing RM schemas; original recipient: {0}"
 msgstr ""
 
-#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/RMObjectValidationMessageIds.java:13
+#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/RMObjectValidationMessageIds.java:14
 #, java-format
 msgid "Attribute does not match cardinality {0}"
 msgstr ""
 
-#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/RMObjectValidationMessageIds.java:15
+#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/RMObjectValidationMessageIds.java:16
 #, java-format
 msgid "Attribute has {0} occurrences, but must be {1}"
 msgstr ""
 
-#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/RMObjectValidationMessageIds.java:14
+#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/RMObjectValidationMessageIds.java:15
 #, java-format
 msgid "Attribute {0} of class {1} does not match existence {2}"
 msgstr ""
@@ -361,9 +357,14 @@ msgstr ""
 msgid "Schema {0} top-level sibling package definitions cannot include a package which is the child of another"
 msgstr ""
 
+#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/RMObjectValidationMessageIds.java:13
+#, java-format
+msgid "The value {0} must be one of:"
+msgstr ""
+
 #: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/RMObjectValidationMessageIds.java:12
 #, java-format
-msgid "The value {1} is not valid for constraint {0}"
+msgid "The value {0} must be {1}"
 msgstr ""
 
 #: ../bmm/src/main/java/org/openehr/bmm/persistence/validation/BmmMessageIds.java:54
@@ -375,37 +376,37 @@ msgstr ""
 msgid "Unknown exception processing RM schemas"
 msgstr ""
 
-#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/ConstraintToStringUtil.java:32
-#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/ConstraintToStringUtil.java:68
+#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/ConstraintToStringUtil.java:40
+#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/ConstraintToStringUtil.java:90
 msgid "anything"
 msgstr ""
 
-#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/ConstraintToStringUtil.java:78
+#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/ConstraintToStringUtil.java:63
+#, java-format
+msgid "at least {0}"
+msgstr ""
+
+#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/ConstraintToStringUtil.java:75
+#, java-format
+msgid "at most {0}"
+msgstr ""
+
+#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/ConstraintToStringUtil.java:50
 #, java-format
 msgid "equal to {0}"
 msgstr ""
 
-#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/ConstraintToStringUtil.java:91
-#, java-format
-msgid "greater than or equal to {0}"
-msgstr ""
-
-#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/ConstraintToStringUtil.java:94
+#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/ConstraintToStringUtil.java:66
 #, java-format
 msgid "greater than {0}"
 msgstr ""
 
-#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/ConstraintToStringUtil.java:103
-#, java-format
-msgid "less than or equal to {0}"
-msgstr ""
-
-#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/ConstraintToStringUtil.java:106
+#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/ConstraintToStringUtil.java:78
 #, java-format
 msgid "less than {0}"
 msgstr ""
 
-#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/ConstraintToStringUtil.java:80
+#: ../tools/src/main/java/com/nedap/archie/rmobjectvalidator/ConstraintToStringUtil.java:52
 #, java-format
 msgid "{0} and {1}"
 msgstr ""
