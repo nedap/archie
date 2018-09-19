@@ -61,6 +61,15 @@ public class BmmGenericClass extends BmmClass implements Serializable {
     }
 
     /**
+     * Returns the internal bmm generic property map for this class.
+     *
+     * @return
+     */
+    public Map<String, BmmGenericParameter> getGenericParameterIndex() {
+        return genericParameters;
+    }
+
+    /**
      * Sets list of generic parameter definitions, keyed by name of generic parameter; these are defined either directly
      * on this class or by the addition of an ancestor class which is generic.
      *
@@ -90,6 +99,28 @@ public class BmmGenericClass extends BmmClass implements Serializable {
      */
     public BmmGenericParameter getGenericParameter(String genericParameterName) {
         return genericParameters.get(genericParameterName.toUpperCase());
+    }
+
+    /**
+     * Removes the generic parameter from the set of generic parameters defined for this class if
+     * the parameter exists in the collection.
+     *
+     * @param genericParameter
+     * @return
+     */
+    public BmmGenericParameter removeGenericParameter(BmmGenericParameter genericParameter) {
+        return genericParameters.remove(genericParameter.getName().toUpperCase());
+    }
+
+    /**
+     * Removes a generic parameter of that name from the set of generic parameters defined for this class if a parameter
+     * entry of that name exists in the collection.
+     *
+     * @param parameterName
+     * @return
+     */
+    public BmmGenericParameter removeGenericParameter(String parameterName) {
+        return genericParameters.remove(parameterName.toUpperCase());
     }
 
     /**
