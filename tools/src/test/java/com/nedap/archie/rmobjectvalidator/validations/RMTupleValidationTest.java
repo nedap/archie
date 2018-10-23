@@ -115,7 +115,7 @@ public class RMTupleValidationTest {
 
         RMObjectValidationMessage unitsMessage = result.get(0);
         assertEquals("/path/so/far/units[id9999]", unitsMessage.getPath());
-        String unitsString = "The value \"\" must be \"m/s\"";
+        String unitsString = "The value empty must be \"m/s\"";
         assertEquals(unitsString, unitsMessage.getMessage());
     }
 
