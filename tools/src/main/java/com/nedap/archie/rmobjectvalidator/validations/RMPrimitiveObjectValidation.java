@@ -6,6 +6,7 @@ import com.nedap.archie.rminfo.ModelInfoLookup;
 import com.nedap.archie.rmobjectvalidator.ConstraintToStringUtil;
 import com.nedap.archie.rmobjectvalidator.RMObjectValidationMessage;
 import com.nedap.archie.rmobjectvalidator.RMObjectValidationMessageIds;
+import org.openehr.utils.message.I18n;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,12 +41,20 @@ public class RMPrimitiveObjectValidation {
 
         if(constraint.size() == 1) {
             String constraintStr = ConstraintToStringUtil.constraintElementToString(constraint.get(0));
-            message = RMObjectValidationMessageIds.rm_INVALID_FOR_CONSTRAINT.getMessage(value.toString(), constraintStr);
+            message = RMObjectValidationMessageIds.rm_INVALID_FOR_CONSTRAINT.getMessage(getValueString(value), constraintStr);
         } else {
             String constraintStr = ConstraintToStringUtil.constraintListToString(constraint);
-            message = RMObjectValidationMessageIds.rm_INVALID_FOR_CONSTRAINT_MULTIPLE.getMessage(value.toString()) + "\n" +
+            message = RMObjectValidationMessageIds.rm_INVALID_FOR_CONSTRAINT_MULTIPLE.getMessage(getValueString(value)) + "\n" +
                     constraintStr;
         }
         return new RMObjectValidationMessage(cobject, pathSoFar, message);
+    }
+
+    private static String getValueString(Object value) {
+        if(value == null) {
+            return I18n.t("empty");
+        }
+
+        return (value instanceof String) ? "\"" + value.toString() + "\"" : value.toString();
     }
 }
