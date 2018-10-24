@@ -53,6 +53,13 @@ definition
                                             }
                                         }
                                     }
+									ELEMENT[id8] matches {
+                                        null_flavour matches {
+                                            DV_CODED_TEXT[id80] matches {
+                                                defining_code matches {[ac1]}
+                                            }
+										}
+									}
 								}
 							}
 						}
@@ -66,6 +73,7 @@ rules
 	/data[id2]/events[id3]/data[id4]/items[id5]/value/value matches {"test string"}
 	/data[id2]/events[id3]/data[id4]/items[id6]/value/defining_code matches {[at1]}
 	/data[id2]/events[id3]/data[id4]/items[id7]/value/symbol matches {[at6]}
+	/data[id2]/events[id3]/data[id4]/items[id8]/null_flavour/defining_code matches {[at1]}
 
 terminology
 	term_definitions = <
