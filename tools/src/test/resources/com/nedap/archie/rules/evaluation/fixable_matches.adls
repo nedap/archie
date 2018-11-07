@@ -31,28 +31,35 @@ definition
 							ITEM_TREE[id4] matches {
 								items cardinality matches {1..*; unordered} matches {
 									ELEMENT[id5] matches {
-									    value matches {
-                                            DV_TEXT[id64]
-                                        }
+										value matches {
+											DV_TEXT[id64]
+										}
 									}
 									ELEMENT[id6] matches {
-                                        value matches {
-                                            DV_CODED_TEXT[id54] matches {
-                                                defining_code matches {[ac1]}
-                                            }
+										value matches {
+											DV_CODED_TEXT[id54] matches {
+												defining_code matches {[ac1]}
+											}
 										}
 									}
 									ELEMENT[id7] matches {
-                                        value matches {
-                                            DV_ORDINAL[id75] matches {
-                                                [value, symbol] matches {
-                                                    [{0}, {[at6]}],
-                                                    [{1}, {[at7]}],
-                                                    [{2}, {[at8]}]
-                                                }
-                                            }
-                                        }
-                                    }
+										value matches {
+											DV_ORDINAL[id75] matches {
+												[value, symbol] matches {
+													[{0}, {[at6]}],
+													[{1}, {[at7]}],
+													[{2}, {[at8]}]
+												}
+											}
+										}
+									}
+									ELEMENT[id8] matches {
+										null_flavour matches {
+											DV_CODED_TEXT[id80] matches {
+												defining_code matches {[ac1]}
+											}
+										}
+									}
 								}
 							}
 						}
@@ -66,6 +73,7 @@ rules
 	/data[id2]/events[id3]/data[id4]/items[id5]/value/value matches {"test string"}
 	/data[id2]/events[id3]/data[id4]/items[id6]/value/defining_code matches {[at1]}
 	/data[id2]/events[id3]/data[id4]/items[id7]/value/symbol matches {[at6]}
+	/data[id2]/events[id3]/data[id4]/items[id8]/null_flavour/defining_code matches {[at1]}
 
 terminology
 	term_definitions = <
@@ -75,15 +83,15 @@ terminology
 				description = <"The local measurement of arterial blood pressure which is a surrogate for arterial. pressure in the systemic circulation.  Most commonly, use of the term 'blood pressure' refers to measurement of brachial artery pressure in the upper arm.">
 			>
 			["at1"] = <
-                text = <"Option 1">
-                description = <"Option 1">
-            >
+				text = <"Option 1">
+				description = <"Option 1">
+			>
 		>
-    >
-    value_sets = <
-        ["ac1"] = <
-            id = <"ac1">
-            members = <"at1", "at2", "at3">
-        >
-    >
+	>
+	value_sets = <
+		["ac1"] = <
+			id = <"ac1">
+			members = <"at1", "at2", "at3">
+		>
+	>
 
