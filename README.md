@@ -356,8 +356,14 @@ The RMObjectCreator creates empty reference model objects based on constraints. 
                     children.add(childObject);
                 }
             }
-            //will fail when a single valued attribute has two values, check code in TestUtil.java for how to solve.
-            creator.set(result, attribute.getRmAttributeName(), children);
+            if(!children.isEmpty()) {
+                if(attribute.isMultiple()) {
+                    creator.set(result, attribute.getRmAttributeName(), children);
+                } else if(!children.isEmpty()){
+                    //set the first possible result in case of multiple children for a single valued value
+                    creator.set(result, attribute.getRmAttributeName(), Lists.newArrayList(children.get(0)));
+                }
+            }
         }
         return result;
     }
@@ -524,7 +530,7 @@ Archie uses its own reference model by default, but it can use any reference mod
 
 ## Status
 
-The project is used in production in an EHR systems and completely or nearly completely implements the standards for all describedfeatures. Of course there are many parts that can be extended and improved.
+The project is used in production in an EHR systems and completely or nearly completely implements the standards for all described features. Of course there are many parts that can be extended and improved.
 
 ## Contributions
 
