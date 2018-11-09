@@ -342,26 +342,31 @@ The RMObjectCreator creates empty reference model objects based on constraints. 
 ```java
   public void createEmptyRMObject(CObject object) {
     RMObjectCreator creator = new RMObjectCreator(ArchieRMInfoLookup.getInstance());
-    constructEmptyRMObject(creator, cObject);
+    constructEmptyRMObject(ArchieRMInfoLookup.getInstance(), creator, cObject);
   }
 
 
- private RMObject constructEmptyRMObject(RMObjectCreator creator, CObject object) {
+ private RMObject constructEmptyRMObject(ModelInfoLookup lookup, RMObjectCreator creator, CObject object) {
         RMObject result = creator.create(object);
         for(CAttribute attribute: object.getAttributes()) {
             List<Object> children = new ArrayList<>();
             for(CObject childConstraint:attribute.getChildren()) {
                 if(childConstraint instanceof CComplexObject) {
-                    RMObject childObject = constructEmptyRMObject(creator, childConstraint);
+                    //in case of abstract classes used in the archetype, this will pick a non-abstract descendant class
+                    RMObject childObject = constructEmptyRMObject(lookup, creator, childConstraint);
                     children.add(childObject);
                 }
             }
             if(!children.isEmpty()) {
-                if(attribute.isMultiple()) {
-                    creator.set(result, attribute.getRmAttributeName(), children);
-                } else if(!children.isEmpty()){
-                    //set the first possible result in case of multiple children for a single valued value
-                    creator.set(result, attribute.getRmAttributeName(), Lists.newArrayList(children.get(0)));
+                //this is not BMM, but access to the actual RM implementation because that is what we need here
+                RMAttributeInfo attributeInfo = lookup.getAttributeInfo(result.getClass(), attribute.getRmAttributeName());
+                if(attributeInfo != null) {
+                    if(attributeInfo.isMultipleValued()) {
+                        creator.set(result, attribute.getRmAttributeName(), children);
+                    } else if(!children.isEmpty()){
+                        //set the first possible result in case of multiple children for a single valued value
+                        creator.set(result, attribute.getRmAttributeName(), Lists.newArrayList(children.get(0)));
+                    }
                 }
             }
         }
