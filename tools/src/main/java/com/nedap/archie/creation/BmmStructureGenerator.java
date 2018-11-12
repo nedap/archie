@@ -75,7 +75,6 @@ public class BmmStructureGenerator {
         addAdditionalPropertiesAtBegin(classDefinition, result, cObject);
 
 
-
         for (CAttribute attribute : cObject.getAttributes()) {
             BmmProperty property = AOMUtils.getPropertyAtPath(bmm, cObject.getRmTypeName(), attribute.getRmAttributeName());
             List<Object> children = new ArrayList<>();
@@ -124,7 +123,6 @@ public class BmmStructureGenerator {
         //add all mandatory properties from the RM
         for (BmmProperty property : properties.values()) {
             if (property.getMandatory() && !result.containsKey(property.getName())) {
-
                 addRequiredProperty(result, property);
             }
         }
@@ -147,7 +145,6 @@ public class BmmStructureGenerator {
             } else {
                 result.put(property.getName(), constructExampleType(actualType));
             }
-
         }
     }
 
@@ -253,6 +250,7 @@ public class BmmStructureGenerator {
     }
 
     private Object generateTerminologyCode(CTerminologyCode child) {
+        //TODO: if child is a subconstaint of a DV_ORDINAL.symbol, manually convert to DV_CODED_TEXT. OpenEHR RM only of course
         if(aomProfile == null) {
             return "cannot convert CTerminologyCode without AOM profile";
         }
