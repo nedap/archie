@@ -1,28 +1,68 @@
-apply plugin: 'jacoco'
 
   
-def generatedSources = ["**/com/nedap/archie/adlparser/antlr**"]
+def generatedSources = "**/nedap/archie/adlparser/antlr**"
 
-test {
+allprojects {
+  apply plugin: 'jacoco'
+}
+
+subprojects {
   jacoco {
-    excludes = generatedSources
+    toolVersion = "0.8.2"  
   }
-   testLogging {
-      events "failed"
-      exceptionFormat "full"
+
+  test {
+     testLogging {
+        events "failed"
+        exceptionFormat "full"
+    }
   }
+
+  jacocoTestReport {
+     // doFirst {
+      //      classDirectories = fileTree(dir: "${buildDir}/classes/main/").exclude(generatedSources)
+     // }
+      reports {
+          xml.enabled = true
+          html.enabled = true
+      }
+      additionalSourceDirs = files(sourceSets.main.allSource.srcDirs)
+      sourceDirectories = files(sourceSets.main.allSource.srcDirs)
+      classDirectories =  files(sourceSets.main.output)
+      afterEvaluate {
+        classDirectories = files(classDirectories.files.collect {
+           fileTree(dir: it, exclude: generatedSources)
+        })
+      }
+      //do not check the generated source 
+  }
+
+  check.dependsOn jacocoTestReport
 }
 
-jacocoTestReport {
-    doFirst {
-          classDirectories = fileTree(dir: "${buildDir}/classes/main/").exclude(generatedSources)
-    }
+task jacocoRootReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
+    dependsOn = subprojects.test
+    additionalSourceDirs = files(subprojects.sourceSets.main.allSource.srcDirs)
+    sourceDirectories = files(subprojects.sourceSets.main.allSource.srcDirs)
+    classDirectories =  files(subprojects.sourceSets.main.output)
+    executionData = files(subprojects.jacocoTestReport.executionData)
     reports {
-        xml.enabled = true
         html.enabled = true
+        xml.enabled = true
+        csv.enabled = false
     }
-    sourceSets sourceSets.main
-    //do not check the generated source 
-}
+    onlyIf = {
+        true
+    }
+    doFirst {
+        executionData = files(executionData.findAll {
+            it.exists()
+        })
+    }
 
-check.dependsOn jacocoTestReport
+    afterEvaluate {
+      classDirectories = files(classDirectories.files.collect {
+         fileTree(dir: it, exclude:  "**/nedap/archie/adlparser/antlr**")
+      })
+    }
+}
