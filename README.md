@@ -38,10 +38,9 @@ If you want to depend on just the AOM and BMM, without any reference model imple
 ## Build
 
 [![Build Status](https://travis-ci.org/openEHR/archie.svg?branch=master)](https://travis-ci.org/openEHR/archie)
-
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/edf860e2c9a5478e99b3be63531fd7f3)](https://www.codacy.com/app/pieter-bos/archie_2?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=openEHR/archie&amp;utm_campaign=Badge_Grade)
 
 the following is from the old repository and not up to date, but gives an impression:
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/dda8ce2b837a40b5b50cf52dae95764d)](https://www.codacy.com/app/pieter-bos/archie?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=nedap/archie&amp;utm_campaign=Badge_Grade)
 [![Codecov Badge](https://img.shields.io/codecov/c/github/nedap/archie.svg)](https://codecov.io/gh/nedap/archie)
 
 You need Java 8 to build. Check out the source and type:
