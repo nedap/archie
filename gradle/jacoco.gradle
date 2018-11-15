@@ -1,6 +1,6 @@
 
-  
-def generatedSources = "**/nedap/archie/adlparser/antlr**"
+//the generated ANTLR sources plus the OpenEHR Test RM implementation do not need coverage
+def excludedPaths = ["**/nedap/archie/adlparser/antlr**", "**/nedap/archie/openehrtestrm/**"]
 
 allprojects {
   apply plugin: 'jacoco'
@@ -19,9 +19,6 @@ subprojects {
   }
 
   jacocoTestReport {
-     // doFirst {
-      //      classDirectories = fileTree(dir: "${buildDir}/classes/main/").exclude(generatedSources)
-     // }
       reports {
           xml.enabled = true
           html.enabled = true
@@ -31,10 +28,9 @@ subprojects {
       classDirectories =  files(sourceSets.main.output)
       afterEvaluate {
         classDirectories = files(classDirectories.files.collect {
-           fileTree(dir: it, exclude: generatedSources)
+           fileTree(dir: it, excludes: excludedPaths)
         })
       }
-      //do not check the generated source 
   }
 
   check.dependsOn jacocoTestReport
@@ -51,6 +47,10 @@ task jacocoRootReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
         xml.enabled = true
         csv.enabled = false
     }
+
+    //The following is added because otherwise jacoco fails with packages without any test code
+    //as we have for example 'archie-all' that only combines the other projects in a single pom.xml, plus some 
+    //packages that are tested in the tools package, this is required
     onlyIf = {
         true
     }
@@ -59,10 +59,11 @@ task jacocoRootReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
             it.exists()
         })
     }
+    //end of code needed for packages without tests
 
     afterEvaluate {
       classDirectories = files(classDirectories.files.collect {
-         fileTree(dir: it, exclude:  "**/nedap/archie/adlparser/antlr**")
+         fileTree(dir: it, excludes:  excludedPaths)
       })
     }
 }
