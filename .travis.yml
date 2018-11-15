@@ -3,6 +3,11 @@ sudo: false
 jdk:
   - oraclejdk8
   - oraclejdk9
+before_script:
+  - chmod +x gradlew
+script:
+  - ./gradlew check
+  - ./gradlew jacocoRootReport
 cache:
   directories:
     - $HOME/.gradle/wrapper
@@ -10,6 +15,4 @@ cache:
     - $HOME/.gradle/daemon
     - $HOME/.gradle/caches
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
-  - curl -o codacy.jar https://oss.sonatype.org/service/local/repositories/releases/content/com/codacy/codacy-coverage-reporter/2.0.0/codacy-coverage-reporter-2.0.0-assembly.jar
-  - java -cp codacy.jar com.codacy.CodacyCoverageReporter -l Java -r ./build/reports/jacoco/test/jacocoTestReport.xml
+  - curl -s https://codecov.io/bash | bash -s - -f ./build/reports/jacoco/jacocoRootReport/jacocoRootReport.xml
