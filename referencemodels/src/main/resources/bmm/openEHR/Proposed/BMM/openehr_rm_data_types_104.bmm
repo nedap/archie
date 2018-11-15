@@ -327,7 +327,7 @@ class_definitions = <
 			["magnitude_status"] = (P_BMM_SINGLE_PROPERTY) <
 				name = <"magnitude_status">
 				type = <"String">
-				is_mandatory = <True>
+				is_mandatory = <False>
 				is_im_runtime = <True>
 			>
 		>

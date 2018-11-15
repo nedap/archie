@@ -40,9 +40,16 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * generates an example structure for any model based on an operational template
+ * generates an example structure for any model based on an operational template + a BMM model + the AOP profile
+ *
+ * Output is a Map<String, Object>, where object is again a Map<String, Object>, or a simple type directly serializable
+ * using the jackson object mapper. This can be simply serialized to JSON if desired.
+ *
+ *
+ * This contains a tiny bit of OpenEHR RM specific code, that is to be converted to subclasses for the different RMs
+ * BMM + AOP simply does nto contain enough information for this to be truly RM independent
  */
-public class BmmStructureGenerator {
+public  class ExampleJsonInstanceGenerator {
 
     private final String language;
     private final MetaModels models;
@@ -51,7 +58,7 @@ public class BmmStructureGenerator {
     private BMMConstraintImposer constraintImposer;
     private AomProfile aomProfile;
 
-    public BmmStructureGenerator(MetaModels models, String language) {
+    public ExampleJsonInstanceGenerator(MetaModels models, String language) {
         this.language = language;
         this.models = models;
     }
@@ -68,7 +75,7 @@ public class BmmStructureGenerator {
     private Map<String, Object> generate(CComplexObject cObject) {
 
         Map<String, Object> result = new LinkedHashMap<>();
-        result.put("@type", cObject.getRmTypeName());
+        result.put("@type", getConcreteTypeName(cObject.getRmTypeName()));
 
         BmmClass classDefinition = bmm.getClassDefinition(BmmDefinitions.typeNameToClassKey(cObject.getRmTypeName()));
 
@@ -118,6 +125,24 @@ public class BmmStructureGenerator {
 
     }
 
+    protected String getConcreteTypeName(String rmTypeName) {
+
+        String classKey = BmmDefinitions.typeNameToClassKey(rmTypeName);
+        BmmClass classDefinition = bmm.getClassDefinition(classKey);
+        if(classDefinition.isAbstract()) {
+            List<String> allDescendants = classDefinition.findAllDescendants();
+            for(String descendant: allDescendants) {
+                BmmClass descendantClassDefinition = bmm.getClassDefinition(descendant);
+                if(!descendantClassDefinition.isAbstract()) {
+                    return descendantClassDefinition.getTypeName();
+                }
+
+            }
+        }
+        //not abstract or cannot find a non-abstract subclass. Return the original parameters
+        return rmTypeName;
+    }
+
     private void addRequiredPropertiesFromBmm(Map<String, Object> result, BmmClass classDefinition) {
         Map<String, BmmProperty> properties = classDefinition.flattenBmmClass().getProperties();
         //add all mandatory properties from the RM
@@ -148,9 +173,13 @@ public class BmmStructureGenerator {
         }
     }
 
-    private Object constructExampleType(String actualType) {
+    private Map<String, Object> constructExampleType(String actualType) {
+        Map<String, Object> custom = generateCustomExampleType(actualType);
+        if(custom != null) {
+            return custom;
+        }
         Map<String, Object> result = new LinkedHashMap<>();
-        String className = BmmDefinitions.typeNameToClassKey(actualType);
+        String className = getConcreteTypeName(actualType);
         BmmClass classDefinition = bmm.getClassDefinition(BmmDefinitions.typeNameToClassKey(actualType));
         result.put("@type", className);
         if(classDefinition != null) {
@@ -180,6 +209,13 @@ public class BmmStructureGenerator {
     }
 
     private void generateCPrimitive(List<Object> children, CPrimitiveObject child) {
+        //optionally create a custom mapping for the current RM. useful to map to strange objects
+        //such as mapping a CTerminologyCode to a DV_CODED_TEXT in OpenEHR ERM
+        Object customMapping = generateCustomMapping(child);
+        if(customMapping != null) {
+            children.add(customMapping);
+            return;
+        }
         if(child instanceof CString) {
             CString string = (CString) child;
             if (string.getConstraint() != null && !string.getConstraint().isEmpty()) {
@@ -249,6 +285,8 @@ public class BmmStructureGenerator {
         }
     }
 
+
+
     private Object generateTerminologyCode(CTerminologyCode child) {
         //TODO: if child is a subconstaint of a DV_ORDINAL.symbol, manually convert to DV_CODED_TEXT. OpenEHR RM only of course
         if(aomProfile == null) {
@@ -313,6 +351,47 @@ public class BmmStructureGenerator {
 
     }
 
+
+    ///// BEGIN OPENEHR RM SPECIFIC CODE TO BE EXTRACTED /////
+
+    /**
+     * Generate a custom JSON mapping if required by the given CPrimitiveObject at the given place in the tree.
+     * @param child
+     * @return the custom JSON mapping, or null if no custom mapping is required
+     */
+    private Object generateCustomMapping(CPrimitiveObject child) {
+        if(child instanceof CTerminologyCode) {
+            CTerminologyCode cTermCode = (CTerminologyCode) child;
+
+            CAttribute parentAttribute = child.getParent();
+            CComplexObject parentObject = (CComplexObject) parentAttribute.getParent();
+            BmmClass classDefinition = bmm.getClassDefinition(BmmDefinitions.typeNameToClassKey(parentObject.getRmTypeName()));
+            if(classDefinition == null) {
+                return null;
+            }
+            BmmProperty property = classDefinition.flattenBmmClass().getProperties().get(parentAttribute.getRmAttributeName());
+            if(property == null) {
+                return null;
+            }
+            if(property.getType().getTypeName().equalsIgnoreCase("DV_CODED_TEXT")) {
+                Object codePhrase = this.generateTerminologyCode(cTermCode);
+                Map<String, Object> dvCodedText = constructExampleType("DV_CODED_TEXT");
+                dvCodedText.put("defining_code", codePhrase);
+                if(codePhrase instanceof Map) {
+                    Map<String, Object> definingCode = (Map<String, Object>) codePhrase;
+                    String codeString = (String) definingCode.get("code_string");//TODO: check terminology code to be local?
+                    ArchetypeTerm term = archetype.getTerm(child, codeString, language);
+                    dvCodedText.put("value", term.getText());
+                }
+
+                return dvCodedText;
+            } else {
+                return null;
+            }
+        }
+
+        return null;
+    }
     /** Add any properties required for this specific RM based on the CObject. For openEHR RM, this should at least
      * set the name if present
      */
@@ -362,4 +441,35 @@ public class BmmStructureGenerator {
             }
         }
     }
+
+    private Map<String, Object> generateCustomExampleType(String actualType) {
+        if(actualType.equalsIgnoreCase("DV_DATE_TIME")) {
+            //In BMM, value is a string, and not a date time, so impossible to map automatically
+            LinkedHashMap<String, Object> result = new LinkedHashMap<>();
+            result.put("@type", "DV_DATE_TIME");
+            result.put("value", "2018-01-01T12:00:00+0000");
+            return result;
+        } else if (actualType.equalsIgnoreCase("DV_DATE")) {
+            //In BMM, value is a string, and not a date time, so impossible to map automatically
+            LinkedHashMap<String, Object> result = new LinkedHashMap<>();
+            result.put("@type", "DV_DATE");
+            result.put("value", "2018-01-01");
+            return result;
+        }  else if (actualType.equalsIgnoreCase("DV_TIME")) {
+            //In BMM, value is a string, and not a date time, so impossible to map automatically
+            LinkedHashMap<String, Object> result = new LinkedHashMap<>();
+            result.put("@type", "DV_TIME");
+            result.put("value", "12:00:00");
+            return result;
+        }  else if (actualType.equalsIgnoreCase("DV_DURATION")) {
+            //In BMM, value is a string, and not a date time, so impossible to map automatically
+            LinkedHashMap<String, Object> result = new LinkedHashMap<>();
+            result.put("@type", "DV_DURATION");
+            result.put("value", "PT20m");
+            return result;
+        }
+        return null;
+    }
+
+    ///// END OPENEHR RM SPECIFIC CODE TO BE EXTRACTED /////
 }

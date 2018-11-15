@@ -27,7 +27,7 @@ public class ArchetypeID extends ObjectId {
      * Parse the Archetype id from a string
      * @param value
      */
-    @JsonCreator
+    @JsonCreator(mode= JsonCreator.Mode.DELEGATING)
     public ArchetypeID(String value) {
 
         Pattern p = Pattern.compile("((?<namespace>.*)::)?(?<publisher>.*)-(?<package>.*)-(?<class>.*)\\.(?<concept>.*)(-(?<specialisation>.*))?\\.v(?<version>.*)");
