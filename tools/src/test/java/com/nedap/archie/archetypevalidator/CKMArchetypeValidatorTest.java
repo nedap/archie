@@ -8,6 +8,7 @@ import com.nedap.archie.flattener.InMemoryFullArchetypeRepository;
 import com.nedap.archie.rminfo.ArchieRMInfoLookup;
 import com.nedap.archie.rminfo.MetaModels;
 import com.nedap.archie.rminfo.ReferenceModels;
+import com.nedap.archie.testutil.TestUtil;
 import org.junit.Test;
 import org.openehr.referencemodels.BuiltinReferenceModels;
 import org.reflections.Reflections;
@@ -50,7 +51,7 @@ public class CKMArchetypeValidatorTest {
     @Test
     public void fullCKMTest() {
 
-        FullArchetypeRepository repository = parseCKM();
+        FullArchetypeRepository repository = TestUtil.parseCKM();
         ReferenceModels models = new ReferenceModels();
         models.registerModel(ArchieRMInfoLookup.getInstance());
         repository.compile(models);
@@ -63,7 +64,7 @@ public class CKMArchetypeValidatorTest {
     public void fullCKMTestBmm() {
         MetaModels bmmReferenceModels = new MetaModels(null, BuiltinReferenceModels.getBMMReferenceModels(), BuiltinReferenceModels.getAomProfiles());
 
-        FullArchetypeRepository repository = parseCKM();
+        FullArchetypeRepository repository = TestUtil.parseCKM();
         repository.compile(bmmReferenceModels);
 
         runTest(repository);
@@ -86,25 +87,5 @@ public class CKMArchetypeValidatorTest {
         assertTrue(error.toString(), resultWithErrors.isEmpty());
     }
 
-    private FullArchetypeRepository parseCKM() {
-        InMemoryFullArchetypeRepository result = new InMemoryFullArchetypeRepository();
-        Reflections reflections = new Reflections("ckm-mirror", new ResourcesScanner());
-        List<String> adlFiles = new ArrayList(reflections.getResources(Pattern.compile(".*\\.adls")));
-        for(String file:adlFiles) {
-            Archetype archetype = null;
-            Exception exception = null;
-            ANTLRParserErrors errors = null;
-            try (InputStream stream = getClass().getResourceAsStream("/" + file)) {
-                ADLParser parser = new ADLParser();
-                parser.setLogEnabled(false);
-                archetype = parser.parse(stream);
-                errors = parser.getErrors();
-                if (errors.hasNoErrors()) {
-                    result.addArchetype(archetype);
-                }
-            } catch (Exception e) {
-            }
-        }
-        return result;
-    }
+
 }

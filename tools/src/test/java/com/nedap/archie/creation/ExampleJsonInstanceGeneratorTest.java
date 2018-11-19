@@ -6,13 +6,19 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.nedap.archie.adlparser.ADLParser;
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.OperationalTemplate;
+import com.nedap.archie.archetypevalidator.ValidationResult;
 import com.nedap.archie.flattener.Flattener;
+import com.nedap.archie.flattener.FullArchetypeRepository;
 import com.nedap.archie.flattener.InMemoryFullArchetypeRepository;
 import com.nedap.archie.json.JacksonUtil;
 import com.nedap.archie.rm.RMObject;
 import com.nedap.archie.rm.composition.Observation;
+import com.nedap.archie.testutil.TestUtil;
 import org.junit.Test;
 import org.openehr.referencemodels.BuiltinReferenceModels;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,6 +29,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class ExampleJsonInstanceGeneratorTest {
+
+    private static Logger logger = LoggerFactory.getLogger(ExampleJsonInstanceGeneratorTest.class);
 
     @Test
     public void bloodPressure() throws Exception {
@@ -95,6 +103,46 @@ public class ExampleJsonInstanceGeneratorTest {
         //check the ordinal creation, including correct DV_CODED_TEXT and CODE_PHRASE
         assertTrue(s.contains("{\"@type\":\"DV_ORDINAL\",\"value\":0,\"symbol\":{\"@type\":\"DV_CODED_TEXT\",\"defining_code\":{\"@type\":\"CODE_PHRASE\",\"terminology_id\":\"local\",\"code_string\":\"at11\"},\"value\":\"Absent\"}}}]},"));
     }
+
+
+    @Test
+    public void generateAllCKMExamples() throws Exception {
+        ExampleJsonInstanceGenerator structureGenerator = new ExampleJsonInstanceGenerator(BuiltinReferenceModels.getMetaModels(), "en");
+        FullArchetypeRepository repository = TestUtil.parseCKM();
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.enable(SerializationFeature.INDENT_OUTPUT);
+        int numberCreated = 0, validationFailed = 0, generatedException = 0;
+        repository.compile(BuiltinReferenceModels.getMetaModels());
+        for(ValidationResult result:repository.getAllValidationResults()) {
+            if(result.passes()) {
+                String value = "";
+                try {
+                    Flattener flattener = new Flattener(repository, BuiltinReferenceModels.getMetaModels()).createOperationalTemplate(true);
+                    OperationalTemplate template = (OperationalTemplate) flattener.flatten(result.getSourceArchetype());
+                    Map<String, Object> example = structureGenerator.generate(template);
+                    value = mapper.writeValueAsString(example);
+                    JacksonUtil.getObjectMapper().readValue(value, RMObject.class);
+                    if(numberCreated < 10) {
+
+                        logger.info(value);
+                    }
+                    numberCreated++;
+                } catch (Exception e) {
+                    if(generatedException <= 0) {
+                        logger.error("error generating example", e);
+                        logger.error(value);
+                    }
+                    generatedException++;
+                }
+            } else {
+                validationFailed++;
+            }
+
+
+        }
+        logger.info("created " + numberCreated + " examples, " + validationFailed + " failed to validate, " + generatedException + " threw exception in test");
+    }
+
 
     private OperationalTemplate createOPT(String s2) throws IOException {
         Archetype archetype = parse(s2);

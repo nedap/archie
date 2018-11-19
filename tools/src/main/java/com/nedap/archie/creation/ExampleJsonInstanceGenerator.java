@@ -29,6 +29,8 @@ import com.nedap.archie.base.MultiplicityInterval;
 import com.nedap.archie.rminfo.MetaModels;
 import org.openehr.bmm.core.BmmClass;
 import org.openehr.bmm.core.BmmContainerProperty;
+import org.openehr.bmm.core.BmmEnumerationInteger;
+import org.openehr.bmm.core.BmmEnumerationString;
 import org.openehr.bmm.core.BmmModel;
 import org.openehr.bmm.core.BmmProperty;
 import org.openehr.bmm.core.BmmType;
@@ -73,9 +75,12 @@ public  class ExampleJsonInstanceGenerator {
     }
 
     private Map<String, Object> generate(CComplexObject cObject) {
-
-        Map<String, Object> result = new LinkedHashMap<>();
-        result.put("@type", getConcreteTypeName(cObject.getRmTypeName()));
+        String type = getConcreteTypeName(cObject.getRmTypeName());
+        Map<String, Object> result = generateCustomExampleType(type);
+        if(result == null) {
+            result = new LinkedHashMap<>();
+            result.put("@type", type);
+        }
 
         BmmClass classDefinition = bmm.getClassDefinition(BmmDefinitions.typeNameToClassKey(cObject.getRmTypeName()));
 
@@ -100,7 +105,8 @@ public  class ExampleJsonInstanceGenerator {
                         generateCPrimitive(children, (CPrimitiveObject) child);
                     } else if (child instanceof ArchetypeSlot) {
                         Map<String, Object> next = new LinkedHashMap<>();
-                        next.put("@type", child.getRmTypeName());
+                        String concreteTypeName = getConcreteTypeName(child.getRmTypeName());
+                        next.put("@type", concreteTypeName);
                         //TODO: indicate this is an archetype slot
                         addAdditionalPropertiesAtBegin(classDefinition, next, child);
                         addAdditionalPropertiesAtEnd(classDefinition, next, child);
@@ -155,11 +161,15 @@ public  class ExampleJsonInstanceGenerator {
 
     private void addRequiredProperty(Map<String, Object> result, BmmProperty property) {
         BmmType type = property.getType();
+        BmmClass propertyClass = type.getBaseClass();
         if (property instanceof BmmContainerProperty) {
             List<Map<String, Object>> children = new ArrayList<>();
             result.put(property.getName(), children);
+        } else if (propertyClass instanceof BmmEnumerationInteger) {
+            result.put(property.getName(), 0);
+        } else if (propertyClass instanceof BmmEnumerationString) {
+            result.put(property.getName(), "string");
         } else {
-
             String actualType = type.getTypeName();
             BmmClass classDefinition1 = bmm.getClassDefinition(BmmDefinitions.typeNameToClassKey(actualType));
             if(classDefinition1 != null && classDefinition1.isPrimitiveType()) {
@@ -204,6 +214,8 @@ public  class ExampleJsonInstanceGenerator {
                 return "12:00:00";
             case "duration":
                 return "PT10m";
+            case "boolean":
+                return "true";
         }
         return "unknown primitive type " + typeName;
     }
@@ -279,7 +291,7 @@ public  class ExampleJsonInstanceGenerator {
         } else if (child instanceof CTime) {
           children.add("12:00:00");
         } else if (child instanceof CDateTime) {
-            children.add("2018-01-01T12:00:00+00:00");
+            children.add("2018-01-01T12:00:00+0000");
         } else {
             children.add("TODO: unsupported primitive object constraint " + child.getClass());
         }
@@ -424,6 +436,12 @@ public  class ExampleJsonInstanceGenerator {
             Map<String, Object> archetypeDetails = new LinkedHashMap<>();
             archetypeDetails.put("@type", "ARCHETYPED");
             archetypeDetails.put("archetype_id", ((CArchetypeRoot) cObject).getArchetypeRef()); //TODO: add template id
+            archetypeDetails.put("rm_version", "1.0.4");
+            result.put("archetype_details", archetypeDetails);
+        } else if(cObject.isRootNode()) {
+            Map<String, Object> archetypeDetails = new LinkedHashMap<>();
+            archetypeDetails.put("@type", "ARCHETYPED");
+            archetypeDetails.put("archetype_id", cObject.getArchetype().getArchetypeId().getFullId()); //TODO: add template id
             archetypeDetails.put("rm_version", "1.0.4");
             result.put("archetype_details", archetypeDetails);
         }
