@@ -79,9 +79,17 @@ public abstract class ReflectionModelInfoLookup implements ModelInfoLookup {
         this.addAttributesWithoutField = addAttributesWithoutField;
 
         this.classLoader = classLoader;
-        addSubtypesOf(baseClass);
+        addTypes(baseClass);
         addSuperAndSubclassInfo();
         inConstructor = false;
+    }
+
+    /**
+     * Override to disable reflections scanning
+     * @param baseClass
+     */
+    protected void addTypes(Class baseClass) {
+        addSubtypesOf(baseClass);
     }
 
     private void addSuperAndSubclassInfo() {
