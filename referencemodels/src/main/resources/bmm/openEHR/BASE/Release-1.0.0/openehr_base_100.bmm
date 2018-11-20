@@ -6,7 +6,7 @@
 -- 	author:      Thomas Beale
 -- 	support:     https://openehr.atlassian.net/projects/SPECPR
 -- 	copyright:   Copyright (c) 2016 openEHR Foundation
--- 	license:     CC-BY-ND <https://creativecommons.org/licenses/by-nd/3.0/>
+-- 	license:     Apache 2.0 License <http://www.apache.org/licenses/LICENSE-2.0.html>
 -- 
 
 ------------------------------------------------------
@@ -20,14 +20,14 @@ bmm_version = <"2.1">
 ------------------------------------------------------
 rm_publisher = <"openehr">
 schema_name = <"base">
-rm_release = <"1.1.0">
+rm_release = <"1.0.0">
 
 ------------------------------------------------------
 -- schema documentation
 ------------------------------------------------------
-schema_revision = <"1.1.0.1">
+schema_revision = <"1.0.0.1">
 schema_lifecycle_state = <"stable">
-schema_description = <"openEHR Release 1.1.0 BASE model foundation and base types packages"> 
+schema_description = <"openEHR Release 1.0.0 BASE model foundation and base types packages"> 
 schema_author = <"Thomas Beale <thomas.beale@openehr.org>">
 
 ------------------------------------------------------
@@ -52,16 +52,9 @@ packages = <
 				classes = <"Interval">
 			>
 			["time"] = <
-				name = <"time">
-				classes = <
-					"IDate", "ITime", "IDate_time", "IDuration",
-					"Date", "Time", "Date_time", "Duration"
-				>
-			>
-			["iso8601_time"] = <
 				name = <"iso8601_time">
 				classes = <
-					"ISO8601_TYPE", "ISO8601_DATE", "ISO8601_TIME", "ISO8601_DATE_TIME", "ISO8601_DURATION"
+					"Iso8601_type", "Iso8601_date", "Iso8601_time", "Iso8601_date_time", "Iso8601_duration"
 				>
 			>
 		>
@@ -110,13 +103,13 @@ primitive_types = <
 		name = <"Ordered">
 		is_abstract = <True>
 		documentation = <"Ancestor of types with total order relation defined, i.e. '<' and '='.">
-		ancestors = <"Any", ...>
+		ancestors = <"Any">
 	>
 	["Numeric"] = <
 		name = <"Numeric">
 		is_abstract = <True>
 		documentation = <"Ancestor of numeric types.">
-		ancestors = <"Any", ...>
+		ancestors = <"Any">
 	>
 	["Ordered_Numeric"] = <
 		name = <"Ordered_Numeric">
@@ -126,75 +119,79 @@ primitive_types = <
 	>
 	["Byte"] = <
 		name = <"Byte">
-		ancestors = <"Any", ...>
+		ancestors = <"Any">
 	>
 	["Octet"] = <
 		name = <"Octet">
-		ancestors = <"Any", ...>
+		ancestors = <"Any">
 	>
 	["Boolean"] = <
 		name = <"Boolean">
-		ancestors = <"Any", ...>
+		ancestors = <"Any">
 	>
 	["Integer"] = <
 		name = <"Integer">
-		ancestors = <"Ordered_Numeric", ...>
+		ancestors = <"Ordered_Numeric">
 	>
 	["Integer64"] = <
 		name = <"Integer64">
-		ancestors = <"Ordered_Numeric", ...>
+		ancestors = <"Ordered_Numeric">
 	>
 	["Real"] = <
 		name = <"Real">
-		ancestors = <"Ordered_Numeric", ...>
+		ancestors = <"Ordered_Numeric">
 	>
 	["Double"] = <
 		name = <"Double">
-		ancestors = <"Ordered_Numeric", ...>
+		ancestors = <"Ordered_Numeric">
 	>
 	["Character"] = <
 		name = <"Character">
-		ancestors = <"Any", ...>
+		ancestors = <"Any">
 	>
 	["String"] = <
 		name = <"String">
-		ancestors = <"Any", ...>
+		ancestors = <"Any">
 	>
 	["Uri"] = <
 		name = <"Uri">
-		ancestors = <"String", ...>
+		ancestors = <"String">
 	>
+
 	["List"] = <
 		name = <"List">
-		ancestors = <"Any", ...>
+		ancestors = <"Aggregate">
 		generic_parameter_defs = <
 			["T"] = <
 				name = <"T">
 			>
 		>
 	>
+
 	["Array"] = <
 		name = <"Array">
-		ancestors = <"Any", ...>
+		ancestors = <"Aggregate">
 		generic_parameter_defs = <
 			["T"] = <
 				name = <"T">
 			>
 		>
 	>
+
 	["Set"] = <
 		name = <"Set">
-		ancestors = <"Any", ...>
+		ancestors = <"Aggregate">
 		generic_parameter_defs = <
 			["T"] = <
 				name = <"T">
 			>
 		>
 	>
+
 	["Interval"] = <
 		name = <"Interval">
 		documentation = <"Type defining an interval of any ordered type.">
-		ancestors = <"Any", ...>
+		ancestors = <"Any">
 		generic_parameter_defs = <
 			["T"] = <
 				name = <"T">
@@ -228,10 +225,11 @@ primitive_types = <
 			>
 		>
 	>
+
 	["Hash"] = <
 		name = <"Hash">
 		documentation = <"Type defining Hash table / hash map structure, whose type parameters V and K represent a value type and an Ordered key type respectively.">
-		ancestors = <"Any", ...>
+		ancestors = <"Any">
 		generic_parameter_defs = <
 			["V"] = <
 				name = <"V">
@@ -245,88 +243,17 @@ primitive_types = <
 
 	["Aggregate"] = <
 		name = <"Aggregate">
-		ancestors = <"Any", ...>
+		ancestors = <"Any">
 		generic_parameter_defs = <
 			["T"] = <
 				name = <"T">
 			>
 		>
+		is_abstract = <True>
 	>
 
-	["IDate"] = <
-		name = <"IDate">
-		documentation = <"Standard interface for Date concept.">
-		ancestors = <"Any">
-	>
-
-	["ITime"] = <
-		name = <"ITime">
-		documentation = <"Standard interface for Time concept.">
-		ancestors = <"Any">
-	>
-
-	["IDate_time"] = <
-		name = <"IDate_time">
-		documentation = <"Standard interface for Date_time concept.">
-		ancestors = <"Any">
-	>
-
-	["IDuration"] = <
-		name = <"IDuration">
-		documentation = <"Standard interface for Duration concept.">
-		ancestors = <"Any">
-	>
-
-	["Date"] = <
-		name = <"Date">
-		documentation = <"Primitive System Date type.">
-		ancestors = <"IDate">
-		properties = <
-			["value"] = (P_BMM_SINGLE_PROPERTY) <
-				name = <"value">
-				type = <"Integer">
-			>
-		>
-	>
-
-	["Time"] = <
-		name = <"Time">
-		documentation = <"Primitive system Time type.">
-		ancestors = <"ITime">
-		properties = <
-			["value"] = (P_BMM_SINGLE_PROPERTY) <
-				name = <"value">
-				type = <"Integer">
-			>
-		>
-	>
-
-	["Date_time"] = <
-		name = <"Date_time">
-		documentation = <"Primitive system Date Time type.">
-		ancestors = <"IDate_time">
-		properties = <
-			["value"] = (P_BMM_SINGLE_PROPERTY) <
-				name = <"value">
-				type = <"Integer">
-			>
-		>
-	>
-
-	["Duration"] = <
-		name = <"Duration">
-		documentation = <"Primitive system Duration type.">
-		ancestors = <"IDuration">
-		properties = <
-			["value"] = (P_BMM_SINGLE_PROPERTY) <
-				name = <"value">
-				type = <"Integer">
-			>
-		>
-	>
-
-	["ISO8601_TYPE"] = <
-		name = <"ISO8601_TYPE">
+	["Iso8601_type"] = <
+		name = <"Iso8601_type">
 		documentation = <"Parent of ISO8601 types.">
 		ancestors = <"Any">
 		properties = <
@@ -337,28 +264,28 @@ primitive_types = <
 		>
 	>
 
-	["ISO8601_DATE"] = <
-		name = <"ISO8601_DATE">
+	["Iso8601_date"] = <
+		name = <"Iso8601_date">
 		documentation = <"Date type based on IS8601 representation.">
-		ancestors = <"IDate", "ISO8601_TYPE">
+		ancestors = <"Iso8601_type">
 	>
 
-	["ISO8601_TIME"] = <
-		name = <"ISO8601_TIME">
+	["Iso8601_time"] = <
+		name = <"Iso8601_time">
 		documentation = <"Time type based on IS8601 representation.">
-		ancestors = <"ITime", "ISO8601_TYPE">
+		ancestors = <"Iso8601_type">
 	>
 
-	["ISO8601_DATE_TIME"] = <
-		name = <"ISO8601_DATE_TIME">
+	["Iso8601_date_time"] = <
+		name = <"Iso8601_date_time">
 		documentation = <"Date Time type based on IS8601 representation.">
-		ancestors = <"IDate_time", "ISO8601_TYPE">
+		ancestors = <"Iso8601_type">
 	>
 
-	["ISO8601_DURATION"] = <
-		name = <"ISO8601_DURATION">
+	["Iso8601_duration"] = <
+		name = <"Iso8601_duration">
 		documentation = <"Duration type based on IS8601 representation.">
-		ancestors = <"IDuration", "ISO8601_TYPE">
+		ancestors = <"Iso8601_type">
 	>
 
 	["Terminology_term"] = <
@@ -417,7 +344,7 @@ class_definitions = <
 
 	["OBJECT_REF"] = <
 		name = <"OBJECT_REF">
-		ancestors = <"Any", ...>
+		ancestors = <"Any">
 		properties = <
 			["id"] = (P_BMM_SINGLE_PROPERTY) <
 				name = <"id">
@@ -439,7 +366,7 @@ class_definitions = <
 
 	["LOCATABLE_REF"] = <
 		name = <"LOCATABLE_REF">
-		ancestors = <"OBJECT_REF", ...>
+		ancestors = <"OBJECT_REF">
 		properties = <
 			["path"] = (P_BMM_SINGLE_PROPERTY) <
 				name = <"path">
@@ -451,13 +378,13 @@ class_definitions = <
 
 	["PARTY_REF"] = <
 		name = <"PARTY_REF">
-		ancestors = <"OBJECT_REF", ...>
+		ancestors = <"OBJECT_REF">
 	>
 
 	["OBJECT_ID"] = <
 		name = <"OBJECT_ID">
 		is_abstract = <True>
-		ancestors = <"Any", ...>
+		ancestors = <"Any">
 		properties = <
 			["value"] = (P_BMM_SINGLE_PROPERTY) <
 				name = <"value">
@@ -469,69 +396,69 @@ class_definitions = <
 
 	["TERMINOLOGY_ID"] = <
 		name = <"TERMINOLOGY_ID">
-		ancestors = <"OBJECT_ID", ...>
+		ancestors = <"OBJECT_ID">
 	>
 	
 	["UID_BASED_ID"] = <
 		name = <"UID_BASED_ID">
-		ancestors = <"OBJECT_ID", ...>
+		ancestors = <"OBJECT_ID">
 		is_abstract = <True>
 	>
 	
 	["GENERIC_ID"] = <
 		name = <"GENERIC_ID">
-		ancestors = <"OBJECT_ID", ...>
+		ancestors = <"OBJECT_ID">
 	>
 	
 	["ARCHETYPE_ID"] = <
 		name = <"ARCHETYPE_ID">
-		ancestors = <"OBJECT_ID", ...>
+		ancestors = <"OBJECT_ID">
 	>
 	
 	["ARCHETYPE_HRID"] = <
 		name = <"ARCHETYPE_HRID">
-		ancestors = <"OBJECT_ID", ...>
+		ancestors = <"OBJECT_ID">
 	>
 	
 	["TEMPLATE_ID"] = <
 		name = <"TEMPLATE_ID">
-		ancestors = <"OBJECT_ID", ...>
+		ancestors = <"OBJECT_ID">
 	>
 	
 	["OBJECT_VERSION_ID"] = <
 		name = <"OBJECT_VERSION_ID">
-		ancestors = <"UID_BASED_ID", ...>
+		ancestors = <"UID_BASED_ID">
 	>
 	
 	["HIER_OBJECT_ID"] = <
 		name = <"HIER_OBJECT_ID">
-		ancestors = <"UID_BASED_ID", ...>
+		ancestors = <"UID_BASED_ID">
 	>
 	
 	["VERSION_TREE_ID"] = <
 		name = <"VERSION_TREE_ID">
-		ancestors = <"Any", ...>
+		ancestors = <"Any">
 	>
 	
 	["UID"] = <
 		name = <"UID">
 		is_abstract = <True>
-		ancestors = <"Any", ...>
+		ancestors = <"Any">
 	>
 	
 	["INTERNET_ID"] = <
 		name = <"INTERNET_ID">
-		ancestors = <"UID", ...>
+		ancestors = <"UID">
 	>
 	
 	["UUID"] = <
 		name = <"UUID">
-		ancestors = <"UID", ...>
+		ancestors = <"UID">
 	>
 	
 	["ISO_OID"] = <
 		name = <"ISO_OID">
-		ancestors = <"UID", ...>
+		ancestors = <"UID">
 	>
 	
 	--
@@ -608,7 +535,7 @@ class_definitions = <
 		properties = <
 			["type_anchor"] = (P_BMM_SINGLE_PROPERTY) <
 				name = <"type_anchor">
-				type = <"Date">
+				type = <"Iso8601_date">
 				is_mandatory = <True>
 			>
 		>
@@ -620,7 +547,7 @@ class_definitions = <
 		properties = <
 			["type_anchor"] = (P_BMM_SINGLE_PROPERTY) <
 				name = <"type_anchor">
-				type = <"Date_time">
+				type = <"Iso8601_date_time">
 				is_mandatory = <True>
 			>
 		>
@@ -632,7 +559,7 @@ class_definitions = <
 		properties = <
 			["type_anchor"] = (P_BMM_SINGLE_PROPERTY) <
 				name = <"type_anchor">
-				type = <"Time">
+				type = <"Iso8601_time">
 				is_mandatory = <True>
 			>
 		>
@@ -644,7 +571,7 @@ class_definitions = <
 		properties = <
 			["type_anchor"] = (P_BMM_SINGLE_PROPERTY) <
 				name = <"type_anchor">
-				type = <"Duration">
+				type = <"Iso8601_duration">
 				is_mandatory = <True>
 			>
 		>

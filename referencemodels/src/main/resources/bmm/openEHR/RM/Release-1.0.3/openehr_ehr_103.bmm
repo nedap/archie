@@ -1,18 +1,22 @@
 -- 
--- 	component:   openEHR Reference Model (RM)
--- 	description: openEHR Reference Model schema. This file format is based on the BMM specification
---  				http://www.openehr.org/releases/BASE/latest/docs/bmm/bmm.html
+-- 	component:   openEHR BMM Implementation Technology Specification
+-- 	description: openEHR RM component formal expression. This file is an ODIN serialisation of
+--               the BMM object meta-model classes found at 
+--               https://www.openehr.org/releases/LANG/latest/p_bmm.html
 -- 	keywords:    reference model, meta-model, archetypes
--- 	author:      Thomas Beale
--- 	support:     https://openehr.atlassian.net/projects/SPECPR
--- 	copyright:   Copyright (c) 2016 openEHR Foundation
--- 	license:     CC-BY-ND <https://creativecommons.org/licenses/by-nd/3.0/>
+-- 	author:      Thomas Beale <thomas.beale@openEHR.org>
+-- 	support:     https://openehr.atlassian.net/issues/?filter=11117
+-- 	copyright:   Copyright (c) 2009- openEHR Foundation <https://www.openEHR.org>
+-- 	license:     Apache 2.0 <http://www.apache.org/licenses/LICENSE-2.0.html>
 -- 
 
 ------------------------------------------------------
 -- BMM version on which these schemas are based.
+-- Current BMM version can be found as the top version in the specification:
+--     https://www.openehr.org/releases/LANG/latest/bmm_persistence.html#_amendment_record
+--
 ------------------------------------------------------
-bmm_version = <"2.1">
+bmm_version = <"2.3">
 
 ------------------------------------------------------
 -- schema identification
@@ -21,6 +25,7 @@ bmm_version = <"2.1">
 rm_publisher = <"openehr">
 schema_name = <"ehr">
 rm_release = <"1.0.3">
+model_name = <"EHR">
 
 ------------------------------------------------------
 -- schema documentation
@@ -31,6 +36,11 @@ schema_description = <"openEHR Release 1.0.3 EHR schema">
 schema_author = <"Thomas Beale <thomas.beale@openehr.org>">
 
 ------------------------------------------------------
+-- archetyping
+------------------------------------------------------
+archetype_rm_closure_packages = <"org.openehr.rm.ehr", "org.openehr.rm.common.directory">
+
+------------------------------------------------------
 -- inclusions
 ------------------------------------------------------
 includes = <
@@ -38,13 +48,6 @@ includes = <
 		id = <"openehr_structures_1.0.3">
 	>
 >
-
-
-------------------------------------------------------
--- archetyping
-------------------------------------------------------
-archetype_rm_closure_packages = <"org.openehr.rm.ehr", "org.openehr.rm.common.directory">
-
 
 ------------------------------------------------------
 -- packages - software structure
@@ -95,7 +98,7 @@ class_definitions = <
 		properties = <
 			["system_id"] = (P_BMM_SINGLE_PROPERTY) <
 				name = <"system_id">
-				type = <"String">
+				type = <"HIER_OBJECT_ID">
 				is_mandatory = <True>
 			>
 			["ehr_id"] = (P_BMM_SINGLE_PROPERTY) <
@@ -129,7 +132,6 @@ class_definitions = <
 					type = <"OBJECT_REF">
 				>
 				cardinality = <|>=0|>
-				is_mandatory = <True>
 			>
 			["contributions"] = (P_BMM_CONTAINER_PROPERTY) <
 				name = <"contributions">
@@ -138,7 +140,6 @@ class_definitions = <
 					type = <"OBJECT_REF">
 				>
 				cardinality = <|>=0|>
-				is_mandatory = <True>
 			>
 			--
 			-- add this function to create a reachability link from EHR to COMPOSITION, which allows
@@ -160,7 +161,6 @@ class_definitions = <
 			["settings"] = (P_BMM_SINGLE_PROPERTY) <
 				name = <"settings">
 				type = <"ACCESS_CONTROL_SETTINGS">
-				is_mandatory = <True>
 			>
 		>
 	>
@@ -235,7 +235,7 @@ class_definitions = <
 					container_type = <"List">
 					type = <"CONTENT_ITEM">
 				>
-				cardinality = <|>=0|>
+				cardinality = <|>=1|>
 			>
 		>
 	>
@@ -263,7 +263,7 @@ class_definitions = <
 					container_type = <"List">
 					type = <"PARTICIPATION">
 				>
-				cardinality = <|>=0|>
+				cardinality = <|>=1|>
 			>
 			["location"] = (P_BMM_SINGLE_PROPERTY) <
 				name = <"location">
@@ -305,7 +305,7 @@ class_definitions = <
 					container_type = <"List">
 					type = <"CONTENT_ITEM">
 				>
-				cardinality = <|>=0|>
+				cardinality = <|>=1|>
 			>
 		>
 	>
@@ -446,7 +446,7 @@ class_definitions = <
 					container_type = <"List">
 					type = <"ACTIVITY">
 				>
-				cardinality = <|>=0|>
+				cardinality = <|>=1|>
 			>
 		>
 	>
@@ -468,7 +468,6 @@ class_definitions = <
 			["action_archetype_id"] = (P_BMM_SINGLE_PROPERTY) <
 				name = <"action_archetype_id">
 				type = <"String">
-				is_mandatory = <True>
 			>
 		>
 	>
@@ -540,6 +539,14 @@ class_definitions = <
 			["careflow_step"] = (P_BMM_SINGLE_PROPERTY) <
 				name = <"careflow_step">
 				type = <"DV_CODED_TEXT">
+			>
+			["reason"] = (P_BMM_CONTAINER_PROPERTY) <
+				name = <"reason">
+				type_def = <
+					container_type = <"List">
+					type = <"DV_TEXT">
+				>
+				cardinality = <|>=0|>
 			>
 		>
 	>

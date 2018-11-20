@@ -426,7 +426,7 @@ public class BmmSchemaValidator extends AnyValidator {
      * @return
      */
     public boolean typeStrictlyConformsTo(String type1, String type2) {
-        return !typeSameAs(type1,type2) && typeConformsTo(type1, type2);
+        return typeSameAs(type1,type2) || typeConformsTo(type1, type2);
     }
 
     /**

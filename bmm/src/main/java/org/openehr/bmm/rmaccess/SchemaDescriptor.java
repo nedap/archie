@@ -34,6 +34,7 @@ import org.openehr.odin.utils.OdinSerializationUtils;
 
 import java.io.File;
 import java.io.InputStream;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -173,6 +174,10 @@ public class SchemaDescriptor {
     }
 
     private void initializeFromLoadedSchema() {
+        if(this.schemaValidator.hasErrors()) {
+            //stop running - the error handling somewhere in the call tree will continue validating
+           return;
+        }
         this.metadata = new HashMap<>();
         metadata.put(BmmDefinitions.METADATA_BMM_VERSION, persistentSchema.getBmmVersion());
         metadata.put(BmmDefinitions.METADATA_RM_PUBLISHER, persistentSchema.getRmPublisher());

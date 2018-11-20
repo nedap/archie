@@ -1,18 +1,22 @@
 -- 
--- 	component:   openEHR Reference Model (RM)
--- 	description: openEHR Reference Model schema. This file format is based on the BMM specification
---  				http://www.openehr.org/releases/BASE/latest/docs/bmm/bmm.html
+-- 	component:   openEHR BMM Implementation Technology Specification
+-- 	description: openEHR BASE component formal expression. This file is an ODIN serialisation of
+--               the BMM object meta-model classes found at 
+--               https://www.openehr.org/releases/LANG/latest/p_bmm.html
 -- 	keywords:    reference model, meta-model, archetypes
--- 	author:      Thomas Beale
--- 	support:     https://openehr.atlassian.net/projects/SPECPR
--- 	copyright:   Copyright (c) 2016 openEHR Foundation
--- 	license:     CC-BY-ND <https://creativecommons.org/licenses/by-nd/3.0/>
+-- 	author:      Thomas Beale <thomas.beale@openEHR.org>
+-- 	support:     https://openehr.atlassian.net/issues/?filter=11117
+-- 	copyright:   Copyright (c) 2009- openEHR Foundation <https://www.openEHR.org>
+-- 	license:     Apache 2.0 <http://www.apache.org/licenses/LICENSE-2.0.html>
 -- 
 
 ------------------------------------------------------
 -- BMM version on which these schemas are based.
+-- Current BMM version can be found as the top version in the specification:
+--     https://www.openehr.org/releases/LANG/latest/bmm_persistence.html#_amendment_record
+--
 ------------------------------------------------------
-bmm_version = <"2.1">
+bmm_version = <"2.3">
 
 ------------------------------------------------------
 -- schema identification
@@ -40,18 +44,13 @@ includes = <
 >
 
 ------------------------------------------------------
--- archetyping
-------------------------------------------------------
-archetype_data_value_parent_class = <"DATA_VALUE">
-
-------------------------------------------------------
 -- packages
 ------------------------------------------------------
 
 packages = <
 	["org.openehr.rm.support.identification"] = <
 		name = <"org.openehr.rm.support.identification">
-		classes = <"OBJECT_REF", "OBJECT_ID", "UID", "LOCATABLE_REF", "PARTY_REF", "OBJECT_ID", "TERMINOLOGY_ID", "UID_BASED_ID", "GENERIC_ID", "ARCHETYPE_ID", "TEMPLATE_ID", "OBJECT_VERSION_ID", "HIER_OBJECT_ID", "VERSION_TREE_ID", "INTERNET_ID", "UUID", "ISO_OID">
+		classes = <"OBJECT_REF", "OBJECT_ID", "UID", "LOCATABLE_REF", "PARTY_REF", "OBJECT_ID", "TERMINOLOGY_ID", "UID_BASED_ID", "GENERIC_ID", "ARCHETYPE_ID", "TEMPLATE_ID", "OBJECT_VERSION_ID", "HIER_OBJECT_ID", "VERSION_TREE_ID", "INTERNET_ID", "UUID", "ISO_OID", "ACCESS_GROUP_REF", "PARTY_REF">
 	>
 	["org.openehr.rm.data_types"] = <
 		name = <"org.openehr.rm.data_types">
@@ -126,6 +125,11 @@ class_definitions = <
 		name = <"LOCATABLE_REF">
 		ancestors = <"OBJECT_REF", ...>
 		properties = <
+			["id"] = (P_BMM_SINGLE_PROPERTY) <
+				name = <"id">
+				type = <"UID_BASED_ID">
+				is_mandatory = <True>
+			>
 			["path"] = (P_BMM_SINGLE_PROPERTY) <
 				name = <"path">
 				type = <"String">
@@ -136,6 +140,11 @@ class_definitions = <
 
 	["PARTY_REF"] = <
 		name = <"PARTY_REF">
+		ancestors = <"OBJECT_REF", ...>
+	>
+
+	["ACCESS_GROUP_REF"] = <
+		name = <"ACCESS_GROUP_REF">
 		ancestors = <"OBJECT_REF", ...>
 	>
 
@@ -166,6 +175,13 @@ class_definitions = <
 	["GENERIC_ID"] = <
 		name = <"GENERIC_ID">
 		ancestors = <"OBJECT_ID", ...>
+		properties = <
+			["scheme"] = (P_BMM_SINGLE_PROPERTY) <
+				name = <"scheme">
+				type = <"String">
+				is_mandatory = <True>
+			>
+		>
 	>
 	
 	["ARCHETYPE_ID"] = <
@@ -191,12 +207,26 @@ class_definitions = <
 	["VERSION_TREE_ID"] = <
 		name = <"VERSION_TREE_ID">
 		ancestors = <"Any", ...>
+		properties = <
+			["value"] = (P_BMM_SINGLE_PROPERTY) <
+				name = <"value">
+				type = <"String">
+				is_mandatory = <True>
+			>
+		>
 	>
 	
 	["UID"] = <
 		name = <"UID">
 		is_abstract = <True>
 		ancestors = <"Any", ...>
+		properties = <
+			["value"] = (P_BMM_SINGLE_PROPERTY) <
+				name = <"value">
+				type = <"String">
+				is_mandatory = <True>
+			>
+		>
 	>
 	
 	["INTERNET_ID"] = <
@@ -289,8 +319,17 @@ class_definitions = <
 	["TERM_MAPPING"] = <
 		name = <"TERM_MAPPING">
 		properties = <
-			["defining_code"] = (P_BMM_SINGLE_PROPERTY) <
-				name = <"defining_code">
+			["match"] = (P_BMM_SINGLE_PROPERTY) <
+				name = <"match">
+				type = <"Character">
+				is_mandatory = <True>
+			>
+			["purpose"] = (P_BMM_SINGLE_PROPERTY) <
+				name = <"purpose">
+				type = <"DV_CODED_TEXT">
+			>
+			["target"] = (P_BMM_SINGLE_PROPERTY) <
+				name = <"target">
 				type = <"CODE_PHRASE">
 				is_mandatory = <True>
 			>
@@ -329,10 +368,10 @@ class_definitions = <
 			["mappings"] = (P_BMM_CONTAINER_PROPERTY) <
 				name = <"mappings">
 				type_def = <
-					container_type = <"Set">
+					container_type = <"List">
 					type = <"TERM_MAPPING">
 				>
-				cardinality = <|>=0|>
+				cardinality = <|>=1|>
 				is_im_runtime = <True>
 			>
 		>
@@ -361,6 +400,7 @@ class_definitions = <
 			["code_string"] = (P_BMM_SINGLE_PROPERTY) <
 				name = <"code_string">
 				type = <"String">
+				is_mandatory = <True>
 			>
 		>
 	>
@@ -375,7 +415,8 @@ class_definitions = <
 					container_type = <"List">
 					type = <"DV_TEXT">
 				>
-				cardinality = <|>=0|>
+				is_mandatory = <True>
+				cardinality = <|>=1|>
 			>
 		>
 	>
@@ -411,6 +452,12 @@ class_definitions = <
 					root_type = <"DV_INTERVAL">
 					generic_parameters = <"T">
 				>
+				is_mandatory = <True>
+			>
+			["meaning"] = (P_BMM_SINGLE_PROPERTY) <
+				name = <"meaning">
+				type = <"DV_TEXT">
+				is_mandatory = <True>
 			>
 		>
 	>
@@ -431,11 +478,15 @@ class_definitions = <
 					generic_parameters = <"DV_ORDERED">
 				>
 			>
-			["other_reference_ranges"] = (P_BMM_GENERIC_PROPERTY) <
+			["other_reference_ranges"] = (P_BMM_CONTAINER_PROPERTY) <
 				name = <"other_reference_ranges">
 				type_def = <
-					root_type = <"REFERENCE_RANGE">
-					generic_parameters = <"DV_ORDERED">
+					container_type = <"List">
+					type_def = (P_BMM_GENERIC_TYPE) <
+						root_type = <"REFERENCE_RANGE">
+						generic_parameters = <"DV_ORDERED">
+					>
+					cardinality = <|>=1|>
 				>
 			>
 		>
@@ -449,8 +500,11 @@ class_definitions = <
 			["magnitude_status"] = (P_BMM_SINGLE_PROPERTY) <
 				name = <"magnitude_status">
 				type = <"String">
-				is_mandatory = <True>
 				is_im_runtime = <True>
+			>
+			["accuracy"] = (P_BMM_SINGLE_PROPERTY) <
+				name = <"accuracy">
+				type = <"Any">
 			>
 		>
 	>
@@ -509,7 +563,7 @@ class_definitions = <
 		properties = <
 			["magnitude"] = (P_BMM_SINGLE_PROPERTY) <
 				name = <"magnitude">
-				type = <"Double">
+				type = <"Real">
 				is_mandatory = <True>
 			>
 			["property"] = (P_BMM_SINGLE_PROPERTY) <
@@ -526,6 +580,23 @@ class_definitions = <
 				name = <"precision">
 				type = <"Integer">
 			>
+			["normal_range"] = (P_BMM_GENERIC_PROPERTY) <
+				name = <"normal_range">
+				type_def = <
+					root_type = <"DV_INTERVAL">
+					generic_parameters = <"DV_QUANTITY">
+				>
+			>
+			["other_reference_ranges"] = (P_BMM_CONTAINER_PROPERTY) <
+				name = <"other_reference_ranges">
+				type_def = <
+					container_type = <"List">
+					type_def = (P_BMM_GENERIC_TYPE) <
+						root_type = <"REFERENCE_RANGE">
+						generic_parameters = <"DV_QUANTITY">
+					>
+				>
+			>
 		>
 	>
 
@@ -536,6 +607,23 @@ class_definitions = <
 			["magnitude"] = (P_BMM_SINGLE_PROPERTY) <
 				name = <"magnitude">
 				type = <"Integer64">
+			>
+			["normal_range"] = (P_BMM_GENERIC_PROPERTY) <
+				name = <"normal_range">
+				type_def = <
+					root_type = <"DV_INTERVAL">
+					generic_parameters = <"DV_COUNT">
+				>
+			>
+			["other_reference_ranges"] = (P_BMM_CONTAINER_PROPERTY) <
+				name = <"other_reference_ranges">
+				type_def = <
+					container_type = <"List">
+					type_def = (P_BMM_GENERIC_TYPE) <
+						root_type = <"REFERENCE_RANGE">
+						generic_parameters = <"DV_COUNT">
+					>
+				>
 			>
 		>
 	>
@@ -568,6 +656,24 @@ class_definitions = <
 				type = <"Boolean">
 				is_computed = <True>
 			>
+			["normal_range"] = (P_BMM_GENERIC_PROPERTY) <
+				name = <"normal_range">
+				type_def = <
+					root_type = <"DV_INTERVAL">
+					generic_parameters = <"DV_PROPORTION">
+				>
+			>
+			["other_reference_ranges"] = (P_BMM_CONTAINER_PROPERTY) <
+				name = <"other_reference_ranges">
+				type_def = <
+					container_type = <"List">
+					type_def = (P_BMM_GENERIC_TYPE) <
+						root_type = <"REFERENCE_RANGE">
+						generic_parameters = <"DV_PROPORTION">
+					>
+					cardinality = <|>=1|>
+				>
+			>
 		>
 	>
 
@@ -585,6 +691,12 @@ class_definitions = <
 		name = <"DV_TEMPORAL">
 		is_abstract = <True>
 		ancestors = <"DV_ABSOLUTE_QUANTITY", ...>
+		properties = <
+			["accuracy"] = (P_BMM_SINGLE_PROPERTY) <
+				name = <"accuracy">
+				type = <"DV_DURATION">
+			>
+		>
 	>
 
 	["DV_DATE"] = <
@@ -698,6 +810,10 @@ class_definitions = <
 				name = <"integrity_check_algorithm">
 				type = <"CODE_PHRASE">
 			>
+			["thumbnail"] = (P_BMM_SINGLE_PROPERTY) <
+				name = <"thumbnail">
+				type = <"DV_MULTIMEDIA">
+			>
 			["size"] = (P_BMM_SINGLE_PROPERTY) <
 				name = <"size">
 				type = <"Integer">
@@ -713,10 +829,12 @@ class_definitions = <
 			["value"] = (P_BMM_SINGLE_PROPERTY) <
 				name = <"value">
 				type = <"String">
+				is_mandatory = <True>
 			>
 			["formalism"] = (P_BMM_SINGLE_PROPERTY) <
 				name = <"formalism">
 				type = <"String">
+				is_mandatory = <True>
 			>
 		>
 	>

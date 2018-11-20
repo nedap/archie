@@ -8,6 +8,8 @@ import com.nedap.archie.rminfo.ReferenceModels;
 import org.openehr.bmm.rmaccess.ReferenceModelAccess;
 import org.reflections.Reflections;
 import org.reflections.scanners.ResourcesScanner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,6 +24,8 @@ import java.util.regex.Pattern;
  * uses reflection to only load the ModelInfoLookup classes that are available
  */
 public class BuiltinReferenceModels {
+
+    private static final Logger logger = LoggerFactory.getLogger(BuiltinReferenceModels.class);
 
     /**
      * Static cache
@@ -46,6 +50,8 @@ public class BuiltinReferenceModels {
                 access.addSchemaInputStream(stream, resourceName);
             } catch (IOException e) {
                 throw new RuntimeException("error loading file: " + e);
+            } catch (RuntimeException ex) {
+                logger.error("error parsing {}", resourceName, ex);
             }
         }
         access.loadSchemas();
