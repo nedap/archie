@@ -1,0 +1,14 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Common/PARTY_PROXY.json",
+    "title": "PARTY_PROXY",
+    "description": "Abstract concept of a proxy description of a party, including an optional link to data for this party in a demographic or other identity management system. Sub- typed into `PARTY_IDENTIFIED` and `PARTY_SELF`. ",
+    "$comments": "Defined in Common IM, abstract",
+    "type": "object",
+    "properties": {
+        "external_ref": {
+            "description": "Optional reference to more detailed demographic or identification information for this party, in an external system. ",
+            "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/BASE/latest/Base_types/all.json#/definitions/PARTY_REF"
+        }
+    }
+}

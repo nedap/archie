@@ -1,0 +1,110 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Common/ORIGINAL_VERSION.json",
+    "title": "ORIGINAL_VERSION",
+    "description": "A Version containing locally created content and optional attestations. ",
+    "$comments": "Defined in Common IM, inherits from VERSION",
+    "type": "object",
+    "properties": {
+        "contribution": {
+            "description": "Contribution in which this version was added. ",
+            "$ref": "all.json#/definitions/CONTRIBUTION"
+        },
+        "signature": {
+            "description": "OpenPGP digital signature or digest of content committed in this Version. ",
+            "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/BASE/latest/Foundation_types/all.json#/definitions/String"
+        },
+        "commit_audit": {
+            "description": "Audit trail corresponding to the committal of this version to the `VERSIONED_OBJECT`.",
+            "$ref": "all.json#/definitions/AUDIT_DETAILS"
+        },
+        "uid": {
+            "description": "Stored version of inheritance precursor. ",
+            "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/BASE/latest/Base_types/all.json#/definitions/OBJECT_VERSION_ID"
+        },
+        "preceding_version_uid": {
+            "description": "Stored version of inheritance precursor. ",
+            "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/BASE/latest/Base_types/all.json#/definitions/OBJECT_VERSION_ID"
+        },
+        "other_input_version_uids": {
+            "description": "Identifiers of other versions whose content was merged into this version, if any. ",
+            "type": "array",
+            "items": {
+                "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/BASE/latest/Base_types/all.json#/definitions/OBJECT_VERSION_ID"
+            }
+        },
+        "lifecycle_state": {
+            "description": "Lifecycle state of the content item in this version; coded by openEHR vocabulary 'version lifecycle state'. ",
+            "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Data_types/all.json#/definitions/DV_CODED_TEXT"
+        },
+        "attestations": {
+            "description": "Set of attestations relating to this version. ",
+            "type": "array",
+            "items": {
+                "$ref": "all.json#/definitions/ATTESTATION"
+            }
+        },
+        "data": {
+            "description": "Data content of this Version.",
+            "$ref": "all.json#/definitions/T"
+        }
+    },
+    "required": [
+        "contribution",
+        "commit_audit",
+        "uid",
+        "lifecycle_state"
+    ],
+    "$inherits": [
+        "all.json#/definitions/VERSION"
+    ],
+    "$functions": {
+        "uid": {
+            "description": "Unique identifier of this `VERSION`, in the form of an `{object_id, a version_tree_id, creating_system_id}` triple, where the `_object_id_` has the same value as the containing `VERSIONED_OBJECT _uid_`."
+        },
+        "preceding_version_uid": {
+            "description": "Unique identifier of the version of which this version is a modification; Void if this is the first version."
+        },
+        "data": {
+            "description": "The data of this Version."
+        },
+        "lifecycle_state": {
+            "description": "Lifecycle state of this version; coded by openEHR vocabulary 'version lifecycle state'. "
+        },
+        "canonical_form": {
+            "description": "A canonical serial form of this Version, suitable for generating reliable hashes and signatures."
+        },
+        "owner_id": {
+            "description": "Copy of the owning `VERSIONED_OBJECT._uid_` value; extracted from the local `_uid_` property's `_object_id_`."
+        },
+        "is_branch": {
+            "description": "True if this Version represents a branch. Derived from `_uid_` attribute. "
+        },
+        "is_merged": {
+            "description": "True if this Version was created from more than just the preceding (checked out) version."
+        }
+    },
+    "$invariants": {
+        "Owner_id_valid": {
+            "description": "owner_id.value.is_equal (uid.object_id.value)"
+        },
+        "Preceding_version_uid_validity": {
+            "description": "uid.version_tree_id.is_first xor preceding_version_uid /= Void"
+        },
+        "Lifecycle_state_ valid": {
+            "description": "lifecycle_state /= Void and then terminology (Term_id_openehr).has_code_for_group_id (Group_id_version_lifecycle_state, lifecycle_state.defining_code)"
+        },
+        "Post": {
+            "description": "Result.value.is_equal (uid.object_id.value)"
+        },
+        "Attestations_valid": {
+            "description": "attestations /= Void implies not attestations.is_empty"
+        },
+        "Is_merged_validity": {
+            "description": "other_input_version_ids = Void xor is_merged"
+        },
+        "Other_input_version_uids_valid": {
+            "description": "other_input_version_uids /= Void implies not other_input_version_uids.is_empty"
+        }
+    }
+}

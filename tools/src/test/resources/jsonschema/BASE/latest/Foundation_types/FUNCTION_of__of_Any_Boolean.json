@@ -1,0 +1,10 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/BASE/latest/Foundation_types/FUNCTION_of__of_Any_Boolean.json",
+    "title": "FUNCTION<<Any>,Boolean>",
+    "$comments": "Defined in Foundation_types IM, inherits from FUNCTION",
+    "type": "object",
+    "$inherits": [
+        "all.json#/definitions/FUNCTION"
+    ]
+}

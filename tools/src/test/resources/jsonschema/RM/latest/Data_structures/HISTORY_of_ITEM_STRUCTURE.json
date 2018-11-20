@@ -1,0 +1,7 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Data_structures/HISTORY_of_ITEM_STRUCTURE.json",
+    "title": "HISTORY<ITEM_STRUCTURE>",
+    "$comments": "Defined in Data_structures IM",
+    "type": "object"
+}

@@ -1,0 +1,13 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Support/OPENEHR_TERMINOLOGY_GROUP_IDENTIFIERS.json",
+    "title": "OPENEHR_TERMINOLOGY_GROUP_IDENTIFIERS",
+    "description": "List of identifiers for groups in the openEHR terminology. ",
+    "$comments": "Defined in Support IM",
+    "type": "object",
+    "$functions": {
+        "valid_terminology_group_id": {
+            "description": "Validity function to test if an identifier is in the set defined by this class. "
+        }
+    }
+}

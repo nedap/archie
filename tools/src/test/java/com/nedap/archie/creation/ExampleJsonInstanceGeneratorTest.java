@@ -3,6 +3,8 @@ package com.nedap.archie.creation;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.google.common.base.Joiner;
+import com.google.common.collect.Sets;
 import com.nedap.archie.adlparser.ADLParser;
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.OperationalTemplate;
@@ -14,6 +16,7 @@ import com.nedap.archie.json.JacksonUtil;
 import com.nedap.archie.rm.RMObject;
 import com.nedap.archie.rm.composition.Observation;
 import com.nedap.archie.testutil.TestUtil;
+import org.everit.json.schema.ValidationException;
 import org.junit.Test;
 import org.openehr.referencemodels.BuiltinReferenceModels;
 import org.slf4j.Logger;
@@ -101,7 +104,7 @@ public class ExampleJsonInstanceGeneratorTest {
         Map<String, Object> structure = structureGenerator.generate(opt);
         String s = serializeToJson(structure, false);
         //check the ordinal creation, including correct DV_CODED_TEXT and CODE_PHRASE
-        assertTrue(s.contains("{\"@type\":\"DV_ORDINAL\",\"value\":0,\"symbol\":{\"@type\":\"DV_CODED_TEXT\",\"defining_code\":{\"@type\":\"CODE_PHRASE\",\"terminology_id\":\"local\",\"code_string\":\"at11\"},\"value\":\"Absent\"}}}]},"));
+        assertTrue(s.contains("{\"@type\":\"DV_ORDINAL\",\"value\":0,\"symbol\":{\"@type\":\"DV_CODED_TEXT\",\"defining_code\":{\"@type\":\"CODE_PHRASE\",\"terminology_id\":{\"@type\":\"TERMINOLOGY_ID\",\"value\":\"local\"},\"code_string\":\"at11\"},\"value\":\"Absent\"}}"));
     }
 
 
@@ -111,26 +114,32 @@ public class ExampleJsonInstanceGeneratorTest {
         FullArchetypeRepository repository = TestUtil.parseCKM();
         ObjectMapper mapper = new ObjectMapper();
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
-        int numberCreated = 0, validationFailed = 0, generatedException = 0;
+        int numberCreated = 0, validationFailed = 0, generatedException = 0, jsonSchemaValidationRan = 0, jsonSchemaValidationFailed = 0;
         repository.compile(BuiltinReferenceModels.getMetaModels());
+        JsonSchemaValidator jsonSchemaValidator = new JsonSchemaValidator(BuiltinReferenceModels.getBMMReferenceModels().getValidModels().get("openehr_rm_1.0.4"));
         for(ValidationResult result:repository.getAllValidationResults()) {
             if(result.passes()) {
-                String value = "";
+                String json = "";
                 try {
                     Flattener flattener = new Flattener(repository, BuiltinReferenceModels.getMetaModels()).createOperationalTemplate(true);
                     OperationalTemplate template = (OperationalTemplate) flattener.flatten(result.getSourceArchetype());
                     Map<String, Object> example = structureGenerator.generate(template);
-                    value = mapper.writeValueAsString(example);
-                    JacksonUtil.getObjectMapper().readValue(value, RMObject.class);
-                    if(numberCreated < 10) {
-
-                        logger.info(value);
-                    }
+                    json = mapper.writeValueAsString(example);
+                    JacksonUtil.getObjectMapper().readValue(json, RMObject.class);
                     numberCreated++;
+                   // if(Sets.newHashSet("COMPOSITION", "OBSERVATION", "EVALUATION", "INSTRUCTION", "SECTION", "ACTION").contains(template.getDefinition().getRmTypeName())) {
+                        jsonSchemaValidationRan++;
+                        jsonSchemaValidator.validate(template.getDefinition().getRmTypeName(), json);
+                   // }
+
+
+                } catch (ValidationException ex) {
+                    logger.error(Joiner.on("\n").join(ex.getAllMessages()));
+                    jsonSchemaValidationFailed++;
                 } catch (Exception e) {
-                    if(generatedException <= 0) {
+                    if(generatedException <= 4) {
                         logger.error("error generating example", e);
-                        logger.error(value);
+                        //logger.error(json);
                     }
                     generatedException++;
                 }
@@ -141,6 +150,7 @@ public class ExampleJsonInstanceGeneratorTest {
 
         }
         logger.info("created " + numberCreated + " examples, " + validationFailed + " failed to validate, " + generatedException + " threw exception in test");
+        logger.info("failed validation " + jsonSchemaValidationFailed + " of " + jsonSchemaValidationRan);
     }
 
 

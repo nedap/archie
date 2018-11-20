@@ -1,0 +1,10 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/BASE/latest/Foundation_types/TUPLE2_of_Numeric_Numeric.json",
+    "title": "TUPLE2<Numeric,Numeric>",
+    "$comments": "Defined in Foundation_types IM, inherits from TUPLE2",
+    "type": "object",
+    "$inherits": [
+        "all.json#/definitions/TUPLE2"
+    ]
+}

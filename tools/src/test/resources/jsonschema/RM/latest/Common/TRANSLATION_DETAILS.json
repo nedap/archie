@@ -1,0 +1,39 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Common/TRANSLATION_DETAILS.json",
+    "title": "TRANSLATION_DETAILS",
+    "description": "Class providing details of a natural language translation. ",
+    "$comments": "Defined in Common IM",
+    "type": "object",
+    "properties": {
+        "language": {
+            "description": "Language of the translation.",
+            "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Data_types/all.json#/definitions/CODE_PHRASE"
+        },
+        "author": {
+            "description": "Translator name and other demographic details.",
+            "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/BASE/latest/Foundation_types/all.json#/definitions/Hash_of_String_String"
+        },
+        "accreditaton": {
+            "description": "Accreditation of translator, usually a national translator's registration or association membership id.",
+            "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/BASE/latest/Foundation_types/all.json#/definitions/String"
+        },
+        "other_details": {
+            "description": "Any other meta-data.",
+            "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/BASE/latest/Foundation_types/all.json#/definitions/Hash_of_String_String"
+        },
+        "version_last_translated": {
+            "description": "Version of this resource last time it was translated into the language represented by this `TRANSLATION_DETAILS` object.",
+            "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/BASE/latest/Foundation_types/all.json#/definitions/String"
+        }
+    },
+    "required": [
+        "language",
+        "author"
+    ],
+    "$invariants": {
+        "Language_valid": {
+            "description": "code_set (Code_set_id_languages).has_code (language)"
+        }
+    }
+}

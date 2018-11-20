@@ -1,0 +1,49 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Support/TERMINOLOGY_SERVICE.json",
+    "title": "TERMINOLOGY_SERVICE",
+    "description": "Defines an object providing proxy access to a terminology service. ",
+    "$comments": "Defined in Support IM, inherits from OPENEHR_TERMINOLOGY_GROUP_IDENTIFIERS, OPENEHR_CODE_SET_IDENTIFIERS",
+    "type": "object",
+    "$inherits": [
+        "all.json#/definitions/OPENEHR_TERMINOLOGY_GROUP_IDENTIFIERS",
+        "all.json#/definitions/OPENEHR_CODE_SET_IDENTIFIERS"
+    ],
+    "$functions": {
+        "valid_code_set_id": {
+            "description": "Validity function to test if an identifier is in the set defined by this class."
+        },
+        "valid_terminology_group_id": {
+            "description": "Validity function to test if an identifier is in the set defined by this class. "
+        },
+        "terminology": {
+            "description": "Return an interface to the terminology named name. Allowable names include:-\n\n* openehr, \n* centc251,\n* any name from are taken from the US NLM UMLS meta-data list at http://www.nlm.nih.gov/research/umls/metaa1.html "
+        },
+        "code_set": {
+            "description": "Return an interface to the code_set identified by the external identifier name (e.g.  ISO_639-1). "
+        },
+        "code_set_for_id": {
+            "description": "Return an interface to the code_set identified internally in openEHR by id. \n"
+        },
+        "has_terminology": {
+            "description": "True if terminology named name known by this service. Allowable names include:-\n\n*  openehr  \n* centc251  \n* any name from are taken from the US NLM UMLS meta-data list at       http://www.nlm.nih.gov/research/umls/metaa1.html"
+        },
+        "has_code_set": {
+            "description": "True if code_set linked to internal name (e.g. languages ) is available. "
+        },
+        "terminology_identifiers": {
+            "description": "Set of all terminology identifiers known in the terminology service. Values from the US NLM UMLS meta-data list at:- http://www.nlm.nih.gov/research/umls/metaa1.html "
+        },
+        "openehr_code_sets": {
+            "description": "Set of all code set identifiers known in the terminology service. \n"
+        },
+        "code_set_identifiers": {
+            "description": "Set of all code sets identifiers for which there is an internal openEHR name; returned as a Map of ids keyed by internal name. "
+        }
+    },
+    "$invariants": {
+        "Pre": {
+            "description": "valid_code_set_id (id)"
+        }
+    }
+}

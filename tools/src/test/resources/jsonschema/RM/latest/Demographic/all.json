@@ -1,0 +1,1677 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Demographic/all.json",
+    "title": "Demographic IM definitions",
+    "description": "The demographic model defines generic concepts of PARTY, ROLE and related details such as contact addresses. The archetype model defines the semantics of constraint on PARTYs, allowing archetypes for any type of person, organisation, role and role relationship to be described. This approach provides a flexible way of including the arbitrary demographic attributes allowed in the OMG HDTF PIDS standard. ",
+    "definitions": {
+        "PARTY": {
+            "title": "PARTY",
+            "description": "Ancestor of all Party types, including real world entities and their roles. A Party is any entity which can participate in an activity. The `_name_` attribute inherited from `LOCATABLE` is used to indicate the actual type of party (note that the actual names, i.e. identities of parties are indicated in the `_identities_` attribute, not the `_name_` attribute).",
+            "$comments": "Defined in Demographic IM, abstract, inherits from LOCATABLE",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "description": "Runtime name of this fragment, used to build runtime paths. This is the term provided via a clinical application or batch process to name this EHR construct: its retention in the EHR faithfully preserves the original label by which this entry was known to end users. \n",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Data_types/all.json#/definitions/DV_TEXT"
+                },
+                "archetype_node_id": {
+                    "description": "Design-time archetype id of this node taken from its generating archetype; used to build archetype paths. Always in the form of an  at  code, e.g.  at0005 . This value enables a \"standardised\" name for this node to be generated, by referring to the generating archetype local ontology. \n\nAt an archetype root point, the value of this attribute is always the stringified form of the archetype_id found in the archetype_details object. \n",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/BASE/latest/Foundation_types/all.json#/definitions/String"
+                },
+                "uid": {
+                    "description": "Optional globally unique object identifier for root points of archetyped structures. ",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/BASE/latest/Base_types/all.json#/definitions/UID_BASED_ID"
+                },
+                "links": {
+                    "description": "Links to other archetyped structures (data whose root object inherits from ARCHETYPED, such as ENTRY, SECTION and so on). Links may be to structures in other compositions. ",
+                    "type": "array",
+                    "items": {
+                        "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Common/all.json#/definitions/LINK"
+                    }
+                },
+                "archetype_details": {
+                    "description": "Details of archetyping used on this node.",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Common/all.json#/definitions/ARCHETYPED"
+                },
+                "feeder_audit": {
+                    "description": "Audit trail from non-openEHR system of original commit of information forming the content of this node, or from a conversion gateway which has synthesised this node. ",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Common/all.json#/definitions/FEEDER_AUDIT"
+                },
+                "identities": {
+                    "description": "Identities used by the party to identify itself, such as legal name, stage names, aliases, nicknames and so on.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/PARTY_IDENTITY"
+                    },
+                    "minItems": 1
+                },
+                "contacts": {
+                    "description": "Contacts for this party.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/CONTACT"
+                    }
+                },
+                "details": {
+                    "description": "All other details for this Party.",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Data_structures/all.json#/definitions/ITEM_STRUCTURE"
+                },
+                "reverse_relationships": {
+                    "description": "References to relationships in which this Party takes part as target.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/PARTY_RELATIONSHIP"
+                    }
+                },
+                "relationships": {
+                    "description": "Relationships in which this Party takes part as source.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/PARTY_RELATIONSHIP"
+                    }
+                }
+            },
+            "required": [
+                "name",
+                "archetype_node_id",
+                "identities"
+            ],
+            "$inherits": [
+                "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Common/all.json#/definitions/LOCATABLE"
+            ],
+            "$functions": {
+                "parent": {
+                    "description": "Parent of this node in a compositional hierarchy. \n"
+                },
+                "item_at_path": {
+                    "description": "The item at a path (relative to this item); only valid for unique paths, i.e. paths that resolve to a single item. "
+                },
+                "items_at_path": {
+                    "description": "List of items corresponding to a non-unique path."
+                },
+                "path_exists": {
+                    "description": "True if the path exists in the data with respect to the current item. "
+                },
+                "path_unique": {
+                    "description": "True if the path corresponds to a single item in the data. "
+                },
+                "path_of_item": {
+                    "description": "The path to an item relative to the root of this archetyped structure."
+                },
+                "concept": {
+                    "description": "Clinical concept of the archetype as a whole (= derived from the archetype_node_id' of the root node) "
+                },
+                "is_archetype_root": {
+                    "description": "True if this node is the root of an archetyped structure."
+                },
+                "type": {
+                    "description": "Type of party, such as  `PERSON`,  `ORGANISATION`, etc. Role name, e.g.  general practitioner ,  nurse ,  private citizen . Taken from inherited `_name_` attribute."
+                }
+            },
+            "$invariants": {
+                "Pre": {
+                    "description": "path_exists (a_path)"
+                },
+                "Links_valid": {
+                    "description": "links /= Void implies not links.is_empty"
+                },
+                "Archetyped_valid": {
+                    "description": "is_archetype_root xor archetype_details = Void"
+                },
+                "Archetype_node_id_valid": {
+                    "description": "not archetype_node_id.is_empty"
+                },
+                "Type_valid": {
+                    "description": "type = name"
+                },
+                "Identities_valid": {
+                    "description": "not identities.is_empty"
+                },
+                "Contacts_valid": {
+                    "description": "contacts /= Void implies not contacts.is_empty"
+                },
+                "Relationships_validity": {
+                    "description": "relationships /= Void implies (not relationships.is_empty and then relationships.for_all (r | r.source = self)"
+                },
+                "Reverse_relationships_validity": {
+                    "description": "reverse_relationships /= Void implies (not reverse_relationships.empty and then reverse_relationships.for_all (item | repository (\"demographics\").all_party_relationships.has_object (item) and then repository(\"demographics\").all_party_relationships.object (item).target = self))"
+                },
+                "Is_archetype_root": {
+                    "description": "is_archetype_root"
+                }
+            }
+        },
+        "CONTACT": {
+            "title": "CONTACT",
+            "description": "Description of a means of contact of a Party. Actual structure is archetyped.",
+            "$comments": "Defined in Demographic IM, inherits from LOCATABLE",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "description": "Runtime name of this fragment, used to build runtime paths. This is the term provided via a clinical application or batch process to name this EHR construct: its retention in the EHR faithfully preserves the original label by which this entry was known to end users. \n",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Data_types/all.json#/definitions/DV_TEXT"
+                },
+                "archetype_node_id": {
+                    "description": "Design-time archetype id of this node taken from its generating archetype; used to build archetype paths. Always in the form of an  at  code, e.g.  at0005 . This value enables a \"standardised\" name for this node to be generated, by referring to the generating archetype local ontology. \n\nAt an archetype root point, the value of this attribute is always the stringified form of the archetype_id found in the archetype_details object. \n",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/BASE/latest/Foundation_types/all.json#/definitions/String"
+                },
+                "uid": {
+                    "description": "Optional globally unique object identifier for root points of archetyped structures. ",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/BASE/latest/Base_types/all.json#/definitions/UID_BASED_ID"
+                },
+                "links": {
+                    "description": "Links to other archetyped structures (data whose root object inherits from ARCHETYPED, such as ENTRY, SECTION and so on). Links may be to structures in other compositions. ",
+                    "type": "array",
+                    "items": {
+                        "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Common/all.json#/definitions/LINK"
+                    }
+                },
+                "archetype_details": {
+                    "description": "Details of archetyping used on this node.",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Common/all.json#/definitions/ARCHETYPED"
+                },
+                "feeder_audit": {
+                    "description": "Audit trail from non-openEHR system of original commit of information forming the content of this node, or from a conversion gateway which has synthesised this node. ",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Common/all.json#/definitions/FEEDER_AUDIT"
+                },
+                "addresses": {
+                    "description": "A set of address alternatives for this contact purpose and time validity combination.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ADDRESS"
+                    },
+                    "minItems": 1
+                },
+                "time_validity": {
+                    "description": "Valid time interval for this contact descriptor.",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Data_types/all.json#/definitions/DV_INTERVAL_of_DV_DATE"
+                }
+            },
+            "required": [
+                "name",
+                "archetype_node_id",
+                "addresses"
+            ],
+            "$inherits": [
+                "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Common/all.json#/definitions/LOCATABLE"
+            ],
+            "$functions": {
+                "parent": {
+                    "description": "Parent of this node in a compositional hierarchy. \n"
+                },
+                "item_at_path": {
+                    "description": "The item at a path (relative to this item); only valid for unique paths, i.e. paths that resolve to a single item. "
+                },
+                "items_at_path": {
+                    "description": "List of items corresponding to a non-unique path."
+                },
+                "path_exists": {
+                    "description": "True if the path exists in the data with respect to the current item. "
+                },
+                "path_unique": {
+                    "description": "True if the path corresponds to a single item in the data. "
+                },
+                "path_of_item": {
+                    "description": "The path to an item relative to the root of this archetyped structure."
+                },
+                "concept": {
+                    "description": "Clinical concept of the archetype as a whole (= derived from the archetype_node_id' of the root node) "
+                },
+                "is_archetype_root": {
+                    "description": "True if this node is the root of an archetyped structure."
+                },
+                "purpose": {
+                    "description": "Purpose for which this contact is used, e.g. mail,  daytime phone, etc. Taken from value of inherited `_name_` attribute."
+                }
+            },
+            "$invariants": {
+                "Pre": {
+                    "description": "path_exists (a_path)"
+                },
+                "Links_valid": {
+                    "description": "links /= Void implies not links.is_empty"
+                },
+                "Archetyped_valid": {
+                    "description": "is_archetype_root xor archetype_details = Void"
+                },
+                "Archetype_node_id_valid": {
+                    "description": "not archetype_node_id.is_empty"
+                },
+                "Purpose_valid": {
+                    "description": "purpose = name"
+                }
+            }
+        },
+        "ADDRESS": {
+            "title": "ADDRESS",
+            "description": "Address of contact, which may be electronic or geographic.",
+            "$comments": "Defined in Demographic IM, inherits from LOCATABLE",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "description": "Runtime name of this fragment, used to build runtime paths. This is the term provided via a clinical application or batch process to name this EHR construct: its retention in the EHR faithfully preserves the original label by which this entry was known to end users. \n",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Data_types/all.json#/definitions/DV_TEXT"
+                },
+                "archetype_node_id": {
+                    "description": "Design-time archetype id of this node taken from its generating archetype; used to build archetype paths. Always in the form of an  at  code, e.g.  at0005 . This value enables a \"standardised\" name for this node to be generated, by referring to the generating archetype local ontology. \n\nAt an archetype root point, the value of this attribute is always the stringified form of the archetype_id found in the archetype_details object. \n",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/BASE/latest/Foundation_types/all.json#/definitions/String"
+                },
+                "uid": {
+                    "description": "Optional globally unique object identifier for root points of archetyped structures. ",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/BASE/latest/Base_types/all.json#/definitions/UID_BASED_ID"
+                },
+                "links": {
+                    "description": "Links to other archetyped structures (data whose root object inherits from ARCHETYPED, such as ENTRY, SECTION and so on). Links may be to structures in other compositions. ",
+                    "type": "array",
+                    "items": {
+                        "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Common/all.json#/definitions/LINK"
+                    }
+                },
+                "archetype_details": {
+                    "description": "Details of archetyping used on this node.",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Common/all.json#/definitions/ARCHETYPED"
+                },
+                "feeder_audit": {
+                    "description": "Audit trail from non-openEHR system of original commit of information forming the content of this node, or from a conversion gateway which has synthesised this node. ",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Common/all.json#/definitions/FEEDER_AUDIT"
+                },
+                "details": {
+                    "description": "Archetypable structured address.",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Data_structures/all.json#/definitions/ITEM_STRUCTURE"
+                }
+            },
+            "required": [
+                "name",
+                "archetype_node_id",
+                "details"
+            ],
+            "$inherits": [
+                "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Common/all.json#/definitions/LOCATABLE"
+            ],
+            "$functions": {
+                "parent": {
+                    "description": "Parent of this node in a compositional hierarchy. \n"
+                },
+                "item_at_path": {
+                    "description": "The item at a path (relative to this item); only valid for unique paths, i.e. paths that resolve to a single item. "
+                },
+                "items_at_path": {
+                    "description": "List of items corresponding to a non-unique path."
+                },
+                "path_exists": {
+                    "description": "True if the path exists in the data with respect to the current item. "
+                },
+                "path_unique": {
+                    "description": "True if the path corresponds to a single item in the data. "
+                },
+                "path_of_item": {
+                    "description": "The path to an item relative to the root of this archetyped structure."
+                },
+                "concept": {
+                    "description": "Clinical concept of the archetype as a whole (= derived from the archetype_node_id' of the root node) "
+                },
+                "is_archetype_root": {
+                    "description": "True if this node is the root of an archetyped structure."
+                },
+                "type": {
+                    "description": "Type of address, e.g. electronic,  locality. Taken from value of inherited `_name_` attribute."
+                }
+            },
+            "$invariants": {
+                "Pre": {
+                    "description": "path_exists (a_path)"
+                },
+                "Links_valid": {
+                    "description": "links /= Void implies not links.is_empty"
+                },
+                "Archetyped_valid": {
+                    "description": "is_archetype_root xor archetype_details = Void"
+                },
+                "Archetype_node_id_valid": {
+                    "description": "not archetype_node_id.is_empty"
+                },
+                "Type_valid": {
+                    "description": "type = name"
+                }
+            }
+        },
+        "PARTY_IDENTITY": {
+            "title": "PARTY_IDENTITY",
+            "description": "An identity  owned  by a Party, such as a person name or company name, and which is used by the Party to identify itself. Actual structure is archetyped.",
+            "$comments": "Defined in Demographic IM, inherits from LOCATABLE",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "description": "Runtime name of this fragment, used to build runtime paths. This is the term provided via a clinical application or batch process to name this EHR construct: its retention in the EHR faithfully preserves the original label by which this entry was known to end users. \n",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Data_types/all.json#/definitions/DV_TEXT"
+                },
+                "archetype_node_id": {
+                    "description": "Design-time archetype id of this node taken from its generating archetype; used to build archetype paths. Always in the form of an  at  code, e.g.  at0005 . This value enables a \"standardised\" name for this node to be generated, by referring to the generating archetype local ontology. \n\nAt an archetype root point, the value of this attribute is always the stringified form of the archetype_id found in the archetype_details object. \n",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/BASE/latest/Foundation_types/all.json#/definitions/String"
+                },
+                "uid": {
+                    "description": "Optional globally unique object identifier for root points of archetyped structures. ",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/BASE/latest/Base_types/all.json#/definitions/UID_BASED_ID"
+                },
+                "links": {
+                    "description": "Links to other archetyped structures (data whose root object inherits from ARCHETYPED, such as ENTRY, SECTION and so on). Links may be to structures in other compositions. ",
+                    "type": "array",
+                    "items": {
+                        "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Common/all.json#/definitions/LINK"
+                    }
+                },
+                "archetype_details": {
+                    "description": "Details of archetyping used on this node.",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Common/all.json#/definitions/ARCHETYPED"
+                },
+                "feeder_audit": {
+                    "description": "Audit trail from non-openEHR system of original commit of information forming the content of this node, or from a conversion gateway which has synthesised this node. ",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Common/all.json#/definitions/FEEDER_AUDIT"
+                },
+                "details": {
+                    "description": "The value of the identity. This will often taken the form of a parseable string or a small structure of strings.",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Data_structures/all.json#/definitions/ITEM_STRUCTURE"
+                }
+            },
+            "required": [
+                "name",
+                "archetype_node_id",
+                "details"
+            ],
+            "$inherits": [
+                "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Common/all.json#/definitions/LOCATABLE"
+            ],
+            "$functions": {
+                "parent": {
+                    "description": "Parent of this node in a compositional hierarchy. \n"
+                },
+                "item_at_path": {
+                    "description": "The item at a path (relative to this item); only valid for unique paths, i.e. paths that resolve to a single item. "
+                },
+                "items_at_path": {
+                    "description": "List of items corresponding to a non-unique path."
+                },
+                "path_exists": {
+                    "description": "True if the path exists in the data with respect to the current item. "
+                },
+                "path_unique": {
+                    "description": "True if the path corresponds to a single item in the data. "
+                },
+                "path_of_item": {
+                    "description": "The path to an item relative to the root of this archetyped structure."
+                },
+                "concept": {
+                    "description": "Clinical concept of the archetype as a whole (= derived from the archetype_node_id' of the root node) "
+                },
+                "is_archetype_root": {
+                    "description": "True if this node is the root of an archetyped structure."
+                },
+                "purpose": {
+                    "description": "Purpose of identity, e.g. legal ,  stagename,  nickname,  tribal name,  trading name. Taken from value of inherited `_name_` attribute."
+                }
+            },
+            "$invariants": {
+                "Pre": {
+                    "description": "path_exists (a_path)"
+                },
+                "Links_valid": {
+                    "description": "links /= Void implies not links.is_empty"
+                },
+                "Archetyped_valid": {
+                    "description": "is_archetype_root xor archetype_details = Void"
+                },
+                "Archetype_node_id_valid": {
+                    "description": "not archetype_node_id.is_empty"
+                },
+                "Purpose_valid": {
+                    "description": "purpose = name"
+                }
+            }
+        },
+        "ROLE": {
+            "title": "ROLE",
+            "description": "Generic description of a role performed by an Actor. The role corresponds to a competency of the Party. Roles are used to define the responsibilities undertaken by a Party for a purpose. Roles should have credentials qualifying the performer to perform the role.",
+            "$comments": "Defined in Demographic IM, inherits from PARTY",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "description": "Runtime name of this fragment, used to build runtime paths. This is the term provided via a clinical application or batch process to name this EHR construct: its retention in the EHR faithfully preserves the original label by which this entry was known to end users. \n",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Data_types/all.json#/definitions/DV_TEXT"
+                },
+                "archetype_node_id": {
+                    "description": "Design-time archetype id of this node taken from its generating archetype; used to build archetype paths. Always in the form of an  at  code, e.g.  at0005 . This value enables a \"standardised\" name for this node to be generated, by referring to the generating archetype local ontology. \n\nAt an archetype root point, the value of this attribute is always the stringified form of the archetype_id found in the archetype_details object. \n",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/BASE/latest/Foundation_types/all.json#/definitions/String"
+                },
+                "uid": {
+                    "description": "Optional globally unique object identifier for root points of archetyped structures. ",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/BASE/latest/Base_types/all.json#/definitions/UID_BASED_ID"
+                },
+                "links": {
+                    "description": "Links to other archetyped structures (data whose root object inherits from ARCHETYPED, such as ENTRY, SECTION and so on). Links may be to structures in other compositions. ",
+                    "type": "array",
+                    "items": {
+                        "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Common/all.json#/definitions/LINK"
+                    }
+                },
+                "archetype_details": {
+                    "description": "Details of archetyping used on this node.",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Common/all.json#/definitions/ARCHETYPED"
+                },
+                "feeder_audit": {
+                    "description": "Audit trail from non-openEHR system of original commit of information forming the content of this node, or from a conversion gateway which has synthesised this node. ",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Common/all.json#/definitions/FEEDER_AUDIT"
+                },
+                "identities": {
+                    "description": "Identities used by the party to identify itself, such as legal name, stage names, aliases, nicknames and so on.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/PARTY_IDENTITY"
+                    },
+                    "minItems": 1
+                },
+                "contacts": {
+                    "description": "Contacts for this party.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/CONTACT"
+                    }
+                },
+                "details": {
+                    "description": "All other details for this Party.",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Data_structures/all.json#/definitions/ITEM_STRUCTURE"
+                },
+                "reverse_relationships": {
+                    "description": "References to relationships in which this Party takes part as target.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/PARTY_RELATIONSHIP"
+                    }
+                },
+                "relationships": {
+                    "description": "Relationships in which this Party takes part as source.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/PARTY_RELATIONSHIP"
+                    }
+                },
+                "time_validity": {
+                    "description": "Valid time interval for this role.",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Data_types/all.json#/definitions/DV_INTERVAL_of_DV_DATE"
+                },
+                "performer": {
+                    "description": "Reference to Version container of Actor playing the role.",
+                    "$ref": "#/definitions/ACTOR"
+                },
+                "capabilities": {
+                    "description": "The capabilities of this role.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/CAPABILITY"
+                    }
+                }
+            },
+            "required": [
+                "name",
+                "archetype_node_id",
+                "identities",
+                "performer"
+            ],
+            "$inherits": [
+                "#/definitions/PARTY"
+            ],
+            "$functions": {
+                "parent": {
+                    "description": "Parent of this node in a compositional hierarchy. \n"
+                },
+                "item_at_path": {
+                    "description": "The item at a path (relative to this item); only valid for unique paths, i.e. paths that resolve to a single item. "
+                },
+                "items_at_path": {
+                    "description": "List of items corresponding to a non-unique path."
+                },
+                "path_exists": {
+                    "description": "True if the path exists in the data with respect to the current item. "
+                },
+                "path_unique": {
+                    "description": "True if the path corresponds to a single item in the data. "
+                },
+                "path_of_item": {
+                    "description": "The path to an item relative to the root of this archetyped structure."
+                },
+                "concept": {
+                    "description": "Clinical concept of the archetype as a whole (= derived from the archetype_node_id' of the root node) "
+                },
+                "is_archetype_root": {
+                    "description": "True if this node is the root of an archetyped structure."
+                },
+                "type": {
+                    "description": "Type of party, such as  `PERSON`,  `ORGANISATION`, etc. Role name, e.g.  general practitioner ,  nurse ,  private citizen . Taken from inherited `_name_` attribute."
+                }
+            },
+            "$invariants": {
+                "Pre": {
+                    "description": "path_exists (a_path)"
+                },
+                "Links_valid": {
+                    "description": "links /= Void implies not links.is_empty"
+                },
+                "Archetyped_valid": {
+                    "description": "is_archetype_root xor archetype_details = Void"
+                },
+                "Archetype_node_id_valid": {
+                    "description": "not archetype_node_id.is_empty"
+                },
+                "Type_valid": {
+                    "description": "type = name"
+                },
+                "Identities_valid": {
+                    "description": "not identities.is_empty"
+                },
+                "Contacts_valid": {
+                    "description": "contacts /= Void implies not contacts.is_empty"
+                },
+                "Relationships_validity": {
+                    "description": "relationships /= Void implies (not relationships.is_empty and then relationships.for_all (r | r.source = self)"
+                },
+                "Reverse_relationships_validity": {
+                    "description": "reverse_relationships /= Void implies (not reverse_relationships.empty and then reverse_relationships.for_all (item | repository (\"demographics\").all_party_relationships.has_object (item) and then repository(\"demographics\").all_party_relationships.object (item).target = self))"
+                },
+                "Is_archetype_root": {
+                    "description": "is_archetype_root"
+                },
+                "Capabilities_valid": {
+                    "description": "capabilities /= Void implies not capabilities.empty"
+                }
+            }
+        },
+        "ACTOR": {
+            "title": "ACTOR",
+            "description": "Ancestor of all real-world types, including people and organisations. An actor is any real-world entity capable of taking on a role.",
+            "$comments": "Defined in Demographic IM, abstract, inherits from PARTY",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "description": "Runtime name of this fragment, used to build runtime paths. This is the term provided via a clinical application or batch process to name this EHR construct: its retention in the EHR faithfully preserves the original label by which this entry was known to end users. \n",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Data_types/all.json#/definitions/DV_TEXT"
+                },
+                "archetype_node_id": {
+                    "description": "Design-time archetype id of this node taken from its generating archetype; used to build archetype paths. Always in the form of an  at  code, e.g.  at0005 . This value enables a \"standardised\" name for this node to be generated, by referring to the generating archetype local ontology. \n\nAt an archetype root point, the value of this attribute is always the stringified form of the archetype_id found in the archetype_details object. \n",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/BASE/latest/Foundation_types/all.json#/definitions/String"
+                },
+                "uid": {
+                    "description": "Optional globally unique object identifier for root points of archetyped structures. ",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/BASE/latest/Base_types/all.json#/definitions/UID_BASED_ID"
+                },
+                "links": {
+                    "description": "Links to other archetyped structures (data whose root object inherits from ARCHETYPED, such as ENTRY, SECTION and so on). Links may be to structures in other compositions. ",
+                    "type": "array",
+                    "items": {
+                        "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Common/all.json#/definitions/LINK"
+                    }
+                },
+                "archetype_details": {
+                    "description": "Details of archetyping used on this node.",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Common/all.json#/definitions/ARCHETYPED"
+                },
+                "feeder_audit": {
+                    "description": "Audit trail from non-openEHR system of original commit of information forming the content of this node, or from a conversion gateway which has synthesised this node. ",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Common/all.json#/definitions/FEEDER_AUDIT"
+                },
+                "identities": {
+                    "description": "Identities used by the party to identify itself, such as legal name, stage names, aliases, nicknames and so on.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/PARTY_IDENTITY"
+                    },
+                    "minItems": 1
+                },
+                "contacts": {
+                    "description": "Contacts for this party.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/CONTACT"
+                    }
+                },
+                "details": {
+                    "description": "All other details for this Party.",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Data_structures/all.json#/definitions/ITEM_STRUCTURE"
+                },
+                "reverse_relationships": {
+                    "description": "References to relationships in which this Party takes part as target.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/PARTY_RELATIONSHIP"
+                    }
+                },
+                "relationships": {
+                    "description": "Relationships in which this Party takes part as source.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/PARTY_RELATIONSHIP"
+                    }
+                },
+                "languages": {
+                    "description": "Languages which can be used to communicate with this actor, in preferred order of use (if known, else order irrelevant).",
+                    "type": "array",
+                    "items": {
+                        "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Data_types/all.json#/definitions/DV_TEXT"
+                    }
+                },
+                "roles": {
+                    "description": "Identifiers of the Version container for each Role played by this Party.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ROLE"
+                    }
+                }
+            },
+            "required": [
+                "name",
+                "archetype_node_id",
+                "identities"
+            ],
+            "$inherits": [
+                "#/definitions/PARTY"
+            ],
+            "$functions": {
+                "parent": {
+                    "description": "Parent of this node in a compositional hierarchy. \n"
+                },
+                "item_at_path": {
+                    "description": "The item at a path (relative to this item); only valid for unique paths, i.e. paths that resolve to a single item. "
+                },
+                "items_at_path": {
+                    "description": "List of items corresponding to a non-unique path."
+                },
+                "path_exists": {
+                    "description": "True if the path exists in the data with respect to the current item. "
+                },
+                "path_unique": {
+                    "description": "True if the path corresponds to a single item in the data. "
+                },
+                "path_of_item": {
+                    "description": "The path to an item relative to the root of this archetyped structure."
+                },
+                "concept": {
+                    "description": "Clinical concept of the archetype as a whole (= derived from the archetype_node_id' of the root node) "
+                },
+                "is_archetype_root": {
+                    "description": "True if this node is the root of an archetyped structure."
+                },
+                "type": {
+                    "description": "Type of party, such as  `PERSON`,  `ORGANISATION`, etc. Role name, e.g.  general practitioner ,  nurse ,  private citizen . Taken from inherited `_name_` attribute."
+                }
+            },
+            "$invariants": {
+                "Pre": {
+                    "description": "path_exists (a_path)"
+                },
+                "Links_valid": {
+                    "description": "links /= Void implies not links.is_empty"
+                },
+                "Archetyped_valid": {
+                    "description": "is_archetype_root xor archetype_details = Void"
+                },
+                "Archetype_node_id_valid": {
+                    "description": "not archetype_node_id.is_empty"
+                },
+                "Type_valid": {
+                    "description": "type = name"
+                },
+                "Identities_valid": {
+                    "description": "not identities.is_empty"
+                },
+                "Contacts_valid": {
+                    "description": "contacts /= Void implies not contacts.is_empty"
+                },
+                "Relationships_validity": {
+                    "description": "relationships /= Void implies (not relationships.is_empty and then relationships.for_all (r | r.source = self)"
+                },
+                "Reverse_relationships_validity": {
+                    "description": "reverse_relationships /= Void implies (not reverse_relationships.empty and then reverse_relationships.for_all (item | repository (\"demographics\").all_party_relationships.has_object (item) and then repository(\"demographics\").all_party_relationships.object (item).target = self))"
+                },
+                "Is_archetype_root": {
+                    "description": "is_archetype_root"
+                },
+                "Roles_valid": {
+                    "description": "roles /= Void implies not roles.is_empty"
+                },
+                "Legal_identity_exists": {
+                    "description": "has_legal_identity"
+                }
+            }
+        },
+        "CAPABILITY": {
+            "title": "CAPABILITY",
+            "description": "Capability of a role, such as  ehr modifier ,  health care provider . Capability should be backed up by credentials.",
+            "$comments": "Defined in Demographic IM, inherits from LOCATABLE",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "description": "Runtime name of this fragment, used to build runtime paths. This is the term provided via a clinical application or batch process to name this EHR construct: its retention in the EHR faithfully preserves the original label by which this entry was known to end users. \n",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Data_types/all.json#/definitions/DV_TEXT"
+                },
+                "archetype_node_id": {
+                    "description": "Design-time archetype id of this node taken from its generating archetype; used to build archetype paths. Always in the form of an  at  code, e.g.  at0005 . This value enables a \"standardised\" name for this node to be generated, by referring to the generating archetype local ontology. \n\nAt an archetype root point, the value of this attribute is always the stringified form of the archetype_id found in the archetype_details object. \n",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/BASE/latest/Foundation_types/all.json#/definitions/String"
+                },
+                "uid": {
+                    "description": "Optional globally unique object identifier for root points of archetyped structures. ",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/BASE/latest/Base_types/all.json#/definitions/UID_BASED_ID"
+                },
+                "links": {
+                    "description": "Links to other archetyped structures (data whose root object inherits from ARCHETYPED, such as ENTRY, SECTION and so on). Links may be to structures in other compositions. ",
+                    "type": "array",
+                    "items": {
+                        "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Common/all.json#/definitions/LINK"
+                    }
+                },
+                "archetype_details": {
+                    "description": "Details of archetyping used on this node.",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Common/all.json#/definitions/ARCHETYPED"
+                },
+                "feeder_audit": {
+                    "description": "Audit trail from non-openEHR system of original commit of information forming the content of this node, or from a conversion gateway which has synthesised this node. ",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Common/all.json#/definitions/FEEDER_AUDIT"
+                },
+                "credentials": {
+                    "description": "The qualifications of the performer of the role for this capability. This might include professional qualifications and official identifications such as provider numbers etc.",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Data_structures/all.json#/definitions/ITEM_STRUCTURE"
+                },
+                "time_validity": {
+                    "description": "Valid time interval for the credentials of this capability.",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Data_types/all.json#/definitions/DV_INTERVAL_of_DV_DATE"
+                }
+            },
+            "required": [
+                "name",
+                "archetype_node_id",
+                "credentials"
+            ],
+            "$inherits": [
+                "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Common/all.json#/definitions/LOCATABLE"
+            ],
+            "$functions": {
+                "parent": {
+                    "description": "Parent of this node in a compositional hierarchy. \n"
+                },
+                "item_at_path": {
+                    "description": "The item at a path (relative to this item); only valid for unique paths, i.e. paths that resolve to a single item. "
+                },
+                "items_at_path": {
+                    "description": "List of items corresponding to a non-unique path."
+                },
+                "path_exists": {
+                    "description": "True if the path exists in the data with respect to the current item. "
+                },
+                "path_unique": {
+                    "description": "True if the path corresponds to a single item in the data. "
+                },
+                "path_of_item": {
+                    "description": "The path to an item relative to the root of this archetyped structure."
+                },
+                "concept": {
+                    "description": "Clinical concept of the archetype as a whole (= derived from the archetype_node_id' of the root node) "
+                },
+                "is_archetype_root": {
+                    "description": "True if this node is the root of an archetyped structure."
+                }
+            },
+            "$invariants": {
+                "Pre": {
+                    "description": "path_exists (a_path)"
+                },
+                "Links_valid": {
+                    "description": "links /= Void implies not links.is_empty"
+                },
+                "Archetyped_valid": {
+                    "description": "is_archetype_root xor archetype_details = Void"
+                },
+                "Archetype_node_id_valid": {
+                    "description": "not archetype_node_id.is_empty"
+                }
+            }
+        },
+        "AGENT": {
+            "title": "AGENT",
+            "description": "Generic concept of any kind of agent, including devices, software systems, but not humans or organisations.",
+            "$comments": "Defined in Demographic IM, inherits from ACTOR",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "description": "Runtime name of this fragment, used to build runtime paths. This is the term provided via a clinical application or batch process to name this EHR construct: its retention in the EHR faithfully preserves the original label by which this entry was known to end users. \n",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Data_types/all.json#/definitions/DV_TEXT"
+                },
+                "archetype_node_id": {
+                    "description": "Design-time archetype id of this node taken from its generating archetype; used to build archetype paths. Always in the form of an  at  code, e.g.  at0005 . This value enables a \"standardised\" name for this node to be generated, by referring to the generating archetype local ontology. \n\nAt an archetype root point, the value of this attribute is always the stringified form of the archetype_id found in the archetype_details object. \n",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/BASE/latest/Foundation_types/all.json#/definitions/String"
+                },
+                "uid": {
+                    "description": "Optional globally unique object identifier for root points of archetyped structures. ",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/BASE/latest/Base_types/all.json#/definitions/UID_BASED_ID"
+                },
+                "links": {
+                    "description": "Links to other archetyped structures (data whose root object inherits from ARCHETYPED, such as ENTRY, SECTION and so on). Links may be to structures in other compositions. ",
+                    "type": "array",
+                    "items": {
+                        "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Common/all.json#/definitions/LINK"
+                    }
+                },
+                "archetype_details": {
+                    "description": "Details of archetyping used on this node.",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Common/all.json#/definitions/ARCHETYPED"
+                },
+                "feeder_audit": {
+                    "description": "Audit trail from non-openEHR system of original commit of information forming the content of this node, or from a conversion gateway which has synthesised this node. ",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Common/all.json#/definitions/FEEDER_AUDIT"
+                },
+                "identities": {
+                    "description": "Identities used by the party to identify itself, such as legal name, stage names, aliases, nicknames and so on.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/PARTY_IDENTITY"
+                    },
+                    "minItems": 1
+                },
+                "contacts": {
+                    "description": "Contacts for this party.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/CONTACT"
+                    }
+                },
+                "details": {
+                    "description": "All other details for this Party.",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Data_structures/all.json#/definitions/ITEM_STRUCTURE"
+                },
+                "reverse_relationships": {
+                    "description": "References to relationships in which this Party takes part as target.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/PARTY_RELATIONSHIP"
+                    }
+                },
+                "relationships": {
+                    "description": "Relationships in which this Party takes part as source.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/PARTY_RELATIONSHIP"
+                    }
+                },
+                "languages": {
+                    "description": "Languages which can be used to communicate with this actor, in preferred order of use (if known, else order irrelevant).",
+                    "type": "array",
+                    "items": {
+                        "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Data_types/all.json#/definitions/DV_TEXT"
+                    }
+                },
+                "roles": {
+                    "description": "Identifiers of the Version container for each Role played by this Party.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ROLE"
+                    }
+                }
+            },
+            "required": [
+                "name",
+                "archetype_node_id",
+                "identities"
+            ],
+            "$inherits": [
+                "#/definitions/ACTOR"
+            ],
+            "$functions": {
+                "parent": {
+                    "description": "Parent of this node in a compositional hierarchy. \n"
+                },
+                "item_at_path": {
+                    "description": "The item at a path (relative to this item); only valid for unique paths, i.e. paths that resolve to a single item. "
+                },
+                "items_at_path": {
+                    "description": "List of items corresponding to a non-unique path."
+                },
+                "path_exists": {
+                    "description": "True if the path exists in the data with respect to the current item. "
+                },
+                "path_unique": {
+                    "description": "True if the path corresponds to a single item in the data. "
+                },
+                "path_of_item": {
+                    "description": "The path to an item relative to the root of this archetyped structure."
+                },
+                "concept": {
+                    "description": "Clinical concept of the archetype as a whole (= derived from the archetype_node_id' of the root node) "
+                },
+                "is_archetype_root": {
+                    "description": "True if this node is the root of an archetyped structure."
+                },
+                "type": {
+                    "description": "Type of party, such as  `PERSON`,  `ORGANISATION`, etc. Role name, e.g.  general practitioner ,  nurse ,  private citizen . Taken from inherited `_name_` attribute."
+                }
+            },
+            "$invariants": {
+                "Pre": {
+                    "description": "path_exists (a_path)"
+                },
+                "Links_valid": {
+                    "description": "links /= Void implies not links.is_empty"
+                },
+                "Archetyped_valid": {
+                    "description": "is_archetype_root xor archetype_details = Void"
+                },
+                "Archetype_node_id_valid": {
+                    "description": "not archetype_node_id.is_empty"
+                },
+                "Type_valid": {
+                    "description": "type = name"
+                },
+                "Identities_valid": {
+                    "description": "not identities.is_empty"
+                },
+                "Contacts_valid": {
+                    "description": "contacts /= Void implies not contacts.is_empty"
+                },
+                "Relationships_validity": {
+                    "description": "relationships /= Void implies (not relationships.is_empty and then relationships.for_all (r | r.source = self)"
+                },
+                "Reverse_relationships_validity": {
+                    "description": "reverse_relationships /= Void implies (not reverse_relationships.empty and then reverse_relationships.for_all (item | repository (\"demographics\").all_party_relationships.has_object (item) and then repository(\"demographics\").all_party_relationships.object (item).target = self))"
+                },
+                "Is_archetype_root": {
+                    "description": "is_archetype_root"
+                },
+                "Roles_valid": {
+                    "description": "roles /= Void implies not roles.is_empty"
+                },
+                "Legal_identity_exists": {
+                    "description": "has_legal_identity"
+                }
+            }
+        },
+        "ORGANISATION": {
+            "title": "ORGANISATION",
+            "description": "Generic description of organisations. An organisation is a legally constituted body whose existence (in general) outlives the existence of parties considered to be part of it.",
+            "$comments": "Defined in Demographic IM, inherits from ACTOR",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "description": "Runtime name of this fragment, used to build runtime paths. This is the term provided via a clinical application or batch process to name this EHR construct: its retention in the EHR faithfully preserves the original label by which this entry was known to end users. \n",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Data_types/all.json#/definitions/DV_TEXT"
+                },
+                "archetype_node_id": {
+                    "description": "Design-time archetype id of this node taken from its generating archetype; used to build archetype paths. Always in the form of an  at  code, e.g.  at0005 . This value enables a \"standardised\" name for this node to be generated, by referring to the generating archetype local ontology. \n\nAt an archetype root point, the value of this attribute is always the stringified form of the archetype_id found in the archetype_details object. \n",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/BASE/latest/Foundation_types/all.json#/definitions/String"
+                },
+                "uid": {
+                    "description": "Optional globally unique object identifier for root points of archetyped structures. ",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/BASE/latest/Base_types/all.json#/definitions/UID_BASED_ID"
+                },
+                "links": {
+                    "description": "Links to other archetyped structures (data whose root object inherits from ARCHETYPED, such as ENTRY, SECTION and so on). Links may be to structures in other compositions. ",
+                    "type": "array",
+                    "items": {
+                        "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Common/all.json#/definitions/LINK"
+                    }
+                },
+                "archetype_details": {
+                    "description": "Details of archetyping used on this node.",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Common/all.json#/definitions/ARCHETYPED"
+                },
+                "feeder_audit": {
+                    "description": "Audit trail from non-openEHR system of original commit of information forming the content of this node, or from a conversion gateway which has synthesised this node. ",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Common/all.json#/definitions/FEEDER_AUDIT"
+                },
+                "identities": {
+                    "description": "Identities used by the party to identify itself, such as legal name, stage names, aliases, nicknames and so on.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/PARTY_IDENTITY"
+                    },
+                    "minItems": 1
+                },
+                "contacts": {
+                    "description": "Contacts for this party.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/CONTACT"
+                    }
+                },
+                "details": {
+                    "description": "All other details for this Party.",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Data_structures/all.json#/definitions/ITEM_STRUCTURE"
+                },
+                "reverse_relationships": {
+                    "description": "References to relationships in which this Party takes part as target.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/PARTY_RELATIONSHIP"
+                    }
+                },
+                "relationships": {
+                    "description": "Relationships in which this Party takes part as source.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/PARTY_RELATIONSHIP"
+                    }
+                },
+                "languages": {
+                    "description": "Languages which can be used to communicate with this actor, in preferred order of use (if known, else order irrelevant).",
+                    "type": "array",
+                    "items": {
+                        "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Data_types/all.json#/definitions/DV_TEXT"
+                    }
+                },
+                "roles": {
+                    "description": "Identifiers of the Version container for each Role played by this Party.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ROLE"
+                    }
+                }
+            },
+            "required": [
+                "name",
+                "archetype_node_id",
+                "identities"
+            ],
+            "$inherits": [
+                "#/definitions/ACTOR"
+            ],
+            "$functions": {
+                "parent": {
+                    "description": "Parent of this node in a compositional hierarchy. \n"
+                },
+                "item_at_path": {
+                    "description": "The item at a path (relative to this item); only valid for unique paths, i.e. paths that resolve to a single item. "
+                },
+                "items_at_path": {
+                    "description": "List of items corresponding to a non-unique path."
+                },
+                "path_exists": {
+                    "description": "True if the path exists in the data with respect to the current item. "
+                },
+                "path_unique": {
+                    "description": "True if the path corresponds to a single item in the data. "
+                },
+                "path_of_item": {
+                    "description": "The path to an item relative to the root of this archetyped structure."
+                },
+                "concept": {
+                    "description": "Clinical concept of the archetype as a whole (= derived from the archetype_node_id' of the root node) "
+                },
+                "is_archetype_root": {
+                    "description": "True if this node is the root of an archetyped structure."
+                },
+                "type": {
+                    "description": "Type of party, such as  `PERSON`,  `ORGANISATION`, etc. Role name, e.g.  general practitioner ,  nurse ,  private citizen . Taken from inherited `_name_` attribute."
+                }
+            },
+            "$invariants": {
+                "Pre": {
+                    "description": "path_exists (a_path)"
+                },
+                "Links_valid": {
+                    "description": "links /= Void implies not links.is_empty"
+                },
+                "Archetyped_valid": {
+                    "description": "is_archetype_root xor archetype_details = Void"
+                },
+                "Archetype_node_id_valid": {
+                    "description": "not archetype_node_id.is_empty"
+                },
+                "Type_valid": {
+                    "description": "type = name"
+                },
+                "Identities_valid": {
+                    "description": "not identities.is_empty"
+                },
+                "Contacts_valid": {
+                    "description": "contacts /= Void implies not contacts.is_empty"
+                },
+                "Relationships_validity": {
+                    "description": "relationships /= Void implies (not relationships.is_empty and then relationships.for_all (r | r.source = self)"
+                },
+                "Reverse_relationships_validity": {
+                    "description": "reverse_relationships /= Void implies (not reverse_relationships.empty and then reverse_relationships.for_all (item | repository (\"demographics\").all_party_relationships.has_object (item) and then repository(\"demographics\").all_party_relationships.object (item).target = self))"
+                },
+                "Is_archetype_root": {
+                    "description": "is_archetype_root"
+                },
+                "Roles_valid": {
+                    "description": "roles /= Void implies not roles.is_empty"
+                },
+                "Legal_identity_exists": {
+                    "description": "has_legal_identity"
+                }
+            }
+        },
+        "GROUP": {
+            "title": "GROUP",
+            "description": "A group is a real world group of parties which is created by another party, usually an organisation, for some specific purpose. A typical clinical example is that of the specialist care team, e.g.  cardiology team . The members of the group usually work together.",
+            "$comments": "Defined in Demographic IM, inherits from ACTOR",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "description": "Runtime name of this fragment, used to build runtime paths. This is the term provided via a clinical application or batch process to name this EHR construct: its retention in the EHR faithfully preserves the original label by which this entry was known to end users. \n",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Data_types/all.json#/definitions/DV_TEXT"
+                },
+                "archetype_node_id": {
+                    "description": "Design-time archetype id of this node taken from its generating archetype; used to build archetype paths. Always in the form of an  at  code, e.g.  at0005 . This value enables a \"standardised\" name for this node to be generated, by referring to the generating archetype local ontology. \n\nAt an archetype root point, the value of this attribute is always the stringified form of the archetype_id found in the archetype_details object. \n",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/BASE/latest/Foundation_types/all.json#/definitions/String"
+                },
+                "uid": {
+                    "description": "Optional globally unique object identifier for root points of archetyped structures. ",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/BASE/latest/Base_types/all.json#/definitions/UID_BASED_ID"
+                },
+                "links": {
+                    "description": "Links to other archetyped structures (data whose root object inherits from ARCHETYPED, such as ENTRY, SECTION and so on). Links may be to structures in other compositions. ",
+                    "type": "array",
+                    "items": {
+                        "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Common/all.json#/definitions/LINK"
+                    }
+                },
+                "archetype_details": {
+                    "description": "Details of archetyping used on this node.",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Common/all.json#/definitions/ARCHETYPED"
+                },
+                "feeder_audit": {
+                    "description": "Audit trail from non-openEHR system of original commit of information forming the content of this node, or from a conversion gateway which has synthesised this node. ",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Common/all.json#/definitions/FEEDER_AUDIT"
+                },
+                "identities": {
+                    "description": "Identities used by the party to identify itself, such as legal name, stage names, aliases, nicknames and so on.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/PARTY_IDENTITY"
+                    },
+                    "minItems": 1
+                },
+                "contacts": {
+                    "description": "Contacts for this party.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/CONTACT"
+                    }
+                },
+                "details": {
+                    "description": "All other details for this Party.",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Data_structures/all.json#/definitions/ITEM_STRUCTURE"
+                },
+                "reverse_relationships": {
+                    "description": "References to relationships in which this Party takes part as target.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/PARTY_RELATIONSHIP"
+                    }
+                },
+                "relationships": {
+                    "description": "Relationships in which this Party takes part as source.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/PARTY_RELATIONSHIP"
+                    }
+                },
+                "languages": {
+                    "description": "Languages which can be used to communicate with this actor, in preferred order of use (if known, else order irrelevant).",
+                    "type": "array",
+                    "items": {
+                        "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Data_types/all.json#/definitions/DV_TEXT"
+                    }
+                },
+                "roles": {
+                    "description": "Identifiers of the Version container for each Role played by this Party.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ROLE"
+                    }
+                }
+            },
+            "required": [
+                "name",
+                "archetype_node_id",
+                "identities"
+            ],
+            "$inherits": [
+                "#/definitions/ACTOR"
+            ],
+            "$functions": {
+                "parent": {
+                    "description": "Parent of this node in a compositional hierarchy. \n"
+                },
+                "item_at_path": {
+                    "description": "The item at a path (relative to this item); only valid for unique paths, i.e. paths that resolve to a single item. "
+                },
+                "items_at_path": {
+                    "description": "List of items corresponding to a non-unique path."
+                },
+                "path_exists": {
+                    "description": "True if the path exists in the data with respect to the current item. "
+                },
+                "path_unique": {
+                    "description": "True if the path corresponds to a single item in the data. "
+                },
+                "path_of_item": {
+                    "description": "The path to an item relative to the root of this archetyped structure."
+                },
+                "concept": {
+                    "description": "Clinical concept of the archetype as a whole (= derived from the archetype_node_id' of the root node) "
+                },
+                "is_archetype_root": {
+                    "description": "True if this node is the root of an archetyped structure."
+                },
+                "type": {
+                    "description": "Type of party, such as  `PERSON`,  `ORGANISATION`, etc. Role name, e.g.  general practitioner ,  nurse ,  private citizen . Taken from inherited `_name_` attribute."
+                }
+            },
+            "$invariants": {
+                "Pre": {
+                    "description": "path_exists (a_path)"
+                },
+                "Links_valid": {
+                    "description": "links /= Void implies not links.is_empty"
+                },
+                "Archetyped_valid": {
+                    "description": "is_archetype_root xor archetype_details = Void"
+                },
+                "Archetype_node_id_valid": {
+                    "description": "not archetype_node_id.is_empty"
+                },
+                "Type_valid": {
+                    "description": "type = name"
+                },
+                "Identities_valid": {
+                    "description": "not identities.is_empty"
+                },
+                "Contacts_valid": {
+                    "description": "contacts /= Void implies not contacts.is_empty"
+                },
+                "Relationships_validity": {
+                    "description": "relationships /= Void implies (not relationships.is_empty and then relationships.for_all (r | r.source = self)"
+                },
+                "Reverse_relationships_validity": {
+                    "description": "reverse_relationships /= Void implies (not reverse_relationships.empty and then reverse_relationships.for_all (item | repository (\"demographics\").all_party_relationships.has_object (item) and then repository(\"demographics\").all_party_relationships.object (item).target = self))"
+                },
+                "Is_archetype_root": {
+                    "description": "is_archetype_root"
+                },
+                "Roles_valid": {
+                    "description": "roles /= Void implies not roles.is_empty"
+                },
+                "Legal_identity_exists": {
+                    "description": "has_legal_identity"
+                }
+            }
+        },
+        "PERSON": {
+            "title": "PERSON",
+            "description": "Generic description of persons. Provides a dedicated type to which Person archetypes can be targeted.",
+            "$comments": "Defined in Demographic IM, inherits from ACTOR",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "description": "Runtime name of this fragment, used to build runtime paths. This is the term provided via a clinical application or batch process to name this EHR construct: its retention in the EHR faithfully preserves the original label by which this entry was known to end users. \n",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Data_types/all.json#/definitions/DV_TEXT"
+                },
+                "archetype_node_id": {
+                    "description": "Design-time archetype id of this node taken from its generating archetype; used to build archetype paths. Always in the form of an  at  code, e.g.  at0005 . This value enables a \"standardised\" name for this node to be generated, by referring to the generating archetype local ontology. \n\nAt an archetype root point, the value of this attribute is always the stringified form of the archetype_id found in the archetype_details object. \n",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/BASE/latest/Foundation_types/all.json#/definitions/String"
+                },
+                "uid": {
+                    "description": "Optional globally unique object identifier for root points of archetyped structures. ",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/BASE/latest/Base_types/all.json#/definitions/UID_BASED_ID"
+                },
+                "links": {
+                    "description": "Links to other archetyped structures (data whose root object inherits from ARCHETYPED, such as ENTRY, SECTION and so on). Links may be to structures in other compositions. ",
+                    "type": "array",
+                    "items": {
+                        "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Common/all.json#/definitions/LINK"
+                    }
+                },
+                "archetype_details": {
+                    "description": "Details of archetyping used on this node.",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Common/all.json#/definitions/ARCHETYPED"
+                },
+                "feeder_audit": {
+                    "description": "Audit trail from non-openEHR system of original commit of information forming the content of this node, or from a conversion gateway which has synthesised this node. ",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Common/all.json#/definitions/FEEDER_AUDIT"
+                },
+                "identities": {
+                    "description": "Identities used by the party to identify itself, such as legal name, stage names, aliases, nicknames and so on.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/PARTY_IDENTITY"
+                    },
+                    "minItems": 1
+                },
+                "contacts": {
+                    "description": "Contacts for this party.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/CONTACT"
+                    }
+                },
+                "details": {
+                    "description": "All other details for this Party.",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Data_structures/all.json#/definitions/ITEM_STRUCTURE"
+                },
+                "reverse_relationships": {
+                    "description": "References to relationships in which this Party takes part as target.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/PARTY_RELATIONSHIP"
+                    }
+                },
+                "relationships": {
+                    "description": "Relationships in which this Party takes part as source.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/PARTY_RELATIONSHIP"
+                    }
+                },
+                "languages": {
+                    "description": "Languages which can be used to communicate with this actor, in preferred order of use (if known, else order irrelevant).",
+                    "type": "array",
+                    "items": {
+                        "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Data_types/all.json#/definitions/DV_TEXT"
+                    }
+                },
+                "roles": {
+                    "description": "Identifiers of the Version container for each Role played by this Party.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ROLE"
+                    }
+                }
+            },
+            "required": [
+                "name",
+                "archetype_node_id",
+                "identities"
+            ],
+            "$inherits": [
+                "#/definitions/ACTOR"
+            ],
+            "$functions": {
+                "parent": {
+                    "description": "Parent of this node in a compositional hierarchy. \n"
+                },
+                "item_at_path": {
+                    "description": "The item at a path (relative to this item); only valid for unique paths, i.e. paths that resolve to a single item. "
+                },
+                "items_at_path": {
+                    "description": "List of items corresponding to a non-unique path."
+                },
+                "path_exists": {
+                    "description": "True if the path exists in the data with respect to the current item. "
+                },
+                "path_unique": {
+                    "description": "True if the path corresponds to a single item in the data. "
+                },
+                "path_of_item": {
+                    "description": "The path to an item relative to the root of this archetyped structure."
+                },
+                "concept": {
+                    "description": "Clinical concept of the archetype as a whole (= derived from the archetype_node_id' of the root node) "
+                },
+                "is_archetype_root": {
+                    "description": "True if this node is the root of an archetyped structure."
+                },
+                "type": {
+                    "description": "Type of party, such as  `PERSON`,  `ORGANISATION`, etc. Role name, e.g.  general practitioner ,  nurse ,  private citizen . Taken from inherited `_name_` attribute."
+                }
+            },
+            "$invariants": {
+                "Pre": {
+                    "description": "path_exists (a_path)"
+                },
+                "Links_valid": {
+                    "description": "links /= Void implies not links.is_empty"
+                },
+                "Archetyped_valid": {
+                    "description": "is_archetype_root xor archetype_details = Void"
+                },
+                "Archetype_node_id_valid": {
+                    "description": "not archetype_node_id.is_empty"
+                },
+                "Type_valid": {
+                    "description": "type = name"
+                },
+                "Identities_valid": {
+                    "description": "not identities.is_empty"
+                },
+                "Contacts_valid": {
+                    "description": "contacts /= Void implies not contacts.is_empty"
+                },
+                "Relationships_validity": {
+                    "description": "relationships /= Void implies (not relationships.is_empty and then relationships.for_all (r | r.source = self)"
+                },
+                "Reverse_relationships_validity": {
+                    "description": "reverse_relationships /= Void implies (not reverse_relationships.empty and then reverse_relationships.for_all (item | repository (\"demographics\").all_party_relationships.has_object (item) and then repository(\"demographics\").all_party_relationships.object (item).target = self))"
+                },
+                "Is_archetype_root": {
+                    "description": "is_archetype_root"
+                },
+                "Roles_valid": {
+                    "description": "roles /= Void implies not roles.is_empty"
+                },
+                "Legal_identity_exists": {
+                    "description": "has_legal_identity"
+                }
+            }
+        },
+        "PARTY_RELATIONSHIP": {
+            "title": "PARTY_RELATIONSHIP",
+            "description": "Generic description of a relationship between parties.",
+            "$comments": "Defined in Demographic IM, inherits from LOCATABLE",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "description": "Runtime name of this fragment, used to build runtime paths. This is the term provided via a clinical application or batch process to name this EHR construct: its retention in the EHR faithfully preserves the original label by which this entry was known to end users. \n",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Data_types/all.json#/definitions/DV_TEXT"
+                },
+                "archetype_node_id": {
+                    "description": "Design-time archetype id of this node taken from its generating archetype; used to build archetype paths. Always in the form of an  at  code, e.g.  at0005 . This value enables a \"standardised\" name for this node to be generated, by referring to the generating archetype local ontology. \n\nAt an archetype root point, the value of this attribute is always the stringified form of the archetype_id found in the archetype_details object. \n",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/BASE/latest/Foundation_types/all.json#/definitions/String"
+                },
+                "uid": {
+                    "description": "Optional globally unique object identifier for root points of archetyped structures. ",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/BASE/latest/Base_types/all.json#/definitions/UID_BASED_ID"
+                },
+                "links": {
+                    "description": "Links to other archetyped structures (data whose root object inherits from ARCHETYPED, such as ENTRY, SECTION and so on). Links may be to structures in other compositions. ",
+                    "type": "array",
+                    "items": {
+                        "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Common/all.json#/definitions/LINK"
+                    }
+                },
+                "archetype_details": {
+                    "description": "Details of archetyping used on this node.",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Common/all.json#/definitions/ARCHETYPED"
+                },
+                "feeder_audit": {
+                    "description": "Audit trail from non-openEHR system of original commit of information forming the content of this node, or from a conversion gateway which has synthesised this node. ",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Common/all.json#/definitions/FEEDER_AUDIT"
+                },
+                "details": {
+                    "description": "The detailed description of the relationship.",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Data_structures/all.json#/definitions/ITEM_STRUCTURE"
+                },
+                "target": {
+                    "description": "Target of relationship.",
+                    "$ref": "#/definitions/PARTY"
+                },
+                "time_validity": {
+                    "description": "Valid time interval for this relationship.",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Data_types/all.json#/definitions/DV_INTERVAL_of_DV_DATE"
+                },
+                "source": {
+                    "description": "Source of relationship.",
+                    "$ref": "#/definitions/PARTY"
+                }
+            },
+            "required": [
+                "name",
+                "archetype_node_id",
+                "target",
+                "source"
+            ],
+            "$inherits": [
+                "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Common/all.json#/definitions/LOCATABLE"
+            ],
+            "$functions": {
+                "parent": {
+                    "description": "Parent of this node in a compositional hierarchy. \n"
+                },
+                "item_at_path": {
+                    "description": "The item at a path (relative to this item); only valid for unique paths, i.e. paths that resolve to a single item. "
+                },
+                "items_at_path": {
+                    "description": "List of items corresponding to a non-unique path."
+                },
+                "path_exists": {
+                    "description": "True if the path exists in the data with respect to the current item. "
+                },
+                "path_unique": {
+                    "description": "True if the path corresponds to a single item in the data. "
+                },
+                "path_of_item": {
+                    "description": "The path to an item relative to the root of this archetyped structure."
+                },
+                "concept": {
+                    "description": "Clinical concept of the archetype as a whole (= derived from the archetype_node_id' of the root node) "
+                },
+                "is_archetype_root": {
+                    "description": "True if this node is the root of an archetyped structure."
+                },
+                "type": {
+                    "description": "Type of relationship, such as  employment,  authority,  health provision "
+                }
+            },
+            "$invariants": {
+                "Pre": {
+                    "description": "path_exists (a_path)"
+                },
+                "Links_valid": {
+                    "description": "links /= Void implies not links.is_empty"
+                },
+                "Archetyped_valid": {
+                    "description": "is_archetype_root xor archetype_details = Void"
+                },
+                "Archetype_node_id_valid": {
+                    "description": "not archetype_node_id.is_empty"
+                },
+                "Source_valid": {
+                    "description": "source /= Void and then source.relationships.has (self)"
+                },
+                "Target_valid": {
+                    "description": "target /= Void and then not target.reverse_relationships.has (self)"
+                },
+                "Type_validity": {
+                    "description": "type = name"
+                }
+            }
+        },
+        "VERSIONED_PARTY": {
+            "title": "VERSIONED_PARTY",
+            "description": "Static type formed by binding generic parameter of `VERSIONED_OBJECT<T>` to `PARTY`. ",
+            "$comments": "Defined in Demographic IM, inherits from VERSIONED_OBJECT",
+            "type": "object",
+            "properties": {
+                "uid": {
+                    "description": "Unique identifier of this version container in the form of a UID with no extension. This id will be the same in all instances of the same container in a distributed environment, meaning that it can be understood as the uid of the  virtual version tree. ",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/BASE/latest/Base_types/all.json#/definitions/HIER_OBJECT_ID"
+                },
+                "owner_id": {
+                    "description": "Reference to object to which this version container belongs, e.g. the id of the containing EHR or other relevant owning entity. ",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/BASE/latest/Base_types/all.json#/definitions/OBJECT_REF"
+                },
+                "time_created": {
+                    "description": "Time of initial creation of this versioned object. ",
+                    "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Data_types/all.json#/definitions/DV_DATE_TIME"
+                }
+            },
+            "required": [
+                "uid",
+                "owner_id",
+                "time_created"
+            ],
+            "$inherits": [
+                "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Common/all.json#/definitions/VERSIONED_OBJECT"
+            ],
+            "$functions": {
+                "version_count": {
+                    "description": "Return the total number of versions in this object."
+                },
+                "all_version_ids": {
+                    "description": "Return a list of ids of all versions in this object. "
+                },
+                "all_versions": {
+                    "description": "Return a list of all versions in this object. "
+                },
+                "has_version_at_time": {
+                    "description": "True if a version for time  `_a_time_` exists. "
+                },
+                "has_version_id": {
+                    "description": "True if a version with `_an_id_` exists. "
+                },
+                "version_with_id": {
+                    "description": "Return the version with `_uid_` =  `_a_ver_id_`. \n"
+                },
+                "is_original_version": {
+                    "description": "True if version with `_an_id_` is an `ORIGINAL_VERSION`. "
+                },
+                "version_at_time": {
+                    "description": "Return the version for time  `_a_time_`. "
+                },
+                "revision_history": {
+                    "description": "History of all audits and attestations in this versioned repository."
+                },
+                "latest_version": {
+                    "description": "Return the most recently added version (i.e. on trunk or any branch). "
+                },
+                "latest_trunk_version": {
+                    "description": "Return the most recently added trunk version. "
+                },
+                "trunk_lifecycle_state": {
+                    "description": "Return the lifecycle state from the latest trunk version. Useful for determining if the version container is logically deleted. "
+                },
+                "commit_original_version": {
+                    "description": "Add a new original version. "
+                },
+                "commit_original_merged_version": {
+                    "description": "Add a new original merged version. This commit function adds a parameter containing the ids of other versions merged into the current one. "
+                },
+                "commit_imported_version": {
+                    "description": "Add a new imported version. Details of version id etc come from the `ORIGINAL_VERSION` being committed. "
+                },
+                "commit_attestation": {
+                    "description": "Add a new attestation to a specified original version. Attestations can only be added to Original versions. "
+                }
+            },
+            "$invariants": {
+                "Version_count_valid": {
+                    "description": "version_count >= 0"
+                },
+                "All_version_ids_valid": {
+                    "description": "all_version_ids.count = version_count"
+                },
+                "All_versions_valid": {
+                    "description": "all_versions.count = version_count"
+                },
+                "Latest_version_valid": {
+                    "description": "version_count > 0 implies latest_version /= Void"
+                },
+                "Uid_validity": {
+                    "description": "extension.is_empty"
+                },
+                "Pre": {
+                    "description": "has_version_id(a_ver_id)\nand is_original_version(a_ver_id)"
+                },
+                "Post": {
+                    "description": "Result = latest_trunk_version.lifecycle_state"
+                }
+            }
+        }
+    }
+}

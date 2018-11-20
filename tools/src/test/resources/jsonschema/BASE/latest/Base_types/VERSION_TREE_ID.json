@@ -1,0 +1,54 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/BASE/latest/Base_types/VERSION_TREE_ID.json",
+    "title": "VERSION_TREE_ID",
+    "description": "Version tree identifier for one version. Lexical form: \n\n`trunk_version [  '.' branch_number  '.' branch_version ]`",
+    "$comments": "Defined in Base_types IM",
+    "type": "object",
+    "properties": {
+        "value": {
+            "description": "String form of this identifier.",
+            "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/BASE/latest/Foundation_types/all.json#/definitions/String"
+        }
+    },
+    "required": [
+        "value"
+    ],
+    "$functions": {
+        "trunk_version": {
+            "description": "Trunk version number; numbering starts at 1. "
+        },
+        "is_branch": {
+            "description": "True if this version identifier represents a branch, i.e. has branch_number and branch_version parts."
+        },
+        "branch_number": {
+            "description": "Number of branch from the trunk point; numbering starts at 1. "
+        },
+        "branch_version": {
+            "description": "Version of the branch; numbering starts at 1. "
+        }
+    },
+    "$invariants": {
+        "Value_valid": {
+            "description": "not value.is_empty"
+        },
+        "Trunk_version_valid": {
+            "description": "trunk_version /= Void and then trunk_version.is_integer and then trunk_version.as_integer >= 1"
+        },
+        "Branch_number_valid": {
+            "description": "branch_number /= Void implies branch_number.is_integer and then branch_number.as_integer >= 1"
+        },
+        "Branch_version_valid": {
+            "description": "branch_version /= Void implies branch_version.is_integer and then branch_version.as_integer >= 1"
+        },
+        "Branch_validity": {
+            "description": "(branch_number = Void and branch_version = Void ) xor (branch_number /= Void and branch_version /= Void )"
+        },
+        "Is_branch_validity": {
+            "description": "is_branch xor branch_number = Void"
+        },
+        "Is_first_validity": {
+            "description": "not is_first xor trunk_version.is_equal(\u201c1\u201d)"
+        }
+    }
+}

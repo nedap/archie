@@ -50,6 +50,7 @@ subprojects {
 
   repositories {
       mavenCentral()
+      maven { url 'https://jitpack.io' }
   }
 
   ext.reflectionsVersion = '0.9.11'
@@ -80,6 +81,9 @@ subprojects {
 
     testCompile 'junit:junit:4.12'
     testCompile 'org.slf4j:slf4j-simple:1.7.25'
+
+    testCompile 'com.github.everit-org.json-schema:org.everit.json.schema:1.9.2'
+
   }
 
 

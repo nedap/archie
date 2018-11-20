@@ -1,0 +1,51 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Ehr_extract/X_VERSIONED_FOLDER.json",
+    "title": "X_VERSIONED_FOLDER",
+    "description": "Form of `X_VERSIONED_OBJECT` for `FOLDER` EHR object.",
+    "$comments": "Defined in Ehr_extract IM, inherits from X_VERSIONED_OBJECT",
+    "type": "object",
+    "properties": {
+        "uid": {
+            "description": "Uid of original `VERSIONED_OBJECT`.",
+            "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/BASE/latest/Base_types/all.json#/definitions/HIER_OBJECT_ID"
+        },
+        "owner_id": {
+            "description": "Owner_id from original VERSIONED_OBJECT, which identifies source EHR.",
+            "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Common/all.json#/definitions/VERSIONED_OBJECT"
+        },
+        "time_created": {
+            "description": "Creation time of original `VERSIONED_OBJECT`.",
+            "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Data_types/all.json#/definitions/DV_DATE_TIME"
+        },
+        "total_version_count": {
+            "description": "Total number of versions in original `VERSIONED_OBJECT` at time of creation of this `X_VERSIONED_OBJECT`.",
+            "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/BASE/latest/Foundation_types/all.json#/definitions/Integer"
+        },
+        "extract_version_count": {
+            "description": "The number of Versions in this extract for this Versioned object, i.e. the count of items in the versions attribute. May be 0 if only revision history is requested.",
+            "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/BASE/latest/Foundation_types/all.json#/definitions/Integer"
+        },
+        "revision_history": {
+            "description": "Optional revision history of the original `VERSIONED_OBJECT`. If included, it is the complete revision history.",
+            "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Common/all.json#/definitions/REVISION_HISTORY"
+        },
+        "versions": {
+            "description": "0 or more Versions from the original `VERSIONED_OBJECT`, according to the Extract specification.",
+            "type": "array",
+            "items": {
+                "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Common/all.json#/definitions/ORIGINAL_VERSION"
+            }
+        }
+    },
+    "required": [
+        "uid",
+        "owner_id",
+        "time_created",
+        "total_version_count",
+        "extract_version_count"
+    ],
+    "$inherits": [
+        "all.json#/definitions/X_VERSIONED_OBJECT"
+    ]
+}

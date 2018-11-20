@@ -67,7 +67,7 @@ public  class ExampleJsonInstanceGenerator {
 
     public Map<String, Object> generate(OperationalTemplate archetype) {
         this.archetype = archetype;
-        models.selectModel(archetype);
+        models.selectModel(archetype, "1.0.4");
         aomProfile = models.getSelectedAomProfile();
         bmm = models.getSelectedBmmModel();
         constraintImposer = new BMMConstraintImposer(bmm);
@@ -314,7 +314,9 @@ public  class ExampleJsonInstanceGenerator {
             AomPropertyMapping terminologyIdMapping = termCodeMapping.getPropertyMappings().get("terminology_id");
             AomPropertyMapping codeStringMapping = termCodeMapping.getPropertyMappings().get("code_string");
             String codeString = "term code";
-            String terminologyId = "local";
+            Map<String, Object> terminologyId = new LinkedHashMap<>();
+            terminologyId.put("@type", "TERMINOLOGY_ID");
+            terminologyId.put("value", "local");
             String termString = "term";
             if(child.getConstraint().isEmpty()) {
                 codeString = "term code";
@@ -427,25 +429,25 @@ public  class ExampleJsonInstanceGenerator {
         }
 
         if(cObject instanceof ArchetypeSlot) {
-            Map<String, Object> archetypeDetails = new LinkedHashMap<>();
-            archetypeDetails.put("@type", "ARCHETYPED");
-            archetypeDetails.put("archetype_id", "openEHR-EHR-" + cObject.getRmTypeName() + ".archetype-slot.v1"); //TODO: add template id
-            archetypeDetails.put("rm_version", "1.0.4");
-            result.put("archetype_details", archetypeDetails);
+            result.put("archetype_details", constructArchetypeDetails("openEHR-EHR-" + cObject.getRmTypeName() + ".archetype-slot.v1"));
         } else if (cObject instanceof CArchetypeRoot) {
-            Map<String, Object> archetypeDetails = new LinkedHashMap<>();
-            archetypeDetails.put("@type", "ARCHETYPED");
-            archetypeDetails.put("archetype_id", ((CArchetypeRoot) cObject).getArchetypeRef()); //TODO: add template id
-            archetypeDetails.put("rm_version", "1.0.4");
-            result.put("archetype_details", archetypeDetails);
+            result.put("archetype_details", constructArchetypeDetails(((CArchetypeRoot) cObject).getArchetypeRef()));
         } else if(cObject.isRootNode()) {
-            Map<String, Object> archetypeDetails = new LinkedHashMap<>();
-            archetypeDetails.put("@type", "ARCHETYPED");
-            archetypeDetails.put("archetype_id", cObject.getArchetype().getArchetypeId().getFullId()); //TODO: add template id
-            archetypeDetails.put("rm_version", "1.0.4");
-            result.put("archetype_details", archetypeDetails);
+            result.put("archetype_details", constructArchetypeDetails(cObject.getArchetype().getArchetypeId().getFullId()));
         }
     }
+
+    private Map<String, Object> constructArchetypeDetails(String archetypeIdValue) {
+        Map<String, Object> archetypeDetails = new LinkedHashMap<>();
+        archetypeDetails.put("@type", "ARCHETYPED");
+        Map<String, Object> archetypeId = new LinkedHashMap<>();
+        archetypeId.put("@type", "ARCHETYPE_ID");
+        archetypeId.put("value", archetypeIdValue);
+        archetypeDetails.put("archetype_id", archetypeId); //TODO: add template id
+        archetypeDetails.put("rm_version", "1.0.4");
+        return archetypeDetails;
+    }
+
     protected void addAdditionalPropertiesAtEnd(BmmClass classDefinition, Map<String, Object> result, CObject cObject) {
         if(classDefinition.getTypeName().equalsIgnoreCase("DV_CODED_TEXT")) {
             try {

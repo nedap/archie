@@ -1,0 +1,103 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Ehr/VERSIONED_EHR_ACCESS.json",
+    "title": "VERSIONED_EHR_ACCESS",
+    "description": "Version container for EHR_ACCESS instance.",
+    "$comments": "Defined in Ehr IM, inherits from VERSIONED_OBJECT",
+    "type": "object",
+    "properties": {
+        "uid": {
+            "description": "Unique identifier of this version container in the form of a UID with no extension. This id will be the same in all instances of the same container in a distributed environment, meaning that it can be understood as the uid of the  virtual version tree. ",
+            "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/BASE/latest/Base_types/all.json#/definitions/HIER_OBJECT_ID"
+        },
+        "owner_id": {
+            "description": "Reference to object to which this version container belongs, e.g. the id of the containing EHR or other relevant owning entity. ",
+            "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/BASE/latest/Base_types/all.json#/definitions/OBJECT_REF"
+        },
+        "time_created": {
+            "description": "Time of initial creation of this versioned object. ",
+            "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Data_types/all.json#/definitions/DV_DATE_TIME"
+        }
+    },
+    "required": [
+        "uid",
+        "owner_id",
+        "time_created"
+    ],
+    "$inherits": [
+        "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Common/all.json#/definitions/VERSIONED_OBJECT"
+    ],
+    "$functions": {
+        "version_count": {
+            "description": "Return the total number of versions in this object."
+        },
+        "all_version_ids": {
+            "description": "Return a list of ids of all versions in this object. "
+        },
+        "all_versions": {
+            "description": "Return a list of all versions in this object. "
+        },
+        "has_version_at_time": {
+            "description": "True if a version for time  `_a_time_` exists. "
+        },
+        "has_version_id": {
+            "description": "True if a version with `_an_id_` exists. "
+        },
+        "version_with_id": {
+            "description": "Return the version with `_uid_` =  `_a_ver_id_`. \n"
+        },
+        "is_original_version": {
+            "description": "True if version with `_an_id_` is an `ORIGINAL_VERSION`. "
+        },
+        "version_at_time": {
+            "description": "Return the version for time  `_a_time_`. "
+        },
+        "revision_history": {
+            "description": "History of all audits and attestations in this versioned repository."
+        },
+        "latest_version": {
+            "description": "Return the most recently added version (i.e. on trunk or any branch). "
+        },
+        "latest_trunk_version": {
+            "description": "Return the most recently added trunk version. "
+        },
+        "trunk_lifecycle_state": {
+            "description": "Return the lifecycle state from the latest trunk version. Useful for determining if the version container is logically deleted. "
+        },
+        "commit_original_version": {
+            "description": "Add a new original version. "
+        },
+        "commit_original_merged_version": {
+            "description": "Add a new original merged version. This commit function adds a parameter containing the ids of other versions merged into the current one. "
+        },
+        "commit_imported_version": {
+            "description": "Add a new imported version. Details of version id etc come from the `ORIGINAL_VERSION` being committed. "
+        },
+        "commit_attestation": {
+            "description": "Add a new attestation to a specified original version. Attestations can only be added to Original versions. "
+        }
+    },
+    "$invariants": {
+        "Version_count_valid": {
+            "description": "version_count >= 0"
+        },
+        "All_version_ids_valid": {
+            "description": "all_version_ids.count = version_count"
+        },
+        "All_versions_valid": {
+            "description": "all_versions.count = version_count"
+        },
+        "Latest_version_valid": {
+            "description": "version_count > 0 implies latest_version /= Void"
+        },
+        "Uid_validity": {
+            "description": "extension.is_empty"
+        },
+        "Pre": {
+            "description": "has_version_id(a_ver_id)\nand is_original_version(a_ver_id)"
+        },
+        "Post": {
+            "description": "Result = latest_trunk_version.lifecycle_state"
+        }
+    }
+}

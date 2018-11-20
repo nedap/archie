@@ -1,0 +1,31 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Data_types/DV_TIME_SPECIFICATION.json",
+    "title": "DV_TIME_SPECIFICATION",
+    "description": "This is an abstract class of which all timing specifications are specialisations. Specifies points in time, possibly linked to the calendar, or a real world repeating event, such as  breakfast. ",
+    "$comments": "Defined in Data_types IM, abstract, inherits from DATA_VALUE",
+    "type": "object",
+    "properties": {
+        "value": {
+            "description": "The specification, in the HL7v3 syntax for `PIVL` or `EIVL` types.",
+            "$ref": "all.json#/definitions/DV_PARSABLE"
+        }
+    },
+    "required": [
+        "value"
+    ],
+    "$inherits": [
+        "all.json#/definitions/DATA_VALUE"
+    ],
+    "$functions": {
+        "calendar_alignment": {
+            "description": "Indicates what prototypical point in the calendar the specification is aligned to, e.g.  5th of the month . Empty if not aligned. Extracted from the  value' attribute."
+        },
+        "event_alignment": {
+            "description": "Indicates what real-world event the specification is aligned to if any. Extracted from the  value' attribute. "
+        },
+        "institution_specified": {
+            "description": "Indicates if the specification is aligned with institution schedules, e.g. a hospital nursing changeover or meal serving times. Extracted from the  value' attribute."
+        }
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Support/BASIC_DEFINITIONS.json",
+    "title": "BASIC_DEFINITIONS",
+    "description": "Defines globally used constant values.",
+    "$comments": "Defined in Support IM",
+    "type": "object"
+}
