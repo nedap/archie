@@ -60,11 +60,12 @@ packages = <
 			>
 		>
 	>
+>
 
 	--
 	--------------------- lang.elom.types ------------------
 	--
-
+class_definitions = <
 	["EXPR_TYPE_DEF"] = <
 		name = <"EXPR_TYPE_DEF">
 		ancestors = <"Any">

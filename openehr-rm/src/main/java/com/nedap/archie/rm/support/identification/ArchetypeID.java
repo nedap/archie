@@ -44,6 +44,8 @@ public class ArchetypeID extends ObjectId {
 
         domainConcept = m.group("concept");
         versionId = m.group("version");
+
+        setValue(value);
     }
 
     /**
@@ -71,6 +73,7 @@ public class ArchetypeID extends ObjectId {
         this.rmEntity = rmEntity;
         this.specialisation = specialisation;
         this.versionId = versionId;
+        setValue(getFullId());
     }
 
     public String getFullId() {

@@ -17,12 +17,15 @@ public class BuiltInReferenceModelsTest {
         ReferenceModelAccess access = BuiltinReferenceModels.getBMMReferenceModels();
         Map<String, BmmModel> models = access.getValidModels();
         assertTrue(access.getValidator().hasErrors()); //hl7 fihr is missing the Signature type, so this results in an error
-        assertEquals(4, access.getValidator().getMessageLogger().getErrorCodes().size());
+        //fhir is broken, so is openehr_lang, so two error codes
+        assertEquals(2, access.getValidator().getMessageLogger().getErrorCodes().size());
 
         //if we don't set the top level schema, it has warnings, apparently. Don't know why, often you would want all of these
+        //unless you want to override versions, in which case there are better mechanisms possible.
         assertTrue(access.getValidator().hasWarnings());
-        //assertEquals(8, models.size());
+
         assertEquals(Sets.newHashSet("openehr_adltest_1.0.2",
+                "openehr_base_1.0.0",
                 "cdisc_core_0.5.0",
                 "cen_en13606_0.95",
                 "openehr_rm_1.0.2",
