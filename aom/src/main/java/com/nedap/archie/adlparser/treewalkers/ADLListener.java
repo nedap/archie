@@ -7,7 +7,7 @@ import com.nedap.archie.adlparser.antlr.AdlBaseListener;
 import com.nedap.archie.adlparser.antlr.AdlParser;
 import com.nedap.archie.adlparser.antlr.AdlParser.*;
 import com.nedap.archie.serializer.odin.OdinObjectParser;
-import com.nedap.archie.serializer.odin.OdinToJsonConverter;
+import com.nedap.archie.serializer.odin.AdlOdinToJsonConverter;
 import com.nedap.archie.aom.*;
 import com.nedap.archie.aom.terminology.ArchetypeTerminology;
 import org.antlr.v4.runtime.tree.TerminalNode;
@@ -188,7 +188,7 @@ public class ADLListener extends AdlBaseListener {
             //this is a direct <["archetype_id"] = ...> syntax
             OperationalTemplate template = (OperationalTemplate) archetype;
 
-            TypeFactory typeFactory = OdinToJsonConverter.getObjectMapper().getTypeFactory();
+            TypeFactory typeFactory = AdlOdinToJsonConverter.getObjectMapper().getTypeFactory();
             MapType mapType = typeFactory.constructMapType(ConcurrentHashMap.class, String.class, ArchetypeTerminology.class);
 
             template.setComponentTerminologies(OdinObjectParser.convert(ctx.odin_text(), mapType));

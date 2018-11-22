@@ -12,7 +12,7 @@ import org.antlr.v4.runtime.CharStreams;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class OdinToJsonConverterTest {
+public class AdlOdinToJsonConverterTest {
 
     @Test
     public void convertURI() throws Exception {
@@ -34,7 +34,7 @@ public class OdinToJsonConverterTest {
         AdlParser parser = new AdlParser(new CommonTokenStream(adlLexer));
         ArchieErrorListener errorListener = new ArchieErrorListener();
         parser.addErrorListener(errorListener);
-        OdinToJsonConverter converter = new OdinToJsonConverter();
+        AdlOdinToJsonConverter converter = new AdlOdinToJsonConverter();
         String result = converter.convert(parser.odin_text());
         assertTrue(errorListener.getErrors().toString(), errorListener.getErrors().hasNoErrors());
 

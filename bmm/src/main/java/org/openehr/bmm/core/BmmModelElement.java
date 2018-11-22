@@ -21,6 +21,9 @@ package org.openehr.bmm.core;
  * Author: Claude Nanjo
  */
 
+import com.esotericsoftware.kryo.Kryo;
+import com.nedap.archie.util.KryoUtil;
+
 import java.io.Serializable;
 
 /**
@@ -51,5 +54,15 @@ public abstract class BmmModelElement implements Serializable {
      */
     public void setDocumentation(String documentation) {
         this.documentation = documentation;
+    }
+
+    public BmmModelElement clone() {
+        Kryo kryo = null;
+        try {
+            kryo = KryoUtil.getPool().borrow();
+            return kryo.copy(this);
+        } finally {
+            KryoUtil.getPool().release(kryo);
+        }
     }
 }
