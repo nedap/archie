@@ -92,6 +92,9 @@ public class BmmSchemaDeserializer {
         if(modelNode.getAttribute("archetype_visualize_descendants_of") != null) {
             schema.setArchetypeVisualizeDescendantsOf(modelNode.getAttribute("archetype_visualize_descendants_of").getStringValue());
         }
+        if(modelNode.getAttribute("model_name") != null) {
+            schema.setModelName(modelNode.getAttribute("model_name").getStringValue());
+        }
     }
 
     protected void deserializeSchemaIncludes(CompositeOdinObject modelNode, PersistedBmmSchema schema) {
