@@ -8,11 +8,12 @@ import org.openehr.bmm.v2.persistence.PBmmSchema;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class CanonicalPackagesGenerator {
 
     public Map<String, PBmmPackage> generateCanonicalPackages(PBmmSchema schema) {
-        Map<String, PBmmPackage> canonicalPackages = new LinkedHashMap<>();
+        Map<String, PBmmPackage> canonicalPackages = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
         PBmmPackage childPackage = null;
         String childPackageKey = null;
         Map<String, PBmmPackage> packageContainer = null;

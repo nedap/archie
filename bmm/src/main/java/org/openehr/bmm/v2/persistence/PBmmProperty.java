@@ -1,6 +1,8 @@
 package org.openehr.bmm.v2.persistence;
 
 public abstract class PBmmProperty<T extends PBmmType>  extends PBmmBase {
+
+    private String documentation;
     private String name;
     private Boolean isMandatory;
     private Boolean isComputed;
@@ -54,5 +56,13 @@ public abstract class PBmmProperty<T extends PBmmType>  extends PBmmBase {
 
     public void setTypeDef(T typeDef) {
         this.typeDef = typeDef;
+    }
+
+    public String getDocumentation() {
+        return documentation;
+    }
+
+    public void setDocumentation(String documentation) {
+        this.documentation = documentation;
     }
 }

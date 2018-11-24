@@ -17,7 +17,6 @@ public class BmmOdinParser {
     public static PBmmSchema convert(odinParser.Odin_textContext odin) {
         try {
             String json = new OdinToJsonConverter().convert(odin);
-            System.out.println(json);
             return BmmJacksonUtil.getObjectMapper().readValue(json, PBmmSchema.class);
         } catch (IOException e) {
             throw new RuntimeException(e);

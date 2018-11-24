@@ -32,12 +32,12 @@ public class CreatedSchemaValidation implements BmmValidation {
         //validate package & class structure
         schema.doRecursivePackages(persistedBmmPackage -> {
             //check for lower-down qualified names
-            if((!schema.getPackages().containsKey(persistedBmmPackage.getName().toUpperCase())) && persistedBmmPackage.getName().indexOf(BmmDefinitions.PACKAGE_NAME_DELIMITER) >=0) {
+            if((!schema.getPackages().containsKey(persistedBmmPackage.getName())) && persistedBmmPackage.getName().indexOf(BmmDefinitions.PACKAGE_NAME_DELIMITER) >=0) {
                 logger.addError(BmmMessageIds.ec_BMM_PKGQN,
                         schema.getSchemaId(),
                         persistedBmmPackage.getName());
             }
-            persistedBmmPackage.getClasses().forEach(persistedBmmClass -> {
+            for(String persistedBmmClass: persistedBmmPackage.getClasses()) {
                 if(StringUtils.isEmpty(persistedBmmClass)) {
                     logger.addError(BmmMessageIds.ec_BMM_class_name_empty,
                             schema.getSchemaId(),
@@ -48,7 +48,7 @@ public class CreatedSchemaValidation implements BmmValidation {
                             persistedBmmClass,
                             persistedBmmPackage.getName());
                 }
-            });
+            }
         });
 
         if(!logger.hasErrors()) {

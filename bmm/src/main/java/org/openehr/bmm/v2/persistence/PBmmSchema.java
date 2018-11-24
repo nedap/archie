@@ -1,11 +1,15 @@
 package org.openehr.bmm.v2.persistence;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.openehr.bmm.persistence.PersistedBmmClass;
 import org.openehr.bmm.persistence.PersistedBmmPackage;
 import org.openehr.bmm.persistence.validation.BmmDefinitions;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.function.Consumer;
 
 public final class PBmmSchema extends PBmmPackageContainer {
@@ -38,6 +42,9 @@ public final class PBmmSchema extends PBmmPackageContainer {
     private String archetypeVisualizeDescendantsOf;
 
     public Map<String, PBmmClass> getPrimitiveTypes() {
+        if(primitiveTypes == null) {
+            primitiveTypes = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+        }
         return primitiveTypes;
     }
 
@@ -46,6 +53,9 @@ public final class PBmmSchema extends PBmmPackageContainer {
     }
 
     public Map<String, PBmmClass> getClassDefinitions() {
+        if(classDefinitions == null) {
+            classDefinitions = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+        }
         return classDefinitions;
     }
 
@@ -54,6 +64,9 @@ public final class PBmmSchema extends PBmmPackageContainer {
     }
 
     public Map<String, BmmIncludeSpec> getIncludes() {
+        if(includes == null) {
+            includes = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+        }
         return includes;
     }
 
@@ -143,6 +156,9 @@ public final class PBmmSchema extends PBmmPackageContainer {
 
     @Deprecated
     public List<String> getArchetypeRmClosurePackages() {
+        if(archetypeRmClosurePackages == null) {
+            archetypeRmClosurePackages = new ArrayList();
+        }
         return archetypeRmClosurePackages;
     }
 
@@ -180,8 +196,21 @@ public final class PBmmSchema extends PBmmPackageContainer {
         return BmmDefinitions.createSchemaId(getRmPublisher(), getSchemaName(), getRmRelease());
     }
 
-    public boolean hasClassOrPrimitiveDefinition(Object persistedBmmClass) {
-        return false;
+    public boolean hasClassOrPrimitiveDefinition(String persistedBmmClass) {
+        return getClassDefinitions().containsKey(persistedBmmClass) || getPrimitiveTypes().containsKey(persistedBmmClass);
     }
 
+    /**
+     * Finds class either among class definitions or primitive definitions in case primitives are used directly as types.
+     *
+     * @param className
+     * @return
+     */
+    public PBmmClass findClassOrPrimitiveDefinition(String className) {
+        PBmmClass bmmClass = getClassDefinitions().get(className);
+        if (bmmClass == null) {
+            bmmClass = getPrimitiveTypes().get(className);
+        }
+        return bmmClass;
+    }
 }

@@ -1,5 +1,6 @@
 package org.openehr.bmm.v2.persistence;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public final class PBmmGenericType extends PBmmBaseType {
@@ -17,6 +18,9 @@ public final class PBmmGenericType extends PBmmBaseType {
     }
 
     public List<PBmmType> getGenericParamaterDefs() {
+        if(genericParamaterDefs == null) {
+            genericParamaterDefs = new ArrayList<>();
+        }
         return genericParamaterDefs;
     }
 
@@ -25,6 +29,9 @@ public final class PBmmGenericType extends PBmmBaseType {
     }
 
     public List<String> getGenericParameters() {
+        if(genericParameters == null) {
+            genericParameters = new ArrayList<>();
+        }
         return genericParameters;
     }
 

@@ -7,8 +7,8 @@ import org.openehr.bmm.v2.persistence.PBmmSchema;
 import org.openehr.bmm.v2.validation.converters.CanonicalPackagesGenerator;
 import org.openehr.bmm.v2.validation.converters.BmmModelCreator;
 import org.openehr.bmm.v2.validation.converters.IncludesProcessor;
+import org.openehr.bmm.v2.validation.converters.PreprocessPersistedSchema;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -52,21 +52,28 @@ public class BmmSchemaConverter {
         } catch (BmmSchemaValidationException ex) {
             BmmValidationResult result = new BmmValidationResult();
             result.setSchemaId(schema.getSchemaId());
+            result.setOriginalSchema(schema);
+            result.setLogger(schemaValidator.getLogger());
             return result;
         }
 
+        new PreprocessPersistedSchema().preprocess(schema);
+
         BmmValidationResult result = new BmmValidationResult();
+        result.setLogger(schemaValidator.getLogger());
         result.setSchemaId(schema.getSchemaId());
-        BmmModel bmmModel = new BmmModelCreator().create(schema);
-        result.setModel(bmmModel);
+
+        result.setOriginalSchema(schema);
         Map<String, PBmmPackage> canonicalPackages = new CanonicalPackagesGenerator().generateCanonicalPackages(schema);
+        result.setCanonicalPackages(canonicalPackages);
 
-        new IncludesProcessor().addIncludes(schema, bmmModel, repository, schemaValidator.getLogger());
+        new IncludesProcessor().cloneSchemaAndAddIncludes(result, repository, schemaValidator.getLogger());
+
+        BmmModel bmmModel = new BmmModelCreator().create(result);
+        result.setModel(bmmModel);
+
+        return result;
     }
 
-    public void convertPhase1() {
-
-
-    }
 
 }

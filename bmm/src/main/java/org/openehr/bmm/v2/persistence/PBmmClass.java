@@ -1,5 +1,8 @@
 package org.openehr.bmm.v2.persistence;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -30,6 +33,9 @@ public class PBmmClass extends PBmmBase {
     }
 
     public List<String> getAncestors() {
+        if(ancestors == null) {
+            ancestors = new ArrayList<>();
+        }
         return ancestors;
     }
 
@@ -67,5 +73,15 @@ public class PBmmClass extends PBmmBase {
 
     public void setGenericParameterDefs(Map<String, PBmmGenericParameter> genericParameterDefs) {
         this.genericParameterDefs = genericParameterDefs;
+    }
+
+    /**
+     * True if this class is a generic class.
+     *
+     * @return
+     */
+    @JsonIgnore
+    public boolean isGeneric() {
+        return this.getGenericParameterDefs() != null && this.getGenericParameterDefs().size() > 0;
     }
 }
