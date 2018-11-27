@@ -56,13 +56,4 @@ public abstract class BmmModelElement implements Serializable {
         this.documentation = documentation;
     }
 
-    public BmmModelElement clone() {
-        Kryo kryo = null;
-        try {
-            kryo = KryoUtil.getPool().borrow();
-            return kryo.copy(this);
-        } finally {
-            KryoUtil.getPool().release(kryo);
-        }
-    }
 }
