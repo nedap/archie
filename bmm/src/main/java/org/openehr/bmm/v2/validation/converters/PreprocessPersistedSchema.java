@@ -16,6 +16,9 @@ public class PreprocessPersistedSchema {
             TreeMap<String, PBmmClass> newClassDefinitions = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
             newClassDefinitions.putAll(classDefinitions);
             schema.setClassDefinitions(newClassDefinitions);
+            for(PBmmClass clazz:classDefinitions.values()) {
+                clazz.setSourceSchemaId(schema.getSchemaId());
+            }
         }
 
         {
@@ -23,6 +26,9 @@ public class PreprocessPersistedSchema {
             TreeMap<String, PBmmClass> newPrimitiveTypes = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
             newPrimitiveTypes.putAll(primitiveTypes);
             schema.setPrimitiveTypes(newPrimitiveTypes);
+            for(PBmmClass clazz:primitiveTypes.values()) {
+                clazz.setSourceSchemaId(schema.getSchemaId());
+            }
         }
         {
             convertPackages(schema);

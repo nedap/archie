@@ -10,7 +10,6 @@ import org.openehr.bmm.core.BmmOpenType;
 import org.openehr.bmm.core.BmmSimpleType;
 import org.openehr.bmm.core.BmmType;
 import org.openehr.bmm.v2.persistence.PBmmContainerType;
-import org.openehr.bmm.v2.persistence.PBmmGenericParameter;
 import org.openehr.bmm.v2.persistence.PBmmGenericType;
 import org.openehr.bmm.v2.persistence.PBmmOpenType;
 import org.openehr.bmm.v2.persistence.PBmmSimpleType;
@@ -49,7 +48,7 @@ public class TypeCreator {
     private BmmType createContainerType(PBmmContainerType typeDef, BmmModel schema, BmmClass bmmClass) {
         PBmmContainerType containerType = typeDef;
         BmmContainerType bmmContainerType = new BmmContainerType();
-        BmmType containedType = createBmmType(containerType.getTypeDef(), schema, bmmClass);
+        BmmType containedType = createBmmType(containerType.getTypeRef(), schema, bmmClass);
 
         BmmClass containerClass = schema.getClassDefinition(containerType.getContainerType());
         if(containerClass == null) {
@@ -59,6 +58,7 @@ public class TypeCreator {
         }
         bmmContainerType.setBaseType(containedType);
         return bmmContainerType;
+
     }
 
     private BmmType createSimpleType(PBmmSimpleType typeDef, BmmModel schema) {
@@ -80,7 +80,7 @@ public class TypeCreator {
         if(classDefinition != null && classDefinition instanceof BmmGenericClass) {
             BmmGenericClass baseClass = (BmmGenericClass)schema.getClassDefinition(pGenericType.getRootType());
             genericType.setBaseClass(baseClass);
-            for(PBmmType param: pGenericType.getGenericParamaterDefs()) {
+            for(PBmmType param: pGenericType.getGenericParameterDefs().values()) {
 
                 BmmType paramBmmType = createBmmType(param, schema, classDefinition);
                 genericType.addGenericParameter(paramBmmType);

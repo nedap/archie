@@ -12,6 +12,7 @@ import com.nedap.archie.query.ComplexObjectProxyReplacement;
 import com.nedap.archie.rminfo.MetaModels;
 
 import com.nedap.archie.rminfo.ReferenceModels;
+import org.openehr.bmm.rmaccess.ReferenceModelAccess;
 
 import static com.nedap.archie.flattener.FlattenerUtil.*;
 
@@ -52,7 +53,7 @@ public class Flattener implements IAttributeFlattenerSupport {
 
     public Flattener(ArchetypeRepository repository, ReferenceModels models) {
         this.repository = new OverridingArchetypeRepository(repository);
-        this.metaModels = new MetaModels(models, null);
+        this.metaModels = new MetaModels(models, (ReferenceModelAccess) null);
     }
 
     public Flattener(ArchetypeRepository repository, MetaModels models) {

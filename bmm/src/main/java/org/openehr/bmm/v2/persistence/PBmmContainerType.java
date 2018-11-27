@@ -1,6 +1,15 @@
 package org.openehr.bmm.v2.persistence;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.openehr.bmm.persistence.PersistedBmmOpenType;
+import org.openehr.bmm.persistence.PersistedBmmSimpleType;
+import org.openehr.bmm.persistence.validation.BmmDefinitions;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class PBmmContainerType extends PBmmType {
+
     private String containerType;
     private PBmmBaseType typeDef;
     private String type;
@@ -28,4 +37,42 @@ public class PBmmContainerType extends PBmmType {
     public void setType(String type) {
         this.type = type;
     }
+
+    /**
+     * Formal name of the type for display.
+     *
+     * @return
+     */
+    @Override
+    public String asTypeString() {
+        return containerType + "<" + getTypeRef().asTypeString() + ">";
+    }
+
+    @Override
+    public List<String> flattenedTypeList() {
+        List<String> retVal = new ArrayList<>();
+        retVal.add(containerType);
+        if(getTypeRef() != null) {
+            retVal.addAll(getTypeRef().flattenedTypeList());
+        }
+        return retVal;
+    }
+
+    /**
+     * Get the type reference to the contained type
+     * @return
+     */
+    @JsonIgnore
+    public PBmmBaseType getTypeRef() {
+        if(typeDef == null && type != null) {
+            if(type.length() == 1) {//TODO!!!!: ?!?!?! Probably a parameter such as "T"
+                return new PBmmOpenType(type);
+            } else {
+                return new PBmmSimpleType(type);
+            }
+        }
+        return typeDef;
+    }
+
+
 }

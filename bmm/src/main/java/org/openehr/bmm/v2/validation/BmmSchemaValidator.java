@@ -1,7 +1,9 @@
 package org.openehr.bmm.v2.validation;
 
 import org.openehr.bmm.v2.persistence.PBmmSchema;
+import org.openehr.bmm.v2.validation.validators.BasicSchemaValidations;
 import org.openehr.bmm.v2.validation.validators.BmmVersionValidation;
+import org.openehr.bmm.v2.validation.validators.ClassesValidator;
 import org.openehr.bmm.v2.validation.validators.CreatedSchemaValidation;
 import org.openehr.bmm.v2.validation.validators.IncludesValidation;
 import org.openehr.bmm.v2.validation.validators.UniqueSchemaIdValidation;
@@ -9,12 +11,17 @@ import org.openehr.utils.message.MessageLogger;
 
 public class BmmSchemaValidator {
 
-    private final PSchemaRepository repository;
+    private final BmmRepository repository;
     private MessageLogger logger;
 
-    public BmmSchemaValidator(PSchemaRepository repository) {
+    public BmmSchemaValidator(BmmRepository repository) {
         this.repository = repository;
         logger = new MessageLogger();
+    }
+
+    public void validateSchema(BmmValidationResult result) {
+        run(new BasicSchemaValidations(), result, result.getSchemaWithMergedIncludes());
+        run(new ClassesValidator(), result, result.getSchemaWithMergedIncludes());
     }
 
     /**
@@ -27,20 +34,24 @@ public class BmmSchemaValidator {
      * 3. check that all models refer to valid packages
      * TODO Need to test this method
      */
-    public void validateCreated(PBmmSchema schema) {
-        new CreatedSchemaValidation().validate(schema, repository, logger);
+    public void validateCreated(BmmValidationResult validationResult, PBmmSchema schema) {
+        run(new CreatedSchemaValidation(), validationResult, schema);
     }
 
-    public void validateBmmVersion(PBmmSchema schema) {
-        new BmmVersionValidation().validate(schema, repository, logger);
+    public void validateBmmVersion(BmmValidationResult validationResult, PBmmSchema schema) {
+        run(new BmmVersionValidation(), validationResult, schema);
     }
 
-    public void validateUniqueness(PBmmSchema schema) {
-        new UniqueSchemaIdValidation().validate(schema, repository, logger);
+    public void validateUniqueness(BmmValidationResult validationResult, PBmmSchema schema) {
+        run(new UniqueSchemaIdValidation(), validationResult, schema);
     }
 
-    public void validateIncludes(PBmmSchema schema) {
-        new IncludesValidation().validate(schema, repository, logger);
+    public void validateIncludes(BmmValidationResult validationResult, PBmmSchema schema) {
+        run(new IncludesValidation(), validationResult, schema);
+    }
+
+    private void run(BmmValidation validation, BmmValidationResult validationResult, PBmmSchema schema) {
+        validation.validate(validationResult, repository, logger, schema);
     }
 
     public MessageLogger getLogger() {

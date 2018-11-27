@@ -1,25 +1,17 @@
 package org.openehr.bmm.v2.validation.converters;
 
 
-import org.openehr.bmm.core.BmmClass;
-import org.openehr.bmm.core.BmmModel;
-import org.openehr.bmm.persistence.PersistedBmmPackage;
-import org.openehr.bmm.persistence.PersistedBmmSchema;
-import org.openehr.bmm.persistence.PersistedBmmSchemaState;
 import org.openehr.bmm.persistence.validation.BmmMessageIds;
 import org.openehr.bmm.v2.persistence.BmmIncludeSpec;
 import org.openehr.bmm.v2.persistence.PBmmClass;
 import org.openehr.bmm.v2.persistence.PBmmPackage;
 import org.openehr.bmm.v2.persistence.PBmmSchema;
 import org.openehr.bmm.v2.validation.BmmSchemaConverter;
-import org.openehr.bmm.v2.validation.BmmSchemaValidationException;
-import org.openehr.bmm.v2.validation.BmmSchemaValidator;
 import org.openehr.bmm.v2.validation.BmmValidationResult;
-import org.openehr.bmm.v2.validation.PSchemaRepository;
+import org.openehr.bmm.v2.validation.BmmRepository;
 import org.openehr.utils.message.MessageLogger;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -33,7 +25,7 @@ public class IncludesProcessor {
                 .map( includeSpec -> includeSpec.getId()).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public void cloneSchemaAndAddIncludes(BmmValidationResult validationResult, PSchemaRepository repository, MessageLogger logger) throws BmmSchemaValidationException {
+    public void cloneSchemaAndAddIncludes(BmmValidationResult validationResult, BmmRepository repository, MessageLogger logger) {
         //step 1: check that all includes exist
         PBmmSchema schema = validationResult.getOriginalSchema();
         for(BmmIncludeSpec include: schema.getIncludes().values()) {

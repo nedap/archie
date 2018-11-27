@@ -223,6 +223,13 @@ public class OdinToJsonConverter {
             outputString(context.getText());
         } else if (context.term_code_value() != null) {
             outputString(context.getText());
+        } else if (context.boolean_value() != null) {
+            //jackson expects true and false, not TruE or trUe like valid in odin
+            if(context.boolean_value().getText().equalsIgnoreCase("true")) {
+                output.append("true");
+            } else {
+                output.append("false");
+            }
         } else {
             //json-compatible anyway
             outputEscaped(context.getText());

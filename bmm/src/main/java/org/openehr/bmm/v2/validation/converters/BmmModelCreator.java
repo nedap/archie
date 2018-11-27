@@ -54,7 +54,7 @@ public class BmmModelCreator {
                         if (schema.getPrimitiveTypes().get(bmmClass.getName()) != null) {
                             bmmClass.setPrimitiveType(true);
                         }
-                        if (persistedBmmClass.isOverride()) {
+                        if (persistedBmmClass.isOverride() != null && persistedBmmClass.isOverride()) {
                             bmmClass.setOverride(true);
                         }
                         model.addClassDefinition(bmmClass, bmmPackage);

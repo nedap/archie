@@ -168,6 +168,13 @@ public class AdlOdinToJsonConverter {
             outputString(context.getText());
         } else if (context.term_code_value() != null) {
             outputString(context.getText());
+        } else if (context.boolean_value() != null) {
+            //Must be unquoted case insensitive for jackson to not just parse this as false
+            if(context.boolean_value().getText().equalsIgnoreCase("true")) {
+                output.append("true");
+            } else {
+                output.append("false");
+            }
         } else {
             //json-compatible anyway
             outputEscaped(context.getText());

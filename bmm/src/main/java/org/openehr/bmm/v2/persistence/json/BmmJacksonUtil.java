@@ -2,16 +2,21 @@ package org.openehr.bmm.v2.persistence.json;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationConfig;
+import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.deser.DeserializationProblemHandler;
 import com.fasterxml.jackson.databind.jsontype.TypeResolverBuilder;
 import com.nedap.archie.base.Interval;
 import com.nedap.archie.base.OpenEHRBase;
 import org.openehr.bmm.v2.persistence.PBmmClass;
 
+import java.io.IOException;
 import java.lang.reflect.Modifier;
 
 /**
@@ -62,10 +67,20 @@ public class BmmJacksonUtil {
 //        objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
 //        objectMapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
 //        objectMapper.enable(DeserializationFeature.UNWRAP_SINGLE_VALUE_ARRAYS);
-        objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+       // objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
         //objectMapper.
+        objectMapper.addHandler(new DeserializationProblemHandler() {
+            @Override
+            public boolean handleUnknownProperty(DeserializationContext ctxt, JsonParser p, JsonDeserializer<?> deserializer, Object beanOrClass, String propertyName) throws IOException {
+                if (propertyName.equalsIgnoreCase("@type")) {
+                    return true;
+                }
+                return super.handleUnknownProperty(ctxt, p, deserializer, beanOrClass, propertyName);
+            }
+        });
 
-       // objectMapper.registerModule(new JavaTimeModule());
+
+        // objectMapper.registerModule(new JavaTimeModule());
 
 
         TypeResolverBuilder typeResolverBuilder = new BmmTypeResolverBuilder()

@@ -84,6 +84,7 @@ public enum BmmMessageIds implements MessageCode {
     ec_BMM_PRDUP(I18n.register("Schema {0} class {1} duplicate property within class {2}")),
     ec_BMM_PRNCF(I18n.register("Schema {0} class {1} property {2} does not conform to same property in ancestor {3} (duplicate?)")),
     ec_BMM_INCERR(I18n.register("Schema {0} included schema {1} validity failure")),
+    ec_BMM_INCERR2(I18n.register("Schema {0} included schema {1} validity failure: {2}")),
     ec_BMM_INCWARN(I18n.register("Schema {0} included schema {1} validity warning")),
     ec_BMM_ARPAR(I18n.register("Schema {0} archetype parent class {1} not defined in schema")),
     ec_BMM_RMREL(I18n.register("Schema {0} RM release {1} not valid; should be 3-part numeric version")),

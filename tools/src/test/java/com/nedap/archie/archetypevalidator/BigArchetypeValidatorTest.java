@@ -17,6 +17,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openehr.bmm.rmaccess.ReferenceModelAccess;
+import org.openehr.bmm.v2.validation.BmmRepository;
 import org.openehr.referencemodels.BuiltinReferenceModels;
 import org.reflections.Reflections;
 import org.reflections.scanners.ResourcesScanner;
@@ -138,9 +139,8 @@ public class BigArchetypeValidatorTest {
         models.registerModel(ArchieRMInfoLookup.getInstance());
         models.registerModel(com.nedap.archie.openehrtestrm.TestRMInfoLookup.getInstance());
 
-        ReferenceModelAccess access = new ReferenceModelAccess();
 //        access.initializeAll(schemaDirectories);
-        testInner(new MetaModels(models, null));
+        testInner(new MetaModels(models, (BmmRepository) null));
 
     }
 

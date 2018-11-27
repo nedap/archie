@@ -37,6 +37,7 @@ public class BmmTypeNaming extends ClassNameIdResolver {
         put("P_BMM_GENERIC_PROPERTY", PBmmGenericProperty.class).
         put("P_BMM_GENERIC_TYPE", PBmmGenericType.class).
         put("P_BMM_OPEN_TYPE", PBmmOpenType.class).
+        put("P_BMM_CONTAINER_TYPE", PBmmContainerType.class).
         put("P_BMM_PACKAGE", PBmmPackage.class).
         put("P_BMM_PROPERTY", PBmmProperty.class).
         put("P_BMM_SCHEMA", PBmmSchema.class).

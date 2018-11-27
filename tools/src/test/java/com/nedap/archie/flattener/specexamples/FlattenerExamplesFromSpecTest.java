@@ -18,6 +18,7 @@ import com.nedap.archie.flattener.SimpleArchetypeRepository;
 import com.nedap.archie.rminfo.MetaModels;
 import org.junit.Before;
 import org.junit.Test;
+import org.openehr.bmm.v2.validation.BmmRepository;
 import org.openehr.referencemodels.BuiltinReferenceModels;
 
 import java.util.List;
@@ -36,7 +37,7 @@ public class FlattenerExamplesFromSpecTest {
     @Before
     public void setup() throws Exception {
         repository = new SimpleArchetypeRepository();
-        models = new MetaModels(BuiltinReferenceModels.getAvailableModelInfoLookups(), null);
+        models = new MetaModels(BuiltinReferenceModels.getAvailableModelInfoLookups(), (BmmRepository) null);
     }
 
     @Test

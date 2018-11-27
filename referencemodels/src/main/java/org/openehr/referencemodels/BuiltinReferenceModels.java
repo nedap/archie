@@ -6,6 +6,11 @@ import com.nedap.archie.rminfo.MetaModels;
 import com.nedap.archie.rminfo.ModelInfoLookup;
 import com.nedap.archie.rminfo.ReferenceModels;
 import org.openehr.bmm.rmaccess.ReferenceModelAccess;
+import org.openehr.bmm.v2.persistence.PBmmSchema;
+import org.openehr.bmm.v2.persistence.json.BmmOdinParser;
+import org.openehr.bmm.v2.validation.BmmSchemaConverter;
+import org.openehr.bmm.v2.validation.BmmValidationResult;
+import org.openehr.bmm.v2.validation.BmmRepository;
 import org.reflections.Reflections;
 import org.reflections.scanners.ResourcesScanner;
 import org.slf4j.Logger;
@@ -33,6 +38,8 @@ public class BuiltinReferenceModels {
     private static ReferenceModelAccess access;
     private static AomProfiles aomProfiles;
 
+    private static BmmRepository bmmRepository;
+
     /**
      * Returns the built in BMM Reference Models
      * @return
@@ -57,6 +64,34 @@ public class BuiltinReferenceModels {
         access.loadSchemas();
         BuiltinReferenceModels.access = access;
         return access;
+    }
+
+    public static BmmRepository getBmmRepository() {
+        if(bmmRepository != null) {
+            return bmmRepository;
+        }
+        Reflections bmm = new Reflections("bmm", new ResourcesScanner());
+        Set<String> resources = bmm.getResources(Pattern.compile(".*\\.bmm"));
+        bmmRepository = new BmmRepository();
+        for(String resourceName:resources) {
+            logger.info("parsing " + resourceName);
+            try(InputStream stream = BuiltinReferenceModels.class.getResourceAsStream("/" + resourceName)) { //not sure why the "/" + is needed, but it is
+                bmmRepository.addPersistentSchema(BmmOdinParser.convert(stream));
+            } catch (IOException e) {
+                throw new RuntimeException("error loading file: " + e);
+            } catch (RuntimeException ex) {
+                logger.error("error parsing {}", resourceName, ex);
+            }
+        }
+        BmmSchemaConverter converter = new BmmSchemaConverter(bmmRepository);
+        for(PBmmSchema schema:bmmRepository.getPersistentSchemas()) {
+            if(bmmRepository.getModel(schema.getSchemaId()) == null) {
+                BmmValidationResult bmmValidationResult = converter.validateAndConvert(schema);
+                bmmRepository.addModel(bmmValidationResult);
+                System.out.println(bmmValidationResult.getLogger());
+            }
+        }
+        return bmmRepository;
     }
 
     /**
@@ -113,7 +148,7 @@ public class BuiltinReferenceModels {
      * @return
      */
     public static MetaModels getMetaModels() {
-        MetaModels metaModels = new MetaModels(getAvailableModelInfoLookups(), getBMMReferenceModels());
+        MetaModels metaModels = new MetaModels(getAvailableModelInfoLookups(), getBmmRepository());
         for(AomProfile profile:getAomProfiles().getProfiles()) {
             metaModels.getAomProfiles().add(profile);
         }

@@ -12,4 +12,12 @@ public final class PBmmSingleProperty extends PBmmProperty<PBmmSimpleType> {
         this.type = type;
     }
 
+    @Override
+    public PBmmSimpleType getTypeRef() {
+        if(getTypeDef() == null) {
+            return new PBmmSimpleType(type);
+        }
+        return getTypeDef();
+    }
+
 }

@@ -10,6 +10,7 @@ import com.nedap.archie.flattener.specexamples.FlattenerTestUtil;
 import com.nedap.archie.rminfo.MetaModels;
 import com.nedap.archie.serializer.adl.ADLArchetypeSerializer;
 import com.nedap.archie.testutil.TestUtil;
+import org.openehr.bmm.rmaccess.ReferenceModelAccess;
 import org.openehr.referencemodels.BuiltinReferenceModels;
 
 import java.io.IOException;
@@ -30,7 +31,7 @@ public class DiffTestUtil {
         this.archetypesResourceLocation = archetypesResourceLocation;
         this.expectationsResourceLocation = expectationsResourceLocation;
         repository = new InMemoryFullArchetypeRepository();
-        models = new MetaModels(BuiltinReferenceModels.getAvailableModelInfoLookups(), null);
+        models = new MetaModels(BuiltinReferenceModels.getAvailableModelInfoLookups(), (ReferenceModelAccess) null);
     }
 
     public void test(String parentFileName, String childFileName) throws Exception {

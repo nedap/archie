@@ -33,7 +33,7 @@ public class ProcessClassesInOrder {
         while (!queue.isEmpty() && tries < attempts) {
             PBmmClass element = queue.remove();
             if (element == null) {
-                System.out.println("Pause here");
+
             } else {
                 processClass(schema, action, visitedClasses, queue, element);
             }

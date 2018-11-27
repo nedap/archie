@@ -13,13 +13,12 @@ import org.openehr.bmm.v2.persistence.PBmmGenericProperty;
 import org.openehr.bmm.v2.persistence.PBmmProperty;
 import org.openehr.bmm.v2.persistence.PBmmSingleProperty;
 import org.openehr.bmm.v2.persistence.PBmmSinglePropertyOpen;
-import org.openehr.bmm.v2.persistence.PBmmType;
 
-public class PropertyCreator {
+public class BmmPropertyCreator {
 
     public BmmProperty createBmmProperty(PBmmProperty property, BmmModel schema, BmmClass bmmClass) {
         //getTypeDefinition().createBmmType(bmmSchema, classDefinition);
-        BmmType type = new TypeCreator().createBmmType(property.getTypeDef(), schema, bmmClass);
+        BmmType type = new TypeCreator().createBmmType(property.getTypeRef(), schema, bmmClass);
 
         if(property instanceof PBmmSinglePropertyOpen) {
             return createSimpleProperty(property, type);
@@ -56,10 +55,24 @@ public class PropertyCreator {
 
     private void setBasics(PBmmProperty property, BmmProperty bmmProperty) {
         bmmProperty.setDocumentation(property.getDocumentation());
-        bmmProperty.setMandatory(property.getMandatory());
-        bmmProperty.setComputed(property.getComputed());
-        bmmProperty.setImInfrastructure(property.getImInfrastructure());
-        bmmProperty.setImRuntime(property.getImRuntime());
+        bmmProperty.setMandatory(property.isMandatory());
+        bmmProperty.setComputed(property.isComputed());
+        bmmProperty.setImInfrastructure(property.isImInfrastructure());
+        bmmProperty.setImRuntime(property.isImRuntime());
+
+        if(bmmProperty.getMandatory() == null) {
+            bmmProperty.setMandatory(false);
+        }
+        if(bmmProperty.getComputed() == null) {
+            bmmProperty.setComputed(false);
+        }
+        if(bmmProperty.getImInfrastructure() == null) {
+            bmmProperty.setImInfrastructure(false);
+        }
+
+        if(bmmProperty.getImRuntime() == null) {
+            bmmProperty.setImRuntime(false);
+        }
     }
 
 

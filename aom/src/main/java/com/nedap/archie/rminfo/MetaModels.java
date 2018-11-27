@@ -5,21 +5,11 @@ import com.nedap.archie.aom.CPrimitiveObject;
 import com.nedap.archie.aom.profile.AomProfile;
 import com.nedap.archie.aom.profile.AomProfiles;
 import com.nedap.archie.base.MultiplicityInterval;
-import com.nedap.archie.rminfo.ModelInfoLookup;
-import com.nedap.archie.rminfo.RMAttributeInfo;
-import com.nedap.archie.rminfo.ReferenceModels;
-import org.openehr.bmm.core.BmmClass;
-import org.openehr.bmm.core.BmmContainerProperty;
 import org.openehr.bmm.core.BmmModel;
-import org.openehr.bmm.core.BmmProperty;
-import org.openehr.bmm.core.BmmType;
 import org.openehr.bmm.persistence.validation.BmmDefinitions;
 import org.openehr.bmm.rmaccess.ReferenceModelAccess;
-
-import java.text.MessageFormat;
-import java.util.List;
-
-import static org.openehr.bmm.persistence.validation.BmmDefinitions.typeNameToClassKey;
+import org.openehr.bmm.v2.validation.BmmValidationResult;
+import org.openehr.bmm.v2.validation.BmmRepository;
 
 /**
  * MetaModel class that provides some opertaions for archetype validation and flattener that is either based on
@@ -34,6 +24,7 @@ public class MetaModels implements MetaModelInterface {
 
     private final ReferenceModels models;
     private final ReferenceModelAccess bmmModels;
+    private final BmmRepository bmmRepository;
     private AomProfiles aomProfiles;
 
     private MetaModel selectedModel;
@@ -44,11 +35,21 @@ public class MetaModels implements MetaModelInterface {
         this.models = models;
         this.bmmModels = bmmModels;
         this.aomProfiles = profiles;
+        this.bmmRepository = null;
     }
 
     public MetaModels(ReferenceModels models, ReferenceModelAccess bmmModels) {
         this.models = models;
         this.bmmModels = bmmModels;
+        aomProfiles = new AomProfiles();
+        this.bmmRepository = null;
+    }
+
+
+    public MetaModels(ReferenceModels models, BmmRepository repository) {
+        this.models = models;
+        this.bmmModels = null;
+        this.bmmRepository = repository;
         aomProfiles = new AomProfiles();
     }
 
@@ -71,12 +72,15 @@ public class MetaModels implements MetaModelInterface {
     public void selectModel(Archetype archetype, String overridenRmRelease) throws ModelNotFoundException {
         ModelInfoLookup selectedModel = null;
         BmmModel selectedBmmModel = null;
+        String rmRelease = overridenRmRelease == null ? archetype.getRmRelease() : overridenRmRelease;
         if(models != null) {
              selectedModel = models.getModel(archetype);
         }
-        if(bmmModels != null) {
-            String rmRelease = overridenRmRelease == null ? archetype.getRmRelease() : overridenRmRelease;
-             selectedBmmModel = bmmModels.getReferenceModelForClosure(BmmDefinitions.publisherQualifiedRmClosureName(archetype.getArchetypeId().getRmPublisher(), archetype.getArchetypeId().getRmPackage()), rmRelease);
+        if(bmmRepository != null) {
+            BmmValidationResult validationResult = bmmRepository.getModelByClosure(BmmDefinitions.publisherQualifiedRmClosureName(archetype.getArchetypeId().getRmPublisher(), archetype.getArchetypeId().getRmPackage()) + "_" +  rmRelease);
+            selectedBmmModel = validationResult == null ? null : validationResult.getModel();
+        } else if(bmmModels != null) {
+            selectedBmmModel = bmmModels.getReferenceModelForClosure(BmmDefinitions.publisherQualifiedRmClosureName(archetype.getArchetypeId().getRmPublisher(), archetype.getArchetypeId().getRmPackage()), rmRelease);
         }
 
         for(AomProfile profile:aomProfiles.getProfiles()) {
@@ -113,6 +117,10 @@ public class MetaModels implements MetaModelInterface {
 
     public ReferenceModelAccess getReferenceModelAccess() {
         return bmmModels;
+    }
+
+    public BmmRepository getBmmRepository() {
+        return bmmRepository;
     }
 
     public boolean isMultiple(String typeName, String attributeName) {

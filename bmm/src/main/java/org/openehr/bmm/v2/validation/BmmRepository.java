@@ -8,13 +8,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class PSchemaRepository {
+public class BmmRepository {
 
     private Map<String, PBmmSchema> persistentSchemasById = new ConcurrentHashMap<>();
 
     private Map<String, BmmValidationResult> modelsById = new ConcurrentHashMap<>();
 
-    public PSchemaRepository() {
+    private Map<String, BmmValidationResult> modelsByClosure = new ConcurrentHashMap<>();
+
+    public BmmRepository() {
 
     }
 
@@ -44,5 +46,14 @@ public class PSchemaRepository {
 
     public boolean containsPersistentSchema(String schemaId) {
         return persistentSchemasById.containsKey(schemaId.toLowerCase());
+    }
+
+    public void addModelByClosure(String closure,  BmmValidationResult model) {
+        this.modelsByClosure.put(closure.toLowerCase(), model);
+
+    }
+
+    public BmmValidationResult getModelByClosure(String closure) {
+        return modelsByClosure.get(closure.toLowerCase());
     }
 }

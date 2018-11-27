@@ -1,8 +1,7 @@
 package org.openehr.bmm.v2.persistence;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.openehr.bmm.persistence.PersistedBmmClass;
-import org.openehr.bmm.persistence.PersistedBmmPackage;
+
 import org.openehr.bmm.persistence.validation.BmmDefinitions;
 
 import java.util.ArrayList;
@@ -212,5 +211,20 @@ public final class PBmmSchema extends PBmmPackageContainer {
             bmmClass = getPrimitiveTypes().get(className);
         }
         return bmmClass;
+    }
+
+    public PBmmClass getClassDefinition(String className) {
+        return classDefinitions.get(className);
+    }
+
+    /**
+     * Do some action to all primitive type and class objects
+     * process in any order
+     *
+     * @param action
+     */
+    public void doAllClasses(Consumer<PBmmClass> action) {
+        getPrimitiveTypes().values().forEach(action);
+        getClassDefinitions().values().forEach(action);
     }
 }
