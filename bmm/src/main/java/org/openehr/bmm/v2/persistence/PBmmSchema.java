@@ -3,7 +3,6 @@ package org.openehr.bmm.v2.persistence;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.openehr.bmm.persistence.validation.BmmDefinitions;
 
 import java.util.ArrayList;

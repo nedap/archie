@@ -1,9 +1,6 @@
 package org.openehr.bmm.v2.persistence;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.openehr.bmm.persistence.PersistedBmmOpenType;
-import org.openehr.bmm.persistence.PersistedBmmSimpleType;
-import org.openehr.bmm.persistence.validation.BmmDefinitions;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,14 +1,9 @@
 package org.openehr.bmm.v2.persistence;
 
-import org.openehr.bmm.persistence.PersistedBmmPackage;
-
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.TreeMap;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 public final class PBmmPackage extends PBmmPackageContainer {
 

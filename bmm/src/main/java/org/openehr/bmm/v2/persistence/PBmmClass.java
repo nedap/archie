@@ -99,6 +99,7 @@ public class PBmmClass extends PBmmBase {
         return this.getGenericParameterDefs() != null && this.getGenericParameterDefs().size() > 0;
     }
 
+    @JsonIgnore
     public String getSourceSchemaId() {
         return sourceSchemaId;
     }
