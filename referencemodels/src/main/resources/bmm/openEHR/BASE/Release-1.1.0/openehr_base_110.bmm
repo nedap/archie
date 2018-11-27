@@ -75,7 +75,7 @@ packages = <
 			>
 			["identification"] = <
 				name = <"identification">
-				classes = <"OBJECT_REF", "OBJECT_ID", "UID", "LOCATABLE_REF", "PARTY_REF", "ACCESS_GROUP_REF",
+				classes = <"OBJECT_REF", "UID", "LOCATABLE_REF", "PARTY_REF", "ACCESS_GROUP_REF",
 					"OBJECT_ID", "TERMINOLOGY_ID", 
 					"UID_BASED_ID", "GENERIC_ID", "ARCHETYPE_ID", "ARCHETYPE_HRID", "TEMPLATE_ID", "OBJECT_VERSION_ID", 
 					"HIER_OBJECT_ID", "VERSION_TREE_ID", "INTERNET_ID", "UUID", "ISO_OID"
@@ -596,7 +596,7 @@ class_definitions = <
 		properties = <
 			["original_language"] = (P_BMM_SINGLE_PROPERTY) <
 				name = <"original_language">
-				type = <"CODE_PHRASE">
+				type = <"Terminology_code">
 				is_mandatory = <True>
 			>
 			["is_controlled"] = (P_BMM_SINGLE_PROPERTY) <
@@ -624,7 +624,7 @@ class_definitions = <
 		properties = <
 			["language"] = (P_BMM_SINGLE_PROPERTY) <
 				name = <"language">
-				type = <"CODE_PHRASE">
+				type = <"Terminology_code">
 				is_mandatory = <True>
 			>
 			["author"] = (P_BMM_GENERIC_PROPERTY) <
@@ -708,7 +708,7 @@ class_definitions = <
 		properties = <
 			["language"] = (P_BMM_SINGLE_PROPERTY) <
 				name = <"language">
-				type = <"CODE_PHRASE">
+				type = <"Terminology_code">
 				is_mandatory = <True>
 			>
 			["purpose"] = (P_BMM_SINGLE_PROPERTY) <
