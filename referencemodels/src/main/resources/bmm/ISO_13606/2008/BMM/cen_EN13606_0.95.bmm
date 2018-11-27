@@ -722,7 +722,6 @@ class_definitions = <
 	["ENTRY"] = <
 		name = <"ENTRY">
 		ancestors = <"CONTENT",...>
-		occurrences = <|>=0|>
 		properties = <
 			["act_id"] = (P_BMM_SINGLE_PROPERTY) <
 				name = <"act_id">

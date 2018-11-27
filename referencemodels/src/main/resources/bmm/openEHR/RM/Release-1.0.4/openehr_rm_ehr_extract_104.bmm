@@ -388,8 +388,8 @@ class_definitions = <
 				type_def = <
 					type = <"DV_CODED_TEXT">
 					container_type = <"List">
-					cardinality = <|>=1|>
 				>
+				cardinality = <|>=1|>
 			>
 			["repeat_period"] = (P_BMM_SINGLE_PROPERTY) <
 				name = <"repeat_period">

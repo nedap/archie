@@ -486,8 +486,8 @@ class_definitions = <
 						root_type = <"REFERENCE_RANGE">
 						generic_parameters = <"DV_ORDERED">
 					>
-					cardinality = <|>=1|>
 				>
+				cardinality = <|>=1|>
 			>
 		>
 	>
@@ -671,8 +671,8 @@ class_definitions = <
 						root_type = <"REFERENCE_RANGE">
 						generic_parameters = <"DV_PROPORTION">
 					>
-					cardinality = <|>=1|>
 				>
+                cardinality = <|>=1|>
 			>
 		>
 	>

@@ -128,7 +128,7 @@ public class BigArchetypeValidatorTest {
 
     @Test
     public void testFullValidityPackageBmm() {
-        testInner(new MetaModels(null, BuiltinReferenceModels.getBMMReferenceModels(), BuiltinReferenceModels.getAomProfiles()));
+        testInner(new MetaModels(null, BuiltinReferenceModels.getBmmRepository(), BuiltinReferenceModels.getAomProfiles()));
 
     }
 

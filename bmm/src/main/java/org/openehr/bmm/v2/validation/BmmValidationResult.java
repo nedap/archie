@@ -81,4 +81,14 @@ public class BmmValidationResult {
     public List<String> getMergedSchemas() {
         return mergedSchemas;
     }
+
+    @Override
+    public String toString() {
+        String result =  "Validation result of " + schemaId;
+        if(logger != null) {
+            result += logger.hasErrors() ? ": Failed" : ": Passed";
+        }
+        return result;
+    }
+
 }

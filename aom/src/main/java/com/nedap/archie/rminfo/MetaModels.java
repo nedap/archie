@@ -53,6 +53,13 @@ public class MetaModels implements MetaModelInterface {
         aomProfiles = new AomProfiles();
     }
 
+    public MetaModels(ReferenceModels models, BmmRepository repository, AomProfiles profiles) {
+        this.models = models;
+        this.bmmModels = null;
+        this.bmmRepository = repository;
+        aomProfiles = profiles;
+    }
+
     /**
      * Select a meta model based on an archetype
      * @param archetype the archetype to find the model for

@@ -14,6 +14,7 @@ public class PBmmClass extends PBmmBase {
     private String documentation;//from P_BMM_MODEL_ELEMENT
     private String name;
     private List<String> ancestors;
+    private Map<String, PBmmType> ancestorDefs;
     private Map<String, PBmmProperty> properties;
     private Boolean isAbstract;
     private Boolean isOverride;
@@ -104,5 +105,13 @@ public class PBmmClass extends PBmmBase {
 
     public void setSourceSchemaId(String sourceSchemaId) {
         this.sourceSchemaId = sourceSchemaId;
+    }
+
+    public Map<String, PBmmType> getAncestorDefs() {
+        return ancestorDefs;
+    }
+
+    public void setAncestorDefs(Map<String, PBmmType> ancestorDefs) {
+        this.ancestorDefs = ancestorDefs;
     }
 }

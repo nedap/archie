@@ -1,7 +1,9 @@
 package org.openehr.bmm.v2.persistence;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.openehr.bmm.persistence.validation.BmmDefinitions;
 
 import java.util.ArrayList;
@@ -182,6 +184,7 @@ public final class PBmmSchema extends PBmmPackageContainer {
         this.archetypeDataValueParentClass = archetypeDataValueParentClass;
     }
 
+    @JsonAlias({"archetype_visualise_descendants_of"})
     public String getArchetypeVisualizeDescendantsOf() {
         return archetypeVisualizeDescendantsOf;
     }

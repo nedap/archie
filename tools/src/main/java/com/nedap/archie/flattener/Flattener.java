@@ -13,6 +13,7 @@ import com.nedap.archie.rminfo.MetaModels;
 
 import com.nedap.archie.rminfo.ReferenceModels;
 import org.openehr.bmm.rmaccess.ReferenceModelAccess;
+import org.openehr.bmm.v2.validation.BmmRepository;
 
 import static com.nedap.archie.flattener.FlattenerUtil.*;
 
@@ -53,7 +54,7 @@ public class Flattener implements IAttributeFlattenerSupport {
 
     public Flattener(ArchetypeRepository repository, ReferenceModels models) {
         this.repository = new OverridingArchetypeRepository(repository);
-        this.metaModels = new MetaModels(models, (ReferenceModelAccess) null);
+        this.metaModels = new MetaModels(models, (BmmRepository) null);
     }
 
     public Flattener(ArchetypeRepository repository, MetaModels models) {

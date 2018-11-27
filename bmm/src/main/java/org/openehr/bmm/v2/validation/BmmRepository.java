@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 public class BmmRepository {
 
@@ -34,6 +35,14 @@ public class BmmRepository {
 
     public List<BmmValidationResult> getModels() {
         return new ArrayList<>(modelsById.values());
+    }
+
+    public List<BmmValidationResult> getValidModels() {
+        return modelsById.values().stream().filter(validationResult -> validationResult.passes()).collect(Collectors.toList());
+    }
+
+    public List<BmmValidationResult> getInvalidModels() {
+        return modelsById.values().stream().filter(validationResult -> !validationResult.passes()).collect(Collectors.toList());
     }
 
     public BmmValidationResult getModel(String schemaId) {

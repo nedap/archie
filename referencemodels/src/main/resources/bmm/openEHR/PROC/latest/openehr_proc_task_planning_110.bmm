@@ -1,4 +1,4 @@
-﻿-- 
+--
 -- 	component:   openEHR Reference Model (RM)
 -- 	description: openEHR PROC component schema. This file format is based on the BMM specification
 --  				http://www.openehr.org/releases/BASE/latest/docs/bmm/bmm.html
@@ -7,7 +7,7 @@
 -- 	support:     https://openehr.atlassian.net/projects/SPECPR
 -- 	copyright:   Copyright (c) 2016 openEHR Foundation <https://www.openEHR.org>
 -- 	license:     Apache 2.0 <http://www.apache.org/licenses/LICENSE-2.0.html>
--- 
+--
 
 ------------------------------------------------------
 -- BMM version on which these schemas are based.
@@ -20,15 +20,15 @@ bmm_version = <"2.3">
 ------------------------------------------------------
 rm_publisher = <"openehr">
 schema_name = <"proc_task_planning">
-rm_release = <"1.0.0">
+rm_release = <"1.1.0">
 model_name = <"TASK_PLANNING">
 
 ------------------------------------------------------
 -- schema documentation
 ------------------------------------------------------
-schema_revision = <"1.0.0.1">
+schema_revision = <"1.1.0.1">
 schema_lifecycle_state = <"development">
-schema_description = <"openEHR Release 1.0.0 Task Management schema">
+schema_description = <"openEHR Release 1.1.0 Task Management schema">
 schema_author = <"Thomas Beale <thomas.beale@openehr.org>">
 
 ------------------------------------------------------
@@ -442,7 +442,7 @@ class_definitions = <
 				name = <"top_level_plans">
 				type_def = <
 					container_type = <"List">
-					type = <"UID_BASED_ID">
+					type = <"TASK_PLAN">
 				>
 				cardinality = <|>=1|>
 			>
@@ -1217,7 +1217,7 @@ class_definitions = <
 			>
 			["source"] = (P_BMM_SINGLE_PROPERTY) <
 				name = <"source">
-				type = <"UID_BASED_ID">
+				type = <"PLAN_EVENT">
 			>
 		>
 	>
@@ -1299,6 +1299,10 @@ class_definitions = <
 			["message"] = (P_BMM_SINGLE_PROPERTY) <
 				name = <"message">
 				type = <"DV_TEXT">
+			>
+			["receiver_thread_next_state"] = (P_BMM_SINGLE_PROPERTY) <
+				name = <"receiver_thread_next_state">
+				type = <"TASK_LIFECYCLE">
 			>
 		>
 	>
