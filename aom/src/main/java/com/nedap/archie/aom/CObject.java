@@ -108,6 +108,9 @@ public abstract class CObject extends ArchetypeConstraint {
             return null;
         }
         Archetype archetype = getArchetype();
+        if(archetype == null) {
+            return null;
+        }
         ArchetypeTerm result = archetype.getTerm(this, ArchieLanguageConfiguration.getMeaningAndDescriptionLanguage());
         if(result == null) {
             //no translation in the given language. Fall back to the default.
@@ -156,7 +159,11 @@ public abstract class CObject extends ArchetypeConstraint {
             return null;
         }
         String meaning = null;
-        ArchetypeTerm termDefinition = getArchetype().getTerm(this, ArchieLanguageConfiguration.getLogicalPathLanguage());
+        Archetype archetype = getArchetype();
+        if(archetype == null) {
+            return null;
+        }
+        ArchetypeTerm termDefinition = archetype.getTerm(this, ArchieLanguageConfiguration.getLogicalPathLanguage());
         if(termDefinition!=null && termDefinition.getText()!=null) {
             meaning = termDefinition.getText();
         }
