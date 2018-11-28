@@ -39,17 +39,23 @@ public class IncludesProcessor {
             validationResult.setSchemaWithMergedIncludes(clone);
             //step 2: get all BMM Models for all includes and merge into BmmModel
             for (BmmIncludeSpec include : schema.getIncludes().values()) {
-                BmmValidationResult included = repository.getModel(include.getId());
-                if(included == null) {
-                    PBmmSchema persistentSchema = repository.getPersistentSchema(include.getId());
-                    BmmSchemaConverter bmmSchemaConverter = new BmmSchemaConverter(repository);
-                    included = bmmSchemaConverter.validateAndConvert(persistentSchema);
-                    repository.addModel(included);
-                }
-                if(!included.passes()) {
-                    logger.addError(BmmMessageIds.ec_bmm_schema_includes_valiidation_failed, schema.getSchemaId(), included.getLogger().toString());
-                } else {
-                    mergeIncluded(validationResult, included);
+                //check if already included. If so, don't include again.
+                // This prevents double includes plus a potential infinite loop
+                if(!validationResult.getMergedSchemas().contains(include.getId()) || validationResult.getFailedMergedSchemas().contains(include.getId())) {
+
+                    BmmValidationResult included = repository.getModel(include.getId());
+                    if(included == null) {
+                        PBmmSchema persistentSchema = repository.getPersistentSchema(include.getId());
+                        BmmSchemaConverter bmmSchemaConverter = new BmmSchemaConverter(repository);
+                        included = bmmSchemaConverter.validateAndConvert(persistentSchema);
+                        repository.addModel(included);
+                    }
+                    if(!included.passes()) {
+                        logger.addError(BmmMessageIds.ec_bmm_schema_includes_valiidation_failed, schema.getSchemaId(), included.getLogger().toString());
+                        validationResult.addFailedMerge(include.getId());
+                    } else {
+                        mergeIncluded(validationResult, included);
+                    }
                 }
             }
         }

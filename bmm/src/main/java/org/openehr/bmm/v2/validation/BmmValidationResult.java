@@ -11,6 +11,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+ * The result of validating a PBmmSchema  and converting it to a BmmModel. Contains:
+ * - the original schema in persisted format
+ * - the schema in persisted format, with all included files merged in
+ * - the resulting BmmModel
+ * - the messageLogger containing any info, warning and debug messages during validation and conversion
+ * - the schema ids that have been merged in
+ * - the schema ids that should have been merged in, but failed to merge
+ */
 public class BmmValidationResult {
 
     private String schemaId;
@@ -21,6 +30,8 @@ public class BmmValidationResult {
 
     private Map<String, PBmmPackage> canonicalPackages = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
     private List<String> mergedSchemas = new ArrayList<>();
+
+    private List<String> failedMergedSchemas = new ArrayList<>();
 
     public String getSchemaId() {
         return schemaId;
@@ -76,6 +87,18 @@ public class BmmValidationResult {
 
     public void addMergedSchema(String schemaId) {
         mergedSchemas.add(schemaId);
+    }
+
+    public List<String> getFailedMergedSchemas() {
+        return failedMergedSchemas;
+    }
+
+    public void setFailedMergedSchemas(List<String> failedMergedSchemas) {
+        this.failedMergedSchemas = failedMergedSchemas;
+    }
+
+    public void addFailedMerge(String schemaId) {
+        this.failedMergedSchemas.add(schemaId);
     }
 
     public List<String> getMergedSchemas() {
