@@ -185,6 +185,11 @@ public class MetaModels implements MetaModelInterface {
 
     }
 
+    public boolean isOrdered(String rmTypeName, String rmAttributeName) {
+        checkThatModelHasBeenSelected();
+        return selectedModel.isOrdered(rmTypeName, rmAttributeName);
+    }
+
     public AomProfiles getAomProfiles() {
         return aomProfiles;
     }
@@ -193,8 +198,5 @@ public class MetaModels implements MetaModelInterface {
         return selectedAomProfile;
     }
 
-    public boolean isOrdered(String rmTypeName, String rmAttributeName) {
-        checkThatModelHasBeenSelected();
-        return selectedModel.isOrdered(rmTypeName, rmAttributeName);
-    }
+
 }

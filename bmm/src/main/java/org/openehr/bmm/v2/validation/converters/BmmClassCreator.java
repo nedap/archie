@@ -18,6 +18,25 @@ import java.util.List;
 
 public class BmmClassCreator {
 
+    public BmmClass createBmmClass(PBmmClass pBmmClass) {
+        BmmClass bmmClass;
+        if(pBmmClass instanceof PBmmEnumerationString) {
+            bmmClass = new BmmEnumerationString(pBmmClass.getName());
+        } else if (pBmmClass instanceof PBmmEnumerationInteger) {
+            bmmClass = new BmmEnumerationInteger(pBmmClass.getName());
+        } else if (pBmmClass.getGenericParameterDefs() != null && pBmmClass.getGenericParameterDefs().size() > 0) {
+            bmmClass = new BmmGenericClass(pBmmClass.getName());
+        } else {
+            bmmClass = new BmmClass(pBmmClass.getName());
+        }
+
+        bmmClass.setDocumentation(pBmmClass.getDocumentation());
+        bmmClass.setAbstract(pBmmClass.isAbstract() == null ? false : pBmmClass.isAbstract());
+        bmmClass.setOverride(pBmmClass.isOverride() == null ? false : pBmmClass.isOverride());
+        bmmClass.setSourceSchemaId(pBmmClass.getSourceSchemaId());
+        return bmmClass;
+    }
+
     public void populateBmmClass(PBmmClass pBmmClass, BmmModel schema) {
 
         BmmClass bmmClass = schema.getClassDefinition(pBmmClass.getName());
@@ -97,22 +116,5 @@ public class BmmClassCreator {
         return bmmGenericParameter;
     }
 
-    public BmmClass createBmmClass(PBmmClass pBmmClass) {
-        BmmClass bmmClass;
-        if(pBmmClass instanceof PBmmEnumerationString) {
-            bmmClass = new BmmEnumerationString(pBmmClass.getName());
-        } else if (pBmmClass instanceof PBmmEnumerationInteger) {
-            bmmClass = new BmmEnumerationInteger(pBmmClass.getName());
-        } else if (pBmmClass.getGenericParameterDefs() != null && pBmmClass.getGenericParameterDefs().size() > 0) {
-            bmmClass = new BmmGenericClass(pBmmClass.getName());
-        } else {
-            bmmClass = new BmmClass(pBmmClass.getName());
-        }
 
-        bmmClass.setDocumentation(pBmmClass.getDocumentation());
-        bmmClass.setAbstract(pBmmClass.isAbstract() == null ? false : pBmmClass.isAbstract());
-        bmmClass.setOverride(pBmmClass.isOverride() == null ? false : pBmmClass.isOverride());
-        bmmClass.setSourceSchemaId(pBmmClass.getSourceSchemaId());
-        return bmmClass;
-    }
 }

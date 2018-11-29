@@ -15,6 +15,9 @@ public class BmmRepository {
 
     private Map<String, BmmValidationResult> modelsById = new ConcurrentHashMap<>();
 
+    /** models by the archetype closure, eg for openEHR-EHR-OBSERVATION.test.v1.0.0
+     * you use openEHR-EHR_1.0.4 for RM model 1.0.4
+     */
     private Map<String, BmmValidationResult> modelsByClosure = new ConcurrentHashMap<>();
 
     public BmmRepository() {

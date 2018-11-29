@@ -58,5 +58,9 @@ public final class PBmmPackage extends PBmmPackageContainer {
             bmmPackage.doRecursiveClasses(action);
         });
     }
+
+    public void setDocumentation(String documentation) {
+        this.documentation = documentation;
+    }
 }
 

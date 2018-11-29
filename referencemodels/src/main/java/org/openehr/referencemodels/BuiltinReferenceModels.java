@@ -84,13 +84,8 @@ public class BuiltinReferenceModels {
             }
         }
         BmmSchemaConverter converter = new BmmSchemaConverter(bmmRepository);
-        for(PBmmSchema schema:bmmRepository.getPersistentSchemas()) {
-            if(bmmRepository.getModel(schema.getSchemaId()) == null) {
-                BmmValidationResult bmmValidationResult = converter.validateAndConvert(schema);
-                bmmRepository.addModel(bmmValidationResult);
-                System.out.println(bmmValidationResult.getLogger());
-            }
-        }
+
+        converter.validateAndConvertRepository();
         return bmmRepository;
     }
 

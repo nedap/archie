@@ -22,15 +22,30 @@ import java.util.TreeMap;
  */
 public class BmmValidationResult {
 
+    //input from file
     private String schemaId;
+    private PBmmSchema originalSchema;
+
+    //all fields below are the result from validating and conversion
     private MessageLogger logger;
     private BmmModel model;
-    private PBmmSchema originalSchema;
+
+
     private PBmmSchema schemaWithMergedIncludes;
 
+    /**
+     * packages in canonical format, so never "org.openehr.ehr", but "org" -> "openehr" -> "ehr"
+     */
     private Map<String, PBmmPackage> canonicalPackages = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+
+    /**
+     * Schemas that have been merged into schemaWithMergedIncludes
+     */
     private List<String> mergedSchemas = new ArrayList<>();
 
+    /**
+     * Schemas that have failed to merge into schemaWithMergedIncludes
+     */
     private List<String> failedMergedSchemas = new ArrayList<>();
 
     public String getSchemaId() {

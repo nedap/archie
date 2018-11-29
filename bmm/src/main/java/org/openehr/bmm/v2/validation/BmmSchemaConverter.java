@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Converts a Persisted BMM Schema into a computable BMM Schema. Can convert only ONE schema at a time!
+ * Converts a Persisted BMM Schema into a computable BMM Model.
  */
 public class BmmSchemaConverter {
 
@@ -53,6 +53,7 @@ public class BmmSchemaConverter {
         result.setSchemaId(schema.getSchemaId());
         result.setOriginalSchema(schema);
         try {
+            //Step 1: run validations that can be run on the persisted file format
             schemaValidator.validateCreated(result, schema);
             schemaValidator.checkNoExceptions();
 
@@ -64,9 +65,11 @@ public class BmmSchemaConverter {
 
             new PreprocessPersistedSchema().preprocess(schema);
 
+            //step 2: create canonical packages (org.openehr.ehr becomes org -> openehr -> ehr)
             Map<String, PBmmPackage> canonicalPackages = new CanonicalPackagesGenerator().generateCanonicalPackages(schema);
             result.setCanonicalPackages(canonicalPackages);
 
+            //and process included schemas
             new IncludesProcessor().cloneSchemaAndAddIncludes(result, repository, schemaValidator.getLogger());
             schemaValidator.checkNoExceptions();
 
@@ -74,7 +77,9 @@ public class BmmSchemaConverter {
             schemaValidator.validateSchema(result);
             schemaValidator.checkNoExceptions();
 
+            //step 4: create model
             BmmModel bmmModel = new BmmModelCreator().create(result);
+
             schemaValidator.checkNoExceptions();
 
             new DescendantsCalculator().calculateDescendants(bmmModel);
@@ -86,6 +91,18 @@ public class BmmSchemaConverter {
         } catch (BmmSchemaValidationException ex) {
             //cannot continue on validation error
             return result;
+        }
+    }
+
+    /**
+     * Convert and validate all schemas in the repository
+     */
+    public void validateAndConvertRepository() {
+        for(PBmmSchema schema:repository.getPersistentSchemas()) {
+            if(repository.getModel(schema.getSchemaId()) == null) {
+                BmmValidationResult bmmValidationResult = validateAndConvert(schema);
+                repository.addModel(bmmValidationResult);
+            }
         }
     }
 

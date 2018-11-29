@@ -49,7 +49,7 @@ public class BmmModelCreator {
                 PBmmClass persistedBmmClass = schema.findClassOrPrimitiveDefinition(s);
                 if (persistedBmmClass != null) {
                     BmmClass bmmClass = classCreator.createBmmClass(persistedBmmClass);
-//TODO: create temporary map from package name to BmmPackageDefinition, or something like it.
+
                     if (bmmClass != null && bmmPackage != null) {
                         if (schema.getPrimitiveTypes().get(bmmClass.getName()) != null) {
                             bmmClass.setPrimitiveType(true);
