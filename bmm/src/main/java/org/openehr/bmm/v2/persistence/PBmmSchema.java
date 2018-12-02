@@ -3,6 +3,7 @@ package org.openehr.bmm.v2.persistence;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.openehr.bmm.persistence.validation.BmmDefinitions;
 
 import java.util.ArrayList;
@@ -12,6 +13,25 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.function.Consumer;
 
+@JsonPropertyOrder({"bmm_version",
+    "rm_publisher",
+    "schema_name",
+    "rm_release",
+    "model_name",
+    "schema_revision",
+    "schema_lifecycle_state",
+    "schema_description",
+    "schema_author",
+    "archetype_closure_packages",
+    "archetype_parent_class",
+    "archetype_data_value_parent_class",
+    "archetype_visualize_descendants_of",
+    "includes",
+    "packages",
+    "primitive_types",
+    "class_definitions"
+
+})
 public final class PBmmSchema extends PBmmPackageContainer {
 
     private Map<String, PBmmClass> primitiveTypes;

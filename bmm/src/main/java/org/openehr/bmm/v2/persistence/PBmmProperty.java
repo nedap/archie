@@ -1,5 +1,6 @@
 package org.openehr.bmm.v2.persistence;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public abstract class PBmmProperty<T extends PBmmType>  extends PBmmBase {
@@ -69,6 +70,7 @@ public abstract class PBmmProperty<T extends PBmmType>  extends PBmmBase {
      * In that case, using the other type attributes from this property
      * @return
      */
+    @JsonIgnore
     public T getTypeRef() {
         return typeDef;
     }

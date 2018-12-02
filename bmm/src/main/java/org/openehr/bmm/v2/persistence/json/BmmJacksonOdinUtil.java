@@ -1,23 +1,19 @@
 package org.openehr.bmm.v2.persistence.json;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationConfig;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.MapperFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.deser.DeserializationProblemHandler;
 import com.fasterxml.jackson.databind.jsontype.TypeResolverBuilder;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.nedap.archie.base.Interval;
 import com.nedap.archie.base.OpenEHRBase;
-import org.openehr.bmm.v2.persistence.PBmmClass;
+import org.openehr.odin.jackson.ODINMapper;
+import org.openehr.odin.jackson.serializers.OdinIntervalSerializer;
+import org.openehr.odin.jackson.serializers.OdinMapKeySerializer;
 
 import java.io.IOException;
-import java.lang.reflect.Modifier;
 
 /**
  * Class to obtain an ObjectMapper that works with both archie RM and AOM objects, serializing into
@@ -27,7 +23,7 @@ import java.lang.reflect.Modifier;
  *
  * Created by pieter.bos on 30/06/16.
  */
-public class BmmJacksonUtil {
+public class BmmJacksonOdinUtil {
 
     //threadsafe, can be cached
     private volatile static ObjectMapper objectMapper;
@@ -57,17 +53,8 @@ public class BmmJacksonUtil {
         objectMapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
         objectMapper.enable(JsonParser.Feature.STRICT_DUPLICATE_DETECTION);
         objectMapper.enable(MapperFeature.USE_BASE_TYPE_AS_DEFAULT_IMPL);
-
-//        objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
-//        objectMapper.enable(SerializationFeature.FLUSH_AFTER_WRITE_VALUE);
-//        objectMapper.disable(SerializationFeature.WRITE_NULL_MAP_VALUES);
         objectMapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
-//        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-//        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-//        objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
-//        objectMapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
-//        objectMapper.enable(DeserializationFeature.UNWRAP_SINGLE_VALUE_ARRAYS);
-       // objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+
         //objectMapper.
         objectMapper.addHandler(new DeserializationProblemHandler() {
             @Override
@@ -78,10 +65,6 @@ public class BmmJacksonUtil {
                 return super.handleUnknownProperty(ctxt, p, deserializer, beanOrClass, propertyName);
             }
         });
-
-
-        // objectMapper.registerModule(new JavaTimeModule());
-
 
         TypeResolverBuilder typeResolverBuilder = new BmmTypeResolverBuilder()
                 .init(JsonTypeInfo.Id.NAME, new BmmTypeNaming())

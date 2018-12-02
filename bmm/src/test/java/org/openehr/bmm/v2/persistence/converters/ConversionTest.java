@@ -2,10 +2,12 @@ package org.openehr.bmm.v2.persistence.converters;
 
 import org.junit.Test;
 import org.openehr.bmm.v2.persistence.PBmmSchema;
+import org.openehr.bmm.v2.persistence.json.BmmJacksonOdinUtil;
 import org.openehr.bmm.v2.persistence.json.BmmOdinParser;
 import org.openehr.bmm.v2.validation.BmmSchemaConverter;
 import org.openehr.bmm.v2.validation.BmmValidationResult;
 import org.openehr.bmm.v2.validation.BmmRepository;
+import org.openehr.odin.jackson.ODINMapper;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,5 +38,15 @@ public class ConversionTest {
         try(InputStream stream = getClass().getResourceAsStream(name)) {//"/testbmm/TestBmm1.bmm")) {
             return BmmOdinParser.convert(stream);
         }
+    }
+
+    @Test
+    public void generateOdinTest() throws  Exception{
+        ODINMapper mapper = new ODINMapper();
+        BmmJacksonOdinUtil.configureObjectMapper(mapper);
+        PBmmSchema parsed = parse("/openehr/openehr_basic_types_102.bmm");
+        String s = mapper.writeValueAsString(parsed);
+        System.out.println(s);
+        PBmmSchema convert = BmmOdinParser.convert(s);
     }
 }

@@ -1,5 +1,7 @@
 package org.openehr.bmm.v2.persistence;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public final class PBmmSingleProperty extends PBmmProperty<PBmmSimpleType> {
 
     private String type;
@@ -13,6 +15,7 @@ public final class PBmmSingleProperty extends PBmmProperty<PBmmSimpleType> {
     }
 
     @Override
+    @JsonIgnore
     public PBmmSimpleType getTypeRef() {
         if(getTypeDef() == null) {
             return new PBmmSimpleType(type);

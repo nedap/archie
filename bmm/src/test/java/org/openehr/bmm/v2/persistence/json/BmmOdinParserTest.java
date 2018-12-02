@@ -13,7 +13,7 @@ public class BmmOdinParserTest {
         try(InputStream stream = getClass().getResourceAsStream("/testbmm/TestBmm1.bmm")) {//"/testbmm/TestBmm1.bmm")) {
             PBmmSchema schema = BmmOdinParser.convert(stream);
 
-            String s = BmmJacksonUtil.getObjectMapper().writeValueAsString(schema);
+            String s = BmmJacksonOdinUtil.getObjectMapper().writeValueAsString(schema);
             System.out.println(s);
 
         }
