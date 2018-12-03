@@ -4,6 +4,7 @@ import org.junit.Test;
 import org.openehr.bmm.v2.persistence.PBmmSchema;
 import org.openehr.bmm.v2.persistence.json.BmmJacksonOdinUtil;
 import org.openehr.bmm.v2.persistence.json.BmmOdinParser;
+import org.openehr.bmm.v2.persistence.json.BmmOdinSerializer;
 import org.openehr.bmm.v2.validation.BmmSchemaConverter;
 import org.openehr.bmm.v2.validation.BmmValidationResult;
 import org.openehr.bmm.v2.validation.BmmRepository;
@@ -42,11 +43,10 @@ public class ConversionTest {
 
     @Test
     public void generateOdinTest() throws  Exception{
-        ODINMapper mapper = new ODINMapper();
-        BmmJacksonOdinUtil.configureObjectMapper(mapper);
+
         PBmmSchema parsed = parse("/openehr/openehr_basic_types_102.bmm");
-        String s = mapper.writeValueAsString(parsed);
-        System.out.println(s);
-        PBmmSchema convert = BmmOdinParser.convert(s);
+        String serialized = new BmmOdinSerializer().serialize(parsed);
+        //check that it can be parsed again
+        PBmmSchema convert = BmmOdinParser.convert(serialized);
     }
 }
