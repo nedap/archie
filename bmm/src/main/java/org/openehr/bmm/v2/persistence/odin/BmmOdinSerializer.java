@@ -1,7 +1,8 @@
-package org.openehr.bmm.v2.persistence.json;
+package org.openehr.bmm.v2.persistence.odin;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.openehr.bmm.v2.persistence.PBmmSchema;
+import org.openehr.bmm.v2.persistence.jackson.BmmJacksonUtil;
 import org.openehr.odin.jackson.ODINMapper;
 
 /**
@@ -17,7 +18,7 @@ public class BmmOdinSerializer {
     private ODINMapper getMapper() {
         if(mapper == null) {
             mapper = new ODINMapper();
-            BmmJacksonOdinUtil.configureObjectMapper(mapper);
+            BmmJacksonUtil.configureObjectMapper(mapper);
         }
         return mapper;
     }

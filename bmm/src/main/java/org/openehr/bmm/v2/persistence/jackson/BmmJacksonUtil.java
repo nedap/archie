@@ -1,17 +1,11 @@
-package org.openehr.bmm.v2.persistence.json;
+package org.openehr.bmm.v2.persistence.jackson;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.deser.DeserializationProblemHandler;
 import com.fasterxml.jackson.databind.jsontype.TypeResolverBuilder;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.nedap.archie.base.Interval;
 import com.nedap.archie.base.OpenEHRBase;
-import org.openehr.odin.jackson.ODINMapper;
-import org.openehr.odin.jackson.serializers.OdinIntervalSerializer;
-import org.openehr.odin.jackson.serializers.OdinMapKeySerializer;
 
 import java.io.IOException;
 
@@ -23,7 +17,7 @@ import java.io.IOException;
  *
  * Created by pieter.bos on 30/06/16.
  */
-public class BmmJacksonOdinUtil {
+public class BmmJacksonUtil {
 
     //threadsafe, can be cached
     private volatile static ObjectMapper objectMapper;

@@ -1,4 +1,4 @@
-package org.openehr.bmm.v2.persistence.json;
+package org.openehr.bmm.v2.persistence.jackson;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.DatabindContext;
@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.jsontype.impl.ClassNameIdResolver;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.google.common.collect.ImmutableBiMap;
-import com.google.common.collect.ImmutableMap;
 import com.nedap.archie.base.Interval;
 import com.nedap.archie.base.OpenEHRBase;
 
@@ -14,8 +13,6 @@ import org.openehr.bmm.persistence.validation.BmmDefinitions;
 import org.openehr.bmm.v2.persistence.*;
 
 import java.io.IOException;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 /**
  * Class that handles naming of Archie RM and AOM objects for use in Jackson.

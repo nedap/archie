@@ -1,7 +1,9 @@
-package org.openehr.bmm.v2.persistence.json;
+package org.openehr.bmm.v2.persistence.odin;
 
 import org.junit.Test;
 import org.openehr.bmm.v2.persistence.PBmmSchema;
+import org.openehr.bmm.v2.persistence.jackson.BmmJacksonUtil;
+import org.openehr.bmm.v2.persistence.odin.BmmOdinParser;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,7 +15,7 @@ public class BmmOdinParserTest {
         try(InputStream stream = getClass().getResourceAsStream("/testbmm/TestBmm1.bmm")) {//"/testbmm/TestBmm1.bmm")) {
             PBmmSchema schema = BmmOdinParser.convert(stream);
 
-            String s = BmmJacksonOdinUtil.getObjectMapper().writeValueAsString(schema);
+            String s = BmmJacksonUtil.getObjectMapper().writeValueAsString(schema);
             System.out.println(s);
 
         }

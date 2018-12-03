@@ -2,13 +2,11 @@ package org.openehr.bmm.v2.persistence.converters;
 
 import org.junit.Test;
 import org.openehr.bmm.v2.persistence.PBmmSchema;
-import org.openehr.bmm.v2.persistence.json.BmmJacksonOdinUtil;
-import org.openehr.bmm.v2.persistence.json.BmmOdinParser;
-import org.openehr.bmm.v2.persistence.json.BmmOdinSerializer;
+import org.openehr.bmm.v2.persistence.odin.BmmOdinParser;
+import org.openehr.bmm.v2.persistence.odin.BmmOdinSerializer;
 import org.openehr.bmm.v2.validation.BmmSchemaConverter;
 import org.openehr.bmm.v2.validation.BmmValidationResult;
 import org.openehr.bmm.v2.validation.BmmRepository;
-import org.openehr.odin.jackson.ODINMapper;
 
 import java.io.IOException;
 import java.io.InputStream;
