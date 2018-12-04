@@ -26,11 +26,4 @@ public abstract class RuleElementSerializer<T extends RuleElement> {
         return false;
     }
 
-    public int mark() {
-        return builder.mark();
-    }
-
-    public void revert(int previousMark) {
-        builder.revert(previousMark);
-    }
 }

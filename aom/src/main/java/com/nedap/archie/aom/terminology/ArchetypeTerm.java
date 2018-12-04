@@ -2,6 +2,7 @@ package com.nedap.archie.aom.terminology;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.nedap.archie.aom.ArchetypeModelObject;
 
@@ -39,10 +40,12 @@ public class ArchetypeTerm extends ArchetypeModelObject implements Map<String, S
         this.code = code;
     }
 
+    @JsonProperty
     public String getText() {
         return items.get("text");
     }
 
+    @JsonProperty
     public String getDescription() {
         return items.get("description");
     }

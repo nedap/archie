@@ -10,6 +10,8 @@ import com.fasterxml.jackson.core.format.InputAccessor;
 import com.fasterxml.jackson.core.format.MatchStrength;
 import com.fasterxml.jackson.core.io.IOContext;
 import com.fasterxml.jackson.databind.MappingJsonFactory;
+import com.nedap.archie.serializer.odin.OdinStringBuilder;
+import com.nedap.archie.serializer.odin.StructuredStringAppendable;
 
 @SuppressWarnings("resource")
 public class ODINFactory extends JsonFactory
@@ -423,4 +425,5 @@ public class ODINFactory extends JsonFactory
         ByteArrayInputStream in = new ByteArrayInputStream(data, offset, len);
         return new InputStreamReader(in, enc.getJavaName());
     }
+
 }

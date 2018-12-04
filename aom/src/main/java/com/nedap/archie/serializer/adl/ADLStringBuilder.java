@@ -1,9 +1,12 @@
 package com.nedap.archie.serializer.adl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.nedap.archie.serializer.adl.jackson.ArchetypeODINMapper;
 import com.nedap.archie.serializer.odin.OdinSerializer;
 import com.nedap.archie.serializer.odin.OdinStringBuilder;
 import com.nedap.archie.serializer.odin.StructureStringBuilder;
 import com.nedap.archie.serializer.odin.StructuredStringAppendable;
+import org.openehr.odin.jackson.ODINMapper;
 
 import static com.nedap.archie.serializer.odin.OdinStringBuilder.quoteText;
 
@@ -44,7 +47,17 @@ public class ADLStringBuilder implements StructuredStringAppendable {
     }
 
     public ADLStringBuilder odin(Object structure) {
-        new OdinSerializer(new OdinStringBuilder(builder), ADLOdinObjectMapper.INSTANCE).serializeDirect(structure);
+        try {
+            String odin = new ArchetypeODINMapper().createMapper().writeValueAsString(structure);
+            for(String line:odin.split("\n")) {
+                //append per line to get indentation
+                builder.append(line);
+                builder.newline();
+            }
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        //new OdinSerializer(new OdinStringBuilder(builder), ADLOdinObjectMapper.INSTANCE).serializeDirect(structure);
         return this;
     }
 
@@ -78,6 +91,11 @@ public class ADLStringBuilder implements StructuredStringAppendable {
     @Override
     public void revert(int previousMark) {
         builder.revert(previousMark);
+    }
+
+    @Override
+    public void clearMark() {
+        builder.clearMark();
     }
 
     @Override

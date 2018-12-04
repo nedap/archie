@@ -1,5 +1,6 @@
 package com.nedap.archie.aom;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.nedap.archie.base.OpenEHRBase;
 import com.nedap.archie.base.terminology.TerminologyCode;
 
@@ -20,6 +21,7 @@ public class LanguageSection extends ArchetypeModelObject {
     private Map<String, TranslationDetails> translations = new ConcurrentHashMap<>();
 
 
+    @JsonProperty
     public TerminologyCode getOriginalLanguage() {
         return originalLanguage;
     }
@@ -28,7 +30,7 @@ public class LanguageSection extends ArchetypeModelObject {
         this.originalLanguage = originalLanguage;
     }
 
-
+    @JsonProperty
     public Map<String, TranslationDetails> getTranslations() {
         return translations;
     }

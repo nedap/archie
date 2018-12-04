@@ -7,10 +7,10 @@ import java.net.URI;
  */
 public class OdinStringBuilder {
 
-    private final StructureStringBuilder builder;
+    private final StructuredStringAppendable builder;
 
 
-    public OdinStringBuilder(StructureStringBuilder builder) {
+    public OdinStringBuilder(StructuredStringAppendable builder) {
         this.builder = builder;
     }
 

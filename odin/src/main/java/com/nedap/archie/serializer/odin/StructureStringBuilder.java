@@ -90,6 +90,10 @@ public class StructureStringBuilder implements StructuredStringAppendable {
         return builder.length();
     }
 
+    public void clearMark() {
+        //nothing to be done here
+    }
+
     @Override
     public void revert(int previousMark) {
         builder.setLength(previousMark);

@@ -17,6 +17,7 @@ import com.fasterxml.jackson.core.*;
 import com.fasterxml.jackson.core.base.GeneratorBase;
 import com.fasterxml.jackson.core.json.JsonWriteContext;
 import com.fasterxml.jackson.core.io.IOContext;
+import com.nedap.archie.serializer.odin.StructuredStringWriter;
 
 public class ODINGenerator extends GeneratorBase
 {
@@ -232,7 +233,7 @@ public class ODINGenerator extends GeneratorBase
 
         boolean startMarker = Feature.WRITE_DOC_START_MARKER.enabledIn(yamlFeatures);
 
-        builder = new OdinStringBuilder();
+        builder = new OdinStringBuilder(new StructuredStringWriter(out));
     }
 
 
@@ -395,16 +396,12 @@ public class ODINGenerator extends GeneratorBase
     public final void flush() throws IOException
     {
         _writer.flush();
-
     }
 
     @Override
     public void close() throws IOException
     {
-        _writer.write(builder.toString());
-        builder = null;
         if (!isClosed()) {
-
             _writer.close();
         }
     }

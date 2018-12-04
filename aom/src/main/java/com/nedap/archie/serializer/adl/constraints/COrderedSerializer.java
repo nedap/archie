@@ -24,6 +24,7 @@ public abstract class COrderedSerializer<T extends COrdered<?>> extends Constrai
             builder.append("*");//TODO: this is deprecated ADL. Should be fixed, but hard to check, so left in for now
             //because leaving it out would mean invalid instead of deprecated ADL
         }
+        builder.clearMark();
     }
 
     protected void serializeBefore(T cobj) {

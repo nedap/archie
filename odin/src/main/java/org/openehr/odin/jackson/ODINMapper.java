@@ -4,13 +4,18 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.MappingJsonFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.nedap.archie.base.Interval;
+import com.nedap.archie.base.terminology.TerminologyCode;
+import com.nedap.archie.serializer.odin.OdinStringBuilder;
+import com.nedap.archie.serializer.odin.StructuredStringAppendable;
 import org.openehr.odin.jackson.serializers.OdinIntervalSerializer;
 import org.openehr.odin.jackson.serializers.OdinMapKeySerializer;
 import org.openehr.odin.jackson.serializers.OdinURISerializer;
 import org.openehr.odin.jackson.serializers.OdinURLSerializer;
+import org.openehr.odin.jackson.serializers.TerminologyCodeSerializer;
 
 import java.net.URI;
 import java.net.URL;
@@ -45,10 +50,12 @@ public class ODINMapper extends ObjectMapper
 
     private void setup() {
 
+        setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
         disable(SerializationFeature.WRITE_NULL_MAP_VALUES);
         disable(SerializationFeature.WRITE_EMPTY_JSON_ARRAYS);
-        enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
         setSerializationInclusion(JsonInclude.Include.NON_NULL);
+
+        enableDefaultTyping(DefaultTyping.JAVA_LANG_OBJECT);
 
         //custom serializer for Maps and Intervals
         SimpleModule odinModule = new SimpleModule();
@@ -56,6 +63,7 @@ public class ODINMapper extends ObjectMapper
         odinModule.addSerializer(Interval.class, new OdinIntervalSerializer());
         odinModule.addSerializer(URI.class, new OdinURISerializer());
         odinModule.addSerializer(URL.class, new OdinURLSerializer());
+        odinModule.addSerializer(TerminologyCode.class, new TerminologyCodeSerializer());
         registerModule(odinModule);
     }
 
