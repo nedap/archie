@@ -1,9 +1,6 @@
 package com.nedap.archie.serializer.adl;
 
 import com.nedap.archie.aom.OperationalTemplate;
-import com.nedap.archie.aom.Template;
-import com.nedap.archie.aom.TemplateOverlay;
-import com.nedap.archie.serializer.odin.OdinSerializer;
 
 /**
  * @author markopi

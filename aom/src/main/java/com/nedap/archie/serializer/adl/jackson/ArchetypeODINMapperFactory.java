@@ -5,7 +5,7 @@ import com.nedap.archie.aom.terminology.ArchetypeTerm;
 import com.nedap.archie.aom.terminology.ArchetypeTerminology;
 import org.openehr.odin.jackson.ODINMapper;
 
-public class ArchetypeODINMapper {
+public class ArchetypeODINMapperFactory {
 
     public ODINMapper createMapper() {
         ODINMapper result = new ODINMapper();

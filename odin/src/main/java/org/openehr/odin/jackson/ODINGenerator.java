@@ -1,23 +1,20 @@
 package org.openehr.odin.jackson;
 
-import java.io.*;
+import com.fasterxml.jackson.core.*;
+import com.fasterxml.jackson.core.base.GeneratorBase;
+import com.fasterxml.jackson.core.io.IOContext;
+import com.fasterxml.jackson.core.json.JsonWriteContext;
+import com.nedap.archie.serializer.odin.OdinStringBuilder;
+import com.nedap.archie.serializer.odin.StructuredStringWriter;
+
+import java.io.IOException;
+import java.io.Writer;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
-import java.util.Stack;
 import java.util.regex.Pattern;
-
-import com.nedap.archie.serializer.odin.OdinSerializer;
-import com.nedap.archie.serializer.odin.OdinStringBuilder;
-import com.nedap.archie.serializer.odin.StructureStringBuilder;
-
-import com.fasterxml.jackson.core.*;
-import com.fasterxml.jackson.core.base.GeneratorBase;
-import com.fasterxml.jackson.core.json.JsonWriteContext;
-import com.fasterxml.jackson.core.io.IOContext;
-import com.nedap.archie.serializer.odin.StructuredStringWriter;
 
 public class ODINGenerator extends GeneratorBase
 {

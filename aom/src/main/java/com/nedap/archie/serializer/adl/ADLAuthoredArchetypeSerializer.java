@@ -2,7 +2,6 @@ package com.nedap.archie.serializer.adl;
 
 import com.google.common.base.Joiner;
 import com.nedap.archie.aom.AuthoredArchetype;
-import com.nedap.archie.serializer.odin.OdinObject;
 
 import java.util.LinkedHashMap;
 import java.util.List;
