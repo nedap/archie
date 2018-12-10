@@ -21,7 +21,7 @@ package org.openehr.bmm.persistence;
  * Author: Claude Nanjo
  */
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.openehr.bmm.core.BmmClass;
 import org.openehr.bmm.core.BmmModel;
 import org.openehr.bmm.core.BmmPackage;

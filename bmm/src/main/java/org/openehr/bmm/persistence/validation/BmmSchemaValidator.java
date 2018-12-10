@@ -1,7 +1,7 @@
 package org.openehr.bmm.persistence.validation;
 
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.openehr.bmm.persistence.*;
 import org.openehr.utils.message.MessageCode;
 import org.openehr.utils.message.MessageLogger;

@@ -5,9 +5,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import com.nedap.archie.adlparser.antlr.AdlParser;
 import com.nedap.archie.adlparser.antlr.AdlParser.*;
-import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.text.StringEscapeUtils;
 
 import java.util.List;
 
@@ -196,7 +195,7 @@ public class AdlOdinToJsonConverter {
             if(text.startsWith("\"") && text.endsWith("\"")) {
                 String textWithoutQuotationMarks = text.substring(1, text.length()-1);
 
-                String textQuotesReplaced = StringEscapeUtils.unescapeJava(textWithoutQuotationMarks);
+                String textQuotesReplaced = StringEscapeUtils.unescapeJson(textWithoutQuotationMarks);
                 output.append(objectMapper.writeValueAsString(textQuotesReplaced));
             } else {
                 output.append(objectMapper.writeValueAsString(text));

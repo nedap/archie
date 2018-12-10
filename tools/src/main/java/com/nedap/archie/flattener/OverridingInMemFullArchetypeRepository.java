@@ -4,12 +4,9 @@ import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.OperationalTemplate;
 import com.nedap.archie.archetypevalidator.ArchetypeValidationSettings;
 import com.nedap.archie.archetypevalidator.ValidationResult;
-import org.apache.commons.lang.mutable.Mutable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * repository that stores a few extra archetypes not affecting the regular repository, specifically for template overlays

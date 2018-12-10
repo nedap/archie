@@ -1,7 +1,7 @@
 package com.nedap.archie.serializer.odin;
 
 import com.nedap.archie.adlparser.antlr.AdlParser;
-import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.text.StringEscapeUtils;
 
 /**
  * Created by pieter.bos on 15/10/15.

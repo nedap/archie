@@ -2,11 +2,13 @@ package com.nedap.archie.serializer.odin;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.io.JsonStringEncoder;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.nedap.archie.adlparser.antlr.odinParser.*;
-import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.text.StringEscapeUtils;
+
 
 import java.util.List;
 
@@ -251,7 +253,7 @@ public class OdinToJsonConverter {
             if(text.startsWith("\"") && text.endsWith("\"")) {
                 String textWithoutQuotationMarks = text.substring(1, text.length()-1);
 
-                String textQuotesReplaced = StringEscapeUtils.unescapeJava(textWithoutQuotationMarks);
+                String textQuotesReplaced = StringEscapeUtils.unescapeJson(textWithoutQuotationMarks);
                 output.append(objectMapper.writeValueAsString(textQuotesReplaced));
             } else {
                 output.append(objectMapper.writeValueAsString(text));
