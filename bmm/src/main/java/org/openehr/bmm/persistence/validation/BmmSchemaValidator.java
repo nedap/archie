@@ -10,6 +10,7 @@ import org.openehr.utils.validation.AnyValidator;
 
 import java.util.*;
 
+@Deprecated
 public class BmmSchemaValidator extends AnyValidator {
 
     private PersistedBmmSchema schema;

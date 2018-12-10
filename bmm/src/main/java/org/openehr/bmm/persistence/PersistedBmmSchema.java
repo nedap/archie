@@ -46,6 +46,7 @@ import java.util.function.Consumer;
 /**
  * Created by cnanjo on 4/11/16.
  */
+@Deprecated
 public class PersistedBmmSchema extends PersistedBmmPackageContainer implements IBmmSchemaCore, Serializable {
 
     /*******************************************************************

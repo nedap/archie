@@ -31,6 +31,7 @@ import org.openehr.odin.utils.OdinSerializationUtils;
  *
  * Created by cnanjo on 1/26/17.
  */
+@Deprecated
 public class BmmSinglePropertyOpenSerializer extends BaseBmmSerializer<PersistedBmmSinglePropertyOpen> {
 
     /**

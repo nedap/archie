@@ -26,6 +26,7 @@ import org.openehr.bmm.persistence.PersistedBmmEnumerationInteger;
 import org.openehr.bmm.persistence.PersistedBmmGenericProperty;
 import org.openehr.odin.utils.OdinSerializationUtils;
 
+@Deprecated
 public class BmmEnumerationIntegerSerializer extends BaseBmmSerializer<PersistedBmmEnumerationInteger> {
 
     /**

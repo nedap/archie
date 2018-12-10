@@ -25,6 +25,7 @@ import org.openehr.bmm.BmmConstants;
 import org.openehr.bmm.persistence.PersistedBmmClass;
 import org.openehr.odin.utils.OdinSerializationUtils;
 
+@Deprecated
 public class BmmClassSerializer extends BaseBmmSerializer<PersistedBmmClass> {
 
     /**

@@ -29,6 +29,7 @@ import java.util.List;
 
 
 
+@Deprecated
 public class BmmPackageDeserializer {
     public PersistedBmmPackage deserialize(CompositeOdinObject packageDefinition) {
         PersistedBmmPackage bmmPackage = new PersistedBmmPackage();

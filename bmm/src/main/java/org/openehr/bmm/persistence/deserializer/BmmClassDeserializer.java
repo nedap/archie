@@ -31,6 +31,7 @@ import org.openehr.odin.OdinObject;
 
 import java.util.List;
 
+@Deprecated
 public class BmmClassDeserializer {
     public PersistedBmmClass deserialize(CompositeOdinObject classDefinition) {
         String className = classDefinition.getAttribute(BmmConstants.BMM_PROPERTY_NAME).getStringValue();

@@ -34,6 +34,7 @@ import java.util.ArrayList;
  *
  * Created by cnanjo on 4/11/16.
  */
+@Deprecated
 public class PersistedBmmEnumerationInteger extends PersistedBmmEnumeration<Integer> implements Serializable {
     public static final String P_BMM_ENUMERATION_INTEGER = "P_BMM_ENUMERATION_INTEGER";
 

@@ -28,6 +28,7 @@ import org.openehr.odin.CompositeOdinObject;
 import org.openehr.odin.IntegerIntervalObject;
 import org.openehr.odin.OdinAttribute;
 
+@Deprecated
 public class BmmCardinalityDeserializer {
     public BmmMultiplicityInterval deserialize(OdinAttribute odinCardinalityAttribute) {
         BmmMultiplicityInterval returnValue = null;

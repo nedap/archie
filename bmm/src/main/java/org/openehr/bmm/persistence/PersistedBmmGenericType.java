@@ -31,6 +31,7 @@ import java.util.*;
  *
  * Created by cnanjo on 4/11/16.
  */
+@Deprecated
 public class PersistedBmmGenericType extends PersistedBmmType<BmmGenericType> implements Serializable {
 
     public static final String P_BMM_GENERIC_TYPE = "P_BMM_GENERIC_TYPE";

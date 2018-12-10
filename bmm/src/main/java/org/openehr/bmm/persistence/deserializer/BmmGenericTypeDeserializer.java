@@ -34,6 +34,7 @@ import org.openehr.odin.StringObject;
 import java.util.List;
 import java.util.Map;
 
+@Deprecated
 public class BmmGenericTypeDeserializer extends BmmTypeDeserializer {
     public PersistedBmmGenericType deserialize(CompositeOdinObject typeDefinition) {
         PersistedBmmGenericType persistedGenericType = new PersistedBmmGenericType();

@@ -33,6 +33,7 @@ import java.util.List;
  *
  * Created by cnanjo on 4/11/16.
  */
+@Deprecated
 public class PersistedBmmOpenType extends PersistedBmmType<BmmOpenType> implements Serializable {
 
     public static final String P_BMM_OPEN_TYPE = "P_BMM_OPEN_TYPE";

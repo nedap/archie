@@ -25,6 +25,7 @@ import org.openehr.bmm.core.BmmContainerProperty;
 import org.openehr.bmm.core.BmmGenericProperty;
 import org.openehr.bmm.persistence.*;
 
+@Deprecated
 public class BmmPropertySerializerFactory {
     public static BaseBmmSerializer<?> createBmmPropertySerializer(PersistedBmmProperty<?> property) {
         if(property instanceof PersistedBmmSinglePropertyOpen) {

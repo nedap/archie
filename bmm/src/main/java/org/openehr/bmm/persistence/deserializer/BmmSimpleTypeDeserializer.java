@@ -46,6 +46,7 @@ import org.openehr.odin.OdinObject;
  * Created by cnanjo on 2/20/17.
  */
 
+@Deprecated
 public class BmmSimpleTypeDeserializer {
     public PersistedBmmSimpleType deserialize(CompositeOdinObject typeObject) {
         OdinAttribute propertyType = typeObject.getAttribute("type");

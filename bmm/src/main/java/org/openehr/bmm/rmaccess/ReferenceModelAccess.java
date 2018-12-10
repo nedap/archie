@@ -41,6 +41,7 @@ import java.io.InputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Deprecated
 public class ReferenceModelAccess {
 
     private static final Logger log = LoggerFactory.getLogger(ReferenceModelAccess.class);

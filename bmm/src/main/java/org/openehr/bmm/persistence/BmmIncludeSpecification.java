@@ -28,6 +28,7 @@ import java.io.Serializable;
  *
  * Created by cnanjo on 10/12/16.
  */
+@Deprecated
 public class BmmIncludeSpecification implements Serializable {
 
     /**

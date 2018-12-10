@@ -39,6 +39,7 @@ import java.util.*;
  *
  * Created by cnanjo on 4/11/16.
  */
+@Deprecated
 public class PersistedBmmClass extends PersistedBmmModelElement implements Serializable {
 
     /**

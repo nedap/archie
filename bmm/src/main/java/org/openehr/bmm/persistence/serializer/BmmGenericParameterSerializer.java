@@ -27,6 +27,7 @@ import org.openehr.bmm.persistence.PersistedBmmContainerProperty;
 import org.openehr.bmm.persistence.PersistedBmmGenericParameter;
 import org.openehr.odin.utils.OdinSerializationUtils;
 
+@Deprecated
 public class BmmGenericParameterSerializer extends BaseBmmSerializer<PersistedBmmGenericParameter> {
     /**
      * Sets the property to serialize.

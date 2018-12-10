@@ -44,6 +44,7 @@ import java.util.Map;
  * Descriptor for a BMM schema. Contains a meta-data table of attributes obtained from a mini-ODIN parse of the schema file.
  * Be sure to call initialize method after invoking the constructor.
  */
+@Deprecated
 public class SchemaDescriptor {
 
     /**

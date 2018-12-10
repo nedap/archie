@@ -32,6 +32,7 @@ import java.io.Serializable;
  *
  * Created by cnanjo on 11/5/16.
  */
+@Deprecated
 public class PersistedBmmGenericProperty extends PersistedBmmProperty<PersistedBmmGenericType> implements Serializable {
 
     public static final String P_BMM_GENERIC_PROPERTY = "P_BMM_GENERIC_PROPERTY";

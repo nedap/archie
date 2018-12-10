@@ -29,6 +29,7 @@ import org.openehr.odin.utils.OdinSerializationUtils;
 
 import java.util.*;
 
+@Deprecated
 public class BmmSchemaSerializer {
 
     private PersistedBmmSchema schema;
