@@ -21,100 +21,10 @@ public class ODINGenerator extends GeneratorBase
     private OdinStringBuilder builder;
 
     /**
-     * Enumeration that defines all togglable features for YAML generators
+     * Enumeration that defines all togglable features for ODIN generators
      */
     public enum Feature implements FormatFeature // since 2.9
     {
-        /**
-         * Whether we are to write an explicit document start marker ("---")
-         * or not.
-         *
-         * @since 2.3
-         */
-        WRITE_DOC_START_MARKER(true),
-
-
-        /**
-         * Whether to use YAML native Type Id construct for indicating type (true);
-         * or "generic" type property (false). Former works better for systems that
-         * are YAML-centric; latter may be better choice for interoperability, when
-         * converting between formats or accepting other formats.
-         *
-         * @since 2.5
-         */
-        USE_NATIVE_TYPE_ID(true),
-
-        /**
-         * Do we try to force so-called canonical output or not.
-         */
-        CANONICAL_OUTPUT(false),
-
-        /**
-         * Options passed to SnakeYAML that determines whether longer textual content
-         * gets automatically split into multiple lines or not.
-         *<p>
-         * Feature is enabled by default to conform to SnakeYAML defaults as well as
-         * backwards compatibility with 2.5 and earlier versions.
-         *
-         * @since 2.6
-         */
-        SPLIT_LINES(true),
-
-        /**
-         * Whether strings will be rendered without quotes (true) or
-         * with quotes (false, default).
-         *<p>
-         * Minimized quote usage makes for more human readable output; however, content is
-         * limited to printable characters according to the rules of
-         * <a href="http://www.yaml.org/spec/1.2/spec.html#style/block/literal">literal block style</a>.
-         *
-         * @since 2.7
-         */
-        MINIMIZE_QUOTES(false),
-
-        /**
-         * Whether numbers stored as strings will be rendered with quotes (true) or
-         * without quotes (false, default) when MINIMIZE_QUOTES is enabled.
-         *<p>
-         * Minimized quote usage makes for more human readable output; however, content is
-         * limited to printable characters according to the rules of
-         * <a href="http://www.yaml.org/spec/1.2/spec.html#style/block/literal">literal block style</a>.
-         *
-         * @since 2.8.2
-         */
-        ALWAYS_QUOTE_NUMBERS_AS_STRINGS(false),
-
-        /**
-         * Whether for string containing newlines a <a href="http://www.yaml.org/spec/1.2/spec.html#style/block/literal">literal block style</a>
-         * should be used. This automatically enabled when {@link #MINIMIZE_QUOTES} is set.
-         * <p>
-         * The content of such strings is limited to printable characters according to the rules of
-         * <a href="http://www.yaml.org/spec/1.2/spec.html#style/block/literal">literal block style</a>.
-         *
-         * @since 2.9
-         */
-        LITERAL_BLOCK_STYLE(false),
-
-        /**
-         * Feature enabling of which adds indentation for array entry generation
-         * (default indentation being 2 spaces).
-         *<p>
-         * Default value is `false` for backwards compatibility
-         *
-         * @since 2.9
-         */
-        INDENT_ARRAYS(false),
-
-        /**
-         * Option passed to SnakeYAML that determines if the line breaks used for
-         * serialization should be same as what the default is for current platform.
-         * If disabled, Unix linefeed ({@code \n}) will be used.
-         * <p>
-         * Default value is `false` for backwards compatibility.
-         *
-         * @since 2.9.6
-         */
-        USE_PLATFORM_LINE_BREAKS(false),
         ;
 
         protected final boolean _defaultState;
@@ -216,19 +126,15 @@ public class ODINGenerator extends GeneratorBase
     /**********************************************************
      */
 
-    public ODINGenerator(IOContext ctxt, int jsonFeatures, int yamlFeatures,
+    public ODINGenerator(IOContext ctxt, int jsonFeatures, int odinFeatures,
                          ObjectCodec codec, Writer out)
         throws IOException
     {
         super(jsonFeatures, codec);
         _ioContext = ctxt;
-        _formatFeatures = yamlFeatures;
+        _formatFeatures = odinFeatures;
         _writer = out;
 
-        // should we start output now, or try to defer?
-        Map<String,String> noTags = Collections.emptyMap();
-
-        boolean startMarker = Feature.WRITE_DOC_START_MARKER.enabledIn(yamlFeatures);
 
         builder = new OdinStringBuilder(new StructuredStringWriter(out));
     }
@@ -275,8 +181,7 @@ public class ODINGenerator extends GeneratorBase
     }
 
     /**
-     * SnakeYAML does not expose buffered content amount, so we can only return
-     * <code>-1</code> from here
+     *  not supported for now, so -1
      */
     @Override
     public int getOutputBuffered() {
@@ -415,8 +320,6 @@ public class ODINGenerator extends GeneratorBase
         _verifyValueWrite("start an array");
         _writeContext = _writeContext.createChildArrayContext();
 
-        String yamlTag = _typeId;
-        boolean implicit = (yamlTag == null);
         String anchor = _objectId;
         if (anchor != null) {
             _objectId = null;
@@ -452,9 +355,6 @@ public class ODINGenerator extends GeneratorBase
     {
         _verifyValueWrite("start an object");
 
-
-        String yamlTag = _typeId;
-        boolean implicit = (yamlTag == null);
         String anchor = _objectId;
         if (anchor != null) {
             _objectId = null;
@@ -736,14 +636,14 @@ public class ODINGenerator extends GeneratorBase
 
     @Override
     public boolean canWriteObjectId() {
-        //nope
+        //nope. Well, not sure what it is :)
         return false;
     }
 
     @Override
     public boolean canWriteTypeId() {
         //yup, odin does this
-        return Feature.USE_NATIVE_TYPE_ID.enabledIn(_formatFeatures);
+        return true;
     }
 
     @Override
@@ -806,8 +706,6 @@ public class ODINGenerator extends GeneratorBase
     private void _writeScalarBinary(Base64Variant b64variant,
             byte[] data) throws IOException
     {
-        // 15-Dec-2017, tatu: as per [dataformats-text#62], can not use SnakeYAML's internal
-        //    codec. Also: force use of linefeed variant if using default
         if (b64variant == Base64Variants.getDefaultVariant()) {
             b64variant = Base64Variants.MIME;
         }
