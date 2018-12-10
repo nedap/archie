@@ -292,7 +292,20 @@ This means you can also convert ODIN to JSON.
     String json = new OdinToJsonConverter().convert(odinText);
 ```
 
-Converting to JSON is a great way to get ODIN object mapping with very little code and it parses enough to parse the ODIN used in ADL 2. Odin has a few advanced features not generally used in archetype metadata, which are object references and intervals. These are currently not yet supported, although it is very possible to implement them using a custom deserializer for the interval and JSON references for the object references.
+The JSON conversion plus object mapping currently supports most ODIN features, except:
+
+- Intervals of anything other than integers
+- object references
+
+To serialize your own object into ODIN, a Jackson object mapper is present. Note that unlike most Jackson Object Mappers, this mapper currently cannot parse ODIN, only serialize it. Trying to parse with it will result in exceptions. To use:
+
+```java
+ODINMapper mapper = new ODINMapper();
+String result = mapper.writeValueAsString(yourObject);
+```
+
+Like any other Jackson ObjectMapper, many options in the mapping are configurable, such as custom type mapping.
+
 
 ### Intervals and primitive objects
 
@@ -483,14 +496,23 @@ Reflection based metadata bases its metadata on an actual reference model implem
 
 The BMM model is not based on an actual implementation, but on a file containing the metadata. The specifications of BMM are part of OpenEHR and can be found at http://www.openehr.org/releases/BASE/latest/docs/bmm/bmm.html.
 
-To use, include your BMM files and point the code to the correct directory, then load the AOM Profiles.
+To use, parse your own BMM files, then load the AOM Profiles.
 
 ```java
-List<String> schemaDirectories = new ArrayList<>();
-schemaDirectories.add("/myBmmDirectory");
-ReferenceModelAccess access = new ReferenceModelAccess();
-access.initializeAll(schemaDirectories);
-MetaModels models = new MetaModels(new ReferenceModels(ArchieRMInfoLookup.getInstance()), access);
+BmmRepository repository = new BmmRepository();
+String[] bmmFiles = {"file1", "file2"};
+for(String fileName:bmmFiles) {
+    try(InputStream stream = new FileInputStream(fileName)) {
+        repository.addPersistentSchema(BmmOdinParser.convert(stream));
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+BmmSchemaConverter converter = new BmmSchemaConverter(repo);
+converter.validateAndConvertRepository();
+
+MetaModels models = new MetaModels(new ReferenceModels(ArchieRMInfoLookup.getInstance()), repository);
+
 //now parse the AOM profiles
 String[] resourceNames = {"first aom profile", "second aom profile"};
 for(String resource:resourceNames) {
@@ -503,6 +525,33 @@ for(String resource:resourceNames) {
 ```
 
 This instantiates a MetaModels class that has both the archie reference model implementation, the BMM models and AOM profiles. The BMM models and AOM profiles will be used for the flattener and archetype validator, the other models for tools that work on reference models.
+
+After validating and converting, the BmmRepository allows access to the PBmmSchema, the BmmModels, all validation messages and more, through the BmmValidationResult class. See Javadoc for more information.B 
+
+### BMM and P_BMM implementation
+
+A BMM and P_BMM implementation is present. See the previous paragraph on how to parse P_BMM and convert it to Bmm, using the BmmRepository and BmmSchemaConverter.
+BMM Version 2.2 is implemented, plus P_BMM version 2.3.0. There are some changes with regards to the BMM documentation:
+
+- The archie P_BMM implementation does not maintain any state regarding the conversion to BMM, only the persisted fields
+- BMM_SCHEMA and REFERENCE_MODEL_ACCESS are not used. Instead of BmmSchema there is BmmValidationResult, instead of ReferenceModelAccess there is BmmRepository
+- BmmSchemaDescriptor and PBmmSchemaDescriptor is not used, without direct replacement
+
+These changes have been made to simplify the implementation of Bmm. There should be a direct replacement of all functionality.
+
+Note that archie still contains a deprecated older P_BMM implementation which conforms directly with the specifications. It will be removed in a future version.
+
+
+### Serializing P_BMM
+
+The P_BMM has a direct binding to Jackson. To serialize to ODIN:
+
+```java
+PBmmSchema schema = ... ;
+String result = BmmOdinSerializer.serialize(schema);
+```
+
+Because the implementation is bound to Jackson, it can also be easily serialized and parsed to JSON and YAML. Use ```BmmJacksonUtil.getObjectMapper()``` for the JSON implementation.
 
 ### Default constraints from the reference model
 
