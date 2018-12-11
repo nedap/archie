@@ -2,7 +2,6 @@ package org.openehr.bmm.v2.persistence;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TreeMap;
 import java.util.function.BiConsumer;
 
 public final class PBmmPackage extends PBmmPackageContainer {
@@ -41,7 +40,7 @@ public final class PBmmPackage extends PBmmPackageContainer {
 
     public void setClassesAndPackagesFrom(PBmmPackage other) {
         setClasses(new ArrayList<>(other.getClasses()));
-        TreeMap<String, PBmmPackage> packages = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+        CaseInsensitiveLinkedHashMap<PBmmPackage> packages = new CaseInsensitiveLinkedHashMap<>();
         packages.putAll(other.getPackages());
         setPackages(packages);//TODO: CLONE TO PACKAGE OBJECTS!?
     }

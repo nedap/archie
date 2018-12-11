@@ -1,18 +1,15 @@
 package org.openehr.bmm.v2.persistence;
 
-import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.function.Consumer;
 
 public class PBmmPackageContainer extends PBmmBase {
 
-    private Map<String, PBmmPackage> packages = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+    private Map<String, PBmmPackage> packages = new CaseInsensitiveLinkedHashMap<>();
 
     public Map<String, PBmmPackage> getPackages() {
         if(packages == null) {
-            packages = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+            packages = new CaseInsensitiveLinkedHashMap<>();
         }
 
         return packages;

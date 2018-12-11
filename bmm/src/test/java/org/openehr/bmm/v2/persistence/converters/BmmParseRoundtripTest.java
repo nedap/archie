@@ -42,6 +42,7 @@ public class BmmParseRoundtripTest {
     public void parseRoundTrip(String name) throws Exception {
         PBmmSchema schema = parse(name);
         String serialized = new BmmOdinSerializer().serialize(schema);
+        System.out.print(serialized);
         PBmmSchema parsed = BmmOdinParser.convert(serialized);
         BmmEqualsAssertions.assertSchemaEquals(schema, parsed);
     }

@@ -2,15 +2,12 @@ package org.openehr.bmm.v2.persistence;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.openehr.bmm.persistence.validation.BmmDefinitions;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.function.Consumer;
 
 @JsonPropertyOrder({"bmm_version",
@@ -63,7 +60,7 @@ public final class PBmmSchema extends PBmmPackageContainer {
 
     public Map<String, PBmmClass> getPrimitiveTypes() {
         if(primitiveTypes == null) {
-            primitiveTypes = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+            primitiveTypes = new CaseInsensitiveLinkedHashMap<>();
         }
         return primitiveTypes;
     }
@@ -74,7 +71,7 @@ public final class PBmmSchema extends PBmmPackageContainer {
 
     public Map<String, PBmmClass> getClassDefinitions() {
         if(classDefinitions == null) {
-            classDefinitions = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+            classDefinitions = new CaseInsensitiveLinkedHashMap<>();
         }
         return classDefinitions;
     }
@@ -85,7 +82,7 @@ public final class PBmmSchema extends PBmmPackageContainer {
 
     public Map<String, BmmIncludeSpec> getIncludes() {
         if(includes == null) {
-            includes = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+            includes = new CaseInsensitiveLinkedHashMap<>();
         }
         return includes;
     }
