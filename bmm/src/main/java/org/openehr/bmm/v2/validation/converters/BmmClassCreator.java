@@ -7,6 +7,7 @@ import org.openehr.bmm.core.BmmGenericClass;
 import org.openehr.bmm.core.BmmGenericParameter;
 import org.openehr.bmm.core.BmmModel;
 import org.openehr.bmm.core.BmmProperty;
+import org.openehr.bmm.persistence.validation.BmmDefinitions;
 import org.openehr.bmm.v2.persistence.PBmmClass;
 import org.openehr.bmm.v2.persistence.PBmmEnumerationInteger;
 import org.openehr.bmm.v2.persistence.PBmmEnumerationString;
@@ -41,15 +42,18 @@ public class BmmClassCreator {
 
         BmmClass bmmClass = schema.getClassDefinition(pBmmClass.getName());
         if (bmmClass != null) {
-            if (pBmmClass.getAncestors() != null) {
-                for (String ancestor : pBmmClass.getAncestors()) {
-                    if (schema.getClassDefinition(ancestor) != null) {
-                        bmmClass.addAncestor(schema.getClassDefinition(ancestor));
-                    } else {
-                        throw new RuntimeException("Error retrieving class definition for " + ancestor);
-                    }
+
+            for (String ancestorTypeName : pBmmClass.getAncestorTypeNames()) {
+                //typeName will have generics included. BMM 2 does not support generics as ancestors, so just throw away this information
+                //until migration to BMM 3
+                BmmClass classDefinition = schema.getClassDefinition(BmmDefinitions.typeNameToClassKey(ancestorTypeName));
+                if (classDefinition != null) {
+                    bmmClass.addAncestor(classDefinition);
+                } else {
+                    throw new RuntimeException("Error retrieving class definition for " + ancestorTypeName);
                 }
             }
+
             if (bmmClass instanceof BmmGenericClass && pBmmClass.getGenericParameterDefs() != null) {
                 for (PBmmGenericParameter param : pBmmClass.getGenericParameterDefs().values()) {
                     BmmGenericParameter bmmGenericParameter = createBmmGenericParameter(param, schema);

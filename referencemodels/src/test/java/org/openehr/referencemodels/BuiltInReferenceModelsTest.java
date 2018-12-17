@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.openehr.bmm.core.BmmModel;
 import org.openehr.bmm.rmaccess.ReferenceModelAccess;
 import org.openehr.bmm.v2.validation.BmmRepository;
+import org.openehr.bmm.v2.validation.BmmValidationResult;
 
 import java.util.Map;
 
@@ -41,6 +42,12 @@ public class BuiltInReferenceModelsTest {
     public void bmmRepository() throws Exception {
 
         BmmRepository bmmRepository = BuiltinReferenceModels.getBmmRepository();
+
+        for(BmmValidationResult validation:bmmRepository.getInvalidModels()) {
+            System.out.println("validation " + validation.getSchemaId() + " contains errors:");
+            System.out.println(validation.getLogger().toString());
+
+        }
         assertEquals(33, bmmRepository.getPersistentSchemas().size());
         assertEquals(33, bmmRepository.getModels().size());
         assertEquals(28, bmmRepository.getValidModels().size());

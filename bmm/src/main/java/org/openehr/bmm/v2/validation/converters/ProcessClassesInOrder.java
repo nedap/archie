@@ -1,5 +1,6 @@
 package org.openehr.bmm.v2.validation.converters;
 
+import org.openehr.bmm.persistence.validation.BmmDefinitions;
 import org.openehr.bmm.v2.persistence.PBmmClass;
 import org.openehr.bmm.v2.persistence.PBmmGenericParameter;
 import org.openehr.bmm.v2.persistence.PBmmSchema;
@@ -44,10 +45,11 @@ public class ProcessClassesInOrder {
     private void processClass(PBmmSchema schema, Consumer<PBmmClass> action, List<String> visitedClasses, Queue<PBmmClass> queue, PBmmClass bmmClass) {
         if (!visitedClasses.contains(bmmClass.getName().toUpperCase())) {
             boolean allAncestorsAndDependenciesVisited = true;
-            for (String ancestor : bmmClass.getAncestors()) {
-                if (!visitedClasses.contains(ancestor.toUpperCase())) {
+            for (String ancestor : bmmClass.getAncestorTypeNames()) {
+                String ancestorClassName = BmmDefinitions.typeNameToClassKey(ancestor);
+                if (!visitedClasses.contains(ancestorClassName.toUpperCase())) {
                     allAncestorsAndDependenciesVisited = false;
-                    PBmmClass ancestorDef = schema.findClassOrPrimitiveDefinition(ancestor);
+                    PBmmClass ancestorDef = schema.findClassOrPrimitiveDefinition(ancestorClassName);
                     queue.add(ancestorDef);
                 }
 

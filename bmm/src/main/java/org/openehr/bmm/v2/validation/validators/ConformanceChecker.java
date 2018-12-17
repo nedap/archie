@@ -98,7 +98,7 @@ public class ConformanceChecker {
      */
     public boolean isAncestor(PBmmSchema schema, String typePart1, String typePart2) {
         PBmmClass classOrPrimitiveDefinition = schema.findClassOrPrimitiveDefinition(typePart1);
-        List<String> ancestors = classOrPrimitiveDefinition.getAncestors();
+        List<String> ancestors = classOrPrimitiveDefinition.getAncestorTypeNames();
         if(ancestors.contains(typePart2)) { //direct ancestor
             return true;
         }

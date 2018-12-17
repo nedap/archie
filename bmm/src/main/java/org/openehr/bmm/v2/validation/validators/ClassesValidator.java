@@ -2,6 +2,7 @@ package org.openehr.bmm.v2.validation.validators;
 
 import org.apache.commons.lang3.StringUtils;
 
+import org.openehr.bmm.persistence.validation.BmmDefinitions;
 import org.openehr.bmm.persistence.validation.BmmMessageIds;
 import org.openehr.bmm.v2.persistence.*;
 import org.openehr.bmm.v2.validation.BmmValidation;
@@ -36,9 +37,11 @@ public class ClassesValidator extends ValidatorBase implements BmmValidation {
 
     public void validateClass(PBmmClass pBmmClass) {
         //check that all ancestors exist
-        pBmmClass.getAncestors().forEach(ancestorClassName -> {
+        pBmmClass.getAncestorTypeNames().forEach(ancestorClassName -> {
             if(StringUtils.isEmpty(ancestorClassName)) {
                 addValidityError(schema, pBmmClass.getSourceSchemaId(), BmmMessageIds.ec_BMM_ANCE, pBmmClass.getSourceSchemaId(), pBmmClass.getName());
+            } else if (!ancestorClassName.equalsIgnoreCase("Any") && schema.findClassOrPrimitiveDefinition(BmmDefinitions.typeNameToClassKey(ancestorClassName)) == null) {
+                addValidityError(schema, pBmmClass.getSourceSchemaId(), BmmMessageIds.ec_BMM_ANC, pBmmClass.getSourceSchemaId(), pBmmClass.getName(), ancestorClassName);
             }
         });
 

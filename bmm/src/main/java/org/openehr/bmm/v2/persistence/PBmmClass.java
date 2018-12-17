@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class PBmmClass extends PBmmBase {
 
@@ -42,6 +43,23 @@ public class PBmmClass extends PBmmBase {
             ancestors = new ArrayList<>();
         }
         return ancestors;
+    }
+
+    /**
+     * Get a list of ancestors type names. Combines the ancestors and ancestor_defs attributes, so can always
+     * be used instead of those two separately. Warning: generates type names including generic parameters,
+     * you may have to strip those for certain types of operations
+     * @return
+     */
+    @JsonIgnore
+    public List<String> getAncestorTypeNames() {
+        if(ancestorDefs != null && !ancestorDefs.isEmpty()) {
+            return ancestorDefs.values().stream().map(type -> type.asTypeString()).collect(Collectors.toList());
+        } else if (ancestors != null) {
+            return ancestors;
+        } else {
+            return new ArrayList<>();
+        }
     }
 
     public void setAncestors(List<String> ancestors) {
@@ -114,4 +132,5 @@ public class PBmmClass extends PBmmBase {
     public void setAncestorDefs(Map<String, PBmmType> ancestorDefs) {
         this.ancestorDefs = ancestorDefs;
     }
+
 }

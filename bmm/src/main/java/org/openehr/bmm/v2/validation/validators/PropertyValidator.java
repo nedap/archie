@@ -1,6 +1,7 @@
 package org.openehr.bmm.v2.validation.validators;
 
 import org.apache.commons.lang3.StringUtils;
+import org.openehr.bmm.persistence.validation.BmmDefinitions;
 import org.openehr.bmm.persistence.validation.BmmMessageIds;
 import org.openehr.bmm.v2.persistence.*;
 import org.openehr.utils.message.MessageLogger;
@@ -170,8 +171,8 @@ public class PropertyValidator extends ValidatorBase {
     }
 
     private void validateOverriddenPropertyType(PBmmClass pBmmClass, PBmmProperty pBmmProperty) {
-        for(String ancestorName:pBmmClass.getAncestors()) {
-            PBmmClass ancestor = schema.findClassOrPrimitiveDefinition(ancestorName);
+        for(String ancestorName:pBmmClass.getAncestorTypeNames()) {
+            PBmmClass ancestor = schema.findClassOrPrimitiveDefinition(BmmDefinitions.typeNameToClassKey(ancestorName));
             if(ancestor != null) {
                 PBmmProperty ancestorProperty = ancestor.getProperties().get(pBmmProperty.getName());
                 if (ancestor != null && ancestorProperty != null && !conformanceChecker.propertyConformsTo(schema, pBmmProperty, ancestorProperty)) {
