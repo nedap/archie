@@ -7,6 +7,8 @@ buildscript {
     classpath 'ch.raffael.pegdown-doclet:pegdown-doclet:1.3'
     classpath 'org.owasp:dependency-check-gradle:1.4.5.1'
   }
+
+  
 }
 
 repositories {
@@ -23,6 +25,7 @@ allprojects {
   group = 'com.nedap.healthcare.archie'
   ext.gradleScriptDir = "${rootProject.projectDir}/gradle"
   //archivesBaseName = 'archie'
+
 }
 
 gradle.ext.ossrhUsernameSafe = hasProperty('ossrhUsername') ? ossrhUsername : ""
@@ -35,7 +38,6 @@ subprojects {
   apply plugin: 'java'
   apply plugin: 'ch.raffael.pegdown-doclet'
   apply plugin: 'org.owasp.dependencycheck'
- // apply from: "${gradleScriptDir}/jacoco.gradle"  
   apply from: "${gradleScriptDir}/publish-maven.gradle"  
 
  // plugins {
@@ -54,7 +56,7 @@ subprojects {
   }
 
   ext.reflectionsVersion = '0.9.11'
-  ext.jacksonVersion = '2.9.6'
+  ext.jacksonVersion = '2.9.7'
 
   dependencies {
     compile 'org.slf4j:slf4j-api:1.7.25'
@@ -114,6 +116,9 @@ subprojects {
   }
 
 }
+
+apply from: "${gradleScriptDir}/jacoco.gradle"  
+
 
 
 

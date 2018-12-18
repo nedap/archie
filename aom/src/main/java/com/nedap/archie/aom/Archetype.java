@@ -298,15 +298,15 @@ public class Archetype extends AuthoredResource {
     }
 
     public String generateNextIdCode() {
-        return generateNextCode(AdlCodeDefinitions.ID_CODE_LEADER, getUsedIdCodes());
+        return generateNextCode(AdlCodeDefinitions.ID_CODE_LEADER, getAllUsedCodes());
     }
 
     public String generateNextValueCode() {
-        return generateNextCode(AdlCodeDefinitions.VALUE_CODE_LEADER, getUsedValueCodes());
+        return generateNextCode(AdlCodeDefinitions.VALUE_CODE_LEADER, getAllUsedCodes());
     }
 
     public String generateNextValueSetCode() {
-        return generateNextCode(AdlCodeDefinitions.VALUE_SET_CODE_LEADER, getUsedValueSetCodes());
+        return generateNextCode(AdlCodeDefinitions.VALUE_SET_CODE_LEADER, getAllUsedCodes());
 
     }
 

@@ -18,7 +18,7 @@ You can depend on parts of Archie, or the entire library at once. If you want th
 
 ```gradle
 dependencies {
-    compile 'com.nedap.healthcare.archie:archie-all:0.5.3'
+    compile 'com.nedap.healthcare.archie:archie-all:0.5.4'
 }
 ```
 
@@ -28,21 +28,17 @@ or if you use maven, in your pom.xml
 <dependency>
     <groupId>com.nedap.healthcare.archie</groupId>
     <artifactId>archie-all</artifactId>
-    <version>0.5.3</version>
+    <version>0.5.4</version>
 </dependency>
 ```
 
-If you want to depend on just the AOM and BMM, without any reference model implementation, depend on com.nedap.healthcare.archie:tools:0.5.3 and com.nedap.healthcare.archie:referencemodels:0.5.3 instead
+If you want to depend on just the AOM and BMM, without any reference model implementation, depend on com.nedap.healthcare.archie:tools:0.5.4 and com.nedap.healthcare.archie:referencemodels:0.5.4 instead
 
 
 ## Build
 
 [![Build Status](https://travis-ci.org/openEHR/archie.svg?branch=master)](https://travis-ci.org/openEHR/archie)
-
-
-the following is from the old repository and not up to date, but gives an impression:
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/dda8ce2b837a40b5b50cf52dae95764d)](https://www.codacy.com/app/pieter-bos/archie?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=nedap/archie&amp;utm_campaign=Badge_Grade)
-[![Codecov Badge](https://img.shields.io/codecov/c/github/nedap/archie.svg)](https://codecov.io/gh/nedap/archie)
+[![codecov](https://codecov.io/gh/openEHR/archie/branch/master/graph/badge.svg)](https://codecov.io/gh/openEHR/archie)
 
 You need Java 8 to build. Check out the source and type:
 
@@ -342,22 +338,33 @@ The RMObjectCreator creates empty reference model objects based on constraints. 
 ```java
   public void createEmptyRMObject(CObject object) {
     RMObjectCreator creator = new RMObjectCreator(ArchieRMInfoLookup.getInstance());
-    constructEmptyRMObject(creator, cObject);
+    constructEmptyRMObject(ArchieRMInfoLookup.getInstance(), creator, cObject);
   }
 
 
- private RMObject constructEmptyRMObject(RMObjectCreator creator, CObject object) {
+ private RMObject constructEmptyRMObject(ModelInfoLookup lookup, RMObjectCreator creator, CObject object) {
         RMObject result = creator.create(object);
         for(CAttribute attribute: object.getAttributes()) {
             List<Object> children = new ArrayList<>();
             for(CObject childConstraint:attribute.getChildren()) {
                 if(childConstraint instanceof CComplexObject) {
-                    RMObject childObject = constructEmptyRMObject(creator, childConstraint);
+                    //in case of abstract classes used in the archetype, this will pick a non-abstract descendant class
+                    RMObject childObject = constructEmptyRMObject(lookup, creator, childConstraint);
                     children.add(childObject);
                 }
             }
-            //will fail when a single valued attribute has two values, check code in TestUtil.java for how to solve.
-            creator.set(result, attribute.getRmAttributeName(), children);
+            if(!children.isEmpty()) {
+                //this is not BMM, but access to the actual RM implementation because that is what we need here
+                RMAttributeInfo attributeInfo = lookup.getAttributeInfo(result.getClass(), attribute.getRmAttributeName());
+                if(attributeInfo != null) {
+                    if(attributeInfo.isMultipleValued()) {
+                        creator.set(result, attribute.getRmAttributeName(), children);
+                    } else if(!children.isEmpty()){
+                        //set the first possible result in case of multiple children for a single valued value
+                        creator.set(result, attribute.getRmAttributeName(), Lists.newArrayList(children.get(0)));
+                    }
+                }
+            }
         }
         return result;
     }
@@ -524,7 +531,7 @@ Archie uses its own reference model by default, but it can use any reference mod
 
 ## Status
 
-The project is used in production in an EHR systems and completely or nearly completely implements the standards for all describedfeatures. Of course there are many parts that can be extended and improved.
+The project is used in production in an EHR systems and completely or nearly completely implements the standards for all described features. Of course there are many parts that can be extended and improved.
 
 ## Contributions
 
