@@ -40,7 +40,7 @@ public class UpdatedValueHandler {
     private static Map<String, Object> fixCodePhrase(Object rmObject, Archetype archetype, String pathOfParent) {
         try {
             //special case: if at-code has been set, we need to do more!
-            if (pathOfParent.endsWith("value/defining_code")) {
+            if (pathOfParent.endsWith("value/defining_code") || pathOfParent.endsWith("null_flavour/defining_code")) {
                 return fixDvCodedText(rmObject, archetype, pathOfParent);
             } else if (pathOfParent.endsWith("symbol/defining_code")) {
                 return fixDvOrdinal(rmObject, archetype, pathOfParent);

@@ -49,7 +49,7 @@ public class FixableAssertionsCheckerTest {
 
         Locatable root = (Locatable) testUtil.constructEmptyRMObject(archetype.getDefinition());
         EvaluationResult evaluate = ruleEvaluation.evaluate(root, archetype.getRules().getRules());
-        assertEquals("There are four values that must be set", 5, evaluate.getSetPathValues().size());
+        assertEquals("There are seven values that must be set", 7, evaluate.getSetPathValues().size());
 
         //assert that paths must be set to specific values
         assertEquals("test string", evaluate.getSetPathValues().get("/data[id2]/events[id3]/data[id4]/items[id5]/value/value").getValue());
@@ -57,6 +57,8 @@ public class FixableAssertionsCheckerTest {
         assertEquals("Option 1", evaluate.getSetPathValues().get("/data[id2]/events[id3]/data[id4]/items[id6]/value/value").getValue());
         assertEquals("at6", evaluate.getSetPathValues().get("/data[id2]/events[id3]/data[id4]/items[id7]/value/symbol/defining_code/code_string").getValue());
         assertEquals(0l, evaluate.getSetPathValues().get("/data[id2]/events[id3]/data[id4]/items[id7]/value/value").getValue());
+        assertEquals("at1", evaluate.getSetPathValues().get("/data[id2]/events[id3]/data[id4]/items[id8]/null_flavour/defining_code/code_string").getValue());
+        assertEquals("Option 1", evaluate.getSetPathValues().get("/data[id2]/events[id3]/data[id4]/items[id8]/null_flavour/value").getValue());
 
         //now assert that the RM Object cloned by rule evaluation has been modified with the new values for further evaluation
         assertEquals("test string", ruleEvaluation.getRMRoot().itemAtPath("/data[id2]/events[id3]/data[id4]/items[id5]/value/value"));
@@ -64,10 +66,13 @@ public class FixableAssertionsCheckerTest {
         assertEquals("Option 1", ruleEvaluation.getRMRoot().itemAtPath("/data[id2]/events[id3]/data[id4]/items[id6]/value/value"));
         assertEquals("at6", ruleEvaluation.getRMRoot().itemAtPath("/data[id2]/events[id3]/data[id4]/items[id7]/value/symbol/defining_code/code_string"));
         assertEquals(0l, ruleEvaluation.getRMRoot().itemAtPath("/data[id2]/events[id3]/data[id4]/items[id7]/value/value"));
+        assertEquals("at1", ruleEvaluation.getRMRoot().itemAtPath("/data[id2]/events[id3]/data[id4]/items[id8]/null_flavour/defining_code/code_string"));
+        assertEquals("Option 1", ruleEvaluation.getRMRoot().itemAtPath("/data[id2]/events[id3]/data[id4]/items[id8]/null_flavour/value"));
 
         //and of course the DV_ORDINAL and DV_CODED_TEXT should be constructed correctly, with the correct numeric respectively a textual value
         assertEquals(0l, ruleEvaluation.getRMRoot().itemAtPath("/data[id2]/events[id3]/data[id4]/items[id7]/value/value"));
         assertEquals("Option 1", ruleEvaluation.getRMRoot().itemAtPath("/data[id2]/events[id3]/data[id4]/items[id6]/value/value"));
+        assertEquals("Option 1", ruleEvaluation.getRMRoot().itemAtPath("/data[id2]/events[id3]/data[id4]/items[id8]/null_flavour/value"));
 
 
         evaluate = ruleEvaluation.evaluate(ruleEvaluation.getRMRoot(), archetype.getRules().getRules());

@@ -16,14 +16,19 @@ public class ArchetypeTest {
     @Test
     public void testLevel0GenerateIdCode() {
         Archetype archetype = createLevel0Archetype();
+        //the generator will generate the same codes until their corresponding objects are added to the archetype
         assertEquals("id3", archetype.generateNextIdCode());
+        assertEquals("at3", archetype.generateNextValueCode());
+        assertEquals("ac3", archetype.generateNextValueSetCode());
     }
 
     @Test
     public void testLevel1GenerateIdCode() {
         Archetype archetype = createLevel1Archetype();
+        //the generator will generate the same codes until their corresponding objects are added to the archetype
         assertEquals("id0.3", archetype.generateNextIdCode());
-
+        assertEquals("at0.3", archetype.generateNextValueCode());
+        assertEquals("ac0.3", archetype.generateNextValueSetCode());
     }
 
     private Archetype createLevel0Archetype() {
@@ -55,4 +60,6 @@ public class ArchetypeTest {
         archetype.setDefinition(definition);
         return archetype;
     }
+
+
 }
