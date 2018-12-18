@@ -168,6 +168,7 @@ public class ArchieRMInfoLookup extends ReflectionModelInfoLookup {
         addClass(HierObjectId.class);
         addClass(Section.class);
         addClass(Activity.class);
+        addClass(TerminologyId.class);
     }
 
     public static ArchieRMInfoLookup getInstance() {
