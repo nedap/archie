@@ -14,6 +14,7 @@ import org.openehr.bmm.core.BmmSimpleType;
 import org.openehr.bmm.core.BmmType;
 import org.openehr.bmm.persistence.validation.BmmDefinitions;
 
+import java.lang.reflect.Modifier;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -112,6 +113,8 @@ public class BmmComparison {
             }
         }
 
+
+        //ancestor comparison
         for(String ancestor:classDefinition.getAncestors().keySet()) {
             Set<RMTypeInfo> directParentClasses = typeInfo.getDirectParentClasses();
             Set<String> parentTypeNames = directParentClasses.stream().map((type) -> type.getRmName()).collect(Collectors.toSet());
@@ -120,6 +123,13 @@ public class BmmComparison {
                         MessageFormat.format("class {0} has ancestor {1} in BMM, but not in ModelInfoLookup", classDefinition.getTypeName(), ancestor),
                         typeInfo.getRmName()));
             }
+        }
+
+        //abstract/concrete class
+        if(typeInfo.getJavaClass() != null && Modifier.isAbstract(typeInfo.getJavaClass().getModifiers()) != classDefinition.isAbstract()) {
+            result.add(new ModelDifference(ModelDifferenceType.ABSTRACT_DIFFERENCE,
+                    MessageFormat.format("class {0} abstract difference: BMM: {1}, Model: {2}", classDefinition.getTypeName(), classDefinition.isAbstract(), Modifier.isAbstract(typeInfo.getJavaClass().getModifiers())),
+                    typeInfo.getRmName()));
         }
 
         return result;
