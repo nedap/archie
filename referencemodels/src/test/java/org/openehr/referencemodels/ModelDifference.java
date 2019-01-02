@@ -1,5 +1,7 @@
 package org.openehr.referencemodels;
 
+import java.util.Objects;
+
 public class ModelDifference {
 
     private ModelDifferenceType type;
@@ -29,7 +31,12 @@ public class ModelDifference {
 
     @Override
     public String toString() {
-        return message;
+        return "ModelDifference{" +
+                "type=" + type +
+                ", className='" + className + '\'' +
+                ", propertyName='" + propertyName + '\'' +
+                ", message='" + message + '\'' +
+                '}';
     }
 
     public ModelDifferenceType getType() {
@@ -42,5 +49,20 @@ public class ModelDifference {
 
     public String getPropertyName() {
         return propertyName;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ModelDifference)) return false;
+        ModelDifference that = (ModelDifference) o;
+        return type == that.type &&
+                Objects.equals(className, that.className) &&
+                Objects.equals(propertyName, that.propertyName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(type, className, propertyName);
     }
 }

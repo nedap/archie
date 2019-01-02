@@ -104,8 +104,9 @@ public class BmmComparison {
         }
         for(BmmProperty property: flatBmmClass.getProperties().values()) {
             if(!typeInfo.getAttributes().containsKey(property.getName())) {
+                String propertyDescription = property.getComputed() ? "computed property" : "property";
                 result.add(new ModelDifference(ModelDifferenceType.PROPERTY_MISSING_IN_MODEL,
-                        MessageFormat.format("class {0}: ModelInfoLookup property {1} is missing in Model", classDefinition.getTypeName(), property.getName()),
+                        MessageFormat.format("class {1}: BMM {0} {2} is missing in Model", propertyDescription, classDefinition.getTypeName(), property.getName()),
                         typeInfo.getRmName(),
                         property.getName()));
             }

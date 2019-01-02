@@ -24,8 +24,9 @@ public class RMComparedWithBmmTest {
         typeMap.put("Integer64", "Long");
         typeMap.put("Integer", "Long");
         typeMap.put("REAL", "Double");
+        typeMap.put("HASH", "Map");
         typeMap.put("Character", "char");
-        typeMap.put("Octet", "Byte[]"); //TODO: fix this properly
+        typeMap.put("Octet", "Byte"); //TODO: fix this properly
         typeMap.put("PROPORTION_KIND", "Long");//TODO: replace with enum!
 
         Set<String> extraParams = Sets.newHashSet("parent", "path");
@@ -47,6 +48,12 @@ public class RMComparedWithBmmTest {
         List<ModelDifference> compared = new BmmComparison(extraParams, typeMap, typeNamesOverride).compare(model, ArchieRMInfoLookup.getInstance());
 
         compared.sort(Comparator.comparing((a) -> a.getClassName() + "." + a.getType().toString()));
+
+        Set<ModelDifference> knownDifferences = new HashSet();
+        knownDifferences.add(new ModelDifference(ModelDifferenceType.EXISTENCE_DIFFERENCE, "", "ACTOR", "uid"));
+        knownDifferences.add(new ModelDifference(ModelDifferenceType.PROPERTY_MISSING_IN_MODEL, "", "ACTOR", "type")); //computed property
+        knownDifferences.add(new ModelDifference(ModelDifferenceType.EXISTENCE_DIFFERENCE, "", "AGENT", "uid"));
+
         System.out.println(Joiner.on("\n").join(compared));
     }
 }

@@ -1,8 +1,11 @@
 package com.nedap.archie.rminfo;
 
 import com.nedap.archie.aom.Archetype;
+import com.nedap.archie.aom.ArchetypeHRID;
+import com.nedap.archie.aom.AuthoredResource;
 import com.nedap.archie.aom.CObject;
 import com.nedap.archie.aom.CPrimitiveObject;
+import com.nedap.archie.aom.TranslationDetails;
 import com.nedap.archie.aom.primitives.*;
 
 import com.nedap.archie.base.Interval;
@@ -29,6 +32,8 @@ import com.nedap.archie.rm.security.*;
 import com.nedap.archie.rm.support.identification.*;
 import com.nedap.archie.rm.support.*;
 
+import javax.annotation.Nullable;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.time.temporal.Temporal;
 import java.time.temporal.TemporalAccessor;
@@ -169,6 +174,25 @@ public class ArchieRMInfoLookup extends ReflectionModelInfoLookup {
         addClass(Section.class);
         addClass(Activity.class);
         addClass(TerminologyId.class);
+        addClass(Link.class);
+        addClass(Archetyped.class);
+        addClass(ArchetypeHRID.class);
+        addClass(AuthoredResource.class);
+        addClass(TranslationDetails.class);
+    }
+
+    @Override
+    protected boolean isNullable(Class clazz, Method getMethod, Field field) {
+        if(field != null) {
+            if (Party.class.isAssignableFrom(clazz) && field.getName().equalsIgnoreCase("uid")) {
+                return false;
+            }
+        } else if (getMethod != null) {
+            if (Party.class.isAssignableFrom(clazz) && getMethod.getName().equalsIgnoreCase("getUid")) {
+                return false;
+            }
+        }
+        return (field != null && field.getAnnotation(Nullable.class) != null) || getMethod.getAnnotation(Nullable.class) != null;
     }
 
     public static ArchieRMInfoLookup getInstance() {
