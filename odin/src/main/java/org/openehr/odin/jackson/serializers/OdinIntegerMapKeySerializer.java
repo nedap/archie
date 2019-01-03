@@ -12,11 +12,11 @@ import java.io.IOException;
  * ["key_name"] format without affecting object property names
  *
  */
-public class OdinMapKeySerializer extends JsonSerializer<String> {
+public class OdinIntegerMapKeySerializer extends JsonSerializer<Integer> {
 
     @Override
-    public void serialize(String value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
-        gen.writeFieldName("[\"" + value + "\"]");
+    public void serialize(Integer value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
+        gen.writeFieldName("[" + value + "]");
     }
 }
 

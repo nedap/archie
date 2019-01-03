@@ -9,10 +9,10 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.nedap.archie.base.Interval;
 import com.nedap.archie.base.terminology.TerminologyCode;
-import com.nedap.archie.serializer.odin.OdinStringBuilder;
-import com.nedap.archie.serializer.odin.StructuredStringAppendable;
+import org.openehr.odin.jackson.serializers.OdinIntegerMapKeySerializer;
 import org.openehr.odin.jackson.serializers.OdinIntervalSerializer;
-import org.openehr.odin.jackson.serializers.OdinMapKeySerializer;
+import org.openehr.odin.jackson.serializers.OdinLongMapKeySerializer;
+import org.openehr.odin.jackson.serializers.OdinStringMapKeySerializer;
 import org.openehr.odin.jackson.serializers.OdinURISerializer;
 import org.openehr.odin.jackson.serializers.OdinURLSerializer;
 import org.openehr.odin.jackson.serializers.TerminologyCodeSerializer;
@@ -59,7 +59,9 @@ public class ODINMapper extends ObjectMapper
 
         //custom serializer for Maps and Intervals
         SimpleModule odinModule = new SimpleModule();
-        odinModule.addKeySerializer(String.class, new OdinMapKeySerializer());
+        odinModule.addKeySerializer(String.class, new OdinStringMapKeySerializer());
+        odinModule.addKeySerializer(Integer.class, new OdinIntegerMapKeySerializer());
+        odinModule.addKeySerializer(Long.class, new OdinLongMapKeySerializer());
         odinModule.addSerializer(Interval.class, new OdinIntervalSerializer());
         odinModule.addSerializer(URI.class, new OdinURISerializer());
         odinModule.addSerializer(URL.class, new OdinURLSerializer());

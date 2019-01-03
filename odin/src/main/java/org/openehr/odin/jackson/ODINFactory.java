@@ -381,15 +381,7 @@ public class ODINFactory extends JsonFactory
         // should never get called; ensure
         throw new IllegalStateException();
     }
-    
-    @Override
-    protected Writer _createWriter(OutputStream out, JsonEncoding enc, IOContext ctxt) throws IOException {
-        if (enc == JsonEncoding.UTF8) {
-            return new UTF8Writer(out);
-        }
-        return new OutputStreamWriter(out, enc.getJavaName());
-    }
-    
+
     /*
     /**********************************************************
     /* Internal methods
@@ -397,33 +389,5 @@ public class ODINFactory extends JsonFactory
      */
 
     protected final Charset UTF8 = Charset.forName("UTF-8");
-
-    protected Reader _createReader(InputStream in, JsonEncoding enc, IOContext ctxt) throws IOException
-    {
-        if (enc == null) {
-            enc = JsonEncoding.UTF8;
-        }
-        // default to UTF-8 if encoding missing
-        if (enc == JsonEncoding.UTF8) {
-            boolean autoClose = ctxt.isResourceManaged() || isEnabled(JsonParser.Feature.AUTO_CLOSE_SOURCE);
-            return new UTF8Reader(in, autoClose);
-//          return new InputStreamReader(in, UTF8);
-        }
-        return new InputStreamReader(in, enc.getJavaName());
-    }
-
-    protected Reader _createReader(byte[] data, int offset, int len,
-            JsonEncoding enc, IOContext ctxt) throws IOException
-    {
-        if (enc == null) {
-            enc = JsonEncoding.UTF8;
-        }
-        // default to UTF-8 if encoding missing
-        if (enc == null || enc == JsonEncoding.UTF8) {
-            return new UTF8Reader(data, offset, len, true);
-        }
-        ByteArrayInputStream in = new ByteArrayInputStream(data, offset, len);
-        return new InputStreamReader(in, enc.getJavaName());
-    }
 
 }
