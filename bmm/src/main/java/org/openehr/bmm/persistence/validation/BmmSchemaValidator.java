@@ -80,11 +80,11 @@ public class BmmSchemaValidator extends AnyValidator {
         });
         //Check that RM shema release is valid
         if(!BmmDefinitions.isValidStandardVersion(schema.getRmRelease())) {
-            addError(BmmMessageIds.ec_BMM_RMREL, schema.getSchemaId(), schema.getRmRelease());
+            addError(BmmMessageIds.EC_RM_RELEASE_INVALID, schema.getSchemaId(), schema.getRmRelease());
         }
         //check archetype parent class in list of class names
         if(schema.getArchetypeParentClass() != null && schema.getClassDefinition(schema.getArchetypeParentClass()) ==  null) {
-            addError(BmmMessageIds.ec_BMM_ARPAR, schema.getSchemaId(), schema.getArchetypeParentClass());
+            addError(BmmMessageIds.EC_ARCHETYPE_PARENT_CLASS_UNDEFINED, schema.getSchemaId(), schema.getArchetypeParentClass());
         }
 
         //check that all models refer to declared packages
@@ -102,7 +102,7 @@ public class BmmSchemaValidator extends AnyValidator {
             canonicalPackage.doRecursiveClasses((persistedBmmPackage, className) -> {
                 String classNameStr = className.toLowerCase();
                 if(packageClassList.containsKey(classNameStr)) {
-                    addError(BmmMessageIds.ec_BMM_CLPKDP, schema.getSchemaId(), className, persistedBmmPackage.getName(), classNameStr);
+                    addError(BmmMessageIds.EC_DUPLICATE_CLASS_IN_PACKAGES, schema.getSchemaId(), className, persistedBmmPackage.getName(), classNameStr);
                 } else {
                     packageClassList.put(classNameStr, persistedBmmPackage.getName());
                 }
@@ -114,9 +114,9 @@ public class BmmSchemaValidator extends AnyValidator {
         schema.doAllClasses( persistedBmmClass -> {
             String className = persistedBmmClass.getName().toLowerCase();
             if(!packageClassList.containsKey(className)) {
-                //addError(BmmMessageIds.ec_BMM_PKGID, schema.getSchemaId(), persistedBmmClass.getName()); //TODO Fix issue with primitives and then uncomment
+                //addError(BmmMessageIds.EC_CLASS_NOT_DECLARED_IN_PACKAGES, schema.getSchemaId(), persistedBmmClass.getName()); //TODO Fix issue with primitives and then uncomment
             } else if(classNameList.contains(className)) {
-                addError(BmmMessageIds.ec_BMM_CLDUP, schema.getSchemaId(), persistedBmmClass.getName());
+                addError(BmmMessageIds.EC_DUPLICATE_CLASS_DEFINITION, schema.getSchemaId(), persistedBmmClass.getName());
             } else {
                 classNameList.add(className);
             }
@@ -131,7 +131,7 @@ public class BmmSchemaValidator extends AnyValidator {
         //check that all ancestors exist
         persistedBmmClass.getAncestors().forEach(ancestorClassName -> {
             if(StringUtils.isEmpty(ancestorClassName)) {
-                addValidityError(persistedBmmClass.getSourceSchemaId(), BmmMessageIds.ec_BMM_ANCE, persistedBmmClass.getSourceSchemaId(), persistedBmmClass.getName());
+                addValidityError(persistedBmmClass.getSourceSchemaId(), BmmMessageIds.EC_ANCESTOR_NAME_EMPTY, persistedBmmClass.getSourceSchemaId(), persistedBmmClass.getName());
             }
         });
         //check that all generic parameter.conforms_to_type exist exists
@@ -141,7 +141,7 @@ public class BmmSchemaValidator extends AnyValidator {
                 genericParameterDefinitions.forEach((name, persistedBmmGenericParameter) -> {
                     String conformsToType = persistedBmmGenericParameter.getConformsToType();
                     if(conformsToType != null && !schema.hasClassOrPrimitiveDefinition(conformsToType)) {
-                        addValidityError(persistedBmmClass.getSourceSchemaId(), BmmMessageIds.ec_BMM_GPCT,
+                        addValidityError(persistedBmmClass.getSourceSchemaId(), BmmMessageIds.EC_GENERIC_PARAMETER_CONSTRAINT_DOES_NOT_EXIST,
                                 persistedBmmClass.getSourceSchemaId(),
                                 persistedBmmClass.getName(),
                                 persistedBmmGenericParameter.getName(),
@@ -164,7 +164,7 @@ public class BmmSchemaValidator extends AnyValidator {
             if(ancestor != null) {
                 PersistedBmmProperty ancestorProperty = ancestor.getPropertyByName(persistedBmmProperty.getName());
                 if (ancestor != null && ancestorProperty != null && !propertyConformsTo(persistedBmmProperty, ancestorProperty)) {
-                    addValidityError(persistedBmmClass.getSourceSchemaId(), BmmMessageIds.ec_BMM_PRNCF, persistedBmmClass.getSourceSchemaId(), persistedBmmClass.getName(), persistedBmmProperty.getName(), ancestorName);
+                    addValidityError(persistedBmmClass.getSourceSchemaId(), BmmMessageIds.EC_OVERRIDDEN_PROPERTY_DOES_NOT_CONFORM, persistedBmmClass.getSourceSchemaId(), persistedBmmClass.getName(), persistedBmmProperty.getName(), ancestorName);
                 }
             }
         }
@@ -174,7 +174,7 @@ public class BmmSchemaValidator extends AnyValidator {
             PersistedBmmSingleProperty singlePropertyDefinition = (PersistedBmmSingleProperty)persistedBmmProperty;
             PersistedBmmSimpleType attributeTypeDefinition = singlePropertyDefinition.getTypeDefinition();
             if(StringUtils.isEmpty(attributeTypeDefinition.getType()) || !schema.hasClassOrPrimitiveDefinition(attributeTypeDefinition.getType())) {
-                addValidityError(persistedBmmClass.getSourceSchemaId(), BmmMessageIds.ec_BMM_SPT,
+                addValidityError(persistedBmmClass.getSourceSchemaId(), BmmMessageIds.EC_SINGLE_PROPERTY_TYPE_NOT_FOUND,
                         persistedBmmClass.getSourceSchemaId(),
                         persistedBmmClass.getName(),
                         persistedBmmProperty.getName(),
@@ -189,7 +189,7 @@ public class BmmSchemaValidator extends AnyValidator {
             PersistedBmmSinglePropertyOpen singlePropertyOpenDefinition = (PersistedBmmSinglePropertyOpen)persistedBmmProperty;
             PersistedBmmOpenType attributeTypeDefinition = singlePropertyOpenDefinition.getTypeDefinition();
             if(!persistedBmmClass.isGeneric() || !persistedBmmClass.getGenericParameterDefinitions().containsKey(attributeTypeDefinition.getType())) {
-                addValidityError(persistedBmmClass.getSourceSchemaId(), BmmMessageIds.ec_BMM_SPOT, persistedBmmClass.getSourceSchemaId(), persistedBmmClass.getName(), persistedBmmProperty.getName(), attributeTypeDefinition.getType());
+                addValidityError(persistedBmmClass.getSourceSchemaId(), BmmMessageIds.EC_SINGLE_OPEN_PARAMETER_NOT_FOUND, persistedBmmClass.getSourceSchemaId(), persistedBmmClass.getName(), persistedBmmProperty.getName(), attributeTypeDefinition.getType());
             } else {
                 //Should this be logged?
             }
@@ -200,7 +200,7 @@ public class BmmSchemaValidator extends AnyValidator {
             PersistedBmmContainerType attributeTypeDefinition = containerPropertyDefinition.getTypeDefinition();
             PersistedBmmType attributeTypeReference = attributeTypeDefinition.getTypeReference();
             if(!schema.hasClassOrPrimitiveDefinition(attributeTypeDefinition.getContainerType())) {
-                addValidityError(persistedBmmClass.getSourceSchemaId(), BmmMessageIds.ec_BMM_CPCT,
+                addValidityError(persistedBmmClass.getSourceSchemaId(), BmmMessageIds.EC_CONTAINER_TYPE_NOT_FOUND,
                         persistedBmmClass.getSourceSchemaId(),
                         persistedBmmClass.getName(),
                         persistedBmmProperty.getName(),
@@ -214,7 +214,7 @@ public class BmmSchemaValidator extends AnyValidator {
                             if (persistedBmmClass.isGeneric()) {  //it might be a formal parameter, to be matched against those of enclosing class
                                 Map<String, PersistedBmmGenericParameter> genericParameters = persistedBmmClass.getGenericParameterDefinitions();
                                 if (!genericParameters.containsKey(typeReference)) {
-                                    addValidityError(persistedBmmClass.getSourceSchemaId(), BmmMessageIds.ec_BMM_GPGPU,
+                                    addValidityError(persistedBmmClass.getSourceSchemaId(), BmmMessageIds.EC_GENERIC_PROPERTY_TYPE_PARAMETER_NOT_FOUND,
                                         persistedBmmClass.getSourceSchemaId(),
                                         persistedBmmClass.getName(),
                                         persistedBmmProperty.getName(),
@@ -223,7 +223,7 @@ public class BmmSchemaValidator extends AnyValidator {
                                     //Should this be logged?
                                 }
                             } else {
-                                addValidityError(persistedBmmClass.getSourceSchemaId(), BmmMessageIds.ec_BMM_CPTV,
+                                addValidityError(persistedBmmClass.getSourceSchemaId(), BmmMessageIds.EC_CONTAINER_PROPERTY_TARGET_TYPE_NOT_FOUND,
                                         persistedBmmClass.getSourceSchemaId(),
                                         persistedBmmClass.getName(),
                                         persistedBmmProperty.getName(),
@@ -235,13 +235,13 @@ public class BmmSchemaValidator extends AnyValidator {
                     //Should this be logged?
                 }
             } else {
-                addValidityError(persistedBmmClass.getSourceSchemaId(), BmmMessageIds.ec_BMM_CPT,
+                addValidityError(persistedBmmClass.getSourceSchemaId(), BmmMessageIds.EC_CONTAINER_PROPERTY_TARGET_TYPE_NOT_DEFINED,
                         persistedBmmClass.getSourceSchemaId(),
                         persistedBmmClass.getName(),
                         persistedBmmProperty.getName());
             }
             if(containerPropertyDefinition.getCardinality() == null) {
-                addValidityInfo(persistedBmmClass.getSourceSchemaId(), BmmMessageIds.ec_BMM_CPTNC,
+                addValidityInfo(persistedBmmClass.getSourceSchemaId(), BmmMessageIds.EC_CONTAINER_PROPERTY_CARDINALITY_NOT_DEFINED,
                         persistedBmmClass.getSourceSchemaId(),
                         persistedBmmClass.getName(),
                         persistedBmmProperty.getName());
@@ -251,7 +251,7 @@ public class BmmSchemaValidator extends AnyValidator {
             PersistedBmmGenericType attributeTypeDefinition = genericPropertyDefinition.getTypeDefinition();
             if(attributeTypeDefinition != null) {
                 if(!schema.hasClassOrPrimitiveDefinition(attributeTypeDefinition.getRootType())) {
-                    addValidityError(persistedBmmClass.getSourceSchemaId(), BmmMessageIds.ec_BMM_GPRT, persistedBmmClass.getSourceSchemaId(),
+                    addValidityError(persistedBmmClass.getSourceSchemaId(), BmmMessageIds.EC_GENERIC_PROPERTY_ROOT_TYPE_NOT_FOUND, persistedBmmClass.getSourceSchemaId(),
                             persistedBmmClass.getName(),
                             persistedBmmProperty.getName(),
                             attributeTypeDefinition.getRootType());
@@ -264,7 +264,7 @@ public class BmmSchemaValidator extends AnyValidator {
                             if (persistedBmmClass.isGeneric()) {  //it might be a formal parameter, to be matched against those of enclosing class
                                 Map<String, PersistedBmmGenericParameter> genericParameters = persistedBmmClass.getGenericParameterDefinitions();
                                 if (!genericParameters.containsKey(typeReference)) {
-                                    addValidityError(persistedBmmClass.getSourceSchemaId(), BmmMessageIds.ec_BMM_GPGPU,
+                                    addValidityError(persistedBmmClass.getSourceSchemaId(), BmmMessageIds.EC_GENERIC_PROPERTY_TYPE_PARAMETER_NOT_FOUND,
                                             persistedBmmClass.getSourceSchemaId(),
                                             persistedBmmClass.getName(),
                                             persistedBmmProperty.getName(),
@@ -273,7 +273,7 @@ public class BmmSchemaValidator extends AnyValidator {
                                     //Should this be logged?
                                 }
                             } else {
-                                addValidityError(persistedBmmClass.getSourceSchemaId(), BmmMessageIds.ec_BMM_GPGPT,
+                                addValidityError(persistedBmmClass.getSourceSchemaId(), BmmMessageIds.EC_GENERIC_PARAMETER_NOT_FOUND,
                                         persistedBmmClass.getSourceSchemaId(),
                                         persistedBmmClass.getName(),
                                         persistedBmmProperty.getName(),
@@ -283,7 +283,7 @@ public class BmmSchemaValidator extends AnyValidator {
                     }
                 }
             } else {
-                addValidityError(persistedBmmClass.getSourceSchemaId(), BmmMessageIds.ec_BMM_GPT,
+                addValidityError(persistedBmmClass.getSourceSchemaId(), BmmMessageIds.EC_GENERIC_PROPERTY_TYPE_DEF_UNDEFINED,
                         persistedBmmClass.getSourceSchemaId(),
                         persistedBmmClass.getName(),
                         persistedBmmProperty.getName());
@@ -451,7 +451,7 @@ public class BmmSchemaValidator extends AnyValidator {
                     (!name1.equalsIgnoreCase(name2)) && (name1.startsWith(name2) || name2.startsWith(name1))
                 ).count() > 0;
                 if(invalidSiblings) {
-                    addError(BmmMessageIds.ec_BMM_PKGTL, schema.getSchemaId());
+                    addError(BmmMessageIds.EC_ILLEGAL_TOP_LEVEL_SIBLING_PACKAGES, schema.getSchemaId());
                 }
             });
 
@@ -474,7 +474,7 @@ public class BmmSchemaValidator extends AnyValidator {
             schema.doRecursivePackages(persistedBmmPackage -> {
                 //check for lower-down qualified names
                 if((!schema.getPackages().containsKey(persistedBmmPackage.getName().toUpperCase())) && persistedBmmPackage.getName().indexOf(BmmDefinitions.PACKAGE_NAME_DELIMITER) >=0) {
-                    addError(BmmMessageIds.ec_BMM_PKGQN,
+                    addError(BmmMessageIds.EC_ILLEGAL_QUALIFIED_PACKAGE_NAME,
                         schema.getSchemaId(),
                         persistedBmmPackage.getName());
                 }

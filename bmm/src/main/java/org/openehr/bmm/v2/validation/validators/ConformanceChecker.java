@@ -107,7 +107,7 @@ public class ConformanceChecker {
                 return true;
             }
         }
-        return true;
+        return false;
     }
 
     /**

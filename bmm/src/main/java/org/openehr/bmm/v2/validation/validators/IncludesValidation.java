@@ -14,7 +14,7 @@ public class IncludesValidation implements BmmValidation {
         if(schema.getIncludes() != null) {
             for(BmmIncludeSpec includeSpec:schema.getIncludes().values()) {
                 if (!repository.containsPersistentSchema(includeSpec.getId())) {
-                    logger.addError(BmmMessageIds.ec_BMM_INC, schema.getSchemaId(), includeSpec.getId());
+                    logger.addError(BmmMessageIds.EC_INCLUDE_NOT_FOUND, schema.getSchemaId(), includeSpec.getId());
                 }
             }
         }

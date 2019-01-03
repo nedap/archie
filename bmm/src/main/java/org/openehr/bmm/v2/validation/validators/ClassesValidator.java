@@ -8,10 +8,8 @@ import org.openehr.bmm.v2.persistence.*;
 import org.openehr.bmm.v2.validation.BmmValidation;
 import org.openehr.bmm.v2.validation.BmmValidationResult;
 import org.openehr.bmm.v2.validation.BmmRepository;
-import org.openehr.utils.message.MessageCode;
 import org.openehr.utils.message.MessageLogger;
 
-import javax.xml.validation.Validator;
 import java.util.Map;
 
 public class ClassesValidator extends ValidatorBase implements BmmValidation {
@@ -39,9 +37,9 @@ public class ClassesValidator extends ValidatorBase implements BmmValidation {
         //check that all ancestors exist
         pBmmClass.getAncestorTypeNames().forEach(ancestorClassName -> {
             if(StringUtils.isEmpty(ancestorClassName)) {
-                addValidityError(schema, pBmmClass.getSourceSchemaId(), BmmMessageIds.ec_BMM_ANCE, pBmmClass.getSourceSchemaId(), pBmmClass.getName());
+                addValidityError(schema, pBmmClass.getSourceSchemaId(), BmmMessageIds.EC_ANCESTOR_NAME_EMPTY, pBmmClass.getSourceSchemaId(), pBmmClass.getName());
             } else if (!ancestorClassName.equalsIgnoreCase("Any") && schema.findClassOrPrimitiveDefinition(BmmDefinitions.typeNameToClassKey(ancestorClassName)) == null) {
-                addValidityError(schema, pBmmClass.getSourceSchemaId(), BmmMessageIds.ec_BMM_ANC, pBmmClass.getSourceSchemaId(), pBmmClass.getName(), ancestorClassName);
+                addValidityError(schema, pBmmClass.getSourceSchemaId(), BmmMessageIds.EC_ANCESTOR_DOES_NOT_EXIST, pBmmClass.getSourceSchemaId(), pBmmClass.getName(), ancestorClassName);
             }
         });
 
@@ -65,7 +63,7 @@ public class ClassesValidator extends ValidatorBase implements BmmValidation {
                 String conformsToType = pBmmGenericParameter.getConformsToType();
                 if(conformsToType != null && !schema.hasClassOrPrimitiveDefinition(conformsToType)) {
 
-                    addValidityError(schema, pBmmClass.getSourceSchemaId(), BmmMessageIds.ec_BMM_GPCT,
+                    addValidityError(schema, pBmmClass.getSourceSchemaId(), BmmMessageIds.EC_GENERIC_PARAMETER_CONSTRAINT_DOES_NOT_EXIST,
                             pBmmClass.getSourceSchemaId(),
                             pBmmClass.getName(),
                             pBmmGenericParameter.getName(),

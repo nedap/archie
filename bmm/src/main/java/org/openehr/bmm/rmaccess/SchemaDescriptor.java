@@ -30,11 +30,9 @@ import org.openehr.bmm.persistence.validation.BmmSchemaValidator;
 import org.openehr.odin.CompositeOdinObject;
 import org.openehr.odin.antlr.OdinVisitorImpl;
 import org.openehr.odin.loader.OdinLoaderImpl;
-import org.openehr.odin.utils.OdinSerializationUtils;
 
 import java.io.File;
 import java.io.InputStream;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -219,7 +217,7 @@ public class SchemaDescriptor {
     private void validateBmmVersionCompatibility() {
         isBmmCompatible = BmmDefinitions.isBmmVersionCompatible(bmmVersion);
         if (!isBmmCompatible) {
-            schemaValidator.addError(BmmMessageIds.ec_BMM_VER,
+            schemaValidator.addError(BmmMessageIds.EC_INCOMPATIBLE_BMM_VERSION,
                 schemaId,
                 bmmVersion,
                 BmmDefinitions.BMM_INTERNAL_VERSION);
@@ -465,7 +463,7 @@ public class SchemaDescriptor {
         if(persistentSchema.getIncludes() != null && persistentSchema.getIncludes().size() > 0) {
             persistentSchema.getIncludes().keySet().forEach(include -> {
                 if(!allSchemas.contains(include.toLowerCase())) {
-                    schemaValidator.addError(BmmMessageIds.ec_BMM_INC, schemaId, include);
+                    schemaValidator.addError(BmmMessageIds.EC_INCLUDE_NOT_FOUND, schemaId, include);
                } else {
                     includes.add(include.toLowerCase());
                 }

@@ -23,11 +23,11 @@ public class BasicSchemaValidations implements BmmValidation {
     public void validate(BmmValidationResult validationResult, BmmRepository repository, MessageLogger logger, PBmmSchema schema) {
         //Check that RM shema release is valid
         if(!BmmDefinitions.isValidStandardVersion(schema.getRmRelease())) {
-            logger.addError(BmmMessageIds.ec_BMM_RMREL, schema.getSchemaId(), schema.getRmRelease());
+            logger.addError(BmmMessageIds.EC_RM_RELEASE_INVALID, schema.getSchemaId(), schema.getRmRelease());
         }
         //check archetype parent class in list of class names
         if(schema.getArchetypeParentClass() != null && schema.getClassDefinition(schema.getArchetypeParentClass()) ==  null) {
-            logger.addError(BmmMessageIds.ec_BMM_ARPAR, schema.getSchemaId(), schema.getArchetypeParentClass());
+            logger.addError(BmmMessageIds.EC_ARCHETYPE_PARENT_CLASS_UNDEFINED, schema.getSchemaId(), schema.getArchetypeParentClass());
         }
 
         //check that all models refer to declared packages
@@ -44,7 +44,7 @@ public class BasicSchemaValidations implements BmmValidation {
             canonicalPackage.doRecursiveClasses((persistedBmmPackage, className) -> {
                 String classNameStr = className.toLowerCase();
                 if(packageClassList.containsKey(classNameStr)) {
-                    logger.addError(BmmMessageIds.ec_BMM_CLPKDP, schema.getSchemaId(), className, persistedBmmPackage.getName(), packageClassList.get(classNameStr));
+                    logger.addError(BmmMessageIds.EC_DUPLICATE_CLASS_IN_PACKAGES, schema.getSchemaId(), className, persistedBmmPackage.getName(), packageClassList.get(classNameStr));
                 } else {
                     packageClassList.put(classNameStr, persistedBmmPackage.getName());
                 }
@@ -56,9 +56,9 @@ public class BasicSchemaValidations implements BmmValidation {
         schema.doAllClasses( persistedBmmClass -> {
             String className = persistedBmmClass.getName().toLowerCase();
             if(!packageClassList.containsKey(className)) {
-                //addError(BmmMessageIds.ec_BMM_PKGID, schema.getSchemaId(), persistedBmmClass.getName()); //TODO Fix issue with primitives and then uncomment
+                logger.addError(BmmMessageIds.EC_CLASS_NOT_DECLARED_IN_PACKAGES, schema.getSchemaId(), persistedBmmClass.getName()); //TODO Fix issue with primitives and then uncomment
             } else if(classNameList.contains(className)) {
-                logger.addError(BmmMessageIds.ec_BMM_CLDUP, schema.getSchemaId(), persistedBmmClass.getName());
+                logger.addError(BmmMessageIds.EC_DUPLICATE_CLASS_DEFINITION, schema.getSchemaId(), persistedBmmClass.getName());
             } else {
                 classNameList.add(className);
             }

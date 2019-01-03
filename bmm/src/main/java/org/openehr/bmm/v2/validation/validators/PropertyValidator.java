@@ -44,7 +44,7 @@ public class PropertyValidator extends ValidatorBase {
         PBmmGenericType attributeTypeDefinition = genericPropertyDefinition.getTypeDef();
         if(attributeTypeDefinition != null) {
             if(!schema.hasClassOrPrimitiveDefinition(attributeTypeDefinition.getRootType())) {
-                addValidityError(schema, pBmmClass.getSourceSchemaId(), BmmMessageIds.ec_BMM_GPRT, pBmmClass.getSourceSchemaId(),
+                addValidityError(schema, pBmmClass.getSourceSchemaId(), BmmMessageIds.EC_GENERIC_PROPERTY_ROOT_TYPE_NOT_FOUND, pBmmClass.getSourceSchemaId(),
                         pBmmClass.getName(),
                         pBmmProperty.getName(),
                         attributeTypeDefinition.getRootType());
@@ -54,7 +54,7 @@ public class PropertyValidator extends ValidatorBase {
                 validateGenericTypeDefParameter(pBmmClass, pBmmProperty, attributeTypeDefinition, genericParameter);
             }
         } else {
-            addValidityError(schema, pBmmClass.getSourceSchemaId(), BmmMessageIds.ec_BMM_GPT,
+            addValidityError(schema, pBmmClass.getSourceSchemaId(), BmmMessageIds.EC_GENERIC_PROPERTY_TYPE_DEF_UNDEFINED,
                     pBmmClass.getSourceSchemaId(),
                     pBmmClass.getName(),
                     pBmmProperty.getName());
@@ -68,7 +68,7 @@ public class PropertyValidator extends ValidatorBase {
                 if (pBmmClass.isGeneric()) {  //it might be a formal parameter, to be matched against those of enclosing class
                     Map<String, PBmmGenericParameter> genericParameters = pBmmClass.getGenericParameterDefs();
                     if (!genericParameters.containsKey(typeReference)) {
-                        addValidityError(schema, pBmmClass.getSourceSchemaId(), BmmMessageIds.ec_BMM_GPGPU,
+                        addValidityError(schema, pBmmClass.getSourceSchemaId(), BmmMessageIds.EC_GENERIC_PROPERTY_TYPE_PARAMETER_NOT_FOUND,
                                 pBmmClass.getSourceSchemaId(),
                                 pBmmClass.getName(),
                                 pBmmProperty.getName(),
@@ -78,7 +78,7 @@ public class PropertyValidator extends ValidatorBase {
                     }
                 } else {
                     //cannot have a generic type declaration for a non-generic class
-                    addValidityError(schema, pBmmClass.getSourceSchemaId(), BmmMessageIds.ec_BMM_GPGPT,
+                    addValidityError(schema, pBmmClass.getSourceSchemaId(), BmmMessageIds.EC_GENERIC_PARAMETER_NOT_FOUND,
                             pBmmClass.getSourceSchemaId(),
                             pBmmClass.getName(),
                             pBmmProperty.getName(),
@@ -93,7 +93,7 @@ public class PropertyValidator extends ValidatorBase {
         PBmmContainerType attributeTypeDefinition = containerPropertyDefinition.getTypeRef();
         PBmmType attributeTypeReference = attributeTypeDefinition.getTypeRef();
         if(!schema.hasClassOrPrimitiveDefinition(attributeTypeDefinition.getContainerType())) {
-            addValidityError(schema, pBmmClass.getSourceSchemaId(), BmmMessageIds.ec_BMM_CPCT,
+            addValidityError(schema, pBmmClass.getSourceSchemaId(), BmmMessageIds.EC_CONTAINER_TYPE_NOT_FOUND,
                     pBmmClass.getSourceSchemaId(),
                     pBmmClass.getName(),
                     pBmmProperty.getName(),
@@ -109,13 +109,13 @@ public class PropertyValidator extends ValidatorBase {
                 //Should this be logged?
             }
         } else {
-            addValidityError(schema, pBmmClass.getSourceSchemaId(), BmmMessageIds.ec_BMM_CPT,
+            addValidityError(schema, pBmmClass.getSourceSchemaId(), BmmMessageIds.EC_CONTAINER_PROPERTY_TARGET_TYPE_NOT_DEFINED,
                     pBmmClass.getSourceSchemaId(),
                     pBmmClass.getName(),
                     pBmmProperty.getName());
         }
         if(containerPropertyDefinition.getCardinality() == null) {
-//                    addValidityInfo(pBmmClass.getSourceSchemaId(), BmmMessageIds.ec_BMM_CPTNC,
+//                    addValidityInfo(pBmmClass.getSourceSchemaId(), BmmMessageIds.EC_CONTAINER_PROPERTY_CARDINALITY_NOT_DEFINED,
 //                            pBmmClass.getSourceSchemaId(),
 //                            pBmmClass.getName(),
 //                            pBmmProperty.getName());
@@ -127,16 +127,14 @@ public class PropertyValidator extends ValidatorBase {
             if (pBmmClass.isGeneric()) {  //it might be a formal parameter, to be matched against those of enclosing class
                 Map<String, PBmmGenericParameter> genericParameters = pBmmClass.getGenericParameterDefs();
                 if (!genericParameters.containsKey(typeReference)) {
-                    addValidityError(schema, pBmmClass.getSourceSchemaId(), BmmMessageIds.ec_BMM_GPGPU,
+                    addValidityError(schema, pBmmClass.getSourceSchemaId(), BmmMessageIds.EC_GENERIC_PROPERTY_TYPE_PARAMETER_NOT_FOUND,
                             pBmmClass.getSourceSchemaId(),
                             pBmmClass.getName(),
                             pBmmProperty.getName(),
                             attributeTypeDefinition.getType());
-                } else {
-                    //Should this be logged?
                 }
             } else {
-                addValidityError(schema, pBmmClass.getSourceSchemaId(), BmmMessageIds.ec_BMM_CPTV,
+                addValidityError(schema, pBmmClass.getSourceSchemaId(), BmmMessageIds.EC_CONTAINER_PROPERTY_TARGET_TYPE_NOT_FOUND,
                         pBmmClass.getSourceSchemaId(),
                         pBmmClass.getName(),
                         pBmmProperty.getName(),
@@ -150,9 +148,7 @@ public class PropertyValidator extends ValidatorBase {
         PBmmSinglePropertyOpen singlePropertyOpenDefinition = (PBmmSinglePropertyOpen) pBmmProperty;
         PBmmOpenType attributeTypeDefinition = singlePropertyOpenDefinition.getTypeRef();
         if(!pBmmClass.isGeneric() || !pBmmClass.getGenericParameterDefs().containsKey(attributeTypeDefinition.getType())) {
-            addValidityError(schema, pBmmClass.getSourceSchemaId(), BmmMessageIds.ec_BMM_SPOT, pBmmClass.getSourceSchemaId(), pBmmClass.getName(), pBmmProperty.getName(), attributeTypeDefinition.getType());
-        } else {
-            //Should this be logged?
+            addValidityError(schema, pBmmClass.getSourceSchemaId(), BmmMessageIds.EC_SINGLE_OPEN_PARAMETER_NOT_FOUND, pBmmClass.getSourceSchemaId(), pBmmClass.getName(), pBmmProperty.getName(), attributeTypeDefinition.getType());
         }
     }
 
@@ -160,13 +156,11 @@ public class PropertyValidator extends ValidatorBase {
         PBmmSingleProperty singlePropertyDefinition = (PBmmSingleProperty)pBmmProperty;
         PBmmSimpleType attributeTypeDefinition = singlePropertyDefinition.getTypeRef();
         if(StringUtils.isEmpty(attributeTypeDefinition.getType()) || !schema.hasClassOrPrimitiveDefinition(attributeTypeDefinition.getType())) {
-            addValidityError(schema, pBmmClass.getSourceSchemaId(), BmmMessageIds.ec_BMM_SPT,
+            addValidityError(schema, pBmmClass.getSourceSchemaId(), BmmMessageIds.EC_SINGLE_PROPERTY_TYPE_NOT_FOUND,
                     pBmmClass.getSourceSchemaId(),
                     pBmmClass.getName(),
                     pBmmProperty.getName(),
                     attributeTypeDefinition.getType());
-        } else {
-            //Should this be logged?
         }
     }
 
@@ -176,7 +170,7 @@ public class PropertyValidator extends ValidatorBase {
             if(ancestor != null) {
                 PBmmProperty ancestorProperty = ancestor.getProperties().get(pBmmProperty.getName());
                 if (ancestor != null && ancestorProperty != null && !conformanceChecker.propertyConformsTo(schema, pBmmProperty, ancestorProperty)) {
-                    addValidityError(schema, pBmmClass.getSourceSchemaId(), BmmMessageIds.ec_BMM_PRNCF, pBmmClass.getSourceSchemaId(), pBmmClass.getName(), pBmmProperty.getName(), ancestorName);
+                    addValidityError(schema, pBmmClass.getSourceSchemaId(), BmmMessageIds.EC_OVERRIDDEN_PROPERTY_DOES_NOT_CONFORM, pBmmClass.getSourceSchemaId(), pBmmClass.getName(), pBmmProperty.getName(), ancestorName);
                 }
             }
         }

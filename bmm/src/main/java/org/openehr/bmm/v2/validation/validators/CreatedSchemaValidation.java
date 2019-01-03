@@ -20,11 +20,11 @@ public class CreatedSchemaValidation implements BmmValidation {
         //check top-level names - package names cannot contain each other and be siblings
         packageNames.addAll(schema.getPackages().keySet());
         schema.getPackages().keySet().forEach(name1 -> {
-            boolean invalidSiblings = packageNames.stream().filter(name2 ->
+            boolean invalidSiblings = packageNames.stream().anyMatch(name2 ->
                     (!name1.equalsIgnoreCase(name2)) && (name1.startsWith(name2) || name2.startsWith(name1))
-            ).count() > 0;
+            );
             if(invalidSiblings) {
-                logger.addError(BmmMessageIds.ec_BMM_PKGTL, schema.getSchemaId());
+                logger.addError(BmmMessageIds.EC_ILLEGAL_TOP_LEVEL_SIBLING_PACKAGES, schema.getSchemaId());
             }
         });
 
@@ -34,7 +34,7 @@ public class CreatedSchemaValidation implements BmmValidation {
         schema.doRecursivePackages(persistedBmmPackage -> {
             //check for lower-down qualified names
             if((!schema.getPackages().containsKey(persistedBmmPackage.getName())) && persistedBmmPackage.getName().indexOf(BmmDefinitions.PACKAGE_NAME_DELIMITER) >=0) {
-                logger.addError(BmmMessageIds.ec_BMM_PKGQN,
+                logger.addError(BmmMessageIds.EC_ILLEGAL_QUALIFIED_PACKAGE_NAME,
                         schema.getSchemaId(),
                         persistedBmmPackage.getName());
             }

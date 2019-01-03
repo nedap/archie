@@ -80,7 +80,7 @@ public class IncludesProcessor {
         newClosurePackages.addAll(including.getArchetypeRmClosurePackages());
         included.setArchetypeRmClosurePackages(new ArrayList<>(newClosurePackages));
 
-
+B
         for(Map.Entry<String, PBmmPackage> packageEntry:includedValidation.getCanonicalPackages().entrySet()) {
             if(includingValidationResult.getCanonicalPackages().containsKey(packageEntry.getKey())) {
                 PBmmPackage persistedBmmPackage = includingValidationResult.getCanonicalPackages().get(packageEntry.getKey());

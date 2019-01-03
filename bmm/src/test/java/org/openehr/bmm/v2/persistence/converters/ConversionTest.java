@@ -45,7 +45,7 @@ public class ConversionTest {
         PBmmSchema parsed = parse("/openehr/openehr_basic_types_102.bmm");
         String serialized = new BmmOdinSerializer().serialize(parsed);
         //check that it can be parsed again
-        PBmmSchema convert = BmmOdinParser.convert(serialized);
+        PBmmSchema converted = BmmOdinParser.convert(serialized);
     }
 
 }
