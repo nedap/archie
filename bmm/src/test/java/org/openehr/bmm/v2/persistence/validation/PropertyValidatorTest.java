@@ -29,6 +29,12 @@ public class PropertyValidatorTest extends AbstractSchemaValidationsTest {
 
     @Test
     public void containerTypeNotFound() throws Exception {
+        BmmValidationResult validationResult = parseAndConvert("container_type_not_found.bmm");
+        assertEquals(Lists.newArrayList(BmmMessageIds.EC_CONTAINER_TYPE_NOT_FOUND), validationResult.getLogger().getErrorCodes());
+    }
+
+    @Test
+    public void containerTargetTypeNotFound() throws Exception {
         BmmValidationResult validationResult = parseAndConvert("container_target_type_not_found.bmm");
         assertEquals(Lists.newArrayList(BmmMessageIds.EC_CONTAINER_PROPERTY_TARGET_TYPE_NOT_FOUND), validationResult.getLogger().getErrorCodes());
     }
