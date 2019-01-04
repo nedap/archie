@@ -137,7 +137,8 @@ public class BuiltinReferenceModels {
     }
 
     /**
-     * Returns the MetaModels loaded with all BMM, ModelInfoLookup and AOM profiles that are available
+     * Returns the MetaModels loaded with all BMM, ModelInfoLookup and AOM profiles that are available.
+     * Returns a new MetaModels instance every call!
      * @return
      */
     public static MetaModels getMetaModels() {
