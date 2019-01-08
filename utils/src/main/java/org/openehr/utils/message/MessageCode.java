@@ -1,6 +1,5 @@
 package org.openehr.utils.message;
 
-import java.text.MessageFormat;
 import java.util.Locale;
 
 /**
