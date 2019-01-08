@@ -1,0 +1,51 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/BASE/latest/Foundation_types/Boolean.json",
+    "title": "Boolean",
+    "description": "Class representing minimal interface of standard Boolean type.",
+    "$comments": "Defined in Foundation_types IM",
+    "type": "boolean",
+    "$functions": {
+        "infix and": {
+            "description": "Logical conjunction"
+        },
+        "infix and_then": {
+            "description": "Boolean semi-strict conjunction with other"
+        },
+        "infix or": {
+            "description": "Boolean disjunction with other."
+        },
+        "infix or_else": {
+            "description": "Boolean semi-strict disjunction with `other'."
+        },
+        "infix xor": {
+            "description": "Boolean exclusive or with `other'."
+        },
+        "infix implies": {
+            "description": "Boolean implication of `other' (semi-strict)"
+        }
+    },
+    "$invariants": {
+        "Involutive_negation": {
+            "description": "is_equal (not (not self))"
+        },
+        "Non_contradiction": {
+            "description": "not (self and (not self))"
+        },
+        "Completeness": {
+            "description": "self or else (not self)"
+        },
+        "Post_de_Morgan": {
+            "description": "Result = not (not self and then not other)"
+        },
+        "Post_commutative": {
+            "description": "Result = (other or Current)"
+        },
+        "Post_consistent_with_semi_strict": {
+            "description": "Result implies (self or else other)"
+        },
+        "Post_definition": {
+            "description": "Result = (not self or else other)"
+        }
+    }
+}

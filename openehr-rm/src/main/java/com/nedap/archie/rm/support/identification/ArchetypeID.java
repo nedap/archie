@@ -27,9 +27,15 @@ public class ArchetypeID extends ObjectId {
      * Parse the Archetype id from a string
      * @param value
      */
-    @JsonCreator
+    @JsonCreator(mode= JsonCreator.Mode.DELEGATING)
     public ArchetypeID(String value) {
 
+        parseValue(value);
+
+        setValue(value);
+    }
+
+    private void parseValue(String value) {
         Pattern p = Pattern.compile("((?<namespace>.*)::)?(?<publisher>.*)-(?<package>.*)-(?<class>.*)\\.(?<concept>.*)(-(?<specialisation>.*))?\\.v(?<version>.*)");
         Matcher m = p.matcher(value);
 
@@ -63,14 +69,22 @@ public class ArchetypeID extends ObjectId {
                        @JsonProperty("rm_name") String rmName,
                        @JsonProperty("rm_entity") String rmEntity,
                        @JsonProperty("specialisation") String specialisation,
-                       @JsonProperty("versionId") String versionId) {
-        this.qualifiedRmEntity = qualifiedRmEntity;
-        this.domainConcept = domainConcept;
-        this.rmOriginator = rmOriginator;
-        this.rmName = rmName;
-        this.rmEntity = rmEntity;
-        this.specialisation = specialisation;
-        this.versionId = versionId;
+                       @JsonProperty("versionId") String versionId,
+                       @JsonProperty("value") String value) {
+        if(value != null) {
+            parseValue(value);
+            setValue(value);
+        } else {
+            this.qualifiedRmEntity = qualifiedRmEntity;
+            this.domainConcept = domainConcept;
+            this.rmOriginator = rmOriginator;
+            this.rmName = rmName;
+            this.rmEntity = rmEntity;
+            this.specialisation = specialisation;
+            this.versionId = versionId;
+            setValue(getFullId());
+        }
+
     }
 
     public String getFullId() {

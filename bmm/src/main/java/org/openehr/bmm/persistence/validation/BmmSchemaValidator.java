@@ -1,11 +1,11 @@
 package org.openehr.bmm.persistence.validation;
 
-import com.google.common.collect.Lists;
+
 import org.apache.commons.lang.StringUtils;
 import org.openehr.bmm.persistence.*;
 import org.openehr.utils.message.MessageCode;
 import org.openehr.utils.message.MessageLogger;
-import org.openehr.utils.message.UnknownMessageCode;
+
 import org.openehr.utils.validation.AnyValidator;
 
 import java.util.*;
@@ -426,7 +426,7 @@ public class BmmSchemaValidator extends AnyValidator {
      * @return
      */
     public boolean typeStrictlyConformsTo(String type1, String type2) {
-        return !typeSameAs(type1,type2) && typeConformsTo(type1, type2);
+        return typeSameAs(type1,type2) || typeConformsTo(type1, type2);
     }
 
     /**
@@ -479,11 +479,11 @@ public class BmmSchemaValidator extends AnyValidator {
                 }
                 persistedBmmPackage.getClasses().forEach(persistedBmmClass -> {
                     if(StringUtils.isEmpty(persistedBmmClass)) {
-                        addError(new UnknownMessageCode(),
+                        addError(BmmMessageIds.ec_BMM_class_name_empty,
                             schema.getSchemaId(),
                             persistedBmmPackage.getName());
                     } else if(!schema.hasClassOrPrimitiveDefinition(persistedBmmClass)) {
-                        addError(new UnknownMessageCode(),
+                        addError(BmmMessageIds.ec_BMM_class_not_in_definitions,
                             schema.getSchemaId(),
                             persistedBmmClass,
                             persistedBmmPackage.getName());
@@ -492,7 +492,7 @@ public class BmmSchemaValidator extends AnyValidator {
             });
 
             if(hasPassed()) {
-                addInfo(new UnknownMessageCode(),schema.getSchemaId(),
+                addInfo(BmmMessageIds.SCHEMA_CREATED,schema.getSchemaId(),
                     ""+schema.getPrimitives().size(),
                     ""+schema.getClassDefinitions().size());
                 schema.setState(PersistedBmmSchemaState.STATE_VALIDATED_CREATED);

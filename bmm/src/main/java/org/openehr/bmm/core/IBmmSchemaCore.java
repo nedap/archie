@@ -226,4 +226,12 @@ public interface IBmmSchemaCore {
      * @return
      */
     public String getSchemaId();
+
+    /**
+     * Returns the name of this model, if this schema is a model root point. Not set for sub-schemas that are not considered models on their own.
+     */
+    public String getModelName();
+
+    /** Sets the Name of this model, if this schema is a model root point. Not set for sub-schemas that are not considered models on their own. */
+    public void setModelName(String modelName);
 }

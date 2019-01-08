@@ -1,0 +1,32 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Data_types/DV_ENCAPSULATED.json",
+    "title": "DV_ENCAPSULATED",
+    "description": "Abstract class defining the common meta-data of all types of encapsulated data.",
+    "$comments": "Defined in Data_types IM, abstract, inherits from DATA_VALUE",
+    "type": "object",
+    "properties": {
+        "charset": {
+            "description": "Name of character encoding scheme in which this value is encoded. Coded from openEHR Code Set  character sets . Unicode is the default assumption in openEHR, with UTF-8 being the assumed encoding. This attribute allows for variations from these assumptions. ",
+            "$ref": "all.json#/definitions/CODE_PHRASE"
+        },
+        "language": {
+            "description": "Optional indicator of the localised language in which the data is written, if relevant. Coded from openEHR Code Set `languages`.",
+            "$ref": "all.json#/definitions/CODE_PHRASE"
+        }
+    },
+    "$inherits": [
+        "all.json#/definitions/DATA_VALUE"
+    ],
+    "$invariants": {
+        "Size_valid": {
+            "description": "size >= 0"
+        },
+        "Language_valid": {
+            "description": "language /= Void implies code_set (Code_set_id_languages).has_code (language)"
+        },
+        "Charset_valid": {
+            "description": "charset /= Void implies code_set (Code_set_id_character_sets).has_code (charset)"
+        }
+    }
+}

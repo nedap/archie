@@ -1,0 +1,8 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/BASE/latest/Foundation_types/ROUTINE.json",
+    "title": "ROUTINE",
+    "description": "Type representing a function with a return type and 0 or more arguments represented as a TUPLE.",
+    "$comments": "Defined in Foundation_types IM",
+    "type": "object"
+}

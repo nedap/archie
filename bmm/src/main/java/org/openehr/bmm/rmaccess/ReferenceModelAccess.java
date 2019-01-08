@@ -659,24 +659,33 @@ public class ReferenceModelAccess {
         //now populate the `models_by_closure' table
         modelsByClosureAndVersion.clear();
         List<String> rmClosures = new ArrayList<>();
-        String modelPublisher = null;
+
         for (String aSchemaId : validModels.keySet()) {
             BmmModel model = validModels.get(aSchemaId);
-            modelPublisher = model.getRmPublisher();
-            //put a ref to schema, keyed by the model_publisher-package_name key (lower-case) for later lookup by compiler
-            rmClosures = model.getArchetypeRmClosurePackages();
-            for (String rmClosure : rmClosures) {
-                String qualifiedRmClosureName = BmmDefinitions.publisherQualifiedRmClosureName(modelPublisher, rmClosure);
-                BmmModel existingSchema = getReferenceModelForClosure(qualifiedRmClosureName,  model.getRmRelease());
-                if (existingSchema != null) {
-                    validator.addInfo(BmmMessageIds.ec_bmm_schema_duplicate_found,
-                            qualifiedRmClosureName,
-                            existingSchema.getSchemaId(),
-                            aSchemaId);
-                } else {
-                    addModelForClosure(qualifiedRmClosureName, model);
+
+            String modelPublisher = model.getRmPublisher();
+            String modelName = model.getModelName();
+            if(modelName != null) {
+                addClosure(aSchemaId, model, modelPublisher, modelName);
+            } else {
+                //possibly old style BMM: this is called
+                for(String closureName:model.getArchetypeRmClosurePackages()) {
+                    addClosure(aSchemaId, model, modelPublisher, closureName);
                 }
             }
+        }
+    }
+
+    private void addClosure(String aSchemaId, BmmModel model, String modelPublisher, String modelName) {
+        String qualifiedRmClosureName = BmmDefinitions.publisherQualifiedRmClosureName(modelPublisher, modelName);
+        BmmModel existingSchema = getReferenceModelForClosure(qualifiedRmClosureName, model.getRmRelease());
+        if (existingSchema != null) {
+            validator.addInfo(BmmMessageIds.ec_bmm_schema_duplicate_found,
+                    qualifiedRmClosureName,
+                    existingSchema.getSchemaId(),
+                    aSchemaId);
+        } else {
+            addModelForClosure(qualifiedRmClosureName, model);
         }
     }
 

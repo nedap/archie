@@ -1,0 +1,7 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Data_types/REFERENCE_RANGE_of_DV_COUNT.json",
+    "title": "REFERENCE_RANGE<DV_COUNT>",
+    "$comments": "Defined in Data_types IM",
+    "type": "object"
+}

@@ -1,0 +1,28 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/BASE/latest/Foundation_types/Real.json",
+    "title": "Real",
+    "description": "Type used to represent decimal numbers. Corresponds to a single-precision floating point value in most languages.",
+    "$comments": "Defined in Foundation_types IM, inherits from Ordered_Numeric",
+    "type": "number",
+    "$inherits": [
+        "all.json#/definitions/Ordered_Numeric"
+    ],
+    "$functions": {
+        "infix *": {
+            "description": "Product by `other'. Actual type of result depends on arithmetic balancing rules."
+        },
+        "infix +": {
+            "description": "Sum with `other' (commutative). Actual type of result depends on arithmetic balancing rules."
+        },
+        "infix -": {
+            "description": "Result of subtracting `other'. Actual type of result depends on arithmetic balancing rules."
+        },
+        "infix <": {
+            "description": "Arithmetic comparison. In conjunction with \u2018=\u2019, enables the definition of the operators \u2018>\u2019, \u2018>=\u2019, \u2018<=\u2019, \u2018<>\u2019. In real type systems, this operator might be defined on another class for comparability."
+        },
+        "floor": {
+            "description": "Return the greatest integer no greater than the value of this object."
+        }
+    }
+}

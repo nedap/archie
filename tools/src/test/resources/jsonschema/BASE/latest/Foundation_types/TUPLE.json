@@ -1,0 +1,8 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/BASE/latest/Foundation_types/TUPLE.json",
+    "title": "TUPLE",
+    "description": "Parent type of all TUPLE types.",
+    "$comments": "Defined in Foundation_types IM",
+    "type": "object"
+}

@@ -2,20 +2,26 @@ package com.nedap.archie.testutil;
 
 import com.google.common.collect.Lists;
 import com.nedap.archie.adlparser.ADLParser;
+import com.nedap.archie.antlr.errors.ANTLRParserErrors;
 import com.nedap.archie.aom.Archetype;
 import com.nedap.archie.aom.CAttribute;
 import com.nedap.archie.aom.CComplexObject;
 import com.nedap.archie.aom.CObject;
 import com.nedap.archie.aom.CPrimitiveObject;
 import com.nedap.archie.creation.RMObjectCreator;
+import com.nedap.archie.flattener.FullArchetypeRepository;
+import com.nedap.archie.flattener.InMemoryFullArchetypeRepository;
 import com.nedap.archie.rm.RMObject;
 import com.nedap.archie.rminfo.ArchieRMInfoLookup;
+import org.reflections.Reflections;
+import org.reflections.scanners.ResourcesScanner;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.*;
@@ -145,6 +151,28 @@ public class TestUtil {
             assertNotNull(archetype);
             return archetype;
         }
+    }
+
+    public static FullArchetypeRepository parseCKM() {
+        InMemoryFullArchetypeRepository result = new InMemoryFullArchetypeRepository();
+        Reflections reflections = new Reflections("ckm-mirror", new ResourcesScanner());
+        List<String> adlFiles = new ArrayList(reflections.getResources(Pattern.compile(".*\\.adls")));
+        for(String file:adlFiles) {
+            Archetype archetype = null;
+            Exception exception = null;
+            ANTLRParserErrors errors = null;
+            try (InputStream stream = TestUtil.class.getResourceAsStream("/" + file)) {
+                ADLParser parser = new ADLParser();
+                parser.setLogEnabled(false);
+                archetype = parser.parse(stream);
+                errors = parser.getErrors();
+                if (errors.hasNoErrors()) {
+                    result.addArchetype(archetype);
+                }
+            } catch (Exception e) {
+            }
+        }
+        return result;
     }
 
 }

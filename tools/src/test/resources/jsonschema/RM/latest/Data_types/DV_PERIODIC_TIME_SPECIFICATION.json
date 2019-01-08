@@ -1,0 +1,39 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Data_types/DV_PERIODIC_TIME_SPECIFICATION.json",
+    "title": "DV_PERIODIC_TIME_SPECIFICATION",
+    "description": "Specifies periodic points in time, linked to the calendar (phase-linked), or a real world repeating event, such as  breakfast  (event-linked). Based on the HL7v3 data types `PIVL<T>` and `EIVL<T>`. \n\nUsed in therapeutic prescriptions, expressed as `INSTRUCTIONs` in the openEHR model. ",
+    "$comments": "Defined in Data_types IM, inherits from DV_TIME_SPECIFICATION",
+    "type": "object",
+    "properties": {
+        "value": {
+            "description": "The specification, in the HL7v3 syntax for `PIVL` or `EIVL` types.",
+            "$ref": "all.json#/definitions/DV_PARSABLE"
+        }
+    },
+    "required": [
+        "value"
+    ],
+    "$inherits": [
+        "all.json#/definitions/DV_TIME_SPECIFICATION"
+    ],
+    "$functions": {
+        "calendar_alignment": {
+            "description": "Calendar alignment extracted from value. "
+        },
+        "event_alignment": {
+            "description": "Event alignment extracted from value. "
+        },
+        "institution_specified": {
+            "description": "Extracted from value."
+        },
+        "period": {
+            "description": "The period of the repetition, computationally derived from the syntax representation. Extracted from the  value' attribute."
+        }
+    },
+    "$invariants": {
+        "Value_valid": {
+            "description": "value.formalism.is_equal (\u201cHL7:PIVL\u201d) or value.formalism. is_equal (\u201cHL7:EIVL\u201d)"
+        }
+    }
+}

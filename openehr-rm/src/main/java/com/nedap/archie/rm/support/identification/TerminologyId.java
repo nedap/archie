@@ -1,5 +1,7 @@
 package com.nedap.archie.rm.support.identification;
 
+import com.nedap.archie.rm.RMObject;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
@@ -9,8 +11,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "TERMINOLOGY_ID")
-public class TerminologyId {
-    private String value;
+public class TerminologyId extends ObjectId {
 
     public TerminologyId() {
 
@@ -18,9 +19,9 @@ public class TerminologyId {
 
     public TerminologyId(String terminologyId, String terminologyVersion) {
         if (terminologyVersion == null || terminologyVersion.isEmpty()) {
-            value = terminologyId;
+            super.setValue(terminologyId);
         } else {
-            value = terminologyId + "(" + terminologyVersion + ")";
+            super.setValue(terminologyId + "(" + terminologyVersion + ")");
         }
     }
 
@@ -28,15 +29,4 @@ public class TerminologyId {
         this(terminologyId, null);
     }
 
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    public String toString() {
-        return value;
-    }
 }

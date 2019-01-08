@@ -97,6 +97,8 @@ public class BmmSchemaCore implements IBmmSchemaCore, Serializable {
      */
     private String archetypeVisualizeDescendantsOf;
 
+    private String modelName;
+
     /**
      * No-arg constructor
      */
@@ -382,5 +384,15 @@ public class BmmSchemaCore implements IBmmSchemaCore, Serializable {
      */
     public String getSchemaId() {
         return BmmDefinitions.createSchemaId(getRmPublisher(), getSchemaName(), getRmRelease());
+    }
+
+    @Override
+    public String getModelName() {
+        return modelName;
+    }
+
+    @Override
+    public void setModelName(String modelName) {
+        this.modelName = modelName;
     }
 }

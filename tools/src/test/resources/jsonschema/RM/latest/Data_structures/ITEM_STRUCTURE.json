@@ -1,0 +1,87 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Data_structures/ITEM_STRUCTURE.json",
+    "title": "ITEM_STRUCTURE",
+    "description": "Abstract parent class of all spatial data types. ",
+    "$comments": "Defined in Data_structures IM, abstract, inherits from DATA_STRUCTURE",
+    "type": "object",
+    "properties": {
+        "name": {
+            "description": "Runtime name of this fragment, used to build runtime paths. This is the term provided via a clinical application or batch process to name this EHR construct: its retention in the EHR faithfully preserves the original label by which this entry was known to end users. \n",
+            "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Data_types/all.json#/definitions/DV_TEXT"
+        },
+        "archetype_node_id": {
+            "description": "Design-time archetype id of this node taken from its generating archetype; used to build archetype paths. Always in the form of an  at  code, e.g.  at0005 . This value enables a \"standardised\" name for this node to be generated, by referring to the generating archetype local ontology. \n\nAt an archetype root point, the value of this attribute is always the stringified form of the archetype_id found in the archetype_details object. \n",
+            "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/BASE/latest/Foundation_types/all.json#/definitions/String"
+        },
+        "uid": {
+            "description": "Optional globally unique object identifier for root points of archetyped structures. ",
+            "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/BASE/latest/Base_types/all.json#/definitions/UID_BASED_ID"
+        },
+        "links": {
+            "description": "Links to other archetyped structures (data whose root object inherits from ARCHETYPED, such as ENTRY, SECTION and so on). Links may be to structures in other compositions. ",
+            "type": "array",
+            "items": {
+                "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Common/all.json#/definitions/LINK"
+            }
+        },
+        "archetype_details": {
+            "description": "Details of archetyping used on this node.",
+            "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Common/all.json#/definitions/ARCHETYPED"
+        },
+        "feeder_audit": {
+            "description": "Audit trail from non-openEHR system of original commit of information forming the content of this node, or from a conversion gateway which has synthesised this node. ",
+            "$ref": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Common/all.json#/definitions/FEEDER_AUDIT"
+        }
+    },
+    "required": [
+        "name",
+        "archetype_node_id"
+    ],
+    "$inherits": [
+        "all.json#/definitions/DATA_STRUCTURE"
+    ],
+    "$functions": {
+        "parent": {
+            "description": "Parent of this node in a compositional hierarchy. \n"
+        },
+        "item_at_path": {
+            "description": "The item at a path (relative to this item); only valid for unique paths, i.e. paths that resolve to a single item. "
+        },
+        "items_at_path": {
+            "description": "List of items corresponding to a non-unique path."
+        },
+        "path_exists": {
+            "description": "True if the path exists in the data with respect to the current item. "
+        },
+        "path_unique": {
+            "description": "True if the path corresponds to a single item in the data. "
+        },
+        "path_of_item": {
+            "description": "The path to an item relative to the root of this archetyped structure."
+        },
+        "concept": {
+            "description": "Clinical concept of the archetype as a whole (= derived from the archetype_node_id' of the root node) "
+        },
+        "is_archetype_root": {
+            "description": "True if this node is the root of an archetyped structure."
+        },
+        "as_hierarchy": {
+            "description": "Hierarchical equivalent of the physical representation of each subtype, compatible with CEN EN 13606 structures. "
+        }
+    },
+    "$invariants": {
+        "Pre": {
+            "description": "path_exists (a_path)"
+        },
+        "Links_valid": {
+            "description": "links /= Void implies not links.is_empty"
+        },
+        "Archetyped_valid": {
+            "description": "is_archetype_root xor archetype_details = Void"
+        },
+        "Archetype_node_id_valid": {
+            "description": "not archetype_node_id.is_empty"
+        }
+    }
+}

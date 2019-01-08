@@ -412,6 +412,25 @@ public class PersistedBmmSchema extends PersistedBmmPackageContainer implements 
     }
 
     /**
+     * Returns the name of this model, if this schema is a model root point. Not set for sub-schemas that are not considered models on their own.
+     * @return the name of this model
+     */
+    @Override
+    public String getModelName() {
+        return bmmSchemaCore.getModelName();
+    }
+
+    /**
+     * Sets the name of this model, if this schema is a model root point. Not set for sub-schemas that are not considered models on their own.
+     * @param modelName
+     */
+    @Override
+    public void setModelName(String modelName) {
+        bmmSchemaCore.setModelName(modelName);
+
+    }
+
+    /**
      * Method returns the version of BMM model, enabling schema evolution reasoning. Persisted attribute.
      *
      * @return

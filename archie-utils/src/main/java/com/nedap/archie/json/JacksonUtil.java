@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.jsontype.TypeResolverBuilder;
 import com.nedap.archie.base.OpenEHRBase;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.nedap.archie.rm.support.identification.ArchetypeID;
 
 /**
  * Class to obtain an ObjectMapper that works with both archie RM and AOM objects, serializing into
@@ -82,6 +83,10 @@ public class JacksonUtil {
         @Override
         public boolean useForType(JavaType t)
         {
+            if(t.getRawClass().equals(ArchetypeID.class)) {
+                //this class is usually serialized as a single String and has no subclasses - adding the type ID is not useful at all here
+                return false;
+            }
             return (OpenEHRBase.class.isAssignableFrom(t.getRawClass()));
         }
     }

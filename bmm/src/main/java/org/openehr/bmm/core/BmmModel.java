@@ -515,6 +515,16 @@ public class BmmModel extends BmmPackageContainer implements IBmmSchemaCore, IBm
         return bmmSchemaCore.getSchemaId();
     }
 
+    @Override
+    public String getModelName() {
+        return bmmSchemaCore.getModelName();
+    }
+
+    @Override
+    public void setModelName(String modelName) {
+        this.bmmSchemaCore.setModelName(modelName);
+    }
+
     public String effectivePropertyType(String typeName, String propertyName) {
         BmmClass bmmClass = getClassDefinition(BmmDefinitions.typeNameToClassKey(typeName));
         if(bmmClass == null) {

@@ -1,0 +1,16 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://www.openEHR.org/releases/ITS-JSON/Release-1.0.0/RM/latest/Support/MEASUREMENT_SERVICE.json",
+    "title": "MEASUREMENT_SERVICE",
+    "description": "Defines an object providing proxy access to a measurement information service.",
+    "$comments": "Defined in Support IM",
+    "type": "object",
+    "$functions": {
+        "is_valid_units_string": {
+            "description": "True if the units string  units' is a valid string according to the HL7 UCUM specification."
+        },
+        "units_equivalent": {
+            "description": "True if two units strings correspond to the same measured property."
+        }
+    }
+}
