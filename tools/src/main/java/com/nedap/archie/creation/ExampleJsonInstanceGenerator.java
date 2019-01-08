@@ -92,11 +92,14 @@ public  class ExampleJsonInstanceGenerator {
             for (CObject child : attribute.getChildren()) {
                 MultiplicityInterval multiplicityInterval = child.effectiveOccurrences(models.getSelectedModel()::referenceModelPropMultiplicity);
                 int occurrences = Math.max(1, multiplicityInterval.getLower());
-                if(multiplicityInterval.has(2) && occurrences <= 1) {
+                if(multiplicityInterval.isProhibited()) {
+                    occurrences = 0;
+                } else if(multiplicityInterval.has(2) && occurrences <= 1) {
                     if(attribute.getCardinality() == null || attribute.getCardinality().getInterval().isUpperUnbounded()) {
                         occurrences = 2 ; //indicate that multiple of these can be added by adding 2 of them if the cardinality is x..*
                     }
                 }
+
                 for(int i = 0; i < occurrences; i++){
                     if (child instanceof CComplexObject) {
                         Map<String, Object> next = generate((CComplexObject) child);
