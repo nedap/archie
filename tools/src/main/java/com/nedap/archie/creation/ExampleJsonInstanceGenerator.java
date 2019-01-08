@@ -57,7 +57,6 @@ public  class ExampleJsonInstanceGenerator {
     private final MetaModels models;
     private OperationalTemplate archetype;
     private BmmModel bmm;
-    private BMMConstraintImposer constraintImposer;
     private AomProfile aomProfile;
 
     public ExampleJsonInstanceGenerator(MetaModels models, String language) {
@@ -70,7 +69,6 @@ public  class ExampleJsonInstanceGenerator {
         models.selectModel(archetype, "1.0.4");
         aomProfile = models.getSelectedAomProfile();
         bmm = models.getSelectedBmmModel();
-        constraintImposer = new BMMConstraintImposer(bmm);
         return generate(archetype.getDefinition());
     }
 
@@ -93,21 +91,22 @@ public  class ExampleJsonInstanceGenerator {
 
             for (CObject child : attribute.getChildren()) {
                 MultiplicityInterval multiplicityInterval = child.effectiveOccurrences(models.getSelectedModel()::referenceModelPropMultiplicity);
-                int occurrences = Math.min(1, multiplicityInterval.getLower());
+                int occurrences = Math.max(1, multiplicityInterval.getLower());
                 if(multiplicityInterval.has(2) && occurrences <= 1) {
-                    occurrences = 1;//TODO: decide whether we should add these structures twice
+                    if(attribute.getCardinality() == null || attribute.getCardinality().getInterval().isUpperUnbounded()) {
+                        occurrences = 2 ; //indicate that multiple of these can be added by adding 2 of them if the cardinality is x..*
+                    }
                 }
-                for(int i = 0; i <= occurrences; i++){
+                for(int i = 0; i < occurrences; i++){
                     if (child instanceof CComplexObject) {
                         Map<String, Object> next = generate((CComplexObject) child);
                         children.add(next);
                     } else if (child instanceof CPrimitiveObject) {
-                        generateCPrimitive(children, (CPrimitiveObject) child);
+                        children.add(generateCPrimitive((CPrimitiveObject) child));
                     } else if (child instanceof ArchetypeSlot) {
                         Map<String, Object> next = new LinkedHashMap<>();
                         String concreteTypeName = getConcreteTypeName(child.getRmTypeName());
                         next.put("@type", concreteTypeName);
-                        //TODO: indicate this is an archetype slot
                         addAdditionalPropertiesAtBegin(classDefinition, next, child);
                         addAdditionalPropertiesAtEnd(classDefinition, next, child);
                         children.add(next);
@@ -213,94 +212,93 @@ public  class ExampleJsonInstanceGenerator {
             case "time":
                 return "12:00:00";
             case "duration":
-                return "PT10m";
+                return "PT10M";
             case "boolean":
                 return "true";
         }
         return "unknown primitive type " + typeName;
     }
 
-    private void generateCPrimitive(List<Object> children, CPrimitiveObject child) {
+    private Object generateCPrimitive(CPrimitiveObject child) {
         //optionally create a custom mapping for the current RM. useful to map to strange objects
         //such as mapping a CTerminologyCode to a DV_CODED_TEXT in OpenEHR ERM
         Object customMapping = generateCustomMapping(child);
         if(customMapping != null) {
-            children.add(customMapping);
-            return;
+            return customMapping;
         }
         if(child instanceof CString) {
             CString string = (CString) child;
             if (string.getConstraint() != null && !string.getConstraint().isEmpty()) {
-                children.add(string.getConstraint().get(0));
+                return string.getConstraint().get(0);
             } else {
-                children.add("string");
+                return "string";
             }
         } else if (child instanceof CBoolean) {
             CBoolean bool = (CBoolean) child;
             if (bool.getConstraint() != null && !bool.getConstraint().isEmpty()) {
-                children.add(bool.getConstraint().get(0));
+                return bool.getConstraint().get(0);
             } else {
-                children.add(true);
+                return true;
             }
         } else if (child instanceof CInteger) {
             CInteger integer = (CInteger) child;
             if (integer.getConstraint() != null && !integer.getConstraint().isEmpty()) {
                 Interval<Long> longInterval = integer.getConstraint().get(0);
                 if(longInterval.isUpperUnbounded() && longInterval.isLowerUnbounded()) {
-                    children.add(42);
+                    return 42;
                 } else if(longInterval.isUpperUnbounded()) {
-                    children.add(longInterval.getLower() + 1);
+                    return longInterval.getLower() + 1;
                 } else if (longInterval.isLowerUnbounded()) {
-                    children.add(longInterval.getUpper() - 1);
+                    return longInterval.getUpper() - 1;
                 } else {
                     if(longInterval.isLowerIncluded()) {
-                        children.add(longInterval.getLower());
+                        return longInterval.getLower();
                     } else {
-                        children.add(longInterval.getUpper() + 1);
+                        return longInterval.getUpper() + 1;
                     }
                 }
             } else {
-                children.add(42);
+                return 42;
             }
         } else if (child instanceof CReal) {
             CReal real = (CReal) child;
             if (real.getConstraint() != null && !real.getConstraint().isEmpty()) {
                 Interval<Double> doubleInterval = real.getConstraint().get(0);
                 if(doubleInterval.isUpperUnbounded() && doubleInterval.isLowerUnbounded()) {
-                    children.add(42.0d);
+                    return 42.0d;
                 } else if(doubleInterval.isUpperUnbounded()) {
-                    children.add(doubleInterval.getLower() + 1.0d);
+                    return doubleInterval.getLower() + 1.0d;
                 } else if (doubleInterval.isLowerUnbounded()) {
-                    children.add(doubleInterval.getUpper() - 1.0d);
+                    return doubleInterval.getUpper() - 1.0d;
                 } else {
                     if(doubleInterval.isLowerIncluded()) {
-                        children.add(doubleInterval.getLower());
+                        return doubleInterval.getLower();
                     } else {
-                        children.add(doubleInterval.getUpper() + 1.0d);
+                        return doubleInterval.getUpper() + 1.0d;
                     }
                 }
             } else {
-                children.add(42.0d);
+                return 42.0d;
             }
         } else if (child instanceof CTerminologyCode) {
-            children.add(generateTerminologyCode( (CTerminologyCode) child));
+            return generateTerminologyCode( (CTerminologyCode) child);
         } else if (child instanceof CDuration) {
-            children.add("PT12m");
+            return "PT12m";
         } else if (child instanceof CDate) {
-            children.add("2018-01-01");
+            return "2018-01-01";
         } else if (child instanceof CTime) {
-          children.add("12:00:00");
+            return "12:00:00";
         } else if (child instanceof CDateTime) {
-            children.add("2018-01-01T12:00:00+0000");
+            return "2018-01-01T12:00:00+0000";
         } else {
-            children.add("TODO: unsupported primitive object constraint " + child.getClass());
+            return "TODO: unsupported primitive object constraint " + child.getClass();
         }
     }
 
 
 
     private Object generateTerminologyCode(CTerminologyCode child) {
-        //TODO: if child is a subconstaint of a DV_ORDINAL.symbol, manually convert to DV_CODED_TEXT. OpenEHR RM only of course
+
         if(aomProfile == null) {
             return "cannot convert CTerminologyCode without AOM profile";
         }
@@ -443,7 +441,7 @@ public  class ExampleJsonInstanceGenerator {
         Map<String, Object> archetypeId = new LinkedHashMap<>();
         archetypeId.put("@type", "ARCHETYPE_ID");
         archetypeId.put("value", archetypeIdValue);
-        archetypeDetails.put("archetype_id", archetypeId); //TODO: add template id
+        archetypeDetails.put("archetype_id", archetypeId); //TODO: add template id?
         archetypeDetails.put("rm_version", "1.0.4");
         return archetypeDetails;
     }

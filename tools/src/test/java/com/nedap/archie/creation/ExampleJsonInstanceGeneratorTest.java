@@ -58,6 +58,10 @@ public class ExampleJsonInstanceGeneratorTest {
         assertEquals("the default value for a string type should be \"string\"", "string", terminologyId.get("value"));
         List events = (List) data.get("events");
         assertEquals(3, events.size());
+        assertEquals("POINT_EVENT<T>", ((Map) events.get(0)).get("@type"));
+        assertEquals("POINT_EVENT<T>", ((Map) events.get(1)).get("@type"));
+        assertEquals("INTERVAL_EVENT", ((Map) events.get(2)).get("@type"));
+
 
 
     }
