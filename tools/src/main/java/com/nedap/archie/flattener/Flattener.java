@@ -183,7 +183,7 @@ public class Flattener implements IAttributeFlattenerSupport {
             TerminologyFlattener.filterLanguages((OperationalTemplate) result, removeLanguagesFromMetaData, languagesToKeep);
         }
         result.getDefinition().setArchetype(result);
-
+        result.setDescription(child.getDescription());
 
         if(child instanceof Template && !createOperationalTemplate) {
             Template resultTemplate = (Template) result;
