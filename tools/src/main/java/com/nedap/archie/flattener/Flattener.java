@@ -184,6 +184,10 @@ public class Flattener implements IAttributeFlattenerSupport {
         }
         result.getDefinition().setArchetype(result);
         result.setDescription(child.getDescription());
+        result.setOtherMetaData(child.getOtherMetaData());
+        result.setBuildUid(child.getBuildUid());
+        result.setOriginalLanguage(child.getOriginalLanguage());
+        result.setTranslations(child.getTranslations());
 
         if(child instanceof Template && !createOperationalTemplate) {
             Template resultTemplate = (Template) result;
