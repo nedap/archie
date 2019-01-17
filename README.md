@@ -374,6 +374,21 @@ Setting primitive object values works in a similar way, with ```creator.set(...)
 
 Notice the call to ```ArchieRMInfoLookup.getInstance()```, which obtains the metadata about the reference model implementation. It can also be obtained from the result of ```BuiltinReferenceModels.getMetaModels()```, or you can define your own to make Archie work with your own reference model implementation.
 
+### Parsing JSON
+
+Parsing Reference Model objects in JSON is done the same as with parsing JSON archetypes:
+
+```java
+String json = JacksonUtil.getObjectMapper().writeValueAsString(archetype);
+RmObject rmObject = JacksonUtil.getObjectMapper().readValue(json, RmObject.class);
+```
+
+or if you already know which RM class you are expecting:
+
+```java
+Composition composition = JacksonUtil.getObjectMapper().readValue(compositionJson, Composition.class);
+```
+
 ### Reference model APath queries
 
 ```java
