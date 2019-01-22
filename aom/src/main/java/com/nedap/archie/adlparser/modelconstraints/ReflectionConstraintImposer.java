@@ -1,12 +1,16 @@
 package com.nedap.archie.adlparser.modelconstraints;
 
 import com.nedap.archie.aom.CAttribute;
+import com.nedap.archie.aom.CComplexObject;
+import com.nedap.archie.aom.CObject;
 import com.nedap.archie.base.Cardinality;
 import com.nedap.archie.base.MultiplicityInterval;
 import com.nedap.archie.rminfo.MetaModel;
 import com.nedap.archie.rminfo.MetaModelInterface;
 import com.nedap.archie.rminfo.ModelInfoLookup;
 import com.nedap.archie.rminfo.RMAttributeInfo;
+
+import java.util.Stack;
 
 /**
  * ModelConstraintImposer that checks the constraint with java-reflection. javax.annotation.NonNull is implemented
@@ -57,6 +61,30 @@ public class ReflectionConstraintImposer implements ModelConstraintImposer {
             attribute.setMultiple(false);
         }
         return attribute;
+    }
+
+    @Override
+    public void setSingleOrMultiple(CComplexObject rootNode) {
+        if(rootNode == null) {
+            return;
+        }
+        Stack<CObject> workList = new Stack<>();
+        workList.add(rootNode);
+        while(!workList.isEmpty()) {
+            CObject object = workList.pop();
+            for(CAttribute attribute:object.getAttributes()) {
+                if(attribute.getDifferentialPath() == null) {
+                    attribute.setMultiple(lookup.isMultiple(object.getRmTypeName(), attribute.getRmAttributeName()));
+                } else {
+                    //this does a path lookup in the model. Not 100% guaranteed that this works correctly in all cases,
+                    //but does a best effort. Create an operationalTemplate to be sure!
+                    attribute.setMultiple(lookup.isMultiple(object.getRmTypeName(), attribute.getDifferentialPath()));
+                }
+                for (CObject child : attribute.getChildren()) {
+                    workList.push(child);
+                }
+            }
+        }
     }
 
     @Override

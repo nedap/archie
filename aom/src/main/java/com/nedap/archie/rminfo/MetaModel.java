@@ -50,20 +50,12 @@ public class MetaModel implements MetaModelInterface {
     }
 
     @Override
-    public boolean isMultiple(String typeName, String attributeName) {
-        if(getSelectedBmmModel() != null) {
-            BmmClass classDefinition = getSelectedBmmModel().getClassDefinition(BmmDefinitions.typeNameToClassKey(typeName));
-            if (classDefinition != null) {
-                //TODO: don't flatten on request, create a flattened properties cache just like the eiffel code for much better performance
-                BmmClass flatClassDefinition = classDefinition.flattenBmmClass();
-                BmmProperty bmmProperty = flatClassDefinition.getProperties().get(attributeName);
-                return isMultiple(bmmProperty);
-            }
-        } else {
-            RMAttributeInfo attributeInfo = selectedModel.getAttributeInfo(typeName, attributeName);
-            return attributeInfo != null && attributeInfo.isMultipleValued();
+    public boolean isMultiple(String typeName, String attributeNameOrPath) {
+        MultiplicityInterval multiplicityInterval = referenceModelPropMultiplicity(typeName, attributeNameOrPath);
+        if(multiplicityInterval == null) {
+            return false;// by default, false if unknown property
         }
-        return false;
+        return multiplicityInterval.isUpperUnbounded() || multiplicityInterval.getUpper() > 1;
     }
 
     private boolean isMultiple(BmmProperty bmmProperty) {

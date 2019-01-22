@@ -105,7 +105,7 @@ public class Flattener implements IAttributeFlattenerSupport {
         }
 
         metaModels.selectModel(toFlatten);
-        
+
         //validate that we can legally flatten first
         String parentId = toFlatten.getParentArchetypeId();
         if(parentId == null) {
