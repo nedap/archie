@@ -46,7 +46,7 @@ public class ArchetypeValidatorTest {
         ValidationResult validationResult = new ArchetypeValidator(models).validate(archetype);
         List<ValidationMessage> messages = validationResult.getErrors();
         System.out.println(messages);
-        assertEquals(1, messages.size());
+        assertEquals(messages.toString(), 1, messages.size());
         assertEquals(ErrorType.VCARM, messages.get(0).getType());
         assertNull(validationResult.getFlattened());
     }

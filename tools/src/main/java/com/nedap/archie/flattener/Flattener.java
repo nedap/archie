@@ -1,5 +1,6 @@
 package com.nedap.archie.flattener;
 
+import com.nedap.archie.adlparser.modelconstraints.ReflectionConstraintImposer;
 import com.nedap.archie.aom.*;
 import com.nedap.archie.aom.utils.ArchetypeParsePostProcesser;
 
@@ -104,7 +105,7 @@ public class Flattener implements IAttributeFlattenerSupport {
         }
 
         metaModels.selectModel(toFlatten);
-       // new ReflectionConstraintImposer(lookup).setSingleOrMultiple(toFlatten.getDefinition());
+
         //validate that we can legally flatten first
         String parentId = toFlatten.getParentArchetypeId();
         if(parentId == null) {
@@ -213,6 +214,11 @@ public class Flattener implements IAttributeFlattenerSupport {
         result.setGenerated(true);
 
         ArchetypeParsePostProcesser.fixArchetype(result);
+
+        //set the single/multiple attributes correctly
+        new ReflectionConstraintImposer(metaModels.getSelectedModel())
+                .setSingleOrMultiple(result.getDefinition());
+
         return result;
     }
 
