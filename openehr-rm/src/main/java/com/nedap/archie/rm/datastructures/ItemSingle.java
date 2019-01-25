@@ -23,7 +23,7 @@ public class ItemSingle extends ItemStructure<Element> {
         return item;
     }
 
-    public void setITem(Element item) {
+    public void setItem(Element item) {
         this.item = item;
     }
 
