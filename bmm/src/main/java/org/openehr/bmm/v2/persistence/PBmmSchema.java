@@ -50,7 +50,8 @@ public final class PBmmSchema extends PBmmPackageContainer {
     @Deprecated
     private List<String> archetypeRmClosurePackages;
 
-    //TODO: this looks like archetype profile?!
+    //these fields are now stored in the Archetype Profile files, and are
+    //deprecated here - included mainly to be able to parse older P_BMM files.
     @Deprecated
     private String archetypeParentClass;
     @Deprecated

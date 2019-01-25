@@ -19,12 +19,6 @@ public class ADLAuthoredArchetypeSerializer<T extends AuthoredArchetype> extends
     @Override
     protected void appendLanguage() {
         if (archetype.getOriginalLanguage() == null) return;
-//        OdinObject language = new OdinObject();
-//        language.put("original_language", archetype.getOriginalLanguage());
-//
-//        if (!archetype.getTranslations().isEmpty()) {
-//            language.put("translations", archetype.getTranslations());
-//        }
 
         builder.newline().append("language").newIndentedLine()
                 .odin(archetype.getAuthoredResourceContent())

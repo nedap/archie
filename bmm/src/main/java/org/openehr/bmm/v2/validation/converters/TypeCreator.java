@@ -64,7 +64,7 @@ public class TypeCreator {
     private BmmType createSimpleType(PBmmSimpleType typeDef, BmmModel schema) {
         BmmClass baseClass = schema.getClassDefinition(typeDef.getType());
         if(baseClass == null) {
-            //TODO: validation exception with nice message
+            //Shouldn't happen: validation already tests this, so runtime exception is fine!
             throw new RuntimeException("BmmClass " + typeDef.getType() + " is not defined in this model");
         } else {
             BmmSimpleType simpleType = new BmmSimpleType();

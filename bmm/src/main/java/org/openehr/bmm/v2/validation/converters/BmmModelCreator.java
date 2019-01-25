@@ -27,14 +27,13 @@ public class BmmModelCreator {
         BmmModel model = new BmmModel();
         model.setRmPublisher(schema.getRmPublisher());
         model.setRmRelease(schema.getRmRelease());
-        //TODO: model.setBmmVersion(schema.getBmmVersion());
         model.setModelName(schema.getModelName());
         model.setSchemaName(schema.getSchemaName());
         model.setSchemaRevision(schema.getSchemaRevision());
         model.setSchemaAuthor(schema.getSchemaAuthor());
         model.setSchemaDescription(schema.getSchemaDescription());
         model.setSchemaLifecycleState(schema.getSchemaLifecycleState());
-        //model.setDocumentation(schema.getDo);TODO: possible?
+        //cannot set the documentation - the supported P_BMM version has no documentation in the P_BMM_SCHEMA
         model.setSchemaContributors(schema.getSchemaContributors() == null ? new ArrayList() : new ArrayList<>(schema.getSchemaContributors()));
 
 

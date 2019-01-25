@@ -47,8 +47,7 @@ public class IncludesProcessor {
                     if(included == null) {
                         PBmmSchema persistentSchema = repository.getPersistentSchema(include.getId());
                         BmmSchemaConverter bmmSchemaConverter = new BmmSchemaConverter(repository);
-                        included = bmmSchemaConverter.validateAndConvert(persistentSchema);
-                        repository.addModel(included);
+                        included = bmmSchemaConverter.validateConvertAndAddToRepo(persistentSchema);
                     }
                     if(!included.passes()) {
                         logger.addError(BmmMessageIds.ec_bmm_schema_includes_valiidation_failed, schema.getSchemaId(), included.getLogger().toString());
@@ -91,7 +90,6 @@ public class IncludesProcessor {
 
         //If a package already exist, merge its classes, for each child package repeat...
         //Merge class definitions first. If you see a class with the same name, log it (complain) - OpenEHR has no notion of namespaces. Need to fix spec to support them.
-        //TODO: complain about duplicates
         //this automatically includes primitive types
         for(String className:included.getClassDefinitions().keySet()) {
             PBmmClass bmmClass = included.getClassDefinitions().get(className);

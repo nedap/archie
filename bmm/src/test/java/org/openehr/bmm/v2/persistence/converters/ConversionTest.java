@@ -26,7 +26,7 @@ public class ConversionTest {
         repo.addPersistentSchema(parse("/openehr/openehr_structures_102.bmm"));
 
         BmmSchemaConverter converter = new BmmSchemaConverter(repo);
-        converter.validateAndConvertRepository();;
+        converter.validateAndConvertRepository();
         for(BmmValidationResult validationResult:repo.getModels()) {
             System.out.println(validationResult.getLogger());
             assertTrue("the OpenEHR RM 1.0.2 BMM files should pass validation", validationResult.passes());

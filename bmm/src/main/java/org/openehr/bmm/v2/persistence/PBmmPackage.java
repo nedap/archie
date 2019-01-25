@@ -38,11 +38,18 @@ public final class PBmmPackage extends PBmmPackageContainer {
     }
 
 
+    /**
+     * Adds all classes and packages from the other package, without further checks. Mainly used in the
+     * CanonicalPackageGenerator
+     * @param other
+     */
     public void setClassesAndPackagesFrom(PBmmPackage other) {
         setClasses(new ArrayList<>(other.getClasses()));
         CaseInsensitiveLinkedHashMap<PBmmPackage> packages = new CaseInsensitiveLinkedHashMap<>();
         packages.putAll(other.getPackages());
-        setPackages(packages);//TODO: CLONE TO PACKAGE OBJECTS!?
+        //bit tricky because packages is not cloned first. However, cloning it would make the
+        //CanonicalPackageGenerator contain errors.
+        setPackages(packages);
     }
 
     public String getDocumentation() {

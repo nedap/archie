@@ -20,7 +20,7 @@ public class AbstractSchemaValidationsTest {
             BmmRepository repo = new BmmRepository();
             repo.addPersistentSchema(schema);
             BmmSchemaConverter converter = new BmmSchemaConverter(repo);
-            return converter.validateAndConvert(schema);
+            return converter.validateConvertAndAddToRepo(schema);
         }
     }
 
@@ -32,7 +32,7 @@ public class AbstractSchemaValidationsTest {
 
             BmmSchemaConverter converter = new BmmSchemaConverter(repo);
 
-            return converter.validateAndConvert(schema);
+            return converter.validateConvertAndAddToRepo(schema);
         }
     }
 }

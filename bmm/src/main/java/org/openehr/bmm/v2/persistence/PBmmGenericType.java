@@ -57,7 +57,9 @@ public final class PBmmGenericType extends PBmmBaseType {
             genericParameterReferences.addAll(genericParameterDefs.values());
         } else {
             genericParameters.forEach(param -> {
-                if(param.length() == 1) { //TODO!!!!! Probably a parameter name such as "T". Not ideal to do this though.
+                if(param.length() == 1) {
+                    // This is ugly because it basically checks parameter length to see if it's a generic parameter
+                    // However it's the only way in the current P_BMM version to do so.
                     PBmmOpenType openType = new PBmmOpenType(param);
                     genericParameterReferences.add(openType);
                 } else {

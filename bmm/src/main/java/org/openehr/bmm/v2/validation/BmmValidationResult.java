@@ -14,8 +14,8 @@ import java.util.TreeMap;
 /**
  * The result of validating a PBmmSchema  and converting it to a BmmModel. Contains:
  * - the original schema in persisted format
- * - the schema in persisted format, with all included files merged in
- * - the resulting BmmModel
+ * - the schema in persisted format, with all included other schemas merged in
+ * - the resulting BmmModel. Null if the originalSchema contained validation errors that make conversion impossible.
  * - the messageLogger containing any info, warning and debug messages during validation and conversion
  * - the schema ids that have been merged in
  * - the schema ids that should have been merged in, but failed to merge
@@ -23,14 +23,18 @@ import java.util.TreeMap;
 public class BmmValidationResult {
 
     //input from file
+    /** The schema ID of the original schema */
     private String schemaId;
+    /** The original schema in persisted format */
     private PBmmSchema originalSchema;
 
     //all fields below are the result from validating and conversion
+    /** a MessageLogger that any validation errors, but also information about the conversion process */
     private MessageLogger logger;
+    /** The resulting BmmModel, if convesion was successful. Null otherwise.*/
     private BmmModel model;
 
-
+    /** The PBmmSchema that contains both the orignalSchema, and all classes and packages from included schemas */
     private PBmmSchema schemaWithMergedIncludes;
 
     /**

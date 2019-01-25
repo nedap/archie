@@ -6,9 +6,13 @@ import org.openehr.bmm.v2.validation.validators.BmmVersionValidation;
 import org.openehr.bmm.v2.validation.validators.ClassesValidator;
 import org.openehr.bmm.v2.validation.validators.CreatedSchemaValidation;
 import org.openehr.bmm.v2.validation.validators.IncludesValidation;
-import org.openehr.bmm.v2.validation.validators.UniqueSchemaIdValidation;
 import org.openehr.utils.message.MessageLogger;
 
+
+/**
+ * Class that has methods for all available BMM schema validations.
+ * Objects are for single use only, to validate one P_BMM schema
+ */
 public class BmmSchemaValidator {
 
     private final BmmRepository repository;
@@ -19,7 +23,7 @@ public class BmmSchemaValidator {
         logger = new MessageLogger();
     }
 
-    public void validateSchema(BmmValidationResult result) {
+    public void validateSchemaAfterMergeOfIncludes(BmmValidationResult result) {
         run(new BasicSchemaValidations(), result, result.getSchemaWithMergedIncludes());
         run(new ClassesValidator(), result, result.getSchemaWithMergedIncludes());
     }
@@ -32,7 +36,6 @@ public class BmmSchemaValidator {
      *     (child package must be declared under the parent)
      * 2. check that all classes are mentioned in the package structure
      * 3. check that all models refer to valid packages
-     * TODO Need to test this method
      */
     public void validateCreated(BmmValidationResult validationResult, PBmmSchema schema) {
         run(new CreatedSchemaValidation(), validationResult, schema);
@@ -40,10 +43,6 @@ public class BmmSchemaValidator {
 
     public void validateBmmVersion(BmmValidationResult validationResult, PBmmSchema schema) {
         run(new BmmVersionValidation(), validationResult, schema);
-    }
-
-    public void validateUniqueness(BmmValidationResult validationResult, PBmmSchema schema) {
-        run(new UniqueSchemaIdValidation(), validationResult, schema);
     }
 
     public void validateIncludes(BmmValidationResult validationResult, PBmmSchema schema) {
@@ -58,6 +57,11 @@ public class BmmSchemaValidator {
         return logger;
     }
 
+
+    /**
+     * Throw a BmmSchemaValidationException in case any errors were encountered in any previously run validations
+     * @throws BmmSchemaValidationException
+     */
     public void checkNoExceptions() throws BmmSchemaValidationException {
 
         if(logger.hasErrors()) {
