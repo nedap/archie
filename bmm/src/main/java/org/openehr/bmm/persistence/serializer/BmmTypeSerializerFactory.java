@@ -23,6 +23,7 @@ package org.openehr.bmm.persistence.serializer;
 
 import org.openehr.bmm.persistence.*;
 
+@Deprecated
 public class BmmTypeSerializerFactory {
     public static BmmTypeSerializer<?> createBmmTypeSerializer(PersistedBmmType<?> type) {
         if(type instanceof PersistedBmmGenericType) {

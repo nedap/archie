@@ -34,6 +34,7 @@ import java.util.List;
  *
  * Created by cnanjo on 1/25/17.
  */
+@Deprecated
 public abstract class PersistedBmmType<T extends BmmType> extends PersistedBmmModelElement implements Serializable {
 
     /**

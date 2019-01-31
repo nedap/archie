@@ -36,6 +36,7 @@ import java.io.Serializable;
  *
  * Created by cnanjo on 11/24/16.
  */
+@Deprecated
 public class PersistedBmmSinglePropertyOpen extends PersistedBmmProperty<PersistedBmmOpenType> implements Serializable {
 
     public static final String P_BMM_SINGLE_PROPERTY_OPEN = "P_BMM_SINGLE_PROPERTY_OPEN";

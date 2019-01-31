@@ -28,6 +28,7 @@ import org.openehr.bmm.persistence.PersistedBmmContainerType;
 import org.openehr.odin.CompositeOdinObject;
 import org.openehr.odin.OdinAttribute;
 
+@Deprecated
 public class BmmContainerPropertyDeserializer extends BmmPropertyDeserializer {
     public PersistedBmmContainerProperty deserialize(CompositeOdinObject propertyDefinition) {
         String documentation = null;

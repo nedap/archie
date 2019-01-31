@@ -26,6 +26,7 @@ import org.openehr.bmm.core.BmmProperty;
 import org.openehr.bmm.persistence.*;
 import org.openehr.odin.utils.OdinSerializationUtils;
 
+@Deprecated
 public class BmmContainerPropertySerializer extends BaseBmmSerializer<PersistedBmmContainerProperty> {
 
     /**

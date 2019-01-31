@@ -26,6 +26,7 @@ import org.openehr.odin.CompositeOdinObject;
 import org.openehr.odin.OdinAttribute;
 
 
+@Deprecated
 public class BmmOpenTypeDeserializer {
     public PersistedBmmOpenType deserialize(CompositeOdinObject typeDefinition) {
         OdinAttribute propertyType = typeDefinition.getAttribute("type");

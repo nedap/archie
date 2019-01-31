@@ -29,6 +29,7 @@ import org.openehr.odin.utils.OdinSerializationUtils;
 
 import java.util.List;
 
+@Deprecated
 public class BmmClassDefinitionSerializer extends BaseBmmSerializer<List<PersistedBmmClass>> implements Serialize {
 
     public BmmClassDefinitionSerializer(List<PersistedBmmClass> bmmClasses) {

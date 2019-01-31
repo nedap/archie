@@ -33,6 +33,7 @@ import java.util.List;
  *
  *  Created by cnanjo on 1/24/17.
  */
+@Deprecated
 public class BmmPackageSerializer extends BaseBmmSerializer<PersistedBmmPackage> {
 
     public BmmPackageSerializer() {

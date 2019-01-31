@@ -30,6 +30,7 @@ import java.util.function.Consumer;
  * Abstraction of a BMM model component that contains packages and classes.
  *
  */
+@Deprecated
 public abstract class PersistedBmmPackageContainer extends PersistedBmmModelElement implements IPersistedBmmPackageContainer {
 
     public static final String DEFAULT_PACKAGE_DELIMITER = ".";

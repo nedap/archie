@@ -34,6 +34,7 @@ import java.util.ArrayList;
  *
  * Created by cnanjo on 1/26/17.
  */
+@Deprecated
 public class BmmGenericPropertySerializer extends BaseBmmSerializer<PersistedBmmGenericProperty> {
 
     /**

@@ -28,6 +28,7 @@ import org.openehr.odin.CompositeOdinObject;
 
 import java.util.List;
 
+@Deprecated
 public class BmmEnumerationStringDeserializer {
     public PersistedBmmEnumerationString deserialize(CompositeOdinObject stringEnumerationDefinition) {
         PersistedBmmEnumerationString integerEnumeration = new PersistedBmmEnumerationString();

@@ -2,7 +2,6 @@ package com.nedap.archie.serializer.adl;
 
 import com.google.common.base.Joiner;
 import com.nedap.archie.aom.AuthoredArchetype;
-import com.nedap.archie.serializer.odin.OdinObject;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -20,15 +19,9 @@ public class ADLAuthoredArchetypeSerializer<T extends AuthoredArchetype> extends
     @Override
     protected void appendLanguage() {
         if (archetype.getOriginalLanguage() == null) return;
-        OdinObject language = new OdinObject();
-        language.put("original_language", archetype.getOriginalLanguage());
-
-        if (!archetype.getTranslations().isEmpty()) {
-            language.put("translations", archetype.getTranslations());
-        }
 
         builder.newline().append("language").newIndentedLine()
-                .odin(language)
+                .odin(archetype.getAuthoredResourceContent())
                 .unindent();
     }
 

@@ -62,7 +62,7 @@ public class CKMArchetypeValidatorTest {
 
     @Test
     public void fullCKMTestBmm() {
-        MetaModels bmmReferenceModels = new MetaModels(null, BuiltinReferenceModels.getBMMReferenceModels(), BuiltinReferenceModels.getAomProfiles());
+        MetaModels bmmReferenceModels = new MetaModels(null, BuiltinReferenceModels.getBmmRepository(), BuiltinReferenceModels.getAomProfiles());
 
         FullArchetypeRepository repository = TestUtil.parseCKM();
         repository.compile(bmmReferenceModels);

@@ -10,6 +10,6 @@ public class FlattenerExamplesFromSpecBMMTest extends FlattenerExamplesFromSpecT
     @Before
     public void setup() throws Exception {
         repository = new SimpleArchetypeRepository();
-        models = new MetaModels(null, BuiltinReferenceModels.getBMMReferenceModels(), BuiltinReferenceModels.getAomProfiles());
+        models = new MetaModels(null, BuiltinReferenceModels.getBmmRepository(), BuiltinReferenceModels.getAomProfiles());
     }
 }

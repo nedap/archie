@@ -29,6 +29,7 @@ import java.util.function.Consumer;
 /**
  * Created by cnanjo on 4/11/16.
  */
+@Deprecated
 public interface IPersistedBmmPackageContainer extends Serializable {
 
     public Map<String, PersistedBmmPackage> getPackages();

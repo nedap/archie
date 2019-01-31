@@ -26,7 +26,7 @@ import org.openehr.bmm.persistence.*;
 import org.openehr.odin.CompositeOdinObject;
 import org.openehr.odin.OdinAttribute;
 
-
+@Deprecated
 public abstract class BmmTypeDeserializer {
 
     public static PersistedBmmType deserializeType(String type, CompositeOdinObject typeDefinition) {

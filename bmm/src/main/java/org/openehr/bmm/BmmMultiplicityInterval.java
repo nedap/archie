@@ -30,6 +30,7 @@ import java.io.Serializable;
 /**
  * Created by cnanjo on 4/11/16.
  */
+@Deprecated
 public class BmmMultiplicityInterval extends IntegerIntervalObject implements Serializable {
 
     public BmmMultiplicityInterval() { super(); }

@@ -1,9 +1,10 @@
 package com.nedap.archie.serializer.adl;
 
-import com.nedap.archie.serializer.odin.OdinSerializer;
-import com.nedap.archie.serializer.odin.OdinStringBuilder;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.nedap.archie.serializer.adl.jackson.ArchetypeODINMapperFactory;
 import com.nedap.archie.serializer.odin.StructureStringBuilder;
 import com.nedap.archie.serializer.odin.StructuredStringAppendable;
+import org.openehr.odin.jackson.ODINMapper;
 
 import static com.nedap.archie.serializer.odin.OdinStringBuilder.quoteText;
 
@@ -13,6 +14,8 @@ import static com.nedap.archie.serializer.odin.OdinStringBuilder.quoteText;
 public class ADLStringBuilder implements StructuredStringAppendable {
 
     private final StructureStringBuilder builder = new StructureStringBuilder();
+
+    private ODINMapper odinMapper = new ArchetypeODINMapperFactory().createMapper();
 
     @Override
     public ADLStringBuilder append(Object str) {
@@ -44,7 +47,16 @@ public class ADLStringBuilder implements StructuredStringAppendable {
     }
 
     public ADLStringBuilder odin(Object structure) {
-        new OdinSerializer(new OdinStringBuilder(builder), ADLOdinObjectMapper.INSTANCE).serializeDirect(structure);
+        try {
+            String odin = odinMapper.writeValueAsString(structure);
+            for(String line:odin.split("\n")) {
+                //append per line to get indentation
+                builder.append(line);
+                builder.newline();
+            }
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
         return this;
     }
 
@@ -78,6 +90,11 @@ public class ADLStringBuilder implements StructuredStringAppendable {
     @Override
     public void revert(int previousMark) {
         builder.revert(previousMark);
+    }
+
+    @Override
+    public void clearMark() {
+        builder.clearMark();
     }
 
     @Override

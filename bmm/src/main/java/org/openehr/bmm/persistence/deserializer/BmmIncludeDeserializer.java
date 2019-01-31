@@ -32,6 +32,7 @@ import org.openehr.odin.StringObject;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated
 public class BmmIncludeDeserializer {
     public List<BmmIncludeSpecification> deserialize(CompositeOdinObject includeBlock) {
         List<BmmIncludeSpecification> includes = new ArrayList<>();

@@ -29,6 +29,7 @@ import org.openehr.odin.OdinObject;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated
 public class BmmGenericParameterDeserializer {
     public List<PersistedBmmGenericParameter> deserialize(CompositeOdinObject parameterListDefinition) {
         List<PersistedBmmGenericParameter> parameters = new ArrayList<>();

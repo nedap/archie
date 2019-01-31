@@ -24,6 +24,7 @@ package org.openehr.bmm.persistence.serializer;
 import org.openehr.bmm.persistence.PersistedBmmModelElement;
 import org.openehr.odin.utils.OdinSerializationUtils;
 
+@Deprecated
 public abstract class BaseBmmSerializer<T> implements Serialize {
 
     /**

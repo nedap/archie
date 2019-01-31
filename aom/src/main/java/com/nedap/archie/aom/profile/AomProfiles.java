@@ -1,7 +1,6 @@
 package com.nedap.archie.aom.profile;
 
 import com.nedap.archie.serializer.odin.OdinObjectParser;
-import com.nedap.archie.serializer.odin.OdinToJsonConverter;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -26,6 +26,7 @@ import org.openehr.bmm.persistence.PersistedBmmOpenType;
 import org.openehr.bmm.persistence.PersistedBmmType;
 import org.openehr.odin.utils.OdinSerializationUtils;
 
+@Deprecated
 public class BmmOpenTypeSerializer extends BmmTypeSerializer<PersistedBmmOpenType> {
 
     /**

@@ -33,6 +33,7 @@ import java.util.List;
  *
  * Created by cnanjo on 4/11/16.
  */
+@Deprecated
 public abstract class PersistedBmmEnumeration<T> extends PersistedBmmClass implements Serializable {
 
     /**

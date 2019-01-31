@@ -36,6 +36,7 @@ import java.util.function.BiConsumer;
  *
  * Created by cnanjo on 4/11/16.
  */
+@Deprecated
 public class PersistedBmmPackage extends PersistedBmmPackageContainer implements Serializable {
 
     /**

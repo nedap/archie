@@ -23,6 +23,7 @@ package org.openehr.bmm.persistence;
 
 import java.io.Serializable;
 
+@Deprecated
 public enum PersistedBmmSchemaState implements Serializable {
     STATE_CREATED, //Initial state directly after materialization
     STATE_VALIDATED_CREATED, //Initial validation pass after creation

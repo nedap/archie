@@ -50,7 +50,8 @@ public class CComplexObject extends CDefinedObject<ArchetypeModelObject> {
     @Override
     public Archetype getArchetype() {
         if(archetype == null) {
-            return getParent().getArchetype();
+            CAttribute parent = getParent();
+            return parent == null ? null : parent.getArchetype();
         }
         return archetype;
     }

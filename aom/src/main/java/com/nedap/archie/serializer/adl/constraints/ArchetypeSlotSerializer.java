@@ -73,6 +73,7 @@ public class ArchetypeSlotSerializer extends ConstraintSerializer<ArchetypeSlot>
         }
 
         if (hasContent) {
+            builder.clearMark();
             builder.newline().append("}");
         } else {
             builder.revert(mark);

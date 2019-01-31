@@ -29,6 +29,7 @@ import java.util.List;
 /**
  * Shared access to service interface to object model
  */
+@Deprecated
 public class SharedReferenceModelAccess {
     private ReferenceModelAccess referenceModelAccess;
 

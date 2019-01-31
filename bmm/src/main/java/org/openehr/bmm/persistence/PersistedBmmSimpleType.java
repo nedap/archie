@@ -35,6 +35,7 @@ import java.util.List;
  *
  * Created by cnanjo on 4/11/16.
  */
+@Deprecated
 public class PersistedBmmSimpleType extends PersistedBmmType<BmmSimpleType> implements Serializable {
 
     public static final String P_BMM_SIMPLE_TYPE = "P_BMM_SIMPLE_TYPE";

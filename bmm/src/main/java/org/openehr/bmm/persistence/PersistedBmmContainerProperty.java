@@ -33,6 +33,7 @@ import java.io.Serializable;
  *
  * Created by cnanjo on 4/11/16.
  */
+@Deprecated
 public class PersistedBmmContainerProperty extends PersistedBmmProperty<PersistedBmmContainerType> implements Serializable {
 
     public static final String P_BMM_CONTAINER_PROPERTY = "P_BMM_CONTAINER_PROPERTY";

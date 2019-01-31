@@ -29,10 +29,6 @@ public abstract class ConstraintSerializer<T extends CObject> {
         return false;
     }
 
-    public int mark() {
-        return builder.mark();
-    }
-
     public void revert(int previousMark) {
         builder.revert(previousMark);
     }

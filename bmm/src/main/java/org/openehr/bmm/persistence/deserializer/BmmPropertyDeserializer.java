@@ -34,6 +34,7 @@ import org.openehr.odin.OdinObject;
 import java.util.List;
 
 
+@Deprecated
 public abstract class BmmPropertyDeserializer {
     protected PersistedBmmProperty configureBmmPropertyFromOdinObject(PersistedBmmProperty property, CompositeOdinObject propertyDef) {
 

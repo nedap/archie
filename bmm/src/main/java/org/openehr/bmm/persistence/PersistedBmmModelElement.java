@@ -28,6 +28,7 @@ import java.io.Serializable;
  *
  * Created by cnanjo on 4/11/16.
  */
+@Deprecated
 public abstract class PersistedBmmModelElement implements Serializable {
 
     /**

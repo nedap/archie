@@ -28,6 +28,7 @@ import org.openehr.odin.OdinObject;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated
 public class BmmPackageContainerDeserializer {
     public List<PersistedBmmPackage> deserialize(CompositeOdinObject packageContainerDefinition) {
         List<PersistedBmmPackage> bmmPackages = new ArrayList<>();

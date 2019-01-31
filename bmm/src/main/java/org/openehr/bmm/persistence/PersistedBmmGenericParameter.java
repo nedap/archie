@@ -34,6 +34,7 @@ import java.io.Serializable;
  *
  * Created by cnanjo on 4/11/16.
  */
+@Deprecated
 public class PersistedBmmGenericParameter extends PersistedBmmModelElement implements Serializable {
 
     /**

@@ -2,17 +2,20 @@ package com.nedap.archie.serializer.odin;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.io.JsonStringEncoder;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import com.nedap.archie.adlparser.antlr.AdlParser;
-import com.nedap.archie.adlparser.antlr.AdlParser.*;
-import org.apache.commons.lang.StringEscapeUtils;
+import com.nedap.archie.adlparser.antlr.odinParser.*;
+import org.apache.commons.text.StringEscapeUtils;
+
 
 import java.util.List;
 
 /**
- * A simple Odin to JSON-converter. This allows us to use standard tooling to bind to objects.
+ * A simple Odin to JSON-converter TO BE USED WITHIN THE CONTEXT OF ADL!. This allows us to use standard tooling to bind to objects.
+ *
+ * We need different lexer modes, but this is very hard to do in the current version of ADL!
  *
  * Perhaps better would be to create a jackson-databinding for ODIN, but this is quite some work and I don't consider
  * ODIN as having considerable benefits over JSON or YAML.
@@ -110,6 +113,62 @@ public class OdinToJsonConverter {
                 output(listContext);
 
             } else {
+                output.append("{ \"@type\": \"INTERVAL\" ");
+                Primitive_interval_valueContext intervalCtx = primitiveObjectContext.primitive_interval_value();
+
+                if(intervalCtx.date_interval_value() != null) {
+
+                } else if(intervalCtx.duration_interval_value() != null) {
+
+                } else if (intervalCtx.integer_interval_value() != null) {
+                    Integer_interval_valueContext interval = intervalCtx.integer_interval_value();
+                    if(interval.relop() != null) {
+                        String relopText = interval.relop().getText();
+                        if(relopText.contains(">")) {
+                            output.append(",\"lower_unbounded\": \"false\"");
+                            output.append(",\"upper_unbounded\": \"true\"");
+                            output.append(",\"lower\": " + interval.integer_value().get(0).getText());
+                            if(relopText.contains("=")) {
+                                output.append(",\"lower_included\": \"true\"");
+                            } else {
+                                output.append(",\"lower_included\": \"false\"");
+                            }
+                        } else if(relopText.contains("<")) {
+                            output.append(",\"lower_unbounded\": \"true\"");
+                            output.append(",\"upper_unbounded\": \"false\"");
+                            output.append(",\"upper\": " + interval.integer_value().get(0).getText());
+                            if(relopText.contains("=")) {
+                                output.append(",\"upper_included\": \"true\"");
+                            } else {
+                                output.append(",\"upper_included\": \"false\"");
+                            }
+                        }
+                    } else {
+                        output.append(",\"lower_unbounded\": \"false\"");
+                        output.append(",\"upper_unbounded\": \"false\"");
+                        if(interval.SYM_GT() != null) {
+                            output.append(",\"lower_included\": \"false\"");
+                        } else {
+                            output.append(",\"lower_included\": \"true\"");
+                        }
+                        if(interval.SYM_LT() != null) {
+                            output.append(",\"upper_included\": \"false\"");
+                        } else {
+                            output.append(",\"upper_included\": \"true\"");
+                        }
+                        output.append(",\"lower\": " + interval.integer_value().get(0).getText());
+                        output.append(",\"upper\": " + interval.integer_value().get(1).getText());
+
+                    }
+
+                } else if (intervalCtx.real_interval_value() != null) {
+
+                } else if(intervalCtx.date_time_interval_value() != null) {
+
+                } else if(intervalCtx.time_interval_value() != null) {
+
+                }
+                output.append("}");
                 //interval. TODO: implement interval-object notation in json :)
             }
         } else {
@@ -166,6 +225,13 @@ public class OdinToJsonConverter {
             outputString(context.getText());
         } else if (context.term_code_value() != null) {
             outputString(context.getText());
+        } else if (context.boolean_value() != null) {
+            //jackson expects true and false, not TruE or trUe like valid in odin
+            if(context.boolean_value().getText().equalsIgnoreCase("true")) {
+                output.append("true");
+            } else {
+                output.append("false");
+            }
         } else {
             //json-compatible anyway
             outputEscaped(context.getText());
@@ -187,7 +253,7 @@ public class OdinToJsonConverter {
             if(text.startsWith("\"") && text.endsWith("\"")) {
                 String textWithoutQuotationMarks = text.substring(1, text.length()-1);
 
-                String textQuotesReplaced = StringEscapeUtils.unescapeJava(textWithoutQuotationMarks);
+                String textQuotesReplaced = StringEscapeUtils.unescapeJson(textWithoutQuotationMarks);
                 output.append(objectMapper.writeValueAsString(textQuotesReplaced));
             } else {
                 output.append(objectMapper.writeValueAsString(text));

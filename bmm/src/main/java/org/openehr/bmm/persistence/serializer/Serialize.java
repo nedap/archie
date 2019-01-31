@@ -23,6 +23,7 @@ package org.openehr.bmm.persistence.serializer;
 
 import org.openehr.bmm.persistence.PersistedBmmModelElement;
 
+@Deprecated
 public interface Serialize {
 
     /**

@@ -33,6 +33,7 @@ import java.io.Serializable;
  *
  * Created by cnanjo on 4/11/16.
  */
+@Deprecated
 public class PersistedBmmEnumerationString extends PersistedBmmEnumeration<String> implements Serializable {
 
     public static final String P_BMM_ENUMERATION_STRING = "P_BMM_ENUMERATION_STRING";

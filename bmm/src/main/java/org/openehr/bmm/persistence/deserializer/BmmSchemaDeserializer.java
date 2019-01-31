@@ -30,6 +30,7 @@ import org.openehr.odin.loader.OdinLoaderImpl;
 
 import java.util.List;
 
+@Deprecated
 public class BmmSchemaDeserializer {
 
     public PersistedBmmSchema deserialize(String filePath) {

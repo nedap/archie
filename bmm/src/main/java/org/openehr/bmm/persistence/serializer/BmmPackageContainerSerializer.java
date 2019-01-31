@@ -29,6 +29,7 @@ import org.openehr.odin.utils.OdinSerializationUtils;
  *
  *  Created by cnanjo on 1/24/17.
  */
+@Deprecated
 public class BmmPackageContainerSerializer extends BaseBmmSerializer<PersistedBmmPackageContainer> {
 
     public BmmPackageContainerSerializer() {

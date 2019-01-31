@@ -25,6 +25,7 @@ import org.openehr.bmm.BmmConstants;
 import org.openehr.bmm.persistence.PersistedBmmType;
 import org.openehr.odin.utils.OdinSerializationUtils;
 
+@Deprecated
 public abstract class BmmTypeSerializer<T extends PersistedBmmType> extends BaseBmmSerializer<T> {
 
     private boolean omitCast = true;
