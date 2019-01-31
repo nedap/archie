@@ -1,5 +1,6 @@
 package com.nedap.archie.rm.generic;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.nedap.archie.rm.RMObject;
 import com.nedap.archie.rm.datavalues.DvCodedText;
 import com.nedap.archie.rm.datavalues.DvText;
@@ -38,6 +39,7 @@ public class AuditDetails extends RMObject {
         return timeCommitted;
     }
 
+    @JsonAlias({"time_commited"})
     public void setTimeCommitted(DvDateTime timeCommitted) {
         this.timeCommitted = timeCommitted;
     }

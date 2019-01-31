@@ -1,5 +1,6 @@
 package com.nedap.archie.rm.changecontrol;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.nedap.archie.rm.RMObject;
 import com.nedap.archie.rm.support.identification.ObjectRef;
 import com.nedap.archie.rm.datavalues.quantity.datetime.DvDateTime;
@@ -46,6 +47,7 @@ public class VersionedObject<Type> extends RMObject {
         return timeCreated;
     }
 
+    @JsonAlias({"time_created"})
     public void setTimeCreated(DvDateTime timeCreated) {
         this.timeCreated = timeCreated;
     }

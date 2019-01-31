@@ -1,5 +1,6 @@
 package com.nedap.archie.rm.composition;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.nedap.archie.rm.datatypes.CodePhrase;
 import com.nedap.archie.rm.generic.Participation;
 import com.nedap.archie.rm.support.identification.ObjectRef;
@@ -86,11 +87,12 @@ public abstract class Entry extends ContentItem {
         this.encoding = encoding;
     }
 
-    @Nullable    
+    @Nullable
     public ObjectRef getWorkflowId() {
         return workflowId;
     }
 
+    @JsonAlias({"work_flow_id"})
     public void setWorkflowId(@Nullable ObjectRef workflowId) {
         this.workflowId = workflowId;
     }

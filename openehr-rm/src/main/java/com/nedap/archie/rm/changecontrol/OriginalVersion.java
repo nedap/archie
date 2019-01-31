@@ -1,5 +1,6 @@
 package com.nedap.archie.rm.changecontrol;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.nedap.archie.rm.datavalues.DvCodedText;
 import com.nedap.archie.rm.generic.Attestation;
 import com.nedap.archie.rm.support.identification.ObjectVersionId;
@@ -50,6 +51,7 @@ public class OriginalVersion<Type> extends Version<Type> {
         return otherInputVersionUids;
     }
 
+    @JsonAlias({"other_input_version_ids"})
     public void setOtherInputVersionUids(@Nullable List<ObjectVersionId> otherInputVersionUids) {
         this.otherInputVersionUids = otherInputVersionUids;
     }
