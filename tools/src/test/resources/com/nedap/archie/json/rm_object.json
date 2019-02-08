@@ -1,0 +1,388 @@
+{
+  "@type": "COMPOSITION",
+  "archetype_details": {
+    "archetype_id": {
+      "@type": "ARCHETYPE_ID",
+      "domain_concept": "some_archetype",
+      "rm_entity": "COMPOSITION",
+      "rm_name": "EHR",
+      "rm_originator": "openEHR",
+      "versionId": "1.0.0",
+      "full_id": "openEHR-EHR-COMPOSITION.some_archetype.v1.0.0",
+      "semantic_id": "openEHR-EHR-COMPOSITION.some_archetype.v1"
+    },
+    "rm_version": "1.0.4"
+  },
+  "archetype_node_id": "id1.1.1.1",
+  "category": {
+    "@type": "DV_CODED_TEXT",
+    "defining_code": {
+      "@type": "CODE_PHRASE",
+      "code_string": "at1"
+    },
+    "mappings": [],
+    "value": "event"
+  },
+  "composer": {
+    "@type": "PARTY_IDENTIFIED",
+    "identifiers": []
+  },
+  "content": [
+    {
+      "@type": "OBSERVATION",
+      "archetype_details": {
+        "archetype_id": {
+          "@type": "ARCHETYPE_ID",
+          "domain_concept": "some_archetype",
+          "rm_entity": "OBSERVATION",
+          "rm_name": "EHR",
+          "rm_originator": "openEHR",
+          "versionId": "1.0.0",
+          "full_id": "openEHR-EHR-OBSERVATION.some_archetype.v1.0.0",
+          "semantic_id": "openEHR-EHR-OBSERVATION.some_archetype.v1"
+        },
+        "rm_version": "1.0.4"
+      },
+      "archetype_node_id": "id0.0.100.1",
+      "data": {
+        "@type": "HISTORY",
+        "archetype_node_id": "id2",
+        "events": [
+          {
+            "@type": "POINT_EVENT",
+            "archetype_node_id": "id3",
+            "data": {
+              "@type": "ITEM_TREE",
+              "archetype_node_id": "id4",
+              "items": [
+                {
+                  "@type": "CLUSTER",
+                  "archetype_node_id": "id5",
+                  "items": [
+                    {
+                      "@type": "ELEMENT",
+                      "archetype_node_id": "id7",
+                      "links": [],
+                      "name": {
+                        "@type": "DV_TEXT",
+                        "mappings": [],
+                        "value": "Pincetgreep"
+                      },
+                      "path": "/content[id0.0.100.1]/data[id2]/events[id3]/data[id4]/items[id5]/items[id7]",
+                      "value": {
+                        "@type": "DV_ORDINAL",
+                        "other_reference_ranges": [],
+                        "symbol": {
+                          "@type": "DV_CODED_TEXT",
+                          "defining_code": {
+                            "@type": "CODE_PHRASE",
+                            "code_string": "at4",
+                            "terminology_id": {}
+                          },
+                          "mappings": [],
+                          "value": "Patient does something"
+                        },
+                        "value": 22
+                      }
+                    },
+                    {
+                      "@type": "ELEMENT",
+                      "archetype_node_id": "id9",
+                      "links": [],
+                      "name": {
+                        "@type": "DV_TEXT",
+                        "mappings": [],
+                        "value": "Elleboogflexie"
+                      },
+                      "path": "/content[id0.0.100.1]/data[id2]/events[id3]/data[id4]/items[id5]/items[id9]",
+                      "value": {
+                        "@type": "DV_ORDINAL",
+                        "other_reference_ranges": [],
+                        "symbol": {
+                          "@type": "DV_CODED_TEXT",
+                          "defining_code": {
+                            "@type": "CODE_PHRASE",
+                            "code_string": "at11",
+                            "terminology_id": {}
+                          },
+                          "mappings": [],
+                          "value": "something with movement"
+                        },
+                        "value": 25
+                      }
+                    },
+                    {
+                      "@type": "ELEMENT",
+                      "archetype_node_id": "id11",
+                      "links": [],
+                      "name": {
+                        "@type": "DV_TEXT",
+                        "mappings": [],
+                        "value": "Schouderabductie"
+                      },
+                      "path": "/content[id0.0.100.1]/data[id2]/events[id3]/data[id4]/items[id5]/items[id11]",
+                      "value": {
+                        "@type": "DV_ORDINAL",
+                        "other_reference_ranges": [],
+                        "symbol": {
+                          "@type": "DV_CODED_TEXT",
+                          "defining_code": {
+                            "@type": "CODE_PHRASE",
+                            "code_string": "at9",
+                            "terminology_id": {}
+                          },
+                          "mappings": [],
+                          "value": "Something with another movement"
+                        },
+                        "value": 14
+                      }
+                    },
+                    {
+                      "@type": "ELEMENT",
+                      "archetype_node_id": "id13",
+                      "links": [],
+                      "name": {
+                        "@type": "DV_TEXT",
+                        "mappings": [],
+                        "value": "Arm score"
+                      },
+                      "path": "/content[id0.0.100.1]/data[id2]/events[id3]/data[id4]/items[id5]/items[id13]",
+                      "value": {
+                        "@type": "DV_COUNT",
+                        "magnitude": 61,
+                        "other_reference_ranges": []
+                      }
+                    }
+                  ],
+                  "links": [],
+                  "name": {
+                    "@type": "DV_TEXT",
+                    "mappings": [],
+                    "value": "Arm"
+                  },
+                  "path": "/content[id0.0.100.1]/data[id2]/events[id3]/data[id4]/items[id5]"
+                },
+                {
+                  "@type": "CLUSTER",
+                  "archetype_node_id": "id6",
+                  "items": [
+                    {
+                      "@type": "ELEMENT",
+                      "archetype_node_id": "id14",
+                      "links": [],
+                      "name": {
+                        "@type": "DV_TEXT",
+                        "mappings": [],
+                        "value": "Dorsale flexie enkel"
+                      },
+                      "path": "/content[id0.0.100.1]/data[id2]/events[id3]/data[id4]/items[id6]/items[id14]",
+                      "value": {
+                        "@type": "DV_ORDINAL",
+                        "other_reference_ranges": [],
+                        "symbol": {
+                          "@type": "DV_CODED_TEXT",
+                          "defining_code": {
+                            "@type": "CODE_PHRASE",
+                            "code_string": "at10",
+                            "terminology_id": {}
+                          },
+                          "mappings": [],
+                          "value": "Some movement possible"
+                        },
+                        "value": 19
+                      }
+                    },
+                    {
+                      "@type": "ELEMENT",
+                      "archetype_node_id": "id16",
+                      "links": [],
+                      "name": {
+                        "@type": "DV_TEXT",
+                        "mappings": [],
+                        "value": "Knie extensie"
+                      },
+                      "path": "/content[id0.0.100.1]/data[id2]/events[id3]/data[id4]/items[id6]/items[id16]",
+                      "value": {
+                        "@type": "DV_ORDINAL",
+                        "other_reference_ranges": [],
+                        "symbol": {
+                          "@type": "DV_CODED_TEXT",
+                          "defining_code": {
+                            "@type": "CODE_PHRASE",
+                            "code_string": "at9",
+                            "terminology_id": {}
+                          },
+                          "mappings": [],
+                          "value": "Some movement possible, but not entire range"
+                        },
+                        "value": 14
+                      }
+                    },
+                    {
+                      "@type": "ELEMENT",
+                      "archetype_node_id": "id18",
+                      "links": [],
+                      "name": {
+                        "@type": "DV_TEXT",
+                        "mappings": [],
+                        "value": "Heup flexie"
+                      },
+                      "path": "/content[id0.0.100.1]/data[id2]/events[id3]/data[id4]/items[id6]/items[id18]",
+                      "value": {
+                        "@type": "DV_ORDINAL",
+                        "other_reference_ranges": [],
+                        "symbol": {
+                          "@type": "DV_CODED_TEXT",
+                          "defining_code": {
+                            "@type": "CODE_PHRASE",
+                            "code_string": "at9",
+                            "terminology_id": {}
+                          },
+                          "mappings": [],
+                          "value": "hjkljkfsdds"
+                        },
+                        "value": 14
+                      }
+                    },
+                    {
+                      "@type": "ELEMENT",
+                      "archetype_node_id": "id20",
+                      "links": [],
+                      "name": {
+                        "@type": "DV_TEXT",
+                        "mappings": [],
+                        "value": "Leg score"
+                      },
+                      "path": "/content[id0.0.100.1]/data[id2]/events[id3]/data[id4]/items[id6]/items[id20]",
+                      "value": {
+                        "@type": "DV_COUNT",
+                        "magnitude": 47,
+                        "other_reference_ranges": []
+                      }
+                    }
+                  ],
+                  "links": [],
+                  "name": {
+                    "@type": "DV_TEXT",
+                    "mappings": [],
+                    "value": "Leg"
+                  },
+                  "path": "/content[id0.0.100.1]/data[id2]/events[id3]/data[id4]/items[id6]"
+                },
+                {
+                  "@type": "ELEMENT",
+                  "archetype_node_id": "id24",
+                  "links": [],
+                  "name": {
+                    "@type": "DV_TEXT",
+                    "mappings": [],
+                    "value": "Opgetelde score"
+                  },
+                  "path": "/content[id0.0.100.1]/data[id2]/events[id3]/data[id4]/items[id24]",
+                  "value": {
+                    "@type": "DV_COUNT",
+                    "magnitude": 108,
+                    "other_reference_ranges": []
+                  }
+                },
+                {
+                  "@type": "ELEMENT",
+                  "archetype_node_id": "id22",
+                  "links": [],
+                  "name": {
+                    "@type": "DV_TEXT",
+                    "mappings": [],
+                    "value": "Totaalscore"
+                  },
+                  "path": "/content[id0.0.100.1]/data[id2]/events[id3]/data[id4]/items[id22]",
+                  "value": {
+                    "@type": "DV_COUNT",
+                    "magnitude": 54,
+                    "other_reference_ranges": []
+                  }
+                }
+              ],
+              "links": [],
+              "name": {
+                "@type": "DV_TEXT",
+                "mappings": [],
+                "value": ""
+              },
+              "path": "/content[id0.0.100.1]/data[id2]/events[id3]/data[id4]"
+            },
+            "links": [],
+            "name": {
+              "@type": "DV_TEXT",
+              "mappings": [],
+              "value": "Any event"
+            },
+            "path": "/content[id0.0.100.1]/data[id2]/events[id3]",
+            "time": {
+              "@type": "DV_DATE_TIME",
+              "other_reference_ranges": [],
+              "value": "2018-12-10T15:25:14+0100"
+            }
+          }
+        ],
+        "links": [],
+        "name": {
+          "@type": "DV_TEXT",
+          "mappings": [],
+          "value": ""
+        },
+        "origin": {
+          "@type": "DV_DATE_TIME",
+          "other_reference_ranges": [],
+          "value": "2018-12-10T15:25:14+0100"
+        },
+        "path": "/content[id0.0.100.1]/data[id2]"
+      },
+      "encoding": {
+        "@type": "CODE_PHRASE",
+        "code_string": "UTF-8",
+        "terminology_id": {
+          "value": "IANA_character-sets"
+        }
+      },
+      "language": {
+        "@type": "CODE_PHRASE",
+        "code_string": "nl",
+        "terminology_id": {
+          "value": "ISO_639-1"
+        }
+      },
+      "links": [],
+      "name": {
+        "@type": "DV_TEXT",
+        "mappings": [],
+        "value": "Motricity Index"
+      },
+      "other_participations": [],
+      "path": "/content[id0.0.100.1]",
+      "subject": {
+        "@type": "PARTY_SELF"
+      }
+    }
+  ],
+  "language": {
+    "@type": "CODE_PHRASE",
+    "code_string": "nl",
+    "terminology_id": {
+      "value": "ISO_639-1"
+    }
+  },
+  "links": [],
+  "name": {
+    "@type": "DV_TEXT",
+    "mappings": [],
+    "value": "Motricity Index"
+  },
+  "path": "/",
+  "territory": {
+    "@type": "CODE_PHRASE",
+    "code_string": "nl",
+    "terminology_id": {
+      "value": "bla"
+    }
+  }
+}

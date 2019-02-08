@@ -22,6 +22,7 @@ import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.*;
 
+import java.io.InputStream;
 import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -99,6 +100,16 @@ public class JacksonRMRoundTripTest {
         assertEquals(composition.getCategory().getDefiningCode().getCodeString(), parsedComposition.getCategory().getDefiningCode().getCodeString());
         assertEquals(composition.getLanguage().getCodeString(), parsedComposition.getLanguage().getCodeString());
         assertEquals(composition.getTerritory().getCodeString(), parsedComposition.getTerritory().getCodeString());
+
+    }
+
+    /**
+     * Parse a 0.5.5 archie generated json and make sure it parses
+     */
+    @Test
+    public void check055BackwardsCompatibility() throws Exception {
+        InputStream stream = getClass().getResourceAsStream("rm_object.json");
+        JacksonUtil.getObjectMapper().readValue(stream, RMObject.class);
 
     }
 
