@@ -30,13 +30,9 @@ public class RMAttributeInfo {
         this.addMethod = addMethod;
         this.computed = this.setMethod == null && this.addMethod == null;
         this.isMultipleValued = (type instanceof Class && Collection.class.isAssignableFrom(type)) || type.isArray();
-        if(type.isArray()) {
-            this.typeInCollection = type.getComponentType();
-            this.typeNameInCollection = this.typeInCollection.getSimpleName();
-        } else {
-            this.typeInCollection = typeInCollection;
-            this.typeNameInCollection = typeNameInCollection;
-        }
+
+        this.typeInCollection = typeInCollection;
+        this.typeNameInCollection = typeNameInCollection;
     }
 
     public String getRmName() {

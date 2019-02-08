@@ -297,6 +297,8 @@ public abstract class ReflectionModelInfoLookup implements ModelInfoLookup {
                     return (Class) ((java.lang.reflect.TypeVariable) actualTypeArguments[0]).getBounds()[0];
                 }
             }
+        } else if(rawFieldType.isArray()) {
+           return rawFieldType.getComponentType();
         }
         return rawFieldType;
     }

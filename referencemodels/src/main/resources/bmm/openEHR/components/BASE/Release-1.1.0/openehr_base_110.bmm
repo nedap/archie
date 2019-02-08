@@ -555,8 +555,8 @@ class_definitions = <
 				>
 				is_mandatory = <True>
 			>
-			["accreditaton"] = (P_BMM_SINGLE_PROPERTY) <
-				name = <"accreditaton">
+			["accreditation"] = (P_BMM_SINGLE_PROPERTY) <
+				name = <"accreditation">
 				type = <"String">
 			>
 			["other_details"] = (P_BMM_GENERIC_PROPERTY) <

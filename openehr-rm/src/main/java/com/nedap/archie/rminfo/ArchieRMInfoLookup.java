@@ -183,6 +183,8 @@ public class ArchieRMInfoLookup extends ReflectionModelInfoLookup {
 
     @Override
     protected boolean isNullable(Class clazz, Method getMethod, Field field) {
+        //The Party class has a non-null field that is nullable in its ancestor Actor. Cannot model that in Java
+        //with Nullable annotations, or have to add really complicated stuff. This works too.
         if(field != null) {
             if (Party.class.isAssignableFrom(clazz) && field.getName().equalsIgnoreCase("uid")) {
                 return false;

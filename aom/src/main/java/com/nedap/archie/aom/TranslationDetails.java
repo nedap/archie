@@ -2,6 +2,7 @@ package com.nedap.archie.aom;
 
 import com.nedap.archie.base.terminology.TerminologyCode;
 
+import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -11,8 +12,11 @@ import java.util.concurrent.ConcurrentHashMap;
 public class TranslationDetails extends ArchetypeModelObject {
     private TerminologyCode language;
     private Map<String, String> author = new ConcurrentHashMap<>();
+    @Nullable
     private String accreditation;
+    @Nullable
     private Map<String, String> otherDetails = new ConcurrentHashMap<>();
+    @Nullable
     private String versionLastTranslated;
 
     public TerminologyCode getLanguage() {

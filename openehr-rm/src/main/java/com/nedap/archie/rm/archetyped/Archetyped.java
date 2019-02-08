@@ -24,10 +24,10 @@ import javax.xml.bind.annotation.XmlType;
 public class Archetyped extends RMObject {
 
     @XmlElement(name="archetype_id")
-    private ArchetypeID archetypeId; //TODO: this is a different class in the RM. why?!
+    private ArchetypeID archetypeId;
     @XmlElement(name="template_id")
     @Nullable
-    private ArchetypeID templateId; //not sure if this is still required in AOM/ADL 2
+    private TemplateId templateId;
     @XmlElement(name="rm_version")
     private String rmVersion;
     
@@ -40,11 +40,11 @@ public class Archetyped extends RMObject {
     }
 
     @Nullable
-    public ArchetypeID getTemplateId() {
+    public TemplateId getTemplateId() {
         return templateId;
     }
 
-    public void setTemplateId(@Nullable ArchetypeID templateId) {
+    public void setTemplateId(@Nullable TemplateId templateId) {
         this.templateId = templateId;
     }
     

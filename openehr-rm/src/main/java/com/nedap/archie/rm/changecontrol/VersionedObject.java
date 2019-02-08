@@ -47,7 +47,7 @@ public class VersionedObject<Type> extends RMObject {
         return timeCreated;
     }
 
-    @JsonAlias({"time_created"})
+    @JsonAlias({"time_creations"})
     public void setTimeCreated(DvDateTime timeCreated) {
         this.timeCreated = timeCreated;
     }
