@@ -1,8 +1,8 @@
 package com.nedap.archie.rm.changecontrol;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.nedap.archie.rm.datavalues.DvCodedText;
 import com.nedap.archie.rm.generic.Attestation;
-import com.nedap.archie.rm.support.identification.HierObjectId;
 import com.nedap.archie.rm.support.identification.ObjectVersionId;
 
 
@@ -16,12 +16,15 @@ import java.util.List;
 public class OriginalVersion<Type> extends Version<Type> {
 
     private ObjectVersionId uid;
+    @Nullable
     private ObjectVersionId precedingVersionUid;
     @Nullable
-    private List<ObjectVersionId> otherInputVersionIds = new ArrayList<>();
+    private List<ObjectVersionId> otherInputVersionUids = new ArrayList<>();
 
     private DvCodedText lifecycleState;
+    @Nullable
     private List<Attestation> attestations = new ArrayList<>();
+    @Nullable
     private Type data;
 
 
@@ -44,12 +47,13 @@ public class OriginalVersion<Type> extends Version<Type> {
     }
 
     @Nullable
-    public List<ObjectVersionId> getOtherInputVersionIds() {
-        return otherInputVersionIds;
+    public List<ObjectVersionId> getOtherInputVersionUids() {
+        return otherInputVersionUids;
     }
 
-    public void setOtherInputVersionIds(@Nullable List<ObjectVersionId> otherInputVersionIds) {
-        this.otherInputVersionIds = otherInputVersionIds;
+    @JsonAlias({"other_input_version_ids"})
+    public void setOtherInputVersionUids(@Nullable List<ObjectVersionId> otherInputVersionUids) {
+        this.otherInputVersionUids = otherInputVersionUids;
     }
 
     @Override

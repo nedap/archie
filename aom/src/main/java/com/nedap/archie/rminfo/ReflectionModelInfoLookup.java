@@ -167,7 +167,7 @@ public abstract class ReflectionModelInfoLookup implements ModelInfoLookup {
         return Modifier.isPublic(method.getModifiers());
     }
 
-    private void addRMAttributeInfo(Class clazz, RMTypeInfo typeInfo, TypeToken typeToken, Method getMethod, Map<String, Field> fieldsByName) {
+    protected void addRMAttributeInfo(Class clazz, RMTypeInfo typeInfo, TypeToken typeToken, Method getMethod, Map<String, Field> fieldsByName) {
         String attributeName = namingStrategy.getAttributeName(getMethod);
         String javaFieldName = null;
         if(getMethod.getName().startsWith("is")) {
@@ -189,6 +189,7 @@ public abstract class ReflectionModelInfoLookup implements ModelInfoLookup {
             logger.debug("No get method found for attribute {} on class {}", attributeName, clazz.getSimpleName());
         }
 
+
         TypeToken fieldType = typeToken.resolveType(getMethod.getGenericReturnType());;
 
         Class rawFieldType = fieldType.getRawType();
@@ -200,7 +201,7 @@ public abstract class ReflectionModelInfoLookup implements ModelInfoLookup {
                     rawFieldType,
                     typeInCollection,
                     this.namingStrategy.getTypeName(typeInCollection),
-                    (field != null && field.getAnnotation(Nullable.class) != null) || getMethod.getAnnotation(Nullable.class) != null,
+                    isNullable(clazz, getMethod, field),
                     getMethod,
                     setMethod,
                     addMethod
@@ -211,6 +212,10 @@ public abstract class ReflectionModelInfoLookup implements ModelInfoLookup {
         //} else {
         //    logger.info("property without a set method ignored for field {} on class {}", attributeName, clazz.getSimpleName());
        // }
+    }
+
+    protected boolean isNullable(Class clazz, Method getMethod, Field field) {
+        return (field != null && field.getAnnotation(Nullable.class) != null) || getMethod.getAnnotation(Nullable.class) != null;
     }
 
 
@@ -230,6 +235,26 @@ public abstract class ReflectionModelInfoLookup implements ModelInfoLookup {
             logger.debug("No get method found for field {} on class {}", field.getName(), clazz.getSimpleName());
         }
 
+        if(attributeName.startsWith("is")) {
+            //special case
+            String fieldNameWithoutPrefix = javaFieldName.substring(2);
+            String withoutPrefixUpperCased = upperCaseFirstChar(fieldNameWithoutPrefix);
+            if (getMethod == null) {
+                getMethod = getMethod(clazz, "is" + withoutPrefixUpperCased);
+            }
+            if (getMethod != null) {
+                if(setMethod == null) {
+                    setMethod = getMethod(clazz, "set" + withoutPrefixUpperCased, getMethod.getReturnType());
+                }
+                if(addMethod == null) {
+                    addMethod = getAddMethod(clazz, typeToken, attributeName, withoutPrefixUpperCased, getMethod);
+                }
+            } else {
+                logger.debug("No get method found for attribute {} on class {}", attributeName, clazz.getSimpleName());
+            }
+
+        }
+
         TypeToken fieldType = null;
         if (getMethod != null) {
             fieldType = typeToken.resolveType(getMethod.getGenericReturnType());
@@ -246,7 +271,7 @@ public abstract class ReflectionModelInfoLookup implements ModelInfoLookup {
                     rawFieldType,
                     typeInCollection,
                     namingStrategy.getTypeName(typeInCollection),
-                    field.getAnnotation(Nullable.class) != null,
+                    isNullable(clazz, getMethod, field),
                     getMethod,
                     setMethod,
                     addMethod
@@ -272,6 +297,8 @@ public abstract class ReflectionModelInfoLookup implements ModelInfoLookup {
                     return (Class) ((java.lang.reflect.TypeVariable) actualTypeArguments[0]).getBounds()[0];
                 }
             }
+        } else if(rawFieldType.isArray()) {
+           return rawFieldType.getComponentType();
         }
         return rawFieldType;
     }

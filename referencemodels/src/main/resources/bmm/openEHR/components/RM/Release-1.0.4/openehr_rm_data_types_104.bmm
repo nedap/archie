@@ -454,6 +454,7 @@ class_definitions = <
 			["magnitude"] = (P_BMM_SINGLE_PROPERTY) <
 				name = <"magnitude">
 				type = <"Integer64">
+				is_mandatory = <True>
 			>
 			["normal_range"] = (P_BMM_GENERIC_PROPERTY) <
 				name = <"normal_range">
@@ -665,6 +666,7 @@ class_definitions = <
 				name = <"size">
 				type = <"Integer">
 				is_im_runtime = <True>
+				is_mandatory = <True>
 			>
 		>
 	>

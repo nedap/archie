@@ -1,5 +1,6 @@
 package com.nedap.archie.rm.composition;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.nedap.archie.rm.datatypes.CodePhrase;
 import com.nedap.archie.rm.generic.Participation;
 import com.nedap.archie.rm.support.identification.ObjectRef;
@@ -23,7 +24,7 @@ import java.util.List;
         "subject",
         "provider",
         "otherParticipations",
-        "workFlowId"
+        "workflowId"
 })
 public abstract class Entry extends ContentItem {
 
@@ -31,8 +32,8 @@ public abstract class Entry extends ContentItem {
     private CodePhrase encoding;
     @Nullable
 
-    @XmlElement(name = "work_flow_id")
-    private ObjectRef workFlowId;
+    @XmlElement(name = "workflow_id")
+    private ObjectRef workflowId;
     private PartyProxy subject;
     @Nullable
     private PartyProxy provider;
@@ -86,12 +87,13 @@ public abstract class Entry extends ContentItem {
         this.encoding = encoding;
     }
 
-    @Nullable    
-    public ObjectRef getWorkFlowId() {
-        return workFlowId;
+    @Nullable
+    public ObjectRef getWorkflowId() {
+        return workflowId;
     }
 
-    public void setWorkFlowId(@Nullable ObjectRef workFlowId) {
-        this.workFlowId = workFlowId;
+    @JsonAlias({"work_flow_id"})
+    public void setWorkflowId(@Nullable ObjectRef workflowId) {
+        this.workflowId = workflowId;
     }
 }

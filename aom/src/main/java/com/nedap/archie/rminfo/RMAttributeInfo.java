@@ -29,7 +29,8 @@ public class RMAttributeInfo {
         this.setMethod = setMethod;
         this.addMethod = addMethod;
         this.computed = this.setMethod == null && this.addMethod == null;
-        this.isMultipleValued = type instanceof Class && Collection.class.isAssignableFrom(type);
+        this.isMultipleValued = (type instanceof Class && Collection.class.isAssignableFrom(type)) || type.isArray();
+
         this.typeInCollection = typeInCollection;
         this.typeNameInCollection = typeNameInCollection;
     }
