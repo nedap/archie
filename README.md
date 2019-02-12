@@ -345,7 +345,9 @@ Archie contains an implementation of the OpenEHR reference model version 1.0.4. 
 
 ### Reference model object creation
 
-The RMObjectCreator creates empty reference model objects based on constraints. It can also set values based on attribute names. You can use it to create a reference model based on an archetype and user input. To create an empty reference model based on an archetype, you could work further on this example:
+The ```ExampleJsonInstanceGenerator``` generates valid JSON instances from Operational Templates. They can be parsed and used as examples of RM Object instances, or empty RM Object instances.
+
+If you want to do this yourself, The RMObjectCreator creates empty reference model objects based on constraints. It can also set values based on attribute names. You can use it to create a reference model based on an archetype and user input. To create an empty reference model based on an archetype, you could work further on this example:
 
 
 ```java
