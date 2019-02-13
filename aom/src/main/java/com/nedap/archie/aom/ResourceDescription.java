@@ -1,6 +1,8 @@
 package com.nedap.archie.aom;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.nedap.archie.base.terminology.TerminologyCode;
+import org.openehr.odin.jackson.serializers.TermCodeAsStringConverter;
 
 import java.util.ArrayList;
 import java.util.List;
