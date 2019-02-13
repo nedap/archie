@@ -622,10 +622,10 @@ public class ODINGenerator extends GeneratorBase
     {
         _verifyValueWrite("write null value");
         //TODO! no null support in ODIN. Just don't serialize the field
-        writeStartObject();
+        writeFieldStart();
         //nothing to append - there is no explicit null
         //and nothing in the standard to address this!
-        writeEndObject();
+        writeFieldEnd();
     }
 
     /*

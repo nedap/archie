@@ -17,8 +17,10 @@ public class ArchetypeTermOdinSerializer extends JsonSerializer<ArchetypeTerm> {
             gen.writeStartObject();
             gen.writeFieldName("text");
             gen.writeString(value.getText());
-            gen.writeFieldName("description");
-            gen.writeString(value.getDescription());
+            if(value.getDescription() != null) {
+                gen.writeFieldName("description");
+                gen.writeString(value.getDescription());
+            }
             gen.writeEndObject();
     }
 
