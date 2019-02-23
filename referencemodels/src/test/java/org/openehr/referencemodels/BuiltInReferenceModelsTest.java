@@ -16,29 +16,34 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class BuiltInReferenceModelsTest {
+    /**
+     * This test tests the old BMM implementation thing and as such is deprecated.
+     * It will start creating more and more errors as BMM is changed, but the implementation is not -
+     * should be removed as soon as possible
+     * @throws Exception
+     */
     @Test
+    @Deprecated
     public void getValidModels() throws Exception {
 
         ReferenceModelAccess access = BuiltinReferenceModels.getBMMReferenceModels();
         Map<String, BmmModel> models = access.getValidModels();
         assertTrue(access.getValidator().hasErrors()); //hl7 fihr is missing the Signature type, so this results in an error
         //fhir is broken, so is openehr_lang, so two error codes
-        assertEquals(1, access.getValidator().getMessageLogger().getErrorCodes().size());
+        assertEquals("unexpected errors: " + access.getValidator().getMessageLogger(),
+                2, access.getValidator().getMessageLogger().getErrorCodes().size());
 
         //if we don't set the top level schema, it has warnings, apparently. Don't know why, often you would want all of these
         //unless you want to override versions, in which case there are better mechanisms possible.
         assertTrue(access.getValidator().hasWarnings());
 
-        assertEquals(Sets.newHashSet("openehr_adltest_1.0.2",
+        assertEquals(Sets.newHashSet(
                 "openehr_base_1.0.0",
                 "cdisc_core_0.5.0",
                 "cen_en13606_0.95",
                 "openehr_rm_1.0.2",
                 "cimi_rm_clinical_0.0.3",
-                "openehr_rm_1.0.4",
-                "openehr_rm_1.0.3",
-                "openehr_proc_task_planning_1.0.0",
-                "openehr_proc_task_planning_1.1.0"), models.keySet());
+                "openehr_rm_1.0.3"), models.keySet());
     }
 
     @Test
@@ -51,9 +56,9 @@ public class BuiltInReferenceModelsTest {
             System.out.println(validation.getLogger().toString());
 
         }
-        assertEquals(33, bmmRepository.getPersistentSchemas().size());
-        assertEquals(33, bmmRepository.getModels().size());
-        assertEquals(28, bmmRepository.getValidModels().size());
+        assertEquals(34, bmmRepository.getPersistentSchemas().size());
+        assertEquals(34, bmmRepository.getModels().size());
+        assertEquals(29, bmmRepository.getValidModels().size());
         assertEquals(5, bmmRepository.getInvalidModels().size());
     }
 

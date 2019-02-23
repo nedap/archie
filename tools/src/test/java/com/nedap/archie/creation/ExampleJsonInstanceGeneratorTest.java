@@ -120,7 +120,7 @@ public class ExampleJsonInstanceGeneratorTest {
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
         int numberCreated = 0, validationFailed = 0, generatedException = 0, jsonSchemaValidationRan = 0, jsonSchemaValidationFailed = 0;
         repository.compile(BuiltinReferenceModels.getMetaModels());
-        JsonSchemaValidator jsonSchemaValidator = new JsonSchemaValidator(BuiltinReferenceModels.getBMMReferenceModels().getValidModels().get("openehr_rm_1.0.4"));
+        JsonSchemaValidator jsonSchemaValidator = new JsonSchemaValidator(BuiltinReferenceModels.getBmmRepository().getModelByClosure("openehr-ehr_1.0.4").getModel());
         for(ValidationResult result:repository.getAllValidationResults()) {
             if(result.passes()) {
                 String json = "";

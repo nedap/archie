@@ -349,6 +349,7 @@ class_definitions = <
 					type = <"REVISION_HISTORY_ITEM">
 				>
 				cardinality = <|>=0|>
+				is_mandatory = <True>
 			>
 		>
 	>
@@ -619,8 +620,8 @@ class_definitions = <
 		name = <"FEEDER_AUDIT">
 		ancestors = <"Any", ...>
 		properties = <
-			["originating_system_ids"] = (P_BMM_CONTAINER_PROPERTY) <
-				name = <"originating_system_ids">
+			["originating_system_item_ids"] = (P_BMM_CONTAINER_PROPERTY) <
+				name = <"originating_system_item_ids">
 				type_def = <
 					container_type = <"List">
 					type = <"DV_IDENTIFIER">
@@ -934,8 +935,8 @@ class_definitions = <
 				>
 				is_mandatory = <True>
 			>
-			["accreditaton"] = (P_BMM_SINGLE_PROPERTY) <
-				name = <"accreditaton">
+			["accreditation"] = (P_BMM_SINGLE_PROPERTY) <
+				name = <"accreditation">
 				type = <"String">
 			>
 			["other_details"] = (P_BMM_GENERIC_PROPERTY) <

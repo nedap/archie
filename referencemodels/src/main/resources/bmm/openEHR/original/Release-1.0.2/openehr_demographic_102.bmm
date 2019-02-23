@@ -80,6 +80,7 @@ class_definitions = <
 					container_type = <"Set">
 					type = <"PARTY_IDENTITY">
 				>
+				is_mandatory = <True>
 				cardinality = <|>=1|>
 			>
 			["contacts"] = (P_BMM_CONTAINER_PROPERTY) <

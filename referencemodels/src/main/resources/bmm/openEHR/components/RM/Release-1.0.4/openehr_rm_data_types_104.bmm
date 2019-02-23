@@ -199,12 +199,18 @@ class_definitions = <
 			>
 			["language"] = (P_BMM_SINGLE_PROPERTY) <
 				name = <"language">
-				type = <"CODE_PHRASE">
+				type_ref = <
+					type = <"CODE_PHRASE">
+					value_constraint = <"openEHR::languages">
+				>
 				is_im_infrastructure = <True>
 			>
 			["encoding"] = (P_BMM_SINGLE_PROPERTY) <
 				name = <"encoding">
-				type = <"CODE_PHRASE">
+				type_ref = <
+					type = <"CODE_PHRASE">
+					value_constraint = <"openEHR::character sets">
+				>
 				is_im_infrastructure = <True>
 			>
 			["formatting"] = (P_BMM_SINGLE_PROPERTY) <
@@ -316,7 +322,10 @@ class_definitions = <
 		properties = <
 			["normal_status"] = (P_BMM_SINGLE_PROPERTY) <
 				name = <"normal_status">
-				type = <"CODE_PHRASE">
+				type_ref = <
+					type = <"CODE_PHRASE">
+					value_constraint = <"openEHR::normal statuses">
+				>
 			>
 			["normal_range"] = (P_BMM_GENERIC_PROPERTY) <
 				name = <"normal_range">
@@ -527,7 +536,7 @@ class_definitions = <
 
 	["PROPORTION_KIND"] = (P_BMM_ENUMERATION_INTEGER) <
 		name = <"PROPORTION_KIND">
-		ancestors = <"Integer", ...>
+		ancestors = <"Integer">
 		item_names = <"pk_ratio", "pk_unitary", "pk_percent", "pk_fraction", "pk_integer_fraction">
 	>
 
@@ -606,12 +615,18 @@ class_definitions = <
 		properties = <
 			["charset"] = (P_BMM_SINGLE_PROPERTY) <
 				name = <"charset">
-				type = <"CODE_PHRASE">
+				type_ref = <
+					type = <"CODE_PHRASE">
+					value_constraint = <"openEHR::character sets">
+				>
 				is_im_runtime = <True>
 			>
 			["language"] = (P_BMM_SINGLE_PROPERTY) <
 				name = <"language">
-				type = <"CODE_PHRASE">
+				type_ref = <
+					type = <"CODE_PHRASE">
+					value_constraint = <"openEHR::languages">
+				>
 				is_im_runtime = <True>
 			>
 		>
@@ -639,12 +654,18 @@ class_definitions = <
 			>
 			["media_type"] = (P_BMM_SINGLE_PROPERTY) <
 				name = <"media_type">
-				type = <"CODE_PHRASE">
+				type_ref = <
+					type = <"CODE_PHRASE">
+					value_constraint = <"openEHR::media types">
+				>
 				is_mandatory = <True>
 			>
 			["compression_algorithm"] = (P_BMM_SINGLE_PROPERTY) <
 				name = <"compression_algorithm">
-				type = <"CODE_PHRASE">
+				type_ref = <
+					type = <"CODE_PHRASE">
+					value_constraint = <"openEHR::compression algorithms">
+				>
 			>
 			["integrity_check"] = (P_BMM_CONTAINER_PROPERTY) <
 				name = <"integrity_check">
@@ -656,7 +677,10 @@ class_definitions = <
 			>
 			["integrity_check_algorithm"] = (P_BMM_SINGLE_PROPERTY) <
 				name = <"integrity_check_algorithm">
-				type = <"CODE_PHRASE">
+				type_ref = <
+					type = <"CODE_PHRASE">
+					value_constraint = <"openEHR::integrity check algorithms">
+				>
 			>
 			["thumbnail"] = (P_BMM_SINGLE_PROPERTY) <
 				name = <"thumbnail">

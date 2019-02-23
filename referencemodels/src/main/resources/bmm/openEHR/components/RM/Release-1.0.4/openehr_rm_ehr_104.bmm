@@ -199,12 +199,18 @@ class_definitions = <
 		properties = <
 			["language"] = (P_BMM_SINGLE_PROPERTY) <
 				name = <"language">
-				type = <"CODE_PHRASE">
+				type_ref = <
+					type = <"CODE_PHRASE">
+					value_constraint = <"openEHR::languages">
+				>
 				is_mandatory = <True>
 			>
 			["territory"] = (P_BMM_SINGLE_PROPERTY) <
 				name = <"territory">
-				type = <"CODE_PHRASE">
+				type_ref = <
+					type = <"CODE_PHRASE">
+					value_constraint = <"openEHR::countries">
+				>
 				is_mandatory = <True>
 			>
 			["category"] = (P_BMM_SINGLE_PROPERTY) <
@@ -313,13 +319,19 @@ class_definitions = <
 		properties = <
 			["language"] = (P_BMM_SINGLE_PROPERTY) <
 				name = <"language">
-				type = <"CODE_PHRASE">
+				type_ref = <
+					type = <"CODE_PHRASE">
+					value_constraint = <"openEHR::languages">
+				>
 				is_mandatory = <True>
 				is_im_infrastructure = <True>
 			>
 			["encoding"] = (P_BMM_SINGLE_PROPERTY) <
 				name = <"encoding">
-				type = <"CODE_PHRASE">
+				type_ref = <
+					type = <"CODE_PHRASE">
+					value_constraint = <"openEHR::character sets">
+				>
 				is_mandatory = <True>
 				is_im_infrastructure = <True>
 			>

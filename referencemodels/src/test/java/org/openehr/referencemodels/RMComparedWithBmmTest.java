@@ -9,6 +9,7 @@ import org.openehr.bmm.core.BmmModel;
 import org.openehr.bmm.v2.validation.BmmRepository;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -61,18 +62,7 @@ public class RMComparedWithBmmTest {
 
         Set<ModelDifference> knownDifferences = new HashSet();
 
-        //Needs a backwards incompatible fix, not changing now (and not important, new API is included)
-        knownDifferences.add(new ModelDifference(ModelDifferenceType.ANCESTOR_DIFFERENCE, "", "ARCHETYPE_HRID", null));
-        //Needs a backwards incompatible fix, not changing now (and not important, new API is included)
-        knownDifferences.add(new ModelDifference(ModelDifferenceType.PROPERTY_MISSING_IN_BMM, "", "ARCHETYPE_HRID", "concept_id"));
-        knownDifferences.add(new ModelDifference(ModelDifferenceType.PROPERTY_MISSING_IN_BMM, "", "ARCHETYPE_HRID", "version_status"));
-        knownDifferences.add(new ModelDifference(ModelDifferenceType.PROPERTY_MISSING_IN_BMM, "", "ARCHETYPE_HRID", "namespace"));
-        knownDifferences.add(new ModelDifference(ModelDifferenceType.PROPERTY_MISSING_IN_BMM, "", "ARCHETYPE_HRID", "rm_publisher"));
-        knownDifferences.add(new ModelDifference(ModelDifferenceType.PROPERTY_MISSING_IN_BMM, "", "ARCHETYPE_HRID", "rm_class"));
-        knownDifferences.add(new ModelDifference(ModelDifferenceType.PROPERTY_MISSING_IN_BMM, "", "ARCHETYPE_HRID", "release_version"));
-        knownDifferences.add(new ModelDifference(ModelDifferenceType.PROPERTY_MISSING_IN_BMM, "", "ARCHETYPE_HRID", "build_count"));
-        knownDifferences.add(new ModelDifference(ModelDifferenceType.PROPERTY_MISSING_IN_BMM, "", "ARCHETYPE_HRID", "rm_package"));
-        knownDifferences.add(new ModelDifference(ModelDifferenceType.PROPERTY_MISSING_IN_MODEL, "", "ARCHETYPE_HRID", "value"));
+
         //Needs a backwards incompatible fix, not changing now (and not important, new API is included)
         knownDifferences.add(new ModelDifference(ModelDifferenceType.PROPERTY_MISSING_IN_BMM, "", "ARCHETYPE_ID", "rm_entity"));
         knownDifferences.add(new ModelDifference(ModelDifferenceType.PROPERTY_MISSING_IN_BMM, "", "ARCHETYPE_ID", "rm_originator"));
@@ -125,16 +115,37 @@ public class RMComparedWithBmmTest {
         //RM implementation at least in old spec, not sure what happened to it, but not getting rid of it!
         knownDifferences.add(new ModelDifference(ModelDifferenceType.CLASS_MISSING_IN_BMM, "", "VERSIONED_FOLDER", null));
 
+        //BMM changed VERSION_STATUS to an enum. For now this remains a string until some further major release
+        knownDifferences.add(new ModelDifference(ModelDifferenceType.TYPE_NAME_DIFFERENCE, "",  "ARCHETYPE_HRID", "version_status"));
+        knownDifferences.add(new ModelDifference(ModelDifferenceType.CLASS_MISSING_IN_MODEL, "",  "VERSION_STATUS", null));
+
         //System.out.println(Joiner.on("\n").join(compared));
+        List<ModelDifference> foundErrors = new ArrayList<>();
 
         for(ModelDifference difference:compared) {
 //            System.out.println(MessageFormat.format("knownDifferences.add(new ModelDifference(ModelDifferenceType.{0}, \"\", \"{1}\", {2}));",
 //                    difference.getType().toString(),
 //                    difference.getClassName(),
 //                    difference.getPropertyName() == null ? "null" : '"' + difference.getPropertyName() + '"'));
-
-            assertTrue("unexpected difference: " + difference.toString(), knownDifferences.contains(difference));
+            if(!knownDifferences.contains(difference)) {
+                foundErrors.add(difference);
+            }
         }
+
+        List<ModelDifference> noLongerFoundErrors = new ArrayList<>();
+
+        for(ModelDifference difference:knownDifferences) {
+//            System.out.println(MessageFormat.format("knownDifferences.add(new ModelDifference(ModelDifferenceType.{0}, \"\", \"{1}\", {2}));",
+//                    difference.getType().toString(),
+//                    difference.getClassName(),
+//                    difference.getPropertyName() == null ? "null" : '"' + difference.getPropertyName() + '"'));
+            if(!compared.contains(difference)) {
+                noLongerFoundErrors.add(difference);
+            }
+        }
+        assertTrue("unexpected model differences: "+ Joiner.on("\n").join(foundErrors), foundErrors.isEmpty());
+
+        assertTrue("difference was in known difference, but is actually not a problem anymore: "+ Joiner.on("\n").join(noLongerFoundErrors), noLongerFoundErrors.isEmpty());
         assertEquals(knownDifferences.size(), compared.size());
     }
 }

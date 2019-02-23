@@ -252,7 +252,10 @@ class_definitions = <
 				name = <"events">
 				type_def = <
 					container_type = <"List">
-					type = <"EVENT">
+					type_def = (P_BMM_GENERIC_TYPE) <
+						root_type = <"EVENT">
+						generic_parameters = <"T">
+					>
 				>
 				cardinality = <|>=1|>
 			>
@@ -345,6 +348,7 @@ class_definitions = <
 					type = <"REVISION_HISTORY_ITEM">
 				>
 				cardinality = <|>=0|>
+				is_mandatory = <True>
 			>
 		>
 	>
@@ -615,7 +619,7 @@ class_definitions = <
 		name = <"FEEDER_AUDIT">
 		ancestors = <"Any">
 		properties = <
-			["originating_system_ids"] = (P_BMM_CONTAINER_PROPERTY) <
+			["originating_system_item_ids"] = (P_BMM_CONTAINER_PROPERTY) <
 				name = <"originating_system_item_ids">
 				type_def = <
 					container_type = <"List">

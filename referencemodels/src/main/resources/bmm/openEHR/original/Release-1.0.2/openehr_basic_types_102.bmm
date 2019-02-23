@@ -169,6 +169,13 @@ class_definitions = <
 	["GENERIC_ID"] = <
 		name = <"GENERIC_ID">
 		ancestors = <"OBJECT_ID">
+		properties = <
+			["scheme"] = (P_BMM_SINGLE_PROPERTY) <
+				name = <"scheme">
+				type = <"String">
+				is_mandatory = <True>
+			>
+		>
 	>
 	
 	["ARCHETYPE_ID"] = <
@@ -543,6 +550,7 @@ class_definitions = <
 			["magnitude"] = (P_BMM_SINGLE_PROPERTY) <
 				name = <"magnitude">
 				type = <"Integer">
+				is_mandatory = <True>
 			>
 		>
 	>
@@ -709,6 +717,7 @@ class_definitions = <
 				name = <"size">
 				type = <"Integer">
 				is_im_runtime = <True>
+				is_mandatory = <True>
 			>
 		>
 	>

@@ -553,6 +553,7 @@ class_definitions = <
 			["data"] = (P_BMM_SINGLE_PROPERTY) <
 				name = <"data">
 				type = <"ITEM_TREE">
+				is_mandatory = <True>
 			>
 		>
 	>

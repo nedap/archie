@@ -39,9 +39,10 @@ public class BuiltinReferenceModels {
     private static BmmRepository bmmRepository;
 
     /**
-     * Returns the built in BMM Reference Models
+     * Returns the built in BMM Reference Models. DO NOT USE ANYMORE, SWITCH TO THE BMM REPOSITORY INSTEAD!
      * @return
      */
+    @Deprecated
     public static ReferenceModelAccess getBMMReferenceModels() {
         if(access != null) {
             return access;

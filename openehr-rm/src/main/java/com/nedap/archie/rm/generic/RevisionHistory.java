@@ -15,7 +15,7 @@ import java.util.List;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name="REVISION_HISTORY")
 public class RevisionHistory extends RMObject {
-    @Nullable
+
     private List<RevisionHistoryItem> items = new ArrayList<>();
 
     public List<RevisionHistoryItem> getItems() {
