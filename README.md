@@ -1,5 +1,7 @@
 # Archie: OpenEHR Library 
 
+## This repository has been moved to https://github.com/openehr/archie
+
 Archie is an openEHR Library written in Java, which can be used to implement openEHR tools and systems. See http://www.openehr.org for information about openEHR.
 Archie works with the most recent versions of openEHR. This includes ADL version 2.
 It contains an ADL 2 parser and an archetype object model implementation, as well as the EHR part of the reference model implementation.
